@@ -10,6 +10,7 @@ extends Node3D
 
 
 const ROCK_SHADER := preload("res://shaders/tumbling_rock.gdshader")
+const ROCK_TEXTURE := preload("res://textures/generated/rock.png")
 
 ## How many ordinary rocks.
 @export var rock_count: int = 420
@@ -62,6 +63,7 @@ func _ready() -> void:
 func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 	var material := ShaderMaterial.new()
 	material.shader = ROCK_SHADER
+	material.set_shader_parameter("rock_texture", ROCK_TEXTURE)
 	for shape in shape_count:
 		var mine: Array[int] = []
 		for i in spots.size():

@@ -13,15 +13,17 @@ var _mouse_stick := Vector2.ZERO
 var _smoothed_steer := Vector2.ZERO
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## Feeds a mouse movement into the virtual stick. The flight scene calls this
+## (the 3D world sits inside a low-res PSXView, which doesn't pass input in).
+func push_mouse_motion(motion: InputEventMouseMotion) -> void:
 	# The mouse only steers while it's captured (hidden and locked to the
 	# game window), so clicking around in menus never yanks the ship.
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		# screen_relative = how far the mouse moved in real screen pixels,
-		# so the feel doesn't change when the window is resized.
-		var motion := event as InputEventMouseMotion
-		_mouse_stick += motion.screen_relative * GameState.tuning.mouse_sensitivity
-		_mouse_stick = _mouse_stick.limit_length(1.0)
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		return
+	# screen_relative = how far the mouse moved in real screen pixels,
+	# so the feel doesn't change when the window is resized.
+	_mouse_stick += motion.screen_relative * GameState.tuning.mouse_sensitivity
+	_mouse_stick = _mouse_stick.limit_length(1.0)
 
 
 ## Reads the controls for this physics step.

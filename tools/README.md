@@ -9,9 +9,9 @@ project on a machine without a screen.
 | File | What it makes |
 |---|---|
 | `setup_input_map.gd` | The default controls in `project.godot`. Re-running resets those actions to the defaults. |
-| `generate_placeholder_textures.gd` | Small textures in `textures/generated/` (the hazard stripes). |
+| `generate_placeholder_textures.gd` | Small PS1-sized textures in `textures/generated/` (hazard stripes, hull plating, vents, rock, station windows, the planet). |
 | `generate_engine_sounds.gd` | The engine hum's four loops in `audio/generated/` (made from math by `scenes/flight/EngineSynth.gd`). |
-| `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`) and the truck stop (`scenes/flight/Station.tscn`) from simple shapes. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
+| `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), the traffic ships (`scenes/flight/traffic/`) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
 
 ## Checkers
 

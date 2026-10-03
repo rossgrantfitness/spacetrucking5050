@@ -2,7 +2,8 @@ class_name EngineTrail
 extends MeshInstance3D
 ## A glowing ribbon streaming out behind an engine.
 ##
-## Put this on a marker at an engine nozzle. Every frame it remembers where
+## Put this on a marker at an engine nozzle, anywhere inside a ship that has
+## speed_ratio() and trail_color() functions (your Ship, or a TrafficShip). Every frame it remembers where
 ## the nozzle is, forgets spots older than Tuning's trail_lifetime, and draws a
 ## fading ribbon through the remembered spots, always turned to face the
 ## camera. Because the ship keeps moving, flying faster spreads the spots out
@@ -19,7 +20,7 @@ const TELEPORT_DISTANCE: float = 200.0
 ## Oldest spots first, newest last. Each spot has an age in seconds.
 var _points: Array[Vector3] = []
 var _ages: Array[float] = []
-var _ship: Ship
+var _source: Node3D  # The ship this trail belongs to.
 var _ribbon := ImmediateMesh.new()
 var _material := StandardMaterial3D.new()
 
@@ -30,9 +31,9 @@ func _ready() -> void:
 	global_transform = Transform3D.IDENTITY
 	# We redraw every frame ourselves, so Godot's motion smoothing must not.
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-	_ship = _find_ship()
-	if _ship != null:
-		_ship.teleported.connect(clear)
+	_source = _find_source()
+	if _source != null and _source.has_signal("teleported"):
+		_source.connect("teleported", clear)
 	_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_material.vertex_color_use_as_albedo = true
 	_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -42,7 +43,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if _ship == null:
+	if _source == null:
 		return
 	var lifetime := GameState.tuning.trail_lifetime
 	var nozzle := (get_parent() as Node3D).get_global_transform_interpolated().origin
@@ -71,11 +72,11 @@ func _redraw(lifetime: float) -> void:
 	_ribbon.clear_surfaces()
 	var camera := get_viewport().get_camera_3d()
 	var tuning := GameState.tuning
-	var brightness := tuning.trail_brightness * clampf(_ship.speed_ratio(), 0.0, 2.0)
+	var brightness := tuning.trail_brightness * clampf(float(_source.call("speed_ratio")), 0.0, 2.0)
 	if camera == null or _points.size() < 2 or brightness <= 0.01:
 		return
 	var eye := camera.global_position
-	var color := _ship.ship_data.trail_color
+	var color: Color = _source.call("trail_color")
 
 	_ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, _material)
 	for i in _points.size():
@@ -95,8 +96,9 @@ func _redraw(lifetime: float) -> void:
 	_ribbon.surface_end()
 
 
-func _find_ship() -> Ship:
+## The nearest parent that knows its speed and trail color.
+func _find_source() -> Node3D:
 	var node := get_parent()
-	while node != null and not node is Ship:
+	while node != null and not node.has_method("trail_color"):
 		node = node.get_parent()
-	return node as Ship
+	return node as Node3D

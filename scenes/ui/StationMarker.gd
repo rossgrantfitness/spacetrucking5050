@@ -9,8 +9,10 @@ const MARKER_COLOR := Color(0.45, 0.95, 1.0)
 ## Keep the off-screen arrow this far in from the screen edges.
 const EDGE_MARGIN: float = 56.0
 
-## The thing to point at, and what to call it. Set by FlightHUD.
+## The thing to point at, and what to call it, and the 3D view it's seen
+## through. Set by FlightHUD.
 var target: Node3D
+var view: PSXView
 var label := "TRUCK STOP"
 
 
@@ -23,12 +25,12 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	var camera := get_viewport().get_camera_3d()
-	if target == null or camera == null:
+	if target == null or view == null or view.camera() == null:
 		return
+	var camera := view.camera()
 	var spot := target.global_position
 	var text := "%s  %.1f km" % [label, camera.global_position.distance_to(spot) / 1000.0]
-	var on_screen := camera.unproject_position(spot)
+	var on_screen := view.unproject(spot)
 	var area := Rect2(Vector2.ONE * EDGE_MARGIN, size - Vector2.ONE * EDGE_MARGIN * 2.0)
 
 	if not camera.is_position_behind(spot) and area.has_point(on_screen):

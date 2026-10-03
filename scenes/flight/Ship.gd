@@ -57,6 +57,11 @@ func speed_ratio() -> float:
 	return flight.speed() / ship_data.max_speed
 
 
+## The color of this ship's engine trails (used by EngineTrail).
+func trail_color() -> Color:
+	return ship_data.trail_color
+
+
 ## How far past top speed we are, from 0 (at or below top speed) to 1 (at
 ## full boost speed). Drives the boost-speed effects.
 func overspeed_ratio() -> float:

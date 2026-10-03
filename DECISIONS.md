@@ -82,3 +82,25 @@ be revisited; just say so.
 - **The engine hum now reacts to the pilot.** Layer loudness and pitch follow your thrust input (it surges when you burn and settles when you coast), the pitch climbs with boost speed and dips slightly in reverse, and sliding sideways adds a "skid" of air.
 - **New HUD drift marker:** a small gold ring showing where momentum is really carrying you, essential once nose and path can differ.
 - **HUD and dash show thrust (forward warm / reverse cyan) and boost fuel** instead of a throttle setting.
+
+## 2026-10-03 (M1 round 3: the PS1 look, a new rig, station life)
+
+- **The core of M4's PS1 look was pulled forward to now,** because the developer said the PSX style and wobbly verts are "paramount". The radio, the optional glow pass and the 3D cockpit instruments stay in M4.
+- **The 3D world is drawn small and blown up (`PSXView`).** It renders at about 240 rows of pixels (a whole-number fraction of the window, so every big pixel is the same size), then is scaled up with no smoothing. The HUD, cockpit frame and menus sit outside it at full resolution, so text stays readable.
+- **PS1 screen colors:** the low-res picture is squeezed to 32 shades per color channel (the PS1's 15-bit color) with a 4×4 ordered dither (`shaders/psx_post.gdshader`).
+- **Every 3D surface uses `shaders/psx_surface.gdshader`:** corners snap to a coarse screen grid (wobbly verts), textures are partly affine (they swim on big polygons), lighting is per-corner (Gouraud) with no shine, and textures are tiny (32-128 px) with crisp pixels and no mipmaps. Rocks and planets use variants of the same tricks.
+- **Wobble and swim strengths are "global shader uniforms"** (*Project Settings → Shader Globals*), set at runtime from `tuning.tres` → *PS1 look*. One knob changes every model at once.
+- **The default wobble snaps corners to every other pixel** (`vertex_snap_scale` 0.5), for a clearly visible wobble. 1.0 is subtler (every pixel, like real hardware at 240 rows).
+- **Textures are projected from the sides of each part, in meters, inside the shader.** Boxes and the chunky hull shapes get evenly tiled hull plating without any hand-made texture coordinates, and the projection still swims like the PS1's.
+- **Input doesn't go into the low-res 3D view.** The flight scene hands mouse movement to the ship's controls itself, so it's always clear where input ends up.
+- **Distance haze is per solar system:** each system's data file now has a `haze_color`; how near it starts and how thick it gets are in tuning. Black space and the stars aren't hazed.
+- **An oversized ringed planet hangs in the sky,** in a `SkyBackdrop` that follows the camera, so it stays on the horizon however far you fly. It skips the haze. It's set in the sandbox scene for now; planets will move into system data files when there are more systems.
+- **New starter rig placeholder, inspired by your BB 42 reference:** about 31 m long and 33 m wide, with a gunmetal fuselage, an amber cockpit, a crew module with lit cabin windows (room for 4-5 and months of supplies), silver engine pods with yellow trim, swept wings and a blinking nose probe. Collision is three capsules (body and two pods); the cockpit seat moved to the new nose.
+- **The chase camera pulled back to fit the bigger rig** (44 m behind, 12 m up, looking 60 m ahead), and engine trails are wider (2 m).
+- **The old space-semi became traffic** (the "box hauler"), alongside a new "capsule hauler" based on your capsule-ship sketch. Each has three paint jobs.
+- **Station traffic: two ships, not a crowd.** A capsule hauler commutes back and forth above the asteroid field between the start and the truck stop, and a box hauler circles the station. `TrafficShip` flies a smooth loop through waypoints you can edit in the Inspector, leans into its turns, leaves engine trails and has a hull you can bonk. Random traffic from data files arrives with M5.
+- **Six trucks are parked on a new parking deck** under the docking bay (lines, lamp posts, a "TRUCK PARKING" sign, engines idling dim, cab lights on).
+- **Engine trails work on any ship** that can report its speed and trail color (the player's rig or traffic).
+- **The uploaded asset packs were not added to the game.** The Unity pack came through opengameasset.net, a site that re-shares paid Unity Asset Store packs, so that copy probably isn't licensed for use. The other archive (Zenith, Striker, Spitfire) has no license file, and those are fighter jets (no combat in this game). Everything was built as placeholders inspired by your reference pictures instead.
+- **Reference pictures live in `reference/`,** which has a hidden `.gdignore` file so Godot never imports them or ships them with the game.
+- **No "stop the ship" button**, per the round-2 playtest. Braking stays a skill.

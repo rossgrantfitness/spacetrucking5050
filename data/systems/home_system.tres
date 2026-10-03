@@ -6,3 +6,4 @@
 script = ExtResource("1_system")
 display_name = "Home Space (placeholder)"
 signature_color = Color(0.8, 0.72, 1, 1)
+haze_color = Color(0.36, 0.26, 0.56, 1)

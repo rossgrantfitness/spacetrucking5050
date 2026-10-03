@@ -76,21 +76,21 @@ extends Resource
 @export_group("Chase camera")
 
 ## How far behind the ship the camera hangs.
-@export_range(5.0, 60.0, 0.5, "suffix:m") var chase_distance: float = 30.0
+@export_range(5.0, 120.0, 0.5, "suffix:m") var chase_distance: float = 44.0
 
 ## How far above the ship the camera hangs.
-@export_range(0.0, 20.0, 0.25, "suffix:m") var chase_height: float = 8.5
+@export_range(0.0, 40.0, 0.25, "suffix:m") var chase_height: float = 12.0
 
 ## How far ahead of the ship the camera looks. Bigger = the ship sits lower on
 ## screen and you see more of the road ahead.
-@export_range(0.0, 100.0, 1.0, "suffix:m") var chase_look_ahead: float = 45.0
+@export_range(0.0, 150.0, 1.0, "suffix:m") var chase_look_ahead: float = 60.0
 
 ## How quickly the camera swings back around behind the ship after a turn.
 ## Lower = a lazier camera, so you see the rig lead into its turns.
 @export_range(0.5, 20.0, 0.25) var chase_turn_follow: float = 3.0
 
 ## How much farther back the camera drifts while boosting.
-@export_range(0.0, 20.0, 0.25, "suffix:m") var chase_boost_pullback: float = 9.0
+@export_range(0.0, 40.0, 0.25, "suffix:m") var chase_boost_pullback: float = 12.0
 
 ## How quickly that boost pull-back eases in and out.
 @export_range(0.5, 10.0, 0.25) var chase_pullback_response: float = 2.0
@@ -184,7 +184,7 @@ extends Resource
 @export_range(0.05, 3.0, 0.05, "suffix:s") var trail_lifetime: float = 0.3
 
 ## How wide the trail is where it leaves the engine.
-@export_range(0.1, 5.0, 0.05, "suffix:m") var trail_width: float = 0.9
+@export_range(0.1, 5.0, 0.05, "suffix:m") var trail_width: float = 2.0
 
 ## How bright the trail is at top speed. It fades away as you slow down.
 @export_range(0.0, 3.0, 0.05) var trail_brightness: float = 1.0
@@ -206,3 +206,35 @@ extends Resource
 
 ## How much airy "whoosh" is mixed into the hum at speed.
 @export_range(0.0, 1.0, 0.05) var engine_whoosh: float = 0.35
+
+
+@export_group("PS1 look")
+
+## How many rows of pixels the 3D world is drawn with before being blown up to
+## fill the window. The PS1 drew about 240. Lower = chunkier pixels.
+## (Text and menus are always drawn sharp, so they stay readable.)
+@export_range(120, 720, 10) var psx_resolution_height: int = 240
+
+## How much models wobble. Corners snap to a grid this fraction of the pixel
+## grid: 1 = snap to every pixel (subtle), 0.5 = every other pixel (wobbly),
+## lower = very wobbly.
+@export_range(0.1, 1.0, 0.05) var vertex_snap_scale: float = 0.5
+
+## How much textures bend and swim on big polygons close to the camera, the
+## PS1's famous "affine" warping. 0 = modern, 1 = full PS1.
+@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.8
+
+## Shades per color channel. The PS1 had 32. Lower = more posterized.
+@export_range(4.0, 256.0, 1.0) var color_levels: float = 32.0
+
+## How strong the fine checkered dither pattern is. 0 = off.
+@export_range(0.0, 2.0, 0.05) var dither_strength: float = 1.0
+
+## Where the solar system's colored distance haze starts, and where it's at
+## its thickest. It tints faraway things with the system's haze color (set in
+## the system's data file).
+@export_range(0.0, 10000.0, 50.0, "suffix:m") var haze_start: float = 1200.0
+@export_range(100.0, 20000.0, 50.0, "suffix:m") var haze_end: float = 10000.0
+
+## How thick the haze gets at its thickest (0 = none, 1 = solid color).
+@export_range(0.0, 1.0, 0.05) var haze_strength: float = 0.75

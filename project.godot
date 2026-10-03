@@ -156,3 +156,14 @@ common/physics_jitter_fix=0.0
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[shader_globals]
+
+psx_snap_resolution={
+"type": "vec2",
+"value": Vector2(213, 120)
+}
+psx_affine_strength={
+"type": "float",
+"value": 0.8
+}

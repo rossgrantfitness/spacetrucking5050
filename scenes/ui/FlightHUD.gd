@@ -27,10 +27,13 @@ func _ready() -> void:
 	_refresh()
 
 
-## Tells the HUD which ship to show and where the destination is.
-func setup(ship: Ship, destination: Node3D) -> void:
+## Tells the HUD which ship to show, where the destination is, and which 3D
+## view the world is seen through (to put markers in the right spots).
+func setup(ship: Ship, destination: Node3D, view: PSXView) -> void:
 	_gauge.ship = ship
 	_drift.ship = ship
+	_drift.view = view
+	_marker.view = view
 	_reticle.controls = ship.controls
 	_marker.target = destination
 

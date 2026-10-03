@@ -1,7 +1,8 @@
 extends SceneTree
 ## Used by tools/validate.sh: a quick "smoke test" of the flight sandbox. It
-## flies on autopilot for a few seconds (thrust, brake, turn, boost, switch to
-## the cockpit and back, open and close the pause menu, go back to the start)
+## flies on autopilot for a few seconds (thrust, mouse, brake, turn, boost,
+## switch to the cockpit and back, open and close the pause menu, go back to
+## the start), with the traffic flying around,
 ## so any errors in those code paths show up, then quits politely.
 ##
 ## Run it with:  godot --headless --path . -s tools/smoke_flight.gd
@@ -21,6 +22,10 @@ func _process(_delta: float) -> bool:
 	match _frame:
 		10:
 			Input.action_press("throttle_up")  # Burn forward.
+			var wiggle := InputEventMouseMotion.new()  # Mouse steering's path.
+			wiggle.relative = Vector2(30.0, -10.0)
+			wiggle.screen_relative = Vector2(30.0, -10.0)
+			Input.parse_input_event(wiggle)
 		120:
 			Input.action_release("throttle_up")
 			Input.action_press("steer_right", 0.8)

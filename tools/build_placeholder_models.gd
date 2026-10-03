@@ -1,20 +1,29 @@
 extends SceneTree
-## Builds the placeholder 3D models out of simple boxes and cylinders, and
-## saves them as ordinary scenes you can open in the editor:
-##     res://scenes/flight/ShipVisual.tscn  - "The Lazy Susan", the starter rig
-##     res://scenes/flight/Station.tscn     - a big truck-stop space station
+## Builds the placeholder 3D models out of simple chunky shapes, and saves
+## them as ordinary scenes you can open in the editor:
+##     res://scenes/flight/ShipVisual.tscn                     - your rig
+##     res://scenes/flight/traffic/CapsuleHaulerVisual.tscn   - traffic
+##     res://scenes/flight/traffic/BoxHaulerVisual.tscn       - traffic
+##     res://scenes/flight/Station.tscn                        - the truck stop
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/build_placeholder_models.gd
 ##
-## Careful: running it again OVERWRITES those two scenes. If you've changed
-## them by hand in the editor, don't re-run this (or copy your changes into
-## this script first). Real art will replace these scenes eventually anyway.
+## Careful: running it again OVERWRITES those scenes. If you've changed them
+## by hand in the editor, don't re-run this (or copy your changes into this
+## script first). Real art will replace these scenes eventually anyway.
+##
+## Every surface uses the PS1 shader (res://shaders/psx_surface.gdshader) with
+## a tiny texture tinted by a paint color, so it wobbles and swims like 1997.
 ##
 ## Directions: in Godot, -Z is "forward", +Y is up, +X is right.
 
 
-const HAZARD_TEXTURE := preload("res://textures/generated/hazard_stripes.png")
+const SURFACE_SHADER := preload("res://shaders/psx_surface.gdshader")
+const HULL := preload("res://textures/generated/hull_panels.png")
+const VENTS := preload("res://textures/generated/vents.png")
+const HAZARD := preload("res://textures/generated/hazard_stripes.png")
+const WINDOWS := preload("res://textures/generated/station_windows.png")
 # Scripts are loaded in _initialize (not preloaded) because EngineTrail uses
 # autoloads, which don't exist yet while this tool script is being compiled.
 const BLINKER_SCRIPT_PATH := "res://scenes/flight/Blinker.gd"
@@ -23,10 +32,29 @@ const TRAIL_SCRIPT_PATH := "res://scenes/flight/EngineTrail.gd"
 ## A rotation that turns a cylinder (normally standing up along Y) to lie
 ## along Z, front to back.
 const ALONG_Z := Vector3(PI / 2.0, 0.0, 0.0)
+## Hull panel texture size: one 64-pixel texture covers 4 x 4 meters, so each
+## panel is a meter across.
+const HULL_SCALE := Vector2(0.25, 0.25)
+
+## Paint jobs. Each truck model can be built in any of these.
+const RIG_PAINT := {
+	"body": Color(0.4, 0.41, 0.47), "pods": Color(0.8, 0.82, 0.86), "trim": Color(1.0, 0.8, 0.12),
+	"dark": Color(0.2, 0.2, 0.25), "glass": Color(1.0, 0.68, 0.22), "engine": Color(1.0, 0.55, 0.3),
+}
+const CAPSULE_PAINTS: Array[Dictionary] = [
+	{"body": Color(0.8, 0.45, 0.26), "band": Color(0.97, 0.9, 0.74), "dark": Color(0.24, 0.2, 0.22), "engine": Color(0.45, 0.85, 1.0)},
+	{"body": Color(0.4, 0.66, 0.58), "band": Color(1.0, 0.78, 0.35), "dark": Color(0.18, 0.22, 0.26), "engine": Color(1.0, 0.5, 0.75)},
+	{"body": Color(0.86, 0.72, 0.32), "band": Color(0.55, 0.32, 0.6), "dark": Color(0.22, 0.2, 0.26), "engine": Color(0.55, 1.0, 0.5)},
+]
+const BOX_PAINTS: Array[Dictionary] = [
+	{"cab": Color(0.86, 0.2, 0.26), "box": Color(0.18, 0.56, 0.62), "stripe": Color(0.98, 0.92, 0.78), "engine": Color(1.0, 0.55, 0.3)},
+	{"cab": Color(0.25, 0.42, 0.85), "box": Color(0.95, 0.58, 0.22), "stripe": Color(0.98, 0.92, 0.78), "engine": Color(0.45, 0.85, 1.0)},
+	{"cab": Color(0.55, 0.3, 0.7), "box": Color(0.92, 0.88, 0.8), "stripe": Color(1.0, 0.45, 0.65), "engine": Color(1.0, 0.5, 0.75)},
+]
 
 var _blinker_script: Script
 var _trail_script: Script
-# Identical materials and box shapes are made once and shared, which keeps the
+# Identical materials and boxes are made once and shared, which keeps the
 # saved scenes small and cheap to draw.
 var _material_cache := {}
 var _box_cache := {}
@@ -36,80 +64,161 @@ var _box_cache := {}
 func _initialize() -> void:
 	_blinker_script = load(BLINKER_SCRIPT_PATH)
 	_trail_script = load(TRAIL_SCRIPT_PATH)
-	_save(_build_ship(), "res://scenes/flight/ShipVisual.tscn")
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/flight/traffic"))
+	_save(_build_rig(), "res://scenes/flight/ShipVisual.tscn")
+	_save(_build_capsule_hauler("CapsuleHaulerVisual", CAPSULE_PAINTS[0], true), "res://scenes/flight/traffic/CapsuleHaulerVisual.tscn")
+	_save(_build_box_hauler("BoxHaulerVisual", BOX_PAINTS[1], true), "res://scenes/flight/traffic/BoxHaulerVisual.tscn")
 	_save(_build_station(), "res://scenes/flight/Station.tscn")
 	quit()
 
 
-# --- The Lazy Susan ---------------------------------------------------------
+# --- Your rig: a long-haul cargo hauler -------------------------------------
+# Inspired by the developer's "BB 42 cargo aircraft" reference: a gunmetal
+# fuselage with a glowing amber cockpit, a crew module on top (room for 4-5
+# people and months of supplies), two big silver engine pods with yellow trim,
+# and swept wings out back. About 31 m long and 33 m wide.
 
-func _build_ship() -> Node3D:
+func _build_rig() -> Node3D:
 	var ship := Node3D.new()
 	ship.name = "ShipVisual"
+	var p := RIG_PAINT
+	var body := _paint(p.body)
+	var pods := _paint(p.pods)
+	var trim := _paint(p.trim, null)
+	var dark := _paint(p.dark)
 
-	var cab_red := _paint(Color(0.86, 0.2, 0.26), 0.55)
-	var cream := _paint(Color(0.98, 0.92, 0.78))
-	var chrome := _paint(Color(0.8, 0.82, 0.9), 0.3)
+	# The fuselage, front to back: nose, cockpit section, long middle, tail.
+	_loft(ship, "Nose", Vector3(0.0, -0.4, -15.0), Vector2(2.6, 1.6), Vector3(0.0, 0.0, -10.0), Vector2(5.6, 3.6), body)
+	_loft(ship, "Cabin", Vector3(0.0, 0.0, -10.0), Vector2(5.6, 3.6), Vector3(0.0, 0.1, -4.0), Vector2(6.4, 4.0), body)
+	_loft(ship, "MidBody", Vector3(0.0, 0.1, -4.0), Vector2(6.4, 4.0), Vector3(0.0, 0.1, 8.0), Vector2(6.4, 4.0), body)
+	_loft(ship, "Tail", Vector3(0.0, 0.1, 8.0), Vector2(6.4, 4.0), Vector3(0.0, 0.3, 11.5), Vector2(4.6, 3.0), dark)
+	_box(ship, "CargoBay", Vector3(4.6, 0.8, 12.0), Vector3(0.0, -2.2, 2.0), dark)
+	# The big amber cockpit window, raked back over the nose.
+	_loft(ship, "Canopy", Vector3(0.0, 0.75, -13.4), Vector2(1.8, 0.5), Vector3(0.0, 1.55, -9.6), Vector2(4.2, 1.3), _glow(p.glass, 1.1, Color(0.35, 0.2, 0.05)))
+	# The crew module on top, with little warm windows: somebody lives here.
+	_loft(ship, "HumpFront", Vector3(0.0, 1.9, -8.6), Vector2(3.0, 0.4), Vector3(0.0, 2.6, -4.5), Vector2(4.4, 1.6), pods)
+	_loft(ship, "Hump", Vector3(0.0, 2.6, -4.5), Vector2(4.4, 1.6), Vector3(0.0, 2.6, 6.0), Vector2(4.4, 1.6), pods)
+	_loft(ship, "HumpBack", Vector3(0.0, 2.6, 6.0), Vector2(4.4, 1.6), Vector3(0.0, 2.2, 9.0), Vector2(3.0, 0.5), pods)
+	var cabin_light := _glow(Color(1.0, 0.82, 0.45), 1.3)
+	for side: float in [-1.0, 1.0]:
+		for i in 4:
+			_box(ship, "CabinWindow", Vector3(0.1, 0.4, 0.8), Vector3(2.21 * side, 2.7, -2.5 + i * 2.2), cabin_light)
+		# Yellow trim along the fuselage, like the reference's pinstripes.
+		_box(ship, "Pinstripe", Vector3(0.1, 0.22, 17.0), Vector3(3.22 * side, -0.4, -0.5), trim)
+		# Stubby wing roots holding the engine pods.
+		_box(ship, "PodPylon", Vector3(3.4, 0.8, 9.0), Vector3(4.6 * side, 0.0, 4.0), dark)
+		_build_rig_pod(ship, 8.0 * side, pods, trim, dark, p.engine)
+		# Swept wings outboard of the pods, with nav lights on the tips
+		# (red on the left, green on the right, like real aircraft).
+		var wing := PackedVector2Array([Vector2(10.4, 2.0), Vector2(16.5, 9.5), Vector2(16.5, 12.5), Vector2(10.4, 11.0)])
+		if side < 0.0:
+			wing = _mirrored(wing)
+		_slab(ship, "Wing", wing, 0.2, 0.5, dark)
+		var tip_color := Color(1.0, 0.15, 0.15) if side < 0.0 else Color(0.2, 1.0, 0.35)
+		var tip := _box(ship, "WingLight", Vector3(0.35, 0.35, 0.35), Vector3(16.6 * side, 0.2, 11.0), _glow(tip_color, 1.6))
+		tip.set_script(_blinker_script)
+		tip.set("offset", 0.0 if side < 0.0 else 0.5)
+		# The hull number, painted on each pod.
+		_decal(ship, "HullNumber", "5050", Vector3(10.7 * side, 0.3, 1.0), side)
+	# A long sensor probe out front with a blinking red tip, and a beacon on
+	# the roof.
+	_cylinder(ship, "Probe", 0.08, 3.4, Vector3(0.0, -0.4, -16.6), _paint(Color(0.8, 0.82, 0.86), null), ALONG_Z, 6)
+	var probe_tip := _box(ship, "ProbeTip", Vector3(0.3, 0.3, 0.3), Vector3(0.0, -0.4, -18.3), _glow(Color(1.0, 0.2, 0.2), 1.6))
+	probe_tip.set_script(_blinker_script)
+	var beacon := _box(ship, "Beacon", Vector3(0.5, 0.35, 0.5), Vector3(0.0, 3.55, 1.0), _glow(Color(1.0, 0.45, 0.1), 1.8))
+	beacon.set_script(_blinker_script)
+	beacon.set("offset", 0.25)
+	return ship
+
+
+func _build_rig_pod(ship: Node3D, x: float, pods: Material, trim: Material, dark: Material, engine: Color) -> void:
+	var y := 0.2
+	_loft(ship, "PodIntake", Vector3(x, y, -6.0), Vector2(4.6, 3.6), Vector3(x, y, -3.0), Vector2(5.2, 4.2), pods)
+	_loft(ship, "Pod", Vector3(x, y, -3.0), Vector2(5.2, 4.2), Vector3(x, y, 10.0), Vector2(5.2, 4.2), pods)
+	_loft(ship, "PodExhaust", Vector3(x, y, 10.0), Vector2(5.2, 4.2), Vector3(x, y, 12.5), Vector2(4.4, 3.4), dark)
+	_box(ship, "IntakeGrille", Vector3(3.4, 2.4, 0.2), Vector3(x, y, -6.05), _paint(Color(1, 1, 1), VENTS, Vector2(0.5, 0.5)))
+	_box(ship, "PodTrimTop", Vector3(0.3, 0.1, 13.0), Vector3(x, y + 2.13, 3.5), trim)
+	_box(ship, "PodTrimSide", Vector3(0.1, 0.3, 13.0), Vector3(x + 2.62 * signf(x), y - 0.6, 3.5), trim)
+	_engine(ship, Vector3(x, y, 12.55), Vector2(3.4, 2.4), engine, 1.0, true)
+
+
+# --- Traffic: the capsule hauler --------------------------------------------
+# From the developer's capsule-ship sketch: a long, rounded fuel-tank body
+# with a bubble cockpit and four boxy engine pods on stubby pylons. ~34 m.
+
+func _build_capsule_hauler(node_name: String, p: Dictionary, with_trails: bool) -> Node3D:
+	var ship := Node3D.new()
+	ship.name = node_name
+	var body := _paint(p.body)
+	var band := _paint(p.band)
+	var dark := _paint(p.dark)
+	var round_ish := 0.42  # Big corner cuts make the 8-sided body read as round.
+	_loft(ship, "NoseCap", Vector3(0.0, 0.0, -17.0), Vector2(3.4, 3.2), Vector3(0.0, 0.0, -13.0), Vector2(7.0, 6.6), body, round_ish)
+	_loft(ship, "Body", Vector3(0.0, 0.0, -13.0), Vector2(7.0, 6.6), Vector3(0.0, 0.0, 12.0), Vector2(7.0, 6.6), body, round_ish)
+	_loft(ship, "TailCap", Vector3(0.0, 0.0, 12.0), Vector2(7.0, 6.6), Vector3(0.0, 0.0, 16.0), Vector2(4.0, 3.8), dark, round_ish)
+	for z: float in [-7.0, 3.0]:
+		_loft(ship, "Band", Vector3(0.0, 0.0, z - 1.0), Vector2(7.4, 7.0), Vector3(0.0, 0.0, z + 1.0), Vector2(7.4, 7.0), band, round_ish)
+	_loft(ship, "Bubble", Vector3(0.0, 0.9, -17.3), Vector2(2.0, 1.2), Vector3(0.0, 1.5, -14.2), Vector2(3.4, 2.2), _glow(Color(0.5, 0.9, 1.0), 0.8, Color(0.1, 0.2, 0.3)), 0.4)
+	_cylinder(ship, "Antenna", 0.1, 4.0, Vector3(0.0, 5.0, 6.0), dark, Vector3.ZERO, 5)
+	for side: float in [-1.0, 1.0]:
+		for z: float in [-8.0, 8.0]:
+			var x := 6.0 * side
+			_box(ship, "Pylon", Vector3(3.0, 0.7, 2.0), Vector3(3.8 * side, -1.0, z), dark)
+			_loft(ship, "EnginePod", Vector3(x, -1.0, z - 3.5), Vector2(2.4, 2.4), Vector3(x, -1.0, z + 3.0), Vector2(2.8, 2.8), band)
+			_engine(ship, Vector3(x, -1.0, z + 3.05), Vector2(2.0, 2.0), p.engine, 1.0 if with_trails else 0.3, with_trails and z > 0.0)
+	return ship
+
+
+# --- Traffic: the box hauler ------------------------------------------------
+# A classic: a truck cab pulling a big cargo container through space. (This
+# was the very first placeholder rig.) ~20 m.
+
+func _build_box_hauler(node_name: String, p: Dictionary, with_trails: bool) -> Node3D:
+	var ship := Node3D.new()
+	ship.name = node_name
+	var cab := _paint(p.cab)
+	var stripe := _paint(p.stripe)
+	var chrome := _paint(Color(0.82, 0.84, 0.9))
 	var dark := _paint(Color(0.2, 0.2, 0.26))
-	var teal := _paint(Color(0.18, 0.56, 0.62))
-	var teal_dark := _paint(Color(0.12, 0.38, 0.44))
+	var box := _paint(p.box)
 	var glass := _glow(Color(0.25, 0.6, 0.85), 0.5, Color(0.1, 0.16, 0.3))
-	var engine_glow := _glow(Color(1.0, 0.55, 0.3), 1.3)
 
-	# The cab, up front.
-	_box(ship, "Cab", Vector3(4.2, 3.4, 4.0), Vector3(0.0, 0.5, -6.6), cab_red)
-	_box(ship, "CabStripe", Vector3(4.24, 0.35, 4.04), Vector3(0.0, -0.55, -6.6), cream)
+	_box(ship, "Cab", Vector3(4.2, 3.4, 4.0), Vector3(0.0, 0.5, -6.6), cab)
+	_box(ship, "CabStripe", Vector3(4.24, 0.35, 4.04), Vector3(0.0, -0.55, -6.6), stripe)
 	_box(ship, "Bumper", Vector3(4.5, 0.9, 0.7), Vector3(0.0, -0.95, -8.75), chrome)
-	_box(ship, "Grille", Vector3(2.6, 1.0, 0.15), Vector3(0.0, -0.05, -8.65), chrome)
+	_box(ship, "Grille", Vector3(2.6, 1.0, 0.15), Vector3(0.0, -0.05, -8.65), _paint(Color(0.9, 0.9, 0.95), VENTS, Vector2(0.6, 0.6)))
 	for side: float in [-1.0, 1.0]:
 		_box(ship, "Headlight", Vector3(0.7, 0.45, 0.12), Vector3(1.55 * side, -0.1, -8.66), _glow(Color(1.0, 0.95, 0.8), 1.4))
 		_box(ship, "SideWindow", Vector3(0.1, 1.0, 1.6), Vector3(2.11 * side, 1.3, -7.4), glass)
 		# Chrome exhaust stacks, a little homage to the trucks back on Earth.
 		_cylinder(ship, "Exhaust", 0.2, 3.6, Vector3(2.3 * side, 1.6, -5.0), chrome)
-		_cylinder(ship, "ExhaustCap", 0.26, 0.25, Vector3(2.3 * side, 3.45, -5.0), dark)
 	_box(ship, "Windshield", Vector3(3.7, 1.25, 0.12), Vector3(0.0, 1.3, -8.62), glass)
 	for i in 5:
 		_box(ship, "RoofLight", Vector3(0.35, 0.22, 0.3), Vector3(-1.4 + 0.7 * i, 2.31, -8.25), _glow(Color(1.0, 0.72, 0.25), 1.5))
-	var beacon := _box(ship, "Beacon", Vector3(0.55, 0.4, 0.55), Vector3(0.0, 2.42, -5.8), _glow(Color(1.0, 0.45, 0.1), 1.8))
-	beacon.set_script(_blinker_script)
 
-	# The cargo container out back.
 	_box(ship, "Hitch", Vector3(2.2, 1.4, 1.6), Vector3(0.0, -0.2, -4.0), dark)
-	_box(ship, "Container", Vector3(4.5, 4.1, 11.6), Vector3(0.0, 0.7, 2.3), teal)
-	_box(ship, "ContainerBand", Vector3(4.56, 0.45, 11.66), Vector3(0.0, 1.6, 2.3), cream)
-	for rib_z: float in [-3.3, -0.6, 2.1, 4.8, 7.9]:
-		_box(ship, "Rib", Vector3(4.6, 4.16, 0.18), Vector3(0.0, 0.7, rib_z), teal_dark)
+	_box(ship, "Container", Vector3(4.5, 4.1, 11.6), Vector3(0.0, 0.7, 2.3), box)
+	_box(ship, "ContainerBand", Vector3(4.56, 0.45, 11.66), Vector3(0.0, 1.6, 2.3), stripe)
 	_box(ship, "RearBumper", Vector3(4.6, 0.55, 0.45), Vector3(0.0, -1.15, 8.3), _hazard(1.2))
-	_box(ship, "NavLightLeft", Vector3(0.25, 0.25, 0.25), Vector3(-2.3, 2.85, 8.0), _glow(Color(1.0, 0.15, 0.15), 1.5))
-	_box(ship, "NavLightRight", Vector3(0.25, 0.25, 0.25), Vector3(2.3, 2.85, 8.0), _glow(Color(0.2, 1.0, 0.35), 1.5))
-
-	# Two big engines, each with a glowing nozzle and an engine trail.
 	_box(ship, "EngineMount", Vector3(3.8, 1.6, 1.0), Vector3(0.0, 0.3, 8.6), dark)
 	for side: float in [-1.0, 1.0]:
-		var x := 1.35 * side
-		_cylinder(ship, "Engine", 0.95, 2.4, Vector3(x, 0.3, 9.4), dark, ALONG_Z, 12)
-		_cylinder(ship, "EngineGlow", 0.72, 0.12, Vector3(x, 0.3, 10.62), engine_glow, ALONG_Z, 12)
-		var nozzle := Marker3D.new()
-		nozzle.name = "Nozzle"
-		nozzle.position = Vector3(x, 0.3, 10.75)
-		ship.add_child(nozzle, true)
-		var trail := MeshInstance3D.new()
-		trail.name = "EngineTrail"
-		trail.set_script(_trail_script)
-		nozzle.add_child(trail, true)
+		_loft(ship, "Engine", Vector3(1.35 * side, 0.3, 8.2), Vector2(1.7, 1.7), Vector3(1.35 * side, 0.3, 10.6), Vector2(1.9, 1.9), dark, 0.3)
+		_engine(ship, Vector3(1.35 * side, 0.3, 10.65), Vector2(1.4, 1.4), p.engine, 1.0 if with_trails else 0.3, with_trails)
 	return ship
 
 
 # --- The truck-stop station -------------------------------------------------
 # Its docking face (the front) points toward +Z, where the player arrives from.
+# Out front, below the docking bay, there's a parking deck full of trucks.
 
 func _build_station() -> Node3D:
 	var station := Node3D.new()
 	station.name = "Station"
 
-	var hull := _paint(Color(0.72, 0.7, 0.78))
-	var accent := _paint(Color(0.35, 0.22, 0.55))
-	var dark := _paint(Color(0.14, 0.13, 0.2))
+	var hull := _paint(Color(0.74, 0.72, 0.8), HULL, Vector2(16.0, 10.0), false)
+	var accent := _paint(Color(0.42, 0.28, 0.62), HULL, Vector2(16.0, 1.0), false)
+	var strut := _paint(Color(0.42, 0.28, 0.62), HULL, Vector2(0.05, 0.05))
+	var dark := _paint(Color(0.16, 0.15, 0.22), HULL, Vector2(0.05, 0.05))
 	var body := StaticBody3D.new()
 	body.name = "Collision"
 	station.add_child(body, true)
@@ -135,28 +244,21 @@ func _build_station() -> Node3D:
 			[Vector3(10.0, 82.0, 6.0), Vector3(46.0, 0.0, 138.0)]]:
 		_box(station, "DockingFrame", frame_part[0], frame_part[1], hazard)
 
-	# The big ring, with four spokes holding it to the hub.
+	# The big ring, wrapped in rows of little windows (most lit, a few dark),
+	# with four spokes holding it to the hub.
 	var ring_mesh := TorusMesh.new()
 	ring_mesh.inner_radius = 300.0
 	ring_mesh.outer_radius = 360.0
 	ring_mesh.rings = 32
 	ring_mesh.ring_segments = 8
-	ring_mesh.material = hull
+	ring_mesh.material = _windows(Vector2(24.0, 1.5))
 	_mesh(station, "Ring", ring_mesh, Vector3.ZERO, ALONG_Z)
 	_add_ring_collision(body, 330.0, 30.0, 24)
 	for i in 4:
 		var angle := PI / 4.0 + i * PI / 2.0
-		var spoke := _box(station, "Spoke", Vector3(18.0, 236.0, 18.0), Vector3(cos(angle), sin(angle), 0.0) * 187.0, accent)
+		var spoke := _box(station, "Spoke", Vector3(18.0, 236.0, 18.0), Vector3(cos(angle), sin(angle), 0.0) * 187.0, strut)
 		spoke.rotation = Vector3(0.0, 0.0, angle - PI / 2.0)
 		_add_collision(body, spoke)
-
-	# Warm windows all around the ring's front face, and blinking beacons.
-	var window_colors: Array[Color] = [Color(1.0, 0.82, 0.4), Color(1.0, 0.82, 0.4), Color(1.0, 0.5, 0.75), Color(0.45, 0.95, 1.0)]
-	for i in 64:
-		var angle := TAU * i / 64.0
-		var color: Color = window_colors[(i * 7) % window_colors.size()]
-		var window := _box(station, "Window", Vector3(16.0, 9.0, 3.0), Vector3(cos(angle) * 330.0, sin(angle) * 330.0, 30.0), _glow(color, 1.4))
-		window.rotation = Vector3(0.0, 0.0, angle + PI / 2.0)  # Long side along the ring.
 	for i in 4:
 		var angle := i * PI / 2.0
 		var beacon := _box(station, "Beacon", Vector3(12.0, 12.0, 12.0), Vector3(cos(angle), sin(angle), 0.0) * 366.0, _glow(Color(1.0, 0.2, 0.2), 1.8))
@@ -169,47 +271,214 @@ func _build_station() -> Node3D:
 	_box(station, "SignPost", Vector3(10.0, 14.0, 10.0), Vector3(0.0, 74.0, 132.0), dark)
 	_sign(station, "NeonSignTop", "TRUCK STOP", 0.5, Color(1.0, 0.45, 0.8), Vector3(0.0, 158.0, 136.0))
 	_sign(station, "NeonSignBottom", "OPEN 24/7 - FUEL - NAPS", 0.25, Color(0.45, 0.95, 1.0), Vector3(0.0, 108.0, 136.0))
+
+	_build_parking_deck(station, body)
 	return station
 
 
-# --- Helpers -----------------------------------------------------------------
+## The parking deck: a big floating lot below the docking bay where truckers
+## park their rigs between jobs. Painted bays, lamp posts, and a row of trucks
+## with their cab lights on (somebody's napping in there).
+func _build_parking_deck(station: Node3D, body: StaticBody3D) -> void:
+	var deck_y := -112.0  # The top of the deck.
+	var bay_width := 26.0
+	var deck_paint := _paint(Color(0.36, 0.34, 0.44), HULL, Vector2(0.1, 0.1))
+	var line_paint := _paint(Color(0.95, 0.92, 0.8), null)
+	_add_collision(body, _box(station, "ParkingDeck", Vector3(bay_width * 8.0 + 30.0, 6.0, 130.0), Vector3(0.0, deck_y - 3.0, 170.0), deck_paint))
+	_add_collision(body, _box(station, "DeckPylon", Vector3(24.0, 48.0, 30.0), Vector3(0.0, deck_y + 20.0, 118.0), _paint(Color(0.42, 0.28, 0.62), HULL, Vector2(0.1, 0.1))))
+	_box(station, "DeckEdge", Vector3(bay_width * 8.0 + 30.0, 2.0, 2.0), Vector3(0.0, deck_y - 0.5, 235.0), _hazard(0.25))
+	_sign(station, "ParkingSign", "TRUCK PARKING", 0.12, Color(1.0, 0.8, 0.3), Vector3(0.0, deck_y + 36.0, 134.0))
+	_sign(station, "IdleSign", "NO IDLING  ·  NO SPACE-WHALE FEEDING", 0.05, Color(0.45, 0.95, 1.0), Vector3(0.0, deck_y + 28.0, 134.0))
 
-func _paint(color: Color, roughness: float = 0.8) -> StandardMaterial3D:
-	var key := "paint %s %s" % [color, roughness]
+	# Eight parking bays (painted lines), six of them taken.
+	for i in 9:
+		_box(station, "BayLine", Vector3(0.8, 0.3, 44.0), Vector3((i - 4.0) * bay_width, deck_y + 0.15, 178.0), line_paint)
+	var parked := [
+		[0, "box", 0], [1, "capsule", 1], [3, "box", 2], [4, "capsule", 2], [5, "box", 0], [7, "capsule", 0]]
+	for spot: Array in parked:
+		var x := (int(spot[0]) - 3.5) * bay_width
+		var truck: Node3D
+		if spot[1] == "box":
+			truck = _build_box_hauler("ParkedBoxHauler", BOX_PAINTS[spot[2]], false)
+			truck.position = Vector3(x, deck_y + 2.2, 178.0)
+		else:
+			truck = _build_capsule_hauler("ParkedCapsuleHauler", CAPSULE_PAINTS[spot[2]], false)
+			truck.position = Vector3(x, deck_y + 4.6, 178.0)
+		# Parked nose-out, backed into the bay like a pro.
+		station.add_child(truck, true)
+		var shape := CollisionShape3D.new()
+		shape.name = "ParkedTruckShape"
+		var box_shape := BoxShape3D.new()
+		box_shape.size = Vector3(14.0, 7.0, 34.0) if spot[1] == "capsule" else Vector3(5.0, 5.0, 20.0)
+		shape.shape = box_shape
+		shape.position = truck.position
+		body.add_child(shape, true)
+
+	# Lamp posts along the front edge, glowing warm like a truck-stop lot.
+	for i in 5:
+		var x := (i - 2.0) * bay_width * 2.0
+		_box(station, "LampPost", Vector3(0.8, 14.0, 0.8), Vector3(x, deck_y + 7.0, 232.0), _paint(Color(0.2, 0.2, 0.25), null))
+		_box(station, "Lamp", Vector3(3.0, 1.0, 2.0), Vector3(x, deck_y + 14.0, 231.0), _glow(Color(1.0, 0.75, 0.4), 1.5))
+
+
+# --- Shapes -------------------------------------------------------------------
+
+## A chunky 8-sided tube: a rectangle with its corners cut off, stretched
+## from one cross-section (`front_center`, `front_size`) to another. Most of
+## the ships are built from these. `bevel` is how much of each corner is cut
+## (0.25 = a quarter of the smaller side).
+func _loft(parent: Node3D, node_name: String, front_center: Vector3, front_size: Vector2,
+		back_center: Vector3, back_size: Vector2, material: Material, bevel: float = 0.22) -> MeshInstance3D:
+	var front := _octagon(front_center, front_size, bevel)
+	var back := _octagon(back_center, back_size, bevel)
+	var triangles: Array[PackedVector3Array] = []
+	for i in 8:
+		var j := (i + 1) % 8
+		triangles.append(PackedVector3Array([front[i], front[j], back[j]]))
+		triangles.append(PackedVector3Array([front[i], back[j], back[i]]))
+	for i in range(1, 7):
+		triangles.append(PackedVector3Array([front[0], front[i], front[i + 1]]))
+		triangles.append(PackedVector3Array([back[0], back[i], back[i + 1]]))
+	return _mesh(parent, node_name, _flat_mesh(triangles, (front_center + back_center) * 0.5, material), Vector3.ZERO)
+
+
+## A flat slab (like a wing): a convex outline in the X/Z plane (seen from
+## above), `thickness` meters thick, centered at height `y`.
+func _slab(parent: Node3D, node_name: String, outline: PackedVector2Array, y: float, thickness: float, material: Material) -> MeshInstance3D:
+	var top := PackedVector3Array()
+	var bottom := PackedVector3Array()
+	var middle := Vector3.ZERO
+	for point in outline:
+		top.append(Vector3(point.x, y + thickness * 0.5, point.y))
+		bottom.append(Vector3(point.x, y - thickness * 0.5, point.y))
+		middle += Vector3(point.x, y, point.y) / outline.size()
+	var triangles: Array[PackedVector3Array] = []
+	var count := outline.size()
+	for i in count:
+		var j := (i + 1) % count
+		triangles.append(PackedVector3Array([top[i], top[j], bottom[j]]))
+		triangles.append(PackedVector3Array([top[i], bottom[j], bottom[i]]))
+	for i in range(1, count - 1):
+		triangles.append(PackedVector3Array([top[0], top[i], top[i + 1]]))
+		triangles.append(PackedVector3Array([bottom[0], bottom[i], bottom[i + 1]]))
+	return _mesh(parent, node_name, _flat_mesh(triangles, middle, material), Vector3.ZERO)
+
+
+## The eight corners of a rectangle with its corners cut off.
+func _octagon(center: Vector3, size: Vector2, bevel: float) -> PackedVector3Array:
+	var w := size.x * 0.5
+	var h := size.y * 0.5
+	var cut := minf(size.x, size.y) * bevel
+	var corners := PackedVector3Array()
+	for point: Vector2 in [
+			Vector2(-w + cut, h), Vector2(w - cut, h), Vector2(w, h - cut), Vector2(w, -h + cut),
+			Vector2(w - cut, -h), Vector2(-w + cut, -h), Vector2(-w, -h + cut), Vector2(-w, h - cut)]:
+		corners.append(center + Vector3(point.x, point.y, 0.0))
+	return corners
+
+
+## Turns a list of triangles into a flat-shaded mesh. Works for any convex
+## shape: each triangle is turned to face away from the shape's `middle`.
+func _flat_mesh(triangles: Array[PackedVector3Array], middle: Vector3, material: Material) -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_material(material)
+	for triangle in triangles:
+		var a := triangle[0]
+		var b := triangle[1]
+		var c := triangle[2]
+		var outward := (b - a).cross(c - a)
+		if outward.length_squared() < 0.000001:
+			continue  # A squashed, zero-size triangle: skip it.
+		if outward.dot((a + b + c) / 3.0 - middle) < 0.0:
+			outward = -outward
+		else:
+			# Godot shows a triangle's front when its corners go CLOCKWISE as
+			# seen from outside, so swap two corners to get that order.
+			var swap := b
+			b = c
+			c = swap
+		surface.set_normal(outward.normalized())
+		for corner in [a, b, c]:
+			surface.add_vertex(corner)
+	return surface.commit()
+
+
+## A glowing engine nozzle at `where` (the back of an engine), plus a marker
+## with an engine trail if `with_trail` is on.
+func _engine(ship: Node3D, where: Vector3, size: Vector2, color: Color, strength: float, with_trail: bool) -> void:
+	_box(ship, "EngineGlow", Vector3(size.x, size.y, 0.15), where, _glow(color, strength))
+	if not with_trail:
+		return
+	var nozzle := Marker3D.new()
+	nozzle.name = "Nozzle"
+	nozzle.position = where + Vector3(0.0, 0.0, 0.25)
+	ship.add_child(nozzle, true)
+	var trail := MeshInstance3D.new()
+	trail.name = "EngineTrail"
+	trail.set_script(_trail_script)
+	nozzle.add_child(trail, true)
+
+
+func _mirrored(outline: PackedVector2Array) -> PackedVector2Array:
+	var flipped := PackedVector2Array()
+	for point in outline:
+		flipped.append(Vector2(-point.x, point.y))
+	return flipped
+
+
+# --- Materials ------------------------------------------------------------------
+
+## A painted PS1 surface: a tiny texture (hull plating by default) tinted with
+## `color`. `texture` = null gives flat paint. `box_uv` projects the texture
+## from the sides in meters; turn it off for round shapes that bring their
+## own texture coordinates (cylinders, rings).
+func _paint(color: Color, texture: Texture2D = HULL, uv_scale: Vector2 = HULL_SCALE, box_uv: bool = true) -> ShaderMaterial:
+	var key := "paint %s %s %s %s" % [color, texture.resource_path if texture else "none", uv_scale, box_uv]
 	if not _material_cache.has(key):
-		var material := StandardMaterial3D.new()
-		material.albedo_color = color
-		material.roughness = roughness
+		var material := ShaderMaterial.new()
+		material.shader = SURFACE_SHADER
+		material.set_shader_parameter("albedo", color)
+		if texture != null:
+			material.set_shader_parameter("albedo_texture", texture)
+		material.set_shader_parameter("uv_scale", uv_scale)
+		material.set_shader_parameter("box_uv", box_uv)
 		_material_cache[key] = material
 	return _material_cache[key]
 
 
-## A material that glows on its own, like a lamp or a screen.
-func _glow(color: Color, strength: float, base: Color = Color.BLACK) -> StandardMaterial3D:
+## A material that glows on its own, like a lamp, a screen or an engine.
+func _glow(color: Color, strength: float, base: Color = Color.BLACK) -> ShaderMaterial:
 	var key := "glow %s %s %s" % [color, strength, base]
 	if not _material_cache.has(key):
-		var material := StandardMaterial3D.new()
-		material.albedo_color = base if base != Color.BLACK else color
-		material.roughness = 0.8
-		material.emission_enabled = true
-		material.emission = color
-		material.emission_energy_multiplier = strength
+		var material := ShaderMaterial.new()
+		material.shader = SURFACE_SHADER
+		material.set_shader_parameter("albedo", base if base != Color.BLACK else color)
+		material.set_shader_parameter("emission", color)
+		material.set_shader_parameter("emission_strength", strength)
 		_material_cache[key] = material
 	return _material_cache[key]
+
+
+## Rows of little station windows that glow where they're lit.
+func _windows(uv_scale: Vector2) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = SURFACE_SHADER
+	material.set_shader_parameter("albedo_texture", WINDOWS)
+	material.set_shader_parameter("uv_scale", uv_scale)
+	material.set_shader_parameter("box_uv", false)
+	material.set_shader_parameter("emission", Color.WHITE)
+	material.set_shader_parameter("emission_strength", 1.3)
+	material.set_shader_parameter("emission_from_texture", true)
+	return material
 
 
 ## Yellow-and-black hazard stripes. `stripes_per_meter` sets how big they look.
-func _hazard(stripes_per_meter: float) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.roughness = 0.8
-	material.albedo_texture = HAZARD_TEXTURE
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST  # Crisp pixels.
-	# "Triplanar" projects the stripes from the sides, so they tile evenly
-	# across every face of the box.
-	material.uv1_triplanar = true
-	material.uv1_scale = Vector3.ONE * stripes_per_meter
-	return material
+func _hazard(stripes_per_meter: float) -> ShaderMaterial:
+	return _paint(Color.WHITE, HAZARD, Vector2.ONE * stripes_per_meter * 0.25)
 
+
+# --- Helpers -----------------------------------------------------------------
 
 func _box(parent: Node3D, node_name: String, size: Vector3, where: Vector3, material: Material) -> MeshInstance3D:
 	var key := "%s %d" % [size, material.get_instance_id()]
@@ -274,12 +543,27 @@ func _sign(parent: Node3D, node_name: String, text: String, meters_per_pixel: fl
 	parent.add_child(label, true)
 
 
+## Painted-on lettering on the side of a ship. `side` is -1 (left) or 1 (right).
+func _decal(parent: Node3D, node_name: String, text: String, where: Vector3, side: float) -> void:
+	var label := Label3D.new()
+	label.name = node_name
+	label.text = text
+	label.font_size = 64
+	label.pixel_size = 0.03
+	label.outline_size = 0
+	label.modulate = Color(0.2, 0.2, 0.25)
+	label.double_sided = false
+	label.position = where
+	label.rotation = Vector3(0.0, PI / 2.0 * side, 0.0)  # Face outward.
+	parent.add_child(label, true)
+
+
 ## Gives a model part a matching invisible collision shape.
 func _add_collision(body: StaticBody3D, part: MeshInstance3D) -> void:
 	var collision := CollisionShape3D.new()
 	collision.name = part.name + "Shape"
 	# Simple shapes where we can (cheap and tiny); an exact copy of the
-	# triangles only for awkward shapes like the ring.
+	# triangles only for awkward shapes.
 	if part.mesh is BoxMesh:
 		var box := BoxShape3D.new()
 		box.size = (part.mesh as BoxMesh).size

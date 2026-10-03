@@ -8,8 +8,12 @@
 [ext_resource type="Script" path="res://scenes/flight/EngineHum.gd" id="6_hum"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hull"]
-radius = 2.6
-height = 20.0
+radius = 3.2
+height = 28.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pod"]
+radius = 2.5
+height = 19.0
 
 [node name="Ship" type="CharacterBody3D"]
 motion_mode = 1
@@ -17,15 +21,23 @@ script = ExtResource("1_ship")
 ship_data = ExtResource("2_rig")
 
 [node name="Hull" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.6, 0.8)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.4, -1.5)
 shape = SubResource("CapsuleShape3D_hull")
+
+[node name="LeftPod" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -8, 0.2, 3.25)
+shape = SubResource("CapsuleShape3D_pod")
+
+[node name="RightPod" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 8, 0.2, 3.25)
+shape = SubResource("CapsuleShape3D_pod")
 
 [node name="VisualPivot" type="Node3D" parent="."]
 
 [node name="ShipVisual" parent="VisualPivot" instance=ExtResource("3_visual")]
 
 [node name="CockpitCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -7.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -11.5)
 fov = 70.0
 near = 0.3
 far = 12000.0

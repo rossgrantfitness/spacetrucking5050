@@ -10,7 +10,8 @@ game's numbers, names and stuff never needs programming.
   your inherited rig: top speed, acceleration, how heavy it turns, boost,
   trail color, engine voice. Its blueprint is `ShipData.gd`.
 - **`systems/`**: one file per solar system. `home_system.tres` holds the home
-  system's signature color, which tints the space dust (and the fog, from M4).
+  system's signature color (tints the space dust) and haze color (the
+  distance haze faraway things fade into).
   Its blueprint is `SystemData.gd`.
 - **The other folders are empty for now** and fill up as their milestones
   arrive: `upgrades/` and `jobs/` (M2), `npcs/` and `dialogue/` (M3),

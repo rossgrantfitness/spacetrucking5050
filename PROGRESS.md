@@ -1,8 +1,9 @@
 # Progress
 
-**Current milestone:** M1 (Flight sandbox), **round 2**: reworked after your
-first playtest (momentum, rocket boost on its own fuel, a more reactive engine
-hum). Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Current milestone:** M1 (Flight sandbox), **round 3**: flying is approved,
+so this round is all about looks. The PS1 look (pulled forward from M4), a new
+rig built from your references, and a truck stop with traffic and a parking
+lot. Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
 **Last updated:** 2026-10-03
 
@@ -15,7 +16,7 @@ hum). Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
   - [x] Folder structure, autoload stubs, input map (keyboard+mouse and gamepad), Invert Y option
   - [x] Tuning resource (`data/tuning.tres`), boot screen with a live input check
   - [x] Headless validation (`tools/validate.sh`), self-tests, cloud-session Godot install
-- [x] **M1: Flight sandbox ("find the heart")** *(round 1 playtested: "totally pleasant"; round 2 waiting for playtest)*
+- [x] **M1: Flight sandbox ("find the heart")** *(round 1: "totally pleasant"; round 2: momentum and boost approved; round 3 waiting for playtest)*
   - [x] Arcade flight (round 1, since replaced by momentum below): throttle lever, banking that auto-levels, gentle nose auto-level, recharging boost
   - [x] Starter rig's personality in data (`data/ships/starter_rig.tres`): heavy and lazy
   - [x] Level-horizon chase cam with turn lag and boost pull-back; camera roll as an option
@@ -25,10 +26,11 @@ hum). Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
   - [x] An asteroid field of tumbling low-poly rocks (with collision) and a distant truck-stop station
   - [x] Minimal corner HUD (speed gauge, station marker, mouse reticle), small pause menu, "Press Start" on the boot screen
   - [x] Self-tests for the flight rules, sound loops and rock meshes; an autopilot smoke test of the sandbox
+  - [x] Round 3 (from your feedback): the PS1 look (low-res, wobbly verts, swimming textures, 15-bit dithered color, per-system haze), a new BB 42-style rig, an oversized ringed planet, two traffic ships around the truck stop, and a parking deck with six parked trucks
   - [x] Round 2 (from your feedback): momentum (thrust, coast, reverse-thrust brake, carving turns with tunable grip, overshooting), rocket boost on a boost-fuel tank (top up at the truck stop for now), boost screen shake with an on/off switch, a drift marker on the HUD, and an engine hum that reacts to thrust, slides and boost
 - [ ] **M2: The delivery loop**: job → fly → approach ring → auto-dock → payout → fly back → speed upgrade you can feel; fuel, bonks, save/load
 - [ ] **M3: The walkable hub**: neon rooms with fixed FF8-style cameras, on-foot controller, dialogue with voice blips
-- [ ] **M4: PSX look + the radio**: PSX shaders, low-res rendering, per-system fog, palette and references, radio stations
+- [ ] **M4: PSX look + the radio**: radio stations, glow pass, 3D cockpit instruments and radar globe, neon hub lighting *(the PSX shaders, low-res rendering, dither, per-system haze and an oversized planet were pulled forward into M1 round 3)*
 - [ ] **M5: Life in space**: comms, random sights, funny ship labels, gentle hazards, cockpit gizmos, screen shake, route map
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
 - [ ] **M7: Home & style**: wardrobe, decor, bigger apartment, new ships, docking computer, forklift minigame
@@ -54,9 +56,11 @@ cartoon bonks that knock your cargo condition, and basic saving.
   5 km hop. We'll plan that when routes and systems arrive (M2 route length,
   M5 route map). Remember the brief's dev default of short legs so testing
   stays quick; the real length will be a tuning value.
-- **The ship:** you're picturing something Cowboy Bebop-sized (room for 4-5
-  people and months of supplies) rather than a literal space truck, and you've
-  found other references. Waiting on those pictures for the next placeholder.
+- **The ship:** done in round 3 from your references (`reference/`). Real
+  art can replace `scenes/flight/ShipVisual.tscn` any time.
+- **Your uploaded model packs:** not used yet (see `DECISIONS.md`). If you buy
+  a pack from its official store, or find one with a clear free license
+  (like CC0), drop it in and tell me; I'll wire it up as traffic or a ship.
 - **Boost fuel is bought and stored** in a limited tank, like a real truck's
   fuel. Buying it arrives with the economy (M2: fuel; M6: purchases).
 
@@ -70,8 +74,9 @@ Ideas that aren't in the plan. Nothing here gets built without your OK.
   shared through screenshots.
 - **Dev shortcuts on the boot screen**: buttons that jump straight into any
   scene, to make testing faster as the game grows.
-- **"Stop the ship" assist** (auto-brake to a halt) for lazy cruising, now
-  that braking takes reverse thrust. Asked about in the round-2 playtest.
+- ~~**"Stop the ship" assist**~~: declined in the round-2 playtest.
+- **The boot screen in PS1 style.** It's still a plain setup/input check;
+  it becomes the main menu in M10, and gets the PS1 treatment then.
 - **Look around** with the right stick (orbit the chase cam, or turn your head
   in the cockpit). The controls already exist in the input map; it would fit
   nicely with the 3D cockpit in M5.

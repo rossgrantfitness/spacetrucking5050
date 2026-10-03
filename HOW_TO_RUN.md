@@ -140,6 +140,16 @@ Numbers that belong to one ship (top speed, acceleration, how heavy it turns,
 boost) live in that ship's own file: `data/ships/starter_rig.tres`. It works
 the same way.
 
+**The PS1 look** has its own group in `tuning.tres`, called *PS1 look*: how
+chunky the pixels are, how much models wobble, how much textures swim, the
+number of colors, the dither, and the distance haze. The haze *color* belongs
+to each solar system, in `data/systems/home_system.tres`.
+
+**Traffic ships** around the truck stop are the *Commuter* and *Orbiter*
+nodes in `scenes/flight/FlightSandbox.tscn` (under *PSXView → Viewport →
+World*). Select one to change its speed or the list of spots it flies
+through (*Waypoints*).
+
 ## Where your settings are saved
 
 Player options (like Invert Y) are saved in `settings.json` in the game's user
