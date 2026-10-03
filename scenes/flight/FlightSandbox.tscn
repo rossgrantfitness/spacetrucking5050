@@ -13,11 +13,13 @@
 [ext_resource type="Shader" path="res://shaders/speed_lines.gdshader" id="11_lines_shader"]
 [ext_resource type="PackedScene" path="res://scenes/ui/FlightHUD.tscn" id="12_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="13_pause"]
-[ext_resource type="Script" path="res://scenes/common/PSXView.gd" id="14_psx"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="14_psx"]
 [ext_resource type="Script" path="res://scenes/common/SkyBackdrop.gd" id="15_sky"]
 [ext_resource type="Shader" path="res://shaders/psx_sky.gdshader" id="16_sky_shader"]
 [ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
+[ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
+[ext_resource type="Texture2D" path="res://textures/generated/nebula.png" id="22_nebula_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="19_capsule"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="20_box"]
 
@@ -57,6 +59,19 @@ outer_radius = 3900.0
 rings = 32
 ring_segments = 4
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nebula"]
+render_priority = 0
+shader = ExtResource("21_nebula_shader")
+shader_parameter/clouds = ExtResource("22_nebula_tex")
+shader_parameter/strength = 0.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_nebula"]
+material = SubResource("ShaderMaterial_nebula")
+radius = 10500.0
+height = 21000.0
+radial_segments = 32
+rings = 16
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lines"]
 shader = ExtResource("11_lines_shader")
 
@@ -64,34 +79,22 @@ shader = ExtResource("11_lines_shader")
 script = ExtResource("1_sandbox")
 system = ExtResource("2_system")
 
-[node name="PSXView" type="SubViewportContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-stretch = true
-stretch_shrink = 3
-script = ExtResource("14_psx")
+[node name="World" type="Node3D" parent="."]
 
-[node name="Viewport" type="SubViewport" parent="PSXView"]
-handle_input_locally = false
-audio_listener_enable_3d = true
-size = Vector2i(426, 240)
-render_target_update_mode = 4
-
-[node name="World" type="Node3D" parent="PSXView/Viewport"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="PSXView/Viewport/World"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
 environment = SubResource("Environment_space")
 
-[node name="Sun" type="DirectionalLight3D" parent="PSXView/Viewport/World"]
+[node name="Sun" type="DirectionalLight3D" parent="World"]
 transform = Transform3D(0.77292824, -0.31702483, 0.54961544, 0, 0.86622715, 0.49965036, -0.63449335, -0.38619387, 0.6695315, 0, 100, 0)
 light_color = Color(1, 0.9, 0.78, 1)
 light_energy = 1.3
 
-[node name="Starfield" type="MultiMeshInstance3D" parent="PSXView/Viewport/World"]
+[node name="FillLight" type="DirectionalLight3D" parent="World"]
+rotation = Vector3(0.336, -2.453, 0)
+light_color = Color(0.5, 0.45, 0.95, 1)
+light_energy = 0.35
+
+[node name="Starfield" type="MultiMeshInstance3D" parent="World"]
 script = ExtResource("3_stars")
 star_count = 1200
 radius = 9000.0
@@ -99,9 +102,9 @@ star_size = 30.0
 drift_speed = 0.0
 follow_camera = true
 
-[node name="Ship" parent="PSXView/Viewport/World" instance=ExtResource("4_ship")]
+[node name="Ship" parent="World" instance=ExtResource("4_ship")]
 
-[node name="ChaseCamera" type="Camera3D" parent="PSXView/Viewport/World" node_paths=PackedStringArray("target")]
+[node name="ChaseCamera" type="Camera3D" parent="World" node_paths=PackedStringArray("target")]
 current = true
 fov = 70.0
 near = 0.3
@@ -109,29 +112,32 @@ far = 12000.0
 script = ExtResource("5_chase")
 target = NodePath("../Ship")
 
-[node name="SpaceDust" type="MeshInstance3D" parent="PSXView/Viewport/World"]
+[node name="SpaceDust" type="MeshInstance3D" parent="World"]
 script = ExtResource("6_dust")
 
-[node name="AsteroidField" type="Node3D" parent="PSXView/Viewport/World"]
+[node name="AsteroidField" type="Node3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2400)
 script = ExtResource("7_field")
 
-[node name="Station" parent="PSXView/Viewport/World" instance=ExtResource("8_station")]
+[node name="Station" parent="World" instance=ExtResource("8_station")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5300)
 
-[node name="SkyBackdrop" type="Node3D" parent="PSXView/Viewport/World"]
+[node name="SkyBackdrop" type="Node3D" parent="World"]
 script = ExtResource("15_sky")
 
-[node name="Planet" type="MeshInstance3D" parent="PSXView/Viewport/World/SkyBackdrop"]
+[node name="Nebula" type="MeshInstance3D" parent="World/SkyBackdrop"]
+mesh = SubResource("SphereMesh_nebula")
+
+[node name="Planet" type="MeshInstance3D" parent="World/SkyBackdrop"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6200, 2300, -4400)
 mesh = SubResource("SphereMesh_planet")
 
-[node name="PlanetRing" type="MeshInstance3D" parent="PSXView/Viewport/World/SkyBackdrop/Planet"]
+[node name="PlanetRing" type="MeshInstance3D" parent="World/SkyBackdrop/Planet"]
 rotation = Vector3(0.35, 0, 0.3)
 scale = Vector3(1, 0.02, 1)
 mesh = SubResource("TorusMesh_planet_ring")
 
-[node name="Commuter" type="Node3D" parent="PSXView/Viewport/World"]
+[node name="Commuter" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")
 visual_scene = ExtResource("19_capsule")
 waypoints = PackedVector3Array(150, 520, -4500, 260, 560, -2500, 200, 520, -300, 0, 450, 500, -220, 400, -300, -260, 460, -2500, -150, 420, -4500, 0, 300, -4800)
@@ -140,13 +146,17 @@ start_fraction = 0.55
 engine_trail_color = Color(0.45, 0.85, 1, 1)
 hull_size = Vector3(14, 7, 34)
 
-[node name="Orbiter" type="Node3D" parent="PSXView/Viewport/World"]
+[node name="Orbiter" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")
 visual_scene = ExtResource("20_box")
 waypoints = PackedVector3Array(700, 180, -5300, 494.975, 222.426, -4805.03, 4.28626e-14, 240, -4600, -494.975, 222.426, -4805.03, -700, 180, -5300, -494.975, 137.574, -5794.97, -1.28588e-13, 120, -6000, 494.975, 137.574, -5794.97)
 speed = 40.0
 engine_trail_color = Color(0.45, 0.85, 1, 1)
 hull_size = Vector3(5, 5, 20)
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("14_psx")
 
 [node name="SpeedLinesLayer" type="CanvasLayer" parent="."]
 layer = 1

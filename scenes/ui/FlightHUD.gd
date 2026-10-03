@@ -27,20 +27,17 @@ func _ready() -> void:
 	_refresh()
 
 
-## Tells the HUD which ship to show, where the destination is, and which 3D
-## view the world is seen through (to put markers in the right spots).
-func setup(ship: Ship, destination: Node3D, view: PSXView) -> void:
+## Tells the HUD which ship to show and where the destination is.
+func setup(ship: Ship, destination: Node3D) -> void:
 	_gauge.ship = ship
 	_drift.ship = ship
-	_drift.view = view
-	_marker.view = view
 	_reticle.controls = ship.controls
 	_marker.target = destination
 
 
 ## Shows "topping up boost fuel" next to the station marker while it happens.
 func set_refueling(refueling: bool) -> void:
-	_marker.label = "TRUCK STOP  ·  TOPPING UP BOOST FUEL" if refueling else "TRUCK STOP"
+	_marker.label = "TRUCK STOP · TOPPING UP BOOST FUEL" if refueling else "TRUCK STOP"
 
 
 func set_cockpit_view(in_cockpit: bool) -> void:

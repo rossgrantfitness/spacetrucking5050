@@ -24,10 +24,13 @@ const HULL := preload("res://textures/generated/hull_panels.png")
 const VENTS := preload("res://textures/generated/vents.png")
 const HAZARD := preload("res://textures/generated/hazard_stripes.png")
 const WINDOWS := preload("res://textures/generated/station_windows.png")
+const CONTAINER := preload("res://textures/generated/container.png")
+const CHEVRONS := preload("res://textures/generated/chevrons.png")
 # Scripts are loaded in _initialize (not preloaded) because EngineTrail uses
 # autoloads, which don't exist yet while this tool script is being compiled.
 const BLINKER_SCRIPT_PATH := "res://scenes/flight/Blinker.gd"
 const TRAIL_SCRIPT_PATH := "res://scenes/flight/EngineTrail.gd"
+const FLARE_SCRIPT_PATH := "res://scenes/flight/EngineFlare.gd"
 
 ## A rotation that turns a cylinder (normally standing up along Y) to lie
 ## along Z, front to back.
@@ -38,9 +41,13 @@ const HULL_SCALE := Vector2(0.25, 0.25)
 
 ## Paint jobs. Each truck model can be built in any of these.
 const RIG_PAINT := {
-	"body": Color(0.4, 0.41, 0.47), "pods": Color(0.8, 0.82, 0.86), "trim": Color(1.0, 0.8, 0.12),
+	"body": Color(0.42, 0.43, 0.5), "pods": Color(0.8, 0.82, 0.86), "trim": Color(1.0, 0.8, 0.12),
 	"dark": Color(0.2, 0.2, 0.25), "glass": Color(1.0, 0.68, 0.22), "engine": Color(1.0, 0.55, 0.3),
 }
+## Cargo container colors, picked in turn for each container on the rack.
+const CONTAINER_COLORS: Array[Color] = [
+	Color(0.8, 0.38, 0.22), Color(0.22, 0.56, 0.6), Color(0.9, 0.7, 0.22), Color(0.9, 0.86, 0.78),
+	Color(0.52, 0.32, 0.64), Color(0.76, 0.22, 0.24), Color(0.3, 0.62, 0.38), Color(0.9, 0.55, 0.62)]
 const CAPSULE_PAINTS: Array[Dictionary] = [
 	{"body": Color(0.8, 0.45, 0.26), "band": Color(0.97, 0.9, 0.74), "dark": Color(0.24, 0.2, 0.22), "engine": Color(0.45, 0.85, 1.0)},
 	{"body": Color(0.4, 0.66, 0.58), "band": Color(1.0, 0.78, 0.35), "dark": Color(0.18, 0.22, 0.26), "engine": Color(1.0, 0.5, 0.75)},
@@ -54,6 +61,7 @@ const BOX_PAINTS: Array[Dictionary] = [
 
 var _blinker_script: Script
 var _trail_script: Script
+var _flare_script: Script
 # Identical materials and boxes are made once and shared, which keeps the
 # saved scenes small and cheap to draw.
 var _material_cache := {}
@@ -64,6 +72,7 @@ var _box_cache := {}
 func _initialize() -> void:
 	_blinker_script = load(BLINKER_SCRIPT_PATH)
 	_trail_script = load(TRAIL_SCRIPT_PATH)
+	_flare_script = load(FLARE_SCRIPT_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/flight/traffic"))
 	_save(_build_rig(), "res://scenes/flight/ShipVisual.tscn")
 	_save(_build_capsule_hauler("CapsuleHaulerVisual", CAPSULE_PAINTS[0], true), "res://scenes/flight/traffic/CapsuleHaulerVisual.tscn")
@@ -73,10 +82,11 @@ func _initialize() -> void:
 
 
 # --- Your rig: a long-haul cargo hauler -------------------------------------
-# Inspired by the developer's "BB 42 cargo aircraft" reference: a gunmetal
-# fuselage with a glowing amber cockpit, a crew module on top (room for 4-5
-# people and months of supplies), two big silver engine pods with yellow trim,
-# and swept wings out back. About 31 m long and 33 m wide.
+# Half space truck, half the developer's "BB 42 cargo aircraft" reference: a
+# truck cab up front (amber cockpit glass, headlights, grille, chrome exhaust
+# stacks, crew quarters on top for 4-5 people), a rack of eight colorful
+# cargo containers behind it, and a heavy engine block with three engines.
+# About 34 m long and 15 m wide.
 
 func _build_rig() -> Node3D:
 	var ship := Node3D.new()
@@ -86,60 +96,69 @@ func _build_rig() -> Node3D:
 	var pods := _paint(p.pods)
 	var trim := _paint(p.trim, null)
 	var dark := _paint(p.dark)
+	var chrome := _paint(Color(0.85, 0.87, 0.92), null)
 
-	# The fuselage, front to back: nose, cockpit section, long middle, tail.
-	_loft(ship, "Nose", Vector3(0.0, -0.4, -15.0), Vector2(2.6, 1.6), Vector3(0.0, 0.0, -10.0), Vector2(5.6, 3.6), body)
-	_loft(ship, "Cabin", Vector3(0.0, 0.0, -10.0), Vector2(5.6, 3.6), Vector3(0.0, 0.1, -4.0), Vector2(6.4, 4.0), body)
-	_loft(ship, "MidBody", Vector3(0.0, 0.1, -4.0), Vector2(6.4, 4.0), Vector3(0.0, 0.1, 8.0), Vector2(6.4, 4.0), body)
-	_loft(ship, "Tail", Vector3(0.0, 0.1, 8.0), Vector2(6.4, 4.0), Vector3(0.0, 0.3, 11.5), Vector2(4.6, 3.0), dark)
-	_box(ship, "CargoBay", Vector3(4.6, 0.8, 12.0), Vector3(0.0, -2.2, 2.0), dark)
-	# The big amber cockpit window, raked back over the nose.
-	_loft(ship, "Canopy", Vector3(0.0, 0.75, -13.4), Vector2(1.8, 0.5), Vector3(0.0, 1.55, -9.6), Vector2(4.2, 1.3), _glow(p.glass, 1.1, Color(0.35, 0.2, 0.05)))
-	# The crew module on top, with little warm windows: somebody lives here.
-	_loft(ship, "HumpFront", Vector3(0.0, 1.9, -8.6), Vector2(3.0, 0.4), Vector3(0.0, 2.6, -4.5), Vector2(4.4, 1.6), pods)
-	_loft(ship, "Hump", Vector3(0.0, 2.6, -4.5), Vector2(4.4, 1.6), Vector3(0.0, 2.6, 6.0), Vector2(4.4, 1.6), pods)
-	_loft(ship, "HumpBack", Vector3(0.0, 2.6, 6.0), Vector2(4.4, 1.6), Vector3(0.0, 2.2, 9.0), Vector2(3.0, 0.5), pods)
+	# The cab: nose, then the main cab section.
+	_loft(ship, "Nose", Vector3(0.0, -0.6, -18.0), Vector2(3.6, 2.4), Vector3(0.0, 0.0, -14.0), Vector2(6.4, 4.4), body)
+	_loft(ship, "Cab", Vector3(0.0, 0.0, -14.0), Vector2(6.4, 4.4), Vector3(0.0, 0.2, -7.0), Vector2(7.0, 4.8), body)
+	_loft(ship, "Canopy", Vector3(0.0, 1.0, -16.6), Vector2(2.4, 0.6), Vector3(0.0, 2.2, -12.6), Vector2(5.0, 1.4), _glow(p.glass, 1.0, Color(0.35, 0.2, 0.05)))
+	# Truck face: grille, headlights and a chrome bumper.
+	_box(ship, "Grille", Vector3(2.4, 1.0, 0.12), Vector3(0.0, -0.9, -18.04), _paint(Color(1, 1, 1), VENTS, Vector2(0.5, 0.5)))
+	_box(ship, "Bumper", Vector3(4.2, 0.5, 0.6), Vector3(0.0, -1.85, -17.0), chrome)
+	for side: float in [-1.0, 1.0]:
+		_box(ship, "Headlight", Vector3(0.55, 0.35, 0.12), Vector3(1.4 * side, -0.25, -18.04), _glow(Color(1.0, 0.95, 0.8), 1.4))
+		# Chrome exhaust stacks behind the cab, a homage to Earth trucks.
+		_cylinder(ship, "ExhaustStack", 0.28, 4.4, Vector3(3.15 * side, 2.6, -7.6), chrome, Vector3.ZERO, 8)
+		_cylinder(ship, "StackCap", 0.36, 0.3, Vector3(3.15 * side, 4.9, -7.6), dark, Vector3.ZERO, 8)
+		_box(ship, "Pinstripe", Vector3(0.1, 0.22, 8.5), Vector3(3.43 * side, -0.5, -10.6), trim)
+		_decal(ship, "HullNumber", "5050", Vector3(3.47 * side, 0.6, -9.6), side)
+	# Crew quarters on the cab roof, with little warm windows: somebody lives here.
+	_loft(ship, "QuartersFront", Vector3(0.0, 2.5, -12.4), Vector2(4.0, 0.6), Vector3(0.0, 3.2, -10.0), Vector2(5.2, 1.8), pods)
+	_loft(ship, "Quarters", Vector3(0.0, 3.2, -10.0), Vector2(5.2, 1.8), Vector3(0.0, 3.2, -6.6), Vector2(5.2, 1.8), pods)
 	var cabin_light := _glow(Color(1.0, 0.82, 0.45), 1.3)
 	for side: float in [-1.0, 1.0]:
-		for i in 4:
-			_box(ship, "CabinWindow", Vector3(0.1, 0.4, 0.8), Vector3(2.21 * side, 2.7, -2.5 + i * 2.2), cabin_light)
-		# Yellow trim along the fuselage, like the reference's pinstripes.
-		_box(ship, "Pinstripe", Vector3(0.1, 0.22, 17.0), Vector3(3.22 * side, -0.4, -0.5), trim)
-		# Stubby wing roots holding the engine pods.
-		_box(ship, "PodPylon", Vector3(3.4, 0.8, 9.0), Vector3(4.6 * side, 0.0, 4.0), dark)
-		_build_rig_pod(ship, 8.0 * side, pods, trim, dark, p.engine)
-		# Swept wings outboard of the pods, with nav lights on the tips
-		# (red on the left, green on the right, like real aircraft).
-		var wing := PackedVector2Array([Vector2(10.4, 2.0), Vector2(16.5, 9.5), Vector2(16.5, 12.5), Vector2(10.4, 11.0)])
-		if side < 0.0:
-			wing = _mirrored(wing)
-		_slab(ship, "Wing", wing, 0.2, 0.5, dark)
-		var tip_color := Color(1.0, 0.15, 0.15) if side < 0.0 else Color(0.2, 1.0, 0.35)
-		var tip := _box(ship, "WingLight", Vector3(0.35, 0.35, 0.35), Vector3(16.6 * side, 0.2, 11.0), _glow(tip_color, 1.6))
-		tip.set_script(_blinker_script)
-		tip.set("offset", 0.0 if side < 0.0 else 0.5)
-		# The hull number, painted on each pod.
-		_decal(ship, "HullNumber", "5050", Vector3(10.7 * side, 0.3, 1.0), side)
-	# A long sensor probe out front with a blinking red tip, and a beacon on
-	# the roof.
-	_cylinder(ship, "Probe", 0.08, 3.4, Vector3(0.0, -0.4, -16.6), _paint(Color(0.8, 0.82, 0.86), null), ALONG_Z, 6)
-	var probe_tip := _box(ship, "ProbeTip", Vector3(0.3, 0.3, 0.3), Vector3(0.0, -0.4, -18.3), _glow(Color(1.0, 0.2, 0.2), 1.6))
-	probe_tip.set_script(_blinker_script)
-	var beacon := _box(ship, "Beacon", Vector3(0.5, 0.35, 0.5), Vector3(0.0, 3.55, 1.0), _glow(Color(1.0, 0.45, 0.1), 1.8))
+		for i in 3:
+			_box(ship, "CabinWindow", Vector3(0.1, 0.45, 0.7), Vector3(2.61 * side, 3.25, -9.4 + i * 1.1), cabin_light)
+
+	# The cargo rack: a spine with eight containers, framed front and back.
+	_box(ship, "Spine", Vector3(2.0, 2.0, 18.0), Vector3(0.0, 0.0, 1.5), dark)
+	_box(ship, "RackFront", Vector3(7.6, 6.8, 0.6), Vector3(0.0, 0.65, -6.1), dark)
+	_box(ship, "RackFrontStripe", Vector3(7.64, 0.7, 0.64), Vector3(0.0, 3.6, -6.1), _hazard(1.0))
+	var slot := 0
+	for z: float in [-2.0, 5.4]:
+		for y: float in [-0.9, 2.2]:
+			for side: float in [-1.0, 1.0]:
+				var paint := _paint(CONTAINER_COLORS[slot % CONTAINER_COLORS.size()], CONTAINER, Vector2(0.3, 0.33))
+				_box(ship, "Container", Vector3(3.2, 3.0, 7.2), Vector3(1.7 * side, y, z), paint)
+				slot += 1
+	for z: float in [1.7, 9.4]:
+		_box(ship, "RackClamp", Vector3(7.6, 0.5, 0.5), Vector3(0.0, 3.85, z), dark)
+		_box(ship, "RackClampLow", Vector3(7.6, 0.5, 0.5), Vector3(0.0, -2.55, z), dark)
+
+	# The engine block: one big main engine and two silver side pods.
+	_loft(ship, "EngineBlock", Vector3(0.0, 0.6, 9.6), Vector2(7.6, 6.4), Vector3(0.0, 0.6, 13.5), Vector2(6.4, 5.2), body)
+	_engine(ship, Vector3(0.0, 0.6, 13.55), Vector2(3.4, 2.6), p.engine, 1.0, true)
+	for side: float in [-1.0, 1.0]:
+		var x := 5.4 * side
+		_loft(ship, "PodIntake", Vector3(x, 0.4, 4.0), Vector2(3.2, 3.2), Vector3(x, 0.4, 6.0), Vector2(3.8, 3.8), pods)
+		_loft(ship, "Pod", Vector3(x, 0.4, 6.0), Vector2(3.8, 3.8), Vector3(x, 0.4, 14.0), Vector2(3.8, 3.8), pods)
+		_loft(ship, "PodExhaust", Vector3(x, 0.4, 14.0), Vector2(3.8, 3.8), Vector3(x, 0.4, 15.5), Vector2(3.2, 3.2), dark)
+		_box(ship, "IntakeGrille", Vector3(2.4, 2.4, 0.15), Vector3(x, 0.4, 3.95), _paint(Color(1, 1, 1), VENTS, Vector2(0.5, 0.5)))
+		_box(ship, "PodTrim", Vector3(0.3, 0.1, 9.0), Vector3(x, 2.33, 10.0), trim)
+		_box(ship, "PodPylon", Vector3(2.0, 0.8, 4.0), Vector3(3.9 * side, 0.4, 11.5), dark)
+		_engine(ship, Vector3(x, 0.4, 15.55), Vector2(2.4, 2.4), p.engine, 1.0, true)
+		# Radiator fins on top of the engine block.
+		_box(ship, "Radiator", Vector3(0.25, 1.8, 3.2), Vector3(1.6 * side, 4.6, 11.3), pods)
+		# Nav lights: red on the left, green on the right, like real aircraft.
+		var light_color := Color(1.0, 0.15, 0.15) if side < 0.0 else Color(0.2, 1.0, 0.35)
+		var nav := _box(ship, "NavLight", Vector3(0.35, 0.35, 0.35), Vector3(x + 1.95 * side, 0.4, 13.0), _glow(light_color, 1.6))
+		nav.set_script(_blinker_script)
+		nav.set("offset", 0.0 if side < 0.0 else 0.5)
+	_cylinder(ship, "Antenna", 0.08, 3.0, Vector3(0.0, 5.4, 12.0), chrome, Vector3.ZERO, 5)
+	var beacon := _box(ship, "Beacon", Vector3(0.5, 0.35, 0.5), Vector3(0.0, 4.25, -8.6), _glow(Color(1.0, 0.45, 0.1), 1.8))
 	beacon.set_script(_blinker_script)
 	beacon.set("offset", 0.25)
 	return ship
-
-
-func _build_rig_pod(ship: Node3D, x: float, pods: Material, trim: Material, dark: Material, engine: Color) -> void:
-	var y := 0.2
-	_loft(ship, "PodIntake", Vector3(x, y, -6.0), Vector2(4.6, 3.6), Vector3(x, y, -3.0), Vector2(5.2, 4.2), pods)
-	_loft(ship, "Pod", Vector3(x, y, -3.0), Vector2(5.2, 4.2), Vector3(x, y, 10.0), Vector2(5.2, 4.2), pods)
-	_loft(ship, "PodExhaust", Vector3(x, y, 10.0), Vector2(5.2, 4.2), Vector3(x, y, 12.5), Vector2(4.4, 3.4), dark)
-	_box(ship, "IntakeGrille", Vector3(3.4, 2.4, 0.2), Vector3(x, y, -6.05), _paint(Color(1, 1, 1), VENTS, Vector2(0.5, 0.5)))
-	_box(ship, "PodTrimTop", Vector3(0.3, 0.1, 13.0), Vector3(x, y + 2.13, 3.5), trim)
-	_box(ship, "PodTrimSide", Vector3(0.1, 0.3, 13.0), Vector3(x + 2.62 * signf(x), y - 0.6, 3.5), trim)
-	_engine(ship, Vector3(x, y, 12.55), Vector2(3.4, 2.4), engine, 1.0, true)
 
 
 # --- Traffic: the capsule hauler --------------------------------------------
@@ -265,6 +284,10 @@ func _build_station() -> Node3D:
 		beacon.set_script(_blinker_script)
 		beacon.set("offset", i * 0.25)
 
+	# Chevron boards either side of the docking bay, like racetrack barriers.
+	for side: float in [-1.0, 1.0]:
+		_box(station, "ChevronBoard", Vector3(60.0, 16.0, 4.0), Vector3(90.0 * side, 0.0, 136.0), _paint(Color.WHITE, CHEVRONS, Vector2(0.125, 0.125)))
+
 	# A neon sign over the docking bay. Mundane trucker stuff, floating in space.
 	var board := _box(station, "SignBoard", Vector3(440.0, 120.0, 6.0), Vector3(0.0, 140.0, 132.0), dark)
 	_add_collision(body, board)
@@ -286,7 +309,7 @@ func _build_parking_deck(station: Node3D, body: StaticBody3D) -> void:
 	var line_paint := _paint(Color(0.95, 0.92, 0.8), null)
 	_add_collision(body, _box(station, "ParkingDeck", Vector3(bay_width * 8.0 + 30.0, 6.0, 130.0), Vector3(0.0, deck_y - 3.0, 170.0), deck_paint))
 	_add_collision(body, _box(station, "DeckPylon", Vector3(24.0, 48.0, 30.0), Vector3(0.0, deck_y + 20.0, 118.0), _paint(Color(0.42, 0.28, 0.62), HULL, Vector2(0.1, 0.1))))
-	_box(station, "DeckEdge", Vector3(bay_width * 8.0 + 30.0, 2.0, 2.0), Vector3(0.0, deck_y - 0.5, 235.0), _hazard(0.25))
+	_box(station, "DeckEdge", Vector3(bay_width * 8.0 + 30.0, 3.0, 2.0), Vector3(0.0, deck_y - 0.5, 235.0), _paint(Color.WHITE, CHEVRONS, Vector2(0.25, 0.25)))
 	_sign(station, "ParkingSign", "TRUCK PARKING", 0.12, Color(1.0, 0.8, 0.3), Vector3(0.0, deck_y + 36.0, 134.0))
 	_sign(station, "IdleSign", "NO IDLING  ·  NO SPACE-WHALE FEEDING", 0.05, Color(0.45, 0.95, 1.0), Vector3(0.0, deck_y + 28.0, 134.0))
 
@@ -418,6 +441,12 @@ func _engine(ship: Node3D, where: Vector3, size: Vector2, color: Color, strength
 	trail.name = "EngineTrail"
 	trail.set_script(_trail_script)
 	nozzle.add_child(trail, true)
+	var flare := MeshInstance3D.new()
+	flare.name = "EngineFlare"
+	flare.set_script(_flare_script)
+	flare.position = Vector3(0.0, 0.0, 0.4)
+	flare.set("size_at_top_speed", maxf(size.x, size.y) * 3.0)
+	nozzle.add_child(flare, true)
 
 
 func _mirrored(outline: PackedVector2Array) -> PackedVector2Array:

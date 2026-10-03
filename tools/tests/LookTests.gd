@@ -3,10 +3,15 @@ extends "res://tools/tests/TestSuite.gd"
 ## is for the playtest; these check the plumbing.
 
 
-func test_low_res_view_shrinks_to_about_240_rows() -> void:
-	check(PSXView.shrink_for(720.0, 240) == 3, "a 720-row view should be drawn at 1/3 size (240 rows)")
-	check(PSXView.shrink_for(1080.0, 270) == 4, "a 1080-row view aiming for 270 rows should be drawn at 1/4 size")
-	check(PSXView.shrink_for(100.0, 240) == 1, "a tiny view should never shrink below full size")
+func test_wobble_grid_matches_the_screen_shape() -> void:
+	check(PSXScreen.snap_grid(Vector2(1920, 1080), 480.0).is_equal_approx(Vector2(853.333, 480.0)), "a 16:9 screen gets a 16:9 snap grid")
+	check(PSXScreen.snap_grid(Vector2(800, 600), 480.0).is_equal_approx(Vector2(640.0, 480.0)), "an 800x600 screen gets a 4:3 snap grid")
+
+
+func test_dither_dots_scale_with_the_screen() -> void:
+	check(PSXScreen.dither_dot_size(1080.0, 540.0) == 2.0, "at 1080p each dither dot is 2 pixels")
+	check(PSXScreen.dither_dot_size(2160.0, 540.0) == 4.0, "at 4K each dither dot is 4 pixels")
+	check(PSXScreen.dither_dot_size(600.0, 540.0) == 1.0, "small screens never go below 1-pixel dots")
 
 
 func test_psx_shader_globals_are_declared() -> void:
@@ -17,10 +22,14 @@ func test_psx_shader_globals_are_declared() -> void:
 
 func test_ps1_tuning_is_sane() -> void:
 	var tuning := GameState.tuning
-	check(tuning.psx_resolution_height >= 120, "the low-res view needs a sensible number of rows")
-	check(tuning.vertex_snap_scale > 0.0, "the vertex snap grid can't be zero")
+	check(tuning.vertex_snap_rows >= 60.0, "the vertex snap grid needs a sensible number of rows")
+	check(tuning.dither_rows >= 60.0, "the dither dots need a sensible size")
 	check(tuning.color_levels >= 2.0, "there must be at least 2 shades per color")
 	check(tuning.haze_end > tuning.haze_start, "the haze must end farther away than it starts")
+
+
+func test_window_never_gets_smaller_than_800_by_600() -> void:
+	check(GameState.MIN_WINDOW_SIZE == Vector2i(800, 600), "the smallest supported window is 800x600")
 
 
 func test_traffic_route_is_a_closed_smooth_loop() -> void:

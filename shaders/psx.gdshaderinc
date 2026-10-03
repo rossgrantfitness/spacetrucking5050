@@ -11,10 +11,10 @@
 //    coordinates.
 //
 // Both strengths are "global shader uniforms" (Project Settings → Shader
-// Globals). PSXView.gd sets them from res://data/tuning.tres at runtime.
+// Globals). PSXScreen.gd sets them from res://data/tuning.tres at runtime.
 
-// The grid the corners snap to, in "pixels" across and down the screen.
-// Smaller = chunkier, wobblier models.
+// The grid the corners snap to, in cells across and down the screen.
+// Fewer cells = wobblier models.
 global uniform vec2 psx_snap_resolution;
 // 0 = textures stay put (modern), 1 = full PS1 texture swim.
 global uniform float psx_affine_strength;

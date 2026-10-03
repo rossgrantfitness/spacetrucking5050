@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dulm1ds5laudw"
-path="res://.godot/imported/station_windows.png-8243b8ba7e72c6536c751a31f9787c67.ctex"
+uid="uid://h1af6311awl0"
+path="res://.godot/imported/flare.png-c5eb414984c705cd528366423d6b6396.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/generated/station_windows.png"
-dest_files=["res://.godot/imported/station_windows.png-8243b8ba7e72c6536c751a31f9787c67.ctex"]
+source_file="res://textures/generated/flare.png"
+dest_files=["res://.godot/imported/flare.png-c5eb414984c705cd528366423d6b6396.ctex"]
 
 [params]
 

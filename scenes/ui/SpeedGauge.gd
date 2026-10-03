@@ -1,85 +1,160 @@
 class_name SpeedGauge
 extends Control
-## The corner speedometer: a gradient arc that fills up with speed, a tick
-## where boost speed begins, the speed in km/h, a little thrust bar (warm =
-## burning forward, cyan = burning backward to brake), and a thin inner arc
-## for the boost fuel tank. (The fuel and cargo gauges join it in M2.)
+## The corner gauge cluster, in the style of late-90s PlayStation HUDs
+## (Wipeout 3's slanted bars, Colony Wars' rainbow arc):
+## - a chunky segmented arc that fills with speed, green to red, and hot pink
+##   into boost territory, with the speed in big slanted pixel digits;
+## - a slanted THRUST bar (warm = burning forward, cyan = reverse to brake);
+## - a slanted BOOST FUEL bar for the boost tank.
+## (Fuel and cargo condition join it in M2.)
 
 
 ## The arc starts at the bottom-left and sweeps three-quarters of a circle,
-## clockwise, to the bottom-right. Angles are in radians; 0 points right.
+## clockwise over the top, to the bottom-right. Angles in radians; 0 = right.
 const START_ANGLE: float = PI * 0.75
 const SWEEP: float = PI * 1.5
-const ARC_WIDTH: float = 12.0
-const BOOST_COLOR := Color(0.45, 0.95, 1.0)
+const ARC_SEGMENTS: int = 24
+const BAR_SEGMENTS: int = 14
+## How far the bars lean (the top edge shifts this much right of the bottom).
+const LEAN: float = 14.0
+const OUTLINE := Color(1.0, 0.85, 0.25)  # Wipeout yellow.
+const EMPTY := Color(1, 1, 1, 0.12)
+const BACKING := Color(0.02, 0.01, 0.06, 0.45)
+const REVERSE_COLOR := Color(0.35, 0.95, 1.0)
 
 ## The ship to show. Set by FlightHUD.
 var ship: Ship
 
-var _gradient := Gradient.new()
+var _speed_colors := Gradient.new()
+var _boost_colors := Gradient.new()
+var _thrust_colors := Gradient.new()
+var _fuel_colors := Gradient.new()
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Cool colors at cruising speed, warming up as you go faster.
-	_gradient.offsets = PackedFloat32Array([0.0, 0.35, 0.62, 0.8, 1.0])
-	_gradient.colors = PackedColorArray([
-		Color(0.4, 0.9, 1.0), Color(0.55, 1.0, 0.55), Color(1.0, 0.9, 0.35),
-		Color(1.0, 0.6, 0.3), Color(1.0, 0.4, 0.75)])
+	_speed_colors.offsets = PackedFloat32Array([0.0, 0.5, 0.8, 1.0])
+	_speed_colors.colors = PackedColorArray([Color("38e07b"), Color("d7f03a"), Color("ffb02e"), Color("ff4a3d")])
+	_boost_colors.offsets = PackedFloat32Array([0.0, 1.0])
+	_boost_colors.colors = PackedColorArray([Color("ff4fd8"), Color("ffffff")])
+	_thrust_colors.offsets = PackedFloat32Array([0.0, 0.4, 0.75, 1.0])
+	_thrust_colors.colors = PackedColorArray([Color("7a2cff"), Color("ff2f6d"), Color("ffc21a"), Color("fff6c2")])
+	_fuel_colors.offsets = PackedFloat32Array([0.0, 1.0])
+	_fuel_colors.colors = PackedColorArray([Color("2e7bff"), Color("4ff2ff")])
 
 
 func _draw() -> void:
 	if ship == null:
 		return
-	var center := size * 0.5
-	var radius := minf(size.x, size.y) * 0.5 - ARC_WIDTH
+	var radius := 96.0
+	var center := Vector2(size.x - radius - 12.0, size.y - radius - 4.0)
+	_draw_speed_arc(center, radius)
+	var bars_right := center.x - radius - 18.0
+	_draw_thrust_bar(Rect2(bars_right - 250.0, size.y - 118.0, 250.0, 26.0))
+	_draw_fuel_bar(Rect2(bars_right - 250.0, size.y - 58.0, 250.0, 20.0))
+
+
+func _draw_speed_arc(center: Vector2, radius: float) -> void:
+	var thickness := 26.0
+	var inner := radius - thickness
 	var top_speed := FlightModel.boosted_top_speed(ship.ship_data)
+	var normal_share := ship.ship_data.max_speed / top_speed  # Where boost begins.
 	var fill := clampf(ship.flight.speed() / top_speed, 0.0, 1.0)
 
-	# The empty track, then the filled part, drawn in small colored slices.
-	draw_arc(center, radius, START_ANGLE, START_ANGLE + SWEEP, 64, Color(1, 1, 1, 0.14), ARC_WIDTH, true)
-	var slices := 48
-	for i in slices:
-		var from := float(i) / slices
-		if from >= fill:
-			break
-		var to := minf(float(i + 1) / slices, fill)
-		draw_arc(center, radius, _angle(from), _angle(to), 3, _gradient.sample(from), ARC_WIDTH, true)
+	draw_circle(center, radius + 6.0, BACKING)
+	var gap := 0.025  # A little gap between segments, in radians.
+	for i in ARC_SEGMENTS:
+		var from := float(i) / ARC_SEGMENTS
+		var to := float(i + 1) / ARC_SEGMENTS
+		var middle := (from + to) * 0.5
+		var color := EMPTY
+		if middle <= fill:
+			if middle < normal_share:
+				color = _speed_colors.sample(middle / normal_share)
+			else:
+				color = _boost_colors.sample((middle - normal_share) / (1.0 - normal_share))
+		_segment(center, inner, radius, _angle(from) + gap, _angle(to) - gap, color)
+	# A chunky outline around the whole arc.
+	var outline := PackedVector2Array()
+	for i in 41:
+		outline.append(center + Vector2.from_angle(_angle(i / 40.0)) * (radius + 3.0))
+	for i in 41:
+		outline.append(center + Vector2.from_angle(_angle(1.0 - i / 40.0)) * (inner - 3.0))
+	outline.append(outline[0])
+	draw_polyline(outline, OUTLINE, 2.0)
+	# A white notch where boost territory begins.
+	var notch := Vector2.from_angle(_angle(normal_share))
+	draw_line(center + notch * (inner - 8.0), center + notch * (radius + 8.0), Color.WHITE, 3.0)
 
-	# A tick where normal top speed ends and boost territory begins.
-	var normal_top := ship.ship_data.max_speed / top_speed
-	_tick(center, radius - ARC_WIDTH * 0.5, radius + ARC_WIDTH * 1.2, normal_top, Color(1, 1, 1, 0.7), 2.0)
-
-	# The thrust bar: grows right while burning forward, left while braking.
-	var bar_center := center + Vector2(0.0, 52.0)
-	draw_rect(Rect2(bar_center - Vector2(40.0, 3.0), Vector2(80.0, 6.0)), Color(1, 1, 1, 0.14))
-	var thrust := ship.flight.thrust
-	if absf(thrust) > 0.01:
-		var thrust_color := Color(1.0, 0.65, 0.3) if thrust > 0.0 else BOOST_COLOR
-		var width := 40.0 * absf(thrust)
-		var left := bar_center.x if thrust > 0.0 else bar_center.x - width
-		draw_rect(Rect2(Vector2(left, bar_center.y - 3.0), Vector2(width, 6.0)), thrust_color)
-
-	# The boost fuel tank: a thin inner arc.
-	var boost_radius := radius - ARC_WIDTH - 6.0
-	draw_arc(center, boost_radius, START_ANGLE, START_ANGLE + SWEEP, 48, Color(1, 1, 1, 0.1), 5.0, true)
-	var tank := ship.flight.boost_fuel
-	if tank > 0.0:
-		var glow := BOOST_COLOR if not ship.flight.boosting else Color.WHITE
-		draw_arc(center, boost_radius, START_ANGLE, _angle(tank), 32, glow, 5.0, true)
-
-	var font := get_theme_default_font()
 	var speed_text := "%d" % roundi(ship.flight.speed() * 3.6)
-	draw_string_outline(font, center + Vector2(-70.0, 12.0), speed_text, HORIZONTAL_ALIGNMENT_CENTER, 140.0, 40, 6, Color(0, 0, 0, 0.6))
-	draw_string(font, center + Vector2(-70.0, 12.0), speed_text, HORIZONTAL_ALIGNMENT_CENTER, 140.0, 40, Color.WHITE)
-	draw_string(font, center + Vector2(-70.0, 32.0), "km/h", HORIZONTAL_ALIGNMENT_CENTER, 140.0, 14, Color(1, 1, 1, 0.65))
-	draw_string(font, center + Vector2(-70.0, radius + 8.0), "BOOST FUEL", HORIZONTAL_ALIGNMENT_CENTER, 140.0, 12, BOOST_COLOR)
+	PixelFont.draw_centered(self, center + Vector2(0.0, -6.0), speed_text, 6.0, Color.WHITE, 0.2)
+	# A little slanted tag under the number, like Wipeout's "KPH".
+	var tag := Rect2(center.x - 30.0, center.y + 26.0, 60.0, 20.0)
+	_slanted(tag, OUTLINE, 6.0)
+	PixelFont.draw_centered(self, tag.get_center(), "KM/H", 2.0, Color(0.1, 0.05, 0.15), 0.15, Color(0, 0, 0, 0))
+
+
+func _draw_thrust_bar(area: Rect2) -> void:
+	var thrust := clampf(ship.flight.thrust, -1.0, 1.0)
+	var reversing := thrust < -0.01
+	_bar_backing(area)
+	var lit := ceili(absf(thrust) * BAR_SEGMENTS - 0.01)
+	for i in BAR_SEGMENTS:
+		var color := EMPTY
+		if i < lit:
+			color = REVERSE_COLOR if reversing else _thrust_colors.sample(float(i) / (BAR_SEGMENTS - 1))
+		_bar_segment(area, i, color)
+	_slanted(area.grow(3.0), OUTLINE, LEAN, false)
+	var label := "REVERSE" if reversing else "THRUST"
+	PixelFont.draw(self, Vector2(area.end.x - PixelFont.width(label, 2.0) + LEAN, area.position.y - 22.0), label, 2.0, REVERSE_COLOR if reversing else Color.WHITE, 0.2)
+
+
+func _draw_fuel_bar(area: Rect2) -> void:
+	var tank := clampf(ship.flight.boost_fuel, 0.0, 1.0)
+	_bar_backing(area)
+	var lit := ceili(tank * BAR_SEGMENTS - 0.01)
+	for i in BAR_SEGMENTS:
+		var color := EMPTY
+		if i < lit:
+			color = Color.WHITE if ship.flight.boosting else _fuel_colors.sample(float(i) / (BAR_SEGMENTS - 1))
+		_bar_segment(area, i, color)
+	_slanted(area.grow(3.0), OUTLINE, LEAN, false)
+	PixelFont.draw(self, Vector2(area.position.x, area.end.y + 9.0), "BOOST FUEL", 2.0, Color.WHITE, 0.2)
+
+
+## One segment of a slanted bar.
+func _bar_segment(area: Rect2, index: int, color: Color) -> void:
+	var step := area.size.x / BAR_SEGMENTS
+	var piece := Rect2(area.position.x + step * index + 1.5, area.position.y, step - 3.0, area.size.y)
+	_slanted(piece, color, LEAN * piece.size.y / area.size.y)
+
+
+func _bar_backing(area: Rect2) -> void:
+	_slanted(area.grow(6.0), BACKING, LEAN)
+
+
+## A parallelogram leaning forward by `lean` (filled, or just its outline).
+func _slanted(area: Rect2, color: Color, lean: float, filled: bool = true) -> void:
+	var corners := PackedVector2Array([
+		Vector2(area.position.x + lean, area.position.y), Vector2(area.end.x + lean, area.position.y),
+		Vector2(area.end.x, area.end.y), Vector2(area.position.x, area.end.y)])
+	if filled:
+		draw_colored_polygon(corners, color)
+	else:
+		corners.append(corners[0])
+		draw_polyline(corners, color, 2.0)
+
+
+## One chunky curved segment of the speed arc.
+func _segment(center: Vector2, inner: float, outer: float, from_angle: float, to_angle: float, color: Color) -> void:
+	var points := PackedVector2Array()
+	var steps := 3
+	for i in steps + 1:
+		points.append(center + Vector2.from_angle(lerpf(from_angle, to_angle, float(i) / steps)) * outer)
+	for i in steps + 1:
+		points.append(center + Vector2.from_angle(lerpf(to_angle, from_angle, float(i) / steps)) * inner)
+	draw_colored_polygon(points, color)
 
 
 func _angle(amount: float) -> float:
 	return START_ANGLE + SWEEP * amount
-
-
-func _tick(center: Vector2, inner: float, outer: float, amount: float, color: Color, width: float) -> void:
-	var direction := Vector2.from_angle(_angle(amount))
-	draw_line(center + direction * inner, center + direction * outer, color, width, true)

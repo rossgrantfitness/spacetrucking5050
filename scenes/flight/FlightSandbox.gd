@@ -5,8 +5,8 @@ extends Node
 ## This script wires the pieces together and handles the camera switch
 ## (chase cam <-> cockpit), the mouse, and the pause menu's buttons.
 ##
-## The whole 3D world lives inside PSXView (PSXView/Viewport/World), which
-## draws it like a PS1 game. The HUD, cockpit frame and menus sit outside it
+## The 3D world lives under "World". PSXScreen adds the PS1-style color and
+## dither on top of it; the HUD, cockpit frame and menus are drawn after that,
 ## so they stay crisp.
 
 
@@ -18,18 +18,18 @@ extends Node
 ## Seconds for a full boost-fuel top-up at the truck stop.
 @export var refuel_seconds: float = 4.0
 
-@onready var _view: PSXView = $PSXView
-@onready var _ship: Ship = $PSXView/Viewport/World/Ship
-@onready var _chase_camera: ChaseCamera = $PSXView/Viewport/World/ChaseCamera
-@onready var _cockpit_camera: Camera3D = $PSXView/Viewport/World/Ship/CockpitCamera
+@onready var _ship: Ship = $World/Ship
+@onready var _chase_camera: ChaseCamera = $World/ChaseCamera
+@onready var _cockpit_camera: Camera3D = $World/Ship/CockpitCamera
 @onready var _cockpit_view: CanvasLayer = $CockpitView
 @onready var _cockpit_frame: CockpitFrame = $CockpitView/CockpitFrame
 @onready var _speed_lines: SpeedLines = $SpeedLinesLayer/SpeedLines
-@onready var _dust: SpaceDust = $PSXView/Viewport/World/SpaceDust
-@onready var _environment: WorldEnvironment = $PSXView/Viewport/World/WorldEnvironment
+@onready var _dust: SpaceDust = $World/SpaceDust
+@onready var _environment: WorldEnvironment = $World/WorldEnvironment
 @onready var _hud: FlightHUD = $FlightHUD
 @onready var _pause_menu: PauseMenu = $PauseMenu
-@onready var _station: Node3D = $PSXView/Viewport/World/Station
+@onready var _station: Node3D = $World/Station
+@onready var _nebula: MeshInstance3D = $World/SkyBackdrop/Nebula
 
 var _start := Transform3D.IDENTITY
 var _in_cockpit := false
@@ -41,8 +41,8 @@ func _ready() -> void:
 	_dust.tint = system.signature_color
 	_cockpit_frame.ship = _ship
 	_speed_lines.ship = _ship
-	_hud.setup(_ship, _station, _view)
-	_apply_haze()
+	_hud.setup(_ship, _station)
+	_apply_system_colors()
 	_pause_menu.resumed.connect(_capture_mouse)
 	_pause_menu.back_to_start_pressed.connect(_back_to_start)
 	_pause_menu.quit_to_title_pressed.connect(_quit_to_title)
@@ -59,9 +59,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		_ship.controls.push_mouse_motion(event as InputEventMouseMotion)
-	elif event.is_action_pressed("toggle_camera"):
+	if event.is_action_pressed("toggle_camera"):
 		_set_cockpit_view(not _in_cockpit)
 	elif event is InputEventMouseButton and event.is_pressed() and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		_capture_mouse()  # Clicking back into the window grabs the mouse again.
@@ -78,9 +76,10 @@ func _set_cockpit_view(in_cockpit: bool) -> void:
 	_hud.set_cockpit_view(in_cockpit)
 
 
-## The system's colored distance haze: faraway rocks and stations fade into
-## its haze color, the classic PS1 fog. Deep space itself stays black.
-func _apply_haze() -> void:
+## The system's colors: faraway rocks and stations fade into its haze color
+## (the classic PS1 fog), and the nebula clouds in the sky are tinted with its
+## signature color. Deep space itself stays black.
+func _apply_system_colors() -> void:
 	var tuning := GameState.tuning
 	var environment := _environment.environment
 	environment.fog_enabled = tuning.haze_strength > 0.0
@@ -91,6 +90,9 @@ func _apply_haze() -> void:
 	environment.fog_depth_begin = tuning.haze_start
 	environment.fog_depth_end = tuning.haze_end
 	environment.fog_sky_affect = 0.0
+	# The faint nebula clouds across the sky share the system's signature color.
+	var nebula := _nebula.mesh.surface_get_material(0) as ShaderMaterial
+	nebula.set_shader_parameter("tint", system.signature_color)
 
 
 ## Hides the mouse and locks it to the window, so moving it steers the ship.

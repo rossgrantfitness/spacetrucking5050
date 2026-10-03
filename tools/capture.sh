@@ -10,6 +10,8 @@
 #   tools/capture.sh 90 /tmp/shots res://scenes/boot/Boot.tscn
 #
 # Frames are recorded at a fixed 30 FPS, so 90 frames = 3 seconds of game time.
+# Set RES to pick the window size (default 1280x720), e.g.
+#   RES=800x600 tools/capture.sh 60 /tmp/shots     or     RES=3840x2160 ...
 set -eu
 cd "$(dirname "$0")/.."
 
@@ -19,7 +21,8 @@ if [ $# -gt 0 ]; then FRAMES="$1"; shift; fi
 if [ $# -gt 0 ]; then OUT="$1"; shift; fi
 mkdir -p "$OUT"
 
-xvfb-run -a -s "-screen 0 1280x720x24" "${GODOT:-godot}" --path . \
-	--resolution 1280x720 --write-movie "$OUT/frame.png" --fixed-fps 30 \
+RES="${RES:-1280x720}"
+xvfb-run -a -s "-screen 0 3840x2160x24" "${GODOT:-godot}" --path . \
+	--resolution "$RES" --write-movie "$OUT/frame.png" --fixed-fps 30 \
 	--quit-after "$FRAMES" "$@"
 echo "Frames written to $OUT"

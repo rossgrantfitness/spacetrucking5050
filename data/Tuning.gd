@@ -210,25 +210,25 @@ extends Resource
 
 @export_group("PS1 look")
 
-## How many rows of pixels the 3D world is drawn with before being blown up to
-## fill the window. The PS1 drew about 240. Lower = chunkier pixels.
-## (Text and menus are always drawn sharp, so they stay readable.)
-@export_range(120, 720, 10) var psx_resolution_height: int = 240
-
-## How much models wobble. Corners snap to a grid this fraction of the pixel
-## grid: 1 = snap to every pixel (subtle), 0.5 = every other pixel (wobbly),
-## lower = very wobbly.
-@export_range(0.1, 1.0, 0.05) var vertex_snap_scale: float = 0.5
+## How much models wobble. Model corners snap to an invisible grid this many
+## rows tall (the grid is as wide as your screen's shape needs). Fewer rows =
+## wobblier: 240 is early-PS1 jelly, 480 is a late-PS1 shimmer, 1000+ is
+## nearly still. It doesn't change the screen's resolution.
+@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 480.0
 
 ## How much textures bend and swim on big polygons close to the camera, the
 ## PS1's famous "affine" warping. 0 = modern, 1 = full PS1.
-@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.8
+@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.25
 
 ## Shades per color channel. The PS1 had 32. Lower = more posterized.
 @export_range(4.0, 256.0, 1.0) var color_levels: float = 32.0
 
 ## How strong the fine checkered dither pattern is. 0 = off.
-@export_range(0.0, 2.0, 0.05) var dither_strength: float = 1.0
+@export_range(0.0, 2.0, 0.05) var dither_strength: float = 0.6
+
+## How big the dither dots are: sized as if the screen had this many rows,
+## so the pattern looks the same on any screen. Fewer = chunkier dots.
+@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 540.0
 
 ## Where the solar system's colored distance haze starts, and where it's at
 ## its thickest. It tints faraway things with the system's haze color (set in

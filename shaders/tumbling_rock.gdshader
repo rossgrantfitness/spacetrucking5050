@@ -10,7 +10,7 @@ render_mode vertex_lighting, diffuse_lambert, specular_disabled;
 
 uniform float spin_scale = 1.0;
 // A small grayscale rock texture, tinted by each rock's color.
-uniform sampler2D rock_texture : source_color, filter_nearest, repeat_enable, hint_default_white;
+uniform sampler2D rock_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
 // How many times the texture repeats across a rock (rocks are built about
 // 1 meter across and scaled up, so the texture grows with the rock).
 uniform float uv_scale = 1.5;

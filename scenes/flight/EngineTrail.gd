@@ -31,7 +31,7 @@ func _ready() -> void:
 	global_transform = Transform3D.IDENTITY
 	# We redraw every frame ourselves, so Godot's motion smoothing must not.
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-	_source = _find_source()
+	_source = find_source(self)
 	if _source != null and _source.has_signal("teleported"):
 		_source.connect("teleported", clear)
 	_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -78,6 +78,14 @@ func _redraw(lifetime: float) -> void:
 	var eye := camera.global_position
 	var color: Color = _source.call("trail_color")
 
+	# Two ribbons: a wide one in the engine's color, and a thin white-hot core
+	# down the middle, like late-90s racing-game exhaust.
+	_add_ribbon(lifetime, eye, color, brightness, 1.0)
+	_add_ribbon(lifetime, eye, Color.WHITE, brightness * 0.8, 0.3)
+
+
+func _add_ribbon(lifetime: float, eye: Vector3, color: Color, brightness: float, width_scale: float) -> void:
+	var tuning := GameState.tuning
 	_ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, _material)
 	for i in _points.size():
 		var spot := _points[i]
@@ -87,7 +95,7 @@ func _redraw(lifetime: float) -> void:
 		var life := clampf(1.0 - _ages[i] / lifetime, 0.0, 1.0)
 		# Sideways, at right angles to both the trail and the line of sight,
 		# so the ribbon always shows its face to the camera.
-		var side := along.cross(eye - spot).normalized() * tuning.trail_width * 0.5 * (0.3 + 0.7 * life)
+		var side := along.cross(eye - spot).normalized() * tuning.trail_width * 0.5 * width_scale * (0.3 + 0.7 * life)
 		var glow := Color(color.r, color.g, color.b, brightness * life * life)
 		_ribbon.surface_set_color(glow)
 		_ribbon.surface_add_vertex(spot - side)
@@ -96,9 +104,10 @@ func _redraw(lifetime: float) -> void:
 	_ribbon.surface_end()
 
 
-## The nearest parent that knows its speed and trail color.
-func _find_source() -> Node3D:
-	var node := get_parent()
+## The nearest parent of `node` that knows its speed and trail color (your
+## Ship, or a TrafficShip).
+static func find_source(node: Node) -> Node3D:
+	node = node.get_parent()
 	while node != null and not node.has_method("trail_color"):
 		node = node.get_parent()
 	return node as Node3D

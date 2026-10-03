@@ -10,7 +10,7 @@ render_mode vertex_lighting, diffuse_lambert, specular_disabled;
 // The surface's color. Multiplies the texture.
 uniform vec4 albedo : source_color = vec4(1.0);
 // A small texture (64x64 is plenty). Pixels stay crisp: no smoothing.
-uniform sampler2D albedo_texture : source_color, filter_nearest, repeat_enable, hint_default_white;
+uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
 // How many times the texture repeats (across, down): per meter when box_uv
 // is on, otherwise across the model's own texture coordinates.
 uniform vec2 uv_scale = vec2(1.0);

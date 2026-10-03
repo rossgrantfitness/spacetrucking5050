@@ -3,7 +3,8 @@ extends Node
 ## up in a save file lives here too.
 ##
 ## M0: holds the shared tuning file, so every script reads the same numbers.
-## M1: quits the game politely (see quit_game).
+## M1: quits the game politely (see quit_game), and keeps the window at
+##     least 800x600 (the smallest screen we support; up to 4K works).
 ## M2: money, cargo condition, fuel, ship upgrades, the active job.
 ## M6: day, shift, rent, ship XP and levels.
 ##
@@ -15,6 +16,10 @@ extends Node
 ## res://data/tuning.tres and use the Inspector.
 var tuning: Tuning = preload("res://data/tuning.tres")
 
+## The smallest the game window can get. Everything is drawn at the screen's
+## own resolution, from this up to 4K.
+const MIN_WINDOW_SIZE := Vector2i(800, 600)
+
 var _quitting := false
 
 
@@ -22,6 +27,7 @@ func _ready() -> void:
 	# When the window's close button is clicked, let quit_game() handle it
 	# instead of Godot closing on the spot.
 	get_tree().auto_accept_quit = false
+	get_tree().root.min_size = MIN_WINDOW_SIZE
 
 
 func _notification(what: int) -> void:

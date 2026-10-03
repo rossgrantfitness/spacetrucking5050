@@ -4,24 +4,29 @@ extends SceneTree
 ##     godot --headless --path . -s tools/generate_placeholder_textures.gd
 ## (Running it again simply recreates the same images.)
 ##
-## They're deliberately tiny (32 to 128 pixels), like real PS1 textures, and
-## mostly gray: the models tint them with their own paint colors.
+## They're small (32 to 256 pixels), like late PS1 textures, and mostly gray:
+## the models tint them with their own paint colors.
 
 
 const OUTPUT_FOLDER: String = "res://textures/generated"
 const HAZARD_YELLOW := Color("ffc21a")
 const HAZARD_BLACK := Color("1c1a22")
+const Letters := preload("res://scenes/ui/PixelFont.gd")
 
 
 func _init() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_FOLDER))
 	var images := {
 		"hazard_stripes.png": _hazard_stripes(32, 8),
-		"hull_panels.png": _hull_panels(64),
+		"hull_panels.png": _hull_panels(128),
+		"container.png": _container(128),
+		"chevrons.png": _chevrons(64, 32),
+		"flare.png": _flare(64),
+		"nebula.png": _nebula(256, 128),
 		"vents.png": _vents(32),
 		"rock.png": _rock(64),
 		"station_windows.png": _station_windows(64),
-		"planet_swirl.png": _planet_swirl(128, 64),
+		"planet_swirl.png": _planet_swirl(256, 128),
 	}
 	var failed := false
 	for file_name: String in images:
@@ -43,13 +48,14 @@ func _hazard_stripes(image_size: int, stripe_width: int) -> Image:
 
 
 ## Light gray hull plating: a grid of panels, each a slightly different shade,
-## with dark seams, little rivets in the corners and a bit of grime. It tiles
-## seamlessly, and models tint it with their paint color.
+## with beveled seams (lit top-left, shadowed bottom-right), rivets, a few
+## vent slots and warning patches, and a little grime. It tiles seamlessly,
+## and models tint it with their paint color.
 func _hull_panels(image_size: int) -> Image:
 	var rng := _rng(1)
-	var grime := _noise(11, 0.12)
+	var grime := _noise(11, 0.06)
 	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	var panel := 16  # Panel size in pixels.
+	var panel := 32  # Panel size in pixels.
 	var shades := {}
 	for y in image_size:
 		for x in image_size:
@@ -58,18 +64,101 @@ func _hull_panels(image_size: int) -> Image:
 			var shifted_x := posmod(x + (panel >> 1 if row % 2 == 1 else 0), image_size)
 			var cell := Vector2i(floori(shifted_x / float(panel)), row)
 			if not shades.has(cell):
-				shades[cell] = rng.randf_range(0.82, 1.0)
+				shades[cell] = rng.randf_range(0.84, 1.0)
 			var shade: float = shades[cell]
 			var in_x := shifted_x % panel
 			var in_y := y % panel
 			if in_x == 0 or in_y == 0:
-				shade = 0.5  # Seam.
+				shade = 0.45  # Seam.
+			elif in_x == 1 or in_y == 1:
+				shade = minf(shade * 1.12, 1.0)  # Lit bevel.
 			elif in_x == panel - 1 or in_y == panel - 1:
-				shade *= 0.88  # Seam shadow.
-			elif (in_x == 2 or in_x == panel - 3) and (in_y == 2 or in_y == panel - 3):
-				shade *= 0.7  # Rivet.
+				shade *= 0.8  # Shadowed bevel.
+			elif (in_x == 3 or in_x == panel - 4) and (in_y == 3 or in_y == panel - 4):
+				shade *= 0.62  # Rivet.
+			shade *= 0.93 + 0.07 * grime.get_noise_2d(x, y)
+			image.set_pixel(x, y, Color(shade, shade, shade))
+	# A few details on top: vent slots and little warning-stripe patches.
+	for i in 5:
+		var spot := Vector2i(rng.randi_range(0, 3) * panel + 6, rng.randi_range(0, 3) * panel + 8)
+		if i % 2 == 0:
+			for slot in 4:
+				image.fill_rect(Rect2i(spot.x, spot.y + slot * 4, 18, 2), Color(0.25, 0.25, 0.28))
+		else:
+			for stripe in 12:
+				for line in 6:
+					var px := spot.x + stripe + line
+					var yellow := posmod(stripe, 4) < 2
+					image.set_pixel(px % image_size, (spot.y + line) % image_size, HAZARD_YELLOW if yellow else HAZARD_BLACK)
+	return image
+
+
+## A corrugated shipping container side: vertical ribs, top and bottom rails,
+## a couple of door bars, and invented cargo-company lettering. Light, so the
+## container's paint color tints it.
+func _container(image_size: int) -> Image:
+	var grime := _noise(21, 0.08)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	for y in image_size:
+		for x in image_size:
+			var rib := x % 8
+			var shade := [0.78, 0.92, 1.0, 0.95, 0.85, 0.74, 0.7, 0.72][rib] as float
+			if y < 6 or y >= image_size - 6:
+				shade = 0.6 if (y == 5 or y == image_size - 6) else 0.82  # Rails.
 			shade *= 0.92 + 0.08 * grime.get_noise_2d(x, y)
 			image.set_pixel(x, y, Color(shade, shade, shade))
+	for bar_x: int in [image_size - 26, image_size - 14]:
+		image.fill_rect(Rect2i(bar_x, 6, 3, image_size - 12), Color(0.55, 0.55, 0.58))
+	Letters.stamp(image, Vector2i(10, 40), "LZY", 4, Color(0.97, 0.95, 0.9))
+	Letters.stamp(image, Vector2i(10, 76), "FREIGHT", 2, Color(0.97, 0.95, 0.9))
+	return image
+
+
+## White chevron arrows on dark, like racing-track barriers.
+func _chevrons(width: int, height: int) -> Image:
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.1, 0.09, 0.14))
+	for y in height:
+		var bend := absi(y - (height >> 1))
+		for x in width:
+			var along := posmod(x - bend, 32)
+			if along >= 6 and along < 16:
+				image.set_pixel(x, y, Color(0.95, 0.93, 0.85))
+	return image
+
+
+## A four-pointed star glow, for the lens flares on engines (late-90s style).
+func _flare(image_size: int) -> Image:
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	var half := image_size * 0.5
+	for y in image_size:
+		for x in image_size:
+			var dx := absf(x + 0.5 - half) / half
+			var dy := absf(y + 0.5 - half) / half
+			var core := exp(-(dx * dx + dy * dy) * 18.0)
+			var streaks := exp(-dy * 40.0) * (1.0 - dx) + exp(-dx * 40.0) * (1.0 - dy)
+			var glow := clampf(core + streaks * 0.8 + exp(-(dx * dx + dy * dy) * 4.0) * 0.25, 0.0, 1.0)
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, glow))
+	return image
+
+
+## Soft clouds of space gas, wrapped around the sky (tiles left to right).
+## Grayscale: the sky shader tints it with the solar system's color.
+func _nebula(width: int, height: int) -> Image:
+	var clouds := _noise(61, 0.9)
+	clouds.fractal_octaves = 5
+	var band := _noise(62, 0.5)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	for y in height:
+		var latitude := (float(y) / height - 0.5) * PI
+		for x in width:
+			var angle := TAU * x / width
+			var point := Vector3(cos(angle) * cos(latitude), sin(latitude), sin(angle) * cos(latitude)) * 1.5
+			# Thickest in a wavy band across the sky, like a galaxy's arm.
+			var arm := 1.0 - absf(sin(latitude) - band.get_noise_3dv(point) * 0.5) * 1.6
+			var amount := clampf((clouds.get_noise_3dv(point) * 0.5 + 0.5) * arm, 0.0, 1.0)
+			amount = amount * amount
+			image.set_pixel(x, y, Color(amount, amount, amount))
 	return image
 
 
@@ -119,23 +208,32 @@ func _station_windows(image_size: int) -> Image:
 	return image
 
 
-## A big, bold, swirly gas giant: bands of candy colors, bent into swirls.
-## It's wrapped around a sphere, so it tiles left to right.
+## A big, bold, swirly gas giant: bands of candy colors, bent into swirls,
+## with a big storm spot. It's wrapped around a sphere, so it tiles left to
+## right.
 func _planet_swirl(width: int, height: int) -> Image:
-	var warp := _noise(51, 0.55)
+	var warp := _noise(51, 0.5)
+	var fine := _noise(52, 2.0)
 	var bands: Array[Color] = [
 		Color("f7a3c4"), Color("f6c27a"), Color("fbe3b0"), Color("e98a6f"),
 		Color("c27ac9"), Color("f6c27a"), Color("8fd3d9"), Color("f7a3c4")]
+	var storm := Vector2(width * 0.3, height * 0.62)
 	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
 	for y in height:
 		for x in width:
 			# Sample the noise on a circle so the left and right edges match.
 			var angle := TAU * x / width
-			var wobble := warp.get_noise_3d(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.06)
-			var band := float(y) / height * bands.size() * 0.999 + wobble * 1.1
+			var wobble := warp.get_noise_3d(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.03)
+			wobble += fine.get_noise_3d(cos(angle) * 2.0, sin(angle) * 2.0, y * 0.05) * 0.15
+			# Swirl the bands around the storm.
+			var to_storm := Vector2(x, y) - storm
+			var swirl := exp(-to_storm.length_squared() / 160.0) * 1.4
+			var band := float(y) / height * bands.size() * 0.999 + wobble * 0.9 + swirl * sin(to_storm.angle() * 2.0)
 			band = clampf(band, 0.0, bands.size() - 1.001)
 			var low := int(band)
-			var color := bands[low].lerp(bands[low + 1], smoothstep(0.35, 0.65, band - low))
+			var color := bands[low].lerp(bands[low + 1], smoothstep(0.3, 0.7, band - low))
+			if to_storm.length() < 7.0:
+				color = color.lerp(Color("d9534f"), 0.6)
 			image.set_pixel(x, y, color)
 	return image
 

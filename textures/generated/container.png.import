@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dulm1ds5laudw"
-path="res://.godot/imported/station_windows.png-8243b8ba7e72c6536c751a31f9787c67.ctex"
+uid="uid://dv4ox100a8l6h"
+path="res://.godot/imported/container.png-2f96cc36b9791c05d13fdad3ec724044.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/generated/station_windows.png"
-dest_files=["res://.godot/imported/station_windows.png-8243b8ba7e72c6536c751a31f9787c67.ctex"]
+source_file="res://textures/generated/container.png"
+dest_files=["res://.godot/imported/container.png-2f96cc36b9791c05d13fdad3ec724044.ctex"]
 
 [params]
 

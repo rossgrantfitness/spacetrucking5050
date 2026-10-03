@@ -85,11 +85,10 @@ func _strut(corners: Array[Vector2]) -> void:
 func _draw_screen(area: Rect2) -> void:
 	draw_rect(area, SCREEN_COLOR)
 	draw_rect(area, SCREEN_GREEN * Color(1, 1, 1, 0.6), false, 2.0)
-	var font := get_theme_default_font()
 	var left := area.position.x + 16.0
 	var top := area.position.y
 	var speed_kmh := roundi(ship.flight.speed() * 3.6)
-	draw_string(font, Vector2(left, top + 30.0), "SPEED  %d km/h" % speed_kmh, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, SCREEN_GREEN)
+	PixelFont.draw(self, Vector2(left, top + 12.0), "SPEED %d KM/H" % speed_kmh, 3.0, SCREEN_GREEN, 0.0, Color(0, 0, 0, 0))
 	_thrust_bar(Vector2(left, top + 44.0), ship.flight.thrust)
 	_bar(Vector2(left, top + 70.0), "BOOST FUEL", ship.flight.boost_fuel)
 	# Faint scanlines, for that old-monitor glow.
@@ -101,8 +100,7 @@ func _draw_screen(area: Rect2) -> void:
 
 ## Thrust shown from the middle of the bar: right = forward, left = reverse.
 func _thrust_bar(where: Vector2, thrust: float) -> void:
-	var font := get_theme_default_font()
-	draw_string(font, where + Vector2(0.0, 16.0), "THRUST", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, SCREEN_GREEN)
+	PixelFont.draw(self, where + Vector2(0.0, 4.0), "THRUST", 2.0, SCREEN_GREEN, 0.0, Color(0, 0, 0, 0))
 	var bar := Rect2(where + Vector2(110.0, 4.0), Vector2(190.0, 14.0))
 	draw_rect(bar, SCREEN_GREEN * Color(1, 1, 1, 0.5), false, 1.0)
 	var middle := bar.position.x + bar.size.x * 0.5
@@ -113,8 +111,7 @@ func _thrust_bar(where: Vector2, thrust: float) -> void:
 
 
 func _bar(where: Vector2, label: String, amount: float) -> void:
-	var font := get_theme_default_font()
-	draw_string(font, where + Vector2(0.0, 16.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, SCREEN_GREEN)
+	PixelFont.draw(self, where + Vector2(0.0, 4.0), label, 2.0, SCREEN_GREEN, 0.0, Color(0, 0, 0, 0))
 	var bar := Rect2(where + Vector2(110.0, 4.0), Vector2(190.0, 14.0))
 	draw_rect(bar, SCREEN_GREEN * Color(1, 1, 1, 0.5), false, 1.0)
 	draw_rect(Rect2(bar.position, Vector2(bar.size.x * clampf(amount, 0.0, 1.0), bar.size.y)), SCREEN_GREEN)

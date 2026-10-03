@@ -141,8 +141,9 @@ boost) live in that ship's own file: `data/ships/starter_rig.tres`. It works
 the same way.
 
 **The PS1 look** has its own group in `tuning.tres`, called *PS1 look*: how
-chunky the pixels are, how much models wobble, how much textures swim, the
-number of colors, the dither, and the distance haze. The haze *color* belongs
+much models wobble, how much textures swim, the number of colors, the dither,
+and the distance haze. The game draws at your screen's own resolution (any
+window from 800x600 up to 4K). The haze *color* belongs
 to each solar system, in `data/systems/home_system.tres`.
 
 **Traffic ships** around the truck stop are the *Commuter* and *Orbiter*

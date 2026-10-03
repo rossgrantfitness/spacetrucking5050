@@ -104,3 +104,18 @@ be revisited; just say so.
 - **The uploaded asset packs were not added to the game.** The Unity pack came through opengameasset.net, a site that re-shares paid Unity Asset Store packs, so that copy probably isn't licensed for use. The other archive (Zenith, Striker, Spitfire) has no license file, and those are fighter jets (no combat in this game). Everything was built as placeholders inspired by your reference pictures instead.
 - **Reference pictures live in `reference/`,** which has a hidden `.gdignore` file so Godot never imports them or ships them with the game.
 - **No "stop the ship" button**, per the round-2 playtest. Braking stays a skill.
+
+## 2026-10-03 (M1 round 4: late-era PS1 look, Wipeout-style HUD, cargo rig)
+
+- **The look moved from early PS1 to late PS1 (1999-2000: Wipeout 3, Colony Wars, Dino Crisis),** per the developer: round 3 was "kind of ugly".
+- **The 3D world now renders at the screen's own resolution,** from an 800x600 window (the smallest allowed) up to 4K. The low-res viewport is gone; `PSXScreen` adds the PS1 color pass on top instead. This replaces round 3's "~240 rows of pixels" decision.
+- **Wobble is subtler and no longer tied to the resolution:** corners snap to a 480-row grid (`vertex_snap_rows`), the PS1's high-res mode, at any screen size. Texture swim is down to 0.25.
+- **The dither pattern scales with the screen** (`dither_rows`, 540), so it looks the same at 800x600 and 4K, and it's softer (0.6). Colors are still 32 shades per channel.
+- **Textures keep crisp pixels but now have mipmaps** (smaller copies used far away), so distant textures don't sparkle at high resolutions. The hull plating is now 128 px with beveled seams, vents and warning patches; there are new container, chevron, flare and nebula textures, and a 256 px planet with a storm spot.
+- **The HUD is in the style of Wipeout 3 and Colony Wars:** slanted segmented THRUST and BOOST FUEL bars with yellow outlines, a chunky segmented rainbow speed arc, and big slanted pixel digits. The station marker uses cyan sci-fi corner brackets. The controls reminder moved to the top-left.
+- **New pixel font (`scenes/ui/PixelFont.gd`)**, drawn from little text pictures in code, so no font file is needed. It's used by the HUD, the cockpit dash, and to stencil lettering onto textures ("LZY FREIGHT" on the containers).
+- **Engines get star-shaped lens flares (`EngineFlare`) and trails with a white-hot core,** the way late-90s racers did it.
+- **A dim purple fill light** keeps the shadowed sides of ships readable, the way late PS1 games used colored lighting.
+- **A faint nebula is painted across the sky,** tinted with the system's signature color. It's a normal solid surface; drawn as see-through, it covered the engine trails.
+- **The rig is now a cargo hauler**, "something in between" the space truck and the BB 42, per the developer. A truck cab up front (amber glass, headlights, grille, chrome exhaust stacks, crew quarters on the roof), a rack of eight colorful cargo containers, and an engine block with three engines. About 34 m long, 15 m wide. The flight numbers didn't change.
+- **`tools/capture.sh` takes a `RES` setting** to check other window sizes.

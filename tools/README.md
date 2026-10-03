@@ -9,7 +9,7 @@ project on a machine without a screen.
 | File | What it makes |
 |---|---|
 | `setup_input_map.gd` | The default controls in `project.godot`. Re-running resets those actions to the defaults. |
-| `generate_placeholder_textures.gd` | Small PS1-sized textures in `textures/generated/` (hazard stripes, hull plating, vents, rock, station windows, the planet). |
+| `generate_placeholder_textures.gd` | Small PS1-style textures in `textures/generated/` (hazard stripes, hull plating, cargo containers, chevrons, vents, rock, station windows, engine flare, nebula, the planet). |
 | `generate_engine_sounds.gd` | The engine hum's four loops in `audio/generated/` (made from math by `scenes/flight/EngineSynth.gd`). |
 | `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), the traffic ships (`scenes/flight/traffic/`) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
 
@@ -36,6 +36,7 @@ godot --headless --path . -s tools/validate_project.gd -- scenes/boot/Boot.gd   
 godot --headless --path . -s tools/setup_input_map.gd                           # reset controls
 tools/capture.sh 60 /tmp/shots                       # 2 seconds of the main scene as PNGs
 tools/capture.sh 90 /tmp/shots res://scenes/flight/FlightSandbox.tscn          # the flight sandbox
+RES=800x600 tools/capture.sh 60 /tmp/shots                                     # another window size
 ```
 
 Why `validate_project.gd` and not Godot's own `--check-only`? Scripts that use

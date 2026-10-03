@@ -11,9 +11,8 @@ const MARKER_COLOR := Color(1.0, 0.85, 0.45)
 ## How far ahead along our path the marker is placed, in meters.
 const LOOK_AHEAD: float = 400.0
 
-## The ship to follow, and the 3D view it's seen through. Set by FlightHUD.
+## The ship to follow. Set by FlightHUD.
 var ship: Ship
-var view: PSXView
 
 
 func _ready() -> void:
@@ -25,13 +24,13 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	if ship == null or view == null or view.camera() == null or ship.flight.speed() < 3.0:
+	var camera := get_viewport().get_camera_3d()
+	if ship == null or camera == null or ship.flight.speed() < 3.0:
 		return
-	var camera := view.camera()
 	var heading_to := ship.get_global_transform_interpolated().origin + ship.flight.velocity.normalized() * LOOK_AHEAD
 	if camera.is_position_behind(heading_to):
 		return
-	var spot := view.unproject(heading_to)
+	var spot := camera.unproject_position(heading_to)
 	draw_arc(spot, 9.0, 0.0, TAU, 20, MARKER_COLOR, 2.0, true)
 	draw_circle(spot, 2.0, MARKER_COLOR)
 	# Little "wings" so it reads as a direction marker, not a target.
