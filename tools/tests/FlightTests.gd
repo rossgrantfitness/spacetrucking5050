@@ -145,3 +145,12 @@ func test_reset_parks_the_ship() -> void:
 	check(model.speed() == 0.0, "reset should stop the ship")
 	check(model.boost_fuel == 1.0, "reset should refill the boost tank")
 	check(is_equal_approx(model.heading, 0.5) and is_equal_approx(model.pitch, 0.1), "reset should face the given way")
+
+
+func test_bonks_scale_from_gentle_to_hard() -> void:
+	var tuning := GameState.tuning
+	check(Ship.bonk_strength(tuning.bonk_min_speed, tuning) == 0.0, "a bump at the minimum speed is the gentlest bonk")
+	check(Ship.bonk_strength(tuning.bonk_hard_speed * 3.0, tuning) == 1.0, "a huge crash is capped at the biggest bonk")
+	var middle := Ship.bonk_strength((tuning.bonk_min_speed + tuning.bonk_hard_speed) * 0.5, tuning)
+	check(absf(middle - 0.5) < 0.01, "bonk strength grows evenly with impact speed")
+	check(tuning.bonk_damage_max >= tuning.bonk_damage_min, "the biggest bonk should hurt at least as much as the gentlest")

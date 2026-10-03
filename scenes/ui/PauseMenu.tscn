@@ -58,7 +58,7 @@ horizontal_alignment = 1
 [node name="Resume" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Keep driving"
+text = "Keep going"
 
 [node name="InvertY" type="CheckButton" parent="Center/Panel/Items"]
 unique_name_in_owner = true
@@ -80,6 +80,16 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Screen shake"
 
+[node name="Rumble" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gamepad rumble"
+
+[node name="DockAtBase" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dock at the base (walk around)"
+
 [node name="BackToStart" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -94,5 +104,5 @@ text = "Quit to the title screen"
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.5)
 theme_override_font_sizes/font_size = 13
-text = "Esc / Start: back to driving"
+text = "Esc / Start: back to the game"
 horizontal_alignment = 1

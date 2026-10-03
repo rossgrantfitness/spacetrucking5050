@@ -40,6 +40,11 @@ func _process(_delta: float) -> bool:
 		280:
 			Input.action_release("throttle_down")
 			_tap("toggle_camera")
+		290:
+			# A big bonk and a little one: sparks, sound, smoke, hull bar.
+			var ship := current_scene.get_node("World/Ship")
+			ship.call("bonk", 40.0, ship.get("global_position") + Vector3(0, 0, -15), Vector3.BACK)
+			ship.call("bonk", 6.0, ship.get("global_position") + Vector3(5, 0, 0), Vector3.LEFT)
 		300:
 			_tap("pause")
 		320:

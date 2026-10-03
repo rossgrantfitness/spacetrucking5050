@@ -35,9 +35,15 @@ func setup(ship: Ship, destination: Node3D) -> void:
 	_marker.target = destination
 
 
-## Shows "topping up boost fuel" next to the station marker while it happens.
-func set_refueling(refueling: bool) -> void:
-	_marker.label = "TRUCK STOP · TOPPING UP BOOST FUEL" if refueling else "TRUCK STOP"
+## Shows what the truck stop is doing for you (boost fuel, hull patching)
+## next to its marker while it happens.
+func set_truck_stop_service(refueling: bool, repairing: bool) -> void:
+	var services: Array[String] = []
+	if refueling:
+		services.append("BOOST FUEL")
+	if repairing:
+		services.append("HULL PATCH")
+	_marker.label = "TRUCK STOP" if services.is_empty() else "TRUCK STOP · " + " + ".join(services)
 
 
 func set_cockpit_view(in_cockpit: bool) -> void:

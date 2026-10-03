@@ -1,16 +1,19 @@
 extends SceneTree
-## Writes the engine hum's four sound loops (made from pure math by
-## scenes/flight/EngineSynth.gd) as .wav files in res://audio/generated/:
+## Writes the game's made-from-math sounds as .wav files in
+## res://audio/generated/:
 ##     engine_drone.wav, engine_whine.wav, engine_air.wav, engine_growl.wav
+##         (the engine hum's four loops, from scenes/flight/EngineSynth.gd)
+##     bonk.wav, blip.wav
+##         (a cartoon bump and a dialogue voice blip, from scenes/common/SfxSynth.gd)
 ##
 ## Run it from the project folder with:
-##     godot --headless --path . -s tools/generate_engine_sounds.gd
+##     godot --headless --path . -s tools/generate_sounds.gd
 ##
 ## Tip: click any of those files in the FileSystem dock to hear it in the
 ## Inspector. To use a real recorded engine sound instead, just replace a file
 ## with your own seamless loop (same name), or point EngineHum at a new file.
-## The import settings next to each file (Loop Mode: Forward, no compression)
-## are kept when you regenerate.
+## The import settings next to each file (the engine loops: Loop Mode:
+## Forward, no compression) are kept when you regenerate.
 
 
 const OUTPUT_FOLDER: String = "res://audio/generated"
@@ -23,6 +26,8 @@ func _initialize() -> void:
 		"engine_whine": EngineSynth.make_whine(),
 		"engine_air": EngineSynth.make_air(),
 		"engine_growl": EngineSynth.make_growl(),
+		"bonk": SfxSynth.make_bonk(),
+		"blip": SfxSynth.make_blip(),
 	}
 	var failed := false
 	for file_name: String in loops:

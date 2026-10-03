@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://scenes/flight/SpaceDust.gd" id="6_dust"]
 [ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="7_field"]
 [ext_resource type="PackedScene" path="res://scenes/flight/Station.tscn" id="8_station"]
-[ext_resource type="Script" path="res://scenes/flight/CockpitFrame.gd" id="9_frame"]
 [ext_resource type="Script" path="res://scenes/flight/SpeedLines.gd" id="10_lines"]
 [ext_resource type="Shader" path="res://shaders/speed_lines.gdshader" id="11_lines_shader"]
 [ext_resource type="PackedScene" path="res://scenes/ui/FlightHUD.tscn" id="12_hud"]
@@ -19,6 +18,7 @@
 [ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
 [ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="23_courier"]
 [ext_resource type="Texture2D" path="res://textures/generated/nebula.png" id="22_nebula_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="19_capsule"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="20_box"]
@@ -154,6 +154,16 @@ speed = 40.0
 engine_trail_color = Color(0.45, 0.85, 1, 1)
 hull_size = Vector3(5, 5, 20)
 
+[node name="Courier" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("23_courier")
+waypoints = PackedVector3Array(480, -60, -5300, 240, -38.3494, -4884.31, -240, -81.6506, -4884.31, -480, -60, -5300, -240, -38.3494, -5715.69, 240, -81.6506, -5715.69)
+speed = 85.0
+start_fraction = 0.4
+max_bank_degrees = 40.0
+engine_trail_color = Color(1, 0.45, 0.35, 1)
+hull_size = Vector3(12, 12, 26)
+
 [node name="PSXScreen" type="CanvasLayer" parent="."]
 layer = 0
 script = ExtResource("14_psx")
@@ -170,19 +180,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("10_lines")
-
-[node name="CockpitView" type="CanvasLayer" parent="."]
-layer = 2
-visible = false
-
-[node name="CockpitFrame" type="Control" parent="CockpitView"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("9_frame")
 
 [node name="FlightHUD" parent="." instance=ExtResource("12_hud")]
 

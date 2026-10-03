@@ -119,3 +119,42 @@ be revisited; just say so.
 - **A faint nebula is painted across the sky,** tinted with the system's signature color. It's a normal solid surface; drawn as see-through, it covered the engine trails.
 - **The rig is now a cargo hauler**, "something in between" the space truck and the BB 42, per the developer. A truck cab up front (amber glass, headlights, grille, chrome exhaust stacks, crew quarters on the roof), a rack of eight colorful cargo containers, and an engine block with three engines. About 34 m long, 15 m wide. The flight numbers didn't change.
 - **`tools/capture.sh` takes a `RES` setting** to check other window sizes.
+
+## 2026-10-03 (Round 5: damage, a lived-in cockpit, and the walkable base begins)
+
+- **The walkable base (M3) started before the delivery loop (M2),** at the developer's request: "begin moving forward to establishing the RPG". M2 isn't dropped, just moved after this; bonks and damage (an M2 item) arrived now too.
+- **More PS1 feel:** wobble snaps to a 360-row grid (was 480), texture swim is 0.35 (was 0.25), and the dither is stronger (0.9, was 0.6) with chunkier dots (360-row scale, was 540).
+- **Ship damage is cozy:** bonking into rocks, the station or traffic knocks the hull (2% for a nudge, up to 20% for a big hit, tunable), with sparks, a cartoon "bonk" sound, screen shake, a little bounce and gamepad rumble. A battered hull trails light lilac smoke (dark smoke vanishes against black space) and spits sparks below a third. Nothing ever explodes or stops working. Brushing along a rock counts as one bonk (`bonk_cooldown`).
+- **Hull repairs are a sandbox stand-in for now:** the truck stop patches you up while you're nearby, and "Back to the start" fixes everything. Paid repairs at the hangar come with the economy.
+- **The HUD gained a HULL bar** that flashes on bonks. Cargo condition joins it with jobs (M2).
+- **A "Gamepad rumble" switch** joined the pause menu (on by default), saved with the other options.
+- **The cockpit is now a real 3D cab** instead of a flat overlay (pulled forward from M5 at the developer's request), with everything reacting:
+  - A fuzzy pink steering wheel turns with your steering.
+  - The throttle lever moves with thrust; the boost button sinks and blazes.
+  - Speed and hull needles move.
+  - Two little screens (made with the pixel font) show status and a nav radar with traffic blips.
+  - Fuzzy dice and an air freshener swing, and an alien bobblehead wobbles, with acceleration, turns and bonks.
+  - Overhead lights twinkle and a red alarm flashes on bonks or low hull.
+  - The lived-in clutter: coffee, a clipboard, sticky notes, and a taped photo of two figures (one with bunny ears).
+  - Your head sways a little in turns. The old 2D frame (`CockpitFrame.gd`) is gone.
+- **Rooms use pre-rendered backgrounds, the real Final Fantasy VIII / Dino Crisis way:**
+  - When a room loads (behind a black fade), each fixed camera's view of the room's "set" is painted once into a picture, with smooth per-pixel lighting and shadows.
+  - The set's shapes then switch to a shader that just shows that picture, so they still hide the bunny when she walks behind a bed or counter. The wobbly PS1 characters are drawn live in front.
+  - The pictures are painted at 75% of the screen's size (`prerender_scale`), so backgrounds are a touch soft, like old CG.
+  - They're repainted when the window is resized, and cameras can be moved freely in the editor because there's no separate baking step.
+- **Each room is a scene with Shots (camera + zone), Spawns, Exits and People;** the visual "set" is a separate generated scene. Re-running `tools/build_hub.gd` replaces the sets and character models but never your camera angles or doors.
+- **A camera cut never flips your controls:** after a cut, she keeps walking along the old camera's directions until you let go of the stick or turn it more than 45° (`camera_cut_hold_angle`).
+- **The bunny is a procedural chibi model** (about 1.3 m with ears): lavender-gray fur, a red trucker cap with her ears through it, an olive jacket, jeans, boots, tired heavy eyelids that blink, and a stalk of wheat in her mouth. Code animates her walk, ear flop and breathing (`BunnyAnimator.gd`), so there are no animation files. She casts a soft round blob shadow, like PS1 games did.
+- **Three rooms from the developer's sketch:**
+  - The messy apartment: a big window onto space, an unmade bed, an old CRT computer, socks everywhere, a framed photo, a rug, a plant and a hanging lamp.
+  - The hallway: a one-point-perspective corridor with numbered doors, ceiling pipes and neon strips.
+  - Dispatch: a counter with the clerk, a job board, waiting chairs, and stairs up to the SHIP door.
+- **Stairs walk as a smooth invisible ramp** (simpler and nicer than step-by-step climbing), with an invisible wall at the open landing edge.
+- **First NPC: Dottie, the morning dispatch clerk,** a raccoon with a headset. Her name and lines are in `data/npcs/dispatch_morning.tres`. She stands on a platform behind the counter so the camera can see her over it.
+- **Dialogue boxes** have typewriter text, a pixel-font name plate and gibberish voice blips at each speaker's pitch (`Dialogue.say()`). They're built in code and appear on demand.
+- **The big names live in one file,** `data/world_names.tres` (`[BUNNY_NAME]`, `[HUSBAND_NAME]`, `[BASE_NAME]`, credits), and dialogue fills them in from `{bunny}` and friends.
+- **"Press Start" now wakes you up in the apartment.** A smaller button on the boot screen still jumps straight into flying. Boarding the ship at the top of the dispatch stairs starts flying, and "Dock at the base" in the flight pause menu brings you back to the top of those stairs.
+- **The pause menu works on foot too,** showing only the options that apply.
+- **The OpenGameArt ships are Quaternius' CC0 "LowPoly Spaceships" pack.** The archive's date matches the June 2021 posting, and the developer confirmed it's from OpenGameArt. One of them, Zenith, now flies a fast loop around the truck stop as a courier. Its texture is shrunk to 256 px for the PS1 look, and the license note is in `assets/opengameart/quaternius_lowpoly_spaceships/LICENSE.txt`. Third-party assets go under `assets/<source>/<pack>/`, always with a license file.
+- **Sounds are made by `tools/generate_sounds.gd`** (renamed from `generate_engine_sounds.gd`): the engine loops, plus the bonk and the dialogue blip from `SfxSynth.gd`.
+- **Validation also walks the base** (`tools/smoke_hub.gd`: apartment → hallway → dispatch → talk → board the ship → dock), and new self-tests cover camera-relative walking, camera zones, name fill-in, the pixel font and room wiring.

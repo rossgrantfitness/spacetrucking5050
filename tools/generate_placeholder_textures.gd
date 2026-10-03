@@ -22,6 +22,18 @@ func _init() -> void:
 		"container.png": _container(128),
 		"chevrons.png": _chevrons(64, 32),
 		"flare.png": _flare(64),
+		"puff.png": _puff(32),
+		"fuzz.png": _fuzz(32),
+		"photo.png": _photo(),
+		"floor_tiles.png": _floor_tiles(64),
+		"wall_panels.png": _wall_panels(64),
+		"carpet.png": _carpet(64),
+		"wood.png": _wood(64),
+		"blanket.png": _blanket(64),
+		"space_view.png": _space_view(256, 128),
+		"job_board.png": _job_board(),
+		"door.png": _door(),
+		"terminal.png": _terminal(),
 		"nebula.png": _nebula(256, 128),
 		"vents.png": _vents(32),
 		"rock.png": _rock(64),
@@ -139,6 +151,198 @@ func _flare(image_size: int) -> Image:
 			var streaks := exp(-dy * 40.0) * (1.0 - dx) + exp(-dx * 40.0) * (1.0 - dy)
 			var glow := clampf(core + streaks * 0.8 + exp(-(dx * dx + dy * dy) * 4.0) * 0.25, 0.0, 1.0)
 			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, glow))
+	return image
+
+
+## A soft, slightly lumpy round puff, for smoke. White, so particles can tint
+## it; see-through at the edges.
+func _puff(image_size: int) -> Image:
+	var lumps := _noise(71, 0.25)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	var half := image_size * 0.5
+	for y in image_size:
+		for x in image_size:
+			var distance := Vector2(x + 0.5 - half, y + 0.5 - half).length() / half
+			var edge := 0.75 + 0.2 * lumps.get_noise_2d(x, y)
+			var alpha := clampf((edge - distance) / 0.35, 0.0, 1.0)
+			var shade := 0.85 + 0.15 * lumps.get_noise_2d(x + 40, y)
+			image.set_pixel(x, y, Color(shade, shade, shade, alpha))
+	return image
+
+
+## Fuzzy faux fur, for pink steering-wheel covers and fuzzy dice. Light, so
+## the paint color tints it.
+func _fuzz(image_size: int) -> Image:
+	var rng := _rng(8)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.82, 0.82, 0.82))
+	# Lots of tiny diagonal strands, light and dark.
+	for strand in 160:
+		var start := Vector2i(rng.randi_range(0, image_size - 1), rng.randi_range(0, image_size - 1))
+		var shade := rng.randf_range(0.6, 1.0)
+		for step in rng.randi_range(2, 4):
+			image.set_pixel((start.x + step) % image_size, (start.y + step) % image_size, Color(shade, shade, shade))
+	return image
+
+
+## A tiny faded snapshot taped to the dash: two figures under a pink sky,
+## one with long bunny ears. (Somebody she misses.)
+func _photo() -> Image:
+	var image := Image.create_empty(24, 30, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.95, 0.93, 0.88))  # The white instant-photo border.
+	for y in range(2, 22):
+		var sky := Color(0.98, 0.7, 0.75).lerp(Color(0.55, 0.45, 0.75), y / 22.0)
+		for x in range(2, 22):
+			image.set_pixel(x, y, sky)
+	var figure := Color(0.25, 0.2, 0.3)
+	image.fill_rect(Rect2i(6, 12, 4, 10), figure)  # Her, with ears.
+	image.fill_rect(Rect2i(6, 7, 1, 5), figure)
+	image.fill_rect(Rect2i(9, 7, 1, 5), figure)
+	image.fill_rect(Rect2i(13, 10, 5, 12), figure)  # Him, a bit taller.
+	image.fill_rect(Rect2i(14, 8, 3, 2), figure)
+	return image
+
+
+## Industrial floor tiles: dark blue-gray squares with seams and scuffs.
+func _floor_tiles(image_size: int) -> Image:
+	var rng := _rng(20)
+	var scuffs := _noise(22, 0.15)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	var tile := 32
+	for y in image_size:
+		for x in image_size:
+			var cell := Vector2i(floori(x / float(tile)), floori(y / float(tile)))
+			var shade := 0.36 + 0.04 * ((cell.x + cell.y) % 2)
+			if x % tile == 0 or y % tile == 0:
+				shade = 0.22
+			elif x % tile == 1 or y % tile == 1:
+				shade += 0.06
+			shade *= 0.9 + 0.1 * scuffs.get_noise_2d(x, y) + rng.randf_range(-0.02, 0.02)
+			image.set_pixel(x, y, Color(shade * 0.9, shade * 0.95, shade * 1.15))
+	return image
+
+
+## Wall paneling: tall slate-blue panels with seams and a darker band.
+func _wall_panels(image_size: int) -> Image:
+	var grime := _noise(24, 0.1)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	for y in image_size:
+		for x in image_size:
+			var shade := 0.42
+			if x % 32 == 0:
+				shade = 0.25
+			elif x % 32 == 1:
+				shade = 0.5
+			if y >= 44 and y < 50:
+				shade = 0.3  # A darker band.
+			shade *= 0.92 + 0.08 * grime.get_noise_2d(x, y)
+			image.set_pixel(x, y, Color(shade * 0.85, shade * 0.92, shade * 1.15))
+	return image
+
+
+## Worn, speckled carpet. Light, so the paint color tints it.
+func _carpet(image_size: int) -> Image:
+	var rng := _rng(25)
+	var wear := _noise(26, 0.08)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	for y in image_size:
+		for x in image_size:
+			var shade := 0.8 + 0.12 * wear.get_noise_2d(x, y) + rng.randf_range(-0.08, 0.08)
+			image.set_pixel(x, y, Color(shade, shade, shade))
+	return image
+
+
+## Wood grain, warm and light.
+func _wood(image_size: int) -> Image:
+	var grain := _noise(27, 0.05)
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	for y in image_size:
+		for x in image_size:
+			var ring := sin((x + grain.get_noise_2d(x * 0.2, y * 2.0) * 30.0) * 0.6) * 0.5 + 0.5
+			var shade := 0.7 + 0.15 * ring
+			image.set_pixel(x, y, Color(shade, shade * 0.72, shade * 0.48))
+	return image
+
+
+## A cozy blanket: wavy zigzag stripes in warm colors (like the sketch's rug).
+func _blanket(image_size: int) -> Image:
+	var stripes: Array[Color] = [Color("e8735a"), Color("f2c75c"), Color("5aa9a0"), Color("f4e9d8"), Color("8a5aa6")]
+	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
+	for y in image_size:
+		for x in image_size:
+			var wave := absi((x % 16) - 8)
+			var band := posmod(floori((y + wave) / 8.0), stripes.size())
+			image.set_pixel(x, y, stripes[band])
+	return image
+
+
+## The view out of a window: deep space, stars, a nebula and a big planet.
+func _space_view(width: int, height: int) -> Image:
+	var rng := _rng(30)
+	var clouds := _noise(31, 0.02)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	for y in height:
+		for x in width:
+			var gas := clampf(clouds.get_noise_2d(x, y) * 0.8 + 0.2, 0.0, 1.0)
+			image.set_pixel(x, y, Color(0.02, 0.02, 0.06).lerp(Color(0.45, 0.25, 0.6), gas * 0.6))
+	for star in 220:
+		var bright := rng.randf_range(0.5, 1.0)
+		image.set_pixel(rng.randi_range(0, width - 1), rng.randi_range(0, height - 1), Color(bright, bright, bright * 1.05))
+	var planet := Vector2(width * 0.72, height * 0.7)
+	for y in height:
+		for x in width:
+			var distance := Vector2(x, y).distance_to(planet)
+			if distance < 34.0:
+				var band := sin(y * 0.4 + sin(x * 0.1) * 2.0) * 0.5 + 0.5
+				var color := Color("f6c27a").lerp(Color("e98a6f"), band)
+				var shade := clampf(1.2 - (x - planet.x + 20.0) / 60.0, 0.25, 1.0)  # Lit from the left.
+				image.set_pixel(x, y, color * shade)
+	return image
+
+
+## A corkboard covered in pinned job notes.
+func _job_board() -> Image:
+	var rng := _rng(32)
+	var image := Image.create_empty(128, 64, false, Image.FORMAT_RGBA8)
+	for y in 64:
+		for x in 128:
+			var shade := 0.6 + rng.randf_range(-0.06, 0.06)
+			image.set_pixel(x, y, Color(shade, shade * 0.72, shade * 0.45))
+	var notes: Array[Color] = [Color(1, 0.95, 0.6), Color(0.95, 0.95, 0.95), Color(0.7, 0.9, 1.0), Color(1.0, 0.75, 0.8)]
+	for i in 9:
+		var corner := Vector2i(6 + (i % 5) * 24 + rng.randi_range(-2, 2), 6 + floori(i / 5.0) * 30 + rng.randi_range(-2, 2))
+		image.fill_rect(Rect2i(corner, Vector2i(18, 22)), notes[i % notes.size()])
+		for line in 4:
+			image.fill_rect(Rect2i(corner + Vector2i(3, 5 + line * 4), Vector2i(rng.randi_range(6, 12), 1)), Color(0.3, 0.3, 0.4))
+		image.fill_rect(Rect2i(corner + Vector2i(8, 1), Vector2i(2, 2)), Color(0.9, 0.2, 0.2))  # Pin.
+	Letters.stamp(image, Vector2i(42, 58), "JOBS", 1, Color(0.2, 0.15, 0.1))
+	return image
+
+
+## A sliding sci-fi door: panels, a window slit and hazard stripes.
+func _door() -> Image:
+	var image := Image.create_empty(64, 128, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.55, 0.58, 0.66))
+	image.fill_rect(Rect2i(31, 0, 2, 128), Color(0.25, 0.27, 0.32))  # The split down the middle.
+	image.fill_rect(Rect2i(10, 24, 44, 8), Color(0.15, 0.2, 0.3))  # Window slit.
+	for y in range(104, 120):
+		for x in 64:
+			var yellow := posmod(x + y, 12) < 6
+			image.set_pixel(x, y, HAZARD_YELLOW if yellow else HAZARD_BLACK)
+	return image
+
+
+## A green computer terminal screen full of text.
+func _terminal() -> Image:
+	var rng := _rng(33)
+	var image := Image.create_empty(64, 48, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.02, 0.08, 0.04))
+	for line in 9:
+		var x := 3
+		while x < 58:
+			var word := rng.randi_range(2, 7)
+			image.fill_rect(Rect2i(x, 3 + line * 5, mini(word, 60 - x), 2), Color(0.4, 1.0, 0.5))
+			x += word + 2
 	return image
 
 

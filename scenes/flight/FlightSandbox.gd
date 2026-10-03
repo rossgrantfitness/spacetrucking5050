@@ -17,12 +17,13 @@ extends Node
 @export var refuel_radius: float = 900.0
 ## Seconds for a full boost-fuel top-up at the truck stop.
 @export var refuel_seconds: float = 4.0
+## Seconds to patch a fully battered hull at the truck stop. (Also a sandbox
+## stand-in: repairs at the hangar, for credits, come later.)
+@export var repair_seconds: float = 8.0
 
 @onready var _ship: Ship = $World/Ship
 @onready var _chase_camera: ChaseCamera = $World/ChaseCamera
 @onready var _cockpit_camera: Camera3D = $World/Ship/CockpitCamera
-@onready var _cockpit_view: CanvasLayer = $CockpitView
-@onready var _cockpit_frame: CockpitFrame = $CockpitView/CockpitFrame
 @onready var _speed_lines: SpeedLines = $SpeedLinesLayer/SpeedLines
 @onready var _dust: SpaceDust = $World/SpaceDust
 @onready var _environment: WorldEnvironment = $World/WorldEnvironment
@@ -39,13 +40,14 @@ func _ready() -> void:
 	_start = _ship.global_transform
 	_dust.ship = _ship
 	_dust.tint = system.signature_color
-	_cockpit_frame.ship = _ship
+	_ship.cockpit.destination = _station
 	_speed_lines.ship = _ship
 	_hud.setup(_ship, _station)
 	_apply_system_colors()
 	_pause_menu.resumed.connect(_capture_mouse)
 	_pause_menu.back_to_start_pressed.connect(_back_to_start)
 	_pause_menu.quit_to_title_pressed.connect(_quit_to_title)
+	_pause_menu.dock_pressed.connect(_dock_at_base)
 	_set_cockpit_view(false)
 	_capture_mouse()
 
@@ -53,9 +55,12 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var near_station := _ship.global_position.distance_to(_station.global_position) < refuel_radius
 	var refueling := near_station and _ship.flight.boost_fuel < 1.0
+	var repairing := near_station and _ship.hull < 1.0
 	if refueling:
 		_ship.flight.boost_fuel = minf(_ship.flight.boost_fuel + delta / refuel_seconds, 1.0)
-	_hud.set_refueling(refueling)
+	if repairing:
+		_ship.repair(delta / repair_seconds)
+	_hud.set_truck_stop_service(refueling, repairing)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -71,8 +76,7 @@ func _set_cockpit_view(in_cockpit: bool) -> void:
 		_cockpit_camera.make_current()
 	else:
 		_chase_camera.make_current()
-	_cockpit_view.visible = in_cockpit
-	_ship.set_model_visible(not in_cockpit)  # We're sitting inside it.
+	_ship.set_cockpit_view(in_cockpit)
 	_hud.set_cockpit_view(in_cockpit)
 
 
@@ -102,8 +106,16 @@ func _capture_mouse() -> void:
 
 func _back_to_start() -> void:
 	_ship.teleport(_start)
+	_ship.repair(1.0)
 	_chase_camera.snap_behind_target()
 	_capture_mouse()
+
+
+## Docks at the base: you climb out at the top of the dispatch stairs.
+func _dock_at_base() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	GameState.next_spawn = "FromShip"
+	get_tree().change_scene_to_file("res://scenes/hub/Dispatch.tscn")
 
 
 func _quit_to_title() -> void:

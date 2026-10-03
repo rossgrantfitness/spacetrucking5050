@@ -1,21 +1,30 @@
 class_name PauseMenu
 extends CanvasLayer
-## A small pause menu: keep driving, flip a few comfort switches, or head
-## back. It works with the mouse, the keyboard (arrows + Enter) or a gamepad
-## (D-pad + A). (The full options menu comes in M10.)
+## A small pause menu: keep going, flip a few comfort switches, or head
+## somewhere else. It works with the mouse, the keyboard (arrows + Enter) or
+## a gamepad (D-pad + A). (The full options menu comes in M10.)
+##
+## Used in flight and on foot; `flying` decides which buttons show.
 ##
 ## Opens and closes with Esc / Start; B / Esc also closes it.
 
 
 signal resumed
 signal back_to_start_pressed
+signal dock_pressed
 signal quit_to_title_pressed
+
+## On in flight: shows "Back to the start" and "Dock at the base", and the
+## flying-only switches.
+@export var flying: bool = true
 
 @onready var _resume: Button = %Resume
 @onready var _invert_y: CheckButton = %InvertY
 @onready var _camera_roll: CheckButton = %CameraRoll
 @onready var _show_hud: CheckButton = %ShowHud
 @onready var _screen_shake: CheckButton = %ScreenShake
+@onready var _rumble: CheckButton = %Rumble
+@onready var _dock: Button = %DockAtBase
 @onready var _back_to_start: Button = %BackToStart
 @onready var _quit_to_title: Button = %QuitToTitle
 
@@ -29,12 +38,17 @@ func _ready() -> void:
 	_camera_roll.button_pressed = Settings.camera_roll
 	_show_hud.button_pressed = Settings.show_hud
 	_screen_shake.button_pressed = Settings.screen_shake
+	_rumble.button_pressed = Settings.rumble
 	_invert_y.toggled.connect(Settings.set_invert_y)
 	_camera_roll.toggled.connect(Settings.set_camera_roll)
 	_show_hud.toggled.connect(Settings.set_show_hud)
 	_screen_shake.toggled.connect(Settings.set_screen_shake)
+	_rumble.toggled.connect(Settings.set_rumble)
 	_resume.pressed.connect(close)
 	_back_to_start.pressed.connect(_on_back_to_start)
+	_dock.pressed.connect(_on_dock)
+	for flight_only: Control in [_invert_y, _camera_roll, _show_hud, _screen_shake, _dock, _back_to_start]:
+		flight_only.visible = flying
 	_quit_to_title.pressed.connect(_on_quit_to_title)
 
 
@@ -66,6 +80,12 @@ func close() -> void:
 func _on_back_to_start() -> void:
 	close()
 	back_to_start_pressed.emit()
+
+
+func _on_dock() -> void:
+	visible = false
+	get_tree().paused = false
+	dock_pressed.emit()
 
 
 func _on_quit_to_title() -> void:

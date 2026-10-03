@@ -13,8 +13,13 @@ game's numbers, names and stuff never needs programming.
   system's signature color (tints the space dust) and haze color (the
   distance haze faraway things fade into).
   Its blueprint is `SystemData.gd`.
+- **`npcs/`**: one file per person on the base: name, voice pitch and what
+  they say. `dispatch_morning.tres` is Dottie. Blueprint: `NPCData.gd`.
+- **`world_names.tres`**: the big names in one place: the bunny, her
+  husband, the base, and what money is called. Dialogue fills them in where
+  it says `{bunny}`, `{husband}`, `{base}` or `{currency}`.
 - **The other folders are empty for now** and fill up as their milestones
-  arrive: `upgrades/` and `jobs/` (M2), `npcs/` and `dialogue/` (M3),
+  arrive: `upgrades/` and `jobs/` (M2), `dialogue/` (M3),
   `radio/` (M4), `clients/` (M5, M8), `outfits/` and `furniture/` (M7).
 
 The pattern for each folder: one small blueprint script (like `ShipData.gd`)

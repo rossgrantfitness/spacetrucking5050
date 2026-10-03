@@ -14,19 +14,28 @@ extends CharacterBody3D
 ## Emitted after the ship jumps somewhere new (e.g. "back to the start"), so
 ## things like the engine trails can wipe themselves clean.
 signal teleported
+## Emitted when the ship bonks into something. `strength` runs from 0 (a
+## gentle bump) to 1 (the hardest bonk); `where` is the spot that got hit.
+signal bonked(strength: float, where: Vector3)
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
 
 ## The rules of flying (see FlightModel.gd).
 var flight := FlightModel.new()
-## Jolts to the camera: a kick when boost fires, a rumble while it burns (and
-## bonks, from M2). Both cameras read it.
+## Jolts to the camera: a kick when boost fires, a rumble while it burns, and
+## bonks. Both cameras read it.
 var shake := ScreenShake.new()
+## How healthy the hull is: 1 = like new, 0 = held together with duct tape.
+## Nothing ever explodes; a battered rig just smokes and sparks.
+var hull: float = 1.0
 
 var _was_boosting := false
+var _bonk_cooldown := 0.0
 
 @onready var controls: ShipControls = $ShipControls
+## The inside of the cab, shown in cockpit view.
+@onready var cockpit: Cockpit = $Cockpit
 @onready var _visual_pivot: Node3D = $VisualPivot
 
 
@@ -43,9 +52,11 @@ func _physics_process(delta: float) -> void:
 	# move_and_slide moves us along `velocity`, and if we touch an asteroid it
 	# slides us along its surface instead of passing through. The momentum
 	# that went into the rock is lost, so hand the result back to the flight
-	# rules. (Proper cartoon "bonks" come in M2.)
+	# rules, after checking whether we bonked into something.
+	var before := velocity
 	move_and_slide()
 	flight.velocity = velocity
+	_check_for_bonks(before, delta)
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
 	# never rolls, so the camera's horizon stays level.
@@ -69,6 +80,50 @@ func overspeed_ratio() -> float:
 	return clampf((flight.speed() - top) / (FlightModel.boosted_top_speed(ship_data) - top), 0.0, 1.0)
 
 
+## Knocks the hull, shakes the camera, bounces the ship a little and tells
+## everyone (sparks, sound, HUD). `impact` is how fast we hit, in m/s.
+func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
+	var tuning := GameState.tuning
+	var strength := bonk_strength(impact, tuning)
+	hull = maxf(hull - lerpf(tuning.bonk_damage_min, tuning.bonk_damage_max, strength), 0.0)
+	shake.add_trauma(lerpf(0.25, tuning.bonk_max_shake, strength))
+	flight.velocity += away * impact * tuning.bonk_bounce
+	_bonk_cooldown = tuning.bonk_cooldown
+	if Settings.rumble:
+		Input.start_joy_vibration(0, 0.3 + 0.5 * strength, 0.2 + 0.8 * strength, 0.15 + 0.25 * strength)
+	bonked.emit(strength, where)
+
+
+## How big a bonk hitting something at `impact` m/s is: 0 (gentlest) to 1.
+static func bonk_strength(impact: float, tuning: Tuning) -> float:
+	return clampf((impact - tuning.bonk_min_speed) / maxf(tuning.bonk_hard_speed - tuning.bonk_min_speed, 0.01), 0.0, 1.0)
+
+
+## Patches up the hull a bit (1 = all of it).
+func repair(amount: float) -> void:
+	hull = minf(hull + amount, 1.0)
+
+
+## Looks at everything we touched this step and bonks on the hardest hit.
+func _check_for_bonks(before: Vector3, delta: float) -> void:
+	_bonk_cooldown = maxf(_bonk_cooldown - delta, 0.0)
+	var hardest := 0.0
+	var where := Vector3.ZERO
+	var away := Vector3.ZERO
+	for i in get_slide_collision_count():
+		var contact := get_slide_collision(i)
+		var normal := contact.get_normal()  # Points away from what we hit.
+		# How fast we were going straight into it, plus how fast it was
+		# coming at us (traffic moves too).
+		var impact := -before.dot(normal) + contact.get_collider_velocity().dot(normal)
+		if impact > hardest:
+			hardest = impact
+			where = contact.get_position()
+			away = normal
+	if hardest >= GameState.tuning.bonk_min_speed and _bonk_cooldown <= 0.0:
+		bonk(hardest, where, away)
+
+
 func _update_shake(delta: float) -> void:
 	var tuning := GameState.tuning
 	if flight.boosting and not _was_boosting:
@@ -78,10 +133,11 @@ func _update_shake(delta: float) -> void:
 	shake.update(delta, tuning.shake_decay)
 
 
-## Shows or hides the ship's model (hidden in cockpit view, where we're
-## sitting inside it).
-func set_model_visible(model_visible: bool) -> void:
-	_visual_pivot.visible = model_visible
+## Shows the ship from outside (chase view) or the inside of the cab
+## (cockpit view, where we're sitting inside it).
+func set_cockpit_view(in_cockpit: bool) -> void:
+	_visual_pivot.visible = not in_cockpit
+	cockpit.visible = in_cockpit
 
 
 ## Puts the ship somewhere new, parked, with no smoothing in between.

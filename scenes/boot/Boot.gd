@@ -4,7 +4,8 @@ extends Node3D
 ##
 ## It proves that the project runs, the 3D renderer works on this computer,
 ## the tuning file and player settings load, and every keyboard, mouse and
-## gamepad input reaches the game. "Press Start" launches the flight sandbox.
+## gamepad input reaches the game. "Press Start" wakes you up in your
+## apartment on the base; the small button below jumps straight into flying.
 
 
 ## Friendly names for Godot's three renderers.
@@ -14,6 +15,7 @@ const RENDERER_NAMES: Dictionary = {
 	"gl_compatibility": "Compatibility",
 }
 const FLIGHT_SCENE: String = "res://scenes/flight/FlightSandbox.tscn"
+const APARTMENT_SCENE: String = "res://scenes/hub/Apartment.tscn"
 const CHIP_IDLE_COLOR := Color(1.0, 1.0, 1.0, 0.08)
 const CHIP_LIT_COLOR := Color(1.0, 0.62, 0.28, 0.95)
 
@@ -28,6 +30,7 @@ const CHIP_LIT_COLOR := Color(1.0, 0.62, 0.28, 0.95)
 @onready var _saved_note: Label = %SavedNote
 @onready var _system_info: Label = %SystemInfo
 @onready var _start_button: Button = %StartFlying
+@onready var _fly_button: Button = %FlySandbox
 
 var _time := 0.0
 var _crate_home_height := 0.0
@@ -54,7 +57,8 @@ func _ready() -> void:
 	_invert_y_toggle.toggled.connect(Settings.set_invert_y)
 	Events.settings_changed.connect(_on_settings_changed)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
-	_start_button.pressed.connect(_start_flying)
+	_start_button.pressed.connect(_start_game)
+	_fly_button.pressed.connect(_start_flying)
 
 
 func _process(delta: float) -> void:
@@ -107,7 +111,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	var enter_pressed := key != null and key.pressed and not key.echo and key.keycode in [KEY_ENTER, KEY_KP_ENTER]
 	var start_pressed := button != null and button.pressed and button.button_index == JOY_BUTTON_START
 	if enter_pressed or start_pressed:
-		_start_flying()
+		_start_game()
+
+
+## Wakes up in the apartment, next to the bed.
+func _start_game() -> void:
+	GameState.next_spawn = "Bed"
+	get_tree().change_scene_to_file(APARTMENT_SCENE)
 
 
 func _start_flying() -> void:

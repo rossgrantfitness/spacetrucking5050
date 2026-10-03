@@ -115,7 +115,18 @@ theme_override_colors/font_color = Color(0.62, 0.95, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.81, 0.42, 1)
 theme_override_font_sizes/font_size = 26
-text = "PRESS START TO FLY  (Enter / gamepad Start / click here)"
+text = "PRESS START  (Enter / gamepad Start / click here)"
+flat = true
+
+[node name="FlySandbox" type="Button" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "or jump straight into the flight sandbox"
 flat = true
 
 [node name="Spacer" type="Control" parent="UI/Margin/Layout"]

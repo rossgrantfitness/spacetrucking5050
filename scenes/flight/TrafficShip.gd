@@ -33,6 +33,7 @@ var _last_heading := Vector3.FORWARD
 
 
 func _ready() -> void:
+	add_to_group("traffic")  # So the cockpit's radar can find us.
 	_route = build_route(waypoints)
 	_distance = _route.get_baked_length() * start_fraction
 	if visual_scene != null:

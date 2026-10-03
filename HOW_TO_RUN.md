@@ -59,9 +59,9 @@ double-click it.
 
 First you'll see the **boot screen**: the title, a lazily tumbling cargo
 crate, and an "INPUT CHECK" panel where every control lights up when you press
-it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START TO
-FLY**) to take the rig out into the **flight sandbox**. See `PLAYTEST.md` for
-what to try.
+it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
+wake up in your apartment on the base. The small button below it jumps
+straight into the **flight sandbox**. See `PLAYTEST.md` for what to try.
 
 ---
 
@@ -98,12 +98,17 @@ itself: fly close to the truck stop to top it up (buying fuel comes later).
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
 opens the pause menu); click the game window to pick the steering back up.
 
-### Walking around the base (from Milestone 3)
+### Walking around the base
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Walk | **W A S D** (or arrow keys) | Left stick |
-| Talk / use | **E** | **A** |
+| Talk / use / board the ship | **E** | **A** |
+| Pause menu | **Esc** | **Start** |
+
+"Up" always walks away from the camera. Doors take you to the next room
+when you walk into them. The ship door at the top of the dispatch stairs
+needs **E** / **A**. To get back from flying, pause → **Dock at the base**.
 
 ### Menus
 
@@ -145,6 +150,15 @@ much models wobble, how much textures swim, the number of colors, the dither,
 and the distance haze. The game draws at your screen's own resolution (any
 window from 800x600 up to 4K). The haze *color* belongs
 to each solar system, in `data/systems/home_system.tres`.
+
+**The base's rooms** are `scenes/hub/Apartment.tscn`, `Hallway.tscn` and
+`Dispatch.tscn`. Open one and look under **Shots**: each shot has a
+**Camera** (select it, then tick *Preview* in the 3D view to look through
+it) and a **Zone** box (where that camera is used). Move and re-aim them
+freely; the backgrounds repaint themselves from the new angle every time
+the room loads. What people say lives in `data/npcs/` (Dottie is
+`dispatch_morning.tres`), and the big names (the bunny, her husband, the
+base) are in `data/world_names.tres`.
 
 **Traffic ships** around the truck stop are the *Commuter* and *Orbiter*
 nodes in `scenes/flight/FlightSandbox.tscn` (under *PSXView → Viewport →

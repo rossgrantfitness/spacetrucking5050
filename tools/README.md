@@ -10,14 +10,15 @@ project on a machine without a screen.
 |---|---|
 | `setup_input_map.gd` | The default controls in `project.godot`. Re-running resets those actions to the defaults. |
 | `generate_placeholder_textures.gd` | Small PS1-style textures in `textures/generated/` (hazard stripes, hull plating, cargo containers, chevrons, vents, rock, station windows, engine flare, nebula, the planet). |
-| `generate_engine_sounds.gd` | The engine hum's four loops in `audio/generated/` (made from math by `scenes/flight/EngineSynth.gd`). |
-| `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), the traffic ships (`scenes/flight/traffic/`) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
+| `generate_sounds.gd` | The engine hum's four loops (from `scenes/flight/EngineSynth.gd`) plus the bonk and dialogue blip (from `scenes/common/SfxSynth.gd`), in `audio/generated/`, made from math. |
+| `build_hub.gd` | The base: the bunny and Dottie models (`scenes/hub/*Visual.tscn`) and the rooms' sets (`scenes/hub/sets/`). **Re-running overwrites those**, but never the rooms' cameras, doors or people. |
+| `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), its cockpit (`scenes/flight/CockpitInterior.tscn`), the traffic ships (`scenes/flight/traffic/`, except the CC0 courier) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
 
 ## Checkers
 
 | File | What it does |
 |---|---|
-| `validate.sh` | Full health check: imports the project, loads every file with GDScript warnings treated as errors, runs the self-tests, runs the boot screen, and flies the sandbox on autopilot. Fails on any error or warning. |
+| `validate.sh` | Full health check: imports the project, loads every file with GDScript warnings treated as errors, runs the self-tests, runs the boot screen, and flies the sandbox on autopilot. Also walks the base (`smoke_hub.gd`). Fails on any error or warning. |
 | `validate_project.gd` | Loads every script, scene and resource (or just the files you list) so Godot reports problems. |
 | `strict_warnings.gd` | Used by `validate.sh`: temporarily turns GDScript warnings into errors (via a throwaway `override.cfg`). |
 | `run_tests.gd` + `tests/` | A tiny self-test runner. Each `*Tests.gd` file in `tests/` holds `test_...` functions. |

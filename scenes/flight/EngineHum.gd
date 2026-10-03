@@ -7,7 +7,7 @@ extends Node
 ## it as a child of a Ship.
 ##
 ## The loops are ordinary .wav files in res://audio/generated/ (made from pure
-## math by tools/generate_engine_sounds.gd), so they can be swapped for real
+## math by tools/generate_sounds.gd), so they can be swapped for real
 ## recordings any time.
 
 

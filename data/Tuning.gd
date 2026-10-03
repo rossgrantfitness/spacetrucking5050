@@ -73,6 +73,58 @@ extends Resource
 @export_range(0.0, 20.0, 0.5, "suffix:°") var nose_tilt_degrees: float = 5.0
 
 
+@export_group("On foot")
+
+## How fast the bunny walks around the base.
+@export_range(0.5, 8.0, 0.1, "suffix:m/s") var walk_speed: float = 2.6
+
+## How quickly she gets up to walking speed and stops again.
+@export_range(1.0, 40.0, 0.5) var walk_acceleration: float = 14.0
+
+## How quickly she turns to face where she's walking.
+@export_range(1.0, 30.0, 0.5) var walk_turn_speed: float = 12.0
+
+## When the camera cuts to a new angle, she keeps walking the way you were
+## pushing until you let go of the stick or turn it more than this much.
+## (So a camera cut never suddenly flips your controls.)
+@export_range(10.0, 90.0, 1.0, "suffix:°") var camera_cut_hold_angle: float = 45.0
+
+## The rooms are "pre-rendered": each camera angle is painted once into a
+## picture when you enter, and the bunny walks in front of it. This is the
+## picture's size compared to your screen. Lower = softer, older-looking
+## backgrounds (and faster to paint).
+@export_range(0.25, 1.0, 0.05) var prerender_scale: float = 0.75
+
+
+@export_group("Bonks and damage")
+
+## Bumping into things slower than this is just a nudge: no bonk, no damage.
+@export_range(0.0, 20.0, 0.5, "suffix:m/s") var bonk_min_speed: float = 3.0
+
+## Hitting something this fast (straight on) is the biggest possible bonk.
+@export_range(5.0, 150.0, 1.0, "suffix:m/s") var bonk_hard_speed: float = 35.0
+
+## Hull lost by the gentlest bonk and by the biggest one (1 = the whole
+## hull). Nothing ever explodes: a battered hull just smokes and sparks until
+## it's patched up.
+@export_range(0.0, 0.5, 0.01) var bonk_damage_min: float = 0.02
+@export_range(0.0, 1.0, 0.01) var bonk_damage_max: float = 0.2
+
+## How much screen shake the biggest bonk gives (0 to 1).
+@export_range(0.0, 1.0, 0.05) var bonk_max_shake: float = 0.75
+
+## How much the ship bounces off what it hit (0 = it just slides along,
+## 1 = a full rubber-ball bounce). A little bounce makes it a cartoon "bonk".
+@export_range(0.0, 1.0, 0.05) var bonk_bounce: float = 0.35
+
+## After a bonk, ignore further bumps for this long, so scraping along a rock
+## counts as one bonk, not dozens.
+@export_range(0.0, 2.0, 0.05, "suffix:s") var bonk_cooldown: float = 0.4
+
+## The engines start trailing smoke when the hull drops below this (1 = 100%).
+@export_range(0.0, 1.0, 0.05) var smoke_below_hull: float = 0.6
+
+
 @export_group("Chase camera")
 
 ## How far behind the ship the camera hangs.
@@ -140,12 +192,16 @@ extends Resource
 
 @export_group("Cockpit view")
 
-## How far the cockpit frame sways when you turn, in pixels at a full turn. It
+## How far your head sways in the seat when you turn or pitch, in meters. It
 ## sells the weight of the rig. 0 = rock solid.
-@export_range(0.0, 60.0, 1.0, "suffix:px") var cockpit_sway: float = 18.0
+@export_range(0.0, 0.3, 0.005, "suffix:m") var cockpit_head_sway: float = 0.06
 
-## How quickly the cockpit sway follows your turning.
+## How quickly your head follows the turning.
 @export_range(0.5, 20.0, 0.5) var cockpit_sway_response: float = 4.0
+
+## How much the fuzzy dice, air freshener and bobblehead swing around.
+## 0 = glued in place, 1 = normal, 2 = very loose.
+@export_range(0.0, 3.0, 0.1) var cockpit_toy_swing: float = 1.0
 
 
 @export_group("Space dust")
@@ -214,21 +270,21 @@ extends Resource
 ## rows tall (the grid is as wide as your screen's shape needs). Fewer rows =
 ## wobblier: 240 is early-PS1 jelly, 480 is a late-PS1 shimmer, 1000+ is
 ## nearly still. It doesn't change the screen's resolution.
-@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 480.0
+@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 360.0
 
 ## How much textures bend and swim on big polygons close to the camera, the
 ## PS1's famous "affine" warping. 0 = modern, 1 = full PS1.
-@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.25
+@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.35
 
 ## Shades per color channel. The PS1 had 32. Lower = more posterized.
 @export_range(4.0, 256.0, 1.0) var color_levels: float = 32.0
 
 ## How strong the fine checkered dither pattern is. 0 = off.
-@export_range(0.0, 2.0, 0.05) var dither_strength: float = 0.6
+@export_range(0.0, 2.0, 0.05) var dither_strength: float = 0.9
 
 ## How big the dither dots are: sized as if the screen had this many rows,
 ## so the pattern looks the same on any screen. Fewer = chunkier dots.
-@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 540.0
+@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 360.0
 
 ## Where the solar system's colored distance haze starts, and where it's at
 ## its thickest. It tints faraway things with the system's haze color (set in

@@ -5,7 +5,8 @@ extends Control
 ## - a chunky segmented arc that fills with speed, green to red, and hot pink
 ##   into boost territory, with the speed in big slanted pixel digits;
 ## - a slanted THRUST bar (warm = burning forward, cyan = reverse to brake);
-## - a slanted BOOST FUEL bar for the boost tank.
+## - a slanted BOOST FUEL bar for the boost tank;
+## - a slanted HULL bar that flashes when you bonk into something.
 ## (Fuel and cargo condition join it in M2.)
 
 
@@ -29,6 +30,9 @@ var _speed_colors := Gradient.new()
 var _boost_colors := Gradient.new()
 var _thrust_colors := Gradient.new()
 var _fuel_colors := Gradient.new()
+var _hull_colors := Gradient.new()
+var _last_hull := 1.0
+var _flash := 0.0  # 1 right after a bonk, fading to 0.
 
 
 func _ready() -> void:
@@ -41,6 +45,17 @@ func _ready() -> void:
 	_thrust_colors.colors = PackedColorArray([Color("7a2cff"), Color("ff2f6d"), Color("ffc21a"), Color("fff6c2")])
 	_fuel_colors.offsets = PackedFloat32Array([0.0, 1.0])
 	_fuel_colors.colors = PackedColorArray([Color("2e7bff"), Color("4ff2ff")])
+	_hull_colors.offsets = PackedFloat32Array([0.0, 0.35, 0.7, 1.0])
+	_hull_colors.colors = PackedColorArray([Color("ff3b3b"), Color("ff9a2e"), Color("e8f03a"), Color("38e07b")])
+
+
+func _process(delta: float) -> void:
+	if ship == null:
+		return
+	if ship.hull < _last_hull - 0.0001:
+		_flash = 1.0  # Bonk!
+	_last_hull = ship.hull
+	_flash = maxf(_flash - delta * 2.5, 0.0)
 
 
 func _draw() -> void:
@@ -52,6 +67,7 @@ func _draw() -> void:
 	var bars_right := center.x - radius - 18.0
 	_draw_thrust_bar(Rect2(bars_right - 250.0, size.y - 118.0, 250.0, 26.0))
 	_draw_fuel_bar(Rect2(bars_right - 250.0, size.y - 58.0, 250.0, 20.0))
+	_draw_hull_bar(Rect2(bars_right - 250.0, size.y - 176.0, 250.0, 20.0))
 
 
 func _draw_speed_arc(center: Vector2, radius: float) -> void:
@@ -120,6 +136,18 @@ func _draw_fuel_bar(area: Rect2) -> void:
 		_bar_segment(area, i, color)
 	_slanted(area.grow(3.0), OUTLINE, LEAN, false)
 	PixelFont.draw(self, Vector2(area.position.x, area.end.y + 9.0), "BOOST FUEL", 2.0, Color.WHITE, 0.2)
+
+
+func _draw_hull_bar(area: Rect2) -> void:
+	var hull := clampf(ship.hull, 0.0, 1.0)
+	_bar_backing(area)
+	var lit := ceili(hull * BAR_SEGMENTS - 0.01)
+	var color := _hull_colors.sample(hull).lerp(Color.WHITE, _flash)
+	for i in BAR_SEGMENTS:
+		_bar_segment(area, i, color if i < lit else EMPTY)
+	_slanted(area.grow(3.0), OUTLINE.lerp(Color(1.0, 0.3, 0.3), _flash), LEAN, false)
+	var label := "HULL %d%%" % roundi(hull * 100.0)
+	PixelFont.draw(self, Vector2(area.end.x - PixelFont.width(label, 2.0) + LEAN, area.position.y - 22.0), label, 2.0, Color.WHITE.lerp(Color(1.0, 0.4, 0.4), _flash), 0.2)
 
 
 ## One segment of a slanted bar.

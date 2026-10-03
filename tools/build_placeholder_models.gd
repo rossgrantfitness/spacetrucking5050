@@ -5,6 +5,7 @@ extends SceneTree
 ##     res://scenes/flight/traffic/CapsuleHaulerVisual.tscn   - traffic
 ##     res://scenes/flight/traffic/BoxHaulerVisual.tscn       - traffic
 ##     res://scenes/flight/Station.tscn                        - the truck stop
+##     res://scenes/flight/CockpitInterior.tscn               - inside the cab
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/build_placeholder_models.gd
@@ -26,6 +27,8 @@ const HAZARD := preload("res://textures/generated/hazard_stripes.png")
 const WINDOWS := preload("res://textures/generated/station_windows.png")
 const CONTAINER := preload("res://textures/generated/container.png")
 const CHEVRONS := preload("res://textures/generated/chevrons.png")
+const FUZZ := preload("res://textures/generated/fuzz.png")
+const PHOTO := preload("res://textures/generated/photo.png")
 # Scripts are loaded in _initialize (not preloaded) because EngineTrail uses
 # autoloads, which don't exist yet while this tool script is being compiled.
 const BLINKER_SCRIPT_PATH := "res://scenes/flight/Blinker.gd"
@@ -78,6 +81,7 @@ func _initialize() -> void:
 	_save(_build_capsule_hauler("CapsuleHaulerVisual", CAPSULE_PAINTS[0], true), "res://scenes/flight/traffic/CapsuleHaulerVisual.tscn")
 	_save(_build_box_hauler("BoxHaulerVisual", BOX_PAINTS[1], true), "res://scenes/flight/traffic/BoxHaulerVisual.tscn")
 	_save(_build_station(), "res://scenes/flight/Station.tscn")
+	_save(_build_cockpit(), "res://scenes/flight/CockpitInterior.tscn")
 	quit()
 
 
@@ -342,6 +346,167 @@ func _build_parking_deck(station: Node3D, body: StaticBody3D) -> void:
 		var x := (i - 2.0) * bay_width * 2.0
 		_box(station, "LampPost", Vector3(0.8, 14.0, 0.8), Vector3(x, deck_y + 7.0, 232.0), _paint(Color(0.2, 0.2, 0.25), null))
 		_box(station, "Lamp", Vector3(3.0, 1.0, 2.0), Vector3(x, deck_y + 14.0, 231.0), _glow(Color(1.0, 0.75, 0.4), 1.5))
+
+
+# --- Inside the cab -----------------------------------------------------------
+# The driver's eyes are at this scene's origin, looking down -Z. Parts that
+# move (wheel, lever, dice...) have the names Cockpit.gd looks for, so keep
+# those names if you rebuild this by hand.
+
+func _build_cockpit() -> Node3D:
+	var cab := Node3D.new()
+	cab.name = "CockpitInterior"
+	cab.set_script(load("res://scenes/flight/Cockpit.gd"))
+	var dash := _paint(Color(0.24, 0.24, 0.3))
+	var panel := _paint(Color(0.13, 0.13, 0.18))
+	var hazard := _hazard(3.0)
+	var pink := _paint(Color(1.0, 0.55, 0.82), FUZZ, Vector2(4.0, 4.0))
+	var chrome := _paint(Color(0.82, 0.84, 0.9), null)
+
+	# The windshield frame: hazard-striped pillars and roof bar, like a truck cab.
+	for side: float in [-1.0, 1.0]:
+		_beam(cab, "Pillar", Vector3(1.38 * side, -0.45, -1.42), Vector3(1.18 * side, 1.02, -0.95), 0.16, hazard)
+		_box(cab, "SideWall", Vector3(0.1, 2.2, 2.2), Vector3(1.6 * side, 0.1, -0.2), panel)
+	_beam(cab, "RoofBar", Vector3(-1.3, 1.02, -0.95), Vector3(1.3, 1.02, -0.95), 0.16, hazard)
+	_box(cab, "Roof", Vector3(3.2, 0.1, 1.8), Vector3(0.0, 1.12, -0.1), panel)
+
+	# The dashboard, with a fuzzy pink dash mat.
+	_box(cab, "DashTop", Vector3(3.0, 0.1, 1.0), Vector3(0.0, -0.48, -1.1), dash)
+	_box(cab, "DashFront", Vector3(3.0, 0.5, 0.1), Vector3(0.0, -0.75, -0.62), panel)
+	_box(cab, "DashMat", Vector3(1.0, 0.03, 0.35), Vector3(0.0, -0.42, -1.4), pink)
+
+	# The instrument panel, tilted toward the driver: two screens and two dials.
+	var instruments := Node3D.new()
+	instruments.name = "Instruments"
+	instruments.position = Vector3(0.0, -0.3, -1.0)
+	instruments.rotation = Vector3(-0.35, 0.0, 0.0)
+	cab.add_child(instruments, true)
+	_box(instruments, "InstrumentPanel", Vector3(2.4, 0.4, 0.08), Vector3.ZERO, dash)
+	for screen: Array in [["StatusScreen", -0.72], ["NavScreen", 0.72]]:
+		var quad := QuadMesh.new()
+		quad.size = Vector2(0.62, 0.32)
+		_mesh(instruments, screen[0], quad, Vector3(screen[1], 0.0, 0.045))
+	for dial: Array in [["SpeedDial", -0.24], ["HullDial", 0.24]]:
+		var face := _cylinder(instruments, dial[0], 0.085, 0.02, Vector3(dial[1], 0.04, 0.05), _paint(Color(0.08, 0.1, 0.09), null), Vector3(PI / 2.0, 0.0, 0.0), 12)
+		var bezel := TorusMesh.new()
+		bezel.inner_radius = 0.08
+		bezel.outer_radius = 0.095
+		bezel.rings = 12
+		bezel.ring_segments = 4
+		bezel.material = chrome
+		_mesh(face, "Bezel", bezel, Vector3.ZERO)
+		var needle := Node3D.new()
+		needle.name = "Needle"
+		face.add_child(needle, true)
+		_box(needle, "NeedleBar", Vector3(0.012, 0.02, 0.07), Vector3(0.0, 0.016, -0.03), _glow(Color(1.0, 0.35, 0.2), 1.4))
+		for tick in 7:
+			var tick_angle := lerpf(2.2, -2.2, tick / 6.0)
+			var mark := _box(face, "Tick", Vector3(0.008, 0.02, 0.018), Vector3(-sin(tick_angle) * 0.068, 0.012, -cos(tick_angle) * 0.068), _glow(Color(0.5, 1.0, 0.6), 0.9))
+			mark.rotation = Vector3(0.0, tick_angle, 0.0)
+	# A snapshot taped to the panel, and a couple of sticky notes.
+	var photo := QuadMesh.new()
+	photo.size = Vector2(0.1, 0.125)
+	photo.material = _paint(Color.WHITE, PHOTO, Vector2.ONE, false)
+	_mesh(instruments, "Photo", photo, Vector3(-1.13, 0.04, 0.05), Vector3(0.0, 0.0, 0.12))
+	for note: Array in [[Vector3(1.1, 0.12, 0.05), -0.1], [Vector3(1.12, -0.06, 0.05), 0.15]]:
+		var sticky := QuadMesh.new()
+		sticky.size = Vector2(0.08, 0.08)
+		sticky.material = _paint(Color(1.0, 0.9, 0.35), null)
+		_mesh(instruments, "StickyNote", sticky, note[0], Vector3(0.0, 0.0, note[1]))
+
+	# The steering wheel (with a fuzzy pink cover), tilted toward the driver.
+	var column := Node3D.new()
+	column.name = "WheelColumn"
+	column.position = Vector3(0.0, -0.44, -0.62)
+	column.rotation = Vector3(0.96, 0.0, 0.0)
+	cab.add_child(column, true)
+	_box(column, "ColumnShaft", Vector3(0.07, 0.4, 0.07), Vector3(0.0, -0.2, 0.0), dash)
+	var wheel := Node3D.new()
+	wheel.name = "Wheel"
+	column.add_child(wheel, true)
+	var rim := TorusMesh.new()
+	rim.inner_radius = 0.19
+	rim.outer_radius = 0.24
+	rim.rings = 16
+	rim.ring_segments = 6
+	rim.material = pink
+	_mesh(wheel, "Rim", rim, Vector3.ZERO)
+	_cylinder(wheel, "Hub", 0.06, 0.05, Vector3.ZERO, chrome, Vector3.ZERO, 8)
+	for i in 3:
+		var angle := PI / 2.0 + i * TAU / 3.0
+		var spoke := _box(wheel, "Spoke", Vector3(0.2, 0.02, 0.03), Vector3(cos(angle), 0.0, sin(angle)) * 0.11, dash)
+		spoke.rotation = Vector3(0.0, -angle, 0.0)
+
+	# The throttle lever and the big boost button, right of the wheel.
+	_box(cab, "LeverBase", Vector3(0.14, 0.05, 0.18), Vector3(0.45, -0.5, -0.6), panel)
+	var lever := Node3D.new()
+	lever.name = "ThrottleLever"
+	lever.position = Vector3(0.45, -0.48, -0.6)
+	cab.add_child(lever, true)
+	_box(lever, "LeverStick", Vector3(0.022, 0.14, 0.022), Vector3(0.0, 0.07, 0.0), chrome)
+	_box(lever, "LeverKnob", Vector3(0.06, 0.045, 0.06), Vector3(0.0, 0.15, 0.0), _paint(Color(0.9, 0.2, 0.2), null))
+	_box(cab, "ButtonBase", Vector3(0.14, 0.03, 0.14), Vector3(0.68, -0.5, -0.64), _hazard(30.0))
+	_cylinder(cab, "BoostButton", 0.045, 0.04, Vector3(0.68, -0.47, -0.64), _paint(Color(1.0, 0.45, 0.1), null), Vector3.ZERO, 10)
+
+	# The overhead panel: rows of little lights, and a red alarm light.
+	_box(cab, "OverheadPanel", Vector3(1.4, 0.1, 0.6), Vector3(0.0, 1.0, -0.55), dash)
+	for row in 2:
+		for column_index in 8:
+			_box(cab, "Led", Vector3(0.04, 0.02, 0.04), Vector3(-0.42 + column_index * 0.12, 0.945, -0.72 + row * 0.12), _paint(Color(0.3, 0.3, 0.3), null))
+	_box(cab, "AlarmLight", Vector3(0.1, 0.06, 0.1), Vector3(0.6, 0.93, -0.8), _paint(Color(0.5, 0.1, 0.1), null))
+
+	# Toys: fuzzy dice and an air freshener hanging from the roof bar, an alien
+	# bobblehead, a coffee and a clipboard on the dash.
+	var dice := Node3D.new()
+	dice.name = "Dice"
+	dice.position = Vector3(0.32, 0.94, -0.95)
+	cab.add_child(dice, true)
+	_box(dice, "String", Vector3(0.006, 0.22, 0.006), Vector3(0.0, -0.11, 0.0), _paint(Color(0.9, 0.9, 0.9), null))
+	var pink_die := _paint(Color(1.0, 0.5, 0.8), FUZZ, Vector2(12.0, 12.0))
+	_box(dice, "Die", Vector3(0.07, 0.07, 0.07), Vector3(-0.03, -0.25, 0.0), pink_die).rotation = Vector3(0.3, 0.4, 0.1)
+	_box(dice, "Die", Vector3(0.07, 0.07, 0.07), Vector3(0.04, -0.28, 0.01), pink_die).rotation = Vector3(-0.2, 0.9, 0.3)
+	var freshener := Node3D.new()
+	freshener.name = "Freshener"
+	freshener.position = Vector3(-0.42, 0.94, -1.0)
+	cab.add_child(freshener, true)
+	_box(freshener, "String", Vector3(0.005, 0.14, 0.005), Vector3(0.0, -0.07, 0.0), _paint(Color(0.9, 0.9, 0.9), null))
+	_slab(freshener, "Tree", PackedVector2Array([Vector2(0.0, 0.0), Vector2(0.05, 0.12), Vector2(-0.05, 0.12)]), 0.0, 0.004, _paint(Color(0.3, 0.85, 0.4), null)).rotation = Vector3(PI / 2.0, 0.0, 0.0)
+	var bobble := Node3D.new()
+	bobble.name = "Bobblehead"
+	bobble.position = Vector3(-0.85, -0.43, -1.2)
+	cab.add_child(bobble, true)
+	_cylinder(bobble, "BobbleBody", 0.03, 0.08, Vector3(0.0, 0.04, 0.0), _paint(Color(0.55, 0.3, 0.7), null), Vector3.ZERO, 6)
+	var head := Node3D.new()
+	head.name = "Head"
+	head.position = Vector3(0.0, 0.1, 0.0)
+	bobble.add_child(head, true)
+	_loft(head, "HeadShape", Vector3(0.0, 0.0, -0.04), Vector2(0.09, 0.08), Vector3(0.0, 0.0, 0.04), Vector2(0.09, 0.08), _paint(Color(0.45, 0.95, 0.5), null), 0.4)
+	_box(head, "Eye", Vector3(0.025, 0.03, 0.01), Vector3(-0.02, 0.005, 0.042), _paint(Color(0.05, 0.05, 0.08), null))
+	_box(head, "Eye", Vector3(0.025, 0.03, 0.01), Vector3(0.02, 0.005, 0.042), _paint(Color(0.05, 0.05, 0.08), null))
+	_box(head, "Antenna", Vector3(0.006, 0.06, 0.006), Vector3(0.0, 0.07, 0.0), _paint(Color(0.45, 0.95, 0.5), null))
+	_cylinder(cab, "Coffee", 0.04, 0.11, Vector3(1.0, -0.37, -0.95), _paint(Color(0.95, 0.92, 0.85), null), Vector3.ZERO, 8)
+	_cylinder(cab, "CoffeeLid", 0.043, 0.02, Vector3(1.0, -0.305, -0.95), _paint(Color(0.35, 0.22, 0.15), null), Vector3.ZERO, 8)
+	var clipboard := _box(cab, "Clipboard", Vector3(0.24, 0.01, 0.32), Vector3(-1.05, -0.425, -1.05), _paint(Color(0.55, 0.38, 0.22), null))
+	clipboard.rotation = Vector3(0.0, 0.3, 0.0)
+	var paper := _box(clipboard, "Paper", Vector3(0.21, 0.004, 0.27), Vector3(0.0, 0.006, 0.01), _paint(Color(0.96, 0.95, 0.9), null))
+	paper.rotation = Vector3(0.0, 0.05, 0.0)
+
+	# A warm little cab light, so it feels like a place someone lives in.
+	var lamp := OmniLight3D.new()
+	lamp.name = "CabLight"
+	lamp.position = Vector3(0.0, 0.7, -0.3)
+	lamp.light_color = Color(1.0, 0.72, 0.5)
+	lamp.light_energy = 0.7
+	lamp.omni_range = 3.0
+	cab.add_child(lamp, true)
+	return cab
+
+
+## A box stretched between two points, `thickness` meters thick.
+func _beam(parent: Node3D, node_name: String, from: Vector3, to: Vector3, thickness: float, material: Material) -> MeshInstance3D:
+	var beam := _box(parent, node_name, Vector3(thickness, thickness, from.distance_to(to)), (from + to) * 0.5, material)
+	beam.basis = Basis.looking_at(to - from, Vector3.UP if absf((to - from).normalized().y) < 0.99 else Vector3.BACK)
+	return beam
 
 
 # --- Shapes -------------------------------------------------------------------

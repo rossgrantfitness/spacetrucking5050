@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/ApartmentSet.tscn" id="2_set"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.35, 0.5, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone0"]
+size = Vector3(6.2, 3, 3.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
+size = Vector3(6.2, 3, 1.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit0"]
+size = Vector3(1.1, 2, 0.5)
+
+[node name="Apartment" type="Node3D"]
+script = ExtResource("1_room")
+default_spawn = "Bed"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_room")
+
+[node name="Set" parent="." instance=ExtResource("2_set")]
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="Wide" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Wide"]
+position = Vector3(2.7, 2.5, 2.35)
+rotation = Vector3(-0.3863, 0.8214, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Wide"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Wide/Zone"]
+position = Vector3(0, 1.4, -0.95)
+shape = SubResource("BoxShape3D_zone0")
+
+[node name="TowardDoor" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/TowardDoor"]
+position = Vector3(-2.7, 2.45, -2.25)
+rotation = Vector3(-0.3899, -2.3916, 0)
+fov = 60
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/TowardDoor"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/TowardDoor/Zone"]
+position = Vector3(0, 1.4, 1.65)
+shape = SubResource("BoxShape3D_zone1")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="Bed" type="Marker3D" parent="Spawns"]
+position = Vector3(-1.5, 0, 1.2)
+rotation = Vector3(0, -1.2793, 0)
+
+[node name="FromHallway" type="Marker3D" parent="Spawns"]
+position = Vector3(1.5, 0, 1.7)
+rotation = Vector3(0, 0.0000, 0)
+
+[node name="Exits" type="Node3D" parent="."]
+
+[node name="HallwayDoor" type="Area3D" parent="Exits"]
+position = Vector3(1.5, 1, 2.45)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Hallway.tscn"
+target_spawn = "FromApartment"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/HallwayDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="People" type="Node3D" parent="."]
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("5_psx")
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+flying = false

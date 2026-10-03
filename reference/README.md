@@ -15,6 +15,8 @@ folder, so these images aren't imported or exported with the game.)
 | `hud_scifi_elements_cyan.webp` | Cyan sci-fi HUD shapes (brackets, rings, segmented bars) for markers and menus. |
 | `look_colony_wars_space.png` | The space look we're aiming for: late PS1 (1999-2000), black space with soft nebula bands, a rainbow arc gauge. |
 | `look_dino_crisis_interior.png` | Late-PS1 interiors for the hub (M3): clean, detailed textures and fixed camera angles. |
+| `cockpit_outer_wilds_style.webp`, `cockpit_fuzzy_pink_seats.webp`, `cockpit_pixel_neon.webp`, `cockpit_lived_in_dice_coffee.jpg` | The cockpit: lived in and reactive. Fuzzy pink, dangling dice, coffee, clipboards, glowing screens and buttons. |
+| `sketch_station_rooms_and_route_map.png` | The developer's sketch: the apartment, the hallway, dispatch with stairs to the ship, and a route map (space restaurant hub, truck stop, airfield, office, warehouse store, drug den). |
 | `hub_neon_food_stand.webp` | The hub (M3): a cozy PS1 food stand with paper lanterns and a neon sign in alien script. |
 
 Add more any time; mention them in chat so Claude looks at them.

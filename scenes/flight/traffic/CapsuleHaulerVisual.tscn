@@ -189,92 +189,92 @@ _surfaces = [{
 "vertex_data": PackedByteArray("+n6qQNDMTD4AAJBABoHVQNDMTD4AAJBAhxbZQMzMzD4AADBB+n6qQNDMTD4AAJBAhxbZQMzMzD4AADBBeemmQMzMzD4AADBBBoHVQNDMTD4AAJBAZmbmQJzvp74AAJBAzczsQBwvXb4AADBBBoHVQNDMTD4AAJBAzczsQBwvXb4AADBBhxbZQMzMzD4AADBBZmbmQJzvp74AAJBAZmbmQBkE1r8AAJBAzczsQBxa5L8AADBBZmbmQJzvp74AAJBAzczsQBxa5L8AADBBzczsQBwvXb4AADBBZmbmQBkE1r8AAJBABoHVQM3MDMAAAJBAhxbZQJqZGcAAADBBZmbmQBkE1r8AAJBAhxbZQJqZGcAAADBBzczsQBxa5L8AADBBBoHVQM3MDMAAAJBA+n6qQM3MDMAAAJBAeemmQJqZGcAAADBBBoHVQM3MDMAAAJBAeemmQJqZGcAAADBBhxbZQJqZGcAAADBB+n6qQM3MDMAAAJBAmpmZQBkE1r8AAJBAMzOTQBxa5L8AADBB+n6qQM3MDMAAAJBAMzOTQBxa5L8AADBBeemmQJqZGcAAADBBmpmZQBkE1r8AAJBAmpmZQJzvp74AAJBAMzOTQBwvXb4AADBBmpmZQBkE1r8AAJBAMzOTQBwvXb4AADBBMzOTQBxa5L8AADBBmpmZQJzvp74AAJBA+n6qQNDMTD4AAJBAeemmQMzMzD4AADBBmpmZQJzvp74AAJBAeemmQMzMzD4AADBBMzOTQBwvXb4AADBB+n6qQNDMTD4AAJBAZmbmQJzvp74AAJBABoHVQNDMTD4AAJBAeemmQMzMzD4AADBBhxbZQMzMzD4AADBBzczsQBwvXb4AADBB+n6qQNDMTD4AAJBAZmbmQBkE1r8AAJBAZmbmQJzvp74AAJBAeemmQMzMzD4AADBBzczsQBwvXb4AADBBzczsQBxa5L8AADBB+n6qQNDMTD4AAJBABoHVQM3MDMAAAJBAZmbmQBkE1r8AAJBAeemmQMzMzD4AADBBzczsQBxa5L8AADBBhxbZQJqZGcAAADBB+n6qQNDMTD4AAJBA+n6qQM3MDMAAAJBABoHVQM3MDMAAAJBAeemmQMzMzD4AADBBhxbZQJqZGcAAADBBeemmQJqZGcAAADBB+n6qQNDMTD4AAJBAmpmZQBkE1r8AAJBA+n6qQM3MDMAAAJBAeemmQMzMzD4AADBBeemmQJqZGcAAADBBMzOTQBxa5L8AADBB+n6qQNDMTD4AAJBAmpmZQJzvp74AAJBAmpmZQBkE1r8AAJBAeemmQMzMzD4AADBBMzOTQBxa5L8AADBBMzOTQBwvXb4AADBB0YP//x4AB77Rg///HgAHvtGD//8eAAe+0YP//x4AB77Rg///HgAHvtGD//8eAAe+f8F/wQFWANZ/wX/BAVYA1n/Bf8EBVgDWf8F/wQFWANZ/wX/BAVYA1n/Bf8EBVgDW///Rg9CD8L///9GD0IPwv///0YPQg/C////Rg9CD8L///9GD0IPwv///0YPQg/C/f8F/PmlXoap/wX8+aVehqn/Bfz5pV6Gqf8F/PmlXoap/wX8+aVehqn/Bfz5pV6Gq0YMAAO8D8L/RgwAA7wPwv9GDAADvA/C/0YMAAO8D8L/RgwAA7wPwv9GDAADvA/C/fz5/PqNUotR/Pn8+o1Si1H8+fz6jVKLUfz5/PqNUotR/Pn8+o1Si1H8+fz6jVKLUAADRgy588L8AANGDLnzwvwAA0YMufPC/AADRgy588L8AANGDLnzwvwAA0YMufPC/fz5/wVFToap/Pn/BUVOhqn8+f8FRU6Gqfz5/wVFToap/Pn/BUVOhqn8+f8FRU6Gq//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
-[node name="CapsuleHaulerVisual" type="Node3D" unique_id=674469691]
+[node name="CapsuleHaulerVisual" type="Node3D" unique_id=944742628]
 
-[node name="NoseCap" type="MeshInstance3D" parent="." unique_id=1634621847]
+[node name="NoseCap" type="MeshInstance3D" parent="." unique_id=2144183917]
 mesh = SubResource("ArrayMesh_cwrhk")
 
-[node name="Body" type="MeshInstance3D" parent="." unique_id=1668977248]
+[node name="Body" type="MeshInstance3D" parent="." unique_id=537083976]
 mesh = SubResource("ArrayMesh_nlef7")
 
-[node name="TailCap" type="MeshInstance3D" parent="." unique_id=946370970]
+[node name="TailCap" type="MeshInstance3D" parent="." unique_id=274447440]
 mesh = SubResource("ArrayMesh_ab03i")
 
-[node name="Band" type="MeshInstance3D" parent="." unique_id=750446800]
+[node name="Band" type="MeshInstance3D" parent="." unique_id=1186544165]
 mesh = SubResource("ArrayMesh_wjurt")
 
-[node name="Band2" type="MeshInstance3D" parent="." unique_id=1805985643]
+[node name="Band2" type="MeshInstance3D" parent="." unique_id=805414534]
 mesh = SubResource("ArrayMesh_wak45")
 
-[node name="Bubble" type="MeshInstance3D" parent="." unique_id=924397508]
+[node name="Bubble" type="MeshInstance3D" parent="." unique_id=1850572833]
 mesh = SubResource("ArrayMesh_n26o8")
 
-[node name="Antenna" type="MeshInstance3D" parent="." unique_id=1762956318]
+[node name="Antenna" type="MeshInstance3D" parent="." unique_id=464696451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 6)
 mesh = SubResource("CylinderMesh_aq7rb")
 
-[node name="Pylon" type="MeshInstance3D" parent="." unique_id=2147380675]
+[node name="Pylon" type="MeshInstance3D" parent="." unique_id=453269531]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, -1, -8)
 mesh = SubResource("BoxMesh_qnrhk")
 
-[node name="EnginePod" type="MeshInstance3D" parent="." unique_id=1414004797]
+[node name="EnginePod" type="MeshInstance3D" parent="." unique_id=1922269260]
 mesh = SubResource("ArrayMesh_md8ps")
 
-[node name="EngineGlow" type="MeshInstance3D" parent="." unique_id=108090165]
+[node name="EngineGlow" type="MeshInstance3D" parent="." unique_id=2108498500]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -4.95)
 mesh = SubResource("BoxMesh_dcmyg")
 
-[node name="Pylon2" type="MeshInstance3D" parent="." unique_id=350736781]
+[node name="Pylon2" type="MeshInstance3D" parent="." unique_id=1877902113]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, -1, 8)
 mesh = SubResource("BoxMesh_qnrhk")
 
-[node name="EnginePod2" type="MeshInstance3D" parent="." unique_id=1590483693]
+[node name="EnginePod2" type="MeshInstance3D" parent="." unique_id=311023128]
 mesh = SubResource("ArrayMesh_45v70")
 
-[node name="EngineGlow2" type="MeshInstance3D" parent="." unique_id=1321058258]
+[node name="EngineGlow2" type="MeshInstance3D" parent="." unique_id=206363905]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 11.05)
 mesh = SubResource("BoxMesh_dcmyg")
 
-[node name="Nozzle" type="Marker3D" parent="." unique_id=1319868803]
+[node name="Nozzle" type="Marker3D" parent="." unique_id=1517209374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 11.3)
 
-[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=67007734]
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=373665653]
 script = ExtResource("3_m71nc")
 
-[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=2069451890]
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=1067828965]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 script = ExtResource("4_mcqal")
 size_at_top_speed = 6.0
 
-[node name="Pylon3" type="MeshInstance3D" parent="." unique_id=960074339]
+[node name="Pylon3" type="MeshInstance3D" parent="." unique_id=1898998932]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, -1, -8)
 mesh = SubResource("BoxMesh_qnrhk")
 
-[node name="EnginePod3" type="MeshInstance3D" parent="." unique_id=109516437]
+[node name="EnginePod3" type="MeshInstance3D" parent="." unique_id=237042926]
 mesh = SubResource("ArrayMesh_0u81o")
 
-[node name="EngineGlow3" type="MeshInstance3D" parent="." unique_id=1483720104]
+[node name="EngineGlow3" type="MeshInstance3D" parent="." unique_id=1068773916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -4.95)
 mesh = SubResource("BoxMesh_dcmyg")
 
-[node name="Pylon4" type="MeshInstance3D" parent="." unique_id=952448309]
+[node name="Pylon4" type="MeshInstance3D" parent="." unique_id=1913814629]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, -1, 8)
 mesh = SubResource("BoxMesh_qnrhk")
 
-[node name="EnginePod4" type="MeshInstance3D" parent="." unique_id=2133799668]
+[node name="EnginePod4" type="MeshInstance3D" parent="." unique_id=1059109858]
 mesh = SubResource("ArrayMesh_6g1hx")
 
-[node name="EngineGlow4" type="MeshInstance3D" parent="." unique_id=409777958]
+[node name="EngineGlow4" type="MeshInstance3D" parent="." unique_id=1338809244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 11.05)
 mesh = SubResource("BoxMesh_dcmyg")
 
-[node name="Nozzle2" type="Marker3D" parent="." unique_id=662489074]
+[node name="Nozzle2" type="Marker3D" parent="." unique_id=984401665]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 11.3)
 
-[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=1173687965]
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=1703748251]
 script = ExtResource("3_m71nc")
 
-[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=294363461]
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=1243897185]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 script = ExtResource("4_mcqal")
 size_at_top_speed = 6.0

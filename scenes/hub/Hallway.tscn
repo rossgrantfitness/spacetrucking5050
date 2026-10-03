@@ -1,0 +1,109 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/HallwaySet.tscn" id="2_set"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.35, 0.5, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone0"]
+size = Vector3(3.2, 3.4, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
+size = Vector3(3.2, 3.4, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit0"]
+size = Vector3(0.4, 2, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit1"]
+size = Vector3(1.1, 2, 0.4)
+
+[node name="Hallway" type="Node3D"]
+script = ExtResource("1_room")
+default_spawn = "FromApartment"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_room")
+
+[node name="Set" parent="." instance=ExtResource("2_set")]
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="Corridor" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Corridor"]
+position = Vector3(0.35, 2.3, -0.8)
+rotation = Vector3(-0.0918, 0.0362, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Corridor"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Corridor/Zone"]
+position = Vector3(0, 1.6, -6)
+shape = SubResource("BoxShape3D_zone0")
+
+[node name="DispatchEnd" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/DispatchEnd"]
+position = Vector3(-1.25, 2.85, -10.5)
+rotation = Vector3(-0.2537, -0.2030, 0)
+fov = 60
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/DispatchEnd"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/DispatchEnd/Zone"]
+position = Vector3(0, 1.6, -16)
+shape = SubResource("BoxShape3D_zone1")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="FromApartment" type="Marker3D" parent="Spawns"]
+position = Vector3(-0.7, 0, -2)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="FromDispatch" type="Marker3D" parent="Spawns"]
+position = Vector3(0, 0, -18.6)
+rotation = Vector3(0, 3.1416, 0)
+
+[node name="Exits" type="Node3D" parent="."]
+
+[node name="ApartmentDoor" type="Area3D" parent="Exits"]
+position = Vector3(-1.4, 1, -2)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Apartment.tscn"
+target_spawn = "FromHallway"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/ApartmentDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="DispatchDoor" type="Area3D" parent="Exits"]
+position = Vector3(0, 1, -19.85)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Dispatch.tscn"
+target_spawn = "FromHallway"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/DispatchDoor"]
+shape = SubResource("BoxShape3D_exit1")
+
+[node name="People" type="Node3D" parent="."]
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("5_psx")
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+flying = false

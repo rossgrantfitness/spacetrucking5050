@@ -41,6 +41,12 @@ func read(delta: float) -> FlightControls:
 	return _controls
 
 
+## The steering being given right now, after smoothing (x = right, y = nose
+## up). The cockpit's steering wheel follows it.
+func current_steer() -> Vector2:
+	return _controls.steer
+
+
 ## Where the mouse's virtual stick is right now (the HUD draws a reticle there).
 func mouse_stick() -> Vector2:
 	return _mouse_stick

@@ -15,6 +15,13 @@ extends Node
 ## The one shared copy of every feel number. To change values, open
 ## res://data/tuning.tres and use the Inspector.
 var tuning: Tuning = preload("res://data/tuning.tres")
+## The big names (the bunny, her husband, the base, the money). Change them in
+## res://data/world_names.tres.
+var names: WorldNames = preload("res://data/world_names.tres")
+
+## Where to put the bunny when the next room loads: the name of one of that
+## room's spawn spots. Set when walking through a door.
+var next_spawn: String = ""
 
 ## The smallest the game window can get. Everything is drawn at the screen's
 ## own resolution, from this up to 4K.
