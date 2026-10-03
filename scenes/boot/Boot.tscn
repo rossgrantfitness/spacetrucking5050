@@ -1,0 +1,227 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/boot/Boot.gd" id="1_boot"]
+[ext_resource type="Script" path="res://scenes/boot/Starfield.gd" id="2_stars"]
+[ext_resource type="Script" path="res://scenes/boot/StickView.gd" id="3_stick"]
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 1
+background_color = Color(0.105, 0.063, 0.2, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.52, 0.95, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Material_crate"]
+albedo_color = Color(0.96, 0.58, 0.26, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="Mesh_crate"]
+material = SubResource("Material_crate")
+
+[sub_resource type="StandardMaterial3D" id="Material_band"]
+albedo_color = Color(0.4, 0.22, 0.6, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Material_band")
+size = Vector3(1.04, 0.14, 1.04)
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
+bg_color = Color(0.07, 0.04, 0.14, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.62, 0.82, 0.5)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Boot" type="Node3D"]
+script = ExtResource("1_boot")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+fov = 60.0
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915206, 0.43938506, -0.36868784, 0, 0.64278764, 0.76604444, 0.57357645, -0.62750685, 0.5265408, 0, 4, 0)
+light_color = Color(1, 0.92, 0.82, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_space")
+
+[node name="Stars" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("2_stars")
+
+[node name="Crate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 0)
+mesh = SubResource("Mesh_crate")
+
+[node name="BandTop" type="MeshInstance3D" parent="Crate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="BandBottom" type="MeshInstance3D" parent="Crate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Margin" type="MarginContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 14
+
+[node name="Layout" type="VBoxContainer" parent="UI/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="UI/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81, 0.42, 1)
+theme_override_colors/font_outline_color = Color(0.23, 0.12, 0.36, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 64
+text = "SPACE TRUCKIN' 5050"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="UI/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "Milestone 0: setup check. The engine's warm. The coffee's cold."
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="UI/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="InputPanel" type="PanelContainer" parent="UI/Margin/Layout"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Rows" type="VBoxContainer" parent="UI/Margin/Layout/InputPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeaderRow" type="HBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.62, 0.82, 1)
+theme_override_font_sizes/font_size = 20
+text = "INPUT CHECK: wiggle everything!"
+
+[node name="DeviceLabel" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.95, 1, 1)
+text = "Last used: nothing yet"
+horizontal_alignment = 2
+
+[node name="Gauges" type="HBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="SteerColumn" type="VBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows/Gauges"]
+layout_mode = 2
+
+[node name="SteerTitle" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/SteerColumn"]
+layout_mode = 2
+text = "Steering"
+horizontal_alignment = 1
+
+[node name="SteerStick" type="Control" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/SteerColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_stick")
+
+[node name="SteerCaption" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/SteerColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(215, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Ship would: cruise straight"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="MouseColumn" type="VBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows/Gauges"]
+layout_mode = 2
+
+[node name="MouseTitle" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/MouseColumn"]
+layout_mode = 2
+text = "Mouse steering"
+horizontal_alignment = 1
+
+[node name="MouseStick" type="Control" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/MouseColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_stick")
+
+[node name="MouseCaption" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/MouseColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(215, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Ship would: cruise straight"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="ActionsColumn" type="VBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows/Gauges"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionsTitle" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/ActionsColumn"]
+layout_mode = 2
+text = "Every action lights up while you hold it (its keys and buttons are listed underneath)"
+
+[node name="Chips" type="HFlowContainer" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/ActionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="FooterRow" type="HBoxContainer" parent="UI/Margin/Layout/InputPanel/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="InvertY" type="CheckButton" parent="UI/Margin/Layout/InputPanel/Rows/FooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Invert Y (pilot style: push up = nose down)"
+
+[node name="SavedNote" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/FooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+text = "Saved!"
+
+[node name="SystemInfo" type="Label" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 12
+text = "System info appears here when the game runs."
