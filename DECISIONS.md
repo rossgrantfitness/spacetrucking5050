@@ -29,3 +29,39 @@ be revisited; just say so.
 - **`tools/capture.sh` takes visual checks.** It renders frames with Godot's Movie Maker mode on a virtual screen, so Claude can look at the game without a monitor.
 - **Cloud sessions auto-install Godot** via a Claude Code SessionStart hook (`.claude/`). It only runs in Claude's cloud sessions and does nothing on your computer.
 - **Placeholder project icon:** a sleepy bunny chewing a wheat stalk (`icon.svg`). Swap it any time.
+
+## 2026-10-03 (Brief update)
+
+- **Synced `CLAUDE.md` to your revised brief.** It adds FF8-style hub cameras, the hazard-striped cockpit, funny ship labels, the corner arc HUD, the mood-board references, the palette, the neon-glow rules and engine trails. Your re-sent brief was taken as the go-ahead for M1, and M0's open questions moved into M1's playtest.
+
+## 2026-10-03 (M1: Flight sandbox)
+
+- **Flight is heading + pitch only.** The ship's body never rolls; the lean into turns is purely visual. That's what keeps the horizon level for both cameras.
+- **Pitch stops at ±70°.** You can't loop over and lose track of up. It's tunable (`max_pitch_degrees`).
+- **A gentle nose auto-level is on by default.** When you let go of up/down, the nose drifts back to the horizon over a few seconds, like a truck on a highway. Set `nose_auto_level` to 0 to turn it off.
+- **The throttle is a lever (cruise control).** W/S or the triggers move it, and it stays where you leave it, so nobody holds a trigger for five minutes.
+- **Speed changes at the ship's full acceleration until close to the target, then eases in.** It feels like a heavy truck settling into cruise instead of snapping onto a number.
+- **Boost is hold-to-boost from a small tank (3 s full, 7 s to refill).** It ignores the throttle and pushes to top speed +60%. After the tank runs dry you have to let go and press again, so holding the button doesn't make it stutter.
+- **Collisions use Godot's CharacterBody3D in "floating" mode.** The rig stops at, or slides along, rocks and the station. Bonks (cargo damage, shake, sound) are M2.
+- **Physics interpolation is on.** The ship moves in fixed physics steps and the cameras follow its smoothed position every frame, so motion is smooth on 60, 144 or 240 Hz screens alike.
+- **The chase cam lags only in direction (heading/pitch), never in distance.** The rig visibly leads into turns, but cruising doesn't drag the camera back. Boost adds a deliberate small pull-back, and FOV widens above 70% of top speed per the brief.
+- **Camera roll is a player option (off by default) in the pause menu.** How much it leans is in tuning (`camera_roll_amount`).
+- **The cockpit view is a placeholder 2D frame** (hazard struts, dashboard, green screen) drawn over the cockpit camera. It sways slightly in turns and never tilts. A 3D cockpit with real instruments and the radar globe comes in M4/M5.
+- **Space dust is one mesh of about 1,400 specks wrapped around the camera by a shader.** That gives an endless field for nearly free. Specks streak along your velocity and are tinted by the system's color. It was tuned down after test renders looked like hyperspace.
+- **Speed lines are a screen-space shader shown only while boosting,** per the brief.
+- **Engine trails are camera-facing ribbons from markers on the engine nozzles** (part of the swappable ship model). Trail length comes from speed × `trail_lifetime`, brightness from speed.
+- **The engine sound is four seamless 2-second loops** (drone, whine, air, growl), made from pure math by `tools/generate_engine_sounds.gd` into `audio/generated/*.wav`, with pitch and volume bent every frame. This replaced a live sound generator: it's cheaper, the loops can be swapped for real recordings, and it avoids a Godot 4.7.2 "leaked at exit" warning.
+- **`GameState.quit_game()` closes the game politely.** It stops all sounds, waits 0.1 s, then quits; Godot 4.7.2 prints a scary-looking leak warning if you quit mid-sound. It's also where saving on exit will go in M2.
+- **Asteroids are procedural low-poly rocks:** 80-face lumpy icospheres in 5 shapes, drawn with MultiMesh. They tumble in a shader (each rock has its own axis and speed) and collide as spheres at 85% of their size, so grazes feel fair.
+- **The placeholder rig and station are built by `tools/build_placeholder_models.gd`** and saved as ordinary editable scenes, with shared materials and simple collision shapes. Re-running the tool overwrites them.
+- **Glow strengths stay at or below about 1.8.** Higher values clipped neon colors to plain white in test renders.
+- **The starter rig's placeholder name is "The Lazy Susan"** and the home system's placeholder color is soft lilac. Both live in data files.
+- **Speed is shown in km/h.** It's familiar to truckers and mundane in a fun way.
+- **The mouse is captured while flying** (hidden, steering). Esc/Start releases it via the pause menu, and clicking recaptures it.
+- **The HUD is a corner speed gauge** (gradient arc, throttle notch, boost-tank arc), a station marker with an off-screen arrow, a mouse reticle, and a controls reminder that fades after 25 s. There's a "Show HUD" toggle; in cockpit view the dash takes over.
+- **A small pause menu** (resume, Invert Y, camera roll, show HUD, back to start, quit to title) is a sandbox convenience. The full options menu stays in M10.
+- **The boot screen launches the flight on Enter, gamepad Start, or a click.** Not Space or A, because the input check uses those for boost.
+- **Starfield moved to `scenes/common/`.** It's shared by the boot screen and flight, and in flight it follows the camera so the stars sit at infinity.
+- **New `textures/generated/` folder** for generated placeholder textures (the hazard stripes), mirroring `audio/generated/`. It's imported without compression so the pixels stay crisp.
+- **The engine loops import with Loop Mode: Forward, uncompressed.** If a `.import` file is edited outside the editor, delete its cache in `.godot/imported/` so Godot re-imports it.
+- **Validation now also flies the sandbox on autopilot** (`tools/smoke_flight.gd`: throttle, turns, boost, cockpit, pause, back to start), and the self-tests cover the flight rules, sound loops and rock meshes.

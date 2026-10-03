@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/Ship.gd" id="1_ship"]
+[ext_resource type="Resource" path="res://data/ships/starter_rig.tres" id="2_rig"]
+[ext_resource type="PackedScene" path="res://scenes/flight/ShipVisual.tscn" id="3_visual"]
+[ext_resource type="Script" path="res://scenes/flight/CockpitCamera.gd" id="4_cockpit"]
+[ext_resource type="Script" path="res://scenes/flight/ShipControls.gd" id="5_controls"]
+[ext_resource type="Script" path="res://scenes/flight/EngineHum.gd" id="6_hum"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hull"]
+radius = 2.6
+height = 20.0
+
+[node name="Ship" type="CharacterBody3D"]
+motion_mode = 1
+script = ExtResource("1_ship")
+ship_data = ExtResource("2_rig")
+
+[node name="Hull" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.6, 0.8)
+shape = SubResource("CapsuleShape3D_hull")
+
+[node name="VisualPivot" type="Node3D" parent="."]
+
+[node name="ShipVisual" parent="VisualPivot" instance=ExtResource("3_visual")]
+
+[node name="CockpitCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -7.9)
+fov = 70.0
+near = 0.3
+far = 12000.0
+script = ExtResource("4_cockpit")
+
+[node name="ShipControls" type="Node" parent="."]
+script = ExtResource("5_controls")
+
+[node name="EngineHum" type="Node" parent="."]
+script = ExtResource("6_hum")

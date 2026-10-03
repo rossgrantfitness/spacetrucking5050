@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
+[ext_resource type="Resource" path="res://data/systems/home_system.tres" id="2_system"]
+[ext_resource type="Script" path="res://scenes/common/Starfield.gd" id="3_stars"]
+[ext_resource type="PackedScene" path="res://scenes/flight/Ship.tscn" id="4_ship"]
+[ext_resource type="Script" path="res://scenes/flight/ChaseCamera.gd" id="5_chase"]
+[ext_resource type="Script" path="res://scenes/flight/SpaceDust.gd" id="6_dust"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="7_field"]
+[ext_resource type="PackedScene" path="res://scenes/flight/Station.tscn" id="8_station"]
+[ext_resource type="Script" path="res://scenes/flight/CockpitFrame.gd" id="9_frame"]
+[ext_resource type="Script" path="res://scenes/flight/SpeedLines.gd" id="10_lines"]
+[ext_resource type="Shader" path="res://shaders/speed_lines.gdshader" id="11_lines_shader"]
+[ext_resource type="PackedScene" path="res://scenes/ui/FlightHUD.tscn" id="12_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="13_pause"]
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 1
+background_color = Color(0.008, 0.008, 0.024, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.42, 0.38, 0.62, 1)
+ambient_light_energy = 0.55
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lines"]
+shader = ExtResource("11_lines_shader")
+
+[node name="FlightSandbox" type="Node3D"]
+script = ExtResource("1_sandbox")
+system = ExtResource("2_system")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_space")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.77292824, -0.31702483, 0.54961544, 0, 0.86622715, 0.49965036, -0.63449335, -0.38619387, 0.6695315, 0, 100, 0)
+light_color = Color(1, 0.9, 0.78, 1)
+light_energy = 1.3
+
+[node name="Starfield" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("3_stars")
+star_count = 1200
+radius = 9000.0
+star_size = 30.0
+drift_speed = 0.0
+follow_camera = true
+
+[node name="Ship" parent="." instance=ExtResource("4_ship")]
+
+[node name="ChaseCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+current = true
+fov = 70.0
+near = 0.3
+far = 12000.0
+script = ExtResource("5_chase")
+target = NodePath("../Ship")
+
+[node name="SpaceDust" type="MeshInstance3D" parent="."]
+script = ExtResource("6_dust")
+
+[node name="AsteroidField" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2400)
+script = ExtResource("7_field")
+
+[node name="Station" parent="." instance=ExtResource("8_station")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5300)
+
+[node name="SpeedLinesLayer" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="SpeedLines" type="ColorRect" parent="SpeedLinesLayer"]
+material = SubResource("ShaderMaterial_lines")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_lines")
+
+[node name="CockpitView" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+
+[node name="CockpitFrame" type="Control" parent="CockpitView"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("9_frame")
+
+[node name="FlightHUD" parent="." instance=ExtResource("12_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("13_pause")]

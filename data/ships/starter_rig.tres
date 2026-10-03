@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ShipData" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+
+[resource]
+script = ExtResource("1_ship")
+display_name = "The Lazy Susan"
+max_speed = 55.0
+acceleration = 6.0
+braking = 10.0
+turn_rate = 38.0
+pitch_rate = 30.0
+turn_response = 2.2
+max_bank = 28.0
+boost_speed_bonus = 0.6
+boost_acceleration = 22.0
+boost_duration = 3.0
+boost_recharge_time = 7.0
+trail_color = Color(1, 0.55, 0.3, 1)
+engine_pitch = 0.9

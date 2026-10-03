@@ -1,7 +1,7 @@
 extends MultiMeshInstance3D
 ## A cheap starry backdrop: hundreds of tiny glowing cubes scattered on a huge
-## sphere around the scene, slowly turning. Placeholder space scenery until
-## the real stuff arrives (space dust in M1, the PSX look in M4).
+## sphere. Used behind the boot screen and in flight. (The full PSX-era sky,
+## with oversized swirly planets, arrives in M4.)
 ##
 ## A MultiMesh draws many copies of one mesh in a single go, which is much
 ## faster than hundreds of separate nodes.
@@ -14,9 +14,13 @@ extends MultiMeshInstance3D
 @export var star_size: float = 0.22
 ## How fast the whole sky turns, in radians per second. Slow and dreamy.
 @export var drift_speed: float = 0.012
+## Stick to the camera's position (but not its turning), so the stars act as
+## if they were infinitely far away, however far you fly. Used in flight.
+@export var follow_camera: bool = false
 
-## A few soft star tints: warm white, pale cyan, pale pink.
+## A few soft star tints: crisp white, warm white, pale cyan, pale pink.
 const STAR_COLORS: Array[Color] = [
+	Color(1.0, 1.0, 1.0),
 	Color(1.0, 0.97, 0.88),
 	Color(0.7, 0.95, 1.0),
 	Color(1.0, 0.78, 0.92),
@@ -24,12 +28,16 @@ const STAR_COLORS: Array[Color] = [
 
 
 func _ready() -> void:
+	if follow_camera:
+		# We move every frame ourselves; Godot's motion smoothing would lag.
+		physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 5050  # Same sky every time.
 
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED  # Stars glow; no lighting.
 	material.vertex_color_use_as_albedo = true  # Lets each star have its own tint.
+	material.disable_fog = true  # Stars shine through any space haze.
 	var cube := BoxMesh.new()
 	cube.size = Vector3.ONE * star_size
 	cube.material = material
@@ -52,3 +60,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	rotate_y(drift_speed * delta)
+	if follow_camera:
+		var camera := get_viewport().get_camera_3d()
+		if camera != null:
+			global_position = camera.global_position

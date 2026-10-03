@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SystemData" format=3]
+
+[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="1_system"]
+
+[resource]
+script = ExtResource("1_system")
+display_name = "Home Space (placeholder)"
+signature_color = Color(0.8, 0.72, 1, 1)

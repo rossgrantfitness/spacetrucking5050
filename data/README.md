@@ -3,15 +3,20 @@
 Everything that's *content* rather than *code* lives here, so changing the
 game's numbers, names and stuff never needs programming.
 
-- **`tuning.tres`** (with its blueprint `Tuning.gd`): every feel number in the
-  game. Double-click it and use the Inspector; hover a value to see what it
-  does.
+- **`tuning.tres`** (with its blueprint `Tuning.gd`): every feel number shared
+  by all ships: steering, camera, field of view, dust, trails, engine sound.
+  Double-click it and use the Inspector; hover a value to see what it does.
+- **`ships/`**: one file per ship. `starter_rig.tres` is *The Lazy Susan*,
+  your inherited rig: top speed, acceleration, how heavy it turns, boost,
+  trail color, engine voice. Its blueprint is `ShipData.gd`.
+- **`systems/`**: one file per solar system. `home_system.tres` holds the home
+  system's signature color, which tints the space dust (and the fog, from M4).
+  Its blueprint is `SystemData.gd`.
 - **The other folders are empty for now** and fill up as their milestones
-  arrive: `ships/` and `upgrades/` (M1–M2), `jobs/` (M2), `npcs/` and
-  `dialogue/` (M3), `radio/` (M4), `systems/` and `clients/` (M5, M8),
-  `outfits/` and `furniture/` (M7).
+  arrive: `upgrades/` and `jobs/` (M2), `npcs/` and `dialogue/` (M3),
+  `radio/` (M4), `clients/` (M5, M8), `outfits/` and `furniture/` (M7).
 
-The pattern for each folder: one small blueprint script (for example
-`ShipData.gd`) that defines the fields, plus one `.tres` file per thing (for
-example `starter_rig.tres`). Adding a new ship or client means duplicating a
-`.tres` file and editing it in the Inspector. No code.
+The pattern for each folder: one small blueprint script (like `ShipData.gd`)
+that defines the fields, plus one `.tres` file per thing (like
+`starter_rig.tres`). Adding a new ship or system means duplicating a `.tres`
+file and editing it in the Inspector. No code.

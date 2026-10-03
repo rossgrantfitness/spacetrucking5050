@@ -1,6 +1,6 @@
 extends Node
-## The player's comfort options (invert Y, and later: camera roll, screen
-## shake, FOV, rumble, HUD, volume...).
+## The player's comfort options: invert Y, camera roll, HUD on/off, and later
+## screen shake, FOV, rumble, volume...
 ##
 ## These belong to the PLAYER, not to one save slot, so they live in their
 ## own little file, user://settings.json, and save themselves on every change.
@@ -18,6 +18,14 @@ const SETTINGS_VERSION: int = 1
 ## true:  push UP to point the nose DOWN, like a real plane's control stick.
 var invert_y: bool = false
 
+## false: the camera stays level while the rig leans into turns (default;
+##        much kinder to motion-sensitive players).
+## true:  the chase camera leans along with the rig.
+var camera_roll: bool = false
+
+## Whether the corner gauges and the station marker are shown while flying.
+var show_hud: bool = true
+
 
 func _ready() -> void:
 	load_settings()
@@ -34,14 +42,25 @@ func pitch_from_vertical_input(vertical: float) -> float:
 
 func set_invert_y(enabled: bool) -> void:
 	invert_y = enabled
-	save_settings()
-	Events.settings_changed.emit()
+	_changed()
+
+
+func set_camera_roll(enabled: bool) -> void:
+	camera_roll = enabled
+	_changed()
+
+
+func set_show_hud(enabled: bool) -> void:
+	show_hud = enabled
+	_changed()
 
 
 func save_settings() -> void:
 	SaveSystem.write_json(SETTINGS_PATH, {
 		"version": SETTINGS_VERSION,
 		"invert_y": invert_y,
+		"camera_roll": camera_roll,
+		"show_hud": show_hud,
 	})
 
 
@@ -53,6 +72,12 @@ func load_settings() -> void:
 ## (like on the very first launch) or of the wrong type (say, from a
 ## hand-edited file) keeps its current value.
 func apply_saved_data(data: Dictionary) -> void:
-	var saved_invert_y: Variant = data.get("invert_y")
-	if saved_invert_y is bool:
-		invert_y = saved_invert_y
+	for option: String in ["invert_y", "camera_roll", "show_hud"]:
+		var saved: Variant = data.get(option)
+		if saved is bool:
+			set(option, saved)
+
+
+func _changed() -> void:
+	save_settings()
+	Events.settings_changed.emit()

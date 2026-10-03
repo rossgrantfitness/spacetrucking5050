@@ -57,9 +57,11 @@ double-click it.
   top-right of the editor.
 - A game window opens. To stop, close it, or press **F8** (Mac: **Cmd+.**).
 
-Right now (Milestone 0) you'll see the **boot screen**: the title, a lazily
-tumbling cargo crate, and an "INPUT CHECK" panel where every control lights up
-when you press it. See `PLAYTEST.md` for what to try.
+First you'll see the **boot screen**: the title, a lazily tumbling cargo
+crate, and an "INPUT CHECK" panel where every control lights up when you press
+it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START TO
+FLY**) to take the rig out into the **flight sandbox**. See `PLAYTEST.md` for
+what to try.
 
 ---
 
@@ -69,7 +71,7 @@ Gamepad buttons use Xbox names, by position: **A** = bottom button, **B** =
 right, **X** = left, **Y** = top. (On PlayStation: A = ✕, B = ○, X = □,
 Y = △.)
 
-### Flying (from Milestone 1)
+### Flying
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
@@ -79,7 +81,15 @@ Y = △.)
 | Throttle up / down | **W** / **S** | **RT** / **LT** (triggers) |
 | Boost | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
-| Look around | — | Right stick |
+| Pause menu | **Esc** | **Start** |
+
+The throttle is a **lever**, like cruise control: tap or hold throttle up/down
+to move it, and it stays where you leave it. The inner cyan arc on the speed
+gauge is the boost tank; it refills on its own.
+
+**The mouse while flying:** it's hidden and locked to the game window, and
+moving it steers the rig. Press **Esc** to get your mouse pointer back (that
+opens the pause menu); click the game window to pick the steering back up.
 
 ### Walking around the base (from Milestone 3)
 
@@ -88,16 +98,18 @@ Y = △.)
 | Walk | **W A S D** (or arrow keys) | Left stick |
 | Talk / use | **E** | **A** |
 
-### Anywhere
+### Menus
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
-| Pause | **Esc** | **Start** |
-| Menus | Arrow keys, **Enter**, **Esc** | D-pad, **A**, **B** |
+| Move around a menu | Arrow keys, or the mouse | D-pad |
+| Choose | **Enter**, or click | **A** |
+| Back | **Esc** | **B** |
 
 **Invert Y:** by default, pushing up points the ship's nose up. If you prefer
-"pilot style" (push up = nose down), flip the *Invert Y* switch on the boot
-screen. It's remembered between sessions.
+"pilot style" (push up = nose down), flip *Invert Y* in the pause menu (or on
+the boot screen). The pause menu also has *Camera roll* and *Show HUD*. All of
+them are remembered between sessions.
 
 You can change any binding in the editor: *Project → Project Settings →
 Input Map*.
@@ -106,8 +118,8 @@ Input Map*.
 
 ## Tweaking how things feel
 
-Every "feel" number (steering smoothness, deadzones, later speeds, camera,
-FOV...) lives in one file:
+Every "feel" number shared by all ships (steering smoothness, camera, field
+of view, dust, trails, engine sound...) lives in one file:
 
 1. In the **FileSystem** panel (bottom-left of the editor), open the `data`
    folder and double-click **`tuning.tres`**.
@@ -116,6 +128,10 @@ FOV...) lives in one file:
 3. Change a value, press Play, and feel the difference.
 4. Don't like it? Click the small circular **revert arrow** next to the value
    to put it back.
+
+Numbers that belong to one ship (top speed, acceleration, how heavy it turns,
+boost) live in that ship's own file: `data/ships/starter_rig.tres`. It works
+the same way.
 
 ## Where your settings are saved
 
@@ -136,6 +152,10 @@ at the bottom.
   which runs on nearly any computer from the last ten years.
 - **The project won't open or looks broken:** make sure you're on Godot
   **4.7.x** (shown in the Project Manager's corner and on the boot screen).
+- **My mouse pointer disappeared:** that's the flight steering. Press
+  **Esc** to get it back.
+- **Stuttery or slow:** tell me your computer and graphics card (shown at the
+  bottom of the boot screen). Nothing here should be demanding.
 - When reporting a problem, the bottom lines of the boot screen (Godot
   version, renderer, graphics card) are super helpful to include.
 

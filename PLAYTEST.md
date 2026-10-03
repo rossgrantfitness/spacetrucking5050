@@ -1,58 +1,74 @@
-# Playtest: M0 (Setup check)
+# Playtest: M1 (The flight sandbox, "find the heart")
 
-**Goal:** make sure the project opens on *your* computer, and that your
-keyboard, mouse and (if you have one) gamepad all reach the game. There's
-nothing to "play" yet. This is the plumbing check before we start flying.
+**Goal:** find out whether just *flying around* feels good. This is the heart
+of the whole game: if cruising isn't pleasant, nothing built on top of it will
+be. There's no job, no money, and no destination to reach yet. It's just you,
+the rig, a field of tumbling rocks and a truck stop glowing in the distance.
 
-**Time needed:** about 10 minutes (plus installing Godot the first time).
+**Time needed:** 10-15 minutes.
+
+> Honest note: I can check that everything *works* (I flew it on autopilot
+> and looked at hundreds of frames), but I can't *feel* it or hear it. Feel is
+> your call, and your answers decide whether we tune more before M2.
 
 ---
 
 ## What to do
 
-1. Follow steps 1–4 in `HOW_TO_RUN.md`: install Godot 4.7.2, open the
-   project, press **F5** (Mac: **Cmd+B**).
-2. You should see the title **SPACE TRUCKIN' 5050**, a slowly tumbling orange
-   cargo crate, drifting stars, and an **INPUT CHECK** panel.
-3. **Keyboard:** press W, A, S, D, the arrow keys, Space, C, E and Esc. The
-   matching chips should light up orange while you hold each key.
-4. **Mouse:** move the mouse around. The *Mouse steering* gauge's dot should
-   follow your hand, then drift gently back to the middle.
-5. **Gamepad** (if you have one): plug it in. The top-right of the panel should
-   name it. Wiggle both sticks, squeeze both triggers, press A, Y and Start.
-   Let go of the left stick: the steering dot should settle dead center.
-   Squeeze a trigger slowly: its chip should glow brighter the harder you
-   press.
-6. Turn **Invert Y** on, watch how the "Ship would: ..." text changes when you
-   push up, then close the game and press Play again. The switch should still
-   be on, which means saving works. Then set it however you like.
-7. **Optional, for fun:** open `data/tuning.tres` (see "Tweaking how things
-   feel" in `HOW_TO_RUN.md`), change **Steer Response** to `2`, press Play, and
-   move the stick or the arrow keys. The orange dot now drifts lazily after the
-   white ring. That's input smoothing, and it'll matter a lot in M1. Click the
-   revert arrow to put it back to 10.
+1. Press **F5** (Mac: **Cmd+B**). On the boot screen, press **Enter** (or
+   **Start** on a gamepad, or click **PRESS START TO FLY**).
+2. You're parked behind your rig, the *Lazy Susan*. Hold **W** (or **RT**) to
+   push the throttle lever up. The lever stays where you leave it, like cruise
+   control, so you don't have to hold anything. **S** (or **LT**) pulls it back.
+3. **Put some music on in another app**, then just fly around for five
+   minutes. Wander through the asteroid field and head for the **TRUCK STOP**
+   (the cyan marker always points the way, even when it's behind you).
+4. Try **boost** (**Space** / **A**): a short burst that drains a little tank
+   (the inner cyan arc on the speed gauge) and refills on its own.
+5. Press **C** (or **Y**) to switch to the **cockpit view**, and again to go
+   back.
+6. Try steering with the **keyboard**, the **mouse** (it's captured while
+   flying, so just move it) and a **gamepad** if you have one.
+7. Press **Esc** (or **Start**) for the pause menu. Flip **Invert Y** and
+   **Camera roll** on and off to compare. **Back to the start** rescues you if
+   you get lost.
+8. *Optional, for the curious:* tweak a value and feel the difference. Good
+   ones to try: in `data/tuning.tres`, *Chase Camera → Chase Turn Follow*
+   (how lazily the camera swings around) and *Flying → Nose Auto Level*; in
+   `data/ships/starter_rig.tres`, *Handling → Turn Response* (how heavy the rig
+   feels) and *Speed → Max Speed*. The revert arrow puts any value back.
 
 ## What to pay attention to
 
-- Any **red text** in the Output panel at the bottom of the editor.
-- Whether the crate turns **smoothly** (this tells us the 3D renderer is happy
-  on your computer).
-- Any key or button that **doesn't light up** what you expect.
+- **Steering:** smooth and buttery, or twitchy? Too slow to respond?
+- **Weight:** does the rig feel like a big, heavy truck in a good way, or just
+  sluggish?
+- **The camera:** comfortable? Any dizziness, or moments where you lose track
+  of which way is up?
+- **Speed:** do you *feel* fast at cruise (about 200 km/h)? Is boost a fun kick?
+- **Sound:** is the engine hum a cozy drone under your music, or annoying?
+- **Smoothness:** any stutter or jerky frames?
+- Bumping into rocks just slides you along them for now. Cartoon "bonks" come
+  in M2.
 
 ---
 
 ## Questions for you
 
-1. **Did it run?** Any red errors? What do the two small lines at the bottom
-   of the boot screen say (Godot version, renderer, graphics card)?
-2. **Gamepad:** do you have one you'd like to play with? Which kind (Xbox,
-   PlayStation, Switch, other)? Did all the sticks, triggers and buttons light
-   up the right chips?
-3. **Invert Y:** when you imagine flying, should pushing UP point the nose
-   **up** (current default) or **down** like a plane's control stick?
-4. **Default controls:** look at the chips and the controls table in
-   `HOW_TO_RUN.md`. Does anything feel wrong before we start flying? For
-   example: W/S as throttle and Space as boost on keyboard, triggers as
-   throttle and A as boost on gamepad, and the mouse for steering.
-5. **Vibe check (optional):** anything you love or hate about the boot
-   screen's look? It's a placeholder, but your taste steers the art direction.
+1. **The big one:** with music playing in another app, is it pleasant to just
+   fly around for five minutes? If something broke the spell, what was it?
+2. **Handling:** does the rig feel heavy-but-pleasant, or sluggish? Is turning
+   too slow, just right, or too twitchy? And the camera swinging in behind you:
+   too lazy, too stiff, or right?
+3. **Speed:** at cruise, do the dust, rocks and trails make you feel like
+   you're moving? Is boost exciting without being too much?
+4. **The engine hum:** cozy or annoying? Too loud, too quiet, too deep, too
+   whiny?
+5. **Left over from M0:** did it all run without red errors, and which
+   computer/graphics card are you on? Gamepad or keyboard-and-mouse, which do
+   you prefer here? And now that you've flown: should pushing **up** point the
+   nose **up** (current default) or **down** (Invert Y)?
+
+*Optional:* if you have mood-board images (cockpits, ships, planets...), drop
+them in a folder called `reference/` in the project. I'll study them before
+the art pass in M4.

@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/boot/Boot.gd" id="1_boot"]
-[ext_resource type="Script" path="res://scenes/boot/Starfield.gd" id="2_stars"]
+[ext_resource type="Script" path="res://scenes/common/Starfield.gd" id="2_stars"]
 [ext_resource type="Script" path="res://scenes/boot/StickView.gd" id="3_stick"]
 
 [sub_resource type="Environment" id="Environment_space"]
@@ -60,7 +60,7 @@ environment = SubResource("Environment_space")
 script = ExtResource("2_stars")
 
 [node name="Crate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 0)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0.55, 0)
 mesh = SubResource("Mesh_crate")
 
 [node name="BandTop" type="MeshInstance3D" parent="Crate"]
@@ -103,8 +103,20 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.7, 0.86, 1)
 theme_override_font_sizes/font_size = 20
-text = "Milestone 0: setup check. The engine's warm. The coffee's cold."
+text = "Milestone 1: the flight sandbox. The engine's warm. The coffee's cold."
 horizontal_alignment = 1
+
+[node name="StartFlying" type="Button" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.62, 0.95, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.81, 0.42, 1)
+theme_override_font_sizes/font_size = 26
+text = "PRESS START TO FLY  (Enter / gamepad Start / click here)"
+flat = true
 
 [node name="Spacer" type="Control" parent="UI/Margin/Layout"]
 layout_mode = 2

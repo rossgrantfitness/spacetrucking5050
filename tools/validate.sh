@@ -5,8 +5,9 @@
 #
 # It (1) imports the project, (2) loads every script, scene and resource with
 # GDScript warnings promoted to errors and runs the self-tests in tools/tests/, and
-# (3) runs the main scene for a few hundred frames. It fails if Godot
-# printed ANY error or warning.
+# (3) runs the main scene, then flies the flight sandbox on autopilot
+# (tools/smoke_flight.gd).
+# It fails if Godot printed ANY error or warning.
 set -u
 cd "$(dirname "$0")/.."
 
@@ -36,8 +37,9 @@ run -s tools/strict_warnings.gd
 run -s tools/validate_project.gd
 run -s tools/run_tests.gd
 
-echo "== 3/3 Running the main scene"
+echo "== 3/3 Running the playable scenes"
 run --quit-after 600
+run -s tools/smoke_flight.gd
 rm -f override.cfg
 
 if grep -E "ERROR|WARNING|Parse Error" "$LOG" >/dev/null; then
