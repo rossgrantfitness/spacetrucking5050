@@ -33,7 +33,9 @@ func read(delta: float) -> FlightControls:
 	_smoothed_steer = _smoothed_steer.lerp(combined, 1.0 - exp(-tuning.steer_response * delta))
 
 	_controls.steer = Vector2(_smoothed_steer.x, Settings.pitch_from_vertical_input(_smoothed_steer.y))
-	_controls.throttle_change = Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
+	# The "throttle" actions are now direct thrust: hold to burn forward or
+	# backward, let go to coast.
+	_controls.thrust = Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
 	_controls.boost = Input.is_action_pressed("boost")
 	return _controls
 

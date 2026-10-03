@@ -156,6 +156,7 @@ Game feel here has an unusual job: **make calm feel good**, not make action feel
 - Light input smoothing and a sensible gamepad deadzone so steering feels buttery, not twitchy.
 - **Each ship has its own personality:** mass/turn rate/acceleration/max speed per ship data file. The starter rig should feel heavy and lazy; upgraded/faster ships feel zippy. **Cargo weight reduces turn rate and acceleration slightly.** Upgrades must be *felt*, not just seen as numbers.
 - Boost: optional short burst, costs extra fuel.
+- **Developer decision from the M1 playtest (2026-10-03):** flight should have real momentum: inertia, coasting, braking by thrusting the opposite way, and easy overshooting, with a boost that truly rockets you and can get away from you if you're not on the controls. FUN and CHILL over everything. This deliberately relaxes "never Newtonian drift" and "short burst": a tunable **grip** keeps the ship's path gradually swinging back to its nose (so it never becomes a pure physics sim), a whisper of coast drag means nothing drifts forever, and boost burns its own **boost fuel** that you buy and store (limited tank), instead of a short recharging burst.
 
 ### Sense of speed (build this right after basic flight)
 - **Space dust** is the #1 speed cue — empty space gives no reference. Surround the ship with a field of small particles that rush past proportional to speed and wrap/recycle around the ship (MultiMeshInstance3D or GPUParticles3D). Nearer dust moves faster across the screen than farther dust. Tint dust to the current system's color.
@@ -325,7 +326,7 @@ Work strictly in order. Don't build later-milestone features early. Each milesto
 ## 10. Hard "don'ts"
 
 - No combat, weapons, enemies, or death.
-- No Newtonian drift flight model.
+- No pure Newtonian drift flight model. (Momentum with grip is in, per the developer's M1 playtest; see section 6.)
 - No camera roll by default.
 - No Spotify or other streaming-service integration.
 - No real-world trademarks (brands, logos) and no copyrighted characters, music, or lyrics. All music must be original, royalty-free, or properly licensed by the developer.

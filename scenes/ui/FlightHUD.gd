@@ -1,8 +1,9 @@
 class_name FlightHUD
 extends CanvasLayer
 ## The flight HUD: deliberately minimal and tucked into the corners. A speed
-## gauge bottom-right, a marker pointing at the truck stop, a ring showing
-## the mouse's steering, and a controls reminder that fades after a while.
+## gauge bottom-right, a marker pointing at the truck stop, a marker showing
+## where your momentum is really carrying you, a ring showing the mouse's
+## steering, and a controls reminder that fades after a while.
 ##
 ## The player can hide all of it from the pause menu ("Show HUD"). In cockpit
 ## view the corner gauge steps aside, because the dashboard shows the same.
@@ -14,6 +15,7 @@ const HINT_SECONDS: float = 25.0
 @onready var _gauge: SpeedGauge = $SpeedGauge
 @onready var _marker: StationMarker = $StationMarker
 @onready var _reticle: MouseReticle = $MouseReticle
+@onready var _drift: DriftMarker = $DriftMarker
 @onready var _hint: Label = $ControlsHint
 
 var _in_cockpit := false
@@ -28,8 +30,14 @@ func _ready() -> void:
 ## Tells the HUD which ship to show and where the destination is.
 func setup(ship: Ship, destination: Node3D) -> void:
 	_gauge.ship = ship
+	_drift.ship = ship
 	_reticle.controls = ship.controls
 	_marker.target = destination
+
+
+## Shows "topping up boost fuel" next to the station marker while it happens.
+func set_refueling(refueling: bool) -> void:
+	_marker.label = "TRUCK STOP  ·  TOPPING UP BOOST FUEL" if refueling else "TRUCK STOP"
 
 
 func set_cockpit_view(in_cockpit: bool) -> void:
@@ -50,4 +58,5 @@ func _refresh() -> void:
 	_gauge.visible = show_hud and not _in_cockpit
 	_marker.visible = show_hud
 	_reticle.visible = show_hud
+	_drift.visible = show_hud
 	_hint.visible = show_hud and not _in_cockpit  # It would cover the dashboard.

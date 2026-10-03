@@ -71,7 +71,7 @@ func _redraw(lifetime: float) -> void:
 	_ribbon.clear_surfaces()
 	var camera := get_viewport().get_camera_3d()
 	var tuning := GameState.tuning
-	var brightness := tuning.trail_brightness * clampf(_ship.speed_ratio(), 0.0, 1.3)
+	var brightness := tuning.trail_brightness * clampf(_ship.speed_ratio(), 0.0, 2.0)
 	if camera == null or _points.size() < 2 or brightness <= 0.01:
 		return
 	var eye := camera.global_position

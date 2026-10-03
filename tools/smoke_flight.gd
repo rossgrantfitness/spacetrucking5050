@@ -1,6 +1,6 @@
 extends SceneTree
 ## Used by tools/validate.sh: a quick "smoke test" of the flight sandbox. It
-## flies on autopilot for a few seconds (throttle up, turn, boost, switch to
+## flies on autopilot for a few seconds (thrust, brake, turn, boost, switch to
 ## the cockpit and back, open and close the pause menu, go back to the start)
 ## so any errors in those code paths show up, then quits politely.
 ##
@@ -20,7 +20,7 @@ func _process(_delta: float) -> bool:
 	_frame += 1
 	match _frame:
 		10:
-			Input.action_press("throttle_up")
+			Input.action_press("throttle_up")  # Burn forward.
 		120:
 			Input.action_release("throttle_up")
 			Input.action_press("steer_right", 0.8)
@@ -30,8 +30,10 @@ func _process(_delta: float) -> bool:
 			Input.action_release("steer_right")
 			Input.action_release("steer_up")
 			Input.action_release("boost")
+			Input.action_press("throttle_down")  # Brake with reverse thrust.
 			_tap("toggle_camera")
 		280:
+			Input.action_release("throttle_down")
 			_tap("toggle_camera")
 		300:
 			_tap("pause")

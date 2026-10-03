@@ -15,6 +15,7 @@ signal quit_to_title_pressed
 @onready var _invert_y: CheckButton = %InvertY
 @onready var _camera_roll: CheckButton = %CameraRoll
 @onready var _show_hud: CheckButton = %ShowHud
+@onready var _screen_shake: CheckButton = %ScreenShake
 @onready var _back_to_start: Button = %BackToStart
 @onready var _quit_to_title: Button = %QuitToTitle
 
@@ -27,9 +28,11 @@ func _ready() -> void:
 	_invert_y.button_pressed = Settings.invert_y
 	_camera_roll.button_pressed = Settings.camera_roll
 	_show_hud.button_pressed = Settings.show_hud
+	_screen_shake.button_pressed = Settings.screen_shake
 	_invert_y.toggled.connect(Settings.set_invert_y)
 	_camera_roll.toggled.connect(Settings.set_camera_roll)
 	_show_hud.toggled.connect(Settings.set_show_hud)
+	_screen_shake.toggled.connect(Settings.set_screen_shake)
 	_resume.pressed.connect(close)
 	_back_to_start.pressed.connect(_on_back_to_start)
 	_quit_to_title.pressed.connect(_on_quit_to_title)

@@ -1,66 +1,76 @@
 class_name FlightModel
 extends RefCounted
-## The rules of flying, with no graphics attached: the throttle lever, speed,
+## The rules of flying, with no graphics attached: thrust, momentum, grip,
 ## boost, turning, and how far the rig leans. Ship.gd feeds it the pilot's
 ## controls every physics tick, then moves the actual ship to match.
 ##
-## It's "an airplane in space": the ship always flies exactly where its nose
-## points (no sliding sideways, no endless drifting), the throttle sets a
-## target speed that the ship eases toward, and turns ramp up and down
-## according to how heavy the ship is.
+## How it works (after the M1 playtest asked for real momentum):
+##   - Thrust pushes the ship along its nose. W / RT burns forward, S / LT
+##     burns backward, and burning backward is how you brake.
+##   - Let go and you COAST: the ship keeps its momentum.
+##   - "Grip" gradually swings your direction of travel around to where the
+##     nose points, without losing speed, like carving a turn. Low grip =
+##     wide, slidey arcs and easy overshooting; high grip = on rails.
+##   - Spin the nose more than 90 degrees away from where you're going and
+##     grip won't save you: burn the engines to brake.
+##   - Boost shoves you far past top speed and makes grip much weaker, so the
+##     rig gets wild. Afterwards the extra speed bleeds off slowly.
 ##
 ## Keeping these rules separate makes them easy to read and to test (see
 ## tools/tests/FlightTests.gd).
 
 
-## Boosting needs at least this much in the tank to START, so tapping boost on
-## a nearly empty tank doesn't stutter on and off.
-const BOOST_START_MINIMUM: float = 0.15
-
-## Throttle lever position, 0 (stopped) to 1 (full).
-var throttle := 0.0
-## Current forward speed, in meters per second.
-var speed := 0.0
+## Where the ship is going and how fast, in meters per second.
+var velocity := Vector3.ZERO
 ## Where the nose points, in radians: heading is left/right, pitch is up/down.
 var heading := 0.0
 var pitch := 0.0
-## How fast we're turning right now, in radians per second.
+## How fast the nose is turning right now, in radians per second.
 var turn_speed := 0.0
 var pitch_speed := 0.0
-## Boost tank, 0 (empty) to 1 (full), and whether boost is firing.
-var boost_tank := 1.0
+## The engine thrust being applied right now, -1 (full reverse) to 1 (full).
+var thrust := 0.0
+## Boost fuel, 0 (empty) to 1 (a full tank), and whether boost is firing.
+var boost_fuel := 1.0
 var boosting := false
+## How fast we're sliding sideways (m/s): the part of our movement that isn't
+## where the nose points. The engine sound and HUD use it.
+var slip := 0.0
 ## How far the rig visibly leans into a turn, and tips its nose, in radians.
 ## Purely for looks: neither changes where the ship goes.
 var bank := 0.0
 var nose_tilt := 0.0
 
-# Set when the tank runs dry mid-boost: boost must be let go of before it can
-# fire again (otherwise holding the button would pulse it on and off).
-var _boost_locked := false
-
 
 ## Advances the flight by one step of `delta` seconds.
 func update(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
-	_update_throttle_and_boost(delta, controls, ship, tuning)
-	_update_speed(delta, ship, tuning)
 	_update_turning(delta, controls, ship, tuning)
+	_update_motion(delta, controls, ship, tuning)
 	_update_lean(delta, ship, tuning)
 
 
-## Which way the ship faces. It never contains any roll (the lean is only
+## Which way the nose points. It never contains any roll (the lean is only
 ## visual), and that's what keeps the horizon level.
 func orientation() -> Basis:
 	return Basis.from_euler(Vector3(pitch, heading, 0.0))
 
 
-## The ship always moves exactly where its nose points. (In Godot, "forward"
-## is the -Z direction.)
-func velocity() -> Vector3:
-	return -orientation().z * speed
+## The direction the nose points. (In Godot, "forward" is the -Z direction.)
+func nose() -> Vector3:
+	return -orientation().z
 
 
-## The fastest this ship can ever go: top speed plus the boost bonus.
+func speed() -> float:
+	return velocity.length()
+
+
+## How fast we're moving in the direction the nose points (negative when
+## drifting backwards).
+func forward_speed() -> float:
+	return velocity.dot(nose())
+
+
+## The fastest boost can push this ship.
 static func boosted_top_speed(ship: ShipData) -> float:
 	return ship.max_speed * (1.0 + ship.boost_speed_bonus)
 
@@ -70,52 +80,70 @@ func turn_amount(ship: ShipData) -> float:
 	return -turn_speed / deg_to_rad(ship.turn_rate)
 
 
-## Puts everything back to "parked": stopped, throttle off, tank full.
+## Puts everything back to "parked": stopped, engines idle, boost tank full.
 func reset(new_heading: float, new_pitch: float) -> void:
 	heading = new_heading
 	pitch = new_pitch
-	throttle = 0.0
-	speed = 0.0
+	velocity = Vector3.ZERO
 	turn_speed = 0.0
 	pitch_speed = 0.0
-	boost_tank = 1.0
+	thrust = 0.0
+	boost_fuel = 1.0
 	boosting = false
+	slip = 0.0
 	bank = 0.0
 	nose_tilt = 0.0
-	_boost_locked = false
 
 
-func _update_throttle_and_boost(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
-	throttle = clampf(throttle + controls.throttle_change * tuning.throttle_lever_speed * delta, 0.0, 1.0)
-
-	if not controls.boost:
-		_boost_locked = false
-	var can_start := boost_tank >= BOOST_START_MINIMUM and not _boost_locked
-	boosting = controls.boost and boost_tank > 0.0 and (boosting or can_start)
+func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
+	var forward := nose()
+	thrust = clampf(controls.thrust, -1.0, 1.0)
+	boosting = controls.boost and boost_fuel > 0.0
 	if boosting:
-		boost_tank = maxf(boost_tank - delta / ship.boost_duration, 0.0)
-		if boost_tank <= 0.0:
-			boosting = false
-			_boost_locked = true
-	else:
-		boost_tank = minf(boost_tank + delta / ship.boost_recharge_time, 1.0)
+		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
 
+	# 1. The engines push along the nose. The ship's own limiter stops the
+	#    main engines adding speed past top speed; only boost goes beyond.
+	var push := 0.0
+	var going := forward_speed()
+	if thrust > 0.0 and going < ship.max_speed:
+		push = thrust * ship.acceleration
+	elif thrust < 0.0 and going > -ship.max_speed * tuning.reverse_speed_fraction:
+		push = thrust * ship.retro_thrust
+	if boosting and going < boosted_top_speed(ship):
+		push += ship.boost_acceleration
+	velocity += forward * push * delta
 
-func _update_speed(delta: float, ship: ShipData, tuning: Tuning) -> void:
-	var target := throttle * ship.max_speed
-	var push := ship.acceleration
-	if boosting:
-		target = boosted_top_speed(ship)
-		push = ship.boost_acceleration
-	var difference := target - speed
-	# Far from the target speed, change at the ship's full acceleration (or
-	# braking) rate. Close to it, ease in gently, like a heavy truck settling
-	# into cruise.
-	var rate_limit := push if difference > 0.0 else ship.braking
-	var change := clampf(difference * tuning.speed_settle, -rate_limit, rate_limit) * delta
-	if absf(change) > absf(difference):
-		change = difference  # Never overshoot the target.
-	speed = maxf(speed + change, 0.0)
+	# 2. Grip: swing our direction of travel toward the nose, keeping speed.
+	#    Boosting and going over top speed both loosen the grip.
+	var current_speed := velocity.length()
+	if current_speed > 0.01:
+		var grip := ship.grip
+		if boosting:
+			grip *= tuning.boost_grip
+		grip /= 1.0 + maxf(current_speed / ship.max_speed - 1.0, 0.0) * tuning.overspeed_slip
+		var catch_up := 1.0 - exp(-grip * delta)
+		var direction := velocity / current_speed
+		if direction.dot(forward) > 0.0:
+			velocity = direction.slerp(forward, catch_up).normalized() * current_speed
+		else:
+			# Mostly facing backwards: only the sideways slide fades. To stop
+			# going backwards, you have to burn the engines.
+			var along := forward * velocity.dot(forward)
+			velocity = along + (velocity - along) * (1.0 - catch_up)
+	slip = (velocity - forward * velocity.dot(forward)).length()
+
+	# 3. Speed above the limit (left over from a boost) bleeds away slowly.
+	var limit := boosted_top_speed(ship) if boosting else ship.max_speed
+	current_speed = velocity.length()
+	if current_speed > limit:
+		var bleed := (current_speed - limit) * (1.0 - exp(-tuning.overspeed_drag * delta))
+		velocity = velocity.normalized() * (current_speed - bleed)
+
+	# 4. Space is nearly frictionless: just a whisper of drag while coasting,
+	#    so a ship left alone does eventually come to rest.
+	if is_zero_approx(thrust) and not boosting:
+		velocity *= exp(-tuning.coast_drag * delta)
 
 
 func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:

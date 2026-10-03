@@ -3,8 +3,8 @@ extends Camera3D
 ## A chase camera hanging behind and a little above the ship.
 ##
 ## - It swings around lazily, so in a turn you see the rig lead the way.
-## - It drifts back a little while boosting.
-## - It widens its view (FOV) a little at high speed.
+## - It falls back while boosting, and shakes a little when boost kicks in.
+## - It widens its view (FOV) at high speed, and more at boost speed.
 ## - It keeps the horizon level, even while the rig leans into turns. Only if
 ##   the player switches on "camera roll" does it lean along (a lot of people
 ##   get motion sick from a rolling camera, so it's off by default).
@@ -22,11 +22,12 @@ var _pitch := 0.0
 var _pullback := 0.0
 
 
-## The field of view for a given speed: normal until 70% of top speed (by
-## default), then gently wider up to top speed. The cockpit camera uses this too.
-static func fov_for_speed(speed_ratio: float, tuning: Tuning) -> float:
-	var fast := clampf((speed_ratio - tuning.speed_fov_threshold) / (1.0 - tuning.speed_fov_threshold), 0.0, 1.0)
-	return tuning.base_fov + tuning.speed_fov_bonus * fast
+## The field of view for the ship's speed: normal until 70% of top speed (by
+## default), gently wider up to top speed, then wider still the further a
+## boost pushes past it. The cockpit camera uses this too.
+static func fov_for(ship: Ship, tuning: Tuning) -> float:
+	var fast := clampf((ship.speed_ratio() - tuning.speed_fov_threshold) / (1.0 - tuning.speed_fov_threshold), 0.0, 1.0)
+	return tuning.base_fov + tuning.speed_fov_bonus * fast + tuning.boost_fov_bonus * ship.overspeed_ratio()
 
 
 func _ready() -> void:
@@ -58,13 +59,18 @@ func _process(delta: float) -> void:
 	_heading = lerp_angle(_heading, facing.y, follow)
 	_pitch = lerpf(_pitch, facing.x, follow)
 
-	var pullback_goal := tuning.chase_boost_pullback if target.flight.boosting else 0.0
+	# Fall back while boosting, and stay back while still going boost-fast.
+	var boost_feel := maxf(target.overspeed_ratio(), 0.5 if target.flight.boosting else 0.0)
+	var pullback_goal := tuning.chase_boost_pullback * boost_feel
 	_pullback = lerpf(_pullback, pullback_goal, 1.0 - exp(-tuning.chase_pullback_response * delta))
 
 	var roll := target.flight.bank * tuning.camera_roll_amount if Settings.camera_roll else 0.0
 	_place(ship_transform.origin, roll)
+	# Screen shake: a small nudge and tilt on top of the resting spot.
+	global_position += global_basis * target.shake.offset(tuning.shake_max_offset)
+	rotate_object_local(Vector3.BACK, target.shake.tilt(deg_to_rad(tuning.shake_max_tilt)))
 
-	var wanted_fov := ChaseCamera.fov_for_speed(target.speed_ratio(), tuning)
+	var wanted_fov := ChaseCamera.fov_for(target, tuning)
 	fov = lerpf(fov, wanted_fov, 1.0 - exp(-tuning.fov_response * delta))
 
 

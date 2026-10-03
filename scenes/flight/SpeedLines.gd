@@ -1,7 +1,8 @@
 class_name SpeedLines
 extends ColorRect
-## Speed lines while boosting, and ONLY while boosting (if they showed at
-## every high speed they'd be on all the time and stop meaning anything).
+## Speed lines while boosting (and fading out while the boost speed bleeds
+## off), never at normal speeds: if they showed at every high speed they'd be
+## on all the time and stop meaning anything.
 ## The look lives in res://shaders/speed_lines.gdshader.
 
 
@@ -20,8 +21,10 @@ func _process(delta: float) -> void:
 	if ship == null:
 		return
 	var tuning := GameState.tuning
-	var boosting := ship.flight.boosting and not get_tree().paused
-	var goal := tuning.speed_lines_strength if boosting else 0.0
+	# Full strength while boosting; afterwards they fade out as the extra
+	# boost speed bleeds away.
+	var boost_feel := maxf(ship.overspeed_ratio(), 1.0 if ship.flight.boosting else 0.0)
+	var goal := 0.0 if get_tree().paused else tuning.speed_lines_strength * boost_feel
 	_intensity = lerpf(_intensity, goal, 1.0 - exp(-tuning.speed_lines_response * delta))
 	var lines := material as ShaderMaterial
 	lines.set_shader_parameter("intensity", _intensity)

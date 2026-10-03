@@ -1,9 +1,9 @@
 class_name SpeedGauge
 extends Control
-## The corner speedometer: a gradient arc that fills up with speed, a small
-## notch showing where the throttle lever is set, a tick where boost speed
-## begins, the speed in km/h, and a thin inner arc for the boost tank.
-## (The fuel and cargo gauges join it in M2.)
+## The corner speedometer: a gradient arc that fills up with speed, a tick
+## where boost speed begins, the speed in km/h, a little thrust bar (warm =
+## burning forward, cyan = burning backward to brake), and a thin inner arc
+## for the boost fuel tank. (The fuel and cargo gauges join it in M2.)
 
 
 ## The arc starts at the bottom-left and sweeps three-quarters of a circle,
@@ -34,7 +34,7 @@ func _draw() -> void:
 	var center := size * 0.5
 	var radius := minf(size.x, size.y) * 0.5 - ARC_WIDTH
 	var top_speed := FlightModel.boosted_top_speed(ship.ship_data)
-	var fill := clampf(ship.flight.speed / top_speed, 0.0, 1.0)
+	var fill := clampf(ship.flight.speed() / top_speed, 0.0, 1.0)
 
 	# The empty track, then the filled part, drawn in small colored slices.
 	draw_arc(center, radius, START_ANGLE, START_ANGLE + SWEEP, 64, Color(1, 1, 1, 0.14), ARC_WIDTH, true)
@@ -46,26 +46,34 @@ func _draw() -> void:
 		var to := minf(float(i + 1) / slices, fill)
 		draw_arc(center, radius, _angle(from), _angle(to), 3, _gradient.sample(from), ARC_WIDTH, true)
 
-	# A faint tick where normal top speed ends and boost territory begins, and
-	# a bright notch outside the arc for the throttle lever's setting.
+	# A tick where normal top speed ends and boost territory begins.
 	var normal_top := ship.ship_data.max_speed / top_speed
-	_tick(center, radius - ARC_WIDTH * 0.5, radius + ARC_WIDTH * 0.5, normal_top, Color(1, 1, 1, 0.45), 2.0)
-	_tick(center, radius + ARC_WIDTH * 0.7, radius + ARC_WIDTH * 1.8, ship.flight.throttle * normal_top, Color.WHITE, 3.0)
+	_tick(center, radius - ARC_WIDTH * 0.5, radius + ARC_WIDTH * 1.2, normal_top, Color(1, 1, 1, 0.7), 2.0)
 
-	# The boost tank: a thin inner arc.
+	# The thrust bar: grows right while burning forward, left while braking.
+	var bar_center := center + Vector2(0.0, 52.0)
+	draw_rect(Rect2(bar_center - Vector2(40.0, 3.0), Vector2(80.0, 6.0)), Color(1, 1, 1, 0.14))
+	var thrust := ship.flight.thrust
+	if absf(thrust) > 0.01:
+		var thrust_color := Color(1.0, 0.65, 0.3) if thrust > 0.0 else BOOST_COLOR
+		var width := 40.0 * absf(thrust)
+		var left := bar_center.x if thrust > 0.0 else bar_center.x - width
+		draw_rect(Rect2(Vector2(left, bar_center.y - 3.0), Vector2(width, 6.0)), thrust_color)
+
+	# The boost fuel tank: a thin inner arc.
 	var boost_radius := radius - ARC_WIDTH - 6.0
 	draw_arc(center, boost_radius, START_ANGLE, START_ANGLE + SWEEP, 48, Color(1, 1, 1, 0.1), 5.0, true)
-	var tank := ship.flight.boost_tank
+	var tank := ship.flight.boost_fuel
 	if tank > 0.0:
 		var glow := BOOST_COLOR if not ship.flight.boosting else Color.WHITE
 		draw_arc(center, boost_radius, START_ANGLE, _angle(tank), 32, glow, 5.0, true)
 
 	var font := get_theme_default_font()
-	var speed_text := "%d" % roundi(ship.flight.speed * 3.6)
+	var speed_text := "%d" % roundi(ship.flight.speed() * 3.6)
 	draw_string_outline(font, center + Vector2(-70.0, 12.0), speed_text, HORIZONTAL_ALIGNMENT_CENTER, 140.0, 40, 6, Color(0, 0, 0, 0.6))
 	draw_string(font, center + Vector2(-70.0, 12.0), speed_text, HORIZONTAL_ALIGNMENT_CENTER, 140.0, 40, Color.WHITE)
 	draw_string(font, center + Vector2(-70.0, 32.0), "km/h", HORIZONTAL_ALIGNMENT_CENTER, 140.0, 14, Color(1, 1, 1, 0.65))
-	draw_string(font, center + Vector2(-70.0, radius + 8.0), "BOOST", HORIZONTAL_ALIGNMENT_CENTER, 140.0, 12, BOOST_COLOR)
+	draw_string(font, center + Vector2(-70.0, radius + 8.0), "BOOST FUEL", HORIZONTAL_ALIGNMENT_CENTER, 140.0, 12, BOOST_COLOR)
 
 
 func _angle(amount: float) -> float:

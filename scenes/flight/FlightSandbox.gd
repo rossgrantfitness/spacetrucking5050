@@ -8,6 +8,11 @@ extends Node3D
 
 ## The solar system we're in (its color tints the space dust).
 @export var system: SystemData
+## Fly within this many meters of the truck stop and your boost fuel tops up.
+## (A sandbox stand-in: buying fuel for credits arrives in M2.)
+@export var refuel_radius: float = 900.0
+## Seconds for a full boost-fuel top-up at the truck stop.
+@export var refuel_seconds: float = 4.0
 
 @onready var _ship: Ship = $Ship
 @onready var _chase_camera: ChaseCamera = $ChaseCamera
@@ -36,6 +41,14 @@ func _ready() -> void:
 	_pause_menu.quit_to_title_pressed.connect(_quit_to_title)
 	_set_cockpit_view(false)
 	_capture_mouse()
+
+
+func _physics_process(delta: float) -> void:
+	var near_station := _ship.global_position.distance_to(_station.global_position) < refuel_radius
+	var refueling := near_station and _ship.flight.boost_fuel < 1.0
+	if refueling:
+		_ship.flight.boost_fuel = minf(_ship.flight.boost_fuel + delta / refuel_seconds, 1.0)
+	_hud.set_refueling(refueling)
 
 
 func _unhandled_input(event: InputEvent) -> void:

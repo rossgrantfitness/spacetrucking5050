@@ -3,7 +3,7 @@ extends Control
 ## The placeholder cockpit, drawn on top of the 3D view: chunky
 ## yellow-and-black hazard-striped struts framing the windshield like a truck
 ## cab, a dashboard along the bottom, and a glowing green screen with speed,
-## throttle and boost.
+## thrust and boost fuel.
 ##
 ## The frame sways a little when you turn (the weight of the rig) but never
 ## tilts, so it also works as a steady reference for motion-sensitive players.
@@ -88,15 +88,28 @@ func _draw_screen(area: Rect2) -> void:
 	var font := get_theme_default_font()
 	var left := area.position.x + 16.0
 	var top := area.position.y
-	var speed_kmh := roundi(ship.flight.speed * 3.6)
+	var speed_kmh := roundi(ship.flight.speed() * 3.6)
 	draw_string(font, Vector2(left, top + 30.0), "SPEED  %d km/h" % speed_kmh, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, SCREEN_GREEN)
-	_bar(Vector2(left, top + 44.0), "THROTTLE", ship.flight.throttle)
-	_bar(Vector2(left, top + 70.0), "BOOST", ship.flight.boost_tank)
+	_thrust_bar(Vector2(left, top + 44.0), ship.flight.thrust)
+	_bar(Vector2(left, top + 70.0), "BOOST FUEL", ship.flight.boost_fuel)
 	# Faint scanlines, for that old-monitor glow.
 	var y := area.position.y + 2.0
 	while y < area.end.y:
 		draw_line(Vector2(area.position.x, y), Vector2(area.end.x, y), Color(0, 0, 0, 0.25))
 		y += 3.0
+
+
+## Thrust shown from the middle of the bar: right = forward, left = reverse.
+func _thrust_bar(where: Vector2, thrust: float) -> void:
+	var font := get_theme_default_font()
+	draw_string(font, where + Vector2(0.0, 16.0), "THRUST", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, SCREEN_GREEN)
+	var bar := Rect2(where + Vector2(110.0, 4.0), Vector2(190.0, 14.0))
+	draw_rect(bar, SCREEN_GREEN * Color(1, 1, 1, 0.5), false, 1.0)
+	var middle := bar.position.x + bar.size.x * 0.5
+	draw_line(Vector2(middle, bar.position.y), Vector2(middle, bar.end.y), SCREEN_GREEN, 1.0)
+	var width := bar.size.x * 0.5 * clampf(absf(thrust), 0.0, 1.0)
+	var left := middle if thrust >= 0.0 else middle - width
+	draw_rect(Rect2(Vector2(left, bar.position.y), Vector2(width, bar.size.y)), SCREEN_GREEN)
 
 
 func _bar(where: Vector2, label: String, amount: float) -> void:

@@ -1,6 +1,6 @@
 extends Node
-## The player's comfort options: invert Y, camera roll, HUD on/off, and later
-## screen shake, FOV, rumble, volume...
+## The player's comfort options: invert Y, camera roll, HUD on/off, screen
+## shake, and later FOV, rumble, volume...
 ##
 ## These belong to the PLAYER, not to one save slot, so they live in their
 ## own little file, user://settings.json, and save themselves on every change.
@@ -25,6 +25,9 @@ var camera_roll: bool = false
 
 ## Whether the corner gauges and the station marker are shown while flying.
 var show_hud: bool = true
+
+## Whether the camera shakes (boost kicks now; bonks from M2 on).
+var screen_shake: bool = true
 
 
 func _ready() -> void:
@@ -55,12 +58,18 @@ func set_show_hud(enabled: bool) -> void:
 	_changed()
 
 
+func set_screen_shake(enabled: bool) -> void:
+	screen_shake = enabled
+	_changed()
+
+
 func save_settings() -> void:
 	SaveSystem.write_json(SETTINGS_PATH, {
 		"version": SETTINGS_VERSION,
 		"invert_y": invert_y,
 		"camera_roll": camera_roll,
 		"show_hud": show_hud,
+		"screen_shake": screen_shake,
 	})
 
 
@@ -72,7 +81,7 @@ func load_settings() -> void:
 ## (like on the very first launch) or of the wrong type (say, from a
 ## hand-edited file) keeps its current value.
 func apply_saved_data(data: Dictionary) -> void:
-	for option: String in ["invert_y", "camera_roll", "show_hud"]:
+	for option: String in ["invert_y", "camera_roll", "show_hud", "screen_shake"]:
 		var saved: Variant = data.get(option)
 		if saved is bool:
 			set(option, saved)

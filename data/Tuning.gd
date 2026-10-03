@@ -38,13 +38,24 @@ extends Resource
 
 @export_group("Flying")
 
-## How fast the throttle lever moves while you hold throttle up or down, in
-## full sweeps per second. 0.5 = two seconds from stopped to full throttle.
-@export_range(0.1, 3.0, 0.05) var throttle_lever_speed: float = 0.5
+## While coasting (no thrust), the fraction of speed lost per second. Space
+## is nearly frictionless, so keep this tiny. 0 = coast forever.
+@export_range(0.0, 0.5, 0.005) var coast_drag: float = 0.01
 
-## How gently the speed settles onto the throttle setting at the very end.
-## Higher = snaps onto the target speed. Lower = creeps the last bit softly.
-@export_range(0.2, 5.0, 0.1) var speed_settle: float = 1.2
+## How fast you can fly backwards, as a fraction of top speed.
+@export_range(0.0, 1.0, 0.05) var reverse_speed_fraction: float = 0.3
+
+## After a boost, how quickly speed above the ship's top speed bleeds away.
+## Lower = you stay rocketing (and harder to handle) for longer.
+@export_range(0.05, 5.0, 0.05) var overspeed_drag: float = 0.25
+
+## How much grip you lose for going faster than top speed. Higher = going
+## too fast gets slidier and easier to overshoot.
+@export_range(0.0, 10.0, 0.1) var overspeed_slip: float = 1.5
+
+## Grip multiplier while boosting (0.3 = 30% of the ship's normal grip).
+## Lower = boost feels wilder and the rig slides more in turns.
+@export_range(0.05, 1.0, 0.05) var boost_grip: float = 0.3
 
 ## The steepest the nose can point up or down, in degrees. Kept below 90 so
 ## you can never flip upside down and lose the horizon.
@@ -79,7 +90,7 @@ extends Resource
 @export_range(0.5, 20.0, 0.25) var chase_turn_follow: float = 3.0
 
 ## How much farther back the camera drifts while boosting.
-@export_range(0.0, 20.0, 0.25, "suffix:m") var chase_boost_pullback: float = 4.0
+@export_range(0.0, 20.0, 0.25, "suffix:m") var chase_boost_pullback: float = 9.0
 
 ## How quickly that boost pull-back eases in and out.
 @export_range(0.5, 10.0, 0.25) var chase_pullback_response: float = 2.0
@@ -97,12 +108,34 @@ extends Resource
 ## How much wider the view gets at top speed. Subtle is good.
 @export_range(0.0, 30.0, 0.5, "suffix:°") var speed_fov_bonus: float = 8.0
 
+## Extra widening on top of that while going faster than top speed (boost).
+@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_fov_bonus: float = 12.0
+
 ## The view only starts widening above this fraction of top speed
 ## (0.7 = 70% of top speed).
 @export_range(0.0, 0.95, 0.05) var speed_fov_threshold: float = 0.7
 
 ## How smoothly the view widens and narrows.
 @export_range(0.5, 20.0, 0.25) var fov_response: float = 4.0
+
+
+@export_group("Screen shake")
+
+## The biggest camera jolt, in meters, at full shake. Players can switch shake
+## off in the pause menu.
+@export_range(0.0, 3.0, 0.05, "suffix:m") var shake_max_offset: float = 0.6
+
+## The biggest camera tilt at full shake, in degrees.
+@export_range(0.0, 10.0, 0.1, "suffix:°") var shake_max_tilt: float = 1.5
+
+## How quickly shake dies away (shake "trauma" lost per second).
+@export_range(0.1, 5.0, 0.05) var shake_decay: float = 1.4
+
+## How hard the boost kicks the camera when it fires (0 to 1).
+@export_range(0.0, 1.0, 0.05) var boost_kick_shake: float = 0.55
+
+## A gentle rumble while boosting, as shake held at this level (0 to 1).
+@export_range(0.0, 1.0, 0.05) var boost_rumble_shake: float = 0.25
 
 
 @export_group("Cockpit view")
@@ -138,7 +171,7 @@ extends Resource
 @export_group("Boost effects")
 
 ## How strong the speed lines are while boosting. 0 = no speed lines.
-@export_range(0.0, 2.0, 0.05) var speed_lines_strength: float = 0.6
+@export_range(0.0, 2.0, 0.05) var speed_lines_strength: float = 0.9
 
 ## How quickly the speed lines fade in and out.
 @export_range(0.5, 20.0, 0.5) var speed_lines_response: float = 6.0

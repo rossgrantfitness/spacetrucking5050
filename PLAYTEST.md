@@ -1,74 +1,75 @@
-# Playtest: M1 (The flight sandbox, "find the heart")
+# Playtest: M1, round 2 (momentum + rocket boost)
 
-**Goal:** find out whether just *flying around* feels good. This is the heart
-of the whole game: if cruising isn't pleasant, nothing built on top of it will
-be. There's no job, no money, and no destination to reach yet. It's just you,
-the rig, a field of tumbling rocks and a truck stop glowing in the distance.
+**Your round-1 verdict:** flying is chill and pleasant, and the distances feel
+right. You asked for real momentum (inertia, coasting, braking by thrusting
+backward, overshooting), a boost that truly *rockets* you on its own buyable
+fuel, and an engine hum that reacts more. This round checks that it's still
+**FUN and CHILL** with all that added.
 
-**Time needed:** 10-15 minutes.
+**Time needed:** 10-15 minutes, with music in another app again.
 
-> Honest note: I can check that everything *works* (I flew it on autopilot
-> and looked at hundreds of frames), but I can't *feel* it or hear it. Feel is
-> your call, and your answers decide whether we tune more before M2.
+> Honest note: I flew it on autopilot and checked the numbers and frames
+> (boost takes you from about 190 to 600 km/h in two seconds, and turning while
+> boosting slides you hard), but only you can say whether it's fun.
 
 ---
 
+## What's different
+
+- **Thrust, coast, brake.** Hold **W** / **RT** to burn forward. Let go and you
+  coast at that speed. To slow down, hold **S** / **LT** (reverse thrust); keep
+  holding and you'll back up slowly.
+- **Momentum in turns.** Your path swings around after the nose, so turns
+  carve wide and you can overshoot, especially fast. The **gold ring** shows
+  where you're actually heading.
+- **Boost is a rocket** (**Space** / **A**): about three times top speed, a
+  kick of screen shake, and much less grip, so it gets wild. The extra speed
+  bleeds off slowly afterwards.
+- **Boost fuel** (the inner cyan arc on the gauge) doesn't refill by itself.
+  Fly close to the **TRUCK STOP** to top it up (the marker says so), or use
+  *Back to the start*. Buying fuel arrives in M2.
+- **The engine hum reacts to you:** it surges when you burn, settles when you
+  coast, revs up at boost speed, dips in reverse and hisses when you slide.
+- **Screen shake** has an on/off switch in the pause menu.
+
 ## What to do
 
-1. Press **F5** (Mac: **Cmd+B**). On the boot screen, press **Enter** (or
-   **Start** on a gamepad, or click **PRESS START TO FLY**).
-2. You're parked behind your rig, the *Lazy Susan*. Hold **W** (or **RT**) to
-   push the throttle lever up. The lever stays where you leave it, like cruise
-   control, so you don't have to hold anything. **S** (or **LT**) pulls it back.
-3. **Put some music on in another app**, then just fly around for five
-   minutes. Wander through the asteroid field and head for the **TRUCK STOP**
-   (the cyan marker always points the way, even when it's behind you).
-4. Try **boost** (**Space** / **A**): a short burst that drains a little tank
-   (the inner cyan arc on the speed gauge) and refills on its own.
-5. Press **C** (or **Y**) to switch to the **cockpit view**, and again to go
-   back.
-6. Try steering with the **keyboard**, the **mouse** (it's captured while
-   flying, so just move it) and a **gamepad** if you have one.
-7. Press **Esc** (or **Start**) for the pause menu. Flip **Invert Y** and
-   **Camera roll** on and off to compare. **Back to the start** rescues you if
-   you get lost.
-8. *Optional, for the curious:* tweak a value and feel the difference. Good
-   ones to try: in `data/tuning.tres`, *Chase Camera → Chase Turn Follow*
-   (how lazily the camera swings around) and *Flying → Nose Auto Level*; in
-   `data/ships/starter_rig.tres`, *Handling → Turn Response* (how heavy the rig
-   feels) and *Speed → Max Speed*. The revert arrow puts any value back.
+1. Pull the update in GitHub Desktop (*Fetch origin*, then *Pull*), press
+   **F5**, then **Enter** / **Start**.
+2. Cruise around for a few minutes like last time. Get up to speed, let go,
+   and just coast.
+3. Try a hard turn at full speed and watch the gold ring slide.
+4. Try to **stop right next to a big rock** or the station. Can you judge your
+   braking?
+5. Boost through the asteroid field. Try turning mid-boost.
+6. Run the boost tank dry, then go top it up at the truck stop.
+7. Optional knobs to play with (hover each for an explanation):
+   `data/ships/starter_rig.tres` → **Grip** (lower = slidier), **Retro
+   Thrust** (lower = harder to stop), **Boost Speed Bonus**; and
+   `data/tuning.tres` → **Flying → Overspeed Drag** (how long boost speed
+   lingers), **Boost Grip**.
 
 ## What to pay attention to
 
-- **Steering:** smooth and buttery, or twitchy? Too slow to respond?
-- **Weight:** does the rig feel like a big, heavy truck in a good way, or just
-  sluggish?
-- **The camera:** comfortable? Any dizziness, or moments where you lose track
-  of which way is up?
-- **Speed:** do you *feel* fast at cruise (about 200 km/h)? Is boost a fun kick?
-- **Sound:** is the engine hum a cozy drone under your music, or annoying?
-- **Smoothness:** any stutter or jerky frames?
-- Bumping into rocks just slides you along them for now. Cartoon "bonks" come
-  in M2.
+- Does momentum make cruising *more* fun, or does it get in the way of
+  chilling?
+- Is braking satisfying, or a chore?
+- Is boost scary-fun, or just scary?
+- Any motion sickness from the shake or the slides?
 
 ---
 
 ## Questions for you
 
-1. **The big one:** with music playing in another app, is it pleasant to just
-   fly around for five minutes? If something broke the spell, what was it?
-2. **Handling:** does the rig feel heavy-but-pleasant, or sluggish? Is turning
-   too slow, just right, or too twitchy? And the camera swinging in behind you:
-   too lazy, too stiff, or right?
-3. **Speed:** at cruise, do the dust, rocks and trails make you feel like
-   you're moving? Is boost exciting without being too much?
-4. **The engine hum:** cozy or annoying? Too loud, too quiet, too deep, too
-   whiny?
-5. **Left over from M0:** did it all run without red errors, and which
-   computer/graphics card are you on? Gamepad or keyboard-and-mouse, which do
-   you prefer here? And now that you've flown: should pushing **up** point the
-   nose **up** (current default) or **down** (Invert Y)?
-
-*Optional:* if you have mood-board images (cockpits, ships, planets...), drop
-them in a folder called `reference/` in the project. I'll study them before
-the art pass in M4.
+1. **Momentum:** is it the right amount? More slide, less slide, or just
+   right? (Grip is one number, easy to dial in.)
+2. **Braking and overshooting:** fun challenge or annoying? Would you like a
+   "stop the ship" assist button for lazy moments, or is that cheating?
+3. **Boost:** does it finally *rocket*? Too much, too little, does the tank
+   last the right amount of time?
+4. **Engine hum:** does it feel alive now? Anything still missing?
+5. **The ship itself:** you said you found other options than a literal space
+   truck, and imagine something Cowboy Bebop-sized (room for 4-5 people and
+   months of supplies). Could you drop those pictures into a `reference/`
+   folder in the project (or describe them)? I'll design the rig's next
+   placeholder from them.

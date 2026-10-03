@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 	if ship == null:
 		return
 	var tuning := GameState.tuning
-	_material.set_shader_parameter("streak", ship.flight.velocity() * tuning.dust_streak_seconds)
+	_material.set_shader_parameter("streak", ship.flight.velocity * tuning.dust_streak_seconds)
 	_material.set_shader_parameter("speck_size", tuning.dust_size)
 	_material.set_shader_parameter("brightness", tuning.dust_brightness)
 	_material.set_shader_parameter("tint", tint)

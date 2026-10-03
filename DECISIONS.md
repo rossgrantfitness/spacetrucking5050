@@ -65,3 +65,20 @@ be revisited; just say so.
 - **New `textures/generated/` folder** for generated placeholder textures (the hazard stripes), mirroring `audio/generated/`. It's imported without compression so the pixels stay crisp.
 - **The engine loops import with Loop Mode: Forward, uncompressed.** If a `.import` file is edited outside the editor, delete its cache in `.godot/imported/` so Godot re-imports it.
 - **Validation now also flies the sandbox on autopilot** (`tools/smoke_flight.gd`: throttle, turns, boost, cockpit, pause, back to start), and the self-tests cover the flight rules, sound loops and rock meshes.
+
+## 2026-10-03 (M1 playtest round 1 → momentum rework)
+
+- **Flight now has momentum, at the developer's request.** Thrust (W/RT) pushes along the nose, reverse thrust (S/LT) is the brake, and letting go coasts. "Grip" swings your direction of travel back to the nose without losing speed, so turns carve and overshoot. Spin past 90° and you have to burn to brake. A note in `CLAUDE.md` records that this overrides "never Newtonian drift".
+- **The throttle lever is gone.** Holding thrust and letting go to coast is space cruise control. The input actions keep their old names (`throttle_up` / `throttle_down`) so no bindings changed.
+- **Main engines stop adding speed at top speed** (a limiter); only boost goes past it. Speed above the limit bleeds off slowly (`overspeed_drag`), and grip weakens the faster you go over it (`overspeed_slip`). Going too fast gets slidey, which is the gentle punishment.
+- **Boost is a rocket:** +200% top speed (to about 600 km/h), 70 m/s² of shove, and grip drops to 30% while it burns. It runs on its own boost fuel tank (15 s for the starter rig) that never refills by itself.
+- **Sandbox stand-in for buying boost fuel:** flying within 900 m of the truck stop tops the tank up, and "Back to the start" fills it. Buying fuel for credits arrives in M2.
+- **There's a whisper of coast drag** (1% of speed per second), so an abandoned ship eventually stops. Tunable; 0 = coast forever.
+- **Reversing is capped at 30% of top speed** (`reverse_speed_fraction`).
+- **Collisions now cost momentum:** the velocity left after sliding along a rock is fed back into the flight rules.
+- **Trauma-based screen shake arrived early (from M5)** because boost needed a kick: a jolt when boost fires plus a gentle rumble while it burns, made from smooth noise per the brief, with small amounts. It's on by default with a "Screen shake" switch in the pause menu; bonks will use the same system in M2.
+- **FOV widens an extra 12° at boost speed** (`boost_fov_bonus`), and the chase camera falls back up to 9 m and stays back while you're still boost-fast.
+- **Speed lines fade out as boost speed bleeds off,** rather than cutting off the instant you let go of boost.
+- **The engine hum now reacts to the pilot.** Layer loudness and pitch follow your thrust input (it surges when you burn and settles when you coast), the pitch climbs with boost speed and dips slightly in reverse, and sliding sideways adds a "skid" of air.
+- **New HUD drift marker:** a small gold ring showing where momentum is really carrying you, essential once nose and path can differ.
+- **HUD and dash show thrust (forward warm / reverse cyan) and boost fuel** instead of a throttle setting.

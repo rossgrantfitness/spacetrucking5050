@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scenes/ui/SpeedGauge.gd" id="2_gauge"]
 [ext_resource type="Script" path="res://scenes/ui/StationMarker.gd" id="3_marker"]
 [ext_resource type="Script" path="res://scenes/ui/MouseReticle.gd" id="4_reticle"]
+[ext_resource type="Script" path="res://scenes/ui/DriftMarker.gd" id="5_drift"]
 
 [node name="FlightHUD" type="CanvasLayer"]
 layer = 5
@@ -17,6 +18,15 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_marker")
+
+[node name="DriftMarker" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_drift")
 
 [node name="MouseReticle" type="Control" parent="."]
 anchors_preset = 15
@@ -55,5 +65,5 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.8)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.6)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
-text = "Keyboard: W/S throttle  ·  A/D or arrow keys steer  ·  mouse steers  ·  Space boost  ·  C camera  ·  Esc pause
-Gamepad: left stick steer  ·  RT/LT throttle  ·  A boost  ·  Y camera  ·  Start pause"
+text = "Keyboard: W thrust  ·  S brake / reverse  ·  A/D or arrow keys steer  ·  mouse steers  ·  Space boost  ·  C camera  ·  Esc pause
+Gamepad: left stick steer  ·  RT thrust  ·  LT brake / reverse  ·  A boost  ·  Y camera  ·  Start pause"

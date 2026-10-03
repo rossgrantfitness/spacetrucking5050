@@ -78,14 +78,21 @@ Y = △.)
 | Steer left / right | **A** / **D** (or **←** / **→**) | Left stick |
 | Nose up / down | **↑** / **↓** | Left stick |
 | Steer with the mouse | Move the mouse | — |
-| Throttle up / down | **W** / **S** | **RT** / **LT** (triggers) |
+| Thrust forward | **W** | **RT** (right trigger) |
+| Brake / thrust backward | **S** | **LT** (left trigger) |
 | Boost | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
 | Pause menu | **Esc** | **Start** |
 
-The throttle is a **lever**, like cruise control: tap or hold throttle up/down
-to move it, and it stays where you leave it. The inner cyan arc on the speed
-gauge is the boost tank; it refills on its own.
+**Your rig has momentum.** Hold thrust to speed up, then let go and you
+*coast*: you keep your speed, like cruise control. To slow down, thrust
+backward. Turns carve and slide, especially at high speed, so you can
+overshoot. The small **gold ring** on screen shows where your momentum is
+really carrying you, which isn't always where the nose points.
+
+**Boost** rockets you way past top speed (and gets slidey!). It burns
+**boost fuel**, the inner cyan arc on the speed gauge, which doesn't refill by
+itself: fly close to the truck stop to top it up (buying fuel comes later).
 
 **The mouse while flying:** it's hidden and locked to the game window, and
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
@@ -108,7 +115,7 @@ opens the pause menu); click the game window to pick the steering back up.
 
 **Invert Y:** by default, pushing up points the ship's nose up. If you prefer
 "pilot style" (push up = nose down), flip *Invert Y* in the pause menu (or on
-the boot screen). The pause menu also has *Camera roll* and *Show HUD*. All of
+the boot screen). The pause menu also has *Camera roll*, *Show HUD* and *Screen shake*. All of
 them are remembered between sessions.
 
 You can change any binding in the editor: *Project → Project Settings →

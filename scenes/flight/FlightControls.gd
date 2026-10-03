@@ -10,9 +10,10 @@ extends RefCounted
 ##   y: +1 = nose up,    -1 = nose down (invert Y is already applied)
 var steer := Vector2.ZERO
 
-## Moving the throttle lever: +1 = pushing it up, -1 = pulling it down,
-## 0 = leaving it where it is. Analog triggers give in-between values.
-var throttle_change := 0.0
+## Engine thrust: +1 = full burn forward, -1 = full burn backward (that's how
+## you brake), 0 = engines idle, just coasting. Analog triggers give
+## in-between values.
+var thrust := 0.0
 
 ## True while the boost button is held.
 var boost := false

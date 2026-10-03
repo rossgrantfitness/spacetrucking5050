@@ -16,15 +16,17 @@ extends Resource
 
 @export_group("Speed")
 
-## Top speed with the throttle all the way up, in meters per second.
-## (Multiply by 3.6 for km/h: 55 m/s is about 200 km/h.)
+## Top speed of the main engines, in meters per second. Only boost goes
+## faster. (Multiply by 3.6 for km/h: 55 m/s is about 200 km/h.)
 @export_range(5.0, 300.0, 1.0, "suffix:m/s") var max_speed: float = 55.0
 
-## How quickly it speeds up, in m/s gained every second. Heavy rigs are low.
-@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var acceleration: float = 6.0
+## Forward thrust: how much speed it gains every second while burning
+## forward. Heavy rigs are low.
+@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var acceleration: float = 9.0
 
-## How quickly it slows down when you pull the throttle back.
-@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var braking: float = 10.0
+## Reverse thrust: how much speed it sheds every second while burning
+## backward. This is the ship's brake. Lower = easier to overshoot.
+@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var retro_thrust: float = 7.0
 
 
 @export_group("Handling")
@@ -39,23 +41,27 @@ extends Resource
 ## moment to swing around. High = a nimble ship that turns on a dime.
 @export_range(0.5, 20.0, 0.1) var turn_response: float = 2.2
 
+## How quickly the ship's direction of travel swings around to follow its
+## nose after a turn. Low = slidey, wide arcs and easy overshooting.
+## High = on rails. (Boosting loosens it even more; see tuning.tres.)
+@export_range(0.1, 10.0, 0.05) var grip: float = 1.6
+
 ## How far the ship leans into a full turn, in degrees. Purely visual.
 @export_range(0.0, 80.0, 1.0, "suffix:°") var max_bank: float = 28.0
 
 
 @export_group("Boost")
 
-## Extra top speed while boosting (0.6 = 60% faster than normal top speed).
-@export_range(0.0, 3.0, 0.05) var boost_speed_bonus: float = 0.6
+## Extra top speed while boosting (2.0 = three times normal top speed).
+@export_range(0.0, 5.0, 0.05) var boost_speed_bonus: float = 2.0
 
 ## How hard the boost shoves you forward, in m/s gained every second.
-@export_range(1.0, 200.0, 1.0, "suffix:m/s²") var boost_acceleration: float = 22.0
+@export_range(1.0, 300.0, 1.0, "suffix:m/s²") var boost_acceleration: float = 70.0
 
-## How many seconds a full boost tank lasts.
-@export_range(0.5, 20.0, 0.25, "suffix:s") var boost_duration: float = 3.0
-
-## How many seconds an empty boost tank takes to refill.
-@export_range(0.5, 60.0, 0.5, "suffix:s") var boost_recharge_time: float = 7.0
+## The boost fuel tank: how many seconds of boosting a full tank holds. Boost
+## fuel doesn't refill by itself; you top it up at a station. (Buying it
+## arrives in M2.)
+@export_range(1.0, 120.0, 0.5, "suffix:s") var boost_fuel_seconds: float = 15.0
 
 
 @export_group("Looks and sound")
