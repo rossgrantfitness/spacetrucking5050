@@ -4,7 +4,9 @@
 [ext_resource type="Script" path="res://data/places/PlaceData.gd" id="2_place"]
 [ext_resource type="Resource" path="res://data/places/base.tres" id="3_base"]
 [ext_resource type="Resource" path="res://data/places/truck_stop.tres" id="4_truck_stop"]
+[ext_resource type="Resource" path="res://data/places/gas_n_go.tres" id="5_gas_n_go"]
+[ext_resource type="Resource" path="res://data/places/tidewater.tres" id="6_tidewater"]
 
 [resource]
 script = ExtResource("1_list")
-places = Array[ExtResource("2_place")]([ExtResource("3_base"), ExtResource("4_truck_stop")])
+places = Array[ExtResource("2_place")]([ExtResource("3_base"), ExtResource("4_truck_stop"), ExtResource("5_gas_n_go"), ExtResource("6_tidewater")])

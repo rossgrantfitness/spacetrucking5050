@@ -4,6 +4,11 @@
 
 [resource]
 script = ExtResource("1_system")
-display_name = "Home Space (placeholder)"
+id = "home"
+display_name = "Home Space"
+center = Vector3(0, 0, -5000)
 signature_color = Color(0.8, 0.72, 1, 1)
 haze_color = Color(0.36, 0.26, 0.56, 1)
+sun_color = Color(1, 0.9, 0.78, 1)
+sun_energy = 1.3
+ambient_color = Color(0.42, 0.38, 0.62, 1)

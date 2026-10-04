@@ -23,7 +23,10 @@ func _restore(before: Dictionary) -> void:
 
 func test_places_and_jobs_data_line_up() -> void:
 	for place in GameState.places.places:
-		check(ResourceLoader.exists(place.interior_scene), "%s needs an interior scene that exists" % place.id)
+		if place.kind == PlaceData.Kind.INTERIOR:
+			check(ResourceLoader.exists(place.interior_scene), "%s needs an interior scene that exists" % place.id)
+		else:
+			check(place.host != null and not place.host_lines.is_empty(), "%s needs someone to say hello on the comms" % place.id)
 	var ids := {}
 	for job in GameState.jobs.jobs:
 		check(not ids.has(job.id), "job ids must be unique (%s)" % job.id)
@@ -36,19 +39,20 @@ func test_places_and_jobs_data_line_up() -> void:
 func test_first_mission_unlocks_the_job_boards() -> void:
 	var before := _fresh()
 	check(GameState.board_jobs("base").is_empty(), "before the first mission, the base's board is empty")
-	var first := GameState.jobs.find("first_pie_run")
+	var first := GameState.jobs.find("first_long_haul")
 	check(first != null and not first.on_job_board, "the first mission is offered in person, not on a board")
 	check(GameState.accept_job(first), "taking the first mission should work")
 	check(not GameState.accept_job(GameState.jobs.find("gnome_run")), "only one job at a time")
-	check(not GameState.deliver_at("truck_stop"), "delivering at the wrong place does nothing")
+	check(not GameState.deliver_at("base"), "delivering at the wrong place does nothing")
 	var credits := GameState.credits
-	check(GameState.deliver_at("base"), "delivering at the base should work")
+	check(GameState.deliver_at("tidewater"), "delivering at Tidewater should work")
 	check(GameState.credits == credits + first.base_pay + first.care_bonus, "perfect cargo, no rush: base pay plus the full care bonus")
 	check(GameState.has_flag("first_mission_done"), "the first mission sets its story flag")
 	check(not GameState.pending_payout.is_empty(), "a delivery leaves a payout card to show")
 	check(not GameState.job_available(first), "the first mission can't be done twice")
 	check(not GameState.board_jobs("base").is_empty(), "after the first mission, the base's board has work")
 	check(not GameState.board_jobs("truck_stop").is_empty(), "after the first mission, the truck stop's board has work")
+	check(not GameState.board_jobs("tidewater").is_empty(), "Tidewater has loads to take back")
 	_restore(before)
 
 
@@ -72,7 +76,7 @@ func test_save_round_trip() -> void:
 	var before := _fresh()
 	GameState.add_credits(1234)
 	GameState.set_flag("met_marge")
-	GameState.accept_job(GameState.jobs.find("first_pie_run"))
+	GameState.accept_job(GameState.jobs.find("first_long_haul"))
 	GameState.job_seconds = 42.0
 	GameState.rig["hull"] = 0.5
 	GameState.owned_upgrades.append("speed_1")
@@ -84,7 +88,7 @@ func test_save_round_trip() -> void:
 	check(GameState.load_game(), "the save should load")
 	check(GameState.credits == credits, "money survives a save")
 	check(GameState.has_flag("met_marge"), "story flags survive a save")
-	check(GameState.active_job_id == "first_pie_run" and is_equal_approx(GameState.job_seconds, 42.0), "the job in progress survives a save")
+	check(GameState.active_job_id == "first_long_haul" and is_equal_approx(GameState.job_seconds, 42.0), "the job in progress survives a save")
 	check(is_equal_approx(GameState.rig["hull"], 0.5), "the rig's hull survives a save")
 	check(GameState.owns_upgrade("speed_1"), "upgrades survive a save")
 	check(GameState.launch_from == "truck_stop" and GameState.current_room.ends_with("TruckStop.tscn"), "where you are survives a save")
@@ -113,16 +117,17 @@ func test_conversations_follow_the_story() -> void:
 	var before := _fresh()
 	var marge: NPCData = load("res://data/npcs/truckstop_control.tres")
 	var first := marge.pick_conversation()
-	check(first != null and first.offers_job != null and first.offers_job.id == "first_pie_run", "meeting Marge offers the first mission")
+	check(first != null and first.offers_job != null and first.offers_job.id == "first_long_haul", "meeting Marge offers the first mission")
 	GameState.set_flag("met_marge")
-	GameState.accept_job(GameState.jobs.find("first_pie_run"))
+	GameState.accept_job(GameState.jobs.find("first_long_haul"))
 	var hauling := marge.pick_conversation()
 	check(hauling != null and hauling.offers_job == null, "while hauling her pies, Marge doesn't offer them again")
-	GameState.deliver_at("base")
+	GameState.deliver_at("tidewater")
 	var dottie: NPCData = load("res://data/npcs/dispatch_morning.tres")
 	var after := dottie.pick_conversation()
 	check(after != null and after.opens_menu == "job_board", "after the first mission, Dottie opens the job board")
-	for npc_file in ["dispatch_morning", "truckstop_control", "truckstop_mechanic", "truckstop_pumps", "trucker_wendell", "trucker_pip"]:
+	for npc_file in ["dispatch_morning", "truckstop_control", "truckstop_mechanic", "truckstop_pumps", "trucker_wendell", "trucker_pip",
+			"tidewater_gill", "gasngo_moe", "space_deputy"]:
 		var npc: NPCData = load("res://data/npcs/%s.tres" % npc_file)
 		check(not npc.comm_name.is_empty(), "%s needs a comm name" % npc_file)
 	_restore(before)

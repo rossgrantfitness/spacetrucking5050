@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/gasngo_moe.tres" id="2_moe"]
+
+[resource]
+script = ExtResource("1_place")
+id = "gas_n_go"
+display_name = "GAS-N-GO 47"
+kind = 2
+services = PackedStringArray("fuel")
+host = ExtResource("2_moe")
+host_lines = PackedStringArray("Welcome... to... Gas-N-Go. Take... your time. I... do.", "Pumps... are... on. Jerky... is... warm. Ish.", "Long... haul? Same.")

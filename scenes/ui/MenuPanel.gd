@@ -9,9 +9,14 @@ extends CanvasLayer
 ## where each option is {"text": "...", "detail": "...", "disabled": false,
 ## "description": "..."}. It returns the chosen option's number, or -1 if
 ## the player backed out.
+##
+## Pass a `side` Control (like the course chart's map) to show it next to
+## the list; it hears `focused(index)` as the player moves through the list.
 
 
 signal chosen(index: int)
+## The player moved to option number `index` (for a side panel to follow).
+signal focused(index: int)
 
 const TITLE_COLOR := Color(1.0, 0.85, 0.25)
 const BOX_COLOR := Color(0.05, 0.06, 0.2, 0.95)
@@ -22,14 +27,18 @@ var _options: Array = []
 var _buttons: Array[Button] = []
 var _description: Label
 var _done: bool = false
+var _side: Control
 
 
 ## Shows a menu and waits for the player's pick (-1 = backed out).
-static func ask(tree: SceneTree, title: String, body: String, options: Array) -> int:
+static func ask(tree: SceneTree, title: String, body: String, options: Array, side: Control = null) -> int:
 	var panel := MenuPanel.new()
 	panel._title = title
 	panel._body = body
 	panel._options = options
+	panel._side = side
+	if side != null and side.has_method("show_option"):
+		panel.focused.connect(Callable(side, "show_option"))
 	tree.root.add_child(panel)
 	var index: int = await panel.chosen
 	panel.queue_free()
@@ -55,7 +64,14 @@ func _ready() -> void:
 	style.set_corner_radius_all(6)
 	style.set_content_margin_all(24.0)
 	box.add_theme_stylebox_override("panel", style)
-	center.add_child(box)
+	if _side != null:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 16)
+		center.add_child(row)
+		row.add_child(_side)
+		row.add_child(box)
+	else:
+		center.add_child(box)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 10)
 	box.add_child(column)
@@ -94,10 +110,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_pick(-1)
 	elif event.is_action_pressed("interact") and not event.is_echo():
-		var focused := get_viewport().gui_get_focus_owner() as Button
-		if focused != null and not focused.disabled:
+		var button := get_viewport().gui_get_focus_owner() as Button
+		if button != null and not button.disabled:
 			get_viewport().set_input_as_handled()
-			focused.pressed.emit()
+			button.pressed.emit()
 
 
 func _pick(index: int) -> void:
@@ -109,6 +125,7 @@ func _pick(index: int) -> void:
 
 func _describe(index: int) -> void:
 	_description.text = (_options[index] as Dictionary).get("description", "")
+	focused.emit(index)
 
 
 func _focus_first() -> void:

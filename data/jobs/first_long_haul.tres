@@ -4,14 +4,14 @@
 
 [resource]
 script = ExtResource("1_job")
-id = "first_pie_run"
-cargo_name = "Nebula pies (fragile)"
-client_name = "Marge's Diner"
-description = "Marge's famous nebula pies, for the base cafeteria. They wobble. Fly gentle."
+id = "first_long_haul"
+cargo_name = "Nebula pies and coffee (fragile)"
+client_name = "Gill, Tidewater Cannery"
+description = "Marge's cousin Gill runs the canteen out at Tidewater Cannery, way out in the teal. They haven't had a decent pie in a year."
 from_place = "truck_stop"
-to_place = "base"
-base_pay = 450
-care_bonus = 150
+to_place = "tidewater"
+base_pay = 1300
+care_bonus = 500
 rush_seconds = 0.0
 rush_bonus = 0
 on_job_board = false

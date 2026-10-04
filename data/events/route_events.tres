@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="RouteEventList" format=3]
+
+[ext_resource type="Script" path="res://data/events/RouteEventList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/events/EventData.gd" id="2_event"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="npc_wendell"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="npc_pip"]
+[ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="npc_gill"]
+[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="npc_dottie"]
+
+[sub_resource type="Resource" id="Event_0_big_ship"]
+script = ExtResource("2_event")
+kind = 0
+weight = 2.0
+ahead = 4500.0
+side_offset = Vector2(0.0, 150.0)
+height_offset = Vector2(260.0, 420.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Whoa, look at the size of that one.", "Big ship crossing, kid. Let it by, it doesn't do brakes.")
+
+[sub_resource type="Resource" id="Event_1_convoy"]
+script = ExtResource("2_event")
+kind = 1
+weight = 2.0
+ahead = 3500.0
+side_offset = Vector2(180.0, 260.0)
+height_offset = Vector2(-30.0, 30.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("That's the Tuesday convoy. Wave!", "Convoy coming the other way. Flash 'em your lights.")
+
+[sub_resource type="Resource" id="Event_2_billboard"]
+script = ExtResource("2_event")
+kind = 4
+weight = 2.5
+ahead = 4000.0
+side_offset = Vector2(250.0, 600.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("MOON MILK|NOW WITH 30% LESS GRAVITY", "DR. SPRINKLE'S HULL PUTTY|IT'S ALSO A SNACK", "GAS-N-GO 47|CLEAN RESTROOMS \u00b7 WARM JERKY", "SPACE MUTUAL INSURANCE|BECAUSE ASTEROIDS DON'T CALL AHEAD", "NAP MOTEL|SLEEP IS A GOOD IDEA", "GALAXY GUMBALLS|COLLECT ALL 9000", "SNOOZE PODS|SLEEP LIKE YOU MEAN IT", "TIDEWATER CANNERY|FRESH FROM THE VOID", "WIGGLE'S WORMHOLE WASH|IN ONE END, OUT THE OTHER", "HAVE YOU CALLED YOUR MOTHER?|SHE'S FINE. CALL ANYWAY.", "SPACE JERKY|MYSTERIOUSLY CHEWY SINCE FOREVER", "LOST: ONE RUBBER DUCK|VERY LARGE \u00b7 ANSWERS TO DUCK", "DUSTY'S GARAGE|IF IT'S LOOSE, WE TIGHTEN IT", "MARGE'S DINER|NEBULA PIE \u00b7 TURN AROUND \u00b7 YOU KNOW YOU WANT TO", "DRIVE TIRED? DON'T.|PULL OVER \u00b7 NAP \u00b7 LIVE")
+
+[sub_resource type="Resource" id="Event_3_comet"]
+script = ExtResource("2_event")
+kind = 5
+weight = 1.0
+ahead = 7000.0
+side_offset = Vector2(0.0, 0.0)
+height_offset = Vector2(600.0, 1500.0)
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("Comet! Make a wish! I wished for a sandwich.", "Was that a comet? It was a comet!")
+
+[sub_resource type="Resource" id="Event_4_junk"]
+script = ExtResource("2_event")
+kind = 6
+weight = 1.5
+ahead = 4000.0
+side_offset = Vector2(0.0, 300.0)
+height_offset = Vector2(-100.0, 100.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Junk on the road ahead. Somebody lost a load.", "Debris up ahead, kid. Easy through there.")
+
+[sub_resource type="Resource" id="Event_5_derelict"]
+script = ExtResource("2_event")
+kind = 7
+weight = 0.8
+ahead = 5000.0
+side_offset = Vector2(500.0, 900.0)
+height_offset = Vector2(-200.0, 200.0)
+texts = PackedStringArray("THE DOROTHY MAE", "LUCKY STRIKE VIII", "SPIRIT OF OCTOBER", "THE WANDERING TUESDAY")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("That old hulk's been drifting out here since before I was hauling.", "Derelict off the lane. Nobody's home. Probably.")
+
+[sub_resource type="Resource" id="Event_6_duck"]
+script = ExtResource("2_event")
+kind = 8
+weight = 0.3
+ahead = 5000.0
+side_offset = Vector2(600.0, 1200.0)
+height_offset = Vector2(-200.0, 300.0)
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("Is that... a duck?", "Guys. GUYS. There's a duck.")
+
+[sub_resource type="Resource" id="Event_7_whales"]
+script = ExtResource("2_event")
+kind = 2
+weight = 2.5
+ahead = 5000.0
+side_offset = Vector2(500.0, 1000.0)
+height_offset = Vector2(-200.0, 200.0)
+systems = PackedStringArray("tidewater")
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Whales off your side. Big ones. They like trucks.", "Mmh. Whales. Say hi. They won't say hi back. They're shy.")
+
+[sub_resource type="Resource" id="Event_8_jellyfish"]
+script = ExtResource("2_event")
+kind = 3
+weight = 1.5
+ahead = 4500.0
+side_offset = Vector2(0.0, 150.0)
+height_offset = Vector2(-60.0, 60.0)
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Jellyfish migration on the lane, hon. Drift through slow, they don't sting.")
+
+[sub_resource type="Resource" id="Event_9_ion_storm"]
+script = ExtResource("2_event")
+kind = 9
+weight = 0.8
+ahead = 6000.0
+side_offset = Vector2(0.0, 600.0)
+height_offset = Vector2(-100.0, 100.0)
+systems = PackedStringArray("tidewater")
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Ion storm brewing out there. Your radio'll get crackly. Mine always is.")
+
+[resource]
+script = ExtResource("1_list")
+events = Array[ExtResource("2_event")]([SubResource("Event_0_big_ship"), SubResource("Event_1_convoy"), SubResource("Event_2_billboard"), SubResource("Event_3_comet"), SubResource("Event_4_junk"), SubResource("Event_5_derelict"), SubResource("Event_6_duck"), SubResource("Event_7_whales"), SubResource("Event_8_jellyfish"), SubResource("Event_9_ion_storm")])

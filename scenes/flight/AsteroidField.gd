@@ -4,6 +4,10 @@ extends Node3D
 ## region of space, plus a few giant landmark rocks to steer around, with
 ## collision so you can't fly straight through them.
 ##
+## Switch on `junk` and it's a debris field instead: tumbling hull panels,
+## barrels, girders and crates in scrap-metal colors (a spilled cargo, an
+## old scrapyard). Same bonks.
+##
 ## Everything is generated when the scene starts, from a seed: the same seed
 ## always makes the same field. All the knobs are in the Inspector when you
 ## select this node in the scene.
@@ -11,6 +15,13 @@ extends Node3D
 
 const ROCK_SHADER := preload("res://shaders/tumbling_rock.gdshader")
 const ROCK_TEXTURE := preload("res://textures/generated/rock.png")
+const JUNK_TEXTURE := preload("res://textures/generated/hull_panels.png")
+## Scrap colors for junk fields: rusty orange, faded teal, hazard yellow,
+## dull white, old red.
+const JUNK_COLORS := [Color(0.7, 0.42, 0.28), Color(0.35, 0.62, 0.62), Color(0.9, 0.75, 0.25), Color(0.8, 0.8, 0.78), Color(0.7, 0.28, 0.28)]
+
+## On: a debris field of junk instead of rocks.
+@export var junk: bool = false
 
 ## How many ordinary rocks.
 @export var rock_count: int = 420
@@ -82,7 +93,7 @@ func rocks_within(point: Vector3, reach: float) -> Array[Vector4]:
 func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 	var material := ShaderMaterial.new()
 	material.shader = ROCK_SHADER
-	material.set_shader_parameter("rock_texture", ROCK_TEXTURE)
+	material.set_shader_parameter("rock_texture", JUNK_TEXTURE if junk else ROCK_TEXTURE)
 	for shape in shape_count:
 		var mine: Array[int] = []
 		for i in spots.size():
@@ -93,12 +104,12 @@ func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 		rocks.use_colors = true  # These two must be switched on before
 		rocks.use_custom_data = true  # instance_count is set.
 		rocks.instance_count = mine.size()
-		rocks.mesh = RockMesh.build(field_seed + shape * 101)
+		rocks.mesh = junk_mesh(shape) if junk else RockMesh.build(field_seed + shape * 101)
 		for slot in mine.size():
 			var i := mine[slot]
 			var turn := Basis.from_euler(Vector3(_rng.randf(), _rng.randf(), _rng.randf()) * TAU)
 			rocks.set_instance_transform(slot, Transform3D(turn.scaled(Vector3.ONE * radii[i]), spots[i]))
-			var color := rock_colors[_rng.randi_range(0, rock_colors.size() - 1)]
+			var color: Color = JUNK_COLORS[_rng.randi_range(0, JUNK_COLORS.size() - 1)] if junk else rock_colors[_rng.randi_range(0, rock_colors.size() - 1)]
 			rocks.set_instance_color(slot, color * _rng.randf_range(0.85, 1.1))
 			# Spin axis squeezed into 0..1 (the shader unsqueezes it), and spin
 			# speed in the 4th slot. Big rocks tumble slower, like big things do.
@@ -110,6 +121,35 @@ func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 		drawer.multimesh = rocks
 		drawer.material_override = material
 		add_child(drawer)
+
+
+## A piece of space junk (about 1 m across, scaled up per piece): a hull
+## panel, a barrel, a girder, a crate or a wedge.
+static func junk_mesh(kind: int) -> Mesh:
+	match kind % 5:
+		0:
+			var panel := BoxMesh.new()
+			panel.size = Vector3(1.6, 0.15, 1.1)
+			return panel
+		1:
+			var barrel := CylinderMesh.new()
+			barrel.top_radius = 0.45
+			barrel.bottom_radius = 0.45
+			barrel.height = 1.2
+			barrel.radial_segments = 8
+			barrel.rings = 1
+			return barrel
+		2:
+			var girder := BoxMesh.new()
+			girder.size = Vector3(0.25, 0.25, 2.2)
+			return girder
+		3:
+			var crate := BoxMesh.new()
+			crate.size = Vector3(0.9, 0.9, 0.9)
+			return crate
+	var wedge := PrismMesh.new()
+	wedge.size = Vector3(1.2, 0.8, 0.6)
+	return wedge
 
 
 ## One invisible ball per rock, a little smaller than the rock so grazing

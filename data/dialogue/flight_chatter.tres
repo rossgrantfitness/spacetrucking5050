@@ -6,6 +6,9 @@
 [ext_resource type="Resource" path="res://data/npcs/truckstop_control.tres" id="npc_marge"]
 [ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="npc_wendell"]
 [ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="npc_pip"]
+[ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="npc_gill"]
+[ext_resource type="Resource" path="res://data/npcs/gasngo_moe.tres" id="npc_moe"]
+[ext_resource type="Resource" path="res://data/npcs/space_deputy.tres" id="npc_deputy"]
 
 [sub_resource type="Resource" id="Set_0_dottie_takeoff"]
 script = ExtResource("2_set")
@@ -43,8 +46,8 @@ needs_active_job = "gnome_run"
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 0
-lines = PackedStringArray("Those pies are my babies, sugar. Fly smooth.", "Bring my pie tins back sometime. Fly safe, hon.")
-needs_active_job = "first_pie_run"
+lines = PackedStringArray("Those pies are my babies, sugar. Long way to Tidewater. Fly smooth.", "Sixty clicks, hon. Press M to chart a course, put on some music, and keep the boost gentle. Pies bruise.")
+needs_active_job = "first_long_haul"
 
 [sub_resource type="Resource" id="Set_5_marge_takeoff"]
 script = ExtResource("2_set")
@@ -53,39 +56,58 @@ situation = 0
 lines = PackedStringArray("Come back soon, hon. Pie'll be warm.", "Truck stop control. You're clear. Watch the parked rigs.")
 place = "truck_stop"
 
-[sub_resource type="Resource" id="Set_6_dottie_idle"]
+[sub_resource type="Resource" id="Set_6_gill_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_gill")
+situation = 0
+lines = PackedStringArray("Mmh. Bye. Drive careful. Say hi to Marge.", "Tidewater control... that's me. You're clear. Probably.")
+place = "tidewater"
+
+[sub_resource type="Resource" id="Set_7_moe_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 0
+lines = PackedStringArray("Drive... safe...", "Come... back... any... time.")
+place = "gas_n_go"
+
+[sub_resource type="Resource" id="Set_8_dottie_idle"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 1
 lines = PackedStringArray("Reminder: the vending machine still has a sock in it.", "Somebody left a pie in the break room fridge. I'm not saying it was me.", "Dispatch here. Just checking you're awake. Blink twice. Okay, I can't see that.", "Your rig's the oldest in the fleet, you know. Still the best looked after.")
 
-[sub_resource type="Resource" id="Set_7_wendell_idle"]
+[sub_resource type="Resource" id="Set_9_wendell_idle"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_wendell")
 situation = 1
 lines = PackedStringArray("Anybody else's coffee taste like the asteroid belt?", "Twenty years hauling and I still can't parallel park this thing.", "Big Wendell here. My cat's on board today. She's driving. Don't tell dispatch.", "Saw a space whale this morning. Or a really big cloud. Either way, beautiful.")
 
-[sub_resource type="Resource" id="Set_8_wendell_idle"]
+[sub_resource type="Resource" id="Set_10_wendell_idle"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_wendell")
 situation = 1
-lines = PackedStringArray("Heard Marge found herself a new pie hauler. Good luck, kid. Those things wobble.")
-needs_flags = PackedStringArray("met_marge")
-blocked_by_flags = PackedStringArray("first_mission_done")
+lines = PackedStringArray("Long haul to Tidewater, huh? Tip: stop at the Gas-N-Go. Moe's slow, but the jerky's worth it.", "On the long runs I just put the autopilot on and listen to the radio. Best part of the job.")
+needs_active_job = "first_long_haul"
 
-[sub_resource type="Resource" id="Set_9_pip_idle"]
+[sub_resource type="Resource" id="Set_11_pip_idle"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_pip")
 situation = 1
 lines = PackedStringArray("Courier coming through! Sorry! Sorry! Love your rig!", "Is it just me or are the rocks extra rocky today?", "Pip here! Does anybody have a spare charger? Any kind. I'll take any kind.", "I've had nine sodas. I can hear colors. Over.")
 
-[sub_resource type="Resource" id="Set_10_marge_idle"]
+[sub_resource type="Resource" id="Set_12_marge_idle"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 1
 lines = PackedStringArray("Truck stop special today: nebula hash browns. Come hungry.", "Truck stop control. Pumps are open, showers are warm, pie is fresh.")
 
-[sub_resource type="Resource" id="Set_11_marge_approach"]
+[sub_resource type="Resource" id="Set_13_gill_idle"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_gill")
+situation = 1
+lines = PackedStringArray("Mmh. Fish are biting. Or the fish are sleeping. Hard to tell.", "Tidewater weather: teal, with a chance of whales.")
+
+[sub_resource type="Resource" id="Set_14_marge_approach"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 2
@@ -93,91 +115,150 @@ lines = PackedStringArray("Truck stop control. You must be Dottie's trucker. Fly
 place = "truck_stop"
 blocked_by_flags = PackedStringArray("met_marge")
 
-[sub_resource type="Resource" id="Set_12_marge_approach"]
+[sub_resource type="Resource" id="Set_15_marge_approach"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 2
 lines = PackedStringArray("Truck stop control. Ring's lit, hon. Fly on through.", "Evening, sugar. Parking deck's full, but the bay's all yours.", "I see you on the scope, {bunny}. Thread the ring and relax.")
 place = "truck_stop"
 
-[sub_resource type="Resource" id="Set_13_dottie_approach"]
+[sub_resource type="Resource" id="Set_16_dottie_approach"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 2
 lines = PackedStringArray("Dispatch here. Hangar 7's open. Thread the ring and I'll park you.", "Welcome back, hon. Ring's lit. Try not to hit the door this time.")
 place = "base"
 
-[sub_resource type="Resource" id="Set_14_dottie_approach"]
+[sub_resource type="Resource" id="Set_17_gill_approach"]
 script = ExtResource("2_set")
-speaker = ExtResource("npc_dottie")
+speaker = ExtResource("npc_gill")
 situation = 2
-lines = PackedStringArray("Is that pie I smell? Ring's lit, the whole cafeteria's waiting.")
-place = "base"
-needs_active_job = "first_pie_run"
+lines = PackedStringArray("Mmh? Oh. A truck. Ring's lit. I think. Yeah, it's lit.", "Tidewater Cannery. Fly through the ring, the crane does the rest.")
+place = "tidewater"
 
-[sub_resource type="Resource" id="Set_15_marge_docking"]
+[sub_resource type="Resource" id="Set_18_gill_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_gill")
+situation = 2
+lines = PackedStringArray("Is that... pie? Marge sent pie? Fly through the ring. Slowly. Please.")
+place = "tidewater"
+needs_active_job = "first_long_haul"
+
+[sub_resource type="Resource" id="Set_19_moe_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 2
+lines = PackedStringArray("Gas... N... Go... forty... seven. Ring's... on.", "Pull... on... in...")
+place = "gas_n_go"
+
+[sub_resource type="Resource" id="Set_20_marge_docking"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 6
 lines = PackedStringArray("Got you, sugar. Hands off the stick, I'll park you.", "Easy does it. Welcome to the truck stop.")
 place = "truck_stop"
 
-[sub_resource type="Resource" id="Set_16_dottie_docking"]
+[sub_resource type="Resource" id="Set_21_dottie_docking"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 6
 lines = PackedStringArray("Autopilot's got you. Welcome home, {bunny}.", "Hangar 7, here she comes. Somebody move that forklift.")
 place = "base"
 
-[sub_resource type="Resource" id="Set_17_wendell_bonk"]
+[sub_resource type="Resource" id="Set_22_gill_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_gill")
+situation = 6
+lines = PackedStringArray("Crane's got you. Mmh. Nice truck.", "Hold still. Or don't. The crane's patient.")
+place = "tidewater"
+
+[sub_resource type="Resource" id="Set_23_moe_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 6
+lines = PackedStringArray("Easy... does... it...", "Right... there... is... fine...")
+place = "gas_n_go"
+
+[sub_resource type="Resource" id="Set_24_wendell_bonk"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_wendell")
 situation = 3
 lines = PackedStringArray("Heard that bonk from here, kid.", "That rock had it coming.", "Easy there. Rocks don't move. Usually.")
 
-[sub_resource type="Resource" id="Set_18_pip_bonk"]
+[sub_resource type="Resource" id="Set_25_pip_bonk"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_pip")
 situation = 3
 lines = PackedStringArray("Ooh! That's gonna buff right out!", "Bonk! Haha. Sorry. Not funny. A little funny.")
 
-[sub_resource type="Resource" id="Set_19_dottie_bonk"]
+[sub_resource type="Resource" id="Set_26_dottie_bonk"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 3
 lines = PackedStringArray("Was that a rock or the cargo?", "Dispatch heard a clunk. Dispatch is choosing not to ask.")
 
-[sub_resource type="Resource" id="Set_20_marge_bonk"]
+[sub_resource type="Resource" id="Set_27_marge_bonk"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 3
 lines = PackedStringArray("Hon! My pies!", "That was a pie-shaped bonk, sugar.")
-needs_active_job = "first_pie_run"
+needs_active_job = "first_long_haul"
 
-[sub_resource type="Resource" id="Set_21_pip_boost"]
+[sub_resource type="Resource" id="Set_28_pip_boost"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_pip")
 situation = 4
 lines = PackedStringArray("Whoa! Look at you go!", "Wheee! Wait, that was you, not me.")
 
-[sub_resource type="Resource" id="Set_22_wendell_boost"]
+[sub_resource type="Resource" id="Set_29_wendell_boost"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_wendell")
 situation = 4
-lines = PackedStringArray("Easy on the boost, kid. It ain't free.", "Somebody's in a hurry.")
+lines = PackedStringArray("Easy on the boost, kid. Hold her steady or she'll wander.", "Boosting, huh? Small hands on the stick. She gets twitchy.")
 
-[sub_resource type="Resource" id="Set_23_dottie_low_fuel"]
+[sub_resource type="Resource" id="Set_30_dottie_low_fuel"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 5
 lines = PackedStringArray("Fuel light's on, hon. Coast a little, it's free.", "Base pumps are free if you can make it home.")
 
-[sub_resource type="Resource" id="Set_24_marge_low_fuel"]
+[sub_resource type="Resource" id="Set_31_marge_low_fuel"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 5
 lines = PackedStringArray("Running thin, sugar? Lily's pumps are open at the truck stop.")
 
+[sub_resource type="Resource" id="Set_32_moe_low_fuel"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 5
+lines = PackedStringArray("Low... fuel...? Gas-N-Go... is... here... for... you...")
+
+[sub_resource type="Resource" id="Set_33_marge_rough"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_marge")
+situation = 7
+lines = PackedStringArray("Easy, sugar! I can hear those pies sliding from here.", "Smooth it out, hon. Pies don't like corners.")
+needs_active_job = "first_long_haul"
+
+[sub_resource type="Resource" id="Set_34_wendell_rough"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_wendell")
+situation = 7
+lines = PackedStringArray("Your load's rattling, kid. Ease off.", "Smooth hands, steady speed. The cargo'll thank you.")
+
+[sub_resource type="Resource" id="Set_35_dottie_rough"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 7
+lines = PackedStringArray("Dispatch can hear your cargo rattling. Dispatch is concerned.")
+
+[sub_resource type="Resource" id="Set_36_deputy_speeding"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_deputy")
+situation = 8
+lines = PackedStringArray("Space Patrol. Clocked you hot past the buoy. Small fine, no fuss. Ease up near the stations, okay?", "Deputy Biscuit here. That was fast. Like, impressively fast. Still a fine though. Drive safe.")
+
 [resource]
 script = ExtResource("1_chatter")
-sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_dottie_idle"), SubResource("Set_7_wendell_idle"), SubResource("Set_8_wendell_idle"), SubResource("Set_9_pip_idle"), SubResource("Set_10_marge_idle"), SubResource("Set_11_marge_approach"), SubResource("Set_12_marge_approach"), SubResource("Set_13_dottie_approach"), SubResource("Set_14_dottie_approach"), SubResource("Set_15_marge_docking"), SubResource("Set_16_dottie_docking"), SubResource("Set_17_wendell_bonk"), SubResource("Set_18_pip_bonk"), SubResource("Set_19_dottie_bonk"), SubResource("Set_20_marge_bonk"), SubResource("Set_21_pip_boost"), SubResource("Set_22_wendell_boost"), SubResource("Set_23_dottie_low_fuel"), SubResource("Set_24_marge_low_fuel")])
+sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding")])

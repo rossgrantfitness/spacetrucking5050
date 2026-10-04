@@ -8,7 +8,8 @@ extends Resource
 ## Their name, shown on the dialogue box.
 @export var display_name: String = "Somebody"
 ## What kind of animal they are. The placeholder comm portrait draws a
-## face for: raccoon, owl, walrus, hamster, pig, cat, crocodile, bunny
+## face for: raccoon, owl, walrus, hamster, pig, cat, crocodile, bunny,
+## otter, sloth, dog
 ## (anything else gets plain round ears).
 @export var species: String = "raccoon"
 ## Their gibberish voice: 1 = normal pitch, higher = squeakier, lower = deeper.

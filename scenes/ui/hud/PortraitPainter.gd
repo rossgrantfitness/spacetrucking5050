@@ -1,6 +1,8 @@
 class_name PortraitPainter
 ## Paints a tiny placeholder comm portrait (28x28 HUD pixels) for whoever's
 ## calling, from their NPC data: species, fur color and accent color.
+## Knows: raccoon, owl, walrus, hamster, pig, cat, crocodile, bunny, otter,
+## sloth and dog (anything else gets plain round ears).
 ## Flat color blocks and one feature that's theirs alone (Dottie's mask,
 ## Marge's ear tufts, Wendell's tusks, Pip's cheeks...), per
 ## CHARACTER_BIBLE.md. M5 replaces these with real 3D heads.
@@ -40,8 +42,14 @@ static func paint(canvas: CanvasItem, corner: Vector2, who: NPCData, talking: bo
 		"bunny":
 			_rect(canvas, o + Vector2(4, 8), Vector2(3, 14), fur.darkened(0.1))
 			_rect(canvas, o + Vector2(21, 8), Vector2(3, 14), fur.darkened(0.1))
-		"walrus", "crocodile":
+		"walrus", "crocodile", "sloth":
 			pass
+		"otter":
+			canvas.draw_circle(o + Vector2(8, 8), 2.0, fur.darkened(0.2))
+			canvas.draw_circle(o + Vector2(20, 8), 2.0, fur.darkened(0.2))
+		"dog":
+			_rect(canvas, o + Vector2(3, 7), Vector2(4, 11), fur.darkened(0.35))  # Floppy ears.
+			_rect(canvas, o + Vector2(21, 7), Vector2(4, 11), fur.darkened(0.35))
 		_:
 			canvas.draw_circle(o + Vector2(8, 7), 2.5, fur)
 			canvas.draw_circle(o + Vector2(20, 7), 2.5, fur)
@@ -71,6 +79,22 @@ static func paint(canvas: CanvasItem, corner: Vector2, who: NPCData, talking: bo
 			_rect(canvas, o + Vector2(9, 15), Vector2(13, 5), fur.darkened(0.15))  # The long jaw.
 			for x in range(10, 21, 2):
 				_rect(canvas, o + Vector2(x, 19), Vector2(1, 1), CREAM)
+		"otter":
+			_rect(canvas, o + Vector2(9, 15), Vector2(10, 4), light)  # Muzzle...
+			for whisker_y: float in [16.0, 18.0]:  # ...and whiskers.
+				_rect(canvas, o + Vector2(4, whisker_y), Vector2(4, 1), CREAM)
+				_rect(canvas, o + Vector2(20, whisker_y), Vector2(4, 1), CREAM)
+			_rect(canvas, o + Vector2(6, 4), Vector2(16, 3), accent)  # Fishing hat.
+			_rect(canvas, o + Vector2(4, 7), Vector2(20, 1), accent)
+		"sloth":
+			_rect(canvas, o + Vector2(8, 10), Vector2(5, 5), DARK.lerp(fur, 0.4))  # Sleepy eye patches.
+			_rect(canvas, o + Vector2(16, 10), Vector2(5, 5), DARK.lerp(fur, 0.4))
+			_rect(canvas, o + Vector2(10, 16), Vector2(8, 3), light)
+		"dog":
+			_rect(canvas, o + Vector2(11, 15), Vector2(6, 4), light)
+			_rect(canvas, o + Vector2(13, 15), Vector2(2, 1), DARK)  # Nose.
+			_rect(canvas, o + Vector2(7, 4), Vector2(14, 3), accent)  # Patrol cap.
+			_rect(canvas, o + Vector2(13, 5), Vector2(2, 1), Color(1.0, 0.85, 0.3))  # Badge.
 		"bunny":
 			_rect(canvas, o + Vector2(6, 4), Vector2(16, 4), accent)  # Trucker cap.
 			_rect(canvas, o + Vector2(13, 18), Vector2(1, 2), CREAM)  # Buck teeth.

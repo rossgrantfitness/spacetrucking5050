@@ -17,3 +17,9 @@ var thrust := 0.0
 
 ## True while the boost button is held.
 var boost := false
+
+
+## Whether the pilot is actually doing something (not just resting a hand on
+## the mouse). Grabbing the controls takes over from the cruise autopilot.
+func is_touched() -> bool:
+	return steer.length() > 0.3 or absf(thrust) > 0.2 or boost

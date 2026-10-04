@@ -66,6 +66,61 @@ static func make_static() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## The deep, throbbing rumble of a huge ship's engines. Loops seamlessly.
+## Played from the big ship as it passes, with the Doppler effect, so it
+## rises as it comes at you and drops away as it goes.
+static func make_big_engine() -> AudioStreamWAV:
+	var seconds := 2.0
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 707
+	var low := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		# Whole-number cycles per loop, so the loop is seamless.
+		var drone := sin(TAU * 42.0 * t) + 0.6 * sin(TAU * 63.0 * t) + 0.3 * sin(TAU * 84.0 * t)
+		var throb := 0.75 + 0.25 * sin(TAU * 2.0 * t)
+		low = lerpf(low, rng.randf_range(-1.0, 1.0), 0.08)
+		samples[i] = (drone * 0.35 * throb + low * 0.5) * 0.8
+	return to_wav(samples, true)
+
+
+## A space whale's song: a slow, wobbly glide up and back down.
+static func make_whale_song() -> AudioStreamWAV:
+	var seconds := 3.5
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var phase := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var glide := 170.0 + 260.0 * sin(PI * t / seconds) + 12.0 * sin(TAU * 5.0 * t)
+		phase += TAU * glide / MIX_RATE
+		var voice := sin(phase) + 0.4 * sin(phase * 2.0) + 0.15 * sin(phase * 3.01)
+		var envelope := sin(PI * t / seconds)
+		samples[i] = voice * envelope * 0.4
+	return to_wav(samples, false)
+
+
+## A soft rushing whoosh, for a comet streaking past.
+static func make_whoosh() -> AudioStreamWAV:
+	var seconds := 2.0
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 909
+	var low := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var openness := 0.03 + 0.25 * sin(PI * t / seconds)
+		low = lerpf(low, rng.randf_range(-1.0, 1.0), openness)
+		samples[i] = low * sin(PI * t / seconds) * 0.9
+	return to_wav(samples, false)
+
+
 ## Packs samples (-1 to 1) into a 16-bit audio stream.
 static func to_wav(samples: PackedFloat32Array, looping: bool) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

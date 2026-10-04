@@ -19,6 +19,8 @@ signal teleported
 signal bonked(strength: float, where: Vector3)
 ## Emitted when the docking autopilot reaches the end of its route.
 signal autopilot_arrived
+## Emitted when the pilot grabs the controls and the cruise autopilot lets go.
+signal cruise_released
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
@@ -34,6 +36,11 @@ var hull: float = 1.0
 ## How intact the cargo is: 1 = pristine, 0 = a box of crumbs. Bonks knock
 ## it a little. (Fragile jobs pay a bonus that shrinks with it.)
 var cargo_condition: float = 1.0
+## How rough the ride is for the cargo right now, 0 (smooth) to 1
+## (rattling). Hard turns, slides, hard braking and boosting shake it; above
+## the comfy limit the cargo slowly gets damaged. (Speeding up straight
+## ahead never hurts it.)
+var cargo_stress: float = 0.0
 ## Where the last bonk hit, relative to the ship (x = right, y = up,
 ## z = toward the back). The HUD's little hull picture flashes that spot.
 var last_bonk_local := Vector3.ZERO
@@ -54,10 +61,18 @@ var jump_charge: float = -1.0
 ## While docking, the autopilot flies the rig through these spots (in the
 ## world, in order) and ignores the pilot. Empty = the pilot is flying.
 var autopilot_route: Array[Vector3] = []
-## The autopilot's cruising speed, in m/s. It slows down for the last spot.
+## The autopilot's cruising speed, in m/s. It slows down for the last spot
+## (unless it was told to keep rolling, like out of a drive-through).
 var autopilot_speed: float = 40.0
+## The cruise autopilot flying a charted course (see CruisePilot.gd), or
+## null when you're driving. Unlike the docking autopilot it flies by the
+## normal rules, and lets go the moment you touch the controls.
+var cruise: CruisePilot
+
+var _autopilot_stops: bool = true
 
 var _was_boosting := false
+var _last_velocity := Vector3.ZERO
 var _bonk_cooldown := 0.0
 
 @onready var controls: ShipControls = $ShipControls
@@ -76,7 +91,14 @@ func _physics_process(delta: float) -> void:
 	if not autopilot_route.is_empty():
 		_fly_autopilot(delta)
 		return
-	flight.update(delta, controls.read(delta), ship_data, GameState.tuning)
+	var hands := controls.read(delta)
+	if cruise != null:
+		if hands.is_touched():
+			cruise = null
+			cruise_released.emit()
+		else:
+			hands = cruise.steer(self, delta)
+	flight.update(delta, hands, ship_data, GameState.tuning)
 	global_basis = flight.orientation()
 	velocity = flight.velocity
 	# move_and_slide moves us along `velocity`, and if we touch an asteroid it
@@ -87,6 +109,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	flight.velocity = velocity
 	_check_for_bonks(before, delta)
+	_shake_cargo(delta)
 	odometer += flight.speed() * delta
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
@@ -137,6 +160,34 @@ func repair(amount: float) -> void:
 	hull = minf(hull + amount, 1.0)
 
 
+## Rough driving damages the cargo a little at a time: sideways g-forces
+## (turns and slides), hard braking, and the vibration of boosting flat out.
+## Bonks are counted separately (see bonk()).
+func _shake_cargo(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	var tuning := GameState.tuning
+	var acceleration := (flight.velocity - _last_velocity) / delta
+	_last_velocity = flight.velocity
+	if _bonk_cooldown > 0.0:
+		return
+	var g := rough_g_force(acceleration, flight.nose())
+	var rough := maxf(g - tuning.cargo_comfy_accel, 0.0) / tuning.cargo_comfy_accel
+	var vibration := overspeed_ratio()
+	var loss := (rough * tuning.cargo_rough_rate + vibration * tuning.cargo_boost_rate) * delta
+	cargo_condition = maxf(cargo_condition - loss, 0.0)
+	var stress_now := clampf(g / (tuning.cargo_comfy_accel * 2.0) + vibration * 0.4, 0.0, 1.0)
+	cargo_stress = lerpf(cargo_stress, stress_now, 1.0 - exp(-4.0 * delta))
+
+
+## The part of an acceleration that shakes cargo: everything except
+## speeding up straight ahead (sideways, up-down and braking all count).
+static func rough_g_force(acceleration: Vector3, nose: Vector3) -> float:
+	var along := acceleration.dot(nose)
+	var sideways := acceleration - nose * along
+	return sqrt(sideways.length_squared() + pow(minf(along, 0.0), 2.0))
+
+
 ## Looks at everything we touched this step and bonks on the hardest hit.
 func _check_for_bonks(before: Vector3, delta: float) -> void:
 	_bonk_cooldown = maxf(_bonk_cooldown - delta, 0.0)
@@ -167,10 +218,12 @@ func _update_shake(delta: float) -> void:
 
 
 ## Hands the controls to the docking autopilot, which flies through
-## `route` and emits autopilot_arrived at the end.
-func fly_route(route: Array[Vector3], speed: float) -> void:
+## `route` and emits autopilot_arrived at the end. With `stop_at_end` off it
+## keeps rolling at the end instead of parking (leaving a drive-through).
+func fly_route(route: Array[Vector3], speed: float, stop_at_end: bool = true) -> void:
 	autopilot_route = route.duplicate()
 	autopilot_speed = speed
+	_autopilot_stops = stop_at_end
 	controls.clear()
 
 
@@ -181,15 +234,16 @@ func _fly_autopilot(delta: float) -> void:
 	var to_target := target - global_position
 	var distance := to_target.length()
 	var last_spot := autopilot_route.size() == 1
-	if distance < (6.0 if last_spot else 25.0):
+	if distance < (6.0 if last_spot and _autopilot_stops else 25.0):
 		autopilot_route.pop_front()
 		if autopilot_route.is_empty():
-			flight.velocity = Vector3.ZERO
+			if _autopilot_stops:
+				flight.velocity = Vector3.ZERO
 			autopilot_arrived.emit()
 		return
 	var direction := to_target / distance
 	var goal_speed := autopilot_speed
-	if last_spot:
+	if last_spot and _autopilot_stops:
 		goal_speed = minf(autopilot_speed, distance * 0.5 + 5.0)
 	flight.velocity = flight.velocity.lerp(direction * goal_speed, 1.0 - exp(-1.8 * delta))
 	flight.thrust = 0.3
@@ -205,6 +259,7 @@ func _fly_autopilot(delta: float) -> void:
 	velocity = flight.velocity
 	odometer += flight.speed() * delta
 	_update_shake(delta)
+	_last_velocity = flight.velocity
 	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank)
 
 
@@ -223,6 +278,8 @@ func teleport(where: Transform3D) -> void:
 	controls.clear()
 	autopilot_route.clear()
 	velocity = Vector3.ZERO
+	_last_velocity = Vector3.ZERO
+	cargo_stress = 0.0
 	_visual_pivot.rotation = Vector3.ZERO
 	# Tell Godot's motion smoothing not to slide us from the old spot.
 	reset_physics_interpolation()

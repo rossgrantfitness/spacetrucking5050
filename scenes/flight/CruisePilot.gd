@@ -1,0 +1,119 @@
+class_name CruisePilot
+extends RefCounted
+## The cruise autopilot: flies the rig along a charted course (press M in
+## flight) at cruise speed, on the limiter so it only sips fuel. It drives
+## like a careful trucker: gentle turns that never rattle the cargo, and it
+## steers around rocks, junk and traffic it sees coming.
+##
+## It "holds the stick" by filling in FlightControls, exactly like your
+## hands do, so the rig flies the same way it does for you (same handling,
+## same fuel burn). Touch the stick, throttle or boost and it lets go (see
+## Ship.gd). It never boosts: that's your call.
+
+
+## The spots to fly through, in order (in the world). The course chart
+## fills these in: usually "line up outside a place's approach ring", then
+## "the ring itself" (flying through it starts the docking autopilot).
+var waypoints: Array[Vector3] = []
+## How close (in meters) counts as having reached a waypoint.
+var reach: float = 120.0
+## Eases off to this speed (m/s) for the last waypoint (0 = full cruise
+## speed all the way).
+var arrival_speed: float = 0.0
+
+var _controls := FlightControls.new()
+var _avoid := Vector3.ZERO
+var _avoid_clock: float = 0.0
+
+
+## Whether it has reached the end of its course.
+func is_done() -> bool:
+	return waypoints.is_empty()
+
+
+## The pilot's hands for this physics step.
+func steer(ship: Ship, delta: float) -> FlightControls:
+	var here := ship.global_position
+	while not waypoints.is_empty() and here.distance_to(waypoints[0]) < reach:
+		waypoints.pop_front()
+	_controls.boost = false
+	if waypoints.is_empty():
+		_controls.steer = Vector2.ZERO
+		_controls.thrust = 0.0
+		return _controls
+	var flight := ship.flight
+	var to_target := waypoints[0] - here
+	var distance := to_target.length()
+	var wanted := to_target / distance
+
+	# Look ahead for things in the way (a few times a second is plenty).
+	_avoid_clock -= delta
+	if _avoid_clock <= 0.0:
+		_avoid_clock = 0.15
+		_avoid = avoidance(ship)
+	if not _avoid.is_zero_approx():
+		wanted = (wanted + _avoid * 1.6).normalized()
+
+	# Turn toward `wanted`, gently: never so hard that the sideways push
+	# rattles the cargo (see Ship._shake_cargo).
+	var speed := maxf(flight.speed(), 1.0)
+	var gentle := GameState.tuning.cargo_comfy_accel * 0.6 / speed
+	var max_turn := deg_to_rad(ship.ship_data.turn_rate)
+	var max_pitch := deg_to_rad(ship.ship_data.pitch_rate)
+	var yaw_error := wrapf(atan2(-wanted.x, -wanted.z) - flight.heading, -PI, PI)
+	var pitch_error := asin(clampf(wanted.y, -0.95, 0.95)) - flight.pitch
+	var turn_rate := clampf(yaw_error * 0.9, -minf(gentle, max_turn), minf(gentle, max_turn))
+	var pitch_rate := clampf(pitch_error * 0.9, -minf(gentle, max_pitch), minf(gentle, max_pitch))
+	# Turning left is a positive change of heading, but steering right is +x.
+	_controls.steer = Vector2(-turn_rate / max_turn, pitch_rate / max_pitch)
+
+	# Speed: cruise on the limiter; slow down for sharp turns (so the rig
+	# doesn't slide) and for the last waypoint.
+	var goal := ship.ship_data.max_speed
+	if absf(yaw_error) > 0.5:
+		goal *= 0.6
+	if arrival_speed > 0.0 and waypoints.size() == 1:
+		goal = minf(goal, arrival_speed + distance * 0.03)
+	var going := flight.forward_speed()
+	if going < goal - 1.0:
+		_controls.thrust = 1.0
+	elif going > goal + 6.0:
+		_controls.thrust = -0.6
+	else:
+		# At the limiter, holding the throttle just sips fuel; below it, coast.
+		_controls.thrust = 1.0 if goal >= ship.ship_data.max_speed - 0.5 else 0.0
+	return _controls
+
+
+## Which way to lean to miss whatever is in the path ahead (zero if the
+## way is clear). Looks at rocks, junk and traffic.
+static func avoidance(ship: Ship) -> Vector3:
+	var here := ship.global_position
+	var ahead := ship.flight.velocity.normalized() if ship.flight.speed() > 5.0 else ship.flight.nose()
+	var look := maxf(ship.flight.speed() * 9.0, 300.0)
+	var obstacles: Array[Vector4] = []
+	for field: AsteroidField in ship.get_tree().get_nodes_in_group("asteroid_fields"):
+		obstacles.append_array(field.rocks_within(here, look))
+	for other: Node3D in ship.get_tree().get_nodes_in_group("traffic"):
+		var radius := 30.0
+		if other is RoadsideThing:
+			radius = (other as RoadsideThing).contact_radius
+		elif other is TrafficShip:
+			radius = (other as TrafficShip).hull_size.length() * 0.5
+		if here.distance_to(other.global_position) < look + radius:
+			var spot := other.global_position
+			obstacles.append(Vector4(spot.x, spot.y, spot.z, radius))
+	var push := Vector3.ZERO
+	for obstacle in obstacles:
+		var offset := Vector3(obstacle.x, obstacle.y, obstacle.z) - here
+		var along := offset.dot(ahead)
+		if along <= 0.0 or along > look:
+			continue
+		var miss := offset - ahead * along  # From our path to its middle.
+		var clearance := obstacle.w + 40.0
+		if miss.length() >= clearance:
+			continue
+		var away := -miss.normalized() if miss.length() > 0.5 else ahead.cross(Vector3.UP).normalized()
+		# Closer and more head-on = lean harder.
+		push += away * (1.0 - miss.length() / clearance) * (1.0 - along / look)
+	return push.limit_length(1.0)

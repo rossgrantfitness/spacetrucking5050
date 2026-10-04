@@ -57,6 +57,24 @@ extends Resource
 ## Lower = boost feels wilder and the rig slides more in turns.
 @export_range(0.05, 1.0, 0.05) var boost_grip: float = 0.3
 
+## While boosting, the nose wanders off course by itself this many degrees
+## per second (at most), even if you're steady. You have to keep correcting.
+@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 3.0
+
+## Extra wandering when the rig is shaky (from jerky steering under boost).
+@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 14.0
+
+## Steering is this much twitchier under boost (1 = normal). Easy to
+## over-correct.
+@export_range(1.0, 3.0, 0.05) var boost_steer_gain: float = 1.5
+
+## How much jerky steering under boost shakes the rig. Higher = you need
+## smoother hands.
+@export_range(0.0, 2.0, 0.01) var boost_jerk_shake: float = 0.12
+
+## How quickly the shakes settle when you hold steady.
+@export_range(0.05, 5.0, 0.05) var boost_steady_recovery: float = 0.6
+
 ## The steepest the nose can point up or down, in degrees. Kept below 90 so
 ## you can never flip upside down and lose the horizon.
 @export_range(30.0, 89.0, 1.0, "suffix:°") var max_pitch_degrees: float = 70.0
@@ -79,6 +97,10 @@ extends Resource
 ## extra on top of the normal burn (1 = twice as much). Coasting is free.
 ## (How big each ship's tank is lives in its own file in res://data/ships/.)
 @export_range(0.0, 4.0, 0.05) var fuel_speed_burn: float = 1.0
+
+## Holding top speed on the limiter only sips fuel: this much of the
+## normal burn (0.2 = a fifth). It's speeding up that drinks fuel.
+@export_range(0.0, 1.0, 0.01) var cruise_burn: float = 0.18
 
 ## With an empty tank, the engines run "on fumes" at this fraction of their
 ## thrust, so you can always limp to a pump. Nobody gets stranded.
@@ -161,6 +183,19 @@ extends Resource
 ## (1 = all of it). Fragile jobs pay a bonus that shrinks with this.
 @export_range(0.0, 0.5, 0.005) var cargo_damage_min: float = 0.01
 @export_range(0.0, 0.5, 0.005) var cargo_damage_max: float = 0.08
+
+## Rough driving shakes the cargo. Up to this much g-force (sideways,
+## braking, speeding up, in m/s²) is fine; above it the cargo slowly gets
+## damaged. Normal thrust is about 9; a hard turn at top speed is about 30.
+@export_range(5.0, 200.0, 1.0, "suffix:m/s²") var cargo_comfy_accel: float = 24.0
+
+## How fast cargo gets damaged by rough driving: the share of the cargo lost
+## per second when the g-force is double the comfy limit.
+@export_range(0.0, 0.2, 0.001) var cargo_rough_rate: float = 0.02
+
+## How fast cargo gets damaged by the vibration of boosting flat out: the
+## share lost per second at full boost speed. Boosting is fast but rough.
+@export_range(0.0, 0.02, 0.0001) var cargo_boost_rate: float = 0.0008
 
 ## The engines start trailing smoke when the hull drops below this (1 = 100%).
 @export_range(0.0, 1.0, 0.05) var smoke_below_hull: float = 0.6
@@ -311,6 +346,27 @@ extends Resource
 @export_range(100.0, 5000.0, 50.0, "suffix:m") var docking_bracket_range: float = 1500.0
 
 
+@export_group("Route events")
+
+## Something to look at shows up every this-many meters you drive (a
+## random distance between the two). At top speed (about 200 km/h), 4 km is
+## a bit over a minute.
+@export_range(500.0, 50000.0, 100.0, "suffix:m") var event_gap_min: float = 2500.0
+@export_range(500.0, 50000.0, 100.0, "suffix:m") var event_gap_max: float = 6000.0
+
+## The most random sights out there at once.
+@export_range(1, 10, 1) var event_max_active: int = 3
+
+## Sights don't appear when you're slower than this (parked, docking).
+@export_range(0.0, 100.0, 1.0, "suffix:m/s") var event_min_speed: float = 15.0
+
+## Sights are cleaned up once they're this far behind you.
+@export_range(1000.0, 20000.0, 100.0, "suffix:m") var event_despawn_distance: float = 7000.0
+
+## No random sights within this distance of a station.
+@export_range(0.0, 20000.0, 100.0, "suffix:m") var event_keep_clear: float = 4000.0
+
+
 @export_group("Comms chatter")
 
 ## Seconds after takeoff before dispatch first calls.
@@ -378,14 +434,14 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.6
 
 ## Shades per color channel. The PS1 had 32. Lower = more posterized.
-@export_range(4.0, 256.0, 1.0) var color_levels: float = 26.0
+@export_range(4.0, 256.0, 1.0) var color_levels: float = 30.0
 
 ## How strong the fine checkered dither pattern is. 0 = off.
-@export_range(0.0, 2.0, 0.05) var dither_strength: float = 1.3
+@export_range(0.0, 2.0, 0.05) var dither_strength: float = 0.6
 
 ## How big the dither dots are: sized as if the screen had this many rows,
 ## so the pattern looks the same on any screen. Fewer = chunkier dots.
-@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 270.0
+@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 400.0
 
 ## Where the solar system's colored distance haze starts, and where it's at
 ## its thickest. It tints faraway things with the system's haze color (set in

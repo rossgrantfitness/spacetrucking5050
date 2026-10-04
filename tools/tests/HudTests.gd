@@ -44,16 +44,30 @@ func test_coasting_is_free_and_thrusting_burns_fuel() -> void:
 	check(model.fuel < 1.0, "thrusting should burn fuel")
 
 
-func test_faster_burns_more_fuel() -> void:
+func test_faster_burns_more_fuel_but_cruising_sips() -> void:
 	var slow := FlightModel.new()
 	var fast := FlightModel.new()
-	fast.velocity = fast.nose() * RIG.max_speed
+	var cruising := FlightModel.new()
+	fast.velocity = fast.nose() * RIG.max_speed * 0.8
+	cruising.velocity = cruising.nose() * RIG.max_speed
 	var controls := FlightControls.new()
 	controls.thrust = 1.0
-	slow.update(STEP, controls, RIG, GameState.tuning)
-	fast.update(STEP, controls, RIG, GameState.tuning)
-	check(fast.fuel < slow.fuel, "the same thrust should burn more fuel at top speed")
-	check(fast.economy_rating(GameState.tuning) == 2, "flooring it at top speed should show the red arrow")
+	for model in [slow, fast, cruising]:
+		(model as FlightModel).update(STEP, controls, RIG, GameState.tuning)
+	check(fast.fuel < slow.fuel, "speeding up at high speed should burn more fuel than at low speed")
+	check(cruising.fuel > slow.fuel, "holding top speed on the limiter should only sip fuel")
+	check(fast.economy_rating(GameState.tuning) >= 1, "flooring it at high speed shouldn't show the green arrow")
+	check(cruising.economy_rating(GameState.tuning) == 0, "cruising on the limiter should show the green arrow")
+
+
+func test_a_full_tank_lasts_a_long_cruise() -> void:
+	var model := FlightModel.new()
+	model.velocity = model.nose() * RIG.max_speed
+	var controls := FlightControls.new()
+	controls.thrust = 1.0
+	for i in 60 * 60 * 18:  # 18 minutes at top speed.
+		model.update(1.0 / 60.0, controls, RIG, GameState.tuning)
+	check(model.fuel > 0.0, "a full tank should last an 18-minute cruise at top speed (%.2f left)" % model.fuel)
 
 
 func test_empty_tank_limps_instead_of_stranding() -> void:
@@ -127,3 +141,30 @@ func test_new_tuning_values_are_sane() -> void:
 	check(tuning.economy_yellow < tuning.economy_red, "the economy arrow should go yellow before red")
 	check(tuning.cargo_damage_min <= tuning.cargo_damage_max, "the biggest bonk should hurt cargo at least as much as the gentlest")
 	check(RIG.fuel_tank_seconds > 0.0, "the rig needs a fuel tank")
+
+
+func test_boost_wanders_off_course_and_jerky_hands_make_it_worse() -> void:
+	var steady := FlightModel.new()
+	var jerky := FlightModel.new()
+	var hands := FlightControls.new()
+	hands.boost = true
+	for i in 60 * 6:
+		steady.update(STEP, hands, RIG, GameState.tuning)
+	var shaky_hands := FlightControls.new()
+	shaky_hands.boost = true
+	for i in 60 * 6:
+		shaky_hands.steer = Vector2(1.0 if i % 20 < 10 else -1.0, 0.0)
+		jerky.update(STEP, shaky_hands, RIG, GameState.tuning)
+	check(absf(steady.heading) > 0.005, "even holding steady, boost should drift the nose a little")
+	check(steady.wobble < 0.05, "holding steady under boost shouldn't make the rig shaky")
+	check(jerky.wobble > 0.3, "jerky steering under boost should make the rig shaky")
+	var calm := FlightModel.new()
+	_fly(calm, FlightControls.new(), 6.0)
+	check(is_zero_approx(calm.heading), "without boost, the nose stays put")
+
+
+func test_only_rough_forces_shake_the_cargo() -> void:
+	var nose := Vector3.FORWARD
+	check(is_zero_approx(Ship.rough_g_force(nose * 50.0, nose)), "speeding up straight ahead never hurts the cargo")
+	check(is_equal_approx(Ship.rough_g_force(-nose * 30.0, nose), 30.0), "hard braking counts")
+	check(is_equal_approx(Ship.rough_g_force(Vector3.RIGHT * 40.0, nose), 40.0), "sideways g-force (turns, slides) counts")

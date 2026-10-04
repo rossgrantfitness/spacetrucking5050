@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Gill (Tidewater Cannery)"
+species = "otter"
+voice_pitch = 0.7
+lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
+comm_name = "GILL · TIDEWATER"
+fur_color = Color(0.52, 0.38, 0.28, 1)
+accent_color = Color(0.95, 0.8, 0.3, 1)

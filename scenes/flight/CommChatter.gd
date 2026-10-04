@@ -9,13 +9,15 @@ extends Node
 ## - A place's traffic control calls as you get close, and again when the
 ##   docking autopilot takes over.
 ## - Bonks and boosts sometimes get a comment (only if the comms are free).
-## - Low fuel always gets a call (it waits its turn).
+## - Rattling the cargo around (rough flying with a load) gets a comment.
+## - Low fuel and speeding tickets always get a call (they wait their turn).
 ## Every timing is in tuning.tres under "Comms chatter".
 
 
 const CHATTER: FlightChatter = preload("res://data/dialogue/flight_chatter.tres")
 ## These always get said, even if they have to wait for the comms to free up.
-const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL, ChatterSet.Situation.DOCKING]
+const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL,
+		ChatterSet.Situation.DOCKING, ChatterSet.Situation.SPEEDING]
 
 ## A place's traffic control calls when you're this close to it.
 @export var approach_call_distance: float = 2500.0
@@ -34,6 +36,8 @@ var _idle_timer: float = 0.0
 var _takeoff_timer: float = 0.0
 var _boost_cooldown: float = 0.0
 var _bonk_cooldown: float = 0.0
+var _rough_cooldown: float = 0.0
+var _rough_time: float = 0.0  # Seconds the cargo has been rattling.
 var _was_low_fuel: bool = false
 var _was_boosting: bool = false
 var _last_line: String = ""
@@ -77,6 +81,8 @@ func _process(delta: float) -> void:
 	_idle_timer -= delta
 	_boost_cooldown -= delta
 	_bonk_cooldown -= delta
+	_rough_cooldown -= delta
+	_watch_the_cargo(delta)
 	if _takeoff_timer > 0.0:
 		_takeoff_timer -= delta
 		if _takeoff_timer <= 0.0:
@@ -112,11 +118,33 @@ func _watch_the_flight() -> void:
 			say(ChatterSet.Situation.APPROACH, id)
 
 
+## Rough flying with a load in the back: someone notices.
+func _watch_the_cargo(delta: float) -> void:
+	if _ship.cargo_stress > 0.55 and not GameState.active_job_id.is_empty():
+		_rough_time += delta
+	else:
+		_rough_time = 0.0
+	if _rough_time > 1.5 and _rough_cooldown <= 0.0:
+		_rough_cooldown = 50.0
+		_rough_time = 0.0
+		say(ChatterSet.Situation.ROUGH)
+
+
 func _on_bonked(_strength: float, _where: Vector3) -> void:
 	if _bonk_cooldown > 0.0 or _rng.randf() > GameState.tuning.comm_bonk_chance:
 		return
 	_bonk_cooldown = 20.0
 	say(ChatterSet.Situation.BONK)
+
+
+## Someone comments on something (like a sight on the road), if the
+## comms are free. Not important: skipped if somebody's already talking.
+func say_line(speaker: NPCData, line: String) -> void:
+	if _comm.is_busy() or _quiet < GameState.tuning.comm_quiet_seconds:
+		return
+	_last_line = line
+	_reset_idle_timer()
+	_comm.call_in(speaker, line)
 
 
 ## Picks a line for the situation (not the one just used) and calls in.

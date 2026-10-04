@@ -58,10 +58,10 @@ extends Resource
 ## How hard the boost shoves you forward, in m/s gained every second.
 @export_range(1.0, 300.0, 1.0, "suffix:m/s²") var boost_acceleration: float = 70.0
 
-## The boost fuel tank: how many seconds of boosting a full tank holds. Boost
-## fuel doesn't refill by itself; you top it up at a station. (Buying it
-## arrives in M2.)
-@export_range(1.0, 120.0, 0.5, "suffix:s") var boost_fuel_seconds: float = 15.0
+## The boost fuel tank: how many seconds of boosting a full tank holds
+## (6 minutes: enough to boost flat out all the way to Tidewater). Boost
+## fuel doesn't refill by itself; buy it at a station's pumps.
+@export_range(1.0, 900.0, 0.5, "suffix:s") var boost_fuel_seconds: float = 360.0
 
 
 @export_group("Fuel")

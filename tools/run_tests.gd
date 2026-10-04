@@ -13,7 +13,23 @@ extends SceneTree
 const TESTS_FOLDER: String = "res://tools/tests"
 
 
-func _initialize() -> void:
+var _frame := 0
+var _exit_code := 0
+
+
+## The tests run on the first frame (not at startup), once the scene tree
+## is up, so tests can add nodes to it. Then it waits a few frames before
+## quitting, so sounds that tests started can finish tidying up.
+func _process(_delta: float) -> bool:
+	_frame += 1
+	if _frame == 1:
+		_run_all()
+	elif _frame == 10:
+		quit(_exit_code)
+	return false
+
+
+func _run_all() -> void:
 	var tests_run := 0
 	var problems := 0
 	for file_name in DirAccess.get_files_at(TESTS_FOLDER):
@@ -27,4 +43,4 @@ func _initialize() -> void:
 				tests_run += 1
 		problems += int(suite.get("problems"))
 	print("Self-tests finished: %d test(s), %d problem(s)." % [tests_run, problems])
-	quit(1 if problems > 0 else 0)
+	_exit_code = 1 if problems > 0 else 0

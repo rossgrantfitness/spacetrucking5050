@@ -152,11 +152,19 @@ func _gather_contacts() -> void:
 	for field: AsteroidField in get_tree().get_nodes_in_group("asteroid_fields"):
 		for rock in field.rocks_within(here, reach):
 			contacts.append({"position": Vector3(rock.x, rock.y, rock.z), "radius": rock.w, "kind": Kind.ROCK, "label": ""})
+	# Traffic, plus sights on the road that want to be on the radar (big
+	# ships, convoys, derelicts, the cops' radar buoy...).
 	for other: Node3D in get_tree().get_nodes_in_group("traffic"):
-		var traffic := other as TrafficShip
-		if traffic != null and here.distance_to(traffic.global_position) <= reach:
+		if here.distance_to(other.global_position) > reach:
+			continue
+		if other is TrafficShip:
+			var traffic := other as TrafficShip
 			contacts.append({"position": traffic.global_position, "radius": traffic.hull_size.length() * 0.5,
 					"kind": Kind.SHIP, "label": traffic.id_label})
+		elif other is RoadsideThing:
+			var thing := other as RoadsideThing
+			contacts.append({"position": thing.global_position, "radius": thing.contact_radius,
+					"kind": Kind.SHIP, "label": thing.id_label})
 	if destination != null:
 		contacts.append({"position": destination.global_position, "radius": 0.0, "kind": Kind.STATION,
 				"label": destination_name})

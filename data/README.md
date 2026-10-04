@@ -9,10 +9,12 @@ game's numbers, names and stuff never needs programming.
 - **`ships/`**: one file per ship. `starter_rig.tres` is *The Lazy Susan*,
   your inherited rig: top speed, acceleration, how heavy it turns, boost,
   trail color, engine voice. Its blueprint is `ShipData.gd`.
-- **`systems/`**: one file per solar system. `home_system.tres` holds the home
-  system's signature color (tints the space dust) and haze color (the
-  distance haze faraway things fade into).
-  Its blueprint is `SystemData.gd`.
+- **`systems/`**: one file per solar system (`home_system.tres`,
+  `tidewater.tres`): its middle, its signature color (tints the space dust,
+  the nebula and the HUD frames), haze color (the distance haze faraway
+  things fade into), sunlight, fill light and nebula brightness. Flying
+  between systems blends their colors. Its planets and sun are SkyBody
+  nodes in the flight scene. Blueprint: `SystemData.gd`.
 - **`npcs/`**: one file per person: name, voice pitch, portrait colors and
   what they say. What they say can depend on the story: each person has a
   list of conversations (`Conversation.gd`) with conditions (story flags,
@@ -27,13 +29,15 @@ game's numbers, names and stuff never needs programming.
   HUD). Dialogue fills them in where it says `{bunny}`, `{husband}`,
   `{base}` or `{currency}`.
 - **`places/`**: one file per place you can dock at (the home base, the
-  truck stop): its name and the inside you walk around after docking.
-  `places.tres` lists them. Blueprint: `PlaceData.gd`.
+  truck stop, Tidewater Cannery, the Gas-N-Go): its name, its kind (walk
+  around inside, a drop-off where you stay in the cab, or a drive-through),
+  the counters it has, and who says hello. `places.tres` lists them.
+  Blueprint: `PlaceData.gd`.
 - **`jobs/`**: one file per job: cargo, client, where it's picked up and
   where it goes, base pay, the optional fragile (care) and rush bonuses,
   and story settings (on the job board or offered in person, repeatable or
   one-off, which story flag it needs or sets). `jobs.tres` lists them all;
-  `first_pie_run.tres` is the first mission. Blueprint: `JobData.gd`.
+  `first_long_haul.tres` is the first mission. Blueprint: `JobData.gd`.
 - **`upgrades/`**: one file per rig upgrade sold at a garage: price and how
   much it multiplies top speed, acceleration, turning or the fuel tank.
   `upgrades.tres` is the shop list. Blueprint: `UpgradeData.gd`.
@@ -44,8 +48,13 @@ game's numbers, names and stuff never needs programming.
   `RadioStation.gd`, `RadioLineup.gd`.
 - **`dialogue/flight_chatter.tres`**: what people say over the comms while
   you fly, grouped by who says it and when (takeoff, small talk, approach,
-  docking, bonks, boosts, low fuel), optionally only at a place, a point in
+  docking, bonks, boosts, low fuel, rough flying, speeding tickets), optionally only at a place, a point in
   the story or during a job. Blueprints: `ChatterSet.gd`, `FlightChatter.gd`.
+- **`events/route_events.tres`**: the random sights on the road (big
+  ships, convoys, billboards and their ads, whales...): how likely each is,
+  which systems it shows up in, where it appears, and what someone might
+  say about it. How often they appear is in tuning.tres. Blueprints:
+  `EventData.gd`, `RouteEventList.gd`.
 - **`traffic_names.tres`**: the funny names on passing ships' ID labels.
   Add as many as you like.
 - **The other folders are empty for now** and fill up as their milestones

@@ -10,9 +10,11 @@ project on a machine without a screen.
 |---|---|
 | `setup_input_map.gd` | The default controls in `project.godot`. Re-running resets those actions to the defaults. |
 | `generate_placeholder_textures.gd` | Small PS1-style textures in `textures/generated/` (hazard stripes, hull plating, cargo containers, chevrons, vents, rock, station windows, engine flare, nebula, the planet). |
-| `generate_sounds.gd` | The engine hum's four loops (from `scenes/flight/EngineSynth.gd`) plus the bonk, the dialogue blip and the radio static burst (from `scenes/common/SfxSynth.gd`), in `audio/generated/`, made from math. |
+| `generate_sounds.gd` | The engine hum's four loops (from `scenes/flight/EngineSynth.gd`) plus the bonk, the dialogue blip, the radio static burst, a big ship's engine rumble, whale song and a whoosh (from `scenes/common/SfxSynth.gd`), in `audio/generated/`, made from math. |
 | `build_hub.gd` | The base: the bunny and Dottie models (`scenes/hub/*Visual.tscn`) and the rooms' sets (`scenes/hub/sets/`). **Re-running overwrites those**, but never the rooms' cameras, doors or people. |
-| `build_world.gd` | The home base seen from space (`scenes/flight/BaseStation.tscn`). **Re-running overwrites it.** |
+| `build_world.gd` | The stations seen from space: the home base (`BaseStation.tscn`), Tidewater Cannery (`CanneryStation.tscn`) and the Gas-N-Go drive-through (`GasNGo.tscn`), in `scenes/flight/`. **Re-running overwrites them.** |
+| `build_road.gd` | Everything fixed along the road to Tidewater (`scenes/flight/TidewaterRoad.tscn`): signs, landmarks, debris fields, hazards, whales, long-haul traffic, each placed by "km along the road / meters to the side / meters up". **Re-running overwrites it.** |
+| `generate_world_textures.gd` | Tidewater's ocean planet and the suns' surface (`textures/generated/ocean_planet.png`, `sun_surface.png`). |
 | `build_truck_stop.gd` | The truck stop's inside (`scenes/hub/sets/TruckStopSet.tscn`) and its people's models (`OwlVisual`, `BeaverVisual`, `FrogVisual`, `WalrusVisual`, `HamsterVisual`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/TruckStop.tscn`). |
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per station (`audio/radio/<station>/placeholder_loop.wav`), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
 | `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), its cockpit (`scenes/flight/CockpitInterior.tscn`), the traffic ships (`scenes/flight/traffic/`, except the CC0 courier) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
@@ -26,7 +28,7 @@ project on a machine without a screen.
 | `strict_warnings.gd` | Used by `validate.sh`: temporarily turns GDScript warnings into errors (via a throwaway `override.cfg`). |
 | `run_tests.gd` + `tests/` | A tiny self-test runner. Each `*Tests.gd` file in `tests/` holds `test_...` functions. |
 | `smoke_flight.gd` | Flies on autopilot (throttle, turns, boost, cockpit view, radio, HUD hide and demo, a comm call, pause menu, back to the launch point), then flies through the truck stop's approach ring and checks the autopilot docks and you end up inside. |
-| `smoke_mission.gd` | Plays the first mission from a new game: talks to Marge, takes the pie job, visits Lily's pumps, boards the rig, gets towed home and checks the job was delivered and paid. |
+| `smoke_mission.gd` | Plays the first mission from a new game: talks to Marge, takes the long haul, visits Lily's pumps, boards the rig, skips most of the road, lets the cruise autopilot fly into Tidewater's ring, gets paid at the drop-off counter and launches, then charts a course through the Gas-N-Go drive-through and checks it rolls out still moving. |
 | `capture.sh` | Renders frames of the game to PNG files (plus the audio as a WAV) on a virtual screen (needs Xvfb + Mesa), for checking visuals without a monitor. |
 
 ## Commands

@@ -79,8 +79,9 @@ func _draw_nav(ship: Ship, tint: Color) -> void:
 	draw_line(center, tip, tint, 2.0)
 	draw_circle(tip, 4.0, tint)
 	var meters := ship.global_position.distance_to(target.global_position)
-	PixelFont.draw(self, Vector2(128, 18), "TRUCK", 2.0, tint, 0.0, Color(0, 0, 0, 0))
-	PixelFont.draw(self, Vector2(128, 36), "STOP", 2.0, tint, 0.0, Color(0, 0, 0, 0))
+	var words := cockpit.destination_name.split(" ", false)
+	for i in mini(words.size(), 2):
+		PixelFont.draw(self, Vector2(128, 18 + 18 * i), words[i].left(8), 2.0, tint, 0.0, Color(0, 0, 0, 0))
 	PixelFont.draw(self, Vector2(128, 62), "%.1f KM" % (meters / 1000.0), 3.0, tint, 0.0, Color(0, 0, 0, 0))
 	PixelFont.draw(self, Vector2(128, 100), "ODO %.1f" % (ship.odometer / 1000.0), 2.0, tint * Color(1, 1, 1, 0.7), 0.0, Color(0, 0, 0, 0))
 

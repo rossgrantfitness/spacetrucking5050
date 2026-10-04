@@ -20,6 +20,8 @@ enum Situation {
 	BOOST,  ## Somebody saw that.
 	LOW_FUEL,  ## The low-fuel light just came on.
 	DOCKING,  ## The docking autopilot just took over at a place.
+	ROUGH,  ## The cargo's rattling: hard turns, slides, wild boosting.
+	SPEEDING,  ## A speed trap clocked you.
 }
 
 ## Who's talking (their name, voice and portrait come from this file).

@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
 [ext_resource type="Resource" path="res://data/systems/home_system.tres" id="2_system"]
+[ext_resource type="Resource" path="res://data/systems/tidewater.tres" id="40_tidewater_system"]
+[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="41_system_data"]
+[ext_resource type="Script" path="res://scenes/common/SkyBody.gd" id="42_sky_body"]
+[ext_resource type="Texture2D" path="res://textures/generated/ocean_planet.png" id="43_ocean_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/sun_surface.png" id="44_sun_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/CanneryStation.tscn" id="45_cannery"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GasNGo.tscn" id="46_gas_n_go"]
+[ext_resource type="PackedScene" path="res://scenes/flight/TidewaterRoad.tscn" id="47_road"]
 [ext_resource type="PackedScene" path="res://scenes/flight/BaseStation.tscn" id="26_base"]
 [ext_resource type="Script" path="res://scenes/flight/ApproachRing.gd" id="27_ring"]
 [ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
@@ -17,7 +25,6 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="13_pause"]
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="14_psx"]
 [ext_resource type="Script" path="res://scenes/common/SkyBackdrop.gd" id="15_sky"]
-[ext_resource type="Shader" path="res://shaders/psx_sky.gdshader" id="16_sky_shader"]
 [ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
 [ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
@@ -32,35 +39,6 @@ background_color = Color(0.008, 0.008, 0.024, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.42, 0.38, 0.62, 1)
 ambient_light_energy = 0.7
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_planet"]
-render_priority = 0
-shader = ExtResource("16_sky_shader")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/albedo_texture = ExtResource("17_planet_tex")
-shader_parameter/uv_scale = Vector2(2, 1)
-shader_parameter/drift_speed = 0.002
-shader_parameter/night_glow = 0.15
-
-[sub_resource type="SphereMesh" id="SphereMesh_planet"]
-material = SubResource("ShaderMaterial_planet")
-radius = 2300.0
-height = 4600.0
-radial_segments = 24
-rings = 12
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_planet_ring"]
-render_priority = 0
-shader = ExtResource("16_sky_shader")
-shader_parameter/albedo = Color(0.95, 0.8, 0.9, 1)
-shader_parameter/night_glow = 0.3
-
-[sub_resource type="TorusMesh" id="TorusMesh_planet_ring"]
-material = SubResource("ShaderMaterial_planet_ring")
-inner_radius = 3000.0
-outer_radius = 3900.0
-rings = 32
-ring_segments = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nebula"]
 render_priority = 0
@@ -80,7 +58,7 @@ shader = ExtResource("11_lines_shader")
 
 [node name="FlightSandbox" type="Node"]
 script = ExtResource("1_sandbox")
-system = ExtResource("2_system")
+systems = Array[ExtResource("41_system_data")]([ExtResource("2_system"), ExtResource("40_tidewater_system")])
 
 [node name="World" type="Node3D" parent="."]
 
@@ -157,20 +135,104 @@ script = ExtResource("27_ring")
 [node name="LaunchPoint" type="Marker3D" parent="World/Places/truck_stop"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
 
+[node name="tidewater" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 43998, 2378, -50436)
+
+[node name="CanneryStation" parent="World/Places/tidewater" instance=ExtResource("45_cannery")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/tidewater"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 135)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/tidewater"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 480)
+script = ExtResource("27_ring")
+color = Color(0.4, 1, 0.85, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/tidewater"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
+
+[node name="gas_n_go" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 23207, 1189, -29184)
+
+[node name="GasNGo" parent="World/Places/gas_n_go" instance=ExtResource("46_gas_n_go")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
+script = ExtResource("27_ring")
+color = Color(1, 0.75, 0.3, 1)
+
+[node name="ApproachRing2" type="Node3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -350)
+script = ExtResource("27_ring")
+color = Color(1, 0.75, 0.3, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 600)
+
+[node name="SkyBodies" type="Node3D" parent="World"]
+
+[node name="HomePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(40000, 15000, 10000)
+true_radius = 15000.0
+texture = ExtResource("17_planet_tex")
+ring_size = 1.8
+ring_color = Color(0.95, 0.8, 0.9, 1)
+
+[node name="HomeSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-150000, 70000, 90000)
+true_radius = 9000.0
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(1, 0.9, 0.7, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="TidewaterPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(13998, -5622, -85436)
+true_radius = 18000.0
+system_id = "tidewater"
+texture = ExtResource("43_ocean_tex")
+drift_speed = 0.003
+night_glow = 0.2
+
+[node name="TidewaterMoon" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(30000, 9000, -78000)
+true_radius = 2500.0
+system_id = "tidewater"
+texture = ExtResource("17_planet_tex")
+tint = Color(0.75, 0.85, 0.9, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.0
+
+[node name="TidewaterSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(113998, 47378, -160436)
+true_radius = 14000.0
+system_id = "tidewater"
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(0.75, 1, 0.9, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="Roadside" parent="World" instance=ExtResource("47_road")]
+
+[node name="Events" type="Node3D" parent="World"]
+
 [node name="SkyBackdrop" type="Node3D" parent="World"]
 script = ExtResource("15_sky")
 
 [node name="Nebula" type="MeshInstance3D" parent="World/SkyBackdrop"]
 mesh = SubResource("SphereMesh_nebula")
-
-[node name="Planet" type="MeshInstance3D" parent="World/SkyBackdrop"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6200, 2300, -4400)
-mesh = SubResource("SphereMesh_planet")
-
-[node name="PlanetRing" type="MeshInstance3D" parent="World/SkyBackdrop/Planet"]
-rotation = Vector3(0.35, 0, 0.3)
-scale = Vector3(1, 0.02, 1)
-mesh = SubResource("TorusMesh_planet_ring")
 
 [node name="Commuter" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")

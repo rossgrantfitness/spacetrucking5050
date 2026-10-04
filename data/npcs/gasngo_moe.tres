@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Moe (Gas-N-Go 47)"
+species = "sloth"
+voice_pitch = 0.5
+lines = PackedStringArray("Welcome... to... Gas... N... Go.")
+comm_name = "MOE · GAS-N-GO"
+fur_color = Color(0.62, 0.55, 0.45, 1)
+accent_color = Color(0.35, 0.75, 1, 1)

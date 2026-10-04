@@ -6,11 +6,11 @@
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("first_mission_done")
-lines = PackedStringArray("New face! Big Wendell. Twenty years hauling. Sit, sit. Or stand, I'm not your boss.", "Tip from an old salt: coast when you can. Holding the throttle at top speed just burns money.", "And when you're docking, aim for the big glowing ring. Can't miss it. I've missed it.")
+lines = PackedStringArray("New face! Big Wendell. Twenty years hauling. Sit, sit. Or stand, I'm not your boss.", "Tip from an old salt: once you're at top speed, the limiter sips fuel. It's speeding up that drinks it.", "And when you're docking, aim for the big glowing ring. Can't miss it. I've missed it.")
 
 [sub_resource type="Resource" id="Conversation_1"]
 script = ExtResource("2_conv")
-lines = PackedStringArray("Heard about your pie run. Marge doesn't trust just anybody with those.", "My cat says hi. She's in the truck. She's always in the truck.")
+lines = PackedStringArray("Heard you made the Tidewater run. Marge doesn't trust just anybody with those pies.", "My cat says hi. She's in the truck. She's always in the truck.")
 
 [resource]
 script = ExtResource("1_npc")

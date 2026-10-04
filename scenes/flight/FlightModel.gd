@@ -15,6 +15,13 @@ extends RefCounted
 ##     grip won't save you: burn the engines to brake.
 ##   - Boost shoves you far past top speed and makes grip much weaker, so the
 ##     rig gets wild. Afterwards the extra speed bleeds off slowly.
+##   - Boosting also makes the rig hard to keep on course: the nose wanders
+##     off by itself, steering gets twitchy, and jerky steering makes it
+##     wander worse. Hold steady and it settles down.
+##   - Thrusting burns main fuel: speeding up drinks it (more at high
+##     speed), holding top speed on the limiter just sips it, coasting is
+##     free. An empty tank never strands you: the engines keep going "on
+##     fumes".
 ##
 ## Keeping these rules separate makes them easy to read and to test (see
 ## tools/tests/FlightTests.gd).
@@ -41,14 +48,22 @@ var boosting := false
 ## How fast we're sliding sideways (m/s): the part of our movement that isn't
 ## where the nose points. The engine sound and HUD use it.
 var slip := 0.0
+## How shaky the rig is under boost, 0 (steady) to 1 (all over the place).
+## Jerky steering while boosting raises it; holding steady calms it.
+var wobble := 0.0
 ## How far the rig visibly leans into a turn, and tips its nose, in radians.
 ## Purely for looks: neither changes where the ship goes.
 var bank := 0.0
 var nose_tilt := 0.0
 
+var _time := 0.0
+var _last_steer := Vector2.ZERO
+
 
 ## Advances the flight by one step of `delta` seconds.
 func update(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
+	_time += delta
+	_update_wobble(delta, controls, tuning)
 	_update_turning(delta, controls, ship, tuning)
 	_update_motion(delta, controls, ship, tuning)
 	_update_lean(delta, ship, tuning)
@@ -108,6 +123,7 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	boost_fuel = 1.0
 	boosting = false
 	slip = 0.0
+	wobble = 0.0
 	bank = 0.0
 	nose_tilt = 0.0
 
@@ -165,10 +181,14 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 
 ## Burns main fuel for `throttle` (how hard the pilot is pushing) and
 ## returns the thrust the engines actually give: all of it, or a little
-## "on fumes" when the tank is empty. Faster = thirstier.
+## "on fumes" when the tank is empty. Speeding up drinks fuel (faster =
+## thirstier); holding top speed on the limiter only sips it.
 func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -> float:
 	var speed_share := clampf(speed() / ship.max_speed, 0.0, 1.0)
-	var burn := absf(throttle) * (1.0 + speed_share * speed_share * tuning.fuel_speed_burn)
+	var effort := 1.0 + speed_share * speed_share * tuning.fuel_speed_burn
+	if throttle > 0.0 and forward_speed() >= ship.max_speed - 0.5:
+		effort = tuning.cruise_burn  # On the limiter: just holding speed.
+	var burn := absf(throttle) * effort
 	fuel_burn = burn / (1.0 + tuning.fuel_speed_burn)
 	if fuel <= 0.0:
 		return throttle * tuning.empty_tank_thrust
@@ -181,8 +201,10 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	var max_pitch := deg_to_rad(ship.pitch_rate)
 	# Turning right means clockwise seen from above, which Godot counts as a
 	# NEGATIVE change of heading.
-	var wanted_turn := -controls.steer.x * max_turn
-	var wanted_pitch := controls.steer.y * max_pitch
+	# Under boost, steering gets twitchy (easy to over-correct).
+	var twitch := tuning.boost_steer_gain if boosting else 1.0
+	var wanted_turn := -controls.steer.x * max_turn * twitch
+	var wanted_pitch := controls.steer.y * max_pitch * twitch
 	if absf(controls.steer.y) < 0.05:
 		# Hands off up/down: let the nose drift gently back toward level.
 		wanted_pitch = clampf(-pitch * tuning.nose_auto_level, -max_pitch, max_pitch)
@@ -192,11 +214,38 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	turn_speed = lerpf(turn_speed, wanted_turn, catch_up)
 	pitch_speed = lerpf(pitch_speed, wanted_pitch, catch_up)
 
-	heading = wrapf(heading + turn_speed * delta, -PI, PI)
+	# Under boost the nose wanders off course by itself, worse when shaky.
+	var wander := wander_amount(tuning)
+	heading = wrapf(heading + (turn_speed + wander * _drift(0.0)) * delta, -PI, PI)
+	pitch += wander * 0.5 * _drift(10.0) * delta
 	var pitch_limit := deg_to_rad(tuning.max_pitch_degrees)
 	pitch = clampf(pitch + pitch_speed * delta, -pitch_limit, pitch_limit)
 	if absf(pitch) >= pitch_limit and signf(pitch_speed) == signf(pitch):
 		pitch_speed = 0.0  # Stop pushing against the limit.
+
+
+## How hard the nose is being pushed off course right now, in radians per
+## second: a little whenever you're boosting, a lot when you're shaky.
+func wander_amount(tuning: Tuning) -> float:
+	if not boosting:
+		return 0.0
+	return deg_to_rad(tuning.boost_wander_degrees + wobble * tuning.boost_wobble_degrees)
+
+
+## Jerky steering under boost makes the rig shaky; holding steady calms it.
+func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> void:
+	var jerk := (controls.steer - _last_steer).length() / maxf(delta, 0.0001)
+	_last_steer = controls.steer
+	if boosting:
+		wobble += jerk * tuning.boost_jerk_shake * delta
+	wobble = clampf(wobble * exp(-tuning.boost_steady_recovery * delta), 0.0, 1.0)
+
+
+## A smooth, wandering push from -1 to 1 (a few slow waves added together,
+## so it never repeats in an obvious way). `offset` gives a different one.
+func _drift(offset: float) -> float:
+	var t := _time + offset
+	return (sin(t * 0.9) + 0.6 * sin(t * 2.3 + 1.7) + 0.35 * sin(t * 4.7 + 0.4)) / 1.95
 
 
 func _update_lean(delta: float, ship: ShipData, tuning: Tuning) -> void:

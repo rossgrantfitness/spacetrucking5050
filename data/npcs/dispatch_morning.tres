@@ -12,8 +12,8 @@ sets_flags = PackedStringArray("heard_about_marge")
 
 [sub_resource type="Resource" id="Conversation_1"]
 script = ExtResource("2_conv")
-needs_active_job = "first_pie_run"
-lines = PackedStringArray("Are those Marge's pies? Hon, the whole cafeteria's been waiting. Go, go.")
+needs_active_job = "first_long_haul"
+lines = PackedStringArray("Tidewater? That's a real haul, hon. Chart a course in the cockpit with M and let the autopilot drive if you get tired.")
 
 [sub_resource type="Resource" id="Conversation_2"]
 script = ExtResource("2_conv")

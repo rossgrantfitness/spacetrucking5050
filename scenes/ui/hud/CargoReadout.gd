@@ -6,6 +6,9 @@ extends HudWidget
 ## - PAY: what the job is on track to pay right now (base pay plus any
 ##   bonuses still in reach). It ticks up and down as bonuses are earned or
 ##   slip away.
+## - RIDE: how rough the ride is for the cargo. Green is fine; yellow means
+##   it's starting to take damage (hard turns, slides, braking, boosting);
+##   red means it's rattling.
 ## (You get paid when you dock and climb out at the destination.)
 
 
@@ -49,7 +52,7 @@ func _draw() -> void:
 	var right := size.x - MARGIN + roundf(_pop.hidden_share() * 90.0)
 	var top := MARGIN
 	var currency := GameState.names.currency_short
-	box(Rect2(right - 72.0, top - 2.0, 74.0, 20.0), BACKING)
+	box(Rect2(right - 72.0, top - 2.0, 74.0, 26.0), BACKING)
 	var cargo_color := GREEN
 	if _shown_cargo < 40.0:
 		cargo_color = RED
@@ -63,3 +66,20 @@ func _draw() -> void:
 	var pay_text := "%d %s" % [maxi(_shown_pay, 0), currency]
 	text_right(Vector2(right, top + 10.0), pay_text, YELLOW if _pay_flash > 0.0 else GREEN)
 	text_right(Vector2(right - text_width(pay_text) - 4.0, top + 10.0), "+" if _pay_flash > 0.0 else "PAY", YELLOW if _pay_flash > 0.0 else tint(0.85))
+	_draw_ride(Vector2(right, top + 17.0))
+
+
+## The ride-roughness bar, right-aligned at `right_top`.
+func _draw_ride(right_top: Vector2) -> void:
+	var stress := ship().cargo_stress
+	var segments := 10
+	var lit := ceili(stress * segments - 0.01)
+	var left := right_top.x - segments * 4.0
+	for i in segments:
+		var share := (i + 0.5) / segments
+		var color := tint(0.18)
+		if i < lit:
+			color = GREEN if share < 0.5 else (YELLOW if share < 0.72 else RED)
+		slanted(Rect2(left + i * 4.0, right_top.y + 1.0, 3.0, 3.0), 1.0, color)
+	var label_color := RED if stress > 0.72 and blink(0.3) else tint(0.85)
+	text_right(Vector2(left - 3.0, right_top.y), "RIDE", label_color)

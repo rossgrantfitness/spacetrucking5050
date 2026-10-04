@@ -38,6 +38,8 @@ func _init() -> void:
 	_action("radio_previous", BUTTON, [_key(KEY_Q), _button(JOY_BUTTON_DPAD_LEFT)])
 	_action("radio_power", BUTTON, [_key(KEY_R), _button(JOY_BUTTON_DPAD_UP)])
 	_action("toggle_hud", BUTTON, [_key(KEY_H), _button(JOY_BUTTON_DPAD_DOWN)])
+	# Opens the course chart (pick a destination for the autopilot).
+	_action("chart_course", BUTTON, [_key(KEY_M), _button(JOY_BUTTON_BACK)])
 	# A developer helper: lights up every HUD warning so the look can be
 	# checked. Keyboard only.
 	_action("hud_demo", BUTTON, [_key(KEY_F9)])

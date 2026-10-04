@@ -72,8 +72,9 @@ static func job_summary(job: JobData) -> String:
 	return words
 
 
-## Lily's pumps: fill the fuel and boost tanks.
-static func fuel(tree: SceneTree) -> void:
+## The pumps: fill the fuel and boost tanks. (Lily's, at the truck stop,
+## unless another place's pumps are named.)
+static func fuel(tree: SceneTree, title: String = "LILY'S PUMPS", goodbye: String = "Drive safe, hon.") -> void:
 	while true:
 		var tuning := GameState.tuning
 		var fuel_cost := ceili((1.0 - GameState.rig["fuel"]) * tuning.fuel_tank_price)
@@ -84,14 +85,14 @@ static func fuel(tree: SceneTree) -> void:
 				"description": "Main tank is at %d%%." % roundi(GameState.rig["fuel"] * 100.0)},
 			{"text": "FILL BOOST", "detail": "%d %s" % [boost_cost, currency], "disabled": boost_cost <= 0,
 				"description": "Boost tank is at %d%%." % roundi(GameState.rig["boost_fuel"] * 100.0)},
-			{"text": "LEAVE", "description": "Drive safe, hon."}]
-		var choice := await MenuPanel.ask(tree, "LILY'S PUMPS", "You've got %d %s." % [GameState.credits, currency], options)
+			{"text": "LEAVE", "description": goodbye}]
+		var choice := await MenuPanel.ask(tree, title, "You've got %d %s." % [GameState.credits, currency], options)
 		if choice == 0 and GameState.spend(fuel_cost):
 			GameState.rig["fuel"] = 1.0
 		elif choice == 1 and GameState.spend(boost_cost):
 			GameState.rig["boost_fuel"] = 1.0
 		elif choice in [0, 1]:
-			await MenuPanel.ask(tree, "NOT ENOUGH", "Lily squints at your wallet. \"Come back after a job, sugar.\"", [{"text": "OKAY"}])
+			await MenuPanel.ask(tree, "NOT ENOUGH", "The attendant squints at your wallet. \"Come back after a job.\"" if title != "LILY'S PUMPS" else "Lily squints at your wallet. \"Come back after a job, sugar.\"", [{"text": "OKAY"}])
 		else:
 			return
 

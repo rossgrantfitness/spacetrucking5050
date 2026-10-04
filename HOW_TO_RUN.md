@@ -88,6 +88,7 @@ Y = △.)
 | Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
 | Radio on / off | **R** | D-pad **up** |
 | Hide / show the HUD | **H** | D-pad **down** |
+| Chart a course (autopilot) | **M** | **Back** / **View** |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
 
@@ -103,16 +104,45 @@ little **ECO** arrow under the fuel gauge turns green, yellow or red to show
 how thriftily you're flying. An empty tank never strands you: the engines
 keep crawling along "on fumes".
 
+Holding thrust at top speed only **sips** fuel: the engines' limiter just
+holds your speed (a full tank cruises about 27 minutes).
+
 **Boost** rockets you way past top speed (and gets slidey!). It burns
-**boost fuel** (the tiny **BST** bar), which doesn't refill by itself.
+**boost fuel** (the tiny **BST** bar), which doesn't refill by itself; a
+full boost tank lasts 6 minutes. **Boosting is hard to hold steady:** the
+rig wanders off course, and jerky steering makes it shake worse. Smooth,
+small corrections calm it down.
+
+**Mind the cargo.** Hard turns, slides, hard braking and boosting flat out
+rattle the load (the **RIDE** bar under the cargo readout, top right:
+green is fine, yellow is bumpy, red is damaging it). Damaged cargo pays a
+smaller care bonus. Speeding up straight ahead never hurts it.
 Docking at the home base fills both tanks for free; at the truck stop,
 Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
 upgrades.
 
 **Docking:** fly through the big glowing **ring** in front of a station's
-bay and the autopilot takes over and parks you. Then you climb out and walk
-around inside. The yellow diamond on the compass strip points at where
-you're headed (your job's destination).
+bay and the autopilot takes over and parks you. At the home base and the
+truck stop you climb out and walk around inside. At **Tidewater Cannery**
+you stay in the cab: get paid, look for a load back, fill up, launch. The
+**Gas-N-Go 47** is a drive-through: fly through either ring, pull up under
+the canopy, buy fuel, and you roll out the far side still moving. The
+yellow diamond on the compass strip points at where you're headed.
+
+**Chart a course (M):** a map with every place you can go, how far, how
+long cruising vs. on full boost, and how much fuel it takes. Pick one (or
+"via the Gas-N-Go") and the autopilot drives at cruise speed, steers around
+rocks and traffic, and flies you through the ring. Touch the stick,
+throttle or boost and you take over.
+
+**The long haul:** Tidewater, the teal system, is about 59 km past the
+truck stop: 18 minutes cruising, 6 on full boost. Along the way: highway
+signs, a junk spill, the Gas-N-Go, the world's biggest donut, the border
+gate, a lighthouse, an old derelict, an ion storm (radio static, a few
+jolts), icy rocks, whales, and a space-patrol speed trap near the cannery
+(the **COPS** light warns you; over 250 km/h right past it costs a small
+fine). Random sights come and go too: big ships crossing, convoys,
+billboards, comets, jellyfish, junk.
 
 **The HUD** (in the style of Wipeout): speed and boost bottom-left, the
 radar globe bottom-middle, fuel and the hull picture bottom-right, the
@@ -194,10 +224,19 @@ the room loads. What people say lives in `data/npcs/` (Dottie is
 `dispatch_morning.tres`), and the big names (the bunny, her husband, the
 base) are in `data/world_names.tres`.
 
-**Traffic ships** around the truck stop are the *Commuter* and *Orbiter*
-nodes in `scenes/flight/FlightSandbox.tscn` (under *PSXView → Viewport →
-World*). Select one to change its speed or the list of spots it flies
-through (*Waypoints*).
+**Traffic ships** around the base and the truck stop are nodes like
+*Commuter* and *Orbiter* under *World* in `scenes/flight/FlightSandbox.tscn`.
+Select one to change its speed or the list of spots it flies through
+(*Waypoints*).
+
+**The road to Tidewater** (signs, landmarks, debris, the speed trap, the
+long-haul truckers) is `scenes/flight/TidewaterRoad.tscn`, made by
+`tools/build_road.gd`: edit the numbers there ("how far along the road,
+how far to the side") and run it again. The random sights (big ships,
+convoys, billboards...) are in `data/events/route_events.tres`, and how
+often they show up is in tuning.tres under "Route events". Planets and
+suns are the *SkyBody* nodes under *World/SkyBodies*; each solar system's
+colors are in `data/systems/`.
 
 ## Where your settings are saved
 

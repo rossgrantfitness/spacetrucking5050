@@ -2,33 +2,33 @@
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
-[ext_resource type="Resource" path="res://data/jobs/first_pie_run.tres" id="job_first_pie_run"]
+[ext_resource type="Resource" path="res://data/jobs/first_long_haul.tres" id="job_first_long_haul"]
 
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("met_marge")
-lines = PackedStringArray("Well, look at you. You must be Dottie's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My nebula pies are famous on every station in the system. My old hauler retired to a moon, the lucky duck.", "Thirty crates for your base's cafeteria. They wobble, so fly gentle: the prettier they get there, the more I pay.", "Four hundred fifty {currency}, plus up to a hundred fifty more if they arrive in one piece. What do you say, sugar?")
+lines = PackedStringArray("Well, look at you. You must be Dottie's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My cousin Gill runs the canteen at Tidewater Cannery. Way out in the teal, past the border gate. Sixty clicks, give or take.", "Poor things haven't had a decent pie in a year. Thirty crates of nebula pie and a sack of real coffee. It's a long haul, sugar.", "About eighteen minutes at your rig's top speed. Six if you burn a whole tank of boost, but boosting rattles the pies, and they bruise.", "Thirteen hundred {currency}, plus up to five hundred more if they get there pretty. Gas-N-Go's about halfway if you need fuel. What do you say?")
 sets_flags = PackedStringArray("met_marge")
-offers_job = ExtResource("job_first_pie_run")
+offers_job = ExtResource("job_first_long_haul")
 
 [sub_resource type="Resource" id="Conversation_1"]
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("met_marge")
 blocked_by_flags = PackedStringArray("first_mission_done")
 needs_no_job = true
-lines = PackedStringArray("Change your mind about those pies, sugar? They're not getting any fresher.")
-offers_job = ExtResource("job_first_pie_run")
+lines = PackedStringArray("Change your mind about the Tidewater run, sugar? Those pies won't haul themselves.")
+offers_job = ExtResource("job_first_long_haul")
 
 [sub_resource type="Resource" id="Conversation_2"]
 script = ExtResource("2_conv")
-needs_active_job = "first_pie_run"
-lines = PackedStringArray("Pies are loaded, hon. Airlock's on the right, back the way you came.", "Base is about ten clicks back. Fly through their ring and they'll park you. Gentle with my babies.")
+needs_active_job = "first_long_haul"
+lines = PackedStringArray("Pies are loaded, hon. Airlock's on the right, back the way you came.", "Press M in the cockpit to chart a course: the autopilot can drive while you listen to the radio. Gentle with my babies.")
 
 [sub_resource type="Resource" id="Conversation_3"]
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("first_mission_done")
 needs_no_job = true
-lines = PackedStringArray("Folks at your base won't stop talking about those pies. You're hired, if you want it.", "Job board's by the big window. Lily's got fuel, Dusty can make that old rig sing. Make yourself at home.")
+lines = PackedStringArray("Gill called. Said the pies made a grown otter cry. You're hired, if you want it.", "Job board's by the big window. Lily's got fuel, Dusty can make that old rig sing. Make yourself at home.")
 
 [sub_resource type="Resource" id="Conversation_4"]
 script = ExtResource("2_conv")

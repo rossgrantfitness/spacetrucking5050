@@ -1,16 +1,18 @@
 # Progress
 
-**Current status:** **Round 7: the first mission, the truck stop inside and
-the real radio**, at your request. You can now play the developer's
-"smallest version of the game" almost all the way: wake up, talk to
-dispatch, fly to the truck stop (now twice as far), dock through the ring,
-meet Marge, take her pie job, fly home, dock, get paid, and spend it at the
-truck stop on fuel, repairs and a speed upgrade you can feel. Built and
-validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 8: the long haul to Tidewater**, at your
+request. The world is huge now: a second solar system (teal Tidewater) 70
+km from home, with its own sun, ocean planet, moon and nebula color. The
+first mission is a real long haul: 18 minutes cruising, 6 on full boost,
+past highway signs, debris, a drive-through gas station, roadside
+attractions, hazards and random sights. Plus a course chart with a cruise
+autopilot, boost that wanders if you're not steady, cargo that minds rough
+flying, and less dither. Built and validated, **waiting for your playtest**
+(see `PLAYTEST.md`).
 **Next session:** the audit your revised brief asks for (`AUDIT.md` and a
 reworked checklist here), then whatever you choose.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-04 (round 7)
+**Last updated:** 2026-10-04 (round 8)
 
 ---
 
@@ -31,6 +33,7 @@ reworked checklist here), then whatever you choose.
   - [x] An asteroid field of tumbling low-poly rocks (with collision) and a distant truck-stop station
   - [x] Minimal corner HUD (speed gauge, station marker, mouse reticle), small pause menu, "Press Start" on the boot screen
   - [x] Self-tests for the flight rules, sound loops and rock meshes; an autopilot smoke test of the sandbox
+  - [x] Round 8 (your request): less dither (wobble kept); boost wanders off course and jerky steering makes it worse; cruising on the limiter sips fuel; a 6-minute boost tank
   - [x] Round 7 (your request): more wobble and dither (240-row wobble grid, more texture swim, 26 shades per color, stronger, chunkier dither, softer painted rooms)
   - [x] Round 6 (your HUD list): a Wipeout-style HUD drawn at low resolution with a tiny pixel font: speed bar with redline and throttle tick, boost bar, wireframe radar globe, fuel arc with economy arrow, hull picture that flashes where you bonked, compass strip with distance and ETA, radio ticker, cargo and pay, flight marker, five status lights, and pop-ins (comm calls, docking brackets, rush timer, ship ID labels, jump charge). Comm chatter from dispatch, truck stop control and two truckers. H hides the HUD, F9 is a demo of every warning
   - [x] Round 5 (from your feedback): more wobble and dither, ship damage (bonks, hull bar, sparks, smoke, rumble), a lived-in reactive 3D cockpit, and a CC0 courier ship
@@ -42,9 +45,10 @@ reworked checklist here), then whatever you choose.
   - [x] Approach rings and the canned autopilot docking
   - [x] Getting paid on docking, with a payout card; money that's spent on fuel, repairs and upgrades
   - [x] Speed upgrade you can feel (Hot-Rod Injectors, +25% top speed), plus three more upgrades
-  - [x] Fuel that burns faster at speed; bonks knock cargo condition
+  - [x] Fuel that burns faster at speed; bonks knock cargo condition; rough flying (hard turns, slides, braking, boost vibration) slowly damages cargo, shown on a RIDE bar (round 8)
+  - [x] Round 8: the first mission is a long haul to Tidewater Cannery (59 km past the truck stop); drop-off docking (stay in the cab: get paid, take a load back, fuel up); four Tidewater jobs
   - [x] Saving and loading (`user://save.json`), Continue and New game on the boot screen
-  - [ ] A route screen before launch (M5's route map covers it)
+  - [x] A route screen: the course chart (M) with distances, cruise and boost times, fuel, and "via" stops, plus a cruise autopilot (round 8)
   - [ ] Your playtest: can you finish a delivery, get paid, buy the upgrade and feel it?
 - [ ] **M3: The walkable hub** *(started early, at your request)*
   - [x] Pre-rendered backgrounds with fixed FF8-style cameras and camera zones; camera-relative walking that doesn't flip on cuts
@@ -63,7 +67,15 @@ reworked checklist here), then whatever you choose.
   - [x] Placeholder beats per station until you add music; `audio/radio/README.md`
   - [ ] Your radio stations and music (you're making these!), DJ voices
   - [ ] Glow pass, 3D cockpit radar globe, neon hub lighting polish
-- [ ] **M5: Life in space**: random sights, gentle hazards, cockpit gizmos, route map, real 3D comm heads *(pulled forward: comm calls with static and placeholder portraits, chatter from dispatch/truckers/traffic control, funny ship ID labels, screen shake, and HUD lights waiting for the hazards)*
+- [ ] **M5: Life in space** *(much of it pulled forward)*
+  - [x] Comm calls with static and placeholder portraits; chatter from dispatch, truckers, traffic control, hosts and the space patrol; funny ship ID labels; screen shake
+  - [x] Random sights along the road (round 8): big ship crossings with a Doppler rumble, convoys, billboards, comets, jellyfish, junk, derelicts, a rubber duck; whales and ion storms in Tidewater
+  - [x] Fixed sights on the road to Tidewater (round 8): highway signs, a junk spill, the world's biggest donut, a border gate, a lighthouse, a derelict, an icy field, whales, long-haul traffic
+  - [x] Hazards (round 8): ion storms (static, jolts, STORM light) and a speed trap (COPS light, small fine)
+  - [x] An optional stop: the Gas-N-Go 47 drive-through
+  - [x] Route map: the course chart (see M2)
+  - [ ] Gravity wells and slingshots, traffic lanes near stations
+  - [ ] Cockpit gizmos and toys, rumble polish, real 3D comm heads, cockpit poses
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
 - [ ] **M7: Home & style**: wardrobe, decor, bigger apartment, new ships, docking computer, forklift minigame
 - [ ] **M8: Story & clients**: clients and systems with storylines; the husband's story
@@ -74,8 +86,8 @@ reworked checklist here), then whatever you choose.
 
 ## Next up
 
-Your playtest of round 7 (rounds 5 and 6 questions are folded in). Then the
-audit your revised brief asks for, then your call on what's next.
+Your playtest of round 8. Then the audit your revised brief asks for, then
+your call on what's next.
 
 ## M2 in short
 
@@ -89,10 +101,9 @@ cartoon bonks that knock your cargo condition, and basic saving.
 
 ## Notes from your playtests (for upcoming milestones)
 
-- **Travel between solar systems can take a lot longer** than the sandbox's
-  5 km hop. We'll plan that when routes and systems arrive (M2 route length,
-  M5 route map). Remember the brief's dev default of short legs so testing
-  stays quick; the real length will be a tuning value.
+- **Travel between solar systems can take a lot longer** (round 8: the
+  Tidewater haul is 18 minutes cruising, 6 on boost, at your request). The
+  course chart's autopilot keeps long hauls chill.
 - **The ship:** round 4 is a cargo hauler (truck cab + container rack +
   engine block). Real art can replace `scenes/flight/ShipVisual.tscn` any
   time.
@@ -136,6 +147,10 @@ Ideas that aren't in the plan. Nothing here gets built without your OK.
 - ~~**"Stop the ship" assist**~~: declined in the round-2 playtest.
 - **The boot screen in PS1 style.** It's still a plain setup/input check;
   it becomes the main menu in M10, and gets the PS1 treatment then.
+- **More things on the road** (from `docs/ROUTE_EVENTS.md`): a weigh
+  station, a scenic overlook, a construction zone, a broken-down trucker to
+  help, a hitchhiker beacon, lost cargo pods to return, message buoys with
+  lore.
 - **Look around** with the right stick (orbit the chase cam, or turn your head
   in the cockpit). The controls already exist in the input map; it would fit
   nicely with the 3D cockpit in M5.

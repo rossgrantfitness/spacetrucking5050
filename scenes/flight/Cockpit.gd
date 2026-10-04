@@ -19,6 +19,8 @@ const LED_COLORS: Array[Color] = [Color(0.3, 1.0, 0.45), Color(1.0, 0.7, 0.2), C
 
 ## Where the nav screen points (the truck stop, for now). Set by the flight scene.
 var destination: Node3D
+## Its name, for the NAV screen.
+var destination_name: String = ""
 
 var _ship: Ship
 var _status_screen: CockpitScreen
