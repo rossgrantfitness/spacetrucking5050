@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
 [ext_resource type="Resource" path="res://data/systems/home_system.tres" id="2_system"]
-[ext_resource type="Resource" path="res://data/jobs/practice_haul.tres" id="24_job"]
+[ext_resource type="PackedScene" path="res://scenes/flight/BaseStation.tscn" id="26_base"]
+[ext_resource type="Script" path="res://scenes/flight/ApproachRing.gd" id="27_ring"]
 [ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
 [ext_resource type="Script" path="res://scenes/common/Starfield.gd" id="3_stars"]
 [ext_resource type="PackedScene" path="res://scenes/flight/Ship.tscn" id="4_ship"]
@@ -80,7 +81,6 @@ shader = ExtResource("11_lines_shader")
 [node name="FlightSandbox" type="Node"]
 script = ExtResource("1_sandbox")
 system = ExtResource("2_system")
-practice_job = ExtResource("24_job")
 
 [node name="World" type="Node3D" parent="."]
 
@@ -111,7 +111,7 @@ follow_camera = true
 current = true
 fov = 70.0
 near = 0.3
-far = 12000.0
+far = 18000.0
 script = ExtResource("5_chase")
 target = NodePath("../Ship")
 
@@ -119,14 +119,43 @@ target = NodePath("../Ship")
 script = ExtResource("6_dust")
 
 [node name="AsteroidField" type="Node3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2400)
-script = ExtResource("7_field")
-
-[node name="Station" parent="World" instance=ExtResource("8_station")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5300)
+script = ExtResource("7_field")
+rock_count = 800
+field_size = Vector3(2600, 800, 7600)
+landmark_count = 12
 
-[node name="DockPoint" type="Marker3D" parent="World/Station"]
+[node name="Places" type="Node3D" parent="World"]
+
+[node name="base" type="Node3D" parent="World/Places"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 250)
+
+[node name="BaseStation" parent="World/Places/base" instance=ExtResource("26_base")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/base"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -300)
+script = ExtResource("27_ring")
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -550)
+
+[node name="truck_stop" type="Node3D" parent="World/Places"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10600)
+
+[node name="Station" parent="World/Places/truck_stop" instance=ExtResource("8_station")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/truck_stop"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/truck_stop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 480)
+script = ExtResource("27_ring")
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/truck_stop"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
 
 [node name="SkyBackdrop" type="Node3D" parent="World"]
 script = ExtResource("15_sky")
@@ -146,7 +175,7 @@ mesh = SubResource("TorusMesh_planet_ring")
 [node name="Commuter" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")
 visual_scene = ExtResource("19_capsule")
-waypoints = PackedVector3Array(150, 520, -4500, 260, 560, -2500, 200, 520, -300, 0, 450, 500, -220, 400, -300, -260, 460, -2500, -150, 420, -4500, 0, 300, -4800)
+waypoints = PackedVector3Array(150, 520, -9800, 260, 560, -5000, 200, 520, -900, 0, 450, -200, -220, 400, -900, -260, 460, -5000, -150, 420, -9800, 0, 300, -10100)
 speed = 70.0
 start_fraction = 0.55
 engine_trail_color = Color(0.45, 0.85, 1, 1)
@@ -155,7 +184,7 @@ hull_size = Vector3(14, 7, 34)
 [node name="Orbiter" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")
 visual_scene = ExtResource("20_box")
-waypoints = PackedVector3Array(700, 180, -5300, 494.975, 222.426, -4805.03, 4.28626e-14, 240, -4600, -494.975, 222.426, -4805.03, -700, 180, -5300, -494.975, 137.574, -5794.97, -1.28588e-13, 120, -6000, 494.975, 137.574, -5794.97)
+waypoints = PackedVector3Array(700, 180, -10600, 494.975, 222.426, -10105, 4.28626e-14, 240, -9900, -494.975, 222.426, -10105, -700, 180, -10600, -494.975, 137.574, -11095, -1.28588e-13, 120, -11300, 494.975, 137.574, -11095)
 speed = 40.0
 engine_trail_color = Color(0.45, 0.85, 1, 1)
 hull_size = Vector3(5, 5, 20)
@@ -163,11 +192,38 @@ hull_size = Vector3(5, 5, 20)
 [node name="Courier" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")
 visual_scene = ExtResource("23_courier")
-waypoints = PackedVector3Array(480, -60, -5300, 240, -38.3494, -4884.31, -240, -81.6506, -4884.31, -480, -60, -5300, -240, -38.3494, -5715.69, 240, -81.6506, -5715.69)
+waypoints = PackedVector3Array(480, -60, -10600, 240, -38.3494, -10184.3, -240, -81.6506, -10184.3, -480, -60, -10600, -240, -38.3494, -11015.7, 240, -81.6506, -11015.7)
 speed = 85.0
 start_fraction = 0.4
 max_bank_degrees = 40.0
 engine_trail_color = Color(1, 0.45, 0.35, 1)
+hull_size = Vector3(12, 12, 26)
+
+[node name="LongHauler" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("19_capsule")
+waypoints = PackedVector3Array(900, -250, -9500, 950, -200, -5300, 900, -250, -1000, 700, -150, -400, 600, -250, -1000, 650, -300, -5300, 700, -250, -9500, 800, -200, -10000)
+speed = 60.0
+start_fraction = 0.2
+engine_trail_color = Color(1, 0.75, 0.35, 1)
+hull_size = Vector3(14, 7, 34)
+
+[node name="FreightLane" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("20_box")
+waypoints = PackedVector3Array(-900, 300, -800, -1000, 350, -5300, -950, 300, -9600, -700, 250, -9900, -650, 300, -9600, -700, 350, -5300, -650, 300, -800, -800, 280, -500)
+speed = 50.0
+start_fraction = 0.7
+engine_trail_color = Color(0.6, 1, 0.5, 1)
+hull_size = Vector3(5, 5, 20)
+
+[node name="BaseShuttle" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("23_courier")
+waypoints = PackedVector3Array(500, 200, 300, 350, 250, -150, 0, 230, -350, -350, 200, -150, -500, 180, 300, -350, 160, 800, 0, 180, 1000, 350, 200, 800)
+speed = 70.0
+max_bank_degrees = 40.0
+engine_trail_color = Color(1, 0.45, 0.8, 1)
 hull_size = Vector3(12, 12, 26)
 
 [node name="PSXScreen" type="CanvasLayer" parent="."]

@@ -3,7 +3,8 @@ extends HudWidget
 ## Top left: the radio. Signal bars and the station's dial number and name
 ## on top; the song (or ad) scrolls underneath like an old LED sign, one
 ## letter at a time. Flipping stations (Q / E, D-pad left / right) fills it
-## with static for a moment. Storms knock the signal bars down.
+## with static for a moment. Storms knock the signal bars down. With the
+## radio off (R / D-pad up) it goes dark.
 ## (A comm call slides in over the top of it.)
 
 
@@ -45,6 +46,8 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 
 ## How many of the four signal bars are lit.
 func signal_bars() -> int:
+	if not Radio.powered:
+		return 0
 	var strength := Radio.signal_strength
 	var rig := ship()
 	if rig != null:
@@ -69,8 +72,11 @@ func _draw() -> void:
 		var bar_height := 2.0 + i
 		box(Rect2(corner.x + i * 3.0, corner.y + 5.0 - bar_height, 2.0, bar_height), GREEN if i < _bars else tint(0.2))
 	var tuning := _tuning > 0.0
-	text(corner + Vector2(15, 0), ("%s %s" % [station.frequency, station.display_name]), YELLOW if tuning else tint(0.9))
+	text(corner + Vector2(15, 0), ("%s %s" % [station.frequency, station.display_name]), YELLOW if tuning else tint(0.9 if Radio.powered else 0.35))
 	var line_spot := corner + Vector2(0, 8)
+	if not Radio.powered:
+		text(line_spot, "RADIO OFF · R TO TURN ON", tint(0.5))
+		return
 	if tuning:
 		var noise := ""
 		for i in WINDOW_LETTERS:

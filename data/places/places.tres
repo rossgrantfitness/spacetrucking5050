@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlaceList" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="2_place"]
+[ext_resource type="Resource" path="res://data/places/base.tres" id="3_base"]
+[ext_resource type="Resource" path="res://data/places/truck_stop.tres" id="4_truck_stop"]
+
+[resource]
+script = ExtResource("1_list")
+places = Array[ExtResource("2_place")]([ExtResource("3_base"), ExtResource("4_truck_stop")])

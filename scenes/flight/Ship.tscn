@@ -46,7 +46,7 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -14.5)
 fov = 70.0
 near = 0.2
-far = 12000.0
+far = 18000.0
 script = ExtResource("4_cockpit")
 
 [node name="ShipControls" type="Node" parent="."]

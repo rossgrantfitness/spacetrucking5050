@@ -93,6 +93,22 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var economy_red: float = 0.7
 
 
+@export_group("Prices")
+
+## What filling the main fuel tank from empty costs. A half-empty tank
+## costs half. (Your home base's pumps are free.)
+@export_range(0, 10000, 5) var fuel_tank_price: int = 90
+
+## What filling the boost tank from empty costs.
+@export_range(0, 10000, 5) var boost_tank_price: int = 120
+
+## What patching a fully battered hull costs at a garage.
+@export_range(0, 10000, 5) var hull_repair_price: int = 220
+
+## A can of neon soda from the vending machine.
+@export_range(0, 1000, 1) var soda_price: int = 2
+
+
 @export_group("On foot")
 
 ## How fast the bunny walks around the base.
@@ -113,7 +129,7 @@ extends Resource
 ## picture when you enter, and the bunny walks in front of it. This is the
 ## picture's size compared to your screen. Lower = softer, older-looking
 ## backgrounds (and faster to paint).
-@export_range(0.25, 1.0, 0.05) var prerender_scale: float = 0.75
+@export_range(0.25, 1.0, 0.05) var prerender_scale: float = 0.6
 
 
 @export_group("Bonks and damage")
@@ -355,27 +371,27 @@ extends Resource
 ## rows tall (the grid is as wide as your screen's shape needs). Fewer rows =
 ## wobblier: 240 is early-PS1 jelly, 480 is a late-PS1 shimmer, 1000+ is
 ## nearly still. It doesn't change the screen's resolution.
-@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 360.0
+@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 240.0
 
 ## How much textures bend and swim on big polygons close to the camera, the
 ## PS1's famous "affine" warping. 0 = modern, 1 = full PS1.
-@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.35
+@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.6
 
 ## Shades per color channel. The PS1 had 32. Lower = more posterized.
-@export_range(4.0, 256.0, 1.0) var color_levels: float = 32.0
+@export_range(4.0, 256.0, 1.0) var color_levels: float = 26.0
 
 ## How strong the fine checkered dither pattern is. 0 = off.
-@export_range(0.0, 2.0, 0.05) var dither_strength: float = 0.9
+@export_range(0.0, 2.0, 0.05) var dither_strength: float = 1.3
 
 ## How big the dither dots are: sized as if the screen had this many rows,
 ## so the pattern looks the same on any screen. Fewer = chunkier dots.
-@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 360.0
+@export_range(120.0, 2160.0, 10.0) var dither_rows: float = 270.0
 
 ## Where the solar system's colored distance haze starts, and where it's at
 ## its thickest. It tints faraway things with the system's haze color (set in
 ## the system's data file).
 @export_range(0.0, 10000.0, 50.0, "suffix:m") var haze_start: float = 1200.0
-@export_range(100.0, 20000.0, 50.0, "suffix:m") var haze_end: float = 10000.0
+@export_range(100.0, 20000.0, 50.0, "suffix:m") var haze_end: float = 14000.0
 
 ## How thick the haze gets at its thickest (0 = none, 1 = solid color).
 @export_range(0.0, 1.0, 0.05) var haze_strength: float = 0.75

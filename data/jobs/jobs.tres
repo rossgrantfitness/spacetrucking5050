@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JobList" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="2_job"]
+[ext_resource type="Resource" path="res://data/jobs/first_pie_run.tres" id="3_first_pie_run"]
+[ext_resource type="Resource" path="res://data/jobs/gnome_run.tres" id="4_gnome_run"]
+[ext_resource type="Resource" path="res://data/jobs/pie_run.tres" id="5_pie_run"]
+[ext_resource type="Resource" path="res://data/jobs/mail_bags.tres" id="6_mail_bags"]
+[ext_resource type="Resource" path="res://data/jobs/spare_parts.tres" id="7_spare_parts"]
+
+[resource]
+script = ExtResource("1_list")
+jobs = Array[ExtResource("2_job")]([ExtResource("3_first_pie_run"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts")])

@@ -1,13 +1,16 @@
 [gd_resource type="Resource" script_class="RadioStation" format=3]
 
 [ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/subspace_fm/placeholder_loop.wav" id="2_loop"]
 
 [resource]
 script = ExtResource("1_station")
 display_name = "SUBSPACE FM"
 frequency = "104.2"
 genre = "Drum & bass"
+music_folder = "res://audio/radio/subspace_fm/music"
+ads_folder = "res://audio/radio/subspace_fm/ads"
+placeholder_loop = ExtResource("2_loop")
 dj_name = "DJ Lowkey Lou"
 tracks = PackedStringArray("HULL BREACH COLLECTIVE - ROLLERS FOR THE LONG HAUL", "AMEN NEBULA - NOTHING BUT TAILLIGHTS", "DOUBLE PARKED - TWO STEP TO THE PUMPS", "THE ODOMETERS - 5050 BPM (NOT REALLY)", "SLEEPY COMET - DUST ON THE WINDSHIELD", "CARGO CULT - LIQUID LOAD")
 ads = PackedStringArray("MOON MILK. NOW WITH 30% LESS GRAVITY.", "DR. SPRINKLE'S HULL PUTTY. IT'S ALSO A SNACK.", "TIRED OF ASTEROIDS? MOVE TO ANOTHER PART OF SPACE. ASK US HOW.")
-track_seconds = 150.0

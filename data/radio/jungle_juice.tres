@@ -1,13 +1,16 @@
 [gd_resource type="Resource" script_class="RadioStation" format=3]
 
 [ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/jungle_juice/placeholder_loop.wav" id="2_loop"]
 
 [resource]
 script = ExtResource("1_station")
 display_name = "JUNGLE JUICE"
 frequency = "99.1"
 genre = "Jungle"
+music_folder = "res://audio/radio/jungle_juice/music"
+ads_folder = "res://audio/radio/jungle_juice/ads"
+placeholder_loop = ExtResource("2_loop")
 dj_name = "MC Fernbiscuit"
 tracks = PackedStringArray("BRANCH MANAGER - SWING LOW SWEET ROCKET", "THE CANOPY - VINES IN ZERO G", "MANGO SATELLITE - BREAKBEAT BREAKFAST", "TOAD MECHANIC - RUSTY RIDDIM", "FERN TEMPLE - STILL GROWING")
 ads = PackedStringArray("WIGGLE'S WORMHOLE CAR WASH. IN ONE END, OUT THE OTHER.", "SPACE JERKY: MYSTERIOUSLY CHEWY SINCE FOREVER.")
-track_seconds = 140.0

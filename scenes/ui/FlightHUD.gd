@@ -15,7 +15,7 @@ extends CanvasLayer
 ##              (bottom middle), fuel + economy + hull (bottom right)
 ##   middle:    flight marker, mouse ring, status lights (left edge)
 ##   pop-ins:   comm calls, docking brackets, rush timer, ship ID labels,
-##              jump charge
+##              jump charge, and a banner for messages ("AUTOPILOT DOCKING")
 ##
 ## The player can hide it all from the pause menu or with H / D-pad down
 ## (comm calls still pop in). In cockpit view the bottom row steps aside,
@@ -28,10 +28,11 @@ enum Kind { ROCK, SHIP, STATION }
 ## How long the controls reminder stays up, in seconds.
 const HINT_SECONDS: float = 25.0
 
-## The rig we're flying, where we're headed, and the job (or null).
+## The rig we're flying, and where we're headed (and its name). The job
+## being hauled comes from GameState.
 var ship: Ship
 var destination: Node3D
-var haul: Haul
+var destination_name: String = ""
 ## The solar system's signature color, used for the HUD's frames.
 var tint := Color.WHITE
 ## Seconds since the flight started (for blinking).
@@ -69,13 +70,19 @@ func _ready() -> void:
 	_refresh()
 
 
-## Tells the HUD which ship to show, where it's headed, the job, and the
-## solar system's color.
-func setup(new_ship: Ship, new_destination: Node3D, new_haul: Haul, system_tint: Color) -> void:
+## Tells the HUD which ship to show, where it's headed (and that place's
+## name), and the solar system's color.
+func setup(new_ship: Ship, new_destination: Node3D, new_destination_name: String, system_tint: Color) -> void:
 	ship = new_ship
 	destination = new_destination
-	haul = new_haul
+	destination_name = new_destination_name
 	tint = system_tint
+
+
+## Pops up a message in the middle of the top of the screen for `seconds`
+## (0 = until another message replaces it).
+func show_banner(text: String, seconds: float) -> void:
+	($Pixels/Banner as Banner).show_text(text, seconds)
 
 
 func set_cockpit_view(in_cockpit: bool) -> void:
@@ -152,7 +159,7 @@ func _gather_contacts() -> void:
 					"kind": Kind.SHIP, "label": traffic.id_label})
 	if destination != null:
 		contacts.append({"position": destination.global_position, "radius": 0.0, "kind": Kind.STATION,
-				"label": haul.job.destination_name if haul != null else ""})
+				"label": destination_name})
 
 
 ## Sizes the HUD picture to the window: as close to `hud_rows` rows as

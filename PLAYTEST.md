@@ -1,93 +1,110 @@
-# Playtest: round 6 (the Wipeout-style HUD and comm chatter)
+# Playtest: round 7 (the first mission, the truck stop, the radio)
 
-**What you asked for:** a full HUD from your list, styled like Wipeout PSX:
-a pixel font at low resolution, segmented bars, a strict palette, jittery
-ticking numbers, pop-ins that slide in a few frames at a time, a hide
-toggle, and HUD chatter. Lots of it tiny.
+**What you asked for:** a first mission, the truck stop twice as far away,
+an inside for the truck stop where you take that mission (with room to grow
+into a hub), the radio system so you can start making stations, and more
+wobble and dither. "Do a lot of work before you ask me again."
 
-**Time needed:** 15 minutes.
+**Time needed:** 30-40 minutes (the trip is longer now, on purpose).
 
-> Honest note: I checked all of this with screenshots at 1280x720, 800x600
-> and in cockpit view, plus automated test flights. Whether it has the
-> *vibe*, whether anything is too tiny to read on your screen, and whether
-> the chatter is charming or annoying are yours to judge.
+> Honest note: I played all of this with automated test runs (the whole
+> first mission plays itself start to finish in the checks) and looked at
+> screenshots of every room angle. How long the trip feels, whether the
+> truck stop feels cozy and big in a good way, and whether the wobble and
+> dither are too much are yours to judge. I couldn't *hear* anything: the
+> placeholder beats are made from math and might sound odd.
 
 ---
 
 ## What's new
 
-**The HUD is drawn small, then blown up with chunky square pixels**, so it
-looks like a real PS1 HUD at any screen size. It ticks at 30 fps and its
-numbers jump 8 times a second on purpose.
+**The first mission**
+- Start a **new game** (boot screen: "start a new game"; it'll say
+  CONTINUE from now on, because the game saves itself).
+- Talk to **Dottie** at dispatch: Marge, who runs the truck stop, needs a
+  hauler. Board the rig.
+- Fly to the **truck stop, now about 10 km out** past the asteroid field (a
+  ~3 minute drive at the rig's top speed). Follow the yellow diamond on the
+  compass strip.
+- Fly through the big **glowing ring** in front of the bay: the
+  **autopilot docks you**, and you climb out inside.
+- Find **Marge** behind the diner counter. Take her **pie run**: nebula
+  pies (fragile!) for your base's cafeteria. 450 credits, plus up to 150
+  if they arrive without a scratch.
+- Fly home, through the base's ring (the base is a huge old starship now,
+  sitting right behind where you launch). You get paid when you climb out:
+  a **payout card** shows the bonus breakdown.
+- That opens the **job boards** at both places (4 repeatable jobs), so you
+  can keep hauling back and forth.
 
-| Where | What |
-|---|---|
-| Bottom left | Speed in big slanted digits, a segmented bar with a **red redline**, yellow **overflow** segments when boosting past it, and a yellow **throttle tick**. The tiny **BST** bar under it is your boost tank. |
-| Bottom middle | A spinning **wireframe radar globe**: rocks are dim green dots (red when close), ships are yellow with stalks, the truck stop is a blinking green diamond. |
-| Bottom right | **Fuel** as a segmented arc, the **ECO** arrow (green / yellow / red), and a tiny **rig picture** that flashes red where you bonked, with the hull % on top. |
-| Top middle | A sliding **compass strip** with a yellow diamond toward the truck stop and the distance, the **ETA** counting down, and the **RUSH** timer. |
-| Top left | The **radio**: signal bars, station, and the song or ad scrolling like an LED sign. **Q / E** (D-pad left/right) flips stations with static. |
-| Top right | **CARGO %** (ticks down when you bonk) and **PAY** (ticks up and down as bonuses come and go). |
-| Middle | A tiny **flight marker** where your momentum is taking you (not a gun sight). |
-| Left edge | Five dark **warning lights**: PROX, GRAV, STORM, COPS, FUEL. |
-| Pop-ins | **Comm calls** (top left), **docking brackets** near the bay, **ship ID labels** ("PET GROOMING SHIP"), **jump charge**. |
+**The truck stop inside** (big on purpose, with room to grow)
+- **Marge's Diner:** counter, stools, booths (Big Wendell is in one), a pie
+  case and a **jukebox** that plays the radio through the speakers.
+- **Job board** in front of a huge window onto space.
+- **Dusty's Garage:** patch the hull, buy **upgrades**. Hot-Rod Injectors
+  (+25% top speed, 1400 credits) is the one you should *feel*. Also Twin
+  Afterburners, Power Steering and Saddle Tanks.
+- **Lily's Pumps:** buy fuel and boost fuel (the base's pumps are free).
+- **Arcade lounge:** Pip's at the cabinets; a vending machine with neon
+  soda; restrooms.
+- **"Coming soon" shops:** Outfitters, Home & Decor, Insurance and the Nap
+  Motel, shuttered for now. That's where wardrobe, decor, insurance and
+  rest go later.
+- Look at things with **E**: windows, cabinets, the pie case, the porthole...
 
-**Comm chatter:** Dottie calls after takeoff; Marge at truck stop control
-when you get close; Big Wendell and Pip make small talk, tease your bonks
-and cheer your boosts. Static before and after, typed words, gibberish blips,
-mouth flaps. (The portraits are placeholders; the character bible's real 3D
-heads come in M5.)
+**The radio plays real music now**
+- Drop songs into a station's folder and they play:
+  `audio/radio/subspace_fm/music/` and friends. Name them
+  `Artist - Title.ogg` (or .mp3 / .wav). Full guide:
+  **`audio/radio/README.md`**. Until a station has songs, it plays a short
+  made-up placeholder beat in its genre.
+- Stations keep playing while you're tuned away, like real radio.
+- **Q / E** flip stations, **R** (D-pad up) turns the radio off: then soft
+  ambient music plays, swelling a little when you fly fast.
+- **MY TUNES (00.0)** plays your own files from the game's
+  `radio/custom/` folder (Godot: Project → Open User Data Folder).
+- Radio volume is in the pause menu.
 
-**Also new, so the HUD has something to show:**
-- **Main fuel.** Thrusting burns it, more at high speed. Coasting is free.
-  An empty tank never strands you (you crawl on fumes). The truck stop
-  tops you up.
-- **A practice haul:** garden gnomes (fragile) for the truck stop diner, a
-  rush job. Fly up to the docking bay to deliver; the top right flashes
-  DELIVERED and what it paid. (Pretend money for now; real pay is M2.)
-- **Hide the HUD** with **H** / D-pad down (calls still pop in).
-- **F9 = HUD demo:** lights every warning and the jump charge, so you can
-  see the ones that have nothing to trigger them yet (gravity wells, storms,
-  cops and jump points arrive with M5).
+**More PS1:** wobblier models, more texture swim, fewer colors with a
+stronger, chunkier dither, and softer painted backgrounds in the rooms.
 
 ## What to do
 
-1. Pull the update, press **F5**, then the small "fly" button on the boot
-   screen (or walk to the ship).
-2. Fly to the truck stop normally. Watch the HUD, let Dottie talk, flip the
-   radio a few times.
-3. Bonk a rock or two: watch the rig picture, CARGO and PAY.
-4. Hold **W** at top speed and watch the ECO arrow, then let go and coast.
-5. Boost a bit. Then fly into the docking bay to deliver.
-6. Press **F9** to see every warning lit, and **C** for cockpit view.
-7. Press **H** to hide the HUD and fly a minute with only the cockpit.
-8. Optional knobs in `data/tuning.tres`: **HUD** (pixel size, frame rate,
-   number rate, pop-in steps, radar range) and **Comms chatter** (how often
-   people call, how fast they talk).
+1. Pull the update. Open the project in Godot (let it import), press **F5**.
+2. Click **start a new game** and play the first mission start to finish.
+3. Spend your pay: fuel at Lily's, then do two more jobs and buy the
+   **Hot-Rod Injectors** from Dusty. Fly. Feel the difference?
+4. Put a song or two into `audio/radio/subspace_fm/music/` and listen in
+   the cockpit. Try **MY TUNES** with your own folder.
+5. Walk every corner of the truck stop. Use the jukebox. Talk to everyone.
+6. Optional knobs in `data/tuning.tres`: **PS1 look** (wobble, dither,
+   color shades), **Prices**, **HUD**, **Comms chatter**.
 
 ## What to pay attention to
 
-- Does it feel like a late-90s PlayStation HUD? Wipeout enough?
-- Is anything too tiny to read, or too big? (`hud_rows` makes everything
-  bigger or smaller at once: fewer rows = bigger pixels.)
-- Is the screen calm enough while flying, or still cluttered?
-- Is the chatter cozy, or too frequent?
+- Does the ~3 minute trip feel like a nice cruise, or too long?
+- Is docking through the ring satisfying? Is the ring easy to find?
+- Does the truck stop feel cozy, big and alive? Which camera angles work?
+- Is the PS1 look now "old enough", or too crunchy?
+- Does the money feel right? (Starting 150, the first job pays up to 600,
+  fuel at the truck stop up to 90 a tank, the speed upgrade 1400.)
 
 ---
 
 ## Questions for you
 
-1. **Overall vibe:** does it read as Wipeout PSX? What's the first thing
-   you'd change?
-2. **Size:** right now the HUD is drawn as if your screen were 360 pixels
-   tall. Want it chunkier (say 300) or finer (say 420)?
-3. **Chatter:** how often should people call? (Small talk is every 50 to
-   110 seconds now.) Any characters you want on the comms instead?
-4. **Fuel and economy:** does the fuel/ECO arrow make you want to coast and
-   save fuel, or does it feel like a chore?
-5. **Next in the cockpit:** want the attitude ball, clock, check-engine
-   light, soda can and the tablet (manifest, logbook, star chart,
-   insurance) next round, or straight on to the audit and M2?
+1. **The first mission:** does Marge's pie run work as a first mission? Is
+   the story setup (Dottie → Marge) the right amount of talking?
+2. **Distance and docking:** is 10 km (about 3 minutes) the right drive for
+   now? Is the autopilot docking too long, too short, or just right?
+3. **The truck stop:** what should open first behind those "coming soon"
+   shutters (outfits, decor, insurance, motel), and is anything missing that
+   a truck stop should have?
+4. **The look:** more wobble and dither, less, or just right? (All in
+   `tuning.tres` → PS1 look.)
+5. **The radio:** how do you want to make your stations? Tell me each
+   station's name, genre, DJ and vibe, and I'll set up their files (and DJ
+   lines and fake ads) for you.
 
 ## Still open from round 5 (walking the base)
 

@@ -20,6 +20,12 @@ func _process(delta: float) -> void:
 	var tuning := GameState.tuning
 	var wanted_fov := ChaseCamera.fov_for(_ship, tuning)
 	fov = lerpf(fov, wanted_fov, 1.0 - exp(-tuning.fov_response * delta))
+
+
+# The head sway moves the camera, so it happens in the physics step: the
+# camera rides on the ship, which Godot smooths between physics steps.
+func _physics_process(delta: float) -> void:
+	var tuning := GameState.tuning
 	# Your head lags the cab a little: turning right leans you left, pitching
 	# up presses you down into the seat.
 	var turn := _ship.flight.turn_amount(_ship.ship_data)

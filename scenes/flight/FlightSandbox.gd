@@ -1,31 +1,39 @@
 extends Node
-## M1's flight sandbox: just you, the rig, a field of tumbling rocks and a
-## truck stop glowing in the distance. Fly around and see how it feels.
+## Flying around the home system: the base (where you live), an asteroid
+## field, and the truck stop about 10 km out, with traffic in between.
 ##
-## This script wires the pieces together and handles the camera switch
-## (chase cam <-> cockpit), the mouse, and the pause menu's buttons.
+## This script wires the pieces together:
+## - LAUNCHING: the rig starts outside whichever place you boarded at
+##   (GameState.launch_from), with its tanks, hull and cargo as you left them.
+## - WHERE TO: the HUD points at your job's destination, or (with no job) at
+##   the other place.
+## - DOCKING: fly through a place's glowing approach ring and the autopilot
+##   takes over and flies you into the bay. Then you climb out inside: a job
+##   for that place gets delivered and paid, and the base's own pumps fill
+##   you up for free.
+## - The camera switch (chase cam <-> cockpit), the radio buttons, the HUD
+##   buttons and the pause menu.
+##
+## Each place is a node under World/Places named after its id in
+## res://data/places/ (like "truck_stop"), holding the station's model, a
+## DockPoint, an ApproachRing and a LaunchPoint. Move them in the editor.
 ##
 ## The 3D world lives under "World". PSXScreen adds the PS1-style color and
-## dither on top of it; the HUD, cockpit frame and menus are drawn after that,
-## so they stay crisp.
+## dither on top of it; the HUD and menus are drawn after that.
 
 
 ## The solar system we're in (its colors tint the space dust, the haze and
 ## the HUD's frames).
 @export var system: SystemData
-## The practice job riding along, so the HUD has cargo, pay and a rush timer
-## to show. (The real job board arrives with M2.)
-@export var practice_job: JobData
-## Fly within this many meters of the docking bay to deliver the job.
-@export var delivery_radius: float = 300.0
-## Fly within this many meters of the truck stop and both fuel tanks top up.
-## (A sandbox stand-in: buying fuel for credits arrives in M2.)
-@export var refuel_radius: float = 900.0
-## Seconds for a full boost-fuel top-up at the truck stop.
-@export var refuel_seconds: float = 4.0
-## Seconds to patch a fully battered hull at the truck stop. (Also a sandbox
-## stand-in: repairs at the hangar, for credits, come later.)
-@export var repair_seconds: float = 8.0
+## How fast the docking autopilot flies, in m/s.
+@export var docking_speed: float = 45.0
+
+## Place id -> its node under World/Places.
+var _places: Dictionary = {}
+var _destination_id: String = ""
+var _docking_at: String = ""
+var _in_cockpit := false
+var _fade: ScreenFade
 
 @onready var _ship: Ship = $World/Ship
 @onready var _chase_camera: ChaseCamera = $World/ChaseCamera
@@ -35,45 +43,54 @@ extends Node
 @onready var _environment: WorldEnvironment = $World/WorldEnvironment
 @onready var _hud: FlightHUD = $FlightHUD
 @onready var _pause_menu: PauseMenu = $PauseMenu
-@onready var _station: Node3D = $World/Station
-@onready var _dock: Node3D = $World/Station/DockPoint
-@onready var _chatter: CommChatter = $CommChatter
 @onready var _nebula: MeshInstance3D = $World/SkyBackdrop/Nebula
-
-var _start := Transform3D.IDENTITY
-var _in_cockpit := false
-var _haul: Haul
+@onready var _chatter: CommChatter = $CommChatter
 
 
 func _ready() -> void:
-	_start = _ship.global_transform
+	_fade = ScreenFade.new()
+	add_child(_fade)
+	_fade.cover()
+	# The rig, with every upgrade you've bought.
+	_ship.ship_data = GameState.upgraded_ship(_ship.ship_data)
+	for node in $World/Places.get_children():
+		if GameState.places.find(node.name) != null:
+			_places[node.name] = node
+	_launch_from(GameState.launch_from)
+	_restore_rig()
+	_destination_id = _pick_destination()
+	var dock := _dock_node(_destination_id)
 	_dust.ship = _ship
 	_dust.tint = system.signature_color
-	_ship.cockpit.destination = _station
+	_ship.cockpit.destination = dock
 	_speed_lines.ship = _ship
-	_haul = Haul.new(practice_job)
-	_hud.setup(_ship, _dock, _haul, system.signature_color)
-	_chatter.start(_ship, _hud.comm, _dock)
+	_hud.setup(_ship, dock, GameState.places.find(_destination_id).display_name, system.signature_color)
+	_chatter.start(_ship, _hud.comm, _places)
+	_ship.autopilot_arrived.connect(_on_autopilot_arrived)
 	_apply_system_colors()
 	_pause_menu.resumed.connect(_capture_mouse)
-	_pause_menu.back_to_start_pressed.connect(_back_to_start)
+	_pause_menu.back_to_start_pressed.connect(_back_to_launch_point)
 	_pause_menu.quit_to_title_pressed.connect(_quit_to_title)
-	_pause_menu.dock_pressed.connect(_dock_at_base)
+	_pause_menu.dock_pressed.connect(func() -> void: _arrive("base"))
 	_set_cockpit_view(false)
 	_capture_mouse()
+	Radio.set_context(Radio.Context.FLIGHT)
+	_fade.fade_in()
 
 
 func _physics_process(delta: float) -> void:
-	_haul.update(delta)
-	if not _haul.delivered and _ship.global_position.distance_to(_dock.global_position) < delivery_radius:
-		_haul.deliver(_ship.cargo_condition)
-		_chatter.say(ChatterSet.Situation.DELIVERED)
-	# The truck stop tops up both tanks and patches the hull while you're near.
-	if _ship.global_position.distance_to(_station.global_position) < refuel_radius:
-		var flight := _ship.flight
-		flight.fuel = minf(flight.fuel + delta / refuel_seconds, 1.0)
-		flight.boost_fuel = minf(flight.boost_fuel + delta / refuel_seconds, 1.0)
-		_ship.repair(delta / repair_seconds)
+	if not GameState.active_job_id.is_empty() and _docking_at.is_empty():
+		GameState.job_seconds += delta
+	# Storms (M5) weaken the radio; flying fast swells the ambient music.
+	Radio.signal_strength = 1.0 - _ship.storm * 0.8
+	Radio.intensity = clampf(_ship.speed_ratio(), 0.0, 1.0)
+	if _docking_at.is_empty():
+		for id: String in _places:
+			var ring := _ring(id)
+			if ring != null and ring.is_inside(_ship.global_position) \
+					and _ship.flight.velocity.dot(ring.through_direction()) > 1.0:
+				_begin_docking(id)
+				break
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -83,6 +100,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		Radio.next_station()
 	elif event.is_action_pressed("radio_previous"):
 		Radio.previous_station()
+	elif event.is_action_pressed("radio_power"):
+		Radio.toggle_power()
+		_hud.show_banner("RADIO ON" if Radio.powered else "RADIO OFF", 1.5)
 	elif event.is_action_pressed("toggle_hud"):
 		Settings.set_show_hud(not Settings.show_hud)
 	elif event.is_action_pressed("hud_demo"):
@@ -91,6 +111,86 @@ func _unhandled_input(event: InputEvent) -> void:
 			_chatter.say(ChatterSet.Situation.IDLE)
 	elif event is InputEventMouseButton and event.is_pressed() and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		_capture_mouse()  # Clicking back into the window grabs the mouse again.
+
+
+## Where the nav points: the job's destination, or the place you didn't
+## launch from.
+func _pick_destination() -> String:
+	var job := GameState.active_job()
+	if job != null and _places.has(job.to_place):
+		return job.to_place
+	for id: String in _places:
+		if id != GameState.launch_from:
+			return id
+	return GameState.launch_from
+
+
+## Puts the rig at a place's launch point, nose out, engines idle.
+func _launch_from(id: String) -> void:
+	var place: Node3D = _places.get(id, _places.get("base"))
+	if place == null:
+		return
+	var launch := place.get_node("LaunchPoint") as Node3D
+	_ship.teleport(launch.global_transform)
+	_chase_camera.snap_behind_target()
+
+
+## Puts the tanks, hull and cargo back the way they were when you docked.
+func _restore_rig() -> void:
+	var rig := GameState.rig
+	_ship.flight.fuel = rig.get("fuel", 1.0)
+	_ship.flight.boost_fuel = rig.get("boost_fuel", 1.0)
+	_ship.hull = rig.get("hull", 1.0)
+	_ship.cargo_condition = rig.get("cargo", 1.0)
+
+
+func _remember_rig() -> void:
+	GameState.rig = {"fuel": _ship.flight.fuel, "boost_fuel": _ship.flight.boost_fuel,
+			"hull": _ship.hull, "cargo": _ship.cargo_condition}
+
+
+func _begin_docking(id: String) -> void:
+	_docking_at = id
+	var ring := _ring(id)
+	var dock := _dock_node(id)
+	var route: Array[Vector3] = [ring.global_position + ring.through_direction() * 40.0, dock.global_position]
+	_ship.fly_route(route, clampf(_ship.flight.speed(), 30.0, docking_speed))
+	_hud.show_banner("AUTOPILOT DOCKING", 0.0)
+	_chatter.say(ChatterSet.Situation.DOCKING, id)
+
+
+func _on_autopilot_arrived() -> void:
+	if not _docking_at.is_empty():
+		_arrive(_docking_at)
+
+
+## Climbs out at a place: delivers a job headed here, fills up at the base,
+## and walks inside.
+func _arrive(id: String) -> void:
+	var place := GameState.places.find(id)
+	if place == null:
+		return
+	_remember_rig()
+	GameState.deliver_at(id)
+	if place.free_fuel:
+		GameState.rig["fuel"] = 1.0
+		GameState.rig["boost_fuel"] = 1.0
+	GameState.launch_from = id
+	GameState.next_spawn = place.arrival_spawn
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	await _fade.fade_out()
+	Radio.set_context(Radio.Context.OFF_AIR)
+	get_tree().change_scene_to_file(place.interior_scene)
+
+
+func _dock_node(id: String) -> Node3D:
+	var place: Node3D = _places.get(id)
+	return place.get_node("DockPoint") as Node3D if place != null else null
+
+
+func _ring(id: String) -> ApproachRing:
+	var place: Node3D = _places.get(id)
+	return place.get_node_or_null("ApproachRing") as ApproachRing if place != null else null
 
 
 func _set_cockpit_view(in_cockpit: bool) -> void:
@@ -127,26 +227,17 @@ func _capture_mouse() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
-func _back_to_start() -> void:
-	_ship.teleport(_start)
-	_ship.repair(1.0)
-	_ship.cargo_condition = 1.0
-	_ship.odometer = 0.0
-	# A fresh copy of the practice job, and dispatch calls again.
-	_haul = Haul.new(practice_job)
-	_hud.haul = _haul
-	_chatter.restart()
-	_chase_camera.snap_behind_target()
+## Pause menu: hop back to where you launched (tanks and cargo as they are).
+func _back_to_launch_point() -> void:
+	_remember_rig()
+	_docking_at = ""
+	_launch_from(GameState.launch_from)
+	_restore_rig()
 	_capture_mouse()
 
 
-## Docks at the base: you climb out at the top of the dispatch stairs.
-func _dock_at_base() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	GameState.next_spawn = "FromShip"
-	get_tree().change_scene_to_file("res://scenes/hub/Dispatch.tscn")
-
-
 func _quit_to_title() -> void:
+	_remember_rig()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Radio.set_context(Radio.Context.OFF_AIR)
 	get_tree().change_scene_to_file("res://scenes/boot/Boot.tscn")

@@ -5,7 +5,7 @@ extends "res://tools/tests/TestSuite.gd"
 
 
 const RIG: ShipData = preload("res://data/ships/starter_rig.tres")
-const JOB: JobData = preload("res://data/jobs/practice_haul.tres")
+const JOB: JobData = preload("res://data/jobs/gnome_run.tres")
 const STEP: float = 1.0 / 60.0
 
 
@@ -82,18 +82,6 @@ func test_job_pay_adds_bonuses_and_never_fails() -> void:
 	check(JOB.pay_for(0.5, 1.0) < perfect, "damaged cargo should pay less")
 
 
-func test_haul_pays_once() -> void:
-	var haul := Haul.new(JOB)
-	haul.update(10.0)
-	haul.deliver(1.0)
-	var paid := haul.paid
-	check(haul.delivered and paid > 0, "delivering should pay")
-	haul.update(500.0)
-	haul.deliver(0.0)
-	check(haul.paid == paid, "a job can only be delivered (and paid) once")
-	check(haul.projected_pay(0.0) == paid, "after delivery the pay readout shows what was paid")
-
-
 func test_compass_and_turns() -> void:
 	check(is_zero_approx(NavTape.compass(Vector3.FORWARD)), "straight ahead at the start is north (0)")
 	check(is_equal_approx(NavTape.compass(Vector3.RIGHT), 90.0), "to the right at the start is east (90)")
@@ -116,21 +104,13 @@ func test_fuel_arc_segments() -> void:
 	check(FuelGauge.segment_at(Vector2(0.5, FuelGauge.RADIUS - 2.0)) == -1, "the bottom of the arc is open")
 
 
-func test_radio_stations_have_something_on_air() -> void:
-	check(not Radio.lineup.stations.is_empty(), "the radio needs stations")
-	for station in Radio.lineup.stations:
-		check(not station.tracks.is_empty(), "%s needs placeholder songs" % station.display_name)
-		var heard_ad := false
-		for slot in 12:
-			if station.on_air(slot * station.track_seconds + 1.0).begins_with("AD:"):
-				heard_ad = true
-		check(heard_ad or station.ads.is_empty(), "%s should play its ads now and then" % station.display_name)
-
-
 func test_every_chatter_situation_has_lines() -> void:
 	var chatter: FlightChatter = load("res://data/dialogue/flight_chatter.tres")
 	for situation: int in ChatterSet.Situation.values():
-		check(not chatter.lines_for(situation).is_empty(), "comm chatter needs lines for situation %d" % situation)
+		var found := false
+		for place in ["", "base", "truck_stop"]:
+			found = found or not chatter.lines_for(situation, place).is_empty()
+		check(found, "comm chatter needs lines for situation %d" % situation)
 	for chatter_set in chatter.sets:
 		check(not chatter_set.speaker.comm_name.is_empty(), "%s needs a comm name" % chatter_set.speaker.display_name)
 

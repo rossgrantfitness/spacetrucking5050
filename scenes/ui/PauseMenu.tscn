@@ -85,15 +85,26 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Gamepad rumble"
 
+[node name="RadioVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Radio volume"
+
+[node name="RadioVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
 [node name="DockAtBase" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Dock at the base (walk around)"
+text = "Get towed home to the base"
 
 [node name="BackToStart" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Back to the start"
+text = "Back to the launch point"
 
 [node name="QuitToTitle" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true

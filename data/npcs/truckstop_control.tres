@@ -1,13 +1,46 @@
 [gd_resource type="Resource" script_class="NPCData" format=3]
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/first_pie_run.tres" id="job_first_pie_run"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_marge")
+lines = PackedStringArray("Well, look at you. You must be Dottie's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My nebula pies are famous on every station in the system. My old hauler retired to a moon, the lucky duck.", "Thirty crates for your base's cafeteria. They wobble, so fly gentle: the prettier they get there, the more I pay.", "Four hundred fifty {currency}, plus up to a hundred fifty more if they arrive in one piece. What do you say, sugar?")
+sets_flags = PackedStringArray("met_marge")
+offers_job = ExtResource("job_first_pie_run")
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_marge")
+blocked_by_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Change your mind about those pies, sugar? They're not getting any fresher.")
+offers_job = ExtResource("job_first_pie_run")
+
+[sub_resource type="Resource" id="Conversation_2"]
+script = ExtResource("2_conv")
+needs_active_job = "first_pie_run"
+lines = PackedStringArray("Pies are loaded, hon. Airlock's on the right, back the way you came.", "Base is about ten clicks back. Fly through their ring and they'll park you. Gentle with my babies.")
+
+[sub_resource type="Resource" id="Conversation_3"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Folks at your base won't stop talking about those pies. You're hired, if you want it.", "Job board's by the big window. Lily's got fuel, Dusty can make that old rig sing. Make yourself at home.")
+
+[sub_resource type="Resource" id="Conversation_4"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Coffee's on. Pie's on. I'm on.", "Don't let Wendell tell you about his cat. Too late? Too late.")
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Marge (Truck Stop traffic control)"
+display_name = "Marge (truck stop)"
 species = "owl"
 voice_pitch = 0.8
-lines = PackedStringArray("...")
-comm_name = "MARGE · TRUCK STOP CTRL"
+lines = PackedStringArray("Coffee's on. Pie's on. I'm on.")
+comm_name = "MARGE · TRUCK STOP"
 fur_color = Color(0.72, 0.55, 0.38, 1)
 accent_color = Color(0.35, 0.95, 1, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])

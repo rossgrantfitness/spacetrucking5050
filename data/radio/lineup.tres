@@ -6,7 +6,8 @@
 [ext_resource type="Resource" path="res://data/radio/jungle_juice.tres" id="3_jungle_juice"]
 [ext_resource type="Resource" path="res://data/radio/late_block.tres" id="4_late_block"]
 [ext_resource type="Resource" path="res://data/radio/lofi_drift.tres" id="5_lofi_drift"]
+[ext_resource type="Resource" path="res://data/radio/my_tunes.tres" id="6_my_tunes"]
 
 [resource]
 script = ExtResource("1_lineup")
-stations = Array[ExtResource("1_station")]([ExtResource("2_subspace_fm"), ExtResource("3_jungle_juice"), ExtResource("4_late_block"), ExtResource("5_lofi_drift")])
+stations = Array[ExtResource("1_station")]([ExtResource("2_subspace_fm"), ExtResource("3_jungle_juice"), ExtResource("4_late_block"), ExtResource("5_lofi_drift"), ExtResource("6_my_tunes")])

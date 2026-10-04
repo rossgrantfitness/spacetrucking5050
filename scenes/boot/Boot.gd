@@ -4,8 +4,9 @@ extends Node3D
 ##
 ## It proves that the project runs, the 3D renderer works on this computer,
 ## the tuning file and player settings load, and every keyboard, mouse and
-## gamepad input reaches the game. "Press Start" wakes you up in your
-## apartment on the base; the small button below jumps straight into flying.
+## gamepad input reaches the game. "Press Start" carries on your saved game
+## (or wakes you up in your apartment for a new one); the small buttons below
+## start over, or jump straight into flying.
 
 
 ## Friendly names for Godot's three renderers.
@@ -31,6 +32,7 @@ const CHIP_LIT_COLOR := Color(1.0, 0.62, 0.28, 0.95)
 @onready var _system_info: Label = %SystemInfo
 @onready var _start_button: Button = %StartFlying
 @onready var _fly_button: Button = %FlySandbox
+@onready var _new_game_button: Button = %NewGame
 
 var _time := 0.0
 var _crate_home_height := 0.0
@@ -58,6 +60,10 @@ func _ready() -> void:
 	Events.settings_changed.connect(_on_settings_changed)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	_start_button.pressed.connect(_start_game)
+	_new_game_button.pressed.connect(_new_game)
+	_new_game_button.visible = SaveSystem.has_save()
+	if SaveSystem.has_save():
+		_start_button.text = "PRESS START TO CONTINUE  (Enter / gamepad Start / click here)"
 	_fly_button.pressed.connect(_start_flying)
 
 
@@ -114,13 +120,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		_start_game()
 
 
-## Wakes up in the apartment, next to the bed.
+## Carries on the saved game in the room you were last in, or starts a
+## new one.
 func _start_game() -> void:
+	if GameState.load_game() and not GameState.current_room.is_empty():
+		get_tree().change_scene_to_file(GameState.current_room)
+	else:
+		_new_game()
+
+
+## Forgets the save and wakes up in the apartment, next to the bed.
+func _new_game() -> void:
+	SaveSystem.delete_save()
+	GameState.new_game()
 	GameState.next_spawn = "Bed"
 	get_tree().change_scene_to_file(APARTMENT_SCENE)
 
 
 func _start_flying() -> void:
+	GameState.load_game()
 	get_tree().change_scene_to_file(FLIGHT_SCENE)
 
 

@@ -60,8 +60,11 @@ double-click it.
 First you'll see the **boot screen**: the title, a lazily tumbling cargo
 crate, and an "INPUT CHECK" panel where every control lights up when you press
 it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
-wake up in your apartment on the base. The small button below it jumps
-straight into the **flight sandbox**. See `PLAYTEST.md` for what to try.
+wake up in your apartment on the base, or to **continue** where you left off
+(the game saves itself whenever you walk into a room, take a job, get paid
+or buy something). The small buttons below jump straight into flying, or
+start a **new game** (that forgets your save). See `PLAYTEST.md` for what
+to try.
 
 ---
 
@@ -83,6 +86,7 @@ Y = △.)
 | Boost | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
 | Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
+| Radio on / off | **R** | D-pad **up** |
 | Hide / show the HUD | **H** | D-pad **down** |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
@@ -100,18 +104,27 @@ how thriftily you're flying. An empty tank never strands you: the engines
 keep crawling along "on fumes".
 
 **Boost** rockets you way past top speed (and gets slidey!). It burns
-**boost fuel** (the tiny **BST** bar), which doesn't refill by itself. Fly
-close to the truck stop to top up both tanks and patch the hull (buying fuel
-comes later).
+**boost fuel** (the tiny **BST** bar), which doesn't refill by itself.
+Docking at the home base fills both tanks for free; at the truck stop,
+Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
+upgrades.
+
+**Docking:** fly through the big glowing **ring** in front of a station's
+bay and the autopilot takes over and parks you. Then you climb out and walk
+around inside. The yellow diamond on the compass strip points at where
+you're headed (your job's destination).
 
 **The HUD** (in the style of Wipeout): speed and boost bottom-left, the
 radar globe bottom-middle, fuel and the hull picture bottom-right, the
 compass strip with distance and ETA at the top, the radio top-left, cargo
 and pay top-right, and warning lights down the left edge. Calls from
-dispatch and other truckers pop in at the top-left. The **practice haul**
-(garden gnomes for the truck stop diner, a rush job) is delivered when you
-fly up to the docking bay; "Back to the start" in the pause menu gives you a
-fresh one.
+dispatch, truck stop control and other truckers pop in at the top-left.
+
+**The radio** plays real music: drop songs into a station's folder and
+they play (see `audio/radio/README.md`). Until then each station plays a
+little placeholder beat. The last station, **MY TUNES**, plays your own
+music files from the game's `radio/custom/` folder. Radio volume is in the
+pause menu.
 
 **The mouse while flying:** it's hidden and locked to the game window, and
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
@@ -127,14 +140,16 @@ opens the pause menu); click the game window to pick the steering back up.
 
 "Up" always walks away from the camera. Doors take you to the next room
 when you walk into them. The ship door at the top of the dispatch stairs
-needs **E** / **A**. To get back from flying, pause → **Dock at the base**.
+(and the airlock at the truck stop) needs **E** / **A**. To get back from
+flying, dock at a station by flying through its ring, or pause → **Get
+towed home**. Your money is in the top-right corner.
 
 ### Menus
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Move around a menu | Arrow keys, or the mouse | D-pad |
-| Choose | **Enter**, or click | **A** |
+| Choose | **E** or **Enter**, or click | **A** |
 | Back | **Esc** | **B** |
 
 **Invert Y:** by default, pushing up points the ship's nose up. If you prefer

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeList" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="2_upgrade"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_1.tres" id="3_speed_1"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_2.tres" id="4_speed_2"]
+[ext_resource type="Resource" path="res://data/upgrades/handling_1.tres" id="5_handling_1"]
+[ext_resource type="Resource" path="res://data/upgrades/tank_1.tres" id="6_tank_1"]
+
+[resource]
+script = ExtResource("1_list")
+upgrades = Array[ExtResource("2_upgrade")]([ExtResource("3_speed_1"), ExtResource("4_speed_2"), ExtResource("5_handling_1"), ExtResource("6_tank_1")])

@@ -12,12 +12,12 @@ var _left: float = 0.0
 
 
 func hud_step(delta: float, numbers_due: bool) -> void:
-	var haul := hud.haul
-	_pop.want = haul != null and haul.job.is_rush() and not haul.delivered
+	var job := GameState.active_job()
+	_pop.want = job != null and job.is_rush()
 	_pop.update(delta)
-	if haul == null or not numbers_due:
+	if job == null or not numbers_due:
 		return
-	_left = haul.rush_seconds_left()
+	_left = job.rush_seconds - GameState.job_seconds
 	_late = _left < 0.0
 	_shown_text = ("LATE +" + clock(-_left)) if _late else clock(_left)
 

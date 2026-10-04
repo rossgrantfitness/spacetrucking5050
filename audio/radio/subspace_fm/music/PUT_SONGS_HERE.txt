@@ -1,0 +1,3 @@
+Drop this station's songs here (.ogg, .mp3 or .wav).
+Name them "Artist - Title.ogg" and the HUD ticker shows that.
+See res://audio/radio/README.md.

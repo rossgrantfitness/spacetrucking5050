@@ -1,6 +1,37 @@
 [gd_resource type="Resource" script_class="NPCData" format=3]
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_marge")
+needs_no_job = true
+lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Got something for you, finally. Marge called. Runs the truck stop out past the rocks.", "Her pie hauler retired to a moon. She needs a new one, and she pays in real {currency}.", "Your rig's up the stairs. Follow the yellow diamond on your compass, fly through the ring, and the autopilot parks you.")
+sets_flags = PackedStringArray("heard_about_marge")
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+needs_active_job = "first_pie_run"
+lines = PackedStringArray("Are those Marge's pies? Hon, the whole cafeteria's been waiting. Go, go.")
+
+[sub_resource type="Resource" id="Conversation_2"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Look at you, an employed trucker. The job board's working again. Mostly.", "Pick something off the board, or go spend your money at the truck stop. I won't tell.")
+opens_menu = "job_board"
+
+[sub_resource type="Resource" id="Conversation_3"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_marge")
+blocked_by_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Marge says you two met. Did you take her pie job? Truck stop's past the rocks, hon.")
+
+[sub_resource type="Resource" id="Conversation_4"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("You've got a load in the back, {bunny}. Ship's up the stairs. Go get paid.")
 
 [resource]
 script = ExtResource("1_npc")
@@ -11,3 +42,4 @@ lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jac
 comm_name = "DOTTIE · DISPATCH"
 fur_color = Color(0.62, 0.6, 0.66, 1)
 accent_color = Color(1, 0.42, 0.75, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])

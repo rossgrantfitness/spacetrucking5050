@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "speed_2"
+display_name = "Twin Afterburner Kit"
+description = "Even more go. Another big jump in top speed."
+price = 2600
+requires_upgrade = "speed_1"
+max_speed = 1.2
+acceleration = 1.25
+turn_rate = 1.0
+fuel_tank = 1.0

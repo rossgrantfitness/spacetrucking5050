@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_dusty")
+lines = PackedStringArray("Whoa. Is that the old rig out at dock three? Haven't seen that model in years. Somebody kept her nice.", "I'm Dusty. Repairs, upgrades, no questions. Well, some questions. Mostly about your fuel lines.")
+sets_flags = PackedStringArray("met_dusty")
+opens_menu = "mechanic"
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("What're we doing today? Patching? Souping her up?")
+opens_menu = "mechanic"
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Dusty (mechanic)"
+species = "beaver"
+voice_pitch = 0.75
+lines = PackedStringArray("Dusty's Garage. If it's loose, I tighten it. If it's tight, I loosen it.")
+comm_name = "DUSTY · GARAGE"
+fur_color = Color(0.58, 0.38, 0.24, 1)
+accent_color = Color(1, 0.55, 0.15, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1")])

@@ -4,10 +4,17 @@
 
 [resource]
 script = ExtResource("1_job")
+id = "gnome_run"
 cargo_name = "Garden gnomes (fragile)"
 client_name = "Truck Stop Diner"
-destination_name = "TRUCK STOP"
+description = "The diner's redoing the patio. Gnomes bruise easy, and they want them before the lunch rush."
+from_place = "base"
+to_place = "truck_stop"
 base_pay = 400
 care_bonus = 150
-rush_seconds = 120.0
+rush_seconds = 240.0
 rush_bonus = 100
+on_job_board = true
+repeatable = true
+requires_flag = "first_mission_done"
+completes_flag = ""

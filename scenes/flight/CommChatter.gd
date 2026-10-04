@@ -4,41 +4,46 @@ extends Node
 ## live in res://data/dialogue/flight_chatter.tres; the HUD's comm portrait
 ## shows them.
 ##
-## - Dispatch calls a few seconds after takeoff.
+## - Someone calls a few seconds after launch (who depends on the story).
 ## - Somebody makes small talk every minute or two when nothing's happening.
-## - Truck stop control calls as you get close.
+## - A place's traffic control calls as you get close, and again when the
+##   docking autopilot takes over.
 ## - Bonks and boosts sometimes get a comment (only if the comms are free).
-## - Low fuel and deliveries always get a call (they wait their turn).
+## - Low fuel always gets a call (it waits its turn).
 ## Every timing is in tuning.tres under "Comms chatter".
 
 
 const CHATTER: FlightChatter = preload("res://data/dialogue/flight_chatter.tres")
 ## These always get said, even if they have to wait for the comms to free up.
-const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL, ChatterSet.Situation.DELIVERED]
+const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL, ChatterSet.Situation.DOCKING]
 
-## Truck stop control calls when you're this close to the destination.
+## A place's traffic control calls when you're this close to it.
 @export var approach_call_distance: float = 2500.0
 
 var _ship: Ship
 var _comm: CommPortrait
-var _destination: Node3D
-var _waiting: Array[ChatterSet.Situation] = []
+## Place id -> its node in the flight scene.
+var _places: Dictionary = {}
+# Calls waiting their turn: [situation, place id].
+var _waiting: Array[Array] = []
+# Places whose approach call has happened (or, for the place you launched
+# from, that you haven't flown far enough from yet).
+var _approach_called: Dictionary = {}
 var _quiet: float = 999.0  # Seconds since the last call ended.
 var _idle_timer: float = 0.0
 var _takeoff_timer: float = 0.0
 var _boost_cooldown: float = 0.0
 var _bonk_cooldown: float = 0.0
-var _approach_called: bool = false
 var _was_low_fuel: bool = false
 var _was_boosting: bool = false
 var _last_line: String = ""
 var _rng := RandomNumberGenerator.new()
 
 
-func start(ship: Ship, comm: CommPortrait, destination: Node3D) -> void:
+func start(ship: Ship, comm: CommPortrait, places: Dictionary) -> void:
 	_ship = ship
 	_comm = comm
-	_destination = destination
+	_places = places
 	_rng.randomize()
 	_ship.bonked.connect(_on_bonked)
 	_comm.finished.connect(func() -> void: _quiet = 0.0)
@@ -49,18 +54,19 @@ func start(ship: Ship, comm: CommPortrait, destination: Node3D) -> void:
 func restart() -> void:
 	_waiting.clear()
 	_takeoff_timer = GameState.tuning.comm_first_call_seconds
-	_approach_called = false
+	_approach_called = {GameState.launch_from: true}
 	_was_low_fuel = false
 	_reset_idle_timer()
 
 
-## Something happened that someone might comment on.
-func say(situation: ChatterSet.Situation) -> void:
+## Something happened that someone might comment on (at `place`, a place
+## id, if it's about a place).
+func say(situation: ChatterSet.Situation, place: String = "") -> void:
 	if situation in IMPORTANT:
-		if not situation in _waiting:
-			_waiting.append(situation)
+		if not [situation, place] in _waiting:
+			_waiting.append([situation, place])
 	elif not _comm.is_busy() and _quiet >= GameState.tuning.comm_quiet_seconds:
-		_play(situation)
+		_play(situation, place)
 
 
 func _process(delta: float) -> void:
@@ -74,12 +80,13 @@ func _process(delta: float) -> void:
 	if _takeoff_timer > 0.0:
 		_takeoff_timer -= delta
 		if _takeoff_timer <= 0.0:
-			say(ChatterSet.Situation.TAKEOFF)
+			say(ChatterSet.Situation.TAKEOFF, GameState.launch_from)
 	_watch_the_flight()
 	if _comm.is_busy() or _quiet < tuning.comm_quiet_seconds:
 		return
 	if not _waiting.is_empty():
-		_play(_waiting.pop_front())
+		var next: Array = _waiting.pop_front()
+		_play(next[0], next[1])
 	elif _idle_timer <= 0.0:
 		_play(ChatterSet.Situation.IDLE)
 
@@ -94,10 +101,15 @@ func _watch_the_flight() -> void:
 		_boost_cooldown = 45.0
 		say(ChatterSet.Situation.BOOST)
 	_was_boosting = _ship.flight.boosting
-	if _destination != null and not _approach_called \
-			and _ship.global_position.distance_to(_destination.global_position) < approach_call_distance:
-		_approach_called = true
-		say(ChatterSet.Situation.APPROACH)
+	for id: String in _places:
+		var distance := _ship.global_position.distance_to((_places[id] as Node3D).global_position)
+		if _approach_called.get(id, false):
+			if id == GameState.launch_from and distance > approach_call_distance * 1.5:
+				_approach_called[id] = false  # Far enough out: coming back counts.
+			continue
+		if distance < approach_call_distance:
+			_approach_called[id] = true
+			say(ChatterSet.Situation.APPROACH, id)
 
 
 func _on_bonked(_strength: float, _where: Vector3) -> void:
@@ -108,8 +120,8 @@ func _on_bonked(_strength: float, _where: Vector3) -> void:
 
 
 ## Picks a line for the situation (not the one just used) and calls in.
-func _play(situation: ChatterSet.Situation) -> void:
-	var options := CHATTER.lines_for(situation).filter(func(pair: Array) -> bool: return pair[1] != _last_line)
+func _play(situation: ChatterSet.Situation, place: String = "") -> void:
+	var options := CHATTER.lines_for(situation, place).filter(func(pair: Array) -> bool: return pair[1] != _last_line)
 	_reset_idle_timer()
 	if options.is_empty():
 		return

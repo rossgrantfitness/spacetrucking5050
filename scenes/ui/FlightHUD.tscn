@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scenes/ui/hud/FuelGauge.gd" id="12_FuelGauge"]
 [ext_resource type="Script" path="res://scenes/ui/hud/HullSilhouette.gd" id="13_HullSilhouette"]
 [ext_resource type="Script" path="res://scenes/ui/hud/CommPortrait.gd" id="14_CommPortrait"]
+[ext_resource type="Script" path="res://scenes/ui/hud/Banner.gd" id="15_Banner"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_premult"]
 blend_mode = 4
@@ -162,6 +163,16 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("14_CommPortrait")
 
+[node name="Banner" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("15_Banner")
+
 [node name="Screen" type="TextureRect" parent="."]
 texture_filter = 1
 material = SubResource("CanvasItemMaterial_premult")
@@ -190,4 +201,4 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0.6)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 13
 horizontal_alignment = 1
-text = "Keyboard: W thrust  ·  S brake / reverse  ·  A/D or arrows steer  ·  mouse steers  ·  Space boost  ·  C camera  ·  Q/E radio  ·  H hide HUD  ·  Esc pause\nGamepad: left stick steer  ·  RT thrust  ·  LT brake / reverse  ·  A boost  ·  Y camera  ·  D-pad left/right radio  ·  D-pad down hide HUD  ·  Start pause"
+text = "Keyboard: W thrust  ·  S brake / reverse  ·  A/D or arrows steer  ·  mouse steers  ·  Space boost  ·  C camera  ·  Q/E radio  ·  R radio on/off  ·  H hide HUD  ·  Esc pause\nGamepad: left stick steer  ·  RT thrust  ·  LT brake / reverse  ·  A boost  ·  Y camera  ·  D-pad left/right radio  ·  D-pad up radio on/off  ·  D-pad down hide HUD  ·  Start pause"

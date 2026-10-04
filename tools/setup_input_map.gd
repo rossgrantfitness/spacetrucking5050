@@ -36,6 +36,7 @@ func _init() -> void:
 	_action("toggle_camera", BUTTON, [_key(KEY_C), _button(JOY_BUTTON_Y)])
 	_action("radio_next", BUTTON, [_key(KEY_E), _button(JOY_BUTTON_DPAD_RIGHT)])
 	_action("radio_previous", BUTTON, [_key(KEY_Q), _button(JOY_BUTTON_DPAD_LEFT)])
+	_action("radio_power", BUTTON, [_key(KEY_R), _button(JOY_BUTTON_DPAD_UP)])
 	_action("toggle_hud", BUTTON, [_key(KEY_H), _button(JOY_BUTTON_DPAD_DOWN)])
 	# A developer helper: lights up every HUD warning so the look can be
 	# checked. Keyboard only.

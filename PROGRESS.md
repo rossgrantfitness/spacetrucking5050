@@ -1,14 +1,16 @@
 # Progress
 
-**Current milestone:** **Round 6, the Wipeout-style HUD**, at your request:
-a full low-res HUD with comm chatter, plus the fuel, cargo, practice job and
-radio data it reads. Built and validated, **waiting for your playtest**
-(see `PLAYTEST.md`). Round 5 (walking the base) is still waiting for
-feedback too.
-**Next session:** your revised brief (`CLAUDE.md`) asks for an audit first
-(`AUDIT.md` plus a reworked checklist here) before more milestone work.
+**Current status:** **Round 7: the first mission, the truck stop inside and
+the real radio**, at your request. You can now play the developer's
+"smallest version of the game" almost all the way: wake up, talk to
+dispatch, fly to the truck stop (now twice as far), dock through the ring,
+meet Marge, take her pie job, fly home, dock, get paid, and spend it at the
+truck stop on fuel, repairs and a speed upgrade you can feel. Built and
+validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Next session:** the audit your revised brief asks for (`AUDIT.md` and a
+reworked checklist here), then whatever you choose.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-04
+**Last updated:** 2026-10-04 (round 7)
 
 ---
 
@@ -29,20 +31,38 @@ feedback too.
   - [x] An asteroid field of tumbling low-poly rocks (with collision) and a distant truck-stop station
   - [x] Minimal corner HUD (speed gauge, station marker, mouse reticle), small pause menu, "Press Start" on the boot screen
   - [x] Self-tests for the flight rules, sound loops and rock meshes; an autopilot smoke test of the sandbox
+  - [x] Round 7 (your request): more wobble and dither (240-row wobble grid, more texture swim, 26 shades per color, stronger, chunkier dither, softer painted rooms)
   - [x] Round 6 (your HUD list): a Wipeout-style HUD drawn at low resolution with a tiny pixel font: speed bar with redline and throttle tick, boost bar, wireframe radar globe, fuel arc with economy arrow, hull picture that flashes where you bonked, compass strip with distance and ETA, radio ticker, cargo and pay, flight marker, five status lights, and pop-ins (comm calls, docking brackets, rush timer, ship ID labels, jump charge). Comm chatter from dispatch, truck stop control and two truckers. H hides the HUD, F9 is a demo of every warning
   - [x] Round 5 (from your feedback): more wobble and dither, ship damage (bonks, hull bar, sparks, smoke, rumble), a lived-in reactive 3D cockpit, and a CC0 courier ship
   - [x] Round 4 (from your feedback): late-PS1 look at native resolution (800x600 to 4K) with subtle wobble, mipmapped crisp textures, Wipeout/Colony Wars HUD with a pixel font, engine flares, nebula sky, and the rig rebuilt as a cargo hauler with eight containers
   - [x] Round 3 (from your feedback): the PS1 look (low-res, wobbly verts, swimming textures, 15-bit dithered color, per-system haze), a new BB 42-style rig, an oversized ringed planet, two traffic ships around the truck stop, and a parking deck with six parked trucks
   - [x] Round 2 (from your feedback): momentum (thrust, coast, reverse-thrust brake, carving turns with tunable grip, overshooting), rocket boost on a boost-fuel tank (top up at the truck stop for now), boost screen shake with an on/off switch, a drift marker on the HUD, and an engine hum that reacts to thrust, slides and boost
-- [ ] **M2: The delivery loop**: job → fly → approach ring → auto-dock → payout → fly back → speed upgrade you can feel; fuel, save/load *(already in: bonks, hull damage, cargo condition, main fuel that burns faster at speed, job data with care and rush bonuses, and a practice haul delivered at the truck stop. Still to do: job menu, approach ring and auto-dock, getting paid for real, the upgrade, saving)*
+- [ ] **M2: The delivery loop** *(nearly all in, pulled forward in round 7)*
+  - [x] Jobs in data with care and rush bonuses, job boards at both places, one job at a time
+  - [x] Approach rings and the canned autopilot docking
+  - [x] Getting paid on docking, with a payout card; money that's spent on fuel, repairs and upgrades
+  - [x] Speed upgrade you can feel (Hot-Rod Injectors, +25% top speed), plus three more upgrades
+  - [x] Fuel that burns faster at speed; bonks knock cargo condition
+  - [x] Saving and loading (`user://save.json`), Continue and New game on the boot screen
+  - [ ] A route screen before launch (M5's route map covers it)
+  - [ ] Your playtest: can you finish a delivery, get paid, buy the upgrade and feel it?
 - [ ] **M3: The walkable hub** *(started early, at your request)*
   - [x] Pre-rendered backgrounds with fixed FF8-style cameras and camera zones; camera-relative walking that doesn't flip on cuts
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades
   - [x] Dialogue boxes with typewriter text and voice blips; Dottie the morning clerk; interact prompts
   - [x] Board the ship at the top of the dispatch stairs; "Dock at the base" from flight
-  - [ ] The hangar (inspect the rig, refuel, upgrades), a hallway neighbor, evening and night clerks, taking jobs at dispatch (with M2)
-- [ ] **M4: PSX look + the radio**: radio music, DJs, ambient music when off, custom station folder, glow pass, 3D cockpit radar globe, neon hub lighting *(pulled forward: the PSX shaders, dither, per-system haze, nebula, oversized planet, the low-res HUD with its radar globe, and radio stations with a scrolling ticker and tuning static, but no music yet)*
+  - [x] Taking jobs at dispatch (Dottie opens the job board after the first mission)
+  - [x] The truck stop inside (round 7): a big concourse with Marge's diner, a job board, Dusty's garage, Lily's pumps, an arcade lounge, shuttered "coming soon" shops and the airlock; five people; things to use and look at
+  - [x] The first mission: Dottie sends you to Marge, who offers her pie run; story flags and conditional conversations in data
+  - [ ] The hangar at the base (inspect the rig; fuel, repairs and upgrades are at the truck stop for now), a hallway neighbor, evening and night clerks
+  - [ ] The bunny rebuilt to `CHARACTER_BIBLE.md` (segmented parts, face sheet, lop ears and cap, vest, boots)
+- [ ] **M4: PSX look + the radio** *(much of it pulled forward)*
+  - [x] PSX shaders, dither, per-system haze, nebula, oversized planet, the low-res Wipeout HUD with its radar globe
+  - [x] The radio plays real music from each station's folder, GTA-style (stations keep playing while you're away), with audio or text ads, tuning static, on/off with ambient music, weak-signal hiss, a radio volume slider, and MY TUNES for the player's own files; the truck stop's jukebox
+  - [x] Placeholder beats per station until you add music; `audio/radio/README.md`
+  - [ ] Your radio stations and music (you're making these!), DJ voices
+  - [ ] Glow pass, 3D cockpit radar globe, neon hub lighting polish
 - [ ] **M5: Life in space**: random sights, gentle hazards, cockpit gizmos, route map, real 3D comm heads *(pulled forward: comm calls with static and placeholder portraits, chatter from dispatch/truckers/traffic control, funny ship ID labels, screen shake, and HUD lights waiting for the hazards)*
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
 - [ ] **M7: Home & style**: wardrobe, decor, bigger apartment, new ships, docking computer, forklift minigame
@@ -54,9 +74,8 @@ feedback too.
 
 ## Next up
 
-Your playtest of rounds 5 and 6. Then the audit your revised brief asks
-for, then **M2: the delivery loop**, now with the base around it: take a
-job from Dottie, board the rig, fly, dock, get paid, walk back home.
+Your playtest of round 7 (rounds 5 and 6 questions are folded in). Then the
+audit your revised brief asks for, then your call on what's next.
 
 ## M2 in short
 
@@ -97,6 +116,12 @@ cartoon bonks that knock your cargo condition, and basic saving.
 ## Later ideas
 
 Ideas that aren't in the plan. Nothing here gets built without your OK.
+
+- **A jog button on foot.** The truck stop is big on purpose (40 x 30 m);
+  a "hold to jog" would make crossing it quicker. The bible says her jog is
+  "rare and reluctant", which could be a fun animation.
+- **Your rig visible through the truck stop's porthole and the base's
+  hangar** (a painted copy of the real model).
 
 - **From your HUD list, still to place in the cockpit and on a tablet:**
   an attitude ball, a clock, a check-engine light and a soda can on the dash

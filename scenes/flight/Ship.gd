@@ -17,6 +17,8 @@ signal teleported
 ## Emitted when the ship bonks into something. `strength` runs from 0 (a
 ## gentle bump) to 1 (the hardest bonk); `where` is the spot that got hit.
 signal bonked(strength: float, where: Vector3)
+## Emitted when the docking autopilot reaches the end of its route.
+signal autopilot_arrived
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
@@ -49,6 +51,12 @@ var speed_trap: float = 0.0
 ## Charging toward a system jump point: below 0 = none near, 0 to 1 = charge.
 var jump_charge: float = -1.0
 
+## While docking, the autopilot flies the rig through these spots (in the
+## world, in order) and ignores the pilot. Empty = the pilot is flying.
+var autopilot_route: Array[Vector3] = []
+## The autopilot's cruising speed, in m/s. It slows down for the last spot.
+var autopilot_speed: float = 40.0
+
 var _was_boosting := false
 var _bonk_cooldown := 0.0
 
@@ -65,6 +73,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not autopilot_route.is_empty():
+		_fly_autopilot(delta)
+		return
 	flight.update(delta, controls.read(delta), ship_data, GameState.tuning)
 	global_basis = flight.orientation()
 	velocity = flight.velocity
@@ -155,6 +166,48 @@ func _update_shake(delta: float) -> void:
 	shake.update(delta, tuning.shake_decay)
 
 
+## Hands the controls to the docking autopilot, which flies through
+## `route` and emits autopilot_arrived at the end.
+func fly_route(route: Array[Vector3], speed: float) -> void:
+	autopilot_route = route.duplicate()
+	autopilot_speed = speed
+	controls.clear()
+
+
+## The canned docking run: steer smoothly at the next spot, ease off at the
+## end, never bonk (it flies straight through, ignoring collisions).
+func _fly_autopilot(delta: float) -> void:
+	var target := autopilot_route[0]
+	var to_target := target - global_position
+	var distance := to_target.length()
+	var last_spot := autopilot_route.size() == 1
+	if distance < (6.0 if last_spot else 25.0):
+		autopilot_route.pop_front()
+		if autopilot_route.is_empty():
+			flight.velocity = Vector3.ZERO
+			autopilot_arrived.emit()
+		return
+	var direction := to_target / distance
+	var goal_speed := autopilot_speed
+	if last_spot:
+		goal_speed = minf(autopilot_speed, distance * 0.5 + 5.0)
+	flight.velocity = flight.velocity.lerp(direction * goal_speed, 1.0 - exp(-1.8 * delta))
+	flight.thrust = 0.3
+	flight.boosting = false
+	# Point the nose along the way we're going.
+	var travel := flight.velocity.normalized() if flight.velocity.length() > 0.5 else direction
+	flight.heading = lerp_angle(flight.heading, atan2(-travel.x, -travel.z), 1.0 - exp(-2.5 * delta))
+	flight.pitch = lerpf(flight.pitch, asin(clampf(travel.y, -0.9, 0.9)), 1.0 - exp(-2.5 * delta))
+	flight.bank = lerpf(flight.bank, 0.0, 1.0 - exp(-3.0 * delta))
+	flight.nose_tilt = lerpf(flight.nose_tilt, 0.0, 1.0 - exp(-3.0 * delta))
+	global_basis = flight.orientation()
+	global_position += flight.velocity * delta
+	velocity = flight.velocity
+	odometer += flight.speed() * delta
+	_update_shake(delta)
+	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank)
+
+
 ## Shows the ship from outside (chase view) or the inside of the cab
 ## (cockpit view, where we're sitting inside it).
 func set_cockpit_view(in_cockpit: bool) -> void:
@@ -168,6 +221,7 @@ func teleport(where: Transform3D) -> void:
 	var facing := where.basis.get_euler()
 	flight.reset(facing.y, facing.x)
 	controls.clear()
+	autopilot_route.clear()
 	velocity = Vector3.ZERO
 	_visual_pivot.rotation = Vector3.ZERO
 	# Tell Godot's motion smoothing not to slide us from the old spot.

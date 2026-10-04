@@ -12,6 +12,9 @@ extends Interactable
 ## Off: just walk through. On: press Interact here (for things like boarding
 ## the ship).
 @export var needs_button: bool = false
+## For doors onto the ship: the place the rig launches from (a place id
+## like "base" or "truck_stop"). Empty for ordinary doors.
+@export var launch_from: String = ""
 
 
 func _ready() -> void:
@@ -37,5 +40,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _leave() -> void:
 	var room := HubRoom.find(self)
+	if not launch_from.is_empty():
+		GameState.launch_from = launch_from
 	if room != null:
 		room.leave_to(target_scene, target_spawn)

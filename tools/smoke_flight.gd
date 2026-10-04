@@ -2,10 +2,11 @@ extends SceneTree
 ## Used by tools/validate.sh: a quick "smoke test" of the flight sandbox. It
 ## flies on autopilot for a few seconds (thrust, mouse, brake, turn, boost,
 ## switch to the cockpit and back, open and close the pause menu, go back to
-## the start), with the traffic flying around, plus the HUD: flipping radio
-## stations, hiding and showing the HUD, the HUD demo, a comm call, and a
-## delivery at the truck stop. Any errors in those code paths show up, then
-## it quits politely.
+## the launch point), with the traffic flying around, plus the HUD and
+## radio: flipping stations, switching it off and on, hiding and showing the
+## HUD, the HUD demo and a comm call. Then it flies through the truck stop's
+## approach ring, lets the autopilot dock, and checks you end up inside.
+## Any errors in those code paths show up, then it quits politely.
 ##
 ## Run it with:  godot --headless --path . -s tools/smoke_flight.gd
 
@@ -13,9 +14,12 @@ extends SceneTree
 const SCENE: String = "res://scenes/flight/FlightSandbox.tscn"
 
 var _frame := 0
+var _docked_at := 0
 
 
 func _initialize() -> void:
+	# Never touch the player's real save.
+	root.get_node("SaveSystem").set("save_path", "user://smoke_test_save.json")
 	change_scene_to_file(SCENE)
 
 
@@ -55,24 +59,33 @@ func _process(_delta: float) -> bool:
 		298:
 			_tap("toggle_hud")
 			_tap("radio_previous")
+			_tap("radio_power")
+		299:
+			_tap("radio_power")
 		300:
 			_tap("toggle_hud")
 			_tap("pause")
 		320:
 			_tap("pause")
-		330:
-			# Hop next to the docking bay to deliver the practice job.
-			var ship := current_scene.get_node("World/Ship")
-			var dock: Node3D = current_scene.get_node("World/Station/DockPoint")
-			ship.call("teleport", Transform3D(Basis.IDENTITY, dock.global_position + Vector3(0, 0, 100)))
-		340:
-			if not current_scene.get("_haul").get("delivered"):
-				push_error("Smoke test: flying up to the docking bay should deliver the practice job")
+		320:
 			_tap("hud_demo")
-			# "Back to the start", like the pause menu button.
-			current_scene.call("_back_to_start")
-		400:
-			root.get_node("GameState").call("quit_game")
+			# "Back to the launch point", like the pause menu button.
+			current_scene.call("_back_to_launch_point")
+		330:
+			# Just in front of the truck stop's approach ring, thrusting
+			# through it: the autopilot should take over and dock.
+			var ship := current_scene.get_node("World/Ship")
+			var ring: Node3D = current_scene.get_node("World/Places/truck_stop/ApproachRing")
+			ship.call("teleport", Transform3D(Basis.IDENTITY, ring.global_position + Vector3(0, 0, 60)))
+			Input.action_press("throttle_up")
+	if _frame > 330 and current_scene != null and current_scene.name == "TruckStop" and _docked_at == 0:
+		_docked_at = _frame
+		Input.action_release("throttle_up")
+	if _docked_at > 0 and _frame == _docked_at + 120:
+		root.get_node("GameState").call("quit_game")
+	if _frame == 20000 and _docked_at == 0:
+		push_error("Smoke test: flying through the truck stop's ring should dock and walk inside")
+		root.get_node("GameState").call("quit_game")
 	return false
 
 

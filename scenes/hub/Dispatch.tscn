@@ -39,6 +39,7 @@ height = 1.1
 [node name="Dispatch" type="Node3D"]
 script = ExtResource("1_room")
 default_spawn = "FromHallway"
+place_id = "base"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_room")
@@ -107,6 +108,7 @@ prompt = "BOARD SHIP"
 target_scene = "res://scenes/flight/FlightSandbox.tscn"
 target_spawn = ""
 needs_button = true
+launch_from = "base"
 
 [node name="Shape" type="CollisionShape3D" parent="Exits/ShipDoor"]
 shape = SubResource("BoxShape3D_exit1")

@@ -13,10 +13,21 @@ extends Resource
 @export var species: String = "raccoon"
 ## Their gibberish voice: 1 = normal pitch, higher = squeakier, lower = deeper.
 @export_range(0.4, 2.5, 0.05) var voice_pitch: float = 1.0
-## What they say when you talk to them, one box per line. Lines can use
-## {bunny}, {husband}, {base} and {currency} (see res://data/world_names.tres).
-## (Proper conversations with choices and conditions come later.)
+## What they say when you talk to them, one box per line, if none of their
+## `conversations` fits. Lines can use {bunny}, {husband}, {base} and
+## {currency} (see res://data/world_names.tres).
 @export var lines: PackedStringArray = PackedStringArray(["..."])
+## Things they say depending on the story so far (the first that fits wins).
+## See Conversation.gd.
+@export var conversations: Array[Conversation] = []
+
+
+## The conversation to use right now, or null (then they say `lines`).
+func pick_conversation() -> Conversation:
+	for conversation in conversations:
+		if conversation != null and conversation.matches():
+			return conversation
+	return null
 
 
 @export_group("Comm portrait")

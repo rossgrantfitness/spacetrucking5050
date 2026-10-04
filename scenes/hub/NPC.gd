@@ -35,6 +35,18 @@ func interact(player: Node3D) -> void:
 	if _visual != null:
 		_visual.rotation.y = atan2(-to_player.x, -to_player.z) - global_rotation.y
 	hub_player.face(atan2(to_player.x, to_player.z))
-	await Dialogue.say(data.display_name, data.lines, data.voice_pitch)
+	# What they say depends on the story so far (see Conversation.gd).
+	var conversation := data.pick_conversation()
+	var lines := conversation.lines if conversation != null and not conversation.lines.is_empty() else data.lines
+	await Dialogue.say(data.display_name, lines, data.voice_pitch)
+	if conversation != null:
+		for flag in conversation.sets_flags:
+			GameState.set_flag(flag)
+		if conversation.offers_job != null:
+			await HubServices.offer_job(get_tree(), conversation.offers_job)
+		if not conversation.opens_menu.is_empty():
+			var room := HubRoom.find(self)
+			await HubServices.open(conversation.opens_menu, get_tree(), room.place_id if room != null else "")
+		GameState.save_game()
 	hub_player.set_busy(false)
 	_talking = false

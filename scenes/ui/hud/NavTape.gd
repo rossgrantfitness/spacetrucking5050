@@ -23,8 +23,8 @@ func hud_step(_delta: float, numbers_due: bool) -> void:
 	var to_target := hud.destination.global_position - rig.global_position
 	var meters := to_target.length()
 	_distance_text = distance_text(meters)
-	if hud.haul != null and hud.haul.delivered:
-		_eta_text = "ARRIVED"
+	if not rig.autopilot_route.is_empty():
+		_eta_text = "DOCKING"
 	else:
 		var closing := rig.flight.velocity.dot(to_target.normalized())
 		_eta_text = "ETA " + (clock(meters / closing) if closing > 1.0 else "--:--")
@@ -78,4 +78,5 @@ func _draw() -> void:
 		off = side * (WIDTH * 0.5 - 4.0)
 	pixels(Vector2(center_x + roundf(off) - 1.0, area.position.y - 2.0), diamond, YELLOW)
 	text(Vector2(area.end.x + 4.0, area.position.y + 3.0), _distance_text, GREEN)
+	text_right(Vector2(area.position.x - 4.0, area.position.y + 3.0), hud.destination_name, tint(0.85))
 	text_centered(Vector2(center_x, area.end.y + 5.0), _eta_text, tint(0.9))

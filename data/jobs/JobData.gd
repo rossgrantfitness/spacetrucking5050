@@ -1,6 +1,7 @@
 class_name JobData
 extends Resource
-## One delivery job. Each job gets its own .tres file in this folder.
+## One delivery job. Each job gets its own .tres file in this folder, and
+## res://data/jobs/jobs.tres lists every job in the game.
 ##
 ## Pay is base pay plus two optional bonuses:
 ## - CARE bonus (fragile, perishable or live cargo): paid in full if the
@@ -8,17 +9,21 @@ extends Resource
 ## - RUSH bonus: paid if you arrive within the target time. Late is fine:
 ##   you still get the base pay. A rush job never fails.
 ##
-## (A real job board, clients and payouts arrive with M2. For now one
-## practice haul rides along in the flight sandbox so the HUD has a job to
-## show.)
+## Where it shows up: on the job board at `from_place` (unless it's a story
+## job someone offers you in person), once you've reached `requires_flag`.
 
 
-## What's in the back, shown on the HUD and the manifest.
+## A short code name, used in saves. Keep it unique.
+@export var id: String = "job"
+## What's in the back, shown on the HUD and the job board.
 @export var cargo_name: String = "Mystery crates"
 ## Who's paying.
 @export var client_name: String = "Somebody"
-## Where it's going (short, it's shown on the HUD).
-@export var destination_name: String = "TRUCK STOP"
+## A line or two about the job, for the job board.
+@export_multiline var description: String = ""
+## Where you pick it up and where it goes (place ids, see res://data/places/).
+@export var from_place: String = "base"
+@export var to_place: String = "truck_stop"
 
 ## Pay for showing up with the cargo, no matter what.
 @export_range(0, 100000, 10) var base_pay: int = 300
@@ -32,14 +37,28 @@ extends Resource
 @export_range(0.0, 3600.0, 5.0, "suffix:s") var rush_seconds: float = 0.0
 @export_range(0, 100000, 10) var rush_bonus: int = 0
 
+@export_group("Story")
+## On: shows on the job board. Off: only a person offers it (story jobs).
+@export var on_job_board: bool = true
+## Off: once delivered, it never comes back.
+@export var repeatable: bool = true
+## Only available once this story flag is set (empty = always).
+@export var requires_flag: String = ""
+## A story flag set when you deliver it.
+@export var completes_flag: String = ""
+
 
 ## What this job pays for cargo in `condition` (0 to 1) arriving after
 ## `seconds` of flying.
 func pay_for(condition: float, seconds: float) -> int:
-	var pay := float(base_pay) + care_bonus * clampf(condition, 0.0, 1.0)
-	if is_rush() and seconds <= rush_seconds:
-		pay += rush_bonus
-	return roundi(pay)
+	return pay_breakdown(condition, seconds)["total"]
+
+
+## The pay, piece by piece: {"base", "care", "rush", "total"}.
+func pay_breakdown(condition: float, seconds: float) -> Dictionary:
+	var care := roundi(care_bonus * clampf(condition, 0.0, 1.0))
+	var rush := rush_bonus if is_rush() and seconds <= rush_seconds else 0
+	return {"base": base_pay, "care": care, "rush": rush, "total": base_pay + care + rush}
 
 
 func is_rush() -> bool:

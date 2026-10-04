@@ -32,6 +32,9 @@ var screen_shake: bool = true
 ## Whether a gamepad rumbles when you bonk into things.
 var rumble: bool = true
 
+## How loud the radio (and the ambient music when it's off) is, 0 to 1.
+var radio_volume: float = 0.8
+
 
 func _ready() -> void:
 	load_settings()
@@ -71,6 +74,11 @@ func set_rumble(enabled: bool) -> void:
 	_changed()
 
 
+func set_radio_volume(volume: float) -> void:
+	radio_volume = clampf(volume, 0.0, 1.0)
+	_changed()
+
+
 func save_settings() -> void:
 	SaveSystem.write_json(SETTINGS_PATH, {
 		"version": SETTINGS_VERSION,
@@ -79,6 +87,7 @@ func save_settings() -> void:
 		"show_hud": show_hud,
 		"screen_shake": screen_shake,
 		"rumble": rumble,
+		"radio_volume": radio_volume,
 	})
 
 
@@ -94,6 +103,9 @@ func apply_saved_data(data: Dictionary) -> void:
 		var saved: Variant = data.get(option)
 		if saved is bool:
 			set(option, saved)
+	var volume: Variant = data.get("radio_volume")
+	if volume is float or volume is int:
+		radio_volume = clampf(float(volume), 0.0, 1.0)
 
 
 func _changed() -> void:

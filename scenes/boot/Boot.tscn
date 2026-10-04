@@ -129,6 +129,17 @@ theme_override_font_sizes/font_size = 16
 text = "or jump straight into the flight sandbox"
 flat = true
 
+[node name="NewGame" type="Button" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0.6, 0.6, 0.7)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "or start a new game (forgets your save)"
+flat = true
+
 [node name="Spacer" type="Control" parent="UI/Margin/Layout"]
 layout_mode = 2
 size_flags_vertical = 3

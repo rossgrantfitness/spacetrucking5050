@@ -2,7 +2,7 @@ class_name HubHUD
 extends CanvasLayer
 ## The little on-foot HUD: when the bunny can use something (talk to someone,
 ## board the ship), a bouncing "!" pops up over it and a prompt at the bottom
-## of the screen says which button to press.
+## of the screen says which button to press. Your wallet sits top-right.
 
 
 const PROMPT_COLOR := Color(1.0, 0.85, 0.25)
@@ -29,6 +29,7 @@ func _process(delta: float) -> void:
 
 
 func _draw_prompt() -> void:
+	_draw_wallet()
 	if player == null or player.is_busy() or Dialogue.is_active():
 		return
 	var target := player.nearest_interactable()
@@ -51,3 +52,13 @@ func _draw_prompt() -> void:
 	_canvas.draw_rect(box, Color(0.05, 0.06, 0.2, 0.85))
 	_canvas.draw_rect(box, PROMPT_COLOR, false, 2.0)
 	PixelFont.draw(_canvas, box.position + Vector2(16.0, 9.0), text, square, Color.WHITE, 0.15)
+
+
+## How much money you have, top-right.
+func _draw_wallet() -> void:
+	var text := "%d %s" % [GameState.credits, GameState.names.currency_short]
+	var square := 3.0
+	var width := PixelFont.width(text, square)
+	var box := Rect2(Vector2(_canvas.size.x - width - 52.0, 24.0), Vector2(width + 28.0, 36.0))
+	_canvas.draw_rect(box, Color(0.05, 0.06, 0.2, 0.75))
+	PixelFont.draw(_canvas, box.position + Vector2(14.0, 8.0), text, square, Color(0.4, 1.0, 0.5), 0.15)

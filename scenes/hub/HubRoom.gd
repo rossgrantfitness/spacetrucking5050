@@ -27,6 +27,11 @@ const SET_LAYER: int = 2
 
 ## The spawn spot to use when nobody said where to arrive (like a new game).
 @export var default_spawn: String = ""
+## Which place this room belongs to (a place id from res://data/places/,
+## like "base" or "truck_stop"): its job board lists jobs from here.
+@export var place_id: String = "base"
+## Whether the radio plays through this room's speakers (the jukebox).
+@export var radio_speakers: bool = false
 
 var player: HubPlayer
 var _shots: Array[RoomShot] = []
@@ -74,7 +79,16 @@ func _ready() -> void:
 	_choose_shot(true)
 	_ready_to_play = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Radio.set_context(Radio.Context.ROOM if radio_speakers else Radio.Context.OFF_AIR)
+	# The game saves itself whenever you walk into a room.
+	GameState.current_room = scene_file_path
+	GameState.save_game()
 	await _fade.fade_in()
+	# Just docked with a delivery? Here's what it paid.
+	if not GameState.pending_payout.is_empty():
+		player.set_busy(true)
+		await HubServices.show_payout(get_tree())
+		player.set_busy(false)
 
 
 func _physics_process(_delta: float) -> void:
@@ -100,6 +114,8 @@ func active_shot() -> RoomShot:
 
 ## Paints every shot's background picture (see the notes at the top).
 func paint_backgrounds() -> void:
+	if DisplayServer.get_name() == "headless":
+		return  # No screen, nothing to paint (the automated tests run like this).
 	_show_set_for_painting(true)
 	var window := Vector2(get_window().size)
 	var painter := SubViewport.new()

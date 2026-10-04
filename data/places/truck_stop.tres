@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+
+[resource]
+script = ExtResource("1_place")
+id = "truck_stop"
+display_name = "TRUCK STOP"
+interior_scene = "res://scenes/hub/TruckStop.tscn"
+arrival_spawn = "FromShip"

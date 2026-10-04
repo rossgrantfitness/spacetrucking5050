@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+
+[resource]
+script = ExtResource("1_place")
+id = "base"
+display_name = "HOME BASE"
+interior_scene = "res://scenes/hub/Dispatch.tscn"
+arrival_spawn = "FromShip"
+free_fuel = true
