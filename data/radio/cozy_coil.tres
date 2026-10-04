@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/lofi.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "COZY COIL"
+frequency = "89.5"
+genre = "Lo-fi hip hop, chillhop"
+dj_name = "DJ Mochi"
+tagline = "Beats to haul to."
+music_folder = "res://audio/radio/cozy_coil/music"
+ads_folder = "res://audio/radio/cozy_coil/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("MOCHI - BEATS TO HAUL TO", "RAINY AIRLOCK - TEA AND TELEMETRY", "THE NAPS - AUTOPILOT DREAMS", "SOFT COMET - STUDY BREAK IN SPACE", "DUSTY TAPE - SUNDAY MORNING ORBIT", "PURRCUSSION - WINDOW SEAT")
+ads = PackedStringArray("NAP PODS. FOR WHEN THE AUTOPILOT'S GOT IT.", "HOT COCOA CUBES. DROP ONE IN SPACE. IT JUST FLOATS THERE. COZY.")
+dj_lines = PackedStringArray("...mochi here. hi. ...back to the beats.", "(a soft purr)", "...", "...stay cozy, trucker.")
+dj_on_storm = PackedStringArray("...storm outside. cozy inside. ...purr.")
+dj_on_delivery = PackedStringArray("...{bunny} delivered to {place}. nice. ...nap time?")
+dj_on_ticket = PackedStringArray("...oh no. a ticket. ...it's okay. breathe.")
+dj_on_new_system = PackedStringArray("...{system}. pretty. ...more beats.")

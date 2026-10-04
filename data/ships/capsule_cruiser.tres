@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShipData" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_ship")
+id = "capsule_cruiser"
+display_name = "The Capsule Cruiser"
+description = "A smooth, quick long-hauler with a comfy cab. A bit of everything. Pays +15% per job."
+price = 14000
+pay_bonus = 1.15
+visual_scene = ExtResource("2_visual")
+max_speed = 68.0
+acceleration = 11.0
+retro_thrust = 8.0
+turn_rate = 32.0
+pitch_rate = 26.0
+turn_response = 1.8
+grip = 1.9
+max_bank = 32.0
+boost_speed_bonus = 2.0
+boost_acceleration = 75.0
+boost_fuel_seconds = 420.0
+fuel_tank_seconds = 360.0
+trail_color = Color(0.45, 0.85, 1, 1)
+engine_pitch = 1.0

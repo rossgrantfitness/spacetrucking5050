@@ -24,11 +24,32 @@ script = ExtResource("2_conv")
 needs_active_job = "first_long_haul"
 lines = PackedStringArray("Pies are loaded, hon. Airlock's on the right, back the way you came.", "Press M in the cockpit to chart a course: the autopilot can drive while you listen to the radio. Gentle with my babies.")
 
+[sub_resource type="Resource" id="Conversation_3a"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done", "first_long_haul_arrived_perfect")
+blocked_by_flags = PackedStringArray("marge_heard_about_pies")
+lines = PackedStringArray("Gill called! Not one bruised pie. Not ONE. Sugar, you drive like a cloud.", "Said the pies made a grown otter cry. You're hired, if you want it. Job board's by the big window.")
+sets_flags = PackedStringArray("marge_heard_about_pies")
+
+[sub_resource type="Resource" id="Conversation_3b"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done", "first_long_haul_arrived_bumpy")
+blocked_by_flags = PackedStringArray("marge_heard_about_pies")
+lines = PackedStringArray("Gill says the pies got there a little... rearranged. Tasted fine, he says.", "Gentle on the corners next time, hon. Anyway: you're hired, if you want it. Job board's by the big window.")
+sets_flags = PackedStringArray("marge_heard_about_pies")
+
+[sub_resource type="Resource" id="Conversation_3c"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done", "first_long_haul_arrived_rough")
+blocked_by_flags = PackedStringArray("marge_heard_about_pies")
+lines = PackedStringArray("Gill says it was more pie FILLING than pie. ...He ate it with a spoon. Bless him.", "We'll call it a learning experience. Job board's by the big window, sugar. Maybe something unbreakable.")
+sets_flags = PackedStringArray("marge_heard_about_pies")
+
 [sub_resource type="Resource" id="Conversation_3"]
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("first_mission_done")
 needs_no_job = true
-lines = PackedStringArray("Gill called. Said the pies made a grown otter cry. You're hired, if you want it.", "Job board's by the big window. Lily's got fuel, Dusty can make that old rig sing. Make yourself at home.")
+lines = PackedStringArray("Job board's by the big window. Lily's got fuel, Dusty can make that old rig sing. Make yourself at home.", "Gill's still talking about those pies, by the way.")
 
 [sub_resource type="Resource" id="Conversation_4"]
 script = ExtResource("2_conv")
@@ -43,4 +64,4 @@ lines = PackedStringArray("Coffee's on. Pie's on. I'm on.")
 comm_name = "MARGE · TRUCK STOP"
 fur_color = Color(0.72, 0.55, 0.38, 1)
 accent_color = Color(0.35, 0.95, 1, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])

@@ -4,8 +4,10 @@ extends HudWidget
 ## - The speed in big slanted digits, with a segmented bar under it. The
 ##   red segments at the end are the redline (the engines' top speed).
 ##   Boosting past it lights a row of yellow overflow segments.
-## - A yellow tick across the bar shows how hard you're pushing the throttle
-##   (it jumps to the left and turns to your system's color in reverse).
+## - A yellow tick across the bar shows where the throttle lever is set
+##   (in reverse it turns to your system's color and says REV).
+## - SPOOL blinks while boost spools up; FULL THROTTLE! if you try to boost
+##   with the lever below full.
 ## - BOOST: a tiny bar of segments that drain while you boost.
 
 
@@ -61,13 +63,18 @@ func _draw() -> void:
 	for i in OVERFLOW_SEGMENTS:
 		var on := overspeed > (i + 0.5) / OVERFLOW_SEGMENTS
 		slanted(Rect2(overflow_left + i * 3.0, bar_top + 1.0, 2.0, 3.0), 1.0, YELLOW if on else tint(0.12))
-	# The throttle tick.
-	var push := absf(flight.thrust)
-	if push > 0.01:
-		var tick_x := left + push * BAR_SEGMENTS * step - 1.0
-		box(Rect2(tick_x, bar_top - 2.0, 1.0, 9.0), YELLOW if flight.thrust > 0.0 else tint())
-		if flight.thrust < 0.0:
+	# The throttle lever's tick: where you've set your speed.
+	var lever := rig.controls.lever
+	if absf(lever) > 0.01:
+		var tick_x := left + absf(lever) * BAR_SEGMENTS * step - 1.0
+		box(Rect2(tick_x, bar_top - 2.0, 1.0, 9.0), YELLOW if lever > 0.0 else tint())
+		if lever < 0.0:
 			text(Vector2(tick_x + 3.0, bar_top - 8.0), "REV", tint())
+	# Boost spooling up (or waiting for full throttle).
+	if flight.spool > 0.0:
+		text(Vector2(overflow_left, bar_top - 8.0), "SPOOL", YELLOW if blink(0.15) else tint())
+	elif rig.controls.boost_blocked:
+		text(Vector2(overflow_left - 30.0, bar_top - 8.0), "FULL THROTTLE!", RED if blink(0.3) else tint())
 
 	# The boost tank.
 	var empty := flight.boost_fuel <= 0.0

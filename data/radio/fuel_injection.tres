@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/punk.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "FUEL INJECTION"
+frequency = "87.3"
+genre = "Garage rock, punk"
+dj_name = "DJ Spit"
+tagline = "Pirate radio from a junk pile. Signal not guaranteed."
+music_folder = "res://audio/radio/fuel_injection/music"
+ads_folder = "res://audio/radio/fuel_injection/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("SPIT - NO PERMIT NO PROBLEM", "THE JUNK PILES - THREE CHORDS AND A CAN OPENER", "DUCT TAPE DEMONS - FIX IT LATER", "SPARK PLUG RIOT - LOUD FAST DONE", "THE RACCOON CREW - TRASH IS TREASURE", "UNLICENSED - (UNTITLED, RECORDED IN A DUMPSTER)")
+ads = PackedStringArray("THIS STATION IS NOT LICENSED. THIS AD IS NOT AN AD. BUY NOTHING.", "SPIT'S JUNK EMPORIUM. IF IT'S BROKEN, IT'S ON SALE.")
+dj_lines = PackedStringArray("Spit here, live from the pile. If the cops call, you didn't hear me.", "*crackle* ...signal's held together with tape, just like the station.", "This next one's two minutes long. That's the whole song. Punk.", "Shout-out to whoever dumped that busted amp out here. It's my studio now.")
+dj_on_storm = PackedStringArray("*crackle* storm's eating my signal, man! ...can you even hear thi—")
+dj_on_delivery = PackedStringArray("{bunny} made a drop at {place}! Working stiffs unite! Or whatever!")
+dj_on_ticket = PackedStringArray("Deputy Biscuit strikes again! Fight the power! ...pay the fine though.")
+dj_on_new_system = PackedStringArray("Made it to {system}? My signal can barely follow. Respect.")
+pirate = true

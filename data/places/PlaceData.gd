@@ -28,9 +28,24 @@ enum Kind {
 @export var host: NPCData
 ## What they might say.
 @export var host_lines: PackedStringArray = PackedStringArray()
+## On: the host's lines are said in order, one per visit, and then start
+## over (so they can remember you, or finish a sentence they started last
+## time). Off: a random one each visit.
+@export var host_lines_in_order: bool = false
 ## The walkable inside of the place, where you arrive after docking.
 @export_file("*.tscn") var interior_scene: String = ""
 ## Which spawn spot (in that interior) you climb out of the ship at.
 @export var arrival_spawn: String = "FromShip"
 ## Free fuel when you dock here (the company's own pumps at home).
 @export var free_fuel: bool = false
+## Fuel here costs this much compared with the usual price (0.7 = 30% off).
+@export_range(0.1, 3.0, 0.05) var fuel_price_factor: float = 1.0
+
+
+## What the host says on visit number `visit` (1 = the first time).
+func host_line(visit: int, rng: RandomNumberGenerator) -> String:
+	if host_lines.is_empty():
+		return ""
+	if host_lines_in_order:
+		return host_lines[(maxi(visit, 1) - 1) % host_lines.size()]
+	return host_lines[rng.randi_range(0, host_lines.size() - 1)]

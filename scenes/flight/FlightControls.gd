@@ -18,8 +18,13 @@ var thrust := 0.0
 ## True while the boost button is held.
 var boost := false
 
+## True when the pilot's hands are actually on the controls this step
+## (moving the throttle lever, boosting, or steering for real). Grabbing the
+## controls takes over from the cruise autopilot.
+var touched := false
+
 
 ## Whether the pilot is actually doing something (not just resting a hand on
 ## the mouse). Grabbing the controls takes over from the cruise autopilot.
 func is_touched() -> bool:
-	return steer.length() > 0.3 or absf(thrust) > 0.2 or boost
+	return touched or steer.length() > 0.3 or boost

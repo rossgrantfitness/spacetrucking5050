@@ -8,6 +8,15 @@ extends MeshInstance3D
 
 const DUST_SHADER := preload("res://shaders/space_dust.gdshader")
 
+## Scales on tuning.tres's dust numbers, so a second layer can look
+## different: the "Motes" layer is a few bigger, slower-glowing chunks in a
+## smaller box, whipping past close for an extra sense of speed.
+@export var count_scale: float = 1.0
+@export var box_scale: float = 1.0
+@export var size_scale: float = 1.0
+@export var brightness_scale: float = 1.0
+@export var streak_scale: float = 1.0
+
 ## The ship we're flying (its velocity stretches the specks into streaks).
 var ship: Ship
 ## The current solar system's signature color.
@@ -20,8 +29,8 @@ func _ready() -> void:
 	var tuning := GameState.tuning
 	_material.shader = DUST_SHADER
 	# The box size is baked into the specks, so it's read once, right here.
-	_material.set_shader_parameter("box_size", tuning.dust_box_size)
-	mesh = _build_specks(tuning.dust_count, tuning.dust_box_size)
+	_material.set_shader_parameter("box_size", tuning.dust_box_size * box_scale)
+	mesh = _build_specks(maxi(roundi(tuning.dust_count * count_scale), 1), tuning.dust_box_size * box_scale)
 	material_override = _material
 
 
@@ -29,9 +38,9 @@ func _process(_delta: float) -> void:
 	if ship == null:
 		return
 	var tuning := GameState.tuning
-	_material.set_shader_parameter("streak", ship.flight.velocity * tuning.dust_streak_seconds)
-	_material.set_shader_parameter("speck_size", tuning.dust_size)
-	_material.set_shader_parameter("brightness", tuning.dust_brightness)
+	_material.set_shader_parameter("streak", ship.flight.velocity * tuning.dust_streak_seconds * streak_scale)
+	_material.set_shader_parameter("speck_size", tuning.dust_size * size_scale)
+	_material.set_shader_parameter("brightness", tuning.dust_brightness * brightness_scale)
 	_material.set_shader_parameter("tint", tint)
 
 

@@ -21,6 +21,9 @@ signal bonked(strength: float, where: Vector3)
 signal autopilot_arrived
 ## Emitted when the pilot grabs the controls and the cruise autopilot lets go.
 signal cruise_released
+## Emitted each time rough flying knocks the cargo around enough to notice
+## (a thump in the hold). `reason` says why: "turn", "brake" or "boost".
+signal cargo_jostled(reason: String)
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
@@ -69,9 +72,25 @@ var autopilot_speed: float = 40.0
 ## normal rules, and lets go the moment you touch the controls.
 var cruise: CruisePilot
 
+const SPOOL_SOUND := preload("res://audio/generated/spool.wav")
+const THUMP_SOUND := preload("res://audio/generated/thump.wav")
+const RATTLE_SOUND := preload("res://audio/generated/rattle.wav")
+## How much cargo damage (0 to 1) adds up to one thump in the hold.
+const DAMAGE_PER_THUMP: float = 0.004
+
 var _autopilot_stops: bool = true
 
 var _was_boosting := false
+var _paint_trail := Color(1, 1, 1, 0)
+## Cargo damage since the last thump in the hold.
+var _jostle := 0.0
+## Why the cargo got knocked around most recently ("turn", "brake", "boost").
+var last_jostle_reason: String = ""
+## How many thumps in the hold this flight (the HUD watches it).
+var jostles: int = 0
+var _thump_sound: AudioStreamPlayer
+var _rattle_sound: AudioStreamPlayer
+var _spool_sound: AudioStreamPlayer
 var _last_velocity := Vector3.ZERO
 var _bonk_cooldown := 0.0
 
@@ -85,12 +104,26 @@ func _ready() -> void:
 	# Start facing whichever way the ship was placed in the editor.
 	var facing := global_basis.get_euler()
 	flight.reset(facing.y, facing.x)
+	_spool_sound = AudioStreamPlayer.new()
+	_spool_sound.stream = SPOOL_SOUND
+	_spool_sound.volume_db = -8.0
+	add_child(_spool_sound)
+	_thump_sound = AudioStreamPlayer.new()
+	_thump_sound.stream = THUMP_SOUND
+	add_child(_thump_sound)
+	_rattle_sound = AudioStreamPlayer.new()
+	_rattle_sound.stream = RATTLE_SOUND
+	_rattle_sound.volume_db = -80.0
+	add_child(_rattle_sound)
 
 
 func _physics_process(delta: float) -> void:
 	if not autopilot_route.is_empty():
 		_fly_autopilot(delta)
 		return
+	flight.shakiness = 0.5 if float(GameState.rig.get("snack", 0.0)) > 0.0 else 1.0
+	controls.max_speed = ship_data.max_speed
+	controls.forward_speed = flight.forward_speed()
 	var hands := controls.read(delta)
 	if cruise != null:
 		if hands.is_touched():
@@ -98,6 +131,9 @@ func _physics_process(delta: float) -> void:
 			cruise_released.emit()
 		else:
 			hands = cruise.steer(self, delta)
+			# Keep the lever where the autopilot is driving, so taking over
+			# is smooth.
+			controls.lever = clampf(flight.forward_speed() / ship_data.max_speed, 0.0, 1.0)
 	flight.update(delta, hands, ship_data, GameState.tuning)
 	global_basis = flight.orientation()
 	velocity = flight.velocity
@@ -122,9 +158,45 @@ func speed_ratio() -> float:
 	return flight.speed() / ship_data.max_speed
 
 
-## The color of this ship's engine trails (used by EngineTrail).
+## The color of this ship's engine trails (used by EngineTrail): its paint
+## job's, or the rig's own.
 func trail_color() -> Color:
-	return ship_data.trail_color
+	return _paint_trail if _paint_trail.a > 0.0 else ship_data.trail_color
+
+
+## Dresses the rig: its own model (if its data has one) and a paint job (a
+## tint over the hull, and a trail color). Called by the flight scene.
+func apply_look(paint: PaintJob) -> void:
+	if ship_data.visual_scene != null:
+		for old in _visual_pivot.get_children():
+			old.queue_free()
+		var look := ship_data.visual_scene.instantiate() as Node3D
+		_visual_pivot.add_child(look)
+	if paint == null:
+		return
+	_paint_trail = paint.trail_color
+	if paint.strength > 0.0:
+		for part in _visual_pivot.find_children("*", "MeshInstance3D", true, false):
+			_tint(part as MeshInstance3D, paint)
+	for flare in _visual_pivot.find_children("*", "EngineFlare", true, false):
+		(flare as EngineFlare).refresh_color()
+
+
+## Tints one part of the model, leaving glowing bits (lights, engines) alone.
+func _tint(part: MeshInstance3D, paint: PaintJob) -> void:
+	if part.mesh == null or part is EngineFlare or part is EngineTrail:
+		return
+	for i in part.mesh.get_surface_count():
+		var material := part.get_active_material(i) as ShaderMaterial
+		if material == null or material.get_shader_parameter("albedo") == null:
+			continue
+		var glow: Variant = material.get_shader_parameter("emission_strength")
+		if glow != null and float(glow) > 0.0:
+			continue
+		var painted := material.duplicate() as ShaderMaterial
+		var albedo: Color = material.get_shader_parameter("albedo")
+		painted.set_shader_parameter("albedo", albedo.lerp(albedo * paint.hull_tint * 1.3, paint.strength))
+		part.set_surface_override_material(i, painted)
 
 
 ## How far past top speed we are, from 0 (at or below top speed) to 1 (at
@@ -174,10 +246,42 @@ func _shake_cargo(delta: float) -> void:
 	var g := rough_g_force(acceleration, flight.nose())
 	var rough := maxf(g - tuning.cargo_comfy_accel, 0.0) / tuning.cargo_comfy_accel
 	var vibration := overspeed_ratio()
-	var loss := (rough * tuning.cargo_rough_rate + vibration * tuning.cargo_boost_rate) * delta
-	cargo_condition = maxf(cargo_condition - loss, 0.0)
+	var rough_loss := rough * tuning.cargo_rough_rate * delta
+	var shake_loss := vibration * tuning.cargo_boost_rate * delta
+	cargo_condition = maxf(cargo_condition - rough_loss - shake_loss, 0.0)
 	var stress_now := clampf(g / (tuning.cargo_comfy_accel * 2.0) + vibration * 0.4, 0.0, 1.0)
 	cargo_stress = lerpf(cargo_stress, stress_now, 1.0 - exp(-4.0 * delta))
+	_feel_the_cargo(acceleration, rough_loss, shake_loss)
+
+
+## Makes cargo damage something you can feel: the cab rattles on a rough
+## ride, and every little bit of damage is a thump in the hold, a jolt, and
+## a flash on the HUD saying why (a hard turn, hard braking, the boost).
+func _feel_the_cargo(acceleration: Vector3, rough_loss: float, shake_loss: float) -> void:
+	var rattle := smoothstep(0.4, 0.9, cargo_stress)
+	_rattle_sound.volume_db = linear_to_db(maxf(rattle * 0.7, 0.0001))
+	if rattle > 0.01 and not _rattle_sound.playing:
+		_rattle_sound.play()
+	elif rattle <= 0.01 and _rattle_sound.playing:
+		_rattle_sound.stop()
+	_jostle += rough_loss + shake_loss
+	if _jostle < DAMAGE_PER_THUMP or GameState.active_job_id.is_empty():
+		_jostle = minf(_jostle, DAMAGE_PER_THUMP)
+		return
+	_jostle = 0.0
+	if rough_loss >= shake_loss:
+		var braking := minf(acceleration.dot(flight.nose()), 0.0)
+		var sideways := (acceleration - flight.nose() * acceleration.dot(flight.nose())).length()
+		last_jostle_reason = "brake" if -braking > sideways else "turn"
+	else:
+		last_jostle_reason = "boost"
+	_thump_sound.pitch_scale = randf_range(0.8, 1.2)
+	_thump_sound.play()
+	shake.add_trauma(0.18)
+	if Settings.rumble:
+		Input.start_joy_vibration(0, 0.4, 0.1, 0.12)
+	jostles += 1
+	cargo_jostled.emit(last_jostle_reason)
 
 
 ## The part of an acceleration that shakes cargo: everything except
@@ -213,8 +317,16 @@ func _update_shake(delta: float) -> void:
 	if flight.boosting and not _was_boosting:
 		shake.add_trauma(tuning.boost_kick_shake)  # The boost kicks in: thump!
 	_was_boosting = flight.boosting
-	shake.rumble = tuning.boost_rumble_shake if flight.boosting else 0.0
+	# A rumble while boosting; a faint road-feel vibration that grows with
+	# speed otherwise.
+	var cruise_feel := tuning.cruise_rumble_shake * pow(clampf(speed_ratio(), 0.0, 1.0), 2.0)
+	shake.rumble = tuning.boost_rumble_shake if flight.boosting else cruise_feel
 	shake.update(delta, tuning.shake_decay)
+	# The boost spooling up: a rising whine while the button's held.
+	if flight.spool > 0.0 and not _spool_sound.playing:
+		_spool_sound.play()
+	elif flight.spool <= 0.0 and _spool_sound.playing and not flight.boosting:
+		_spool_sound.stop()
 
 
 ## Hands the controls to the docking autopilot, which flies through
@@ -230,6 +342,9 @@ func fly_route(route: Array[Vector3], speed: float, stop_at_end: bool = true) ->
 ## The canned docking run: steer smoothly at the next spot, ease off at the
 ## end, never bonk (it flies straight through, ignoring collisions).
 func _fly_autopilot(delta: float) -> void:
+	cargo_stress = 0.0
+	if _rattle_sound.playing:
+		_rattle_sound.stop()
 	var target := autopilot_route[0]
 	var to_target := target - global_position
 	var distance := to_target.length()
@@ -239,6 +354,8 @@ func _fly_autopilot(delta: float) -> void:
 		if autopilot_route.is_empty():
 			if _autopilot_stops:
 				flight.velocity = Vector3.ZERO
+			# Hand back the lever matching how fast we're rolling.
+			controls.lever = clampf(flight.speed() / ship_data.max_speed, 0.0, 1.0)
 			autopilot_arrived.emit()
 		return
 	var direction := to_target / distance
@@ -280,6 +397,7 @@ func teleport(where: Transform3D) -> void:
 	velocity = Vector3.ZERO
 	_last_velocity = Vector3.ZERO
 	cargo_stress = 0.0
+	_rattle_sound.stop()
 	_visual_pivot.rotation = Vector3.ZERO
 	# Tell Godot's motion smoothing not to slide us from the old spot.
 	reset_physics_interpolation()

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/synthwave.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "NEON DRIFT"
+frequency = "88.8"
+genre = "Synthwave, outrun"
+dj_name = "DJ Vapor"
+tagline = "Every sunset, all night long."
+music_folder = "res://audio/radio/neon_drift/music"
+ads_folder = "res://audio/radio/neon_drift/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("VAPOR - CHROME HORIZON", "THE GRIDLINES - MIDNIGHT TOLLBOOTH", "PALM ORBIT - PINK SUNSET MACHINE", "LASER COUPE - DRIVE TO NOWHERE (EXTENDED)", "MISS MAGENTA - NEON TEARS", "OUTRUN OUTPOST - 1987 FOREVER")
+ads = PackedStringArray("CHROME DOME HULL WAX. LOOK FAST, EVEN WHEN PARKED.", "SUNSET IN A CAN. SPRAY IT ON YOUR WINDSHIELD. IT'S ALWAYS GOLDEN HOUR.", "GRIDLINE AUTO SPA. WE BUFF THE STARS RIGHT OFF YOUR HULL.")
+dj_lines = PackedStringArray("Vapor here. Behind these shades: another sunset.", "That one felt like a pink sky melting into chrome. Most of them do.", "Keep your window down. In space that's a bad idea. But spiritually.", "Somewhere a palm tree is swaying for you, trucker.")
+dj_on_storm = PackedStringArray("The ion storm is glowing like a 1980s sunset. Gorgeous. Terrifying. Gorgeous.")
+dj_on_delivery = PackedStringArray("{bunny} just rolled into {place} like the last scene of a movie. Freeze frame.")
+dj_on_ticket = PackedStringArray("A speeding ticket, under the neon. Honestly? Iconic.")
+dj_on_new_system = PackedStringArray("Welcome to {system}. The sky's a new color. Same sunset in your heart.")

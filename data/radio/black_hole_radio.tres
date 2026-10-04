@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/doom.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "BLACK HOLE RADIO"
+frequency = "60.1"
+genre = "Doom, stoner metal"
+dj_name = "DJ Fuzz"
+tagline = "Slow. Heavy. Fuzzy. Like time near a black hole."
+music_folder = "res://audio/radio/black_hole_radio/music"
+ads_folder = "res://audio/radio/black_hole_radio/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("FUZZ - ...", "EVENT LOOP - SLOWER THAN LIGHT", "TORTOISE COSMOS - SHELL OF THE UNIVERSE", "SMOKE NEBULA - HAZE", "RED DWARF RIFF - DYING STAR, GOOD VIBES", "GREEN COMET - SEVENTEEN MINUTES (EDIT)")
+ads = PackedStringArray("LAVA LAMP DEPOT. WATCH IT. JUST WATCH IT.", "BEANBAG CHAIRS FOR YOUR CAB. SINK IN. NEVER LEAVE.")
+dj_lines = PackedStringArray("This... is... Black... Hole... Radio.", "That... was... (three songs later) ...heavy.", "Fuzz... here. Just... let it... ring.", "Time... moves... different... out here.")
+dj_on_storm = PackedStringArray("Storm... out... there. Nice... colors.")
+dj_on_delivery = PackedStringArray("Shout... out... to... {bunny}... at... {place}... (song ends) ...nice.")
+dj_on_ticket = PackedStringArray("Ticket?... Slow... down... man. Like... me.")
+dj_on_new_system = PackedStringArray("{system}... far... out.")

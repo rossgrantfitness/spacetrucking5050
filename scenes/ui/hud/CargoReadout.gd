@@ -8,7 +8,8 @@ extends HudWidget
 ##   slip away.
 ## - RIDE: how rough the ride is for the cargo. Green is fine; yellow means
 ##   it's starting to take damage (hard turns, slides, braking, boosting);
-##   red means it's rattling.
+##   red means it's rattling. Each time the load gets knocked around, a word
+##   flashes under it saying why: HARD TURN, BRAKING or BOOST SHAKE.
 ## (You get paid when you dock and climb out at the destination.)
 
 
@@ -17,6 +18,9 @@ var _shown_cargo: float = -1.0
 var _shown_pay: int = -1
 var _pay_flash: float = 0.0
 var _cargo_flash: float = 0.0
+var _jostles_seen: int = 0
+var _why: String = ""
+var _why_time: float = 0.0
 
 
 func hud_step(delta: float, numbers_due: bool) -> void:
@@ -26,6 +30,11 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 	_pop.update(delta)
 	_pay_flash = maxf(_pay_flash - delta, 0.0)
 	_cargo_flash = maxf(_cargo_flash - delta, 0.0)
+	_why_time = maxf(_why_time - delta, 0.0)
+	if rig != null and rig.jostles != _jostles_seen:
+		_jostles_seen = rig.jostles
+		_why = {"turn": "HARD TURN!", "brake": "BRAKING!", "boost": "BOOST SHAKE!"}.get(rig.last_jostle_reason, "")
+		_why_time = 1.6
 	if job == null or rig == null or not numbers_due:
 		return
 	# Cargo ticks down one percent per number update until it catches up.
@@ -52,7 +61,7 @@ func _draw() -> void:
 	var right := size.x - MARGIN + roundf(_pop.hidden_share() * 90.0)
 	var top := MARGIN
 	var currency := GameState.names.currency_short
-	box(Rect2(right - 72.0, top - 2.0, 74.0, 26.0), BACKING)
+	box(Rect2(right - 72.0, top - 2.0, 74.0, 26.0 + (8.0 if _why_time > 0.0 else 0.0)), BACKING)
 	var cargo_color := GREEN
 	if _shown_cargo < 40.0:
 		cargo_color = RED
@@ -67,6 +76,8 @@ func _draw() -> void:
 	text_right(Vector2(right, top + 10.0), pay_text, YELLOW if _pay_flash > 0.0 else GREEN)
 	text_right(Vector2(right - text_width(pay_text) - 4.0, top + 10.0), "+" if _pay_flash > 0.0 else "PAY", YELLOW if _pay_flash > 0.0 else tint(0.85))
 	_draw_ride(Vector2(right, top + 17.0))
+	if _why_time > 0.0:
+		text_right(Vector2(right, top + 25.0), _why, RED if blink(0.2) else YELLOW)
 
 
 ## The ride-roughness bar, right-aligned at `right_top`.

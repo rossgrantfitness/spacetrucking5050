@@ -2,8 +2,9 @@ class_name HullSilhouette
 extends HudWidget
 ## The very bottom-right corner: a tiny top-down picture of your rig. It's
 ## green when healthy, yellow when battered, red when it really needs a
-## patch, and the spot you just bonked flashes red. The hull percentage sits
-## on top.
+## patch, and the spot you just bonked flashes red. When rough flying
+## knocks the cargo around, the cargo hold (the middle) flashes orange. The
+## hull percentage sits on top.
 
 
 ## The rig from above, nose up. '#' = hull.
@@ -33,6 +34,8 @@ var _last_hull: float = 1.0
 var _flash: float = 0.0
 var _zone: Zone = Zone.MIDDLE
 var _shown_hull: int = 100
+var _cargo_flash: float = 0.0
+var _jostles_seen: int = 0
 
 
 func _init() -> void:
@@ -48,6 +51,10 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 		_zone = zone_for(rig.last_bonk_local)
 	_last_hull = rig.hull
 	_flash = maxf(_flash - delta, 0.0)
+	_cargo_flash = maxf(_cargo_flash - delta, 0.0)
+	if rig.jostles != _jostles_seen:
+		_jostles_seen = rig.jostles
+		_cargo_flash = 0.8
 	if numbers_due:
 		_shown_hull = roundi(rig.hull * 100.0)
 
@@ -82,6 +89,8 @@ func _draw() -> void:
 			var color := health
 			if flashing and _zone_at(x, y) == _zone:
 				color = RED
+			elif _cargo_flash > 0.0 and blink(0.15) and y >= 4 and y <= 10:
+				color = Color(1.0, 0.55, 0.2)  # The cargo hold.
 			box(Rect2(corner + Vector2(x, y), Vector2.ONE), color)
 	text_right(corner + Vector2(10, -8), str(_shown_hull), RED if _flash > 0.0 else tint(0.85))
 

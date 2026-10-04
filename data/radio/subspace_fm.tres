@@ -1,16 +1,22 @@
 [gd_resource type="Resource" script_class="RadioStation" format=3]
 
 [ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
-[ext_resource type="AudioStream" path="res://audio/radio/subspace_fm/placeholder_loop.wav" id="2_loop"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/drum_and_bass.wav" id="2_loop"]
 
 [resource]
 script = ExtResource("1_station")
 display_name = "SUBSPACE FM"
-frequency = "104.2"
-genre = "Drum & bass"
+frequency = "101.1"
+genre = "Drum & bass, jungle"
+dj_name = "DJ Static"
+tagline = "Faster than light, heavier than bass."
 music_folder = "res://audio/radio/subspace_fm/music"
 ads_folder = "res://audio/radio/subspace_fm/ads"
 placeholder_loop = ExtResource("2_loop")
-dj_name = "DJ Lowkey Lou"
-tracks = PackedStringArray("HULL BREACH COLLECTIVE - ROLLERS FOR THE LONG HAUL", "AMEN NEBULA - NOTHING BUT TAILLIGHTS", "DOUBLE PARKED - TWO STEP TO THE PUMPS", "THE ODOMETERS - 5050 BPM (NOT REALLY)", "SLEEPY COMET - DUST ON THE WINDSHIELD", "CARGO CULT - LIQUID LOAD")
+tracks = PackedStringArray("HULL BREACH COLLECTIVE - ROLLERS FOR THE LONG HAUL", "AMEN NEBULA - NOTHING BUT TAILLIGHTS", "DOUBLE PARKED - TWO STEP TO THE PUMPS", "SLEEPY COMET - DUST ON THE WINDSHIELD", "CARGO CULT - LIQUID LOAD", "THE ODOMETERS - JUNGLE GYM (ZERO G MIX)")
 ads = PackedStringArray("MOON MILK. NOW WITH 30% LESS GRAVITY.", "DR. SPRINKLE'S HULL PUTTY. IT'S ALSO A SNACK.", "TIRED OF ASTEROIDS? MOVE TO ANOTHER PART OF SPACE. ASK US HOW.")
+dj_lines = PackedStringArray("(whispering) Subspace FM. Faster than light, heavier than bass.", "Traffic and weather on the twos. Weather: space. Traffic: you.", "(whispering) Big shout to everybody hauling tonight. Keep it rolling.", "This next one goes out to anyone whose cargo is making noises it shouldn't.")
+dj_on_storm = PackedStringArray("(whispering) Ion storm on the {system} lanes. If I cut out... it's the storm. Not me. I'm fine.")
+dj_on_delivery = PackedStringArray("(whispering) Shout-out to {bunny}, just dropped a load at {place}. Clean. Respect.")
+dj_on_ticket = PackedStringArray("(whispering) Somebody just got clocked by the space patrol. Was it you? It was you.")
+dj_on_new_system = PackedStringArray("(whispering) Welcome to {system}, haulers. Same bass, new sky.")

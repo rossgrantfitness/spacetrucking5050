@@ -40,6 +40,12 @@ func _init() -> void:
 	_action("toggle_hud", BUTTON, [_key(KEY_H), _button(JOY_BUTTON_DPAD_DOWN)])
 	# Opens the course chart (pick a destination for the autopilot).
 	_action("chart_course", BUTTON, [_key(KEY_M), _button(JOY_BUTTON_BACK)])
+	# On autopilot: get out of the seat and walk around the cabin.
+	_action("get_up", BUTTON, [_key(KEY_F), _button(JOY_BUTTON_X)])
+	# Talk back on the comms (then pick a reply with Q / R / E or the D-pad).
+	_action("reply", BUTTON, [_key(KEY_T), _button(JOY_BUTTON_RIGHT_SHOULDER)])
+	# The logbook of sights you've seen (also in the pause menu).
+	_action("logbook", BUTTON, [_key(KEY_L)])
 	# A developer helper: lights up every HUD warning so the look can be
 	# checked. Keyboard only.
 	_action("hud_demo", BUTTON, [_key(KEY_F9)])
@@ -54,6 +60,8 @@ func _init() -> void:
 	_action("move_left", STICK, [_key(KEY_A), _key(KEY_LEFT), _axis(JOY_AXIS_LEFT_X, -1.0)])
 	_action("move_right", STICK, [_key(KEY_D), _key(KEY_RIGHT), _axis(JOY_AXIS_LEFT_X, 1.0)])
 	_action("interact", BUTTON, [_key(KEY_E), _button(JOY_BUTTON_A)])
+	# Hold to run.
+	_action("run", BUTTON, [_key(KEY_SHIFT), _button(JOY_BUTTON_X), _button(JOY_BUTTON_LEFT_STICK)])
 
 	# --- Anywhere ---------------------------------------------------------
 	_action("pause", BUTTON, [_key(KEY_ESCAPE), _button(JOY_BUTTON_START)])

@@ -78,8 +78,8 @@ func _process(delta: float) -> void:
 	# The wheel turns with the steering and tips a little with nose up/down.
 	_wheel.rotation.y = -steer.x * 1.7
 	_column.rotation.x = 0.96 + steer.y * 0.12
-	# The throttle lever eases toward the thrust you're giving.
-	_lever_angle = lerpf(_lever_angle, -flight.thrust * 0.55, 1.0 - exp(-12.0 * delta))
+	# The throttle lever follows where you've set it.
+	_lever_angle = lerpf(_lever_angle, -_ship.controls.lever * 0.55, 1.0 - exp(-12.0 * delta))
 	_lever.rotation.x = _lever_angle
 	# The boost button sinks in and blazes while boosting, and glows softly
 	# while there's boost fuel to burn.

@@ -8,6 +8,12 @@ extends HudWidget
 ## Long lines flip over to a second card. CommChatter.gd decides who calls
 ## and when; this just shows the call. Calls stay up even when the player
 ## hides the rest of the HUD.
+##
+## Talking back: when a call has finished typing, "T: REPLY" shows under
+## it. Press T (RB) and three of Jack's one-liners pop up; pick one with
+## Q / R / E (or 1 / 2 / 3, or D-pad left / up / right) and she says it
+## over the comms once the call ends. Pure flavor, no consequences. Her
+## lines are in res://data/dialogue/bunny_replies.tres.
 
 
 ## Emitted when a call has finished and slid away.
@@ -16,6 +22,9 @@ signal finished
 enum State { IDLE, STATIC_IN, TYPING, HOLDING, STATIC_OUT, LEAVING }
 
 const STATIC_SOUND := preload("res://audio/generated/static.wav")
+const REPLIES: BunnyReplies = preload("res://data/dialogue/bunny_replies.tres")
+## How long the reply picker waits for a choice, in seconds.
+const PICK_SECONDS: float = 8.0
 const BLIP_SOUND := preload("res://audio/generated/blip.wav")
 const MAX_WIDTH: float = 180.0
 const HEIGHT: float = 38.0
@@ -35,6 +44,14 @@ var _mouth_open: bool = false
 var _blinking: bool = false
 var _static_player: AudioStreamPlayer
 var _blip_player: AudioStreamPlayer
+## What kind of call this is (for picking fitting replies).
+var _situation: ChatterSet.Situation = ChatterSet.Situation.IDLE
+var _allow_reply: bool = false
+var _picking: bool = false
+var _replies := PackedStringArray()
+## Jack's reply, said once this call has slid away.
+var _queued_reply: String = ""
+var _rng := RandomNumberGenerator.new()
 
 
 func _init() -> void:
@@ -51,14 +68,19 @@ func _ready() -> void:
 	_blip_player.stream = BLIP_SOUND
 	_blip_player.max_polyphony = 3
 	add_child(_blip_player)
+	_rng.randomize()
 
 
 ## Starts a call from `speaker` saying `words` (names like {bunny} are filled
-## in). Ignored if a call is already up; check is_busy() first.
-func call_in(speaker: NPCData, words: String) -> void:
+## in). Ignored if a call is already up; check is_busy() first. `situation`
+## is what it's about, for Jack's replies; `repliable` off for her own lines.
+func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = ChatterSet.Situation.IDLE, repliable: bool = true) -> void:
 	if is_busy():
 		return
 	_speaker = speaker
+	_situation = situation
+	_allow_reply = repliable
+	_picking = false
 	var text_width_available := _box_width() - 36.0
 	var lines := PixelFont.wrap(GameState.names.fill_in(words).to_upper(), text_width_available, 1.0)
 	_cards.clear()
@@ -72,6 +94,42 @@ func call_in(speaker: NPCData, words: String) -> void:
 
 func is_busy() -> bool:
 	return _state != State.IDLE
+
+
+## Whether Jack can talk back right now (the call has finished typing).
+func can_reply() -> bool:
+	return _allow_reply and not _picking and _state == State.HOLDING and _card == _cards.size() - 1
+
+
+## Whether the reply picker is up.
+func is_picking() -> bool:
+	return _picking
+
+
+## Shows three things Jack could say back.
+func open_replies() -> void:
+	if not can_reply():
+		return
+	_replies = REPLIES.pick(_situation, 3, _rng)
+	if _replies.is_empty():
+		return
+	_picking = true
+	_clock = 0.0
+
+
+## Jack says reply number `index` (0-2) once the call ends.
+func choose_reply(index: int) -> void:
+	if not _picking or index < 0 or index >= _replies.size():
+		return
+	_queued_reply = _replies[index]
+	_picking = false
+	_set_state(State.STATIC_OUT)
+	_static_player.play()
+
+
+## Never mind.
+func close_replies() -> void:
+	_picking = false
 
 
 ## Whether the box is on screen (the radio ticker hides under it).
@@ -100,7 +158,10 @@ func hud_step(delta: float, _numbers_due: bool) -> void:
 				_set_state(State.HOLDING)
 		State.HOLDING:
 			var hold := tuning.comm_hold_seconds if _card == _cards.size() - 1 else tuning.comm_hold_seconds * 0.6
+			if _picking:
+				hold = PICK_SECONDS
 			if _clock >= hold:
+				_picking = false
 				if _card < _cards.size() - 1:
 					_card += 1
 					_letters = 0.0
@@ -115,6 +176,10 @@ func hud_step(delta: float, _numbers_due: bool) -> void:
 			if not _pop.shown():
 				_set_state(State.IDLE)
 				finished.emit()
+				if not _queued_reply.is_empty():
+					var reply := _queued_reply
+					_queued_reply = ""
+					call_in(REPLIES.voice, reply, ChatterSet.Situation.IDLE, false)
 
 
 func _set_state(state: State) -> void:
@@ -188,3 +253,18 @@ func _draw() -> void:
 	# "More" arrow when another card follows.
 	if _state == State.HOLDING and _card < _cards.size() - 1 and blink(0.4):
 		pixels(Vector2(corner.x + width - 6.0, corner.y + HEIGHT - 8.0), ["###", ".#."], YELLOW)
+	_draw_replies(Vector2(corner.x, corner.y + HEIGHT + 1.0), width)
+
+
+## Under the box: the offer to reply, or the three replies to pick from.
+func _draw_replies(top_left: Vector2, width: float) -> void:
+	if can_reply():
+		box(Rect2(top_left - Vector2(2, 0), Vector2(46, 9)), BACKING)
+		text(top_left + Vector2(0, 2), "T: REPLY", YELLOW if blink(0.5) else tint(0.8))
+	elif _picking:
+		var keys := ["Q", "R", "E"]
+		box(Rect2(top_left - Vector2(2, 0), Vector2(width + 4.0, 3.0 + 8.0 * _replies.size())), BACKING)
+		for i in _replies.size():
+			var words: String = GameState.names.fill_in(_replies[i]).to_upper()
+			text(top_left + Vector2(0, 2.0 + i * 8.0), keys[i], YELLOW)
+			text(top_left + Vector2(8, 2.0 + i * 8.0), words.left(int((width - 10.0) / 4.0)), GREEN)

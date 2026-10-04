@@ -16,7 +16,15 @@ extends Node
 ##   plays instead, swelling a little when you fly fast.
 ## - In the truck stop: the jukebox, muffled through the room's speakers.
 ## - Elsewhere on the base it's quiet (the stations keep going, though).
-## A weak signal (solar storms, in M5) adds hiss and makes the music drop out.
+## A weak signal (ion storms, a pirate station, a regional station far from
+## home) adds hiss and makes the music drop out. Some stations only come in
+## near their part of space (Tide 77 near Tidewater), or only at night
+## (Afterglow Block), and one has no name at all...
+##
+## THE DJs: every couple of minutes the DJ says something or an ad scrolls
+## across the ticker (tuning.tres, "Radio"). DJs also react to what you do:
+## ion storms, speeding tickets, crossing into a new system, and (next time
+## you're on the road) your last delivery. See the station files.
 ##
 ## There is deliberately no streaming-service integration (see CLAUDE.md).
 
@@ -42,8 +50,15 @@ const AMBIENT_BUS: String = "Ambient"
 const ROOM_VOLUME_DB: float = -8.0
 const ROOM_MUFFLE_HZ: float = 1100.0
 const WEAK_SIGNAL_MUFFLE_HZ: float = 2400.0
-## Seconds a text ad stays on the ticker.
-const TEXT_AD_SECONDS: float = 12.0
+## Seconds a text ad or DJ line stays on the ticker.
+const TEXT_AD_SECONDS: float = 14.0
+## What DJs say when their station has no line of its own for something.
+const GENERAL_REACTIONS := {
+	"storm": "Heads up, haulers: ion storm on the lanes. Ride it out.",
+	"delivery": "Shout-out to {bunny}, just made a delivery at {place}.",
+	"ticket": "Somebody just met the space patrol. Ease off out there.",
+	"new_system": "Welcome to {system}, haulers.",
+}
 ## Songs with an unknown length are treated as this long.
 const UNKNOWN_LENGTH: float = 180.0
 
@@ -59,6 +74,9 @@ var signal_strength: float = 1.0
 ## 0 = drifting slowly, 1 = flying flat out. The ambient music (radio off)
 ## swells a little with it.
 var intensity: float = 0.0
+## Where the listener is in the flight world (the flight scene keeps this
+## up to date), for regional stations.
+var listener_position := Vector3.ZERO
 
 var _context: Context = Context.OFF_AIR
 var _clock: float = 0.0
@@ -70,6 +88,10 @@ var _tune: AudioStreamPlayer
 var _ambient: AudioStreamPlayer
 var _text_ad: String = ""
 var _text_ad_left: float = 0.0
+var _talk_left: float = 60.0
+# A DJ reaction waiting for the next time you're on the road: [event, fill-ins].
+var _queued_reaction: Array = []
+var _reaction_delay: float = 0.0
 var _dropout: float = 0.0
 var _rng := RandomNumberGenerator.new()
 
@@ -95,6 +117,7 @@ func _process(delta: float) -> void:
 	_clock += delta
 	_text_ad_left = maxf(_text_ad_left - delta, 0.0)
 	_update_levels(delta)
+	_update_talk(delta)
 
 
 # --- Using the radio -------------------------------------------------------------
@@ -110,6 +133,8 @@ func set_context(context: Context) -> void:
 	_leave_station()
 	_context = context
 	_start_station()
+	if context == Context.FLIGHT and not _queued_reaction.is_empty():
+		_reaction_delay = 6.0  # A few seconds after takeoff.
 
 
 func next_station() -> void:
@@ -141,12 +166,17 @@ func toggle_power() -> void:
 	power_changed.emit()
 
 
-## What's on air right now: "ARTIST - TITLE", or "AD: ..." during an ad.
+## What's on air right now: "ARTIST - TITLE", "AD: ..." during an ad, or
+## "DJ NAME: ..." while the DJ talks.
 func now_playing() -> String:
 	if not powered:
 		return "RADIO OFF"
+	if reception() < 0.05:
+		if station().night_only and not TimeOfDay.is_night():
+			return "OFF THE AIR TILL THE NIGHT SHIFT"
+		return "~ STATIC ~"
 	if _text_ad_left > 0.0:
-		return "AD: " + _text_ad
+		return _text_ad
 	var state := _stations[station_index]
 	var items: Array = state["items"]
 	if items.is_empty():
@@ -155,6 +185,34 @@ func now_playing() -> String:
 	if item["placeholder"]:
 		return station().placeholder_title(state["round"])
 	return ("AD: " if item["ad"] else "") + str(item["title"])
+
+
+## How well the station you're tuned to comes in: 1 = clear, 0 = static.
+func reception() -> float:
+	var at_night := TimeOfDay.is_night()
+	if _context == Context.ROOM:
+		# A jukebox or the cabin speakers: no distance to worry about.
+		return 0.0 if station().night_only and not at_night else 1.0
+	return station().reception(listener_position, at_night)
+
+
+## The DJ reacts to something that happened ("storm", "delivery", "ticket",
+## "new_system"). `fill` fills in words like {place} and {system}.
+## With `later` on, it waits for the next time you're on the road.
+func dj_react(event: String, fill: Dictionary = {}, later: bool = false) -> void:
+	if later or _context == Context.OFF_AIR:
+		_queued_reaction = [event, fill]
+		return
+	if not powered or reception() < 0.3:
+		return
+	var radio_station := station()
+	var options := radio_station.reaction_lines(event)
+	var words: String = options[_rng.randi_range(0, options.size() - 1)] if not options.is_empty() else GENERAL_REACTIONS.get(event, "")
+	if words.is_empty():
+		return
+	for key: String in fill:
+		words = words.replace("{%s}" % key, str(fill[key]))
+	_show_words(radio_station, GameState.names.fill_in(words), false)
 
 
 ## Stops every radio sound (when quitting).
@@ -255,11 +313,11 @@ func _catch_up(state: Dictionary, seconds: float) -> void:
 			state["position"] = float(state["position"]) + seconds
 			return
 		seconds -= left
-		_step(state, false)
+		_step(state)
 
 
 ## Goes on to the next item in a station's playlist.
-func _step(state: Dictionary, show_text_ads: bool) -> void:
+func _step(state: Dictionary) -> void:
 	var items: Array = state["items"]
 	var finished: Dictionary = items[state["index"]]
 	state["position"] = 0.0
@@ -269,15 +327,6 @@ func _step(state: Dictionary, show_text_ads: bool) -> void:
 	if finished["ad"]:
 		return
 	state["songs_since_ad"] = int(state["songs_since_ad"]) + 1
-	# Stations without audio ads read their ads out on the ticker instead.
-	var radio_station: RadioStation = lineup.stations[_stations.find(state)]
-	var has_audio_ads := items.any(func(entry: Dictionary) -> bool: return entry["ad"])
-	if not has_audio_ads and int(state["songs_since_ad"]) >= radio_station.tracks_per_ad:
-		state["songs_since_ad"] = 0
-		state["ad_round"] = int(state["ad_round"]) + 1
-		if show_text_ads and not radio_station.ads.is_empty():
-			_text_ad = radio_station.ad_text(state["ad_round"])
-			_text_ad_left = TEXT_AD_SECONDS
 
 
 func _on_song_finished() -> void:
@@ -285,7 +334,7 @@ func _on_song_finished() -> void:
 	var items: Array = state["items"]
 	if items.is_empty():
 		return
-	_step(state, true)
+	_step(state)
 	_music.stream = items[state["index"]]["stream"]
 	_music.play()
 
@@ -296,16 +345,56 @@ func _length(item: Dictionary) -> float:
 	return length if length > 0.1 else UNKNOWN_LENGTH
 
 
+## Every few minutes, the DJ says something or an ad scrolls by. Also
+## plays a DJ reaction that was waiting for you to get back on the road.
+func _update_talk(delta: float) -> void:
+	if _context == Context.OFF_AIR or not powered:
+		return
+	if not _queued_reaction.is_empty() and _context == Context.FLIGHT:
+		_reaction_delay -= delta
+		if _reaction_delay <= 0.0:
+			var waiting := _queued_reaction
+			_queued_reaction = []
+			dj_react(waiting[0], waiting[1])
+	_talk_left -= delta
+	if _talk_left > 0.0:
+		return
+	var tuning := GameState.tuning
+	_talk_left = _rng.randf_range(tuning.radio_talk_min_seconds, maxf(tuning.radio_talk_max_seconds, tuning.radio_talk_min_seconds))
+	if _text_ad_left > 0.0 or reception() < 0.3:
+		return
+	var radio_station := station()
+	var state := _stations[station_index]
+	var has_audio_ads := (state["items"] as Array).any(func(entry: Dictionary) -> bool: return entry["ad"])
+	var wants_ad := _rng.randf() < tuning.radio_ad_share
+	if wants_ad and not has_audio_ads and not radio_station.ads.is_empty():
+		state["ad_round"] = int(state["ad_round"]) + 1
+		_show_words(radio_station, radio_station.ad_text(state["ad_round"]), true)
+	elif not radio_station.dj_lines.is_empty():
+		_show_words(radio_station, radio_station.dj_lines[_rng.randi_range(0, radio_station.dj_lines.size() - 1)], false)
+
+
+## Puts words on the ticker: an ad, or the DJ talking.
+func _show_words(radio_station: RadioStation, words: String, is_ad: bool) -> void:
+	var speaker := radio_station.dj_name.to_upper() if not radio_station.dj_name.is_empty() else "???"
+	_text_ad = ("AD: " if is_ad else speaker + ": ") + words.to_upper()
+	_text_ad_left = TEXT_AD_SECONDS
+	_talk_left = maxf(_talk_left, GameState.tuning.radio_talk_min_seconds * 0.5)
+
+
 ## Volume, muffling, hiss and dropouts, every frame.
 func _update_levels(delta: float) -> void:
 	var volume := linear_to_db(maxf(Settings.radio_volume, 0.0001))
 	var room := _context == Context.ROOM
 	# A weak signal: hiss rises and the music cuts out now and then.
-	var weakness := clampf(1.0 - signal_strength, 0.0, 1.0)
+	var clear := reception() if _context != Context.OFF_AIR else 1.0
+	var weakness := clampf(1.0 - signal_strength * clear, 0.0, 1.0)
 	if weakness > 0.3 and _rng.randf() < weakness * delta * 2.0:
 		_dropout = _rng.randf_range(0.15, 0.5)
 	_dropout = maxf(_dropout - delta, 0.0)
 	var music_db := volume + (ROOM_VOLUME_DB if room else 0.0) - (18.0 if _dropout > 0.0 else 0.0)
+	if clear < 0.05:
+		music_db = -80.0  # Out of range (or off the air): nothing but hiss.
 	_music.volume_db = music_db
 	_hiss.volume_db = linear_to_db(maxf(weakness * 0.5 + 0.02, 0.0001)) + volume - 6.0
 	var bus := AudioServer.get_bus_index(RADIO_BUS)

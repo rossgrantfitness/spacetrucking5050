@@ -47,7 +47,8 @@ func _draw() -> void:
 func _draw_status(ship: Ship, tint: Color) -> void:
 	var flight := ship.flight
 	PixelFont.draw(self, Vector2(10, 8), "%d KM/H" % roundi(flight.speed() * 3.6), 3.0, tint, 0.0, Color(0, 0, 0, 0))
-	_bar(Vector2(10, 34), "THR", clampf(absf(flight.thrust), 0.0, 1.0), tint if flight.thrust >= 0.0 else Color(0.4, 0.9, 1.0))
+	var lever := ship.controls.lever
+	_bar(Vector2(10, 34), "THR", clampf(absf(lever), 0.0, 1.0), tint if lever >= 0.0 else Color(0.4, 0.9, 1.0))
 	var low_fuel := flight.fuel < GameState.tuning.low_fuel_warning
 	_bar(Vector2(10, 56), "FUL", flight.fuel, Color(1.0, 0.35, 0.3) if low_fuel else tint)
 	_bar(Vector2(10, 78), "BST", flight.boost_fuel, tint)

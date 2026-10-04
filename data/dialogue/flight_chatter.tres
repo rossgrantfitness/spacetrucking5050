@@ -238,7 +238,7 @@ lines = PackedStringArray("Low... fuel...? Gas-N-Go... is... here... for... you.
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 7
-lines = PackedStringArray("Easy, sugar! I can hear those pies sliding from here.", "Smooth it out, hon. Pies don't like corners.")
+lines = PackedStringArray("Easy, sugar! I can hear those pies sliding from here.", "Smooth it out, hon. Pies don't like corners.", "Hon! THE PIES! ...Sorry. Just. The pies.")
 needs_active_job = "first_long_haul"
 
 [sub_resource type="Resource" id="Set_34_wendell_rough"]
@@ -251,7 +251,7 @@ lines = PackedStringArray("Your load's rattling, kid. Ease off.", "Smooth hands,
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 7
-lines = PackedStringArray("Dispatch can hear your cargo rattling. Dispatch is concerned.")
+lines = PackedStringArray("Dispatch can hear your cargo rattling. Dispatch is concerned.", "Was that a crate? That sounded like a crate. Ease off the corners, hon.")
 
 [sub_resource type="Resource" id="Set_36_deputy_speeding"]
 script = ExtResource("2_set")

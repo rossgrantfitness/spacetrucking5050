@@ -8,6 +8,9 @@ extends Node3D
 ## `id_label` (and join the "traffic" group, see show_on_radar()).
 
 
+## Which logbook entry it is ("" = not in the logbook). See
+## res://data/logbook/sights.tres.
+@export var log_id: String = ""
 ## The name on its HUD ID label ("" = no label).
 var id_label: String = ""
 ## Roughly how big it is (a radius, in meters), for the radar and labels.

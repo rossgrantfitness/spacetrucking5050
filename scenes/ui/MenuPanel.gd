@@ -80,6 +80,19 @@ func _ready() -> void:
 		var body := _label(_body, 20, Color(0.9, 0.92, 1.0))
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		column.add_child(body)
+	# Long lists (like the jukebox) scroll; the list follows the focus.
+	var list := VBoxContainer.new()
+	list.add_theme_constant_override("separation", 10)
+	if _options.size() > 8:
+		var scroller := ScrollContainer.new()
+		scroller.follow_focus = true
+		scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		scroller.custom_minimum_size = Vector2(0.0, 400.0)
+		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		scroller.add_child(list)
+		column.add_child(scroller)
+	else:
+		column.add_child(list)
 	for i in _options.size():
 		var option: Dictionary = _options[i]
 		var button := Button.new()
@@ -92,7 +105,7 @@ func _ready() -> void:
 		button.pressed.connect(_pick.bind(i))
 		button.focus_entered.connect(_describe.bind(i))
 		button.mouse_entered.connect(button.grab_focus)
-		column.add_child(button)
+		list.add_child(button)
 		_buttons.append(button)
 	_description = _label("", 18, Color(0.6, 0.95, 1.0))
 	_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

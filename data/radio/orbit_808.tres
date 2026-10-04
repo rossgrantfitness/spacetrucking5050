@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/boom_bap.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "ORBIT 808"
+frequency = "80.8"
+genre = "Boom bap, golden-age hip hop"
+dj_name = "DJ Mole-ecule"
+tagline = "Deep cuts, dug from the asteroid."
+music_folder = "res://audio/radio/orbit_808/music"
+ads_folder = "res://audio/radio/orbit_808/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("MOLE-ECULE - DIGGIN' IN THE BELT", "CRATE COMMAND - SAMPLE FROM THE VOID", "THE BREAKBEAT BROTHERS - DUSTY GROOVES", "LOW EARTH MCS - CLASSIC MATERIAL", "FUNK ASTRONOMY - MOON BOOTS AND BEATS", "RHYME CARGO - PAYLOAD")
+ads = PackedStringArray("CRATE DIGGERS SUPPLY. SHOVELS AND RECORDS.", "TURNTABLE GRAVITY CLAMPS. THE NEEDLE STAYS PUT. EVEN WHEN YOU DON'T.")
+dj_lines = PackedStringArray("Mole-ecule here, broadcasting from a tunnel inside an asteroid. Dug it myself.", "This joint's a deep cut. Real deep. I had to dig for it. Literally.", "Shout-out to the crate diggers and the crate haulers. Same thing, kinda.", "Golden age never ended. It just moved to space.")
+dj_on_storm = PackedStringArray("Storm's shaking the tunnel. Records skipping. That's a new remix now.")
+dj_on_delivery = PackedStringArray("Big up {bunny} on that delivery to {place}. Payload secured.")
+dj_on_ticket = PackedStringArray("Patrol caught somebody speeding. Slow your flow, haulers.")
+dj_on_new_system = PackedStringArray("Welcome to {system}. New crates to dig.")

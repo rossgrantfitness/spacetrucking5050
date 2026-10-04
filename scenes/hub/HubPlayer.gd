@@ -1,6 +1,6 @@
 class_name HubPlayer
 extends CharacterBody3D
-## The bunny on foot, walking around the base.
+## The bunny on foot, walking (or, holding Shift / X, running) around.
 ##
 ## Movement is "camera-relative": pushing up walks away from the camera,
 ## whichever fixed camera is showing her. When the view cuts to a new camera,
@@ -35,8 +35,10 @@ func _physics_process(delta: float) -> void:
 	if not _busy:
 		stick = Input.get_vector("move_left", "move_right", "move_forward", "move_back", tuning.stick_deadzone)
 	_update_move_yaw(stick)
-	var wanted := Basis(Vector3.UP, _move_yaw) * Vector3(stick.x, 0.0, stick.y) * tuning.walk_speed
-	var flat := Vector3(velocity.x, 0.0, velocity.z).move_toward(wanted, tuning.walk_acceleration * delta)
+	# Hold run to hurry (she's not happy about it).
+	var pace := tuning.run_speed if Input.is_action_pressed("run") else tuning.walk_speed
+	var wanted := Basis(Vector3.UP, _move_yaw) * Vector3(stick.x, 0.0, stick.y) * pace
+	var flat := Vector3(velocity.x, 0.0, velocity.z).move_toward(wanted, tuning.walk_acceleration * pace / tuning.walk_speed * delta)
 	velocity = Vector3(flat.x, velocity.y, flat.z)
 	if not is_on_floor():
 		velocity.y -= 9.8 * delta

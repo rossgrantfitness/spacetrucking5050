@@ -44,6 +44,7 @@ var _mouse_smoothed := Vector2.ZERO
 ## Action name -> the chip background we light up while it's pressed.
 var _chip_styles: Dictionary = {}
 var _saved_note_tween: Tween
+var _starting: bool = false  # Already on our way into the game.
 
 
 func _ready() -> void:
@@ -123,23 +124,27 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Carries on the saved game in the room you were last in, or starts a
 ## new one.
 func _start_game() -> void:
+	if _starting:
+		return
+	_starting = true
 	if GameState.load_game() and not GameState.current_room.is_empty():
-		get_tree().change_scene_to_file(GameState.current_room)
+		LoadingScreen.go(get_tree(), GameState.current_room, "start")
 	else:
 		_new_game()
 
 
 ## Forgets the save and wakes up in the apartment, next to the bed.
 func _new_game() -> void:
+	_starting = true
 	SaveSystem.delete_save()
 	GameState.new_game()
 	GameState.next_spawn = "Bed"
-	get_tree().change_scene_to_file(APARTMENT_SCENE)
+	LoadingScreen.go(get_tree(), APARTMENT_SCENE, "start")
 
 
 func _start_flying() -> void:
 	GameState.load_game()
-	get_tree().change_scene_to_file(FLIGHT_SCENE)
+	LoadingScreen.go(get_tree(), FLIGHT_SCENE, "flight")
 
 
 ## Turns a steering input into words, respecting the invert Y setting.

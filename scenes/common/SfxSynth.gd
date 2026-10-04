@@ -121,6 +121,111 @@ static func make_whoosh() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## The "power on" chime for the intro: a soft whoomp, a sparkly little
+## run of bell notes, then a big warm chord that rings out. Our own jingle,
+## in the spirit of 90s consoles saying hello.
+static func make_power_on() -> AudioStreamWAV:
+	var seconds := 3.2
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	# The sparkle: three quick bell notes (E6, B5, E6 up an octave-ish).
+	var bells: Array[Array] = [[0.18, 1318.5], [0.30, 987.8], [0.42, 1975.5]]
+	# The chord: A major add 9, warm and wide.
+	var chord: Array[float] = [110.0, 164.8, 220.0, 277.2, 329.6, 493.9]
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var sample := 0.0
+		# Whoomp: a low sine dropping in pitch.
+		var whoomp_t := t
+		sample += sin(TAU * lerpf(90.0, 40.0, minf(whoomp_t / 0.4, 1.0)) * whoomp_t) * exp(-whoomp_t * 5.0) * 0.5
+		for bell: Array in bells:
+			var start: float = bell[0]
+			if t >= start:
+				var bt := t - start
+				var hz: float = bell[1]
+				# A bell: a tone plus a slightly out-of-tune overtone (FM-ish shimmer).
+				sample += (sin(TAU * hz * bt + 1.5 * sin(TAU * hz * 2.01 * bt) * exp(-bt * 6.0))) * exp(-bt * 4.5) * 0.22
+		if t >= 0.55:
+			var ct := t - 0.55
+			var swell := minf(ct / 0.08, 1.0) * exp(-ct * 0.9)
+			for note in chord:
+				# Each note slightly detuned against itself for a chorus shimmer.
+				sample += (sin(TAU * note * ct) + 0.5 * sin(TAU * note * 1.003 * ct) + 0.25 * sin(TAU * note * 2.0 * ct)) * swell * 0.07
+		samples[i] = tanh(sample * 1.1) * 0.85
+	return to_wav(samples, false)
+
+
+## The PC-speaker style "beep" of a power-on self test (POST).
+static func make_post_beep() -> AudioStreamWAV:
+	var seconds := 0.12
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var square := 1.0 if sin(TAU * 1000.0 * t) > 0.0 else -1.0
+		samples[i] = square * 0.18 * clampf((seconds - t) / 0.01, 0.0, 1.0)
+	return to_wav(samples, false)
+
+
+## A crate thumping against the walls of the cargo hold: a dull, woody knock.
+static func make_thump() -> AudioStreamWAV:
+	var seconds := 0.3
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 77
+	var low := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var body := sin(TAU * lerpf(150.0, 70.0, minf(t / 0.08, 1.0)) * t) * exp(-t * 22.0)
+		low = lerpf(low, rng.randf_range(-1.0, 1.0), 0.2)
+		var knock := low * exp(-t * 60.0)
+		samples[i] = tanh((body * 0.9 + knock * 0.8) * 1.5) * 0.8
+	return to_wav(samples, false)
+
+
+## The cab rattling on a rough ride: loose panels and a tool box buzzing.
+## Loops; its volume follows how rough the ride is.
+static func make_rattle() -> AudioStreamWAV:
+	var seconds := 1.0
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 31
+	for i in count:
+		var t := float(i) / MIX_RATE
+		# Fast irregular clicks: a few "loose things" tapping at their own rates.
+		var clicks := 0.0
+		for rate: float in [23.0, 31.0, 17.0]:
+			var since := fposmod(t * rate, 1.0) / rate
+			clicks += exp(-since * 400.0) * rng.randf_range(0.5, 1.0)
+		var buzz := sin(TAU * 61.0 * t) * 0.15 * (0.5 + 0.5 * sin(TAU * 3.0 * t))
+		samples[i] = clampf(clicks * 0.35 + buzz, -1.0, 1.0)
+	return to_wav(samples, true)
+
+
+## The boost spooling up: a rising turbine whine with a growl under it.
+static func make_spool() -> AudioStreamWAV:
+	var seconds := 1.3
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var phase := 0.0
+	var growl := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var rise := t / seconds
+		phase += TAU * lerpf(300.0, 1400.0, rise * rise) / MIX_RATE
+		growl += TAU * lerpf(50.0, 110.0, rise) / MIX_RATE
+		var envelope := minf(t / 0.1, 1.0) * clampf((seconds - t) / 0.08, 0.0, 1.0)
+		samples[i] = (sin(phase) * 0.3 * rise + sin(growl) * 0.35 + sin(growl * 3.0) * 0.1) * envelope
+	return to_wav(samples, false)
+
+
 ## Packs samples (-1 to 1) into a 16-bit audio stream.
 static func to_wav(samples: PackedFloat32Array, looping: bool) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

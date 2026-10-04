@@ -7,3 +7,11 @@ extends Node
 ##
 ## This is never a stressful timer: time only moves forward when the player
 ## does something (flies a job, goes to sleep).
+
+
+## Whether it's the night shift. Until shifts arrive (M6), it follows the
+## player's own clock: 9 p.m. to 6 a.m. (The Afterglow Block radio station
+## only broadcasts at night.)
+func is_night() -> bool:
+	var hour: int = Time.get_datetime_dict_from_system()["hour"]
+	return hour >= 21 or hour < 6

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/late_night_electro.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "AFTERGLOW BLOCK"
+frequency = "92.3"
+genre = "Downtempo, IDM, late-night electronica"
+dj_name = "K-9000"
+tagline = "The station of 2 a.m. hauls. Night shift only."
+music_folder = "res://audio/radio/afterglow_block/music"
+ads_folder = "res://audio/radio/afterglow_block/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("KILOBYTE KENNEL - EPISODE 41: THE QUIET LANE", "SOFT ROBOT - STANDBY MODE", "NIGHT CYCLE - DREAMING IN WIREFRAME", "AFTERGLOW SYSTEMS - LOW POWER WALTZ", "THE MODEMS - DIAL TONE LULLABY", "CRT GHOST - SCANLINES")
+ads = PackedStringArray("WARM MILK CAPSULES. FOR HAULERS WHO CAN'T SLEEP. OR WON'T.", "NIGHT VISION GOGGLES FOR YOUR DOG. YOUR DOG DESERVES TO SEE.")
+dj_lines = PackedStringArray("This is K-9000. The night is long. Next episode: a track about a quiet lane.", "Previously, on Afterglow Block: you were driving. Tonight: you still are.", "K-9000 reminds you: stretch. Blink. The lane will wait.", "Good boy. That was meant for you. You're doing fine.")
+dj_on_storm = PackedStringArray("K-9000 detects an ion storm. Stay calm. Stay on course. Good.")
+dj_on_delivery = PackedStringArray("Next episode: {bunny} delivers to {place}. A quiet triumph. Roll credits.")
+dj_on_ticket = PackedStringArray("Episode filler: a speeding ticket. It happens to the best of us.")
+dj_on_new_system = PackedStringArray("Now entering {system}. The night looks different here. Still night.")
+night_only = true

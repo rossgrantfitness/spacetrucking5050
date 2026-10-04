@@ -3,10 +3,13 @@ extends SceneTree
 ## res://audio/generated/:
 ##     engine_drone.wav, engine_whine.wav, engine_air.wav, engine_growl.wav
 ##         (the engine hum's four loops, from scenes/flight/EngineSynth.gd)
-##     bonk.wav, blip.wav, static.wav, big_engine.wav, whale_song.wav, whoosh.wav
+##     bonk.wav, blip.wav, static.wav, big_engine.wav, whale_song.wav, whoosh.wav,
+##     power_on.wav, post_beep.wav, thump.wav, rattle.wav, spool.wav
 ##         (a cartoon bump, a dialogue voice blip, a burst of radio static, a
-##         big ship's engines, a space whale's song and a comet's whoosh,
-##         from scenes/common/SfxSynth.gd)
+##         big ship's engines, a space whale's song, a comet's whoosh, the
+##         intro's power-on chime and self-test beep, a crate thumping in the
+##         hold, the cab rattling, and the boost spooling up, from
+##         scenes/common/SfxSynth.gd)
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/generate_sounds.gd
@@ -34,6 +37,11 @@ func _initialize() -> void:
 		"big_engine": SfxSynth.make_big_engine(),
 		"whale_song": SfxSynth.make_whale_song(),
 		"whoosh": SfxSynth.make_whoosh(),
+		"power_on": SfxSynth.make_power_on(),
+		"post_beep": SfxSynth.make_post_beep(),
+		"thump": SfxSynth.make_thump(),
+		"rattle": SfxSynth.make_rattle(),
+		"spool": SfxSynth.make_spool(),
 	}
 	var failed := false
 	for file_name: String in loops:

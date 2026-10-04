@@ -4,3 +4,4 @@
 
 [resource]
 script = ExtResource("1_names")
+bunny_name = "Jack Rabbit"

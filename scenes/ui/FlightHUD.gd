@@ -48,6 +48,7 @@ var contacts: Array[Dictionary] = []
 var pixel_scale: float = 2.0
 
 var _in_cockpit: bool = false
+var _in_cabin: bool = false
 var _frame_clock: float = 0.0
 var _number_clock: float = 0.0
 var _widgets: Array[HudWidget] = []
@@ -87,6 +88,12 @@ func show_banner(text: String, seconds: float) -> void:
 
 func set_cockpit_view(in_cockpit: bool) -> void:
 	_in_cockpit = in_cockpit
+	_refresh()
+
+
+## Walking around the cabin: only comm calls and messages show.
+func set_cabin(in_cabin: bool) -> void:
+	_in_cabin = in_cabin
 	_refresh()
 
 
@@ -181,5 +188,6 @@ func _fit() -> void:
 
 func _refresh() -> void:
 	for widget in _widgets:
-		widget.visible = (Settings.show_hud or widget.always_shown) and not (_in_cockpit and widget.bottom_row)
-	_hint.visible = Settings.show_hud
+		widget.visible = (Settings.show_hud or widget.always_shown) and not (_in_cockpit and widget.bottom_row) \
+				and (widget.always_shown or not _in_cabin)
+	_hint.visible = Settings.show_hud and not _in_cabin

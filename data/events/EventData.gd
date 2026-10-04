@@ -11,6 +11,17 @@ enum Kind { BIG_SHIP, CONVOY, WHALES, JELLYFISH, BILLBOARD, COMET, JUNK, DERELIC
 
 ## What it is.
 @export var kind: Kind = Kind.BILLBOARD
+## Which logbook entry it is (see res://data/logbook/sights.tres).
+@export var log_id: String = ""
+## Rare: never picked like the others. Instead, every time a sight comes
+## up there's a small chance (tuning.tres, "Route events") it's a rare one.
+@export var rare: bool = false
+## How big it is compared to normal (6 = a whale pod six times the size).
+@export_range(0.1, 20.0, 0.1) var size: float = 1.0
+## How many of it appear at once, spread out (a comet storm).
+@export_range(1, 20, 1) var copies: int = 1
+## A ghost: see-through and flickering.
+@export var ghost: bool = false
 ## How likely it is compared to the others (2 = twice as likely as 1).
 @export_range(0.0, 20.0, 0.1) var weight: float = 1.0
 ## Only in these solar systems (system ids like "home", "tidewater").

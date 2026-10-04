@@ -5,16 +5,19 @@ extends RefCounted
 ## controls every physics tick, then moves the actual ship to match.
 ##
 ## How it works (after the M1 playtest asked for real momentum):
-##   - Thrust pushes the ship along its nose. W / RT burns forward, S / LT
-##     burns backward, and burning backward is how you brake.
-##   - Let go and you COAST: the ship keeps its momentum.
+##   - Thrust pushes the ship along its nose (forward, or backward to brake).
+##     The pilot sets a throttle LEVER and ShipControls turns it into the
+##     thrust that reaches and holds that speed (see ShipControls.gd).
+##   - With no thrust you COAST: the ship keeps its momentum.
 ##   - "Grip" gradually swings your direction of travel around to where the
 ##     nose points, without losing speed, like carving a turn. Low grip =
 ##     wide, slidey arcs and easy overshooting; high grip = on rails.
 ##   - Spin the nose more than 90 degrees away from where you're going and
 ##     grip won't save you: burn the engines to brake.
 ##   - Boost shoves you far past top speed and makes grip much weaker, so the
-##     rig gets wild. Afterwards the extra speed bleeds off slowly.
+##     rig gets wild. Afterwards the extra speed bleeds off slowly. It's a
+##     commitment: it spools up for a moment while you hold the button
+##     before it lights, and once lit it burns for a few seconds minimum.
 ##   - Boosting also makes the rig hard to keep on course: the nose wanders
 ##     off by itself, steering gets twitchy, and jerky steering makes it
 ##     wander worse. Hold steady and it settles down.
@@ -45,12 +48,19 @@ var fuel_burn := 0.0
 ## Boost fuel, 0 (empty) to 1 (a full tank), and whether boost is firing.
 var boost_fuel := 1.0
 var boosting := false
+## Boost spooling up while the button is held, 0 to 1 (it lights at 1).
+var spool := 0.0
+## Seconds boost must keep burning before it can stop.
+var burn_left := 0.0
 ## How fast we're sliding sideways (m/s): the part of our movement that isn't
 ## where the nose points. The engine sound and HUD use it.
 var slip := 0.0
 ## How shaky the rig is under boost, 0 (steady) to 1 (all over the place).
 ## Jerky steering while boosting raises it; holding steady calms it.
 var wobble := 0.0
+## How easily jerky steering shakes the rig (1 = normal; a calming snack
+## from the Gas-N-Go makes it 0.5 for the trip).
+var shakiness := 1.0
 ## How far the rig visibly leans into a turn, and tips its nose, in radians.
 ## Purely for looks: neither changes where the ship goes.
 var bank := 0.0
@@ -122,6 +132,8 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	fuel_burn = 0.0
 	boost_fuel = 1.0
 	boosting = false
+	spool = 0.0
+	burn_left = 0.0
 	slip = 0.0
 	wobble = 0.0
 	bank = 0.0
@@ -131,7 +143,7 @@ func reset(new_heading: float, new_pitch: float) -> void:
 func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
 	var forward := nose()
 	thrust = _burn_fuel(delta, clampf(controls.thrust, -1.0, 1.0), ship, tuning)
-	boosting = controls.boost and boost_fuel > 0.0
+	_update_boost(delta, controls, tuning)
 	if boosting:
 		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
 
@@ -177,6 +189,27 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 	#    so a ship left alone does eventually come to rest.
 	if is_zero_approx(thrust) and not boosting:
 		velocity *= exp(-tuning.coast_drag * delta)
+
+
+## Boost is a commitment: hold the button and it spools up, then lights;
+## once lit it burns at least `boost_min_burn_seconds`, held or not.
+func _update_boost(delta: float, controls: FlightControls, tuning: Tuning) -> void:
+	if boost_fuel <= 0.0:
+		boosting = false
+		spool = 0.0
+		return
+	if boosting:
+		burn_left -= delta
+		boosting = controls.boost or burn_left > 0.0
+		return
+	if controls.boost:
+		spool += delta / maxf(tuning.boost_spool_seconds, 0.001)
+		if spool >= 1.0:
+			boosting = true
+			spool = 0.0
+			burn_left = tuning.boost_min_burn_seconds
+	else:
+		spool = maxf(spool - delta * 3.0, 0.0)
 
 
 ## Burns main fuel for `throttle` (how hard the pilot is pushing) and
@@ -237,7 +270,7 @@ func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> v
 	var jerk := (controls.steer - _last_steer).length() / maxf(delta, 0.0001)
 	_last_steer = controls.steer
 	if boosting:
-		wobble += jerk * tuning.boost_jerk_shake * delta
+		wobble += jerk * tuning.boost_jerk_shake * shakiness * delta
 	wobble = clampf(wobble * exp(-tuning.boost_steady_recovery * delta), 0.0, 1.0)
 
 

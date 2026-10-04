@@ -21,6 +21,10 @@ extends Node
 ##                     autopilot rolls you out the far side, still moving
 ## - THE COURSE CHART (M / Back): pick a destination and the cruise
 ##   autopilot drives (CruisePilot.gd). Grab the controls to take over.
+## - THE CABIN (F / X on autopilot): get out of the seat and walk around
+##   the rig's sleeper cabin (the apartment scene, shown in a SubViewport
+##   while the flight keeps going). Walk out the door to get back in the
+##   seat. Napping on the bed fast-forwards the trip until you arrive.
 ## - HAZARDS: ion storms and speed traps (scenes/flight/events/HazardZone.gd)
 ##   tell the ship how strongly they're affecting it.
 ## - ROUTE EVENTS: random sights along the road (RouteEvents.gd).
@@ -57,13 +61,32 @@ var _in_cockpit := false
 var _fade: ScreenFade
 var _current_system: String = ""
 var _route_events: RouteEvents
+## Walking around the cabin (out of the seat).
+var _in_cabin: bool = false
+var _cabin_layer: CanvasLayer
+var _cabin_room: HubRoom
+## Napping: time runs fast until you wake up or arrive.
+var _napping: bool = false
+var _nap_screen: CanvasLayer
+
+const CABIN_SCENE := preload("res://scenes/hub/Apartment.tscn")
+## Prices at the Gas-N-Go counter.
+const JERKY_PRICE: int = 15
+const KEYCHAIN_PRICE: int = 5
 var _rng := RandomNumberGenerator.new()
+var _in_storm: bool = false
+## Sights already logged this flight (by node), and a clock for checking.
+var _logged: Dictionary = {}
+var _log_clock: float = 0.0
+## How close you have to get to a sight for it to go in the logbook.
+const LOG_DISTANCE: float = 3000.0
 
 @onready var _ship: Ship = $World/Ship
 @onready var _chase_camera: ChaseCamera = $World/ChaseCamera
 @onready var _cockpit_camera: Camera3D = $World/Ship/CockpitCamera
 @onready var _speed_lines: SpeedLines = $SpeedLinesLayer/SpeedLines
 @onready var _dust: SpaceDust = $World/SpaceDust
+@onready var _motes: SpaceDust = $World/Motes
 @onready var _environment: WorldEnvironment = $World/WorldEnvironment
 @onready var _sun: DirectionalLight3D = $World/Sun
 @onready var _hud: FlightHUD = $FlightHUD
@@ -78,14 +101,16 @@ func _ready() -> void:
 	_fade = ScreenFade.new()
 	add_child(_fade)
 	_fade.cover()
-	# The rig, with every upgrade you've bought.
-	_ship.ship_data = GameState.upgraded_ship(_ship.ship_data)
+	# The rig you drive, with every upgrade you've bought, in its paint job.
+	_ship.ship_data = GameState.upgraded_ship(GameState.active_ship_data())
+	_ship.apply_look(GameState.paints.find(GameState.paint))
 	for node in $World/Places.get_children():
 		if GameState.places.find(node.name) != null:
 			_places[node.name] = node
 	_launch_from(GameState.launch_from)
 	_restore_rig()
 	_dust.ship = _ship
+	_motes.ship = _ship
 	_speed_lines.ship = _ship
 	_hud.setup(_ship, null, "", Color.WHITE)
 	_set_destination(_pick_destination())
@@ -97,18 +122,36 @@ func _ready() -> void:
 	_route_events.start(_ship, _events_holder, _chatter, _places, current_system)
 	_setup_haze()
 	_blend_systems(true)
-	_pause_menu.resumed.connect(_capture_mouse)
-	_pause_menu.back_to_start_pressed.connect(_back_to_launch_point)
-	_pause_menu.quit_to_title_pressed.connect(_quit_to_title)
-	_pause_menu.dock_pressed.connect(func() -> void: _arrive("base"))
+	_pause_menu.resumed.connect(func() -> void:
+		if not _in_cabin:
+			_capture_mouse())
+	_pause_menu.back_to_start_pressed.connect(func() -> void:
+		_close_cabin()
+		_back_to_launch_point())
+	_pause_menu.quit_to_title_pressed.connect(func() -> void:
+		_close_cabin()
+		_quit_to_title())
+	_pause_menu.dock_pressed.connect(func() -> void:
+		_close_cabin()
+		_arrive("base"))
 	_set_cockpit_view(false)
 	_capture_mouse()
 	Radio.set_context(Radio.Context.FLIGHT)
 	_fade.fade_in()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_blend_systems(false)
+	_log_clock -= delta
+	if _log_clock <= 0.0:
+		_log_clock = 0.5
+		_spot_sights()
+	if _nap_screen != null:
+		_nap_screen.get_child(0).queue_redraw()
+
+
+func _exit_tree() -> void:
+	Engine.time_scale = 1.0  # Never leave the game stuck in a nap's fast-forward.
 
 
 func _physics_process(delta: float) -> void:
@@ -117,10 +160,17 @@ func _physics_process(delta: float) -> void:
 	_feel_the_hazards(delta)
 	# Storms weaken the radio; flying fast swells the ambient music.
 	Radio.signal_strength = 1.0 - _ship.storm * 0.8
+	Radio.listener_position = _ship.global_position
 	Radio.intensity = clampf(_ship.speed_ratio(), 0.0, 1.0)
 	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty():
 		_ship.cruise = null  # Got there without docking (it's the pilot's turn).
 		_hud.show_banner("AUTOPILOT OFF", 2.0)
+	if _ship.cruise == null and _docking_at.is_empty():
+		# Nobody's driving: wake up and get back in the seat.
+		if _napping:
+			_wake_up()
+		if _in_cabin:
+			_back_to_seat()
 	if _docking_at.is_empty():
 		for id: String in _places:
 			for ring in _rings(id):
@@ -130,7 +180,23 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle_camera"):
+	if _napping:
+		if event.is_pressed() and not event.is_echo():
+			_wake_up()
+		return
+	if _in_cabin:
+		return  # On foot in the cabin: the keys walk, not fly.
+	if _talk_back(event):
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("get_up"):
+		if _ship.cruise != null and _docking_at.is_empty():
+			_open_cabin()
+		else:
+			_hud.show_banner("SET A COURSE FIRST (M)", 2.0)
+	elif event.is_action_pressed("logbook"):
+		_open_logbook()
+	elif event.is_action_pressed("toggle_camera"):
 		_set_cockpit_view(not _in_cockpit)
 	elif event.is_action_pressed("chart_course"):
 		if _docking_at.is_empty():
@@ -203,6 +269,9 @@ func engage_course(stops: PackedStringArray) -> void:
 	_aim_cruise()
 	if _ship.cruise != null:
 		_hud.show_banner("AUTOPILOT > " + GameState.places.find(_course[_course.size() - 1]).display_name, 3.0)
+		await get_tree().create_timer(3.5).timeout
+		if _ship.cruise != null and not _in_cabin and is_inside_tree():
+			_hud.show_banner("F / X: GET UP AND STRETCH", 4.0)
 
 
 ## Sets the cruise autopilot on its way to the next stop on the course.
@@ -233,6 +302,177 @@ func approach_points(id: String, from: Vector3) -> Array[Vector3]:
 	return [best.global_position - best.through_direction() * 700.0, best.global_position + best.through_direction() * 150.0]
 
 
+## Talking back on the comms: T / RB opens Jack's replies, then Q / R / E
+## (1 / 2 / 3, D-pad left / up / right) picks one. Returns whether the key
+## was used for that.
+func _talk_back(event: InputEvent) -> bool:
+	var comm := _hud.comm
+	if event.is_action_pressed("reply"):
+		if comm.is_picking():
+			comm.close_replies()
+			return true
+		if comm.can_reply():
+			comm.open_replies()
+			return true
+		return false
+	if not comm.is_picking() or not event.is_pressed() or event.is_echo():
+		return false
+	var choice := -1
+	var key := event as InputEventKey
+	if key != null and key.keycode in [KEY_1, KEY_2, KEY_3]:
+		choice = key.keycode - KEY_1
+	elif event.is_action_pressed("radio_previous"):
+		choice = 0
+	elif event.is_action_pressed("radio_power"):
+		choice = 1
+	elif event.is_action_pressed("radio_next"):
+		choice = 2
+	if choice < 0:
+		return false
+	comm.choose_reply(choice)
+	return true
+
+
+# --- The logbook -------------------------------------------------------------------
+
+## Writes down sights you get close to (and the mystery radio station, if
+## you hear it). The first time you see something: a banner (a fanfare for
+## the rare ones).
+func _spot_sights() -> void:
+	var here := _ship.global_position
+	var things: Array[Node] = []
+	things.append_array(_events_holder.get_children())
+	things.append_array($World/Roadside.get_children())
+	for node in things:
+		var thing := node as RoadsideThing
+		if thing == null or thing.log_id.is_empty() or _logged.has(thing.get_instance_id()):
+			continue
+		if here.distance_to(thing.global_position) < LOG_DISTANCE + thing.contact_radius:
+			_logged[thing.get_instance_id()] = true
+			_log(thing.log_id)
+	if Radio.powered and Radio.station().hidden and Radio.reception() > 0.5 and not _logged.has("numbers_station"):
+		_logged["numbers_station"] = true
+		_log("numbers_station")
+
+
+func _log(id: String) -> void:
+	if not GameState.log_sight(id):
+		return
+	var entry := GameState.sights.find(id)
+	if entry.rare:
+		_hud.show_banner("RARE SIGHT! LOGBOOK: " + entry.display_name, 6.0)
+	else:
+		_hud.show_banner("LOGBOOK: " + entry.display_name, 4.0)
+
+
+func _open_logbook() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	get_tree().paused = true
+	await LogbookView.open(get_tree())
+	get_tree().paused = false
+	_capture_mouse()
+
+
+# --- The cabin ---------------------------------------------------------------------
+
+## Out of the seat: the rig's sleeper cabin, shown over the flight while the
+## autopilot keeps driving.
+func _open_cabin() -> void:
+	if _in_cabin:
+		return
+	_in_cabin = true
+	_ship.controls.hands_free = true
+	await _fade.fade_out()
+	_hud.set_cabin(true)
+	_cabin_layer = CanvasLayer.new()
+	_cabin_layer.layer = 4  # Over the flight, under the HUD's comm calls.
+	add_child(_cabin_layer)
+	var frame := SubViewportContainer.new()
+	frame.stretch = true
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_cabin_layer.add_child(frame)
+	var view := SubViewport.new()
+	view.own_world_3d = true  # Its own little world: nothing in it touches space.
+	view.audio_listener_enable_3d = true
+	frame.add_child(view)
+	GameState.next_spawn = "FromHallway"  # Just inside the cabin door.
+	_cabin_room = CABIN_SCENE.instantiate() as HubRoom
+	_cabin_room.aboard = true
+	_cabin_room.left_cabin.connect(_back_to_seat)
+	_cabin_room.nap_requested.connect(_nap)
+	view.add_child(_cabin_room)
+	_fade.fade_in()
+	_hud.show_banner("DOOR: BACK TO THE SEAT   BED: NAP", 5.0)
+
+
+## Back in the driver's seat (walking out the cabin door).
+func _back_to_seat() -> void:
+	if not _in_cabin:
+		return
+	await _fade.fade_out()
+	_close_cabin()
+	_fade.fade_in()
+
+
+## Shuts the cabin view at once and puts you back in the seat.
+func _close_cabin() -> void:
+	if not _in_cabin:
+		return
+	_in_cabin = false
+	if _napping:
+		_wake_up()
+	if _cabin_layer != null:
+		_cabin_layer.queue_free()
+		_cabin_layer = null
+		_cabin_room = null
+	_ship.controls.hands_free = false
+	_hud.set_cabin(false)
+	Radio.set_context(Radio.Context.FLIGHT)
+	_capture_mouse()
+
+
+## A nap on the cabin bed: the screen goes dark and time runs fast while the
+## autopilot drives. Any key wakes you up; arriving does too.
+func _nap() -> void:
+	if _napping or _ship.cruise == null:
+		return
+	_napping = true
+	_cabin_room.player.set_busy(true)
+	_nap_screen = CanvasLayer.new()
+	_nap_screen.layer = 45
+	var dark := Control.new()
+	dark.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dark.draw.connect(func() -> void: _draw_nap(dark))
+	_nap_screen.add_child(dark)
+	add_child(_nap_screen)
+	Engine.time_scale = GameState.tuning.nap_time_scale
+
+
+func _wake_up() -> void:
+	if not _napping:
+		return
+	_napping = false
+	Engine.time_scale = 1.0
+	if _nap_screen != null:
+		_nap_screen.queue_free()
+		_nap_screen = null
+	if _cabin_room != null and is_instance_valid(_cabin_room):
+		_cabin_room.player.set_busy(false)
+
+
+func _draw_nap(canvas: Control) -> void:
+	var screen := canvas.size
+	canvas.draw_rect(Rect2(Vector2.ZERO, screen), Color(0.01, 0.01, 0.03))
+	var square := maxf(2.0, floorf(screen.y / 200.0))
+	var dock := _dock_node(_destination_id)
+	var left := dock.global_position.distance_to(_ship.global_position) / 1000.0 if dock != null else 0.0
+	var z := "Z".repeat(1 + int(Time.get_ticks_msec() / 600.0) % 3)
+	PixelFont.draw_centered(canvas, screen * 0.5 - Vector2(0.0, square * 14.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
+	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "NAPPING. THE AUTOPILOT'S GOT IT.", square, Color(0.8, 0.82, 0.9))
+	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 16.0), "%.1f KM TO GO" % left, square, Color(1.0, 0.85, 0.3))
+	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 30.0), "ANY KEY TO WAKE UP", square * 0.75, Color(0.5, 0.52, 0.6))
+
+
 func _on_cruise_released() -> void:
 	_course.clear()
 	_hud.show_banner("MANUAL CONTROL", 2.0)
@@ -261,13 +501,18 @@ func _restore_rig() -> void:
 
 func _remember_rig() -> void:
 	GameState.rig = {"fuel": _ship.flight.fuel, "boost_fuel": _ship.flight.boost_fuel,
-			"hull": _ship.hull, "cargo": _ship.cargo_condition}
+			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0)}
 
 
 # --- Docking ------------------------------------------------------------------------
 
 func _begin_docking(id: String, ring: ApproachRing) -> void:
 	_docking_at = id
+	if _napping:
+		_wake_up()
+	if _in_cabin:
+		_hud.show_banner("ARRIVING! BACK TO THE SEAT", 3.0)
+		_close_cabin()
 	if not _course.is_empty() and _course[0] == id:
 		_course.remove_at(0)
 	var dock := _dock_node(id)
@@ -296,6 +541,7 @@ func _arrive(id: String) -> void:
 	var place := GameState.places.find(id)
 	if place == null:
 		return
+	GameState.visit(id)
 	match place.kind:
 		PlaceData.Kind.DROP_OFF:
 			await _drop_off(id, place)
@@ -309,7 +555,9 @@ func _arrive(id: String) -> void:
 ## walks inside.
 func _climb_out(id: String, place: PlaceData) -> void:
 	_remember_rig()
-	GameState.deliver_at(id)
+	GameState.rig["snack"] = 0.0  # The trip's over; so is the jerky's calm.
+	if GameState.deliver_at(id):
+		Radio.dj_react("delivery", {"place": place.display_name}, true)  # A shout-out next trip.
 	if place.free_fuel:
 		GameState.rig["fuel"] = 1.0
 		GameState.rig["boost_fuel"] = 1.0
@@ -318,16 +566,19 @@ func _climb_out(id: String, place: PlaceData) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	await _fade.fade_out()
 	Radio.set_context(Radio.Context.OFF_AIR)
-	get_tree().change_scene_to_file(place.interior_scene)
+	LoadingScreen.go(get_tree(), place.interior_scene, "place")
 
 
 ## DROP_OFF places: you stay in the cab. The crane takes the load, you get
 ## paid, maybe take a load back and fill up, then launch again.
 func _drop_off(id: String, place: PlaceData) -> void:
 	var delivered := _deliver_here(id)
+	if delivered:
+		Radio.dj_react("delivery", {"place": place.display_name})
 	await _greet(place, "DOCKED: " + place.display_name)
 	await _counter(id, place, delivered)
 	GameState.launch_from = id
+	GameState.rig["snack"] = 0.0  # A new trip.
 	GameState.save_game()
 	await _fade.fade_out()
 	_ship.process_mode = Node.PROCESS_MODE_INHERIT
@@ -377,7 +628,7 @@ func _greet(place: PlaceData, banner: String) -> void:
 	_ship.process_mode = Node.PROCESS_MODE_DISABLED  # Parked: hands off.
 	_hud.show_banner(banner, 0.0)
 	if place.host != null and not place.host_lines.is_empty():
-		_hud.comm.call_in(place.host, place.host_lines[_rng.randi_range(0, place.host_lines.size() - 1)])
+		_hud.comm.call_in(place.host, place.host_line(int(GameState.visits.get(place.id, 1)), _rng), ChatterSet.Situation.DOCKING)
 	await get_tree().create_timer(2.5).timeout
 
 
@@ -393,9 +644,17 @@ func _counter(id: String, place: PlaceData, delivered: bool) -> void:
 	while true:
 		var options: Array = []
 		var actions: Array[String] = []
-		if place.kind == PlaceData.Kind.DROP_OFF:
+		if place.kind == PlaceData.Kind.DROP_OFF or not GameState.board_jobs(id).is_empty():
 			options.append({"text": "LOOK FOR A LOAD", "description": "See what needs hauling from here."})
 			actions.append("job_board")
+		if "snacks" in place.services:
+			options.append({"text": "MOE'S JERKY", "detail": "%d %s" % [JERKY_PRICE, GameState.names.currency_short],
+					"description": "Chewy. Calming. Steadier hands under boost for the rest of this trip."})
+			actions.append("snack")
+		if "souvenir" in place.services:
+			options.append({"text": "SOUVENIR KEYCHAIN", "detail": "%d %s" % [KEYCHAIN_PRICE, GameState.names.currency_short],
+					"description": "For the logbook. A tiny sloth holding a tiny fuel nozzle."})
+			actions.append("souvenir")
 		if "fuel" in place.services:
 			options.append({"text": "FUEL UP", "description": "Main tank %d%%, boost %d%%." % [
 					roundi(GameState.rig["fuel"] * 100.0), roundi(GameState.rig["boost_fuel"] * 100.0)]})
@@ -408,13 +667,31 @@ func _counter(id: String, place: PlaceData, delivered: bool) -> void:
 		if action == "job_board":
 			await HubServices.job_board(tree, id)
 		elif action == "fuel":
-			await HubServices.fuel(tree, pumps, "Come back... whenever.")
+			await HubServices.fuel(tree, pumps, "Come back... whenever.", place.fuel_price_factor)
+		elif action == "snack":
+			if GameState.spend(JERKY_PRICE):
+				GameState.rig["snack"] = 1.0
+				await MenuPanel.ask(tree, "MOE'S JERKY", "You chew. And chew. A deep calm settles over you. Your hands feel... steady.", [{"text": "*CHEW*"}])
+			else:
+				await MenuPanel.ask(tree, "NOT ENOUGH", "Moe... understands... completely.", [{"text": "OKAY"}])
+		elif action == "souvenir":
+			if GameState.spend(KEYCHAIN_PRICE):
+				var first := GameState.log_sight("gas_n_go_keychain")
+				await MenuPanel.ask(tree, "SOUVENIR", "A tiny plastic sloth. It goes on your keys." + (" (Added to your logbook.)" if first else " You collect them now, apparently."), [{"text": "CUTE"}])
 		else:
 			break
 	tree.paused = false
 
 
 # --- Solar systems ------------------------------------------------------------------
+
+## A solar system's name, from its id.
+func _system_name(id: String) -> String:
+	for system in systems:
+		if system.id == id:
+			return system.display_name
+	return "space"
+
 
 ## The id of the solar system the rig is in (the nearest one).
 func current_system() -> String:
@@ -467,6 +744,7 @@ func _blend_systems(first: bool) -> void:
 			if body.is_sun and body.system_id == system.id:
 				light_from += body.direction_from(eye) * weight
 	_dust.tint = signature
+	_motes.tint = signature
 	_hud.tint = signature
 	var environment := _environment.environment
 	environment.fog_light_color = haze
@@ -484,9 +762,8 @@ func _blend_systems(first: bool) -> void:
 	var now := current_system()
 	if now != _current_system:
 		if not first:
-			for system in systems:
-				if system.id == now:
-					_hud.show_banner("NOW ENTERING " + system.display_name.to_upper(), 4.0)
+			_hud.show_banner("NOW ENTERING " + _system_name(now).to_upper(), 4.0)
+			Radio.dj_react("new_system", {"system": _system_name(now)})
 		_current_system = now
 
 
@@ -518,6 +795,12 @@ func _feel_the_hazards(delta: float) -> void:
 		var effect := zone.influence(_ship)
 		storm = maxf(storm, effect.get("storm", 0.0))
 		trap = maxf(trap, effect.get("speed_trap", 0.0))
+	# The DJ notices when you fly into a storm.
+	if storm > 0.3 and not _in_storm:
+		_in_storm = true
+		Radio.dj_react("storm", {"system": _system_name(current_system())})
+	elif storm < 0.05:
+		_in_storm = false
 	_ship.storm = storm
 	_ship.speed_trap = trap
 	if storm > 0.3 and _rng.randf() < delta * storm * 0.6:
@@ -530,6 +813,7 @@ func _on_caught_speeding(kmh: int, zone: HazardZone) -> void:
 	GameState.spend(fine)
 	_hud.show_banner("SPEEDING TICKET  %d KM/H  -%d %s" % [kmh, fine, GameState.names.currency_short], 4.0)
 	_chatter.say(ChatterSet.Situation.SPEEDING)
+	Radio.dj_react("ticket")
 
 
 # --- Bits and bobs ------------------------------------------------------------------

@@ -9,7 +9,8 @@ extends Node
 ## - A place's traffic control calls as you get close, and again when the
 ##   docking autopilot takes over.
 ## - Bonks and boosts sometimes get a comment (only if the comms are free).
-## - Rattling the cargo around (rough flying with a load) gets a comment.
+## - Rattling the cargo around (rough flying with a load) gets ONE comment
+##   per trip. After that, nobody nags.
 ## - Low fuel and speeding tickets always get a call (they wait their turn).
 ## Every timing is in tuning.tres under "Comms chatter".
 
@@ -36,7 +37,7 @@ var _idle_timer: float = 0.0
 var _takeoff_timer: float = 0.0
 var _boost_cooldown: float = 0.0
 var _bonk_cooldown: float = 0.0
-var _rough_cooldown: float = 0.0
+var _rough_said: bool = false
 var _rough_time: float = 0.0  # Seconds the cargo has been rattling.
 var _was_low_fuel: bool = false
 var _was_boosting: bool = false
@@ -60,6 +61,7 @@ func restart() -> void:
 	_takeoff_timer = GameState.tuning.comm_first_call_seconds
 	_approach_called = {GameState.launch_from: true}
 	_was_low_fuel = false
+	_rough_said = false
 	_reset_idle_timer()
 
 
@@ -81,7 +83,6 @@ func _process(delta: float) -> void:
 	_idle_timer -= delta
 	_boost_cooldown -= delta
 	_bonk_cooldown -= delta
-	_rough_cooldown -= delta
 	_watch_the_cargo(delta)
 	if _takeoff_timer > 0.0:
 		_takeoff_timer -= delta
@@ -124,9 +125,9 @@ func _watch_the_cargo(delta: float) -> void:
 		_rough_time += delta
 	else:
 		_rough_time = 0.0
-	if _rough_time > 1.5 and _rough_cooldown <= 0.0:
-		_rough_cooldown = 50.0
-		_rough_time = 0.0
+	# Said once per trip, then it's up to you: nobody nags.
+	if _rough_time > 1.5 and not _rough_said:
+		_rough_said = true
 		say(ChatterSet.Situation.ROUGH)
 
 
@@ -155,7 +156,7 @@ func _play(situation: ChatterSet.Situation, place: String = "") -> void:
 		return
 	var pick: Array = options[_rng.randi_range(0, options.size() - 1)]
 	_last_line = pick[1]
-	_comm.call_in(pick[0], pick[1])
+	_comm.call_in(pick[0], pick[1], situation)
 
 
 func _reset_idle_timer() -> void:

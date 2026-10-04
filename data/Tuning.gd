@@ -24,8 +24,8 @@ extends Resource
 
 ## How quickly steering catches up with your stick, keys or mouse.
 ## Higher = snappier and twitchier. Lower = smoother and floatier.
-## (At 10, steering is about 2/3 of the way there after 0.1 seconds.)
-@export_range(1.0, 30.0, 0.5) var steer_response: float = 10.0
+## (At 6, steering is about 2/3 of the way there after 0.17 seconds.)
+@export_range(1.0, 30.0, 0.5) var steer_response: float = 6.0
 
 ## How far a mouse movement pushes the "virtual stick" when steering with the
 ## mouse. Higher = smaller hand movements steer harder.
@@ -34,6 +34,25 @@ extends Resource
 ## How quickly the mouse's virtual stick drifts back to center after you stop
 ## moving the mouse. 0 = it stays wherever you leave it.
 @export_range(0.0, 10.0, 0.1) var mouse_recenter_speed: float = 2.5
+
+
+@export_group("Throttle")
+
+## The throttle is a lever you set, like a real truck's cruise control or a
+## plane's throttle: W / right trigger pushes it up, S / left trigger pulls
+## it down, and the rig speeds up or slows down to match, then holds that
+## speed. How fast the lever moves while you hold the key (per second;
+## 0.45 = about 2 seconds from idle to full).
+@export_range(0.05, 3.0, 0.05) var throttle_lever_speed: float = 0.45
+
+## How far below its matching speed the rig has to be before the engines
+## push at full power (in m/s). Smaller = snappier speed holding; bigger =
+## gentler, lazier speed changes.
+@export_range(0.5, 30.0, 0.5, "suffix:m/s") var throttle_band: float = 5.0
+
+## How far the lever goes below zero, into reverse (as a fraction of the
+## lever's travel). Pulling it all the way back = backing up slowly.
+@export_range(0.0, 1.0, 0.05) var reverse_lever: float = 0.25
 
 
 @export_group("Flying")
@@ -52,6 +71,17 @@ extends Resource
 ## How much grip you lose for going faster than top speed. Higher = going
 ## too fast gets slidier and easier to overshoot.
 @export_range(0.0, 10.0, 0.1) var overspeed_slip: float = 1.5
+
+## How long you hold boost before it lights (it spools up first, so it's a
+## decision, not a tap). Let go early and nothing happens.
+@export_range(0.0, 3.0, 0.05, "suffix:s") var boost_spool_seconds: float = 0.8
+
+## Once lit, boost keeps burning at least this long, even if you let go
+## (it's hard to turn off).
+@export_range(0.0, 10.0, 0.25, "suffix:s") var boost_min_burn_seconds: float = 3.0
+
+## On: boost only lights with the throttle lever at full.
+@export var boost_needs_full_throttle: bool = true
 
 ## Grip multiplier while boosting (0.3 = 30% of the ship's normal grip).
 ## Lower = boost feels wilder and the rig slides more in turns.
@@ -136,6 +166,9 @@ extends Resource
 ## How fast the bunny walks around the base.
 @export_range(0.5, 8.0, 0.1, "suffix:m/s") var walk_speed: float = 2.6
 
+## Her running speed (hold Shift / X), in meters per second.
+@export_range(0.5, 12.0, 0.1, "suffix:m/s") var run_speed: float = 5.6
+
 ## How quickly she gets up to walking speed and stops again.
 @export_range(1.0, 40.0, 0.5) var walk_acceleration: float = 14.0
 
@@ -187,7 +220,7 @@ extends Resource
 ## Rough driving shakes the cargo. Up to this much g-force (sideways,
 ## braking, speeding up, in m/s²) is fine; above it the cargo slowly gets
 ## damaged. Normal thrust is about 9; a hard turn at top speed is about 30.
-@export_range(5.0, 200.0, 1.0, "suffix:m/s²") var cargo_comfy_accel: float = 24.0
+@export_range(5.0, 200.0, 1.0, "suffix:m/s²") var cargo_comfy_accel: float = 26.0
 
 ## How fast cargo gets damaged by rough driving: the share of the cargo lost
 ## per second when the g-force is double the comfy limit.
@@ -195,7 +228,7 @@ extends Resource
 
 ## How fast cargo gets damaged by the vibration of boosting flat out: the
 ## share lost per second at full boost speed. Boosting is fast but rough.
-@export_range(0.0, 0.02, 0.0001) var cargo_boost_rate: float = 0.0008
+@export_range(0.0, 0.02, 0.0001) var cargo_boost_rate: float = 0.0015
 
 ## The engines start trailing smoke when the hull drops below this (1 = 100%).
 @export_range(0.0, 1.0, 0.05) var smoke_below_hull: float = 0.6
@@ -215,7 +248,7 @@ extends Resource
 
 ## How quickly the camera swings back around behind the ship after a turn.
 ## Lower = a lazier camera, so you see the rig lead into its turns.
-@export_range(0.5, 20.0, 0.25) var chase_turn_follow: float = 3.0
+@export_range(0.5, 20.0, 0.25) var chase_turn_follow: float = 2.2
 
 ## How much farther back the camera drifts while boosting.
 @export_range(0.0, 40.0, 0.25, "suffix:m") var chase_boost_pullback: float = 12.0
@@ -234,14 +267,14 @@ extends Resource
 @export_range(40.0, 110.0, 1.0, "suffix:°") var base_fov: float = 70.0
 
 ## How much wider the view gets at top speed. Subtle is good.
-@export_range(0.0, 30.0, 0.5, "suffix:°") var speed_fov_bonus: float = 8.0
+@export_range(0.0, 30.0, 0.5, "suffix:°") var speed_fov_bonus: float = 10.0
 
 ## Extra widening on top of that while going faster than top speed (boost).
-@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_fov_bonus: float = 12.0
+@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_fov_bonus: float = 16.0
 
 ## The view only starts widening above this fraction of top speed
-## (0.7 = 70% of top speed).
-@export_range(0.0, 0.95, 0.05) var speed_fov_threshold: float = 0.7
+## (0.3 = 30% of top speed).
+@export_range(0.0, 0.95, 0.05) var speed_fov_threshold: float = 0.3
 
 ## How smoothly the view widens and narrows.
 @export_range(0.5, 20.0, 0.25) var fov_response: float = 4.0
@@ -265,6 +298,10 @@ extends Resource
 ## A gentle rumble while boosting, as shake held at this level (0 to 1).
 @export_range(0.0, 1.0, 0.05) var boost_rumble_shake: float = 0.25
 
+## A faint road-feel vibration that grows with speed (at top cruise speed),
+## so going fast feels like going fast. 0 = none.
+@export_range(0.0, 0.5, 0.01) var cruise_rumble_shake: float = 0.07
+
 
 @export_group("Cockpit view")
 
@@ -283,7 +320,7 @@ extends Resource
 @export_group("Space dust")
 
 ## How many specks of dust float around you. (Read when a flight starts.)
-@export_range(100, 6000, 50) var dust_count: int = 1400
+@export_range(100, 6000, 50) var dust_count: int = 2600
 
 ## The size of the invisible box of dust that travels with the camera.
 ## A smaller box with the same count = denser dust.
@@ -291,13 +328,13 @@ extends Resource
 
 ## How long the dust streaks are: your speed times this many seconds.
 ## 0 = little dots that never stretch.
-@export_range(0.0, 0.2, 0.005, "suffix:s") var dust_streak_seconds: float = 0.02
+@export_range(0.0, 0.2, 0.005, "suffix:s") var dust_streak_seconds: float = 0.045
 
 ## How thick each speck of dust is.
 @export_range(0.01, 0.5, 0.01, "suffix:m") var dust_size: float = 0.045
 
 ## How brightly the dust glows.
-@export_range(0.0, 3.0, 0.05) var dust_brightness: float = 0.55
+@export_range(0.0, 3.0, 0.05) var dust_brightness: float = 0.7
 
 
 @export_group("Boost effects")
@@ -346,6 +383,25 @@ extends Resource
 @export_range(100.0, 5000.0, 50.0, "suffix:m") var docking_bracket_range: float = 1500.0
 
 
+@export_group("Autopilot")
+
+## Napping in the cabin while the autopilot drives fast-forwards the trip:
+## time runs this many times faster until you wake up (or arrive).
+@export_range(1.0, 20.0, 0.5) var nap_time_scale: float = 8.0
+
+
+@export_group("Radio")
+
+## The DJ talks, or a text ad scrolls by, every so often: at least this many
+## seconds apart...
+@export_range(10.0, 1200.0, 5.0, "suffix:s") var radio_talk_min_seconds: float = 100.0
+## ...and at most this many.
+@export_range(10.0, 1200.0, 5.0, "suffix:s") var radio_talk_max_seconds: float = 200.0
+## Of those breaks, the share that are ads (the rest are the DJ talking).
+## 0 = never any ads; 1 = only ads.
+@export_range(0.0, 1.0, 0.05) var radio_ad_share: float = 0.4
+
+
 @export_group("Route events")
 
 ## Something to look at shows up every this-many meters you drive (a
@@ -365,6 +421,15 @@ extends Resource
 
 ## No random sights within this distance of a station.
 @export_range(0.0, 20000.0, 100.0, "suffix:m") var event_keep_clear: float = 4000.0
+
+## Don't repeat any of the last this-many kinds of sight (no jellyfish
+## twice in a row, or even close).
+@export_range(0, 8, 1) var event_no_repeat: int = 4
+
+## The chance that a sight is a RARE one instead (a ghost ship, a comet
+## storm...). 0.006 = about one rare sight every dozen long hauls; any
+## particular one, about once in fifty.
+@export_range(0.0, 1.0, 0.001) var event_rare_chance: float = 0.006
 
 
 @export_group("Comms chatter")

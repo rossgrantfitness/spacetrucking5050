@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/rock.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "GLAM ROCKET"
+frequency = "102.5"
+genre = "Glam rock, arena rock, power ballads"
+dj_name = "Roxxy Stardust"
+tagline = "Big hair. Bigger choruses."
+music_folder = "res://audio/radio/glam_rocket/music"
+ads_folder = "res://audio/radio/glam_rocket/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("ROXXY STARDUST - LONELY HAULER (BALLAD VERSION)", "DIAMOND THRUSTERS - SPANDEX SUPERNOVA", "THE HAIRSPRAYS - TOO BIG FOR ONE GALAXY", "LIPGLOSS LASERS - ROCK ME ZERO G", "POWER CHORD PEACOCKS - ENCORE ETERNAL", "VELVET COMET - KISS THE STARS GOODNIGHT")
+ads = PackedStringArray("HOLD-TIGHT FUR SPRAY. SURVIVES ZERO-G.", "SEQUIN SEAT COVERS. YOUR CAB DESERVES TO SPARKLE.", "FOG MACHINE FUEL. MAKE EVERY ENTRANCE AN ENTRANCE.")
+dj_lines = PackedStringArray("This power ballad goes out to all you lonely haulers out there.", "Roxxy here, darlings. Tonight, we FEEL things. At arena volume.", "Lighters up! Well, not in the cab. Metaphorical lighters!", "If your rig doesn't have a fog machine, what are you even doing?")
+dj_on_storm = PackedStringArray("An ion storm! The sky is putting on a SHOW! Encore! Encore!")
+dj_on_delivery = PackedStringArray("This next ballad is dedicated to {bunny}, who just delivered to {place}. You beautiful star.")
+dj_on_ticket = PackedStringArray("A ticket! Darling, speed is GLAMOROUS. Pay it in style.")
+dj_on_new_system = PackedStringArray("{system}, are you READY TO ROCK?!")

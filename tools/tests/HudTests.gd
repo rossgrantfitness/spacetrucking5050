@@ -84,7 +84,8 @@ func test_boosting_shows_red_economy() -> void:
 	var model := FlightModel.new()
 	var controls := FlightControls.new()
 	controls.boost = true
-	model.update(STEP, controls, RIG, GameState.tuning)
+	for i in roundi((GameState.tuning.boost_spool_seconds + 0.1) / STEP):
+		model.update(STEP, controls, RIG, GameState.tuning)
 	check(model.economy_rating(GameState.tuning) == 2, "boosting should always show the red arrow")
 
 
@@ -148,14 +149,16 @@ func test_boost_wanders_off_course_and_jerky_hands_make_it_worse() -> void:
 	var jerky := FlightModel.new()
 	var hands := FlightControls.new()
 	hands.boost = true
+	var furthest := 0.0
 	for i in 60 * 6:
 		steady.update(STEP, hands, RIG, GameState.tuning)
+		furthest = maxf(furthest, absf(steady.heading))
 	var shaky_hands := FlightControls.new()
 	shaky_hands.boost = true
 	for i in 60 * 6:
 		shaky_hands.steer = Vector2(1.0 if i % 20 < 10 else -1.0, 0.0)
 		jerky.update(STEP, shaky_hands, RIG, GameState.tuning)
-	check(absf(steady.heading) > 0.005, "even holding steady, boost should drift the nose a little")
+	check(furthest > 0.01, "even holding steady, boost should drift the nose a little")
 	check(steady.wobble < 0.05, "holding steady under boost shouldn't make the rig shaky")
 	check(jerky.wobble > 0.3, "jerky steering under boost should make the rig shaky")
 	var calm := FlightModel.new()

@@ -40,3 +40,9 @@ func _process(delta: float) -> void:
 	var grow := (0.35 + 0.65 * minf(speed, 1.0) + 0.5 * maxf(speed - 1.0, 0.0)) * flicker
 	scale = Vector3.ONE * size_at_top_speed * grow
 	_material.set_shader_parameter("brightness", clampf(0.5 + speed * 0.7, 0.0, 1.6))
+
+
+## Picks up the ship's trail color again (after a paint job).
+func refresh_color() -> void:
+	if _source != null:
+		_material.set_shader_parameter("color", _source.call("trail_color"))

@@ -20,6 +20,12 @@ extends Node3D
 ## wobbly PS1 models in front of a crisp painting, just like back then.
 
 
+## Cabin mode (the rig's sleeper cabin, walked around in flight): the
+## bunny walked out the cabin door, back to the driver's seat.
+signal left_cabin
+## Cabin mode: she lay down on the bed for a nap.
+signal nap_requested
+
 const BACKDROP_SHADER := preload("res://shaders/prerendered_backdrop.gdshader")
 const PLAYER_SCENE := preload("res://scenes/hub/Player.tscn")
 ## Visual layer 2 holds the Set (what gets painted); layer 1 holds people.
@@ -32,6 +38,12 @@ const SET_LAYER: int = 2
 @export var place_id: String = "base"
 ## Whether the radio plays through this room's speakers (the jukebox).
 @export var radio_speakers: bool = false
+
+## On when this room is the rig's cabin, shown inside the flight scene while
+## the autopilot drives (see FlightSandbox.gd). Then the door leads back to
+## the driver's seat, the bed is for napping, the game doesn't save here,
+## and the radio plays through the cabin speakers.
+var aboard: bool = false
 
 var player: HubPlayer
 var _shots: Array[RoomShot] = []
@@ -66,6 +78,11 @@ func _ready() -> void:
 	hud.player = player
 	add_child(hud)
 	var pause_menu := get_node_or_null("PauseMenu") as PauseMenu
+	if aboard and pause_menu != null:
+		pause_menu.queue_free()  # The flight scene's pause menu covers the cabin.
+		pause_menu = null
+	if aboard:
+		_set_up_cabin()
 	if pause_menu != null:
 		pause_menu.quit_to_title_pressed.connect(func() -> void: leave_to("res://scenes/boot/Boot.tscn", ""))
 	# Repaint the backgrounds if the window changes size (after it settles).
@@ -79,10 +96,12 @@ func _ready() -> void:
 	_choose_shot(true)
 	_ready_to_play = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	Radio.set_context(Radio.Context.ROOM if radio_speakers else Radio.Context.OFF_AIR)
-	# The game saves itself whenever you walk into a room.
-	GameState.current_room = scene_file_path
-	GameState.save_game()
+	Radio.set_context(Radio.Context.ROOM if radio_speakers or aboard else Radio.Context.OFF_AIR)
+	# The game saves itself whenever you walk into a room (not in the cabin
+	# in flight: that's saved with the flight).
+	if not aboard:
+		GameState.current_room = scene_file_path
+		GameState.save_game()
 	await _fade.fade_in()
 	# Just docked with a delivery? Here's what it paid.
 	if not GameState.pending_payout.is_empty():
@@ -100,11 +119,32 @@ func _physics_process(_delta: float) -> void:
 func leave_to(scene_path: String, spawn: String) -> void:
 	if _leaving or scene_path.is_empty():
 		return
+	if aboard:
+		left_cabin.emit()  # In flight, every door leads back to the driver's seat.
+		return
 	_leaving = true
 	player.set_busy(true)
 	GameState.next_spawn = spawn
 	await _fade.fade_out()
-	get_tree().change_scene_to_file(scene_path)
+	if scene_path.ends_with("FlightSandbox.tscn"):
+		LoadingScreen.go(get_tree(), scene_path, "flight")  # Boarding the rig.
+	else:
+		get_tree().change_scene_to_file(scene_path)
+
+
+## Cabin mode: the bed becomes a place to nap while the autopilot drives.
+func _set_up_cabin() -> void:
+	var bed := Interactable.new()
+	bed.name = "NapBed"
+	bed.prompt = "NAP"
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(1.6, 1.2, 2.6)
+	shape.shape = box
+	bed.add_child(shape)
+	bed.position = Vector3(-2.3, 0.6, 1.3)
+	bed.interacted.connect(func(_who: Node3D) -> void: nap_requested.emit())
+	add_child(bed)
 
 
 ## The shot currently on screen.

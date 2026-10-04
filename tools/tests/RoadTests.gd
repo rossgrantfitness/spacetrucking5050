@@ -168,6 +168,6 @@ func test_every_route_event_can_be_built() -> void:
 	director.free()
 	var whales: EventData
 	for event in RouteEvents.EVENTS.events:
-		if event != null and event.kind == EventData.Kind.WHALES:
+		if event != null and event.log_id == "whales":
 			whales = event
 	check(whales != null and whales.allowed_in("tidewater") and not whales.allowed_in("home"), "whales only swim in Tidewater")

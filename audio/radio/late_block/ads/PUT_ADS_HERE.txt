@@ -1,3 +1,0 @@
-Optional: this station's audio ads and DJ bits (.ogg, .mp3 or .wav).
-One plays after every few songs. Without any, the station's text ads
-scroll across the HUD ticker instead.

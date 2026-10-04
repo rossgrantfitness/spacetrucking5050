@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/grunge.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "STATIC CLING"
+frequency = "94.1"
+genre = "Grunge, alt rock"
+dj_name = "DJ Mope"
+tagline = "Great songs. Whatever."
+music_folder = "res://audio/radio/static_cling/music"
+ads_folder = "res://audio/radio/static_cling/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("MOPE - EVERYTHING IS FINE (IT ISN'T)", "FLANNEL ORBIT - RAIN ON MARS", "THE OVERCASTS - SMELLS LIKE SPACE", "LOW BATTERY - ELEVEN PERCENT", "THE MEH - SIDE B", "SAD SATELLITE - NOBODY CALLS")
+ads = PackedStringArray("FLANNEL SHIRTS. THEY'RE BACK. THEY NEVER LEFT. WE NEVER LEFT.", "CLOUD-IN-A-JAR. FOR WHEN SPACE IS TOO SUNNY.")
+dj_lines = PackedStringArray("Great song. Whatever. Here's another one.", "Mope here. It's a beautiful night in space. I guess.", "Somebody called in to say they love the station. Weird. Thanks.", "Next up, a song about feeling things. Ugh.")
+dj_on_storm = PackedStringArray("Ion storm. Figures. Even space has a bad day.")
+dj_on_delivery = PackedStringArray("{bunny} delivered to {place}. Good for them. Really. I mean it. Mostly.")
+dj_on_ticket = PackedStringArray("Speeding ticket. Classic. The universe always finds a way.")
+dj_on_new_system = PackedStringArray("{system}. New sky. Same me.")

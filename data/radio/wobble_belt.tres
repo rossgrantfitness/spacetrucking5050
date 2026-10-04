@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/dubstep.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "WOBBLE BELT"
+frequency = "96.6"
+genre = "Dubstep, bass music"
+dj_name = "DJ Big Low"
+tagline = "Bass so big it has its own orbit."
+music_folder = "res://audio/radio/wobble_belt/music"
+ads_folder = "res://audio/radio/wobble_belt/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("PRESSURE DROP - REARRANGED A MOON", "LOW ORBIT - WUB CARGO", "SUBWOOFER SAINTS - HULL RATTLER", "GRAVITY WELL - DROP ZONE 9", "BIG LOW - THE HIPPO STOMP", "FILTER BABY - HALF TIME HAUL")
+ads = PackedStringArray("GRAVITY BOOTS. FOR WHEN YOUR BASS IS TOO STRONG TO STAND.", "SUBWOOFER RENTALS. FEEL IT IN YOUR TEETH. RENT BY THE HOUR.", "RATTLE-B-GONE DASH FOAM. SHUTS YOUR CAB UP.")
+dj_lines = PackedStringArray("Big Low here. That last drop? Rearranged a moon. I checked.", "If your cup holder is dancing, you're tuned in right.", "Turn it up. No. More. More than that.", "Science fact: bass travels faster in space. I made that up. Turn it up anyway.")
+dj_on_storm = PackedStringArray("Ion storm out there! Big Low says: the storm's just the universe dropping the bass.")
+dj_on_delivery = PackedStringArray("Big respect to {bunny}, load delivered at {place}. That's a drop worth waiting for.")
+dj_on_ticket = PackedStringArray("Speeding ticket? Ha! Your engine was just keeping time with the beat.")
+dj_on_new_system = PackedStringArray("Entering {system}! New system, same wobble.")

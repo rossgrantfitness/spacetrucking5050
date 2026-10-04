@@ -48,7 +48,7 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 func signal_bars() -> int:
 	if not Radio.powered:
 		return 0
-	var strength := Radio.signal_strength
+	var strength := Radio.signal_strength * Radio.reception()
 	var rig := ship()
 	if rig != null:
 		strength *= 1.0 - rig.storm * 0.8

@@ -26,6 +26,7 @@ signal quit_to_title_pressed
 @onready var _rumble: CheckButton = %Rumble
 @onready var _radio_volume: HSlider = %RadioVolume
 @onready var _dock: Button = %DockAtBase
+@onready var _logbook: Button = %Logbook
 @onready var _back_to_start: Button = %BackToStart
 @onready var _quit_to_title: Button = %QuitToTitle
 
@@ -53,6 +54,7 @@ func _ready() -> void:
 	for flight_only: Control in [_invert_y, _camera_roll, _show_hud, _screen_shake, _dock, _back_to_start]:
 		flight_only.visible = flying
 	_quit_to_title.pressed.connect(_on_quit_to_title)
+	_logbook.pressed.connect(_on_logbook)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -89,6 +91,11 @@ func _on_dock() -> void:
 	visible = false
 	get_tree().paused = false
 	dock_pressed.emit()
+
+
+func _on_logbook() -> void:
+	await LogbookView.open(get_tree())
+	_logbook.grab_focus()
 
 
 func _on_quit_to_title() -> void:

@@ -21,7 +21,8 @@ var _current_system: Callable
 var _active: Array[RoadsideThing] = []
 var _travelled: float = 0.0
 var _next_gap: float = 0.0
-var _last_kind: int = -1
+## The kinds of the last few sights (so nothing repeats too soon).
+var _recent_kinds: Array[int] = []
 var _rng := RandomNumberGenerator.new()
 
 
@@ -57,13 +58,22 @@ func _physics_process(delta: float) -> void:
 ## tests and the HUD demo can call it.
 func spawn_something() -> RoadsideThing:
 	var system_id: String = _current_system.call() if _current_system.is_valid() else "home"
+	# Once in a long while: something rare.
+	if _rng.randf() < GameState.tuning.event_rare_chance:
+		var rares: Array[EventData] = []
+		for event in EVENTS.events:
+			if event != null and event.rare and event.allowed_in(system_id):
+				rares.append(event)
+		if not rares.is_empty():
+			return spawn(rares[_rng.randi_range(0, rares.size() - 1)])
 	var options: Array[EventData] = []
 	var total := 0.0
 	for event in EVENTS.events:
-		if event != null and event.allowed_in(system_id) and event.kind != _last_kind and event.weight > 0.0:
+		if event != null and not event.rare and event.allowed_in(system_id) and not event.kind in _recent_kinds and event.weight > 0.0:
 			options.append(event)
 			total += event.weight
 	if options.is_empty():
+		_recent_kinds.clear()
 		return null
 	var roll := _rng.randf() * total
 	var picked := options[0]
@@ -75,20 +85,31 @@ func spawn_something() -> RoadsideThing:
 	return spawn(picked)
 
 
-## Puts one particular sight ahead of the rig.
+## Puts one particular sight ahead of the rig (several, for events with
+## copies).
 func spawn(event: EventData) -> RoadsideThing:
 	var travel := _ship.flight.velocity.normalized() if _ship.flight.speed() > 1.0 else _ship.flight.nose()
 	var side := travel.cross(Vector3.UP).normalized()
 	if side.is_zero_approx():
 		side = Vector3.RIGHT
-	var thing := make(event)
-	thing.setup(_ship, travel, _rng.randi())
-	var sideways := _rng.randf_range(event.side_offset.x, event.side_offset.y) * (1.0 if _rng.randf() < 0.5 else -1.0)
-	var up := _rng.randf_range(event.height_offset.x, event.height_offset.y)
-	thing.position = _ship.global_position + travel * event.ahead + side * sideways + Vector3.UP * up
-	_holder.add_child(thing)
-	_active.append(thing)
-	_last_kind = event.kind
+	var thing: RoadsideThing
+	for copy in event.copies:
+		thing = make(event)
+		thing.setup(_ship, travel, _rng.randi())
+		thing.log_id = event.log_id
+		var sideways := _rng.randf_range(event.side_offset.x, event.side_offset.y) * (1.0 if _rng.randf() < 0.5 else -1.0)
+		var up := _rng.randf_range(event.height_offset.x, event.height_offset.y)
+		var further := copy * _rng.randf_range(300.0, 900.0)
+		thing.position = _ship.global_position + travel * (event.ahead + further) + side * sideways + Vector3.UP * up
+		thing.scale = Vector3.ONE * event.size
+		_holder.add_child(thing)
+		thing.contact_radius *= event.size
+		if event.ghost:
+			_make_ghost(thing)
+		_active.append(thing)
+	_recent_kinds.append(event.kind)
+	while _recent_kinds.size() > GameState.tuning.event_no_repeat:
+		_recent_kinds.pop_front()
 	if event.speaker != null and not event.lines.is_empty() and _chatter != null:
 		_chatter.say_line(event.speaker, event.lines[_rng.randi_range(0, event.lines.size() - 1)])
 	return thing
@@ -126,6 +147,26 @@ func make(event: EventData) -> RoadsideThing:
 		billboard.headline = ad[0]
 		billboard.tagline = ad[1] if ad.size() > 1 else ""
 	return billboard
+
+
+## Turns a sight see-through, ghostly and flickering. You fly right
+## through it.
+func _make_ghost(thing: RoadsideThing) -> void:
+	var ghostly := StandardMaterial3D.new()
+	ghostly.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	ghostly.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	ghostly.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	ghostly.albedo_color = Color(0.45, 1.0, 0.9, 0.35)
+	ghostly.cull_mode = BaseMaterial3D.CULL_DISABLED
+	for part in thing.find_children("*", "GeometryInstance3D", true, false):
+		(part as GeometryInstance3D).material_override = ghostly
+	for body in thing.find_children("*", "CollisionObject3D", true, false):
+		body.queue_free()  # You fly right through it.
+	var flicker := Timer.new()
+	flicker.wait_time = 0.15
+	flicker.autostart = true
+	flicker.timeout.connect(func() -> void: thing.visible = _rng.randf() > 0.12)
+	thing.add_child(flicker)
 
 
 ## How many sights are out there right now.

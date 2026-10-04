@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShipList" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="2_ship"]
+[ext_resource type="Resource" path="res://data/ships/starter_rig.tres" id="s0"]
+[ext_resource type="Resource" path="res://data/ships/zippy_courier.tres" id="s1"]
+[ext_resource type="Resource" path="res://data/ships/big_bertha.tres" id="s2"]
+[ext_resource type="Resource" path="res://data/ships/capsule_cruiser.tres" id="s3"]
+[ext_resource type="Resource" path="res://data/ships/megahauler.tres" id="s4"]
+
+[resource]
+script = ExtResource("1_list")
+ships = Array[ExtResource("2_ship")]([ExtResource("s0"), ExtResource("s1"), ExtResource("s2"), ExtResource("s3"), ExtResource("s4")])

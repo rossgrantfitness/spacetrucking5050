@@ -1,6 +1,7 @@
 extends SceneTree
 ## Builds res://scenes/flight/TidewaterRoad.tscn: everything fixed along the
-## long haul from the truck stop to Tidewater Cannery (about 59 km):
+## long haul from the truck stop to Tidewater Cannery (about 59 km), plus
+## the spaceway beacons along the lanes (from home, too):
 ## highway signs, the border gate between the systems, roadside attractions
 ## (a lighthouse, the world's biggest donut, an old derelict), a junk field,
 ## an icy rock field, a speed trap, an ion storm, a pod of whales, and a
@@ -30,6 +31,7 @@ const HAZARD := "res://scenes/flight/events/HazardZone.gd"
 const WHALES := "res://scenes/flight/events/WhalePod.gd"
 const FIELD := "res://scenes/flight/AsteroidField.gd"
 const TRAFFIC := "res://scenes/flight/TrafficShip.gd"
+const SPACEWAY := "res://scenes/flight/Spaceway.gd"
 
 
 func _initialize() -> void:
@@ -48,26 +50,33 @@ func _initialize() -> void:
 	var gate := _thing(road, LANDMARK, "BorderGate", 31.0, 0.0, 0.0)
 	gate.set("kind", 4)  # Landmark.Kind.BORDER_GATE
 	gate.set("label", "NOW ENTERING TIDEWATER SYSTEM")
+	gate.set("log_id", "border_gate")
 
 	# Roadside attractions.
-	_thing(road, LANDMARK, "Lighthouse", 33.5, -2000.0, -100.0).set("kind", 0)
+	var lighthouse := _thing(road, LANDMARK, "Lighthouse", 33.5, -2000.0, -100.0)
+	lighthouse.set("kind", 0)
+	lighthouse.set("log_id", "lighthouse")
 	var donut := _thing(road, LANDMARK, "BiggestDonut", 28.0, 3400.0, 400.0)
 	donut.set("kind", 1)
+	donut.set("log_id", "donut")
 	var derelict := _thing(road, LANDMARK, "Derelict", 40.0, -900.0, 150.0)
 	derelict.set("kind", 3)
 	derelict.set("label", "THE DOROTHY MAE (ABANDONED)")
+	derelict.set("log_id", "dorothy_mae")
 
 	# Hazards: an ion storm hanging just off the lane, and the space
 	# patrol's speed trap before the cannery.
 	var storm := _thing(road, HAZARD, "IonStorm", 44.0, -700.0, 0.0)
 	storm.set("kind", 0)
 	storm.set("radius", 1600.0)
+	storm.set("log_id", "ion_storm")
 	var trap := _thing(road, HAZARD, "SpeedTrap", 55.0, 260.0, 60.0)
 	trap.set("kind", 1)
 	trap.set("radius", 2500.0)
+	trap.set("log_id", "speed_trap")
 
 	# Tidewater's whales, swimming in lazy circles near the cannery.
-	_thing(road, WHALES, "Whales", 52.0, 2500.0, 300.0)
+	_thing(road, WHALES, "Whales", 52.0, 2500.0, 300.0).set("log_id", "whales")
 
 	# Debris: an old spill along the lane, and junk around the cannery.
 	var spill := _field(road, "JunkField", 18.0, 0.0, Vector3(1800.0, 500.0, 3200.0), 260, true, 1801)
@@ -84,6 +93,13 @@ func _initialize() -> void:
 	_hauler(road, "LongHaulerA", 280.0, 120.0, 60.0, 0.15, "res://scenes/flight/traffic/CapsuleHaulerVisual.tscn", Color(1.0, 0.75, 0.35))
 	_hauler(road, "LongHaulerB", -320.0, -80.0, 52.0, 0.6, "res://scenes/flight/traffic/BoxHaulerVisual.tscn", Color(0.6, 1.0, 0.5))
 	_hauler(road, "Courier", 180.0, 250.0, 90.0, 0.35, "res://scenes/flight/traffic/CourierVisual.tscn", Color(1.0, 0.45, 0.8))
+
+	# The spaceways: reflector beacons lining the lanes (home to the truck
+	# stop, the truck stop to Tidewater, and the ramps to the Gas-N-Go).
+	_spaceway(road, "SpacewayHome", [Vector3(0.0, 0.0, -650.0), Vector3(0.0, 0.0, -10050.0)], 250.0, 80.0, Color(1.0, 0.72, 0.3))
+	_spaceway(road, "SpacewayTidewater", [spot(0.9, 0.0, 0.0), spot(58.8, 0.0, 0.0)], 250.0, 80.0, Color(1.0, 0.72, 0.3))
+	_spaceway(road, "RampToGasNGo", [spot(27.3, 0.0, 0.0), spot(28.9, 1798.0, 0.0), spot(29.3, 1798.0, 0.0)], 150.0, 50.0, Color(0.5, 1.0, 0.5))
+	_spaceway(road, "RampFromGasNGo", [spot(30.0, 1798.0, 0.0), spot(33.0, 0.0, 0.0)], 150.0, 50.0, Color(0.5, 1.0, 0.5))
 
 	_save(road, "res://scenes/flight/TidewaterRoad.tscn")
 	quit()
@@ -136,6 +152,17 @@ func _hauler(road: Node3D, hauler_name: String, side: float, up: float, speed: f
 	ship.set("engine_trail_color", color)
 	ship.set("hull_size", Vector3(14.0, 7.0, 34.0))
 	road.add_child(ship)
+
+
+func _spaceway(road: Node3D, way_name: String, lane: Array[Vector3], spacing: float, half_width: float, left: Color) -> void:
+	var way := MultiMeshInstance3D.new()
+	way.set_script(load(SPACEWAY))
+	way.name = way_name
+	way.set("points", PackedVector3Array(lane))
+	way.set("spacing", spacing)
+	way.set("half_width", half_width)
+	way.set("left_color", left)
+	road.add_child(way)
 
 
 func _save(scene_root: Node, path: String) -> void:

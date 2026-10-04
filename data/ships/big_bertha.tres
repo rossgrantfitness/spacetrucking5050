@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShipData" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_ship")
+id = "big_bertha"
+display_name = "Big Bertha"
+description = "A box hauler with a hold like a cathedral. Turns like a cathedral too. Pays +35% per job."
+price = 9000
+pay_bonus = 1.35
+visual_scene = ExtResource("2_visual")
+max_speed = 58.0
+acceleration = 7.5
+retro_thrust = 6.0
+turn_rate = 22.0
+pitch_rate = 18.0
+turn_response = 1.0
+grip = 1.4
+max_bank = 26.0
+boost_speed_bonus = 1.8
+boost_acceleration = 60.0
+boost_fuel_seconds = 400.0
+fuel_tank_seconds = 420.0
+trail_color = Color(0.6, 1, 0.5, 1)
+engine_pitch = 0.7

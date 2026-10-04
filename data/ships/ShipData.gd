@@ -10,8 +10,25 @@ extends Resource
 ## distance, live in res://data/tuning.tres instead.)
 
 
-## The ship's name, shown in menus later on.
+## A short code name, used by saves ("lazy_susan").
+@export var id: String = "rig"
+## The ship's name, shown in menus.
 @export var display_name: String = "Unnamed Rig"
+## What the dealer says about it.
+@export_multiline var description: String = ""
+
+
+@export_group("For sale")
+
+## What it costs at the rig dealer (Dusty's garage at the truck stop).
+@export_range(0, 10000000, 100) var price: int = 0
+## Special order: shown at the dealer as something to save up for, but it
+## can't be bought yet.
+@export var special_order: bool = false
+## How much more a delivery pays in this rig, for its bigger hold
+## (1.35 = +35% of a job's base pay). Never below 1: small rigs make up
+## for it with speed.
+@export_range(1.0, 5.0, 0.05) var pay_bonus: float = 1.0
 
 
 @export_group("Speed")
@@ -73,6 +90,9 @@ extends Resource
 
 
 @export_group("Looks and sound")
+
+## The ship's model. Empty = the starter rig's (ShipVisual.tscn).
+@export var visual_scene: PackedScene
 
 ## The color of the glowing trail behind the engines.
 @export var trail_color: Color = Color(1.0, 0.55, 0.3)

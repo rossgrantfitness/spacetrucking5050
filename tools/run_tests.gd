@@ -24,7 +24,7 @@ func _process(_delta: float) -> bool:
 	_frame += 1
 	if _frame == 1:
 		_run_all()
-	elif _frame == 10:
+	elif _frame == 40:
 		quit(_exit_code)
 	return false
 

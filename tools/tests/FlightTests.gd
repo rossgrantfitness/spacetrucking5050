@@ -88,12 +88,18 @@ func test_boost_rockets_past_top_speed_then_bleeds_off() -> void:
 	var model := _cruising()
 	var controls := FlightControls.new()
 	controls.boost = true
+	_fly(model, controls, GameState.tuning.boost_spool_seconds * 0.5)
+	check(not model.boosting and model.spool > 0.0, "boost spools up for a moment before it lights")
 	_fly(model, controls, 2.0)
 	check(model.boosting, "holding boost with fuel in the tank should boost")
 	check(model.speed() > RIG.max_speed * 2.0, "boost should rocket far past top speed (got %.1f m/s)" % model.speed())
 	check(model.speed() <= FlightModel.boosted_top_speed(RIG) + 1.0, "boost has a top speed too")
 	check(model.boost_fuel < 1.0, "boosting burns boost fuel")
 	controls.boost = false
+	_fly(model, controls, 0.1)
+	check(model.boosting, "once lit, boost keeps burning a few seconds even after letting go")
+	_fly(model, controls, GameState.tuning.boost_min_burn_seconds)
+	check(not model.boosting, "after its minimum burn, letting go stops the boost")
 	_fly(model, controls, 2.0)
 	check(model.speed() > RIG.max_speed * 1.5, "after a boost you should keep rocketing for a while")
 	_fly(model, controls, 40.0)
@@ -104,11 +110,35 @@ func test_boost_fuel_runs_dry_and_does_not_refill_itself() -> void:
 	var model := _cruising()
 	var controls := FlightControls.new()
 	controls.boost = true
-	_fly(model, controls, RIG.boost_fuel_seconds + 0.5)
+	_fly(model, controls, RIG.boost_fuel_seconds + GameState.tuning.boost_spool_seconds + 0.5)
 	check(not model.boosting and model.boost_fuel == 0.0, "boosting long enough should empty the boost tank")
 	controls.boost = false
 	_fly(model, controls, 10.0)
 	check(model.boost_fuel == 0.0, "boost fuel must not refill by itself (you top it up at a station)")
+
+
+func test_a_tap_of_boost_does_nothing() -> void:
+	var model := _cruising()
+	var controls := FlightControls.new()
+	controls.boost = true
+	_fly(model, controls, GameState.tuning.boost_spool_seconds * 0.4)
+	controls.boost = false
+	_fly(model, controls, 1.0)
+	check(not model.boosting and is_equal_approx(model.boost_fuel, 1.0), "letting go before it spools up costs nothing")
+
+
+func test_the_throttle_lever_holds_a_speed() -> void:
+	var model := FlightModel.new()
+	var controls := FlightControls.new()
+	for i in 60 * 30:
+		controls.thrust = ShipControls.thrust_for(0.5, model.forward_speed(), RIG.max_speed, GameState.tuning)
+		model.update(STEP, controls, RIG, GameState.tuning)
+	check(absf(model.speed() - RIG.max_speed * 0.5) < 1.5, "half throttle settles at half speed (got %.1f m/s)" % model.speed())
+	for i in 60 * 30:
+		controls.thrust = ShipControls.thrust_for(0.0, model.forward_speed(), RIG.max_speed, GameState.tuning)
+		model.update(STEP, controls, RIG, GameState.tuning)
+	check(model.speed() < 1.0, "idle throttle brings the rig to a stop")
+	check(is_equal_approx(ShipControls.thrust_for(1.0, RIG.max_speed, RIG.max_speed, GameState.tuning), 1.0), "full throttle leans on the limiter")
 
 
 func test_pitch_never_passes_the_limit() -> void:

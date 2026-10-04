@@ -11,7 +11,9 @@
 [ext_resource type="Resource" path="res://data/jobs/whale_song_records.tres" id="9_whale_song_records"]
 [ext_resource type="Resource" path="res://data/jobs/tidewater_mail.tres" id="10_tidewater_mail"]
 [ext_resource type="Resource" path="res://data/jobs/cannery_parts.tres" id="11_cannery_parts"]
+[ext_resource type="Resource" path="res://data/jobs/moes_mixtape.tres" id="12_moes_mixtape"]
+[ext_resource type="Resource" path="res://data/jobs/jerky_crate.tres" id="13_jerky_crate"]
 
 [resource]
 script = ExtResource("1_list")
-jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts")])
+jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate")])

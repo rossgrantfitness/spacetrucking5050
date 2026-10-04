@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="PaintList" format=3]
+
+[ext_resource type="Script" path="res://data/ships/PaintList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/ships/PaintJob.gd" id="2_paint"]
+
+[sub_resource type="Resource" id="Paint_factory"]
+script = ExtResource("2_paint")
+id = "factory"
+display_name = "FACTORY (AS INHERITED)"
+price = 0
+hull_tint = Color(1, 1, 1, 1)
+strength = 0.0
+
+[sub_resource type="Resource" id="Paint_cherry"]
+script = ExtResource("2_paint")
+id = "cherry"
+display_name = "CHERRY RED"
+price = 400
+hull_tint = Color(1.0, 0.25, 0.25, 1)
+strength = 0.6
+trail_color = Color(1.0, 0.35, 0.3, 1)
+
+[sub_resource type="Resource" id="Paint_teal_tide"]
+script = ExtResource("2_paint")
+id = "teal_tide"
+display_name = "TEAL TIDE"
+price = 400
+hull_tint = Color(0.3, 1.0, 0.85, 1)
+strength = 0.55
+trail_color = Color(0.35, 1.0, 0.85, 1)
+
+[sub_resource type="Resource" id="Paint_hazard"]
+script = ExtResource("2_paint")
+id = "hazard"
+display_name = "HAZARD YELLOW"
+price = 400
+hull_tint = Color(1.0, 0.85, 0.2, 1)
+strength = 0.6
+trail_color = Color(1.0, 0.85, 0.25, 1)
+
+[sub_resource type="Resource" id="Paint_neon_purple"]
+script = ExtResource("2_paint")
+id = "neon_purple"
+display_name = "NEON PURPLE"
+price = 500
+hull_tint = Color(0.75, 0.35, 1.0, 1)
+strength = 0.6
+trail_color = Color(0.8, 0.4, 1.0, 1)
+
+[sub_resource type="Resource" id="Paint_minty"]
+script = ExtResource("2_paint")
+id = "minty"
+display_name = "MINT CHIP"
+price = 400
+hull_tint = Color(0.6, 1.0, 0.7, 1)
+strength = 0.5
+trail_color = Color(0.6, 1.0, 0.7, 1)
+
+[sub_resource type="Resource" id="Paint_sunset"]
+script = ExtResource("2_paint")
+id = "sunset"
+display_name = "SUNSET ORANGE"
+price = 450
+hull_tint = Color(1.0, 0.55, 0.3, 1)
+strength = 0.55
+trail_color = Color(1.0, 0.5, 0.25, 1)
+
+[sub_resource type="Resource" id="Paint_midnight"]
+script = ExtResource("2_paint")
+id = "midnight"
+display_name = "MIDNIGHT BLUE"
+price = 500
+hull_tint = Color(0.3, 0.4, 1.0, 1)
+strength = 0.6
+trail_color = Color(0.4, 0.55, 1.0, 1)
+
+[resource]
+script = ExtResource("1_list")
+paints = Array[ExtResource("2_paint")]([SubResource("Paint_factory"), SubResource("Paint_cherry"), SubResource("Paint_teal_tide"), SubResource("Paint_hazard"), SubResource("Paint_neon_purple"), SubResource("Paint_minty"), SubResource("Paint_sunset"), SubResource("Paint_midnight")])
