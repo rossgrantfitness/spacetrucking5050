@@ -16,5 +16,6 @@ max_bank = 28.0
 boost_speed_bonus = 2.0
 boost_acceleration = 70.0
 boost_fuel_seconds = 15.0
+fuel_tank_seconds = 300.0
 trail_color = Color(1, 0.55, 0.3, 1)
 engine_pitch = 0.9

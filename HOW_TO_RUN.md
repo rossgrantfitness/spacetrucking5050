@@ -82,17 +82,36 @@ Y = △.)
 | Brake / thrust backward | **S** | **LT** (left trigger) |
 | Boost | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
+| Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
+| Hide / show the HUD | **H** | D-pad **down** |
+| HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
 
 **Your rig has momentum.** Hold thrust to speed up, then let go and you
 *coast*: you keep your speed, like cruise control. To slow down, thrust
 backward. Turns carve and slide, especially at high speed, so you can
-overshoot. The small **gold ring** on screen shows where your momentum is
-really carrying you, which isn't always where the nose points.
+overshoot. The tiny green **flight marker** (a dot with little wings)
+shows where your momentum is really carrying you, which isn't always where
+the nose points.
+
+**Fuel:** thrusting burns fuel, more at high speed; coasting is free. The
+little **ECO** arrow under the fuel gauge turns green, yellow or red to show
+how thriftily you're flying. An empty tank never strands you: the engines
+keep crawling along "on fumes".
 
 **Boost** rockets you way past top speed (and gets slidey!). It burns
-**boost fuel**, the inner cyan arc on the speed gauge, which doesn't refill by
-itself: fly close to the truck stop to top it up (buying fuel comes later).
+**boost fuel** (the tiny **BST** bar), which doesn't refill by itself. Fly
+close to the truck stop to top up both tanks and patch the hull (buying fuel
+comes later).
+
+**The HUD** (in the style of Wipeout): speed and boost bottom-left, the
+radar globe bottom-middle, fuel and the hull picture bottom-right, the
+compass strip with distance and ETA at the top, the radio top-left, cargo
+and pay top-right, and warning lights down the left edge. Calls from
+dispatch and other truckers pop in at the top-left. The **practice haul**
+(garden gnomes for the truck stop diner, a rush job) is delivered when you
+fly up to the docking bay; "Back to the start" in the pause menu gives you a
+fresh one.
 
 **The mouse while flying:** it's hidden and locked to the game window, and
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that

@@ -15,6 +15,8 @@ extends Resource
 @export var base_name: String = "[BASE_NAME]"
 ## What money is called.
 @export var currency: String = "credits"
+## Its short form, for tight spots like the HUD ("650 CR").
+@export var currency_short: String = "CR"
 
 
 ## Replaces {bunny}, {husband}, {base} and {currency} in `text`.

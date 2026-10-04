@@ -64,6 +64,14 @@ extends Resource
 @export_range(1.0, 120.0, 0.5, "suffix:s") var boost_fuel_seconds: float = 15.0
 
 
+@export_group("Fuel")
+
+## The main fuel tank: how many seconds of full thrust at low speed a full
+## tank holds. Flying fast burns it quicker; coasting burns nothing. (Buying
+## fuel arrives with the economy; the truck stop tops you up for now.)
+@export_range(10.0, 3600.0, 5.0, "suffix:s") var fuel_tank_seconds: float = 300.0
+
+
 @export_group("Looks and sound")
 
 ## The color of the glowing trail behind the engines.

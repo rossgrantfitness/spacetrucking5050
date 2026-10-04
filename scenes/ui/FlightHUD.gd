@@ -1,49 +1,81 @@
 class_name FlightHUD
 extends CanvasLayer
-## The flight HUD: deliberately minimal and tucked into the corners. A speed
-## gauge bottom-right, a marker pointing at the truck stop, a marker showing
-## where your momentum is really carrying you, a ring showing the mouse's
-## steering, and a controls reminder that fades after a while.
+## The flight HUD, in the style of late-90s PlayStation racers (Wipeout).
 ##
-## The player can hide all of it from the pause menu ("Show HUD"). In cockpit
-## view the corner gauge steps aside, because the dashboard shows the same.
+## Every piece is drawn into a small low-resolution picture ("Pixels", about
+## 360 rows tall, see `hud_rows` in tuning.tres) that's blown up to fill the
+## screen with crisp square pixels, so the chunky pixel font looks
+## period-correct at any screen size. It also redraws a little slower than
+## the game (`hud_frame_rate`) and its numbers tick over in jumps
+## (`hud_number_rate`), the way old HUDs did.
+##
+## The pieces (each its own small script in res://scenes/ui/hud/):
+##   corners:   radio ticker (top left), nav tape + ETA (top), cargo + pay
+##              (top right), speed + boost (bottom left), radar globe
+##              (bottom middle), fuel + economy + hull (bottom right)
+##   middle:    flight marker, mouse ring, status lights (left edge)
+##   pop-ins:   comm calls, docking brackets, rush timer, ship ID labels,
+##              jump charge
+##
+## The player can hide it all from the pause menu or with H / D-pad down
+## (comm calls still pop in). In cockpit view the bottom row steps aside,
+## because the dashboard has its own gauges.
 
+
+## What a radar contact is.
+enum Kind { ROCK, SHIP, STATION }
 
 ## How long the controls reminder stays up, in seconds.
 const HINT_SECONDS: float = 25.0
 
-@onready var _gauge: SpeedGauge = $SpeedGauge
-@onready var _marker: StationMarker = $StationMarker
-@onready var _reticle: MouseReticle = $MouseReticle
-@onready var _drift: DriftMarker = $DriftMarker
-@onready var _hint: Label = $ControlsHint
+## The rig we're flying, where we're headed, and the job (or null).
+var ship: Ship
+var destination: Node3D
+var haul: Haul
+## The solar system's signature color, used for the HUD's frames.
+var tint := Color.WHITE
+## Seconds since the flight started (for blinking).
+var time: float = 0.0
+## Lights up every warning light and gauge, so the look can be checked
+## (F9 in the flight sandbox).
+var demo: bool = false
+## Everything near the ship this HUD frame: rocks, traffic, the destination.
+## Each is {position, radius, kind, label}. Shared by the radar, the
+## proximity light and the ID labels.
+var contacts: Array[Dictionary] = []
+## How many real screen pixels wide one HUD pixel is.
+var pixel_scale: float = 2.0
 
-var _in_cockpit := false
-var _time := 0.0
+var _in_cockpit: bool = false
+var _frame_clock: float = 0.0
+var _number_clock: float = 0.0
+var _widgets: Array[HudWidget] = []
+
+@onready var _pixels: SubViewport = $Pixels
+@onready var _screen: TextureRect = $Screen
+@onready var _hint: Label = $ControlsHint
+@onready var comm: CommPortrait = $Pixels/CommPortrait
 
 
 func _ready() -> void:
+	_screen.texture = _pixels.get_texture()
+	for child in _pixels.get_children():
+		if child is HudWidget:
+			(child as HudWidget).hud = self
+			_widgets.append(child)
+	get_viewport().size_changed.connect(_fit)
 	Events.settings_changed.connect(_refresh)
+	_fit()
 	_refresh()
 
 
-## Tells the HUD which ship to show and where the destination is.
-func setup(ship: Ship, destination: Node3D) -> void:
-	_gauge.ship = ship
-	_drift.ship = ship
-	_reticle.controls = ship.controls
-	_marker.target = destination
-
-
-## Shows what the truck stop is doing for you (boost fuel, hull patching)
-## next to its marker while it happens.
-func set_truck_stop_service(refueling: bool, repairing: bool) -> void:
-	var services: Array[String] = []
-	if refueling:
-		services.append("BOOST FUEL")
-	if repairing:
-		services.append("HULL PATCH")
-	_marker.label = "TRUCK STOP" if services.is_empty() else "TRUCK STOP · " + " + ".join(services)
+## Tells the HUD which ship to show, where it's headed, the job, and the
+## solar system's color.
+func setup(new_ship: Ship, new_destination: Node3D, new_haul: Haul, system_tint: Color) -> void:
+	ship = new_ship
+	destination = new_destination
+	haul = new_haul
+	tint = system_tint
 
 
 func set_cockpit_view(in_cockpit: bool) -> void:
@@ -51,18 +83,88 @@ func set_cockpit_view(in_cockpit: bool) -> void:
 	_refresh()
 
 
+## Where a spot in the 3D world appears on the HUD, in HUD pixels.
+func to_hud(world: Vector3) -> Vector2:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return Vector2.ZERO
+	var visible_size := get_viewport().get_visible_rect().size
+	return camera.unproject_position(world) * Vector2(_pixels.size) / visible_size
+
+
+## Whether a spot in the 3D world is behind the camera (so not on screen).
+func is_behind(world: Vector3) -> bool:
+	var camera := get_viewport().get_camera_3d()
+	return camera == null or camera.is_position_behind(world)
+
+
+## The size of the HUD picture, in HUD pixels.
+func hud_size() -> Vector2:
+	return Vector2(_pixels.size)
+
+
+## How close the nearest rock or ship is, to its surface, in meters (INF if
+## nothing is on the radar).
+func nearest_obstacle() -> float:
+	var nearest := INF
+	for contact in contacts:
+		if contact["kind"] != Kind.STATION:
+			nearest = minf(nearest, ship.global_position.distance_to(contact["position"]) - contact["radius"])
+	return maxf(nearest, 0.0)
+
+
 func _process(delta: float) -> void:
-	_time += delta
+	time += delta
 	# Fade the controls reminder out over its last 3 seconds.
-	_hint.modulate.a = clampf((HINT_SECONDS - _time) / 3.0, 0.0, 1.0)
-	_gauge.queue_redraw()
-	_reticle.queue_redraw()
+	_hint.modulate.a = clampf((HINT_SECONDS - time) / 3.0, 0.0, 1.0)
+	var tuning := GameState.tuning
+	_frame_clock += delta
+	_number_clock += delta
+	if _frame_clock < 1.0 / tuning.hud_frame_rate:
+		return
+	var step := _frame_clock
+	_frame_clock = 0.0
+	var numbers_due := _number_clock >= 1.0 / tuning.hud_number_rate
+	if numbers_due:
+		_number_clock = 0.0
+	_gather_contacts()
+	for widget in _widgets:
+		widget.hud_step(step, numbers_due)
+		widget.queue_redraw()
+	# Only repaint the HUD picture on HUD frames.
+	_pixels.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+
+## Finds the rocks and ships within radar range, plus the destination.
+func _gather_contacts() -> void:
+	contacts.clear()
+	if ship == null:
+		return
+	var here := ship.global_position
+	var reach := GameState.tuning.radar_range
+	for field: AsteroidField in get_tree().get_nodes_in_group("asteroid_fields"):
+		for rock in field.rocks_within(here, reach):
+			contacts.append({"position": Vector3(rock.x, rock.y, rock.z), "radius": rock.w, "kind": Kind.ROCK, "label": ""})
+	for other: Node3D in get_tree().get_nodes_in_group("traffic"):
+		var traffic := other as TrafficShip
+		if traffic != null and here.distance_to(traffic.global_position) <= reach:
+			contacts.append({"position": traffic.global_position, "radius": traffic.hull_size.length() * 0.5,
+					"kind": Kind.SHIP, "label": traffic.id_label})
+	if destination != null:
+		contacts.append({"position": destination.global_position, "radius": 0.0, "kind": Kind.STATION,
+				"label": haul.job.destination_name if haul != null else ""})
+
+
+## Sizes the HUD picture to the window: as close to `hud_rows` rows as
+## whole-pixel scaling allows, so every HUD pixel is a crisp square.
+func _fit() -> void:
+	var window := Vector2(get_window().size)
+	pixel_scale = maxf(1.0, roundf(window.y / GameState.tuning.hud_rows))
+	_pixels.size = Vector2i((window / pixel_scale).ceil())
+	_pixels.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func _refresh() -> void:
-	var show_hud := Settings.show_hud
-	_gauge.visible = show_hud and not _in_cockpit
-	_marker.visible = show_hud
-	_reticle.visible = show_hud
-	_drift.visible = show_hud
-	_hint.visible = show_hud and not _in_cockpit  # It would cover the dashboard.
+	for widget in _widgets:
+		widget.visible = (Settings.show_hud or widget.always_shown) and not (_in_cockpit and widget.bottom_row)
+	_hint.visible = Settings.show_hud

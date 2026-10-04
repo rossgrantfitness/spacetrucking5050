@@ -44,6 +44,28 @@ static func make_blip() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## A short burst of radio static: hiss with crackles, swelling in and out.
+## Plays before and after every comm call, and when you flip stations.
+static func make_static() -> AudioStreamWAV:
+	var seconds := 0.32
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 104
+	var smooth := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		# Hiss, softened a little so it's fuzzy rather than harsh.
+		smooth = lerpf(smooth, rng.randf_range(-1.0, 1.0), 0.45)
+		var crackle := rng.randf_range(-1.0, 1.0) if rng.randf() < 0.012 else 0.0
+		# A wobbly whistle, like a dial passing a station.
+		var whistle := sin(TAU * (900.0 + 500.0 * sin(t * 20.0)) * t) * 0.08
+		var envelope := sin(PI * t / seconds)
+		samples[i] = (smooth * 0.55 + crackle * 0.8 + whistle) * envelope * 0.8
+	return to_wav(samples, false)
+
+
 ## Packs samples (-1 to 1) into a 16-bit audio stream.
 static func to_wav(samples: PackedFloat32Array, looping: bool) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

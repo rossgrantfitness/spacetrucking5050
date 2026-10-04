@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="FlightChatter" format=3]
+
+[ext_resource type="Script" path="res://data/dialogue/FlightChatter.gd" id="1_chatter"]
+[ext_resource type="Script" path="res://data/dialogue/ChatterSet.gd" id="2_set"]
+[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="npc_dottie"]
+[ext_resource type="Resource" path="res://data/npcs/truckstop_control.tres" id="npc_marge"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="npc_wendell"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="npc_pip"]
+
+[sub_resource type="Resource" id="Set_0_dottie_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 0
+lines = PackedStringArray("Morning, {bunny}. Gnomes are loaded. The diner at the truck stop wants 'em.", "You're clear, hon. Try not to bonk the gnomes. They bruise.", "Dispatch to {bunny}. Practice run. Truck stop. Gnomes. Go.")
+
+[sub_resource type="Resource" id="Set_1_dottie_idle"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 1
+lines = PackedStringArray("Reminder: the vending machine still has a sock in it.", "Somebody left a pie in the break room fridge. I'm not saying it was me.", "The job board's working again. It only shows jobs from last Tuesday though.", "Dispatch here. Just checking you're awake. Blink twice. Okay, I can't see that.")
+
+[sub_resource type="Resource" id="Set_2_wendell_idle"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_wendell")
+situation = 1
+lines = PackedStringArray("Anybody else's coffee taste like the asteroid belt?", "Twenty years hauling and I still can't parallel park this thing.", "Big Wendell here. My cat's on board today. She's driving. Don't tell dispatch.", "Saw a space whale this morning. Or a really big cloud. Either way, beautiful.")
+
+[sub_resource type="Resource" id="Set_3_pip_idle"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_pip")
+situation = 1
+lines = PackedStringArray("Courier coming through! Sorry! Sorry! Love your rig!", "Is it just me or are the rocks extra rocky today?", "Pip here! Does anybody have a spare charger? Any kind. I'll take any kind.", "I've had nine sodas. I can hear colors. Over.")
+
+[sub_resource type="Resource" id="Set_4_marge_idle"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_marge")
+situation = 1
+lines = PackedStringArray("Truck stop special today: nebula hash browns. Come hungry.", "Truck stop control. Pumps are open, showers are warm, pie is fresh.")
+
+[sub_resource type="Resource" id="Set_5_marge_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_marge")
+situation = 2
+lines = PackedStringArray("Truck stop control. Bay's lit, hon. Come on in nice and slow.", "Evening, sugar. Parking deck's full, but the bay's all yours.", "I see you on the scope, {bunny}. Mind the parked rigs, they bite.")
+
+[sub_resource type="Resource" id="Set_6_wendell_bonk"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_wendell")
+situation = 3
+lines = PackedStringArray("Heard that bonk from here, kid.", "That rock had it coming.", "Easy there. Rocks don't move. Usually.")
+
+[sub_resource type="Resource" id="Set_7_pip_bonk"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_pip")
+situation = 3
+lines = PackedStringArray("Ooh! That's gonna buff right out!", "Bonk! Haha. Sorry. Not funny. A little funny.")
+
+[sub_resource type="Resource" id="Set_8_dottie_bonk"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 3
+lines = PackedStringArray("Was that a rock or the gnomes?", "Dispatch heard a clunk. Dispatch is choosing not to ask.")
+
+[sub_resource type="Resource" id="Set_9_pip_boost"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_pip")
+situation = 4
+lines = PackedStringArray("Whoa! Look at you go!", "Wheee! Wait, that was you, not me.")
+
+[sub_resource type="Resource" id="Set_10_wendell_boost"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_wendell")
+situation = 4
+lines = PackedStringArray("Easy on the boost, kid. It ain't free.", "Somebody's in a hurry. Gnomes waiting?")
+
+[sub_resource type="Resource" id="Set_11_dottie_low_fuel"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 5
+lines = PackedStringArray("Fuel light's on, hon. Truck stop pumps are open.", "Your fuel's looking thin. Coast a little, it's free.")
+
+[sub_resource type="Resource" id="Set_12_marge_delivered"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_marge")
+situation = 6
+lines = PackedStringArray("Gnomes received. Diner says thanks. Pie's on the house.", "That's a delivery. Park it, stretch your legs, have a coffee.")
+
+[sub_resource type="Resource" id="Set_13_dottie_delivered"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 6
+lines = PackedStringArray("Delivery logged. Look at you, being employed.", "Nice haul, {bunny}. I'd clap, but I'm holding a donut.")
+
+[resource]
+script = ExtResource("1_chatter")
+sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_idle"), SubResource("Set_2_wendell_idle"), SubResource("Set_3_pip_idle"), SubResource("Set_4_marge_idle"), SubResource("Set_5_marge_approach"), SubResource("Set_6_wendell_bonk"), SubResource("Set_7_pip_bonk"), SubResource("Set_8_dottie_bonk"), SubResource("Set_9_pip_boost"), SubResource("Set_10_wendell_boost"), SubResource("Set_11_dottie_low_fuel"), SubResource("Set_12_marge_delivered"), SubResource("Set_13_dottie_delivered")])

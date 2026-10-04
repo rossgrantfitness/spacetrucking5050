@@ -40,6 +40,9 @@ const ROCK_TEXTURE := preload("res://textures/generated/rock.png")
 	Color(0.7, 0.6, 0.46), Color(0.62, 0.34, 0.26)])
 
 var _rng := RandomNumberGenerator.new()
+# Every rock's center (in world space) and radius, for rocks_within().
+var _rock_centers := PackedVector3Array()
+var _rock_radii := PackedFloat32Array()
 
 
 func _ready() -> void:
@@ -56,6 +59,22 @@ func _ready() -> void:
 		radii.append(lerpf(rock_radius_range.x, rock_radius_range.y, pow(_rng.randf(), 3.0)))
 	_build_rocks(spots, radii)
 	_build_collision(spots, radii)
+	add_to_group("asteroid_fields")  # So the HUD's radar can find us.
+	for i in spots.size():
+		_rock_centers.append(to_global(spots[i]))
+	_rock_radii = radii
+
+
+## The rocks whose surfaces are within `reach` meters of `point`, as
+## Vector4s: x, y, z = the rock's center (world space), w = its radius.
+## The HUD's radar globe and proximity light use this.
+func rocks_within(point: Vector3, reach: float) -> Array[Vector4]:
+	var found: Array[Vector4] = []
+	for i in _rock_centers.size():
+		var center := _rock_centers[i]
+		if center.distance_to(point) - _rock_radii[i] <= reach:
+			found.append(Vector4(center.x, center.y, center.z, _rock_radii[i]))
+	return found
 
 
 ## Hands each rock to one of a few shared rock shapes, drawn with MultiMeshes

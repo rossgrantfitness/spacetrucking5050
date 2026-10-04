@@ -141,9 +141,11 @@ func test_the_ship_itself_never_rolls() -> void:
 func test_reset_parks_the_ship() -> void:
 	var model := _cruising()
 	model.boost_fuel = 0.2
+	model.fuel = 0.3
 	model.reset(0.5, 0.1)
 	check(model.speed() == 0.0, "reset should stop the ship")
 	check(model.boost_fuel == 1.0, "reset should refill the boost tank")
+	check(model.fuel == 1.0, "reset should refill the fuel tank")
 	check(is_equal_approx(model.heading, 0.5) and is_equal_approx(model.pitch, 0.1), "reset should face the given way")
 
 

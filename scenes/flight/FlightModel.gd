@@ -30,6 +30,11 @@ var turn_speed := 0.0
 var pitch_speed := 0.0
 ## The engine thrust being applied right now, -1 (full reverse) to 1 (full).
 var thrust := 0.0
+## Main fuel, 0 (empty) to 1 (a full tank).
+var fuel := 1.0
+## How hard we're burning main fuel right now, from 0 (coasting) to 1
+## (flooring it at top speed). The HUD's fuel-economy arrow shows it.
+var fuel_burn := 0.0
 ## Boost fuel, 0 (empty) to 1 (a full tank), and whether boost is firing.
 var boost_fuel := 1.0
 var boosting := false
@@ -80,7 +85,17 @@ func turn_amount(ship: ShipData) -> float:
 	return -turn_speed / deg_to_rad(ship.turn_rate)
 
 
-## Puts everything back to "parked": stopped, engines idle, boost tank full.
+## How thriftily we're flying right now: 0 = green (coasting or easy
+## thrust), 1 = yellow (working hard), 2 = red (flooring it fast, or boost).
+func economy_rating(tuning: Tuning) -> int:
+	if boosting or fuel_burn >= tuning.economy_red:
+		return 2
+	if fuel_burn >= tuning.economy_yellow:
+		return 1
+	return 0
+
+
+## Puts everything back to "parked": stopped, engines idle, both tanks full.
 func reset(new_heading: float, new_pitch: float) -> void:
 	heading = new_heading
 	pitch = new_pitch
@@ -88,6 +103,8 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	turn_speed = 0.0
 	pitch_speed = 0.0
 	thrust = 0.0
+	fuel = 1.0
+	fuel_burn = 0.0
 	boost_fuel = 1.0
 	boosting = false
 	slip = 0.0
@@ -97,7 +114,7 @@ func reset(new_heading: float, new_pitch: float) -> void:
 
 func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
 	var forward := nose()
-	thrust = clampf(controls.thrust, -1.0, 1.0)
+	thrust = _burn_fuel(delta, clampf(controls.thrust, -1.0, 1.0), ship, tuning)
 	boosting = controls.boost and boost_fuel > 0.0
 	if boosting:
 		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
@@ -144,6 +161,19 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 	#    so a ship left alone does eventually come to rest.
 	if is_zero_approx(thrust) and not boosting:
 		velocity *= exp(-tuning.coast_drag * delta)
+
+
+## Burns main fuel for `throttle` (how hard the pilot is pushing) and
+## returns the thrust the engines actually give: all of it, or a little
+## "on fumes" when the tank is empty. Faster = thirstier.
+func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -> float:
+	var speed_share := clampf(speed() / ship.max_speed, 0.0, 1.0)
+	var burn := absf(throttle) * (1.0 + speed_share * speed_share * tuning.fuel_speed_burn)
+	fuel_burn = burn / (1.0 + tuning.fuel_speed_burn)
+	if fuel <= 0.0:
+		return throttle * tuning.empty_tank_thrust
+	fuel = maxf(fuel - burn * delta / ship.fuel_tank_seconds, 0.0)
+	return throttle
 
 
 func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Pip (courier)"
+species = "hamster"
+voice_pitch = 1.9
+lines = PackedStringArray("...")
+comm_name = "PIP · COURIER"
+fur_color = Color(0.98, 0.78, 0.5, 1)
+accent_color = Color(1, 0.45, 0.35, 1)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RadioLineup" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioLineup.gd" id="1_lineup"]
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="Resource" path="res://data/radio/subspace_fm.tres" id="2_subspace_fm"]
+[ext_resource type="Resource" path="res://data/radio/jungle_juice.tres" id="3_jungle_juice"]
+[ext_resource type="Resource" path="res://data/radio/late_block.tres" id="4_late_block"]
+[ext_resource type="Resource" path="res://data/radio/lofi_drift.tres" id="5_lofi_drift"]
+
+[resource]
+script = ExtResource("1_lineup")
+stations = Array[ExtResource("1_station")]([ExtResource("2_subspace_fm"), ExtResource("3_jungle_juice"), ExtResource("4_late_block"), ExtResource("5_lofi_drift")])

@@ -73,6 +73,26 @@ extends Resource
 @export_range(0.0, 20.0, 0.5, "suffix:°") var nose_tilt_degrees: float = 5.0
 
 
+@export_group("Fuel")
+
+## Flying faster burns more fuel: at top speed, thrusting burns this much
+## extra on top of the normal burn (1 = twice as much). Coasting is free.
+## (How big each ship's tank is lives in its own file in res://data/ships/.)
+@export_range(0.0, 4.0, 0.05) var fuel_speed_burn: float = 1.0
+
+## With an empty tank, the engines run "on fumes" at this fraction of their
+## thrust, so you can always limp to a pump. Nobody gets stranded.
+@export_range(0.05, 1.0, 0.05) var empty_tank_thrust: float = 0.25
+
+## The LOW FUEL light comes on below this much fuel (0.2 = 20%).
+@export_range(0.0, 0.5, 0.01) var low_fuel_warning: float = 0.2
+
+## The fuel-economy arrow turns yellow, then red, when you burn fuel harder
+## than these (1 = flooring it at top speed). Coasting is always green.
+@export_range(0.0, 1.0, 0.05) var economy_yellow: float = 0.35
+@export_range(0.0, 1.0, 0.05) var economy_red: float = 0.7
+
+
 @export_group("On foot")
 
 ## How fast the bunny walks around the base.
@@ -120,6 +140,11 @@ extends Resource
 ## After a bonk, ignore further bumps for this long, so scraping along a rock
 ## counts as one bonk, not dozens.
 @export_range(0.0, 2.0, 0.05, "suffix:s") var bonk_cooldown: float = 0.4
+
+## Cargo condition lost by the gentlest bonk and by the biggest one
+## (1 = all of it). Fragile jobs pay a bonus that shrinks with this.
+@export_range(0.0, 0.5, 0.005) var cargo_damage_min: float = 0.01
+@export_range(0.0, 0.5, 0.005) var cargo_damage_max: float = 0.08
 
 ## The engines start trailing smoke when the hull drops below this (1 = 100%).
 @export_range(0.0, 1.0, 0.05) var smoke_below_hull: float = 0.6
@@ -231,6 +256,66 @@ extends Resource
 
 ## How quickly the speed lines fade in and out.
 @export_range(0.5, 20.0, 0.5) var speed_lines_response: float = 6.0
+
+
+@export_group("HUD")
+
+## How chunky the HUD's pixels are: it's drawn as if the screen had this
+## many rows of pixels, then blown up with crisp square pixels. Fewer rows =
+## bigger, chunkier HUD. (It always uses whole-pixel steps, so it stays
+## crisp: at 1080p, 360 rows means each HUD pixel is 3x3 screen pixels.)
+@export_range(180.0, 720.0, 10.0) var hud_rows: float = 360.0
+
+## How many times a second the HUD redraws. Old games often ran their HUD
+## slower than the screen, which makes it tick and jitter. 60 = smooth.
+@export_range(5.0, 60.0, 1.0, "suffix:fps") var hud_frame_rate: float = 30.0
+
+## How many times a second the numbers (speed, distance, pay...) update.
+## Low = they tick over in little jumps, like an old digital display.
+@export_range(1.0, 30.0, 0.5, "suffix:/s") var hud_number_rate: float = 8.0
+
+## Pop-up panels (calls, rush timer, cargo...) slide in over this many
+## steps, a few frames at a time, instead of smoothly.
+@export_range(1, 12, 1) var hud_pop_steps: int = 4
+
+## Seconds between those steps.
+@export_range(0.01, 0.2, 0.01, "suffix:s") var hud_pop_step_seconds: float = 0.05
+
+## How far the radar globe sees. Ships and rocks beyond this don't show.
+@export_range(200.0, 6000.0, 50.0, "suffix:m") var radar_range: float = 1500.0
+
+## The PROXIMITY light comes on when a rock or ship is this close (to its
+## surface), and blinks faster the closer it gets.
+@export_range(10.0, 600.0, 5.0, "suffix:m") var proximity_range: float = 150.0
+
+## Passing ships closer than this get a little ID label.
+@export_range(50.0, 3000.0, 10.0, "suffix:m") var target_label_range: float = 800.0
+
+## Docking brackets appear around the bay when it's this close.
+@export_range(100.0, 5000.0, 50.0, "suffix:m") var docking_bracket_range: float = 1500.0
+
+
+@export_group("Comms chatter")
+
+## Seconds after takeoff before dispatch first calls.
+@export_range(0.0, 30.0, 0.5, "suffix:s") var comm_first_call_seconds: float = 4.0
+
+## When nothing is happening, somebody calls every this-many seconds or so
+## (a random time between the two).
+@export_range(10.0, 600.0, 5.0, "suffix:s") var comm_idle_min_seconds: float = 50.0
+@export_range(10.0, 600.0, 5.0, "suffix:s") var comm_idle_max_seconds: float = 110.0
+
+## The fewest seconds of quiet between two calls.
+@export_range(0.0, 60.0, 0.5, "suffix:s") var comm_quiet_seconds: float = 8.0
+
+## How fast a call's words type out, in letters per second.
+@export_range(5.0, 120.0, 1.0) var comm_letters_per_second: float = 28.0
+
+## How long a call stays up after its words finish typing.
+@export_range(0.5, 10.0, 0.25, "suffix:s") var comm_hold_seconds: float = 3.0
+
+## The chance that somebody teases you about a bonk (0 = never, 1 = always).
+@export_range(0.0, 1.0, 0.05) var comm_bonk_chance: float = 0.35
 
 
 @export_group("Engine trail")

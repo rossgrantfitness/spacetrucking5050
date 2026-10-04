@@ -34,6 +34,12 @@ func _init() -> void:
 	_action("throttle_down", TRIGGER, [_key(KEY_S), _axis(JOY_AXIS_TRIGGER_LEFT, 1.0)])
 	_action("boost", BUTTON, [_key(KEY_SPACE), _button(JOY_BUTTON_A)])
 	_action("toggle_camera", BUTTON, [_key(KEY_C), _button(JOY_BUTTON_Y)])
+	_action("radio_next", BUTTON, [_key(KEY_E), _button(JOY_BUTTON_DPAD_RIGHT)])
+	_action("radio_previous", BUTTON, [_key(KEY_Q), _button(JOY_BUTTON_DPAD_LEFT)])
+	_action("toggle_hud", BUTTON, [_key(KEY_H), _button(JOY_BUTTON_DPAD_DOWN)])
+	# A developer helper: lights up every HUD warning so the look can be
+	# checked. Keyboard only.
+	_action("hud_demo", BUTTON, [_key(KEY_F9)])
 	_action("look_left", STICK, [_axis(JOY_AXIS_RIGHT_X, -1.0)])
 	_action("look_right", STICK, [_axis(JOY_AXIS_RIGHT_X, 1.0)])
 	_action("look_up", STICK, [_axis(JOY_AXIS_RIGHT_Y, -1.0)])

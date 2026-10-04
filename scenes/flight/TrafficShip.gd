@@ -24,6 +24,11 @@ extends Node3D
 @export var engine_trail_color := Color(0.5, 0.9, 1.0)
 ## A rough size of its hull, for bonking into it: width, height, length.
 @export var hull_size := Vector3(12.0, 7.0, 32.0)
+## The name on its HUD ID label. Leave empty to pick a funny one from
+## res://data/traffic_names.tres.
+@export var id_label: String = ""
+
+const NAMES: TrafficNames = preload("res://data/traffic_names.tres")
 
 var _route := Curve3D.new()
 var _distance := 0.0
@@ -33,7 +38,9 @@ var _last_heading := Vector3.FORWARD
 
 
 func _ready() -> void:
-	add_to_group("traffic")  # So the cockpit's radar can find us.
+	add_to_group("traffic")  # So the radars and ID labels can find us.
+	if id_label.is_empty():
+		id_label = NAMES.pick_for(name)
 	_route = build_route(waypoints)
 	_distance = _route.get_baked_length() * start_fraction
 	if visual_scene != null:

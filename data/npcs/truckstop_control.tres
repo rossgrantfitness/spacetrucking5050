@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Marge (Truck Stop traffic control)"
+species = "owl"
+voice_pitch = 0.8
+lines = PackedStringArray("...")
+comm_name = "MARGE · TRUCK STOP CTRL"
+fur_color = Color(0.72, 0.55, 0.38, 1)
+accent_color = Color(0.35, 0.95, 1, 1)

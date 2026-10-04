@@ -22,7 +22,7 @@ project on a machine without a screen.
 | `validate_project.gd` | Loads every script, scene and resource (or just the files you list) so Godot reports problems. |
 | `strict_warnings.gd` | Used by `validate.sh`: temporarily turns GDScript warnings into errors (via a throwaway `override.cfg`). |
 | `run_tests.gd` + `tests/` | A tiny self-test runner. Each `*Tests.gd` file in `tests/` holds `test_...` functions. |
-| `smoke_flight.gd` | Flies the flight sandbox on autopilot (throttle, turns, boost, cockpit view, pause menu, back to start) to shake out errors, then quits politely. |
+| `smoke_flight.gd` | Flies the flight sandbox on autopilot (throttle, turns, boost, cockpit view, radio, HUD hide and demo, a comm call, delivering the practice haul, pause menu, back to start) to shake out errors, then quits politely. |
 | `capture.sh` | Renders frames of the game to PNG files (plus the audio as a WAV) on a virtual screen (needs Xvfb + Mesa), for checking visuals without a monitor. |
 
 ## Commands

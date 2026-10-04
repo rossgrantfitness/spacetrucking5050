@@ -8,3 +8,6 @@ display_name = "Dottie (Dispatch, mornings)"
 species = "raccoon"
 voice_pitch = 1.35
 lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Coffee's burnt, the job board's broken, and somebody fed the vending machine a sock.", "Your rig's up the stairs, same as always. Fly safe, hon. Or at least fly.")
+comm_name = "DOTTIE · DISPATCH"
+fur_color = Color(0.62, 0.6, 0.66, 1)
+accent_color = Color(1, 0.42, 0.75, 1)

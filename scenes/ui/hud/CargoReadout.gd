@@ -1,0 +1,78 @@
+class_name CargoReadout
+extends HudWidget
+## Top right, while you're hauling a job:
+## - CARGO: how intact the load is. Bonks knock it down, and it ticks down
+##   a percent at a time so you see it happen.
+## - PAY: what the job is on track to pay right now (base pay plus any
+##   bonuses still in reach). It ticks up and down as bonuses are earned or
+##   slip away.
+## After a delivery it flashes DELIVERED and what you were paid, then
+## slides away.
+
+
+## Seconds the "delivered" card stays up.
+const DELIVERED_SECONDS: float = 6.0
+
+var _pop := HudWidget.Pop.new()
+var _shown_cargo: float = -1.0
+var _shown_pay: int = -1
+var _pay_flash: float = 0.0
+var _cargo_flash: float = 0.0
+var _delivered_clock: float = 0.0
+
+
+func hud_step(delta: float, numbers_due: bool) -> void:
+	var haul := hud.haul
+	var rig := ship()
+	if haul != null and haul.delivered:
+		_delivered_clock += delta
+	else:
+		_delivered_clock = 0.0
+	_pop.want = haul != null and rig != null and _delivered_clock < DELIVERED_SECONDS
+	_pop.update(delta)
+	_pay_flash = maxf(_pay_flash - delta, 0.0)
+	_cargo_flash = maxf(_cargo_flash - delta, 0.0)
+	if haul == null or rig == null or not numbers_due:
+		return
+	# Cargo ticks down one percent per number update until it catches up.
+	var cargo := roundf(rig.cargo_condition * 100.0)
+	if _shown_cargo < 0.0 or cargo > _shown_cargo:
+		_shown_cargo = cargo
+	elif cargo < _shown_cargo:
+		_shown_cargo -= 1.0
+		_cargo_flash = 0.4
+	# Pay counts toward its new value in a few jumps.
+	var pay := haul.projected_pay(rig.cargo_condition)
+	if _shown_pay < 0:
+		_shown_pay = pay
+	elif pay != _shown_pay:
+		var jump := maxi(floori(absi(pay - _shown_pay) / 3.0), 1)
+		if pay > _shown_pay:
+			_pay_flash = 0.6
+		_shown_pay += jump if pay > _shown_pay else -jump
+
+
+func _draw() -> void:
+	if not _pop.shown() or hud.haul == null:
+		return
+	var right := size.x - MARGIN + roundf(_pop.hidden_share() * 90.0)
+	var top := MARGIN
+	var currency := GameState.names.currency_short
+	box(Rect2(right - 72.0, top - 2.0, 74.0, 20.0), BACKING)
+	if hud.haul.delivered:
+		text_right(Vector2(right, top), "DELIVERED", YELLOW if blink(0.5) else GREEN, BIG, 1.0, 0.15)
+		text_right(Vector2(right, top + 10.0), "PAID %d %s" % [hud.haul.paid, currency], GREEN)
+		return
+	var cargo_color := GREEN
+	if _shown_cargo < 40.0:
+		cargo_color = RED
+	elif _shown_cargo < 70.0:
+		cargo_color = YELLOW
+	if _cargo_flash > 0.0 and blink(0.2):
+		cargo_color = RED
+	var cargo_text := "%d%%" % roundi(_shown_cargo)
+	text_right(Vector2(right, top), cargo_text, cargo_color, BIG, 1.0, 0.15)
+	text_right(Vector2(right - text_width(cargo_text, BIG) - 4.0, top + 2.0), "CARGO", tint(0.85))
+	var pay_text := "%d %s" % [_shown_pay, currency]
+	text_right(Vector2(right, top + 10.0), pay_text, YELLOW if _pay_flash > 0.0 else GREEN)
+	text_right(Vector2(right - text_width(pay_text) - 4.0, top + 10.0), "+" if _pay_flash > 0.0 else "PAY", YELLOW if _pay_flash > 0.0 else tint(0.85))

@@ -29,6 +29,25 @@ var shake := ScreenShake.new()
 ## How healthy the hull is: 1 = like new, 0 = held together with duct tape.
 ## Nothing ever explodes; a battered rig just smokes and sparks.
 var hull: float = 1.0
+## How intact the cargo is: 1 = pristine, 0 = a box of crumbs. Bonks knock
+## it a little. (Fragile jobs pay a bonus that shrinks with it.)
+var cargo_condition: float = 1.0
+## Where the last bonk hit, relative to the ship (x = right, y = up,
+## z = toward the back). The HUD's little hull picture flashes that spot.
+var last_bonk_local := Vector3.ZERO
+## How far the rig has flown this trip, in meters (the dashboard odometer).
+var odometer: float = 0.0
+
+## Gentle hazards (M5) report here, and the HUD's status lights read them.
+## Nothing sets these yet. All run from 0 (nothing) to 1 (full on).
+var gravity_pull: float = 0.0
+## A gravity well you could slingshot around for free speed.
+var slingshot_ready: bool = false
+var storm: float = 0.0
+## Space cops' speed trap nearby (the trucker's radar detector).
+var speed_trap: float = 0.0
+## Charging toward a system jump point: below 0 = none near, 0 to 1 = charge.
+var jump_charge: float = -1.0
 
 var _was_boosting := false
 var _bonk_cooldown := 0.0
@@ -57,6 +76,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	flight.velocity = velocity
 	_check_for_bonks(before, delta)
+	odometer += flight.speed() * delta
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
 	# never rolls, so the camera's horizon stays level.
@@ -86,6 +106,8 @@ func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
 	var tuning := GameState.tuning
 	var strength := bonk_strength(impact, tuning)
 	hull = maxf(hull - lerpf(tuning.bonk_damage_min, tuning.bonk_damage_max, strength), 0.0)
+	cargo_condition = maxf(cargo_condition - lerpf(tuning.cargo_damage_min, tuning.cargo_damage_max, strength), 0.0)
+	last_bonk_local = global_basis.inverse() * (where - global_position)
 	shake.add_trauma(lerpf(0.25, tuning.bonk_max_shake, strength))
 	flight.velocity += away * impact * tuning.bonk_bounce
 	_bonk_cooldown = tuning.bonk_cooldown

@@ -10,9 +10,15 @@ extends Node
 ## so they stay crisp.
 
 
-## The solar system we're in (its colors tint the space dust and the haze).
+## The solar system we're in (its colors tint the space dust, the haze and
+## the HUD's frames).
 @export var system: SystemData
-## Fly within this many meters of the truck stop and your boost fuel tops up.
+## The practice job riding along, so the HUD has cargo, pay and a rush timer
+## to show. (The real job board arrives with M2.)
+@export var practice_job: JobData
+## Fly within this many meters of the docking bay to deliver the job.
+@export var delivery_radius: float = 300.0
+## Fly within this many meters of the truck stop and both fuel tanks top up.
 ## (A sandbox stand-in: buying fuel for credits arrives in M2.)
 @export var refuel_radius: float = 900.0
 ## Seconds for a full boost-fuel top-up at the truck stop.
@@ -30,10 +36,13 @@ extends Node
 @onready var _hud: FlightHUD = $FlightHUD
 @onready var _pause_menu: PauseMenu = $PauseMenu
 @onready var _station: Node3D = $World/Station
+@onready var _dock: Node3D = $World/Station/DockPoint
+@onready var _chatter: CommChatter = $CommChatter
 @onready var _nebula: MeshInstance3D = $World/SkyBackdrop/Nebula
 
 var _start := Transform3D.IDENTITY
 var _in_cockpit := false
+var _haul: Haul
 
 
 func _ready() -> void:
@@ -42,7 +51,9 @@ func _ready() -> void:
 	_dust.tint = system.signature_color
 	_ship.cockpit.destination = _station
 	_speed_lines.ship = _ship
-	_hud.setup(_ship, _station)
+	_haul = Haul.new(practice_job)
+	_hud.setup(_ship, _dock, _haul, system.signature_color)
+	_chatter.start(_ship, _hud.comm, _dock)
 	_apply_system_colors()
 	_pause_menu.resumed.connect(_capture_mouse)
 	_pause_menu.back_to_start_pressed.connect(_back_to_start)
@@ -53,19 +64,31 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var near_station := _ship.global_position.distance_to(_station.global_position) < refuel_radius
-	var refueling := near_station and _ship.flight.boost_fuel < 1.0
-	var repairing := near_station and _ship.hull < 1.0
-	if refueling:
-		_ship.flight.boost_fuel = minf(_ship.flight.boost_fuel + delta / refuel_seconds, 1.0)
-	if repairing:
+	_haul.update(delta)
+	if not _haul.delivered and _ship.global_position.distance_to(_dock.global_position) < delivery_radius:
+		_haul.deliver(_ship.cargo_condition)
+		_chatter.say(ChatterSet.Situation.DELIVERED)
+	# The truck stop tops up both tanks and patches the hull while you're near.
+	if _ship.global_position.distance_to(_station.global_position) < refuel_radius:
+		var flight := _ship.flight
+		flight.fuel = minf(flight.fuel + delta / refuel_seconds, 1.0)
+		flight.boost_fuel = minf(flight.boost_fuel + delta / refuel_seconds, 1.0)
 		_ship.repair(delta / repair_seconds)
-	_hud.set_truck_stop_service(refueling, repairing)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_camera"):
 		_set_cockpit_view(not _in_cockpit)
+	elif event.is_action_pressed("radio_next"):
+		Radio.next_station()
+	elif event.is_action_pressed("radio_previous"):
+		Radio.previous_station()
+	elif event.is_action_pressed("toggle_hud"):
+		Settings.set_show_hud(not Settings.show_hud)
+	elif event.is_action_pressed("hud_demo"):
+		_hud.demo = not _hud.demo
+		if _hud.demo:
+			_chatter.say(ChatterSet.Situation.IDLE)
 	elif event is InputEventMouseButton and event.is_pressed() and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		_capture_mouse()  # Clicking back into the window grabs the mouse again.
 
@@ -107,6 +130,12 @@ func _capture_mouse() -> void:
 func _back_to_start() -> void:
 	_ship.teleport(_start)
 	_ship.repair(1.0)
+	_ship.cargo_condition = 1.0
+	_ship.odometer = 0.0
+	# A fresh copy of the practice job, and dispatch calls again.
+	_haul = Haul.new(practice_job)
+	_hud.haul = _haul
+	_chatter.restart()
 	_chase_camera.snap_behind_target()
 	_capture_mouse()
 

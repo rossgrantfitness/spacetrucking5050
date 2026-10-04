@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "LO-FI DRIFT"
+frequency = "66.6"
+genre = "Chill / lo-fi"
+dj_name = "Nobody, it's automated"
+tracks = PackedStringArray("COZY HAULER - RAIN ON THE CARGO BAY", "NAPTIME NEBULA - TEA FOR ONE", "SOFT LANDING - SLIPPERS IN SPACE", "LATE SHIFT - VENDING MACHINE HUM", "WARM STATIC - JUST FIVE MORE MINUTES")
+ads = PackedStringArray("SNOOZE PODS: SLEEP LIKE YOU MEAN IT.", "GRANDMA ORBIT'S SOUP. SHE'S STILL UP THERE. SHE'S FINE.")
+track_seconds = 170.0

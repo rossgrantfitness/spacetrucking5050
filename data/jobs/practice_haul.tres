@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+cargo_name = "Garden gnomes (fragile)"
+client_name = "Truck Stop Diner"
+destination_name = "TRUCK STOP"
+base_pay = 400
+care_bonus = 150
+rush_seconds = 120.0
+rush_bonus = 100

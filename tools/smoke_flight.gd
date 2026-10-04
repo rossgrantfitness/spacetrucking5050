@@ -2,8 +2,10 @@ extends SceneTree
 ## Used by tools/validate.sh: a quick "smoke test" of the flight sandbox. It
 ## flies on autopilot for a few seconds (thrust, mouse, brake, turn, boost,
 ## switch to the cockpit and back, open and close the pause menu, go back to
-## the start), with the traffic flying around,
-## so any errors in those code paths show up, then quits politely.
+## the start), with the traffic flying around, plus the HUD: flipping radio
+## stations, hiding and showing the HUD, the HUD demo, a comm call, and a
+## delivery at the truck stop. Any errors in those code paths show up, then
+## it quits politely.
 ##
 ## Run it with:  godot --headless --path . -s tools/smoke_flight.gd
 
@@ -45,11 +47,28 @@ func _process(_delta: float) -> bool:
 			var ship := current_scene.get_node("World/Ship")
 			ship.call("bonk", 40.0, ship.get("global_position") + Vector3(0, 0, -15), Vector3.BACK)
 			ship.call("bonk", 6.0, ship.get("global_position") + Vector3(5, 0, 0), Vector3.LEFT)
+		295:
+			_tap("radio_next")
+			_tap("hud_demo")
+			current_scene.get_node("FlightHUD").get("comm").call("call_in",
+					load("res://data/npcs/trucker_pip.tres"), "Smoke test! Is this thing on? Testing, testing, one two three gnomes.")
+		298:
+			_tap("toggle_hud")
+			_tap("radio_previous")
 		300:
+			_tap("toggle_hud")
 			_tap("pause")
 		320:
 			_tap("pause")
+		330:
+			# Hop next to the docking bay to deliver the practice job.
+			var ship := current_scene.get_node("World/Ship")
+			var dock: Node3D = current_scene.get_node("World/Station/DockPoint")
+			ship.call("teleport", Transform3D(Basis.IDENTITY, dock.global_position + Vector3(0, 0, 100)))
 		340:
+			if not current_scene.get("_haul").get("delivered"):
+				push_error("Smoke test: flying up to the docking bay should deliver the practice job")
+			_tap("hud_demo")
 			# "Back to the start", like the pause menu button.
 			current_scene.call("_back_to_start")
 		400:

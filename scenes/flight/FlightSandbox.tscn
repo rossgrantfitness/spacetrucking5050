@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
 [ext_resource type="Resource" path="res://data/systems/home_system.tres" id="2_system"]
+[ext_resource type="Resource" path="res://data/jobs/practice_haul.tres" id="24_job"]
+[ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
 [ext_resource type="Script" path="res://scenes/common/Starfield.gd" id="3_stars"]
 [ext_resource type="PackedScene" path="res://scenes/flight/Ship.tscn" id="4_ship"]
 [ext_resource type="Script" path="res://scenes/flight/ChaseCamera.gd" id="5_chase"]
@@ -78,6 +80,7 @@ shader = ExtResource("11_lines_shader")
 [node name="FlightSandbox" type="Node"]
 script = ExtResource("1_sandbox")
 system = ExtResource("2_system")
+practice_job = ExtResource("24_job")
 
 [node name="World" type="Node3D" parent="."]
 
@@ -121,6 +124,9 @@ script = ExtResource("7_field")
 
 [node name="Station" parent="World" instance=ExtResource("8_station")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5300)
+
+[node name="DockPoint" type="Marker3D" parent="World/Station"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
 
 [node name="SkyBackdrop" type="Node3D" parent="World"]
 script = ExtResource("15_sky")
@@ -184,3 +190,6 @@ script = ExtResource("10_lines")
 [node name="FlightHUD" parent="." instance=ExtResource("12_hud")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("13_pause")]
+
+[node name="CommChatter" type="Node" parent="."]
+script = ExtResource("25_chatter")

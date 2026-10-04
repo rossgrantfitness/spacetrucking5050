@@ -3,8 +3,9 @@ extends SceneTree
 ## res://audio/generated/:
 ##     engine_drone.wav, engine_whine.wav, engine_air.wav, engine_growl.wav
 ##         (the engine hum's four loops, from scenes/flight/EngineSynth.gd)
-##     bonk.wav, blip.wav
-##         (a cartoon bump and a dialogue voice blip, from scenes/common/SfxSynth.gd)
+##     bonk.wav, blip.wav, static.wav
+##         (a cartoon bump, a dialogue voice blip and a burst of radio
+##         static, from scenes/common/SfxSynth.gd)
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/generate_sounds.gd
@@ -28,6 +29,7 @@ func _initialize() -> void:
 		"engine_growl": EngineSynth.make_growl(),
 		"bonk": SfxSynth.make_bonk(),
 		"blip": SfxSynth.make_blip(),
+		"static": SfxSynth.make_static(),
 	}
 	var failed := false
 	for file_name: String in loops:

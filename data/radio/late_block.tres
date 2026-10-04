@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "LATE BLOCK 77"
+frequency = "77.7"
+genre = "Late-night cartoon electronica"
+dj_name = "The Night Announcer"
+tracks = PackedStringArray("VECTOR KID - BACK AFTER THESE MESSAGES", "PIXEL MOM - SATURDAY 3 AM", "CHROME GECKO - MISSION SELECT", "THE CEL SHADERS - TO BE CONTINUED")
+ads = PackedStringArray("GALAXY GUMBALLS: COLLECT ALL 9000.", "DON'T SLEEP. STAY UP. WATCH STUFF. THIS HAS BEEN A MESSAGE.")
+track_seconds = 160.0
