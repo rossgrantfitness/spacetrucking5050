@@ -1,18 +1,20 @@
 # Progress
 
-**Current status:** **Round 8: the long haul to Tidewater**, at your
-request. The world is huge now: a second solar system (teal Tidewater) 70
-km from home, with its own sun, ocean planet, moon and nebula color. The
-first mission is a real long haul: 18 minutes cruising, 6 on full boost,
-past highway signs, debris, a drive-through gas station, roadside
-attractions, hazards and random sights. Plus a course chart with a cruise
-autopilot, boost that wanders if you're not steady, cargo that minds rough
-flying, and less dither. Built and validated, **waiting for your playtest**
-(see `PLAYTEST.md`).
+**Current status:** **Round 9: the intro, the throttle, the cabin, the
+radio lineup and things to buy**, from your round-8 playtest answers. A
+power-on intro and loading screens; a real throttle lever, heavier
+turning, more speed at cruise (spaceway beacons, more dust) and a boost you
+have to commit to; cargo damage you can hear and see; walking around your
+rig's cabin while the autopilot drives (and napping to fast-forward);
+Jack Rabbit's replies on the comms; people who remember; your 20 radio
+stations with DJs who react to you; a logbook with rare sights; a
+Gas-N-Go worth stopping at; new rigs and paint jobs; and a walkable
+Tidewater canteen. Built and validated, **waiting for your playtest** (see
+`PLAYTEST.md`).
 **Next session:** the audit your revised brief asks for (`AUDIT.md` and a
 reworked checklist here), then whatever you choose.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-04 (round 8)
+**Last updated:** 2026-10-04 (round 9)
 
 ---
 
@@ -33,6 +35,7 @@ reworked checklist here), then whatever you choose.
   - [x] An asteroid field of tumbling low-poly rocks (with collision) and a distant truck-stop station
   - [x] Minimal corner HUD (speed gauge, station marker, mouse reticle), small pause menu, "Press Start" on the boot screen
   - [x] Self-tests for the flight rules, sound loops and rock meshes; an autopilot smoke test of the sandbox
+  - [x] Round 9 (your request): a throttle lever that holds a speed, heavier turning, more sense of speed at cruise (spaceway beacons, more dust, near motes, wider view, road-feel rumble), boost that spools up, needs full throttle and burns at least 3 seconds
   - [x] Round 8 (your request): less dither (wobble kept); boost wanders off course and jerky steering makes it worse; cruising on the limiter sips fuel; a 6-minute boost tank
   - [x] Round 7 (your request): more wobble and dither (240-row wobble grid, more texture swim, 26 shades per color, stronger, chunkier dither, softer painted rooms)
   - [x] Round 6 (your HUD list): a Wipeout-style HUD drawn at low resolution with a tiny pixel font: speed bar with redline and throttle tick, boost bar, wireframe radar globe, fuel arc with economy arrow, hull picture that flashes where you bonked, compass strip with distance and ETA, radio ticker, cargo and pay, flight marker, five status lights, and pop-ins (comm calls, docking brackets, rush timer, ship ID labels, jump charge). Comm chatter from dispatch, truck stop control and two truckers. H hides the HUD, F9 is a demo of every warning
@@ -48,6 +51,7 @@ reworked checklist here), then whatever you choose.
   - [x] Fuel that burns faster at speed; bonks knock cargo condition; rough flying (hard turns, slides, braking, boost vibration) slowly damages cargo, shown on a RIDE bar (round 8)
   - [x] Round 8: the first mission is a long haul to Tidewater Cannery (59 km past the truck stop); drop-off docking (stay in the cab: get paid, take a load back, fuel up); four Tidewater jobs
   - [x] Saving and loading (`user://save.json`), Continue and New game on the boot screen
+  - [x] Round 9: cargo damage you can read (thumps, rattle, jolt, the hold flashing, HARD TURN / BRAKING / BOOST SHAKE), one comment per trip; Tidewater is walkable (the cannery canteen and Gill)
   - [x] A route screen: the course chart (M) with distances, cruise and boost times, fuel, and "via" stops, plus a cruise autopilot (round 8)
   - [ ] Your playtest: can you finish a delivery, get paid, buy the upgrade and feel it?
 - [ ] **M3: The walkable hub** *(started early, at your request)*
@@ -59,25 +63,30 @@ reworked checklist here), then whatever you choose.
   - [x] Taking jobs at dispatch (Dottie opens the job board after the first mission)
   - [x] The truck stop inside (round 7): a big concourse with Marge's diner, a job board, Dusty's garage, Lily's pumps, an arcade lounge, shuttered "coming soon" shops and the airlock; five people; things to use and look at
   - [x] The first mission: Dottie sends you to Marge, who offers her pie run; story flags and conditional conversations in data
+  - [x] Round 9: run on foot (Shift / X); the apartment is the rig's sleeper cabin, walkable in flight while the autopilot drives, with a nap that fast-forwards the trip; people remember (Marge and Gill about the pies, Moe finishing his sentence); Jack Rabbit's name
   - [ ] The hangar at the base (inspect the rig; fuel, repairs and upgrades are at the truck stop for now), a hallway neighbor, evening and night clerks
   - [ ] The bunny rebuilt to `CHARACTER_BIBLE.md` (segmented parts, face sheet, lop ears and cap, vest, boots)
 - [ ] **M4: PSX look + the radio** *(much of it pulled forward)*
   - [x] PSX shaders, dither, per-system haze, nebula, oversized planet, the low-res Wipeout HUD with its radar globe
   - [x] The radio plays real music from each station's folder, GTA-style (stations keep playing while you're away), with audio or text ads, tuning static, on/off with ambient music, weak-signal hiss, a radio volume slider, and MY TUNES for the player's own files; the truck stop's jukebox
   - [x] Placeholder beats per station until you add music; `audio/radio/README.md`
-  - [ ] Your radio stations and music (you're making these!), DJ voices
+  - [x] Round 9: your 20-station lineup (DJs, slogans, ads, invented songs, placeholder loops per genre), DJs reacting to storms, tickets, new systems and deliveries, a regional station, a pirate station, a night-only station and a hidden numbers station
+  - [ ] Your music for the stations (you're making these!), DJ voices
   - [ ] Glow pass, 3D cockpit radar globe, neon hub lighting polish
 - [ ] **M5: Life in space** *(much of it pulled forward)*
   - [x] Comm calls with static and placeholder portraits; chatter from dispatch, truckers, traffic control, hosts and the space patrol; funny ship ID labels; screen shake
   - [x] Random sights along the road (round 8): big ship crossings with a Doppler rumble, convoys, billboards, comets, jellyfish, junk, derelicts, a rubber duck; whales and ion storms in Tidewater
   - [x] Fixed sights on the road to Tidewater (round 8): highway signs, a junk spill, the world's biggest donut, a border gate, a lighthouse, a derelict, an icy field, whales, long-haul traffic
   - [x] Hazards (round 8): ion storms (static, jolts, STORM light) and a speed trap (COPS light, small fine)
-  - [x] An optional stop: the Gas-N-Go 47 drive-through
+  - [x] An optional stop: the Gas-N-Go 47 drive-through (round 9: cheaper fuel, a calming snack, a souvenir, side jobs)
+  - [x] Round 9: no repeating sights, rare sights (great migration, leviathans, a ghost ship, a comet storm), a logbook (L), comm replies (T)
   - [x] Route map: the course chart (see M2)
   - [ ] Gravity wells and slingshots, traffic lanes near stations
   - [ ] Cockpit gizmos and toys, rumble polish, real 3D comm heads, cockpit poses
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
-- [ ] **M7: Home & style**: wardrobe, decor, bigger apartment, new ships, docking computer, forklift minigame
+- [ ] **M7: Home & style** *(started)*
+  - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
+  - [ ] Wardrobe, decor, a bigger apartment, docking computer, forklift minigame
 - [ ] **M8: Story & clients**: clients and systems with storylines; the husband's story
 - [ ] **M9: Endgame & completion**: buy the company, completion percentage
 - [ ] **M10: Polish & ship**: menus, options, credits, controller glyphs, exports, performance
@@ -86,7 +95,7 @@ reworked checklist here), then whatever you choose.
 
 ## Next up
 
-Your playtest of round 8. Then the audit your revised brief asks for, then
+Your playtest of round 9. Then the audit your revised brief asks for, then
 your call on what's next.
 
 ## M2 in short
@@ -127,6 +136,14 @@ cartoon bonks that knock your cargo condition, and basic saving.
 ## Later ideas
 
 Ideas that aren't in the plan. Nothing here gets built without your OK.
+
+- **The Megahauler, for real**: is flying something the size of an
+  aircraft carrier fun? It could be, if the game leans in: slow, majestic
+  turns, a crew of tiny tugs to dock it, a bridge you walk around, cargo
+  that's a whole shopping mall. A late-game dream to design properly.
+- **Replies in on-foot conversations** (like the comm replies).
+- **A live view out the cabin window** while you walk around on autopilot.
+- **Photo mode for the logbook**: snap the sights you log.
 
 - **A jog button on foot.** The truck stop is big on purpose (40 x 30 m);
   a "hold to jog" would make crossing it quicker. The bible says her jog is

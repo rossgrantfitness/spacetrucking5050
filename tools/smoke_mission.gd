@@ -3,16 +3,16 @@ extends SceneTree
 ## new game, to shake out errors in the story, menus and money:
 ##   arrive in the truck stop -> talk to Marge -> take the long haul -> visit
 ##   Lily's pumps -> board the rig -> (skip most of the road) -> the cruise
-##   autopilot flies into Tidewater's ring -> docked: payout card, counter,
-##   launch again -> chart a course through the Gas-N-Go drive-through and
-##   roll out the far side.
+##   autopilot flies into Tidewater's ring -> climb out in the cannery
+##   canteen: payout card -> board again -> chart a course through the
+##   Gas-N-Go drive-through and roll out the far side.
 ## It checks the job was taken, delivered and paid, then quits politely.
 ## It saves to a scratch file, never the player's real save.
 ##
 ## Run it with:  godot --headless --path . -s tools/smoke_mission.gd
 
 
-enum Step { ARRIVE, TALK_TO_MARGE, VISIT_LILY, LEAVE_LILY, BOARD, FLY_OUT, DROP_OFF, DRIVE_THROUGH, DONE }
+enum Step { ARRIVE, TALK_TO_MARGE, VISIT_LILY, LEAVE_LILY, BOARD, FLY_OUT, AT_TIDEWATER, BOARD_AGAIN, DRIVE_THROUGH, DONE }
 
 var _frame := 0
 var _step := Step.ARRIVE
@@ -70,14 +70,22 @@ func _process(_delta: float) -> bool:
 				Engine.time_scale = 4.0
 				_put_ship_before("World/Places/tidewater/ApproachRing", 1800.0)
 				current_scene.call("engage_course", PackedStringArray(["tidewater"]))
-			if waited > 60 and current_scene.get("_at_counter") == true:
-				_next(Step.DROP_OFF)
-		Step.DROP_OFF:
-			# Close the payout card, then leave the counter.
-			if waited % 15 == 0:
-				_tap("ui_cancel")
-			if waited > 60 and current_scene.get("_at_counter") == false and current_scene.get("_docking_at") == "":
+			if current_scene != null and current_scene.name == "CanneryCanteen":
+				Engine.time_scale = 1.0
+				_next(Step.AT_TIDEWATER)
+		Step.AT_TIDEWATER:
+			# Close the payout card, then walk to the airlock.
+			if _room_ready() and waited % 10 == 0:
+				_tap("interact")
+			if _room_ready() and waited > 150:
 				_check_results()
+				_player().global_position = Vector3(8.8, 0.0, 5.5)
+				_next(Step.BOARD_AGAIN)
+		Step.BOARD_AGAIN:
+			if waited % 10 == 0 and current_scene != null and current_scene.name == "CanneryCanteen":
+				_tap("interact")
+			if current_scene != null and current_scene.name == "FlightSandbox" and waited > 120:
+				Engine.time_scale = 4.0
 				_put_ship_before("World/Places/gas_n_go/ApproachRing", 1500.0)
 				current_scene.call("engage_course", PackedStringArray(["gas_n_go", "base"]))
 				_next(Step.DRIVE_THROUGH)
@@ -110,7 +118,7 @@ func _check_results() -> void:
 	if not (_game.get("pending_payout") as Dictionary).is_empty():
 		push_error("Smoke test: the payout card should have been shown")
 	if _game.get("launch_from") != "tidewater":
-		push_error("Smoke test: after the drop-off, the rig should launch from Tidewater")
+		push_error("Smoke test: after docking at Tidewater, the rig should launch from there")
 
 
 ## Puts the rig `meters` out in front of an approach ring, pointed at it.

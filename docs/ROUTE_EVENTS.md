@@ -56,6 +56,13 @@ surreal products, comets, cosmic jellyfish drifting by, junk clouds,
 derelicts, a giant rubber duck, whales and ion storms (those two only in
 Tidewater). Some come with a comment on the comms.
 
+**Rare** (round 9; about one every dozen long hauls, any particular one
+about once in fifty): THE GREAT MIGRATION (a jellyfish swarm four times the
+size), a LEVIATHAN POD (whales six times the size), a GHOST SHIP
+(see-through, flickering, you fly right through it) and a COMET STORM. All
+of them, and everything above, go in the **logbook** (L) the first time you
+get within 3 km. The same kind of sight never comes up twice within four.
+
 ## Ideas for later (not built)
 
 - **Weigh station:** pull in, the scale reads your cargo, a bored clerk

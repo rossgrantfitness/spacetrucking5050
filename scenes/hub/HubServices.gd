@@ -15,7 +15,11 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 		"job_board":
 			await job_board(tree, place_id)
 		"fuel":
-			await fuel(tree)
+			var place := GameState.places.find(place_id)
+			if place == null or place_id == "truck_stop":
+				await fuel(tree)  # Lily's.
+			else:
+				await fuel(tree, place.display_name + " PUMPS", "Safe travels.", place.fuel_price_factor)
 		"mechanic":
 			await mechanic(tree)
 		"jukebox":

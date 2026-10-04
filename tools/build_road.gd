@@ -96,8 +96,8 @@ func _initialize() -> void:
 
 	# The spaceways: reflector beacons lining the lanes (home to the truck
 	# stop, the truck stop to Tidewater, and the ramps to the Gas-N-Go).
-	_spaceway(road, "SpacewayHome", [Vector3(0.0, 0.0, -650.0), Vector3(0.0, 0.0, -10050.0)], 250.0, 80.0, Color(1.0, 0.72, 0.3))
-	_spaceway(road, "SpacewayTidewater", [spot(0.9, 0.0, 0.0), spot(58.8, 0.0, 0.0)], 250.0, 80.0, Color(1.0, 0.72, 0.3))
+	_spaceway(road, "SpacewayHome", [Vector3(0.0, 0.0, -650.0), Vector3(0.0, 0.0, -10050.0)], 200.0, 80.0, Color(1.0, 0.72, 0.3))
+	_spaceway(road, "SpacewayTidewater", [spot(0.9, 0.0, 0.0), spot(58.8, 0.0, 0.0)], 200.0, 80.0, Color(1.0, 0.72, 0.3))
 	_spaceway(road, "RampToGasNGo", [spot(27.3, 0.0, 0.0), spot(28.9, 1798.0, 0.0), spot(29.3, 1798.0, 0.0)], 150.0, 50.0, Color(0.5, 1.0, 0.5))
 	_spaceway(road, "RampFromGasNGo", [spot(30.0, 1798.0, 0.0), spot(33.0, 0.0, 0.0)], 150.0, 50.0, Color(0.5, 1.0, 0.5))
 

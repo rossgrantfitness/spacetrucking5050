@@ -11,9 +11,9 @@
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="9_yg4sr"]
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="10_o8emu"]
 
-[node name="TidewaterRoad" type="Node3D" unique_id=162601558]
+[node name="TidewaterRoad" type="Node3D" unique_id=1137365415]
 
-[node name="Sign3Km" type="Node3D" parent="." unique_id=1820698612]
+[node name="Sign3Km" type="Node3D" parent="." unique_id=1146342172]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 2000.6183, 280, -12856.434)
 script = ExtResource("1_kiyqa")
 front_text = "TIDEWATER  56 KM
@@ -21,7 +21,7 @@ GAS-N-GO 47  27 KM"
 back_text = "TRUCK STOP  3 KM
 HOME BASE  13 KM"
 
-[node name="Sign13Km" type="Node3D" parent="." unique_id=1292759726]
+[node name="Sign13Km" type="Node3D" parent="." unique_id=1148247425]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 9407.618, 680, -19562.436)
 script = ExtResource("1_kiyqa")
 front_text = "GAS-N-GO 47  17 KM
@@ -29,7 +29,7 @@ TIDEWATER  46 KM"
 back_text = "TRUCK STOP  13 KM
 HOME BASE  23 KM"
 
-[node name="Sign25Km" type="Node3D" parent="." unique_id=1028906861]
+[node name="Sign25Km" type="Node3D" parent="." unique_id=1963612706]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 18296.018, 1160, -27609.635)
 script = ExtResource("1_kiyqa")
 front_text = "GAS-N-GO 47  NEXT RIGHT
@@ -37,7 +37,7 @@ WORLD'S BIGGEST DONUT!"
 back_text = "TRUCK STOP  25 KM
 HOME BASE  35 KM"
 
-[node name="Sign36Km" type="Node3D" parent="." unique_id=1191965048]
+[node name="Sign36Km" type="Node3D" parent="." unique_id=1236684353]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 26443.717, 1599.9999, -34986.234)
 script = ExtResource("1_kiyqa")
 front_text = "WELCOME TO TIDEWATER
@@ -45,7 +45,7 @@ PLEASE DON'T FEED THE WHALES"
 back_text = "GAS-N-GO 47  6 KM
 TRUCK STOP  36 KM"
 
-[node name="Sign47Km" type="Node3D" parent="." unique_id=593161947]
+[node name="Sign47Km" type="Node3D" parent="." unique_id=1044413832]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 34591.42, 2040, -42362.832)
 script = ExtResource("1_kiyqa")
 front_text = "TIDEWATER CANNERY  12 KM
@@ -53,7 +53,7 @@ ION STORMS POSSIBLE"
 back_text = "GAS-N-GO 47  17 KM
 DRIVE SAFE"
 
-[node name="Sign56Km" type="Node3D" parent="." unique_id=1686850397]
+[node name="Sign56Km" type="Node3D" parent="." unique_id=1035166033]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 41257.723, 2400, -48398.234)
 script = ExtResource("1_kiyqa")
 front_text = "TIDEWATER CANNERY  3 KM
@@ -61,50 +61,50 @@ WE CAN, THEREFORE WE ARE"
 back_text = "LEAVING TIDEWATER
 HOME BASE  67 KM"
 
-[node name="BorderGate" type="Node3D" parent="." unique_id=1643076547]
+[node name="BorderGate" type="Node3D" parent="." unique_id=1482719536]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 22961.701, 1240, -31388.6)
 script = ExtResource("2_pdn8s")
 kind = 4
 label = "NOW ENTERING TIDEWATER SYSTEM"
 log_id = "border_gate"
 
-[node name="Lighthouse" type="Node3D" parent="." unique_id=240307428]
+[node name="Lighthouse" type="Node3D" parent="." unique_id=14333660]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 23471.135, 1239.9999, -34547.73)
 script = ExtResource("2_pdn8s")
 log_id = "lighthouse"
 
-[node name="BiggestDonut" type="Node3D" parent="." unique_id=638863315]
+[node name="BiggestDonut" type="Node3D" parent="." unique_id=348657978]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 23021.535, 1520, -26856.328)
 script = ExtResource("2_pdn8s")
 kind = 1
 log_id = "donut"
 
-[node name="Derelict" type="Node3D" parent="." unique_id=2122131789]
+[node name="Derelict" type="Node3D" parent="." unique_id=974884394]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 29023.959, 1749.9999, -38091.184)
 script = ExtResource("2_pdn8s")
 kind = 3
 label = "THE DOROTHY MAE (ABANDONED)"
 log_id = "dorothy_mae"
 
-[node name="IonStorm" type="Node3D" parent="." unique_id=421188204]
+[node name="IonStorm" type="Node3D" parent="." unique_id=129840457]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 32120.99, 1760, -40625.32)
 script = ExtResource("3_rty6y")
 radius = 1600.0
 log_id = "ion_storm"
 
-[node name="SpeedTrap" type="Node3D" parent="." unique_id=740645393]
+[node name="SpeedTrap" type="Node3D" parent="." unique_id=1144876835]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 40913, 2260, -47290.258)
 script = ExtResource("3_rty6y")
 kind = 1
 radius = 2500.0
 log_id = "speed_trap"
 
-[node name="Whales" type="Node3D" parent="." unique_id=1534652111]
+[node name="Whales" type="Node3D" parent="." unique_id=1599147769]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 40194.29, 2380, -43617.91)
 script = ExtResource("4_7jwth")
 log_id = "whales"
 
-[node name="JunkField" type="Node3D" parent="." unique_id=1412351290]
+[node name="JunkField" type="Node3D" parent="." unique_id=2118941372]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 13332.6, 719.99994, -22670.8)
 script = ExtResource("5_tqhgk")
 junk = true
@@ -116,7 +116,7 @@ keep_clear_spots = PackedVector3Array()
 field_seed = 1801
 rock_colors = PackedColorArray(0.56, 0.42, 0.52, 1, 0.56, 0.41, 0.31, 1, 0.4, 0.42, 0.53, 1, 0.7, 0.6, 0.46, 1, 0.62, 0.34, 0.26, 1)
 
-[node name="CanneryJunk" type="Node3D" parent="." unique_id=992605424]
+[node name="CanneryJunk" type="Node3D" parent="." unique_id=1487055283]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 43060.06, 2300, -48640.58)
 script = ExtResource("5_tqhgk")
 junk = true
@@ -128,7 +128,7 @@ keep_clear_spots = PackedVector3Array()
 field_seed = 1802
 rock_colors = PackedColorArray(0.56, 0.42, 0.52, 1, 0.56, 0.41, 0.31, 1, 0.4, 0.42, 0.53, 1, 0.7, 0.6, 0.46, 1, 0.62, 0.34, 0.26, 1)
 
-[node name="IceField" type="Node3D" parent="." unique_id=973743236]
+[node name="IceField" type="Node3D" parent="." unique_id=1887294039]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 37405.35, 2020, -44465.3)
 script = ExtResource("5_tqhgk")
 rock_count = 520
@@ -138,7 +138,7 @@ keep_clear_spots = PackedVector3Array()
 field_seed = 1803
 rock_colors = PackedColorArray(0.75, 0.9, 1, 1, 0.6, 0.8, 0.9, 1, 0.85, 0.95, 0.95, 1, 0.5, 0.75, 0.85, 1, 0.7, 0.85, 0.8, 1)
 
-[node name="LongHaulerA" type="Node3D" parent="." unique_id=1344464304]
+[node name="LongHaulerA" type="Node3D" parent="." unique_id=194575919]
 script = ExtResource("6_sbkte")
 visual_scene = ExtResource("7_ib10y")
 waypoints = PackedVector3Array(1298.974, 180, -11398.332, 15039.509, 919.99994, -23762.918, 29815.924, 1759.9999, -37216.434, 42407.83, 2400, -48616.637, 42402.324, 2420, -49367.066, 29440.076, 1679.9999, -37631.566, 14588.491, 919.99994, -24261.082, 923.1261, 180, -11813.469)
@@ -147,7 +147,7 @@ start_fraction = 0.15
 engine_trail_color = Color(1, 0.75, 0.35, 1)
 hull_size = Vector3(14, 7, 34)
 
-[node name="LongHaulerB" type="Node3D" parent="." unique_id=79976928]
+[node name="LongHaulerB" type="Node3D" parent="." unique_id=510348672]
 script = ExtResource("6_sbkte")
 visual_scene = ExtResource("8_ivsgj")
 waypoints = PackedVector3Array(896.2798, -20, -11843.121, 14556.275, 719.99994, -24296.664, 29413.23, 1559.9999, -37661.223, 42005.133, 2200, -49061.426, 42805.02, 2220, -48922.277, 29842.77, 1479.9999, -37186.777, 15071.725, 719.99994, -23727.336, 1325.8203, -20, -11368.68)
@@ -156,7 +156,7 @@ start_fraction = 0.6
 engine_trail_color = Color(0.6, 1, 0.5, 1)
 hull_size = Vector3(14, 7, 34)
 
-[node name="Courier" type="Node3D" parent="." unique_id=1460678999]
+[node name="Courier" type="Node3D" parent="." unique_id=1843193788]
 script = ExtResource("6_sbkte")
 visual_scene = ExtResource("9_yg4sr")
 waypoints = PackedVector3Array(1231.8583, 310, -11472.464, 14958.97, 1050, -23851.875, 29748.809, 1889.9999, -37290.563, 42340.71, 2530, -48690.766, 42469.44, 2550, -49292.938, 29507.191, 1809.9999, -37557.438, 14669.03, 1050, -24172.125, 990.2418, 310, -11739.337)
@@ -165,22 +165,22 @@ start_fraction = 0.35
 engine_trail_color = Color(1, 0.45, 0.8, 1)
 hull_size = Vector3(14, 7, 34)
 
-[node name="SpacewayHome" type="MultiMeshInstance3D" parent="." unique_id=1380381482]
+[node name="SpacewayHome" type="MultiMeshInstance3D" parent="." unique_id=165223620]
 script = ExtResource("10_o8emu")
 points = PackedVector3Array(0, 0, -650, 0, 0, -10050)
 
-[node name="SpacewayTidewater" type="MultiMeshInstance3D" parent="." unique_id=1267688663]
+[node name="SpacewayTidewater" type="MultiMeshInstance3D" parent="." unique_id=1554279714]
 script = ExtResource("10_o8emu")
 points = PackedVector3Array(666.62994, 36, -11203.54, 43553.16, 2352, -50031.277)
 
-[node name="RampToGasNGo" type="MultiMeshInstance3D" parent="." unique_id=1995037202]
+[node name="RampToGasNGo" type="MultiMeshInstance3D" parent="." unique_id=1636103906]
 script = ExtResource("10_o8emu")
 points = PackedVector3Array(20221.11, 1091.9999, -28907.379, 22612.969, 1156, -28647.455, 22909.25, 1171.9999, -28915.693)
 spacing = 150.0
 half_width = 50.0
 left_color = Color(0.5, 1, 0.5, 1)
 
-[node name="RampFromGasNGo" type="MultiMeshInstance3D" parent="." unique_id=970581245]
+[node name="RampFromGasNGo" type="MultiMeshInstance3D" parent="." unique_id=414285671]
 script = ExtResource("10_o8emu")
 points = PackedVector3Array(23427.74, 1199.9999, -29385.115, 24443.1, 1319.9999, -32729.8)
 spacing = 150.0

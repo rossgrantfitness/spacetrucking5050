@@ -1,0 +1,227 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/CanneryCanteenSet.tscn" id="2_set"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scenes/hub/NPC.gd" id="7_npc"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="8_service"]
+[ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
+[ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="d_Gill"]
+[ext_resource type="PackedScene" path="res://scenes/hub/OtterVisual.tscn" id="v_Gill"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.02, 0.04, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.32, 0.5, 0.52, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="SphereShape3D" id="Sphere_talk"]
+radius = 1.3
+
+[sub_resource type="SphereShape3D" id="Sphere_use"]
+radius = 1.2
+
+[sub_resource type="CapsuleShape3D" id="Capsule_npc"]
+radius = 0.3
+height = 1.2
+
+[sub_resource type="BoxShape3D" id="Box_airlock"]
+size = Vector3(1.4, 2, 2.2)
+
+[sub_resource type="BoxShape3D" id="Box_board"]
+size = Vector3(3.2, 2, 1.6)
+
+[sub_resource type="BoxShape3D" id="Box_zone0"]
+size = Vector3(12, 6, 16)
+
+[sub_resource type="BoxShape3D" id="Box_zone1"]
+size = Vector3(8, 6, 11)
+
+[sub_resource type="BoxShape3D" id="Box_zone2"]
+size = Vector3(8, 6, 5)
+
+[node name="CanneryCanteen" type="Node3D"]
+script = ExtResource("1_room")
+default_spawn = "FromShip"
+place_id = "tidewater"
+radio_speakers = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_room")
+
+[node name="Set" parent="." instance=ExtResource("2_set")]
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="Canteen" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Canteen"]
+position = Vector3(1.0, 4.0, 7.5)
+rotation = Vector3(-0.2273, 0.4809, 0)
+fov = 60
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Canteen"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Canteen/Zone"]
+position = Vector3(-4, 3, 0)
+shape = SubResource("Box_zone0")
+
+[node name="Cannery" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Cannery"]
+position = Vector3(8.8, 4.6, 7.2)
+rotation = Vector3(-0.2926, 0.4778, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Cannery"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Cannery/Zone"]
+position = Vector3(6, 3, -2.5)
+shape = SubResource("Box_zone1")
+
+[node name="Airlock" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Airlock"]
+position = Vector3(1.5, 3.2, 0.5)
+rotation = Vector3(-0.2394, -2.1588, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Airlock"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Airlock/Zone"]
+position = Vector3(6, 3, 5.5)
+shape = SubResource("Box_zone2")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="FromShip" type="Marker3D" parent="Spawns"]
+position = Vector3(8.4, 0, 5.5)
+rotation = Vector3(0, 1.5708, 0)
+
+[node name="Exits" type="Node3D" parent="."]
+
+[node name="Airlock" type="Area3D" parent="Exits"]
+position = Vector3(9.3, 1, 5.5)
+script = ExtResource("4_exit")
+prompt = "BOARD SHIP"
+target_scene = "res://scenes/flight/FlightSandbox.tscn"
+needs_button = true
+launch_from = "tidewater"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/Airlock"]
+shape = SubResource("Box_airlock")
+
+[node name="People" type="Node3D" parent="."]
+
+[node name="Gill" type="Area3D" parent="People"]
+position = Vector3(-6, 0.6, -5.2)
+script = ExtResource("7_npc")
+data = ExtResource("d_Gill")
+
+[node name="Visual" parent="People/Gill" instance=ExtResource("v_Gill")]
+rotation = Vector3(0, 3.1416, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="TalkReach" type="CollisionShape3D" parent="People/Gill"]
+position = Vector3(0, 0.3, 2.0)
+shape = SubResource("Sphere_talk")
+
+[node name="Body" type="StaticBody3D" parent="People/Gill"]
+
+[node name="Shape" type="CollisionShape3D" parent="People/Gill/Body"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Capsule_npc")
+
+[node name="Things" type="Node3D" parent="."]
+
+[node name="JobBoard" type="Area3D" parent="Things"]
+position = Vector3(-0.5, 1, -6.6)
+script = ExtResource("8_service")
+prompt = "JOB BOARD"
+menu = "job_board"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/JobBoard"]
+shape = SubResource("Box_board")
+
+[node name="Pump" type="Area3D" parent="Things"]
+position = Vector3(8.0, 1, 3.0)
+script = ExtResource("8_service")
+prompt = "FUEL"
+menu = "fuel"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Pump"]
+shape = SubResource("Sphere_use")
+
+[node name="Jukebox" type="Area3D" parent="Things"]
+position = Vector3(-8.7, 1, 3.5)
+script = ExtResource("8_service")
+prompt = "JUKEBOX"
+menu = "jukebox"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Jukebox"]
+shape = SubResource("Sphere_use")
+
+[node name="Window" type="Area3D" parent="Things"]
+position = Vector3(3.5, 1, -7.0)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("The ocean planet fills the whole window. Somewhere down there, whales are singing.", "...Probably at the cannery. They don't seem to mind.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Window"]
+shape = SubResource("Sphere_use")
+
+[node name="Conveyor" type="Area3D" parent="Things"]
+position = Vector3(5.5, 1, -1.4)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("Cans. Cans going left. Cans forever.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Conveyor"]
+shape = SubResource("Sphere_use")
+
+[node name="CanPyramid" type="Area3D" parent="Things"]
+position = Vector3(8.6, 1, 2.2)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("A pyramid of canned starfish. A sign says DO NOT TAKE FROM THE BOTTOM.", "She thinks about it. She doesn't.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/CanPyramid"]
+shape = SubResource("Sphere_use")
+
+[node name="RadioHatch" type="Area3D" parent="Things"]
+position = Vector3(1.5, 1, 5.5)
+script = ExtResource("9_examine")
+prompt = "LISTEN"
+lines = PackedStringArray("A hatch in the floor. Muffled bass, and a voice: \"...live from under the cannery...\"", "Kelp. Tide 77. He's really down there.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/RadioHatch"]
+shape = SubResource("Sphere_use")
+
+[node name="FishTank" type="Area3D" parent="Things"]
+position = Vector3(-1.0, 1, 6.6)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("Three fish. One of them looks like it's doing taxes.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/FishTank"]
+shape = SubResource("Sphere_use")
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("5_psx")
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+flying = false

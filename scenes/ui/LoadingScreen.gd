@@ -4,8 +4,8 @@ extends CanvasLayer
 ## at a place, starting the game). It's a quick black screen where a few
 ## trucker-flavored lines type themselves out in the top-left corner, old
 ## computer style: "LOADING CARGO.......OK!", "MAPPING COORDINATES...OK!".
-## The next scene loads in the background meanwhile, and the screen stays
-## at least `MIN_SECONDS` so the lines can be read.
+## The screen stays up `MIN_SECONDS` so the lines can be read, then the
+## next scene loads (quickly; our scenes are small) and the black fades away.
 ##
 ## Use it with:
 ##     LoadingScreen.go(get_tree(), "res://scenes/flight/FlightSandbox.tscn", "flight")
@@ -64,7 +64,6 @@ func _ready() -> void:
 	_blips.volume_db = -14.0
 	_blips.pitch_scale = 1.6
 	add_child(_blips)
-	ResourceLoader.load_threaded_request(_path)
 
 
 func _process(delta: float) -> void:
@@ -81,15 +80,10 @@ func _process(delta: float) -> void:
 		if _canvas.modulate.a <= 0.0:
 			queue_free()
 		return
-	var status := ResourceLoader.load_threaded_get_status(_path)
-	if _time >= MIN_SECONDS and status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+	if _time >= MIN_SECONDS:
 		_switched = true
-		var scene := ResourceLoader.load_threaded_get(_path) as PackedScene
 		get_tree().paused = false
-		if scene != null:
-			get_tree().change_scene_to_packed(scene)
-		else:
-			get_tree().change_scene_to_file(_path)  # Something went wrong; try the plain way.
+		get_tree().change_scene_to_file(_path)
 
 
 func _draw_lines() -> void:

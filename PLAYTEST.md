@@ -1,117 +1,112 @@
-# Playtest: round 8 (the long haul to Tidewater)
+# Playtest: round 9 (intro, throttle, the cabin, the radio, things to buy)
 
-**What you asked for:** less dither (same wobble); a huge space world; a
-first mission that takes 6 minutes on full boost but 18 at regular speed;
-debris; procedural (or planned) things to pass on the road, researched
-from what a space trucker might see; maybe an optional stop; cargo damage
-from flying too fast or too erratically; boost that makes you lose course
-if you're not steady; charting a course for the autopilot; and a new sun,
-planet and nebula color in the new system.
+**What you asked for:** a fast power-on intro and loading screens; more
+speed at cruise without making boost feel weaker; a throttle instead of a
+go-kart; heavier turning; cargo damage you can understand (and feel) with
+no nagging; a boost that's harder to start and stop; walking around the
+rig while the autopilot drives; no repeating sights, a logbook and rare
+sights; a Gas-N-Go worth stopping at; walking around every destination;
+people who remember; Jack Rabbit; replies on the comms; your 20 radio
+stations with DJs who react to the game; something to spend money on (a
+new ship first, then paint); and running on foot.
 
-**Time needed:** about 45-60 minutes (the haul is long on purpose: try it
-once by hand, once on autopilot, and a bit of boosting).
+**Time needed:** about an hour.
 
-> Honest note: I tested all of this with automated runs (the mission plays
-> itself, including the autopilot docking at Tidewater and rolling through
-> the Gas-N-Go) and looked at screenshots along the whole road. Whether 18
-> minutes feels chill or long, whether boosting feels exciting or annoying,
-> and whether the cargo damage feels fair are yours to judge. Feel can't be
-> checked by reading code.
+> Honest note: I tested everything with automated runs (the long haul
+> plays itself, including docking at Tidewater's canteen, a drive-through,
+> a comm reply, flipping all the stations, the cabin and a nap) and looked
+> at screenshots. Whether the throttle, the heavier turning and the speed
+> feel right is yours to judge. The placeholder music is made from math
+> and I can't hear it, so some loops may sound odd (especially the metal).
 
 ---
 
 ## What's new
 
-**The first mission is a long haul**
-- Start a **new game** (boot screen: "start a new game"), talk to Dottie,
-  fly to the truck stop, dock, and talk to **Marge**. Her cousin **Gill**
-  runs the canteen at **Tidewater Cannery**, way out in the teal system:
-  haul nebula pies and coffee out there (1300 credits, up to +500 if
-  they arrive perfect).
-- Tidewater is about **59 km past the truck stop**: about **18 minutes**
-  cruising at top speed, **6 minutes** on full boost (a full boost tank
-  lasts exactly that long).
-- At the cannery you **stay in the cab**: Gill says hi on the comms, you
-  get paid, and a counter menu lets you look for a load back, fill up, or
-  launch. Four Tidewater jobs open up after the first mission.
+**Starting up**
+- A ~9 second **power-on intro**: a self test types itself out ("CHECKING
+  SPACESHIP... OK!"), then the logo and a chime. Any key skips it.
+- **Loading screens** between flying and walking ("LOADING CARGO...
+  MAPPING COORDINATES... ENTERING HYPERDRIVE... JUST KIDDING").
 
-**Chart a course (press M, or Back on a gamepad)**
-- A map plus a list: every place, its distance, time cruising, time on full
-  boost, and fuel needed. "Via Gas-N-Go 47" shows up when it's on the way.
-- Pick one and the **autopilot drives**: top speed on the limiter (cheap on
-  fuel), gentle turns that don't rattle the cargo, steering around rocks,
-  junk and traffic, and right through the approach ring.
-- **Grab the stick, throttle or boost and you take over.** Press M again to
-  switch it off or pick somewhere else.
+**Flying**
+- **The throttle is a lever:** hold W to push it up, S to pull it down; it
+  stays where you leave it and the rig holds that speed. All the way back
+  stops you.
+- **Heavier:** turns take a moment to start and stop, and lean more.
+- **More speed at cruise:** more dust, bigger specks whipping past close,
+  the view widening sooner, a faint road rumble, and **spaceway beacons**
+  lining the lanes (with a pulse of light running toward where you're
+  going).
+- **Boost is a commitment:** full throttle only, it spools up while you
+  hold it (SPOOL), and once lit it burns at least 3 seconds.
+- **Cargo damage you can read:** thumps in the hold, a cab rattle, a jolt,
+  the hold flashing orange on the rig picture, and HARD TURN / BRAKING /
+  BOOST SHAKE under the RIDE bar. Someone mentions it once per trip.
 
-**The road** (in order from the truck stop)
-- Green **highway signs** counting down (they read both ways).
-- A **junk spill** across the lane at about 18 km.
-- **Gas-N-Go 47**, the optional stop, about 1.8 km to the right at 30 km:
-  fly through either orange ring, pull up under the canopy, Moe sells you
-  fuel... slowly... and you roll out the far side still moving.
-- **The world's biggest donut**, the **border gate** into Tidewater (the
-  colors change as you cross), a **lighthouse** with no rock, the derelict
-  **Dorothy Mae**, an **ion storm** (static, jolts, the STORM light), an
-  **icy rock field**, **space whales**, and a **speed trap** before the
-  cannery (the COPS light comes on; zoom past it over 250 km/h and Deputy
-  Biscuit writes you a 25-credit ticket).
-- **Random sights** every few km: big ships crossing (listen for the
-  rumble), convoys, billboards for weird products, comets, jellyfish, junk,
-  a giant rubber duck. Some get a comment on the comms.
+**Your rig is your home**
+- On autopilot, press **F** (X) to **get up and walk around the cabin**
+  (your apartment is the rig's sleeper cabin). Walk out the door to get
+  back in the seat. **Nap** on the bed to fast-forward the trip.
+- **Run** on foot with **Shift** (X).
 
-**Tidewater looks different**
-- Its own **sun** (minty), a huge **ocean planet**, a **moon**, and a
-  **teal nebula**. The space dust, haze, sunlight and HUD frames blend from
-  home's purple to Tidewater's teal as you fly, with a "NOW ENTERING"
-  banner at the crossover.
+**People**
+- The bunny is **Jack Rabbit**.
+- **Talk back:** after a comm call, press **T** (RB), then **Q / R / E**
+  (or 1 / 2 / 3, or the D-pad) to pick one of three replies.
+- **They remember:** Marge and Gill say something different depending on
+  how the pies arrived; Moe finishes last visit's sentence.
 
-**Flying changes**
-- **Less dither** (finer and softer), same wobble.
-- **Boost is hard to hold steady:** the nose wanders off course, and jerky
-  steering makes it shake worse. Small, smooth corrections calm it.
-- **Cruising sips fuel:** holding thrust at top speed burns much less than
-  speeding up (a full tank cruises about 27 minutes).
-- **The cargo minds rough flying:** hard turns, slides, hard braking and
-  boosting flat out slowly damage it. Watch the new **RIDE** bar under the
-  cargo readout (top right): green is fine, yellow bumpy, red damaging.
-  Speeding up straight ahead is always fine.
+**The radio: your 20 stations**
+- All of them, with DJs, slogans, ads and made-up songs (placeholder loops
+  until you add music). **Tide 77** only comes in near Tidewater,
+  **Fuel Injection** is a crackly pirate station, **Afterglow Block** only
+  plays at night (9 p.m. to 6 a.m. on your computer's clock for now), and
+  there's an unnamed station somewhere on the road...
+- **DJs react:** fly into an ion storm, get a ticket, cross into Tidewater,
+  or make a delivery (a shout-out next trip).
+
+**Sights**
+- No more repeats. **Rare sights** (about one every dozen long hauls).
+- **The logbook** (**L**, or the pause menu): everything you've seen.
+
+**Places and money**
+- **Tidewater is walkable:** climb out in Gill's cannery canteen.
+- **The Gas-N-Go:** cheaper fuel, Moe's calming jerky (steadier under
+  boost), a souvenir keychain, side jobs.
+- **Dusty's garage:** **RIGS FOR SALE** (three new rigs that handle
+  differently; bigger holds pay more) and a **PAINT SHOP**. Plus the
+  Megahauler, a special order to dream about.
 
 ---
 
 ## Try this
 
-1. **New game**, take Marge's long haul, then **fly the first stretch by
-   hand** for 5 minutes or so with the radio on.
-2. **Boost for a while.** Try holding it steady, then try yanking the stick
-   around. Watch the RIDE bar and where the nose goes.
-3. Press **M** and pick **Tidewater via Gas-N-Go 47**. Let the autopilot
-   drive. Stop for fuel, roll out, and let it carry on.
-4. Somewhere along the way, **take the wheel back** (just steer), look at
-   something, then press **M** again to re-engage.
-5. Try zooming past the **speed trap** near the cannery on boost (it's
-   only 25 credits).
-6. At the cannery: get paid, **look for a load**, and haul one back.
-
-## What to pay attention to
-
-- Does the long haul feel **chill** (radio on, watching stuff go by) or
-  **too long**? Is there enough to look at?
-- The **colors changing** from home to Tidewater, and the new sun, planet
-  and moon.
-- Whether the **boost wander** is fun-hard or just annoying.
-- Whether **cargo damage** ever feels unfair.
+1. Start the game and watch the intro (then skip it next time).
+2. New game. Fly to the truck stop by hand: try the **throttle lever**,
+   some turns, and the **boost** (hold it at full throttle). How does it
+   feel now?
+3. Take Marge's long haul and **chart a course (M) via the Gas-N-Go**.
+   Once the autopilot's driving, press **F** and **walk around the cabin**.
+   Try a **nap**.
+4. At the Gas-N-Go, try the **jerky** and the **keychain**. Then **flip
+   through the radio** (Q / E) and find a favorite.
+5. When someone calls, press **T** and **reply**.
+6. Climb out at **Tidewater**, talk to Gill, take a load back.
+7. Save up and **buy a new rig** (or paint the old one). Feel the
+   difference?
+8. Press **L** now and then to see your **logbook**.
 
 ## Questions for you
 
-1. Is 18 minutes cruising the right length for a "big" haul, with the
-   autopilot there to help? Would you like a shorter run in between?
-2. Boosting now wanders off course and shakes if you're jerky. **More,
-   less, or about right?** (The numbers are in tuning.tres under "Flying":
-   `boost_wander_degrees`, `boost_wobble_degrees`, `boost_steer_gain`.)
-3. Does the cargo damage from rough flying feel fair? Was the RIDE bar
-   clear?
-4. Of the things on the road, **which ones did you like, and which fell
-   flat?** Want more fixed landmarks, or more random sights? (Ideas for
-   later are in `docs/ROUTE_EVENTS.md`.)
-5. Is the dither right now, or still too much / too little?
+1. **The throttle lever and the heavier turning:** right, or too much / too
+   little? (Numbers: tuning.tres "Throttle" and "Steering input"; the rig's
+   own turn numbers are in `data/ships/starter_rig.tres`.)
+2. **Speed at cruise:** do the spaceway beacons and extra dust sell it now,
+   while boost still feels like a big deal?
+3. **Boost:** with the spool-up, full-throttle rule and 3-second minimum
+   burn, is choosing to boost a real decision now? Too fiddly?
+4. **The cabin:** is walking around (and napping) while the autopilot
+   drives what you imagined? What would you want to do in there?
+5. **The radio:** which stations land, and do the DJ lines and ads come up
+   too often, too rarely, or about right?

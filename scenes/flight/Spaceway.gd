@@ -17,11 +17,11 @@ const FLARE := preload("res://textures/generated/flare.png")
 ## The lane, as spots in the world it passes through, in order.
 @export var points := PackedVector3Array()
 ## Meters between beacons along the lane.
-@export var spacing: float = 250.0
+@export var spacing: float = 200.0
 ## How far each line of beacons is from the middle of the lane.
 @export var half_width: float = 80.0
 ## How big each beacon looks (meters).
-@export var beacon_size: float = 7.0
+@export var beacon_size: float = 16.0
 ## Left and right beacon colors (like a highway's yellow and white lines).
 @export var left_color := Color(1.0, 0.72, 0.3)
 @export var right_color := Color(0.75, 0.9, 1.0)

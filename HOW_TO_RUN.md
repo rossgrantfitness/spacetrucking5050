@@ -57,7 +57,8 @@ double-click it.
   top-right of the editor.
 - A game window opens. To stop, close it, or press **F8** (Mac: **Cmd+.**).
 
-First you'll see the **boot screen**: the title, a lazily tumbling cargo
+First, a few seconds of **power-on intro** (a self test types itself out,
+then the logo and a chime; any key skips it). Then the **boot screen**: the title, a lazily tumbling cargo
 crate, and an "INPUT CHECK" panel where every control lights up when you press
 it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
 wake up in your apartment on the base, or to **continue** where you left off
@@ -81,23 +82,28 @@ Y = △.)
 | Steer left / right | **A** / **D** (or **←** / **→**) | Left stick |
 | Nose up / down | **↑** / **↓** | Left stick |
 | Steer with the mouse | Move the mouse | — |
-| Thrust forward | **W** | **RT** (right trigger) |
-| Brake / thrust backward | **S** | **LT** (left trigger) |
-| Boost | **Space** | **A** |
+| Throttle lever up | **W** (hold) | **RT** (right trigger) |
+| Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
+| Boost (hold; full throttle only) | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
 | Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
 | Radio on / off | **R** | D-pad **up** |
 | Hide / show the HUD | **H** | D-pad **down** |
 | Chart a course (autopilot) | **M** | **Back** / **View** |
+| Get up and walk around the cabin (on autopilot) | **F** | **X** |
+| Reply to a comm call, then pick one | **T**, then **Q** / **R** / **E** (or **1** / **2** / **3**) | **RB**, then D-pad **left** / **up** / **right** |
+| Logbook (sights you've seen) | **L** | (pause menu) |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
 
-**Your rig has momentum.** Hold thrust to speed up, then let go and you
-*coast*: you keep your speed, like cruise control. To slow down, thrust
-backward. Turns carve and slide, especially at high speed, so you can
-overshoot. The tiny green **flight marker** (a dot with little wings)
-shows where your momentum is really carrying you, which isn't always where
-the nose points.
+**The throttle is a lever.** Hold W to push it up and S to pull it down;
+it stays where you leave it, and the rig speeds up or slows down to match,
+then holds that speed (the yellow tick on the speed bar shows where it's
+set). Pull it all the way back and the rig brakes to a stop; keep pulling
+for a slow reverse. The rig is heavy: turns take a moment to start and
+stop, carve, and slide at high speed. The tiny green **flight marker** (a
+dot with little wings) shows where your momentum is really carrying you,
+which isn't always where the nose points.
 
 **Fuel:** thrusting burns fuel, more at high speed; coasting is free. The
 little **ECO** arrow under the fuel gauge turns green, yellow or red to show
@@ -107,26 +113,34 @@ keep crawling along "on fumes".
 Holding thrust at top speed only **sips** fuel: the engines' limiter just
 holds your speed (a full tank cruises about 27 minutes).
 
-**Boost** rockets you way past top speed (and gets slidey!). It burns
-**boost fuel** (the tiny **BST** bar), which doesn't refill by itself; a
-full boost tank lasts 6 minutes. **Boosting is hard to hold steady:** the
+**Boost** rockets you way past top speed (and gets slidey!). It's a
+commitment: it only works with the throttle at full, it **spools up** for
+a moment while you hold it (SPOOL blinks), and once lit it burns for at
+least 3 seconds even if you let go. It burns **boost fuel** (the tiny
+**BST** bar), which doesn't refill by itself; a full boost tank lasts 6
+minutes. **Boosting is hard to hold steady:** the
 rig wanders off course, and jerky steering makes it shake worse. Smooth,
 small corrections calm it down.
 
 **Mind the cargo.** Hard turns, slides, hard braking and boosting flat out
 rattle the load (the **RIDE** bar under the cargo readout, top right:
-green is fine, yellow is bumpy, red is damaging it). Damaged cargo pays a
-smaller care bonus. Speeding up straight ahead never hurts it.
+green is fine, yellow is bumpy, red is damaging it). When the load gets
+knocked around you hear it thump in the hold, feel a jolt, the cargo hold
+flashes orange on the little rig picture (bottom right), and a word under
+the RIDE bar says why: HARD TURN, BRAKING or BOOST SHAKE. Damaged cargo
+pays a smaller care bonus. Speeding up straight ahead never hurts it.
 Docking at the home base fills both tanks for free; at the truck stop,
 Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
-upgrades.
+upgrades, **new rigs** (each with its own handling; bigger holds pay more
+per job) and **paint jobs**.
 
 **Docking:** fly through the big glowing **ring** in front of a station's
-bay and the autopilot takes over and parks you. At the home base and the
-truck stop you climb out and walk around inside. At **Tidewater Cannery**
-you stay in the cab: get paid, look for a load back, fill up, launch. The
-**Gas-N-Go 47** is a drive-through: fly through either ring, pull up under
-the canopy, buy fuel, and you roll out the far side still moving. The
+bay and the autopilot takes over and parks you. Then you climb out and walk
+around inside (the base, the truck stop, and Tidewater Cannery's canteen,
+where Gill works). The **Gas-N-Go 47** is a drive-through: fly through
+either ring, pull up under the canopy, buy cheap fuel, Moe's calming jerky
+or a souvenir, maybe take a side job, and you roll out the far side still
+moving. The
 yellow diamond on the compass strip points at where you're headed.
 
 **Chart a course (M):** a map with every place you can go, how far, how
@@ -134,6 +148,19 @@ long cruising vs. on full boost, and how much fuel it takes. Pick one (or
 "via the Gas-N-Go") and the autopilot drives at cruise speed, steers around
 rocks and traffic, and flies you through the ring. Touch the stick,
 throttle or boost and you take over.
+
+**Get up (F / X) while the autopilot drives:** walk around your rig's
+sleeper cabin (your apartment is the rig's cabin). Walk out the cabin door
+to get back in the seat. Lie down on the bed to **nap**: the trip
+fast-forwards until you wake up (any key) or arrive. Arriving always puts
+you back in the seat.
+
+**Talk back:** after a comm call, "T: REPLY" shows under it. Press T (RB),
+then pick one of three things Jack says back. Just flavor; nothing changes.
+
+**The logbook (L, or the pause menu):** every sight you get close to
+(whales, the donut, the derelict, a comet...) goes in it. Some are rare:
+you might drive fifty hauls before you see one.
 
 **The long haul:** Tidewater, the teal system, is about 59 km past the
 truck stop: 18 minutes cruising, 6 on full boost. Along the way: highway
@@ -150,9 +177,11 @@ compass strip with distance and ETA at the top, the radio top-left, cargo
 and pay top-right, and warning lights down the left edge. Calls from
 dispatch, truck stop control and other truckers pop in at the top-left.
 
-**The radio** plays real music: drop songs into a station's folder and
-they play (see `audio/radio/README.md`). Until then each station plays a
-little placeholder beat. The last station, **MY TUNES**, plays your own
+**The radio** has 20 stations (and a hidden one), each with its own DJ, ads
+and genre; DJs react to what you do (storms, tickets, new systems, your
+deliveries). Drop songs into a station's folder and they play (see
+`audio/radio/README.md`). Until then each station plays a little
+placeholder loop. The last station, **MY TUNES**, plays your own
 music files from the game's `radio/custom/` folder. Radio volume is in the
 pause menu.
 
@@ -165,6 +194,7 @@ opens the pause menu); click the game window to pick the steering back up.
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Walk | **W A S D** (or arrow keys) | Left stick |
+| Run (hold) | **Shift** | **X** (or click the left stick) |
 | Talk / use / board the ship | **E** | **A** |
 | Pause menu | **Esc** | **Start** |
 

@@ -6,9 +6,13 @@ game's numbers, names and stuff never needs programming.
 - **`tuning.tres`** (with its blueprint `Tuning.gd`): every feel number shared
   by all ships: steering, camera, field of view, dust, trails, engine sound.
   Double-click it and use the Inspector; hover a value to see what it does.
-- **`ships/`**: one file per ship. `starter_rig.tres` is *The Lazy Susan*,
-  your inherited rig: top speed, acceleration, how heavy it turns, boost,
-  trail color, engine voice. Its blueprint is `ShipData.gd`.
+- **`ships/`**: one file per rig. `starter_rig.tres` is *The Lazy Susan*,
+  your inherited rig; the others are for sale at Dusty's garage (price,
+  model, how much more each job pays for a bigger hold). Each has its own
+  top speed, acceleration, how heavy it turns, boost, trail color and
+  engine voice. `ships.tres` is the dealer's list; `paints.tres` lists the
+  paint shop's colors. Blueprints: `ShipData.gd`, `ShipList.gd`,
+  `PaintJob.gd`, `PaintList.gd`.
 - **`systems/`**: one file per solar system (`home_system.tres`,
   `tidewater.tres`): its middle, its signature color (tints the space dust,
   the nebula and the HUD frames), haze color (the distance haze faraway
@@ -41,8 +45,9 @@ game's numbers, names and stuff never needs programming.
 - **`upgrades/`**: one file per rig upgrade sold at a garage: price and how
   much it multiplies top speed, acceleration, turning or the fuel tank.
   `upgrades.tres` is the shop list. Blueprint: `UpgradeData.gd`.
-- **`radio/`**: one file per station (name, dial number, music and ads
-  folders, placeholder loop, made-up song names, text ads), and
+- **`radio/`**: one file per station (name, dial number, DJ, slogan, music
+  and ads folders, placeholder loop, made-up song names, text ads, DJ
+  banter and reactions, and where and when it comes in), and
   `lineup.tres` listing the stations on the dial. The music itself goes in
   `res://audio/radio/` (see the README there). Blueprints:
   `RadioStation.gd`, `RadioLineup.gd`.
@@ -50,6 +55,11 @@ game's numbers, names and stuff never needs programming.
   you fly, grouped by who says it and when (takeoff, small talk, approach,
   docking, bonks, boosts, low fuel, rough flying, speeding tickets), optionally only at a place, a point in
   the story or during a job. Blueprints: `ChatterSet.gd`, `FlightChatter.gd`.
+- **`logbook/sights.tres`**: every sight that can go in the logbook (its
+  name, what Jack wrote about it, whether it's rare). Blueprints:
+  `LogbookEntry.gd`, `Logbook.gd`.
+- **`dialogue/bunny_replies.tres`**: the one-liners Jack can say back to
+  comm calls, grouped by kind of call. Blueprint: `BunnyReplies.gd`.
 - **`events/route_events.tres`**: the random sights on the road (big
   ships, convoys, billboards and their ads, whales...): how likely each is,
   which systems it shows up in, where it appears, and what someone might

@@ -269,9 +269,9 @@ func engage_course(stops: PackedStringArray) -> void:
 	_aim_cruise()
 	if _ship.cruise != null:
 		_hud.show_banner("AUTOPILOT > " + GameState.places.find(_course[_course.size() - 1]).display_name, 3.0)
-		await get_tree().create_timer(3.5).timeout
-		if _ship.cruise != null and not _in_cabin and is_inside_tree():
-			_hud.show_banner("F / X: GET UP AND STRETCH", 4.0)
+		get_tree().create_timer(3.5).timeout.connect(func() -> void:
+			if is_instance_valid(_ship) and _ship.cruise != null and not _in_cabin:
+				_hud.show_banner("F / X: GET UP AND STRETCH", 4.0))
 
 
 ## Sets the cruise autopilot on its way to the next stop on the course.

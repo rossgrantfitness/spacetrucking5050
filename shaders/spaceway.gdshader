@@ -20,7 +20,7 @@ void vertex() {
 	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
 	float along = INSTANCE_CUSTOM.x;
 	float wave = fract(along / pulse_gap - TIME * pulse_speed / pulse_gap);
-	glow = 0.45 + 0.9 * smoothstep(0.12, 0.0, wave);
+	glow = 0.8 + 1.2 * smoothstep(0.12, 0.0, wave);
 }
 
 void fragment() {

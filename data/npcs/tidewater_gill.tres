@@ -1,13 +1,45 @@
 [gd_resource type="Resource" script_class="NPCData" format=3]
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_perfect"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_perfect")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Mmh. The pies. Marge's pies. Not a crumb out of place.", "I'm not crying. It's the cannery. It's very... fishy in here.", "Thanks, {bunny}. Board's by the window if you want a load back. Cans, mostly. Sometimes records.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_bumpy"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_bumpy")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("The pies are a little... smushed. That's okay. Pie is pie.", "Long road out here. Bumpy. I get it. Board's by the window if you want a load back.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_rough"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_rough")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Pie soup. Huh.", "I'll get a spoon. ...I'm keeping the spoon. Board's by the window, if you want another try at something.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Oh, hey. It's you again. Coffee's in the... somewhere.", "Kelp's on the radio downstairs. He never comes up. I bring him fish.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Mmh? Oh. Hi. Welcome to Tidewater. Fish?", "The board by the window has loads going out. The pump's by your airlock.")
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Gill (Tidewater Cannery)"
+display_name = "Gill"
 species = "otter"
 voice_pitch = 0.7
 lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
 comm_name = "GILL · TIDEWATER"
 fur_color = Color(0.52, 0.38, 0.28, 1)
 accent_color = Color(0.95, 0.8, 0.3, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
