@@ -594,11 +594,11 @@ extends Resource
 ## rows tall (the grid is as wide as your screen's shape needs). Fewer rows =
 ## wobblier: 240 is early-PS1 jelly, 480 is a late-PS1 shimmer, 1000+ is
 ## nearly still. It doesn't change the screen's resolution.
-@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 240.0
+@export_range(120.0, 2160.0, 10.0) var vertex_snap_rows: float = 480.0
 
 ## How much textures bend and swim on big polygons close to the camera, the
 ## PS1's famous "affine" warping. 0 = modern, 1 = full PS1.
-@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.6
+@export_range(0.0, 1.0, 0.05) var affine_strength: float = 0.3
 
 ## Shades per color channel. The PS1 had 32. Lower = more posterized.
 @export_range(4.0, 256.0, 1.0) var color_levels: float = 30.0

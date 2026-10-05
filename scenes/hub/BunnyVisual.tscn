@@ -1,29 +1,23 @@
 [gd_scene format=4]
 
-[ext_resource type="Script" path="res://scenes/hub/BunnyAnimator.gd" id="1_0pnef"]
-[ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="2_f71c2"]
-[ext_resource type="Texture2D" path="res://textures/generated/fuzz.png" id="3_18oa8"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i58ab"]
-render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.3, 0.36, 0.52, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
-shader_parameter/box_uv = true
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = null
-shader_parameter/emission_strength = null
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_rlngo"]
-material = SubResource("ShaderMaterial_i58ab")
-size = Vector3(0.11, 0.24, 0.12)
+[ext_resource type="Script" path="res://scenes/hub/BunnyAnimator.gd" id="1_f71c2"]
+[ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="2_18oa8"]
+[ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_i58ab"]
+[ext_resource type="Texture2D" path="res://textures/generated/fuzz.png" id="4_rlngo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ptjuy"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.32, 0.21, 0.15, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.3, 0.36, 0.52, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
@@ -32,13 +26,43 @@ shader_parameter/emission_from_texture = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_1635v"]
 material = SubResource("ShaderMaterial_ptjuy")
-size = Vector3(0.13, 0.1, 0.19)
+size = Vector3(0.11, 0.24, 0.12)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yx1u4"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.32, 0.21, 0.15, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_phxse"]
+material = SubResource("ShaderMaterial_yx1u4")
+size = Vector3(0.13, 0.1, 0.19)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sdbur"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
 shader_parameter/albedo = Color(0.46, 0.4, 0.26, 1)
-shader_parameter/albedo_texture = ExtResource("3_18oa8")
+shader_parameter/albedo_texture = ExtResource("4_rlngo")
 shader_parameter/uv_scale = Vector2(3, 3)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
@@ -46,37 +70,52 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_phxse"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_7vigu"]
 _surfaces = [{
 "aabb": AABB(-0.15, -0.11, -0.31, 0.3, 0.22, 0.31),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_yx1u4"),
+"material": SubResource("ShaderMaterial_sdbur"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 84,
 "vertex_data": PackedByteArray("Mgisva5H4T0AAAAAKFyPPc3MzD1SuJ6+MgisPa5H4T0AAAAAMgisva5H4T0AAAAAKFyPvc3MzD1SuJ6+KFyPPc3MzD1SuJ6+MgisPa5H4T0AAAAAuB4FPgrXIz1SuJ6+mpkZPlg5ND0AAAAAMgisPa5H4T0AAAAAKFyPPc3MzD1SuJ6+uB4FPgrXIz1SuJ6+mpkZPlg5ND0AAAAAuB4FPgrXI71SuJ6+mpkZPlg5NL0AAAAAmpkZPlg5ND0AAAAAuB4FPgrXIz1SuJ6+uB4FPgrXI71SuJ6+mpkZPlg5NL0AAAAAKFyPPc3MzL1SuJ6+MgisPa5H4b0AAAAAmpkZPlg5NL0AAAAAuB4FPgrXI71SuJ6+KFyPPc3MzL1SuJ6+MgisPa5H4b0AAAAAKFyPvc3MzL1SuJ6+Mgisva5H4b0AAAAAMgisPa5H4b0AAAAAKFyPPc3MzL1SuJ6+KFyPvc3MzL1SuJ6+Mgisva5H4b0AAAAAuB4FvgrXI71SuJ6+mpkZvlg5NL0AAAAAMgisva5H4b0AAAAAKFyPvc3MzL1SuJ6+uB4FvgrXI71SuJ6+mpkZvlg5NL0AAAAAuB4FvgrXIz1SuJ6+mpkZvlg5ND0AAAAAmpkZvlg5NL0AAAAAuB4FvgrXI71SuJ6+uB4FvgrXIz1SuJ6+mpkZvlg5ND0AAAAAKFyPvc3MzD1SuJ6+Mgisva5H4T0AAAAAmpkZvlg5ND0AAAAAuB4FvgrXIz1SuJ6+KFyPvc3MzD1SuJ6+Mgisva5H4T0AAAAAMgisPa5H4T0AAAAAmpkZPlg5ND0AAAAAKFyPvc3MzD1SuJ6+uB4FPgrXIz1SuJ6+KFyPPc3MzD1SuJ6+Mgisva5H4T0AAAAAmpkZPlg5ND0AAAAAmpkZPlg5NL0AAAAAKFyPvc3MzD1SuJ6+uB4FPgrXI71SuJ6+uB4FPgrXIz1SuJ6+Mgisva5H4T0AAAAAmpkZPlg5NL0AAAAAMgisPa5H4b0AAAAAKFyPvc3MzD1SuJ6+KFyPPc3MzL1SuJ6+uB4FPgrXI71SuJ6+Mgisva5H4T0AAAAAMgisPa5H4b0AAAAAMgisva5H4b0AAAAAKFyPvc3MzD1SuJ6+KFyPvc3MzL1SuJ6+KFyPPc3MzL1SuJ6+Mgisva5H4T0AAAAAMgisva5H4b0AAAAAmpkZvlg5NL0AAAAAKFyPvc3MzD1SuJ6+uB4FvgrXI71SuJ6+KFyPvc3MzL1SuJ6+Mgisva5H4T0AAAAAmpkZvlg5NL0AAAAAmpkZvlg5ND0AAAAAKFyPvc3MzD1SuJ6+uB4FvgrXIz1SuJ6+uB4FvgrXI71SuJ6+/4P//yAA773/g///IADvvf+D//8gAO+9/4P//yAA773/g///IADvvf+D//8gAO+9YcJhwmdWZ9ZhwmHCZ1Zn1mHCYcJnVmfWYcJhwmdWZ9ZhwmHCZ1Zn1mHCYcJnVmfW///Bh7mHv7///8GHuYe/v///wYe5h7+////Bh7mHv7///8GHuYe/v///wYe5h7+/YcKdPbZYlKphwp09tliUqmHCnT22WJSqYcKdPbZYlKphwp09tliUqmHCnT22WJSq/4MAAB8E7r//gwAAHwTuv/+DAAAfBO6//4MAAB8E7r//gwAAHwTuv/+DAAAfBO6/nT2dPTNUM9SdPZ09M1Qz1J09nT0zVDPUnT2dPTNUM9SdPZ09M1Qz1J09nT0zVDPUAADBh0V4v78AAMGHRXi/vwAAwYdFeL+/AADBh0V4v78AAMGHRXi/vwAAwYdFeL+/nT1hwh5SlKqdPWHCHlKUqp09YcIeUpSqnT1hwh5SlKqdPWHCHlKUqp09YcIeUpSq/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sdbur"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ufadm"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
 shader_parameter/albedo = Color(0.92, 0.9, 0.82, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_7vigu"]
-material = SubResource("ShaderMaterial_sdbur")
+[sub_resource type="BoxMesh" id="BoxMesh_sk260"]
+material = SubResource("ShaderMaterial_ufadm")
 size = Vector3(0.1, 0.24, 0.02)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ufadm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqa6h"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
 shader_parameter/albedo = Color(0.95, 0.93, 0.92, 1)
-shader_parameter/albedo_texture = ExtResource("3_18oa8")
+shader_parameter/albedo_texture = ExtResource("4_rlngo")
 shader_parameter/uv_scale = Vector2(8, 8)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
@@ -84,26 +123,52 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_sk260"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_0l3fx"]
 _surfaces = [{
 "aabb": AABB(-0.05, 0.009999998, 0.1, 0.1, 0.1, 0.080000006),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_ufadm"),
+"material": SubResource("ShaderMaterial_nqa6h"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 42,
 "vertex_data": PackedByteArray("CtejO65H4T3NzMw9zcxMPbgehT3NzMw9zcxMPbgehT3sUTg+CtejO65H4T3NzMw9zcxMPbgehT3sUTg+CtejO65H4T3sUTg+zcxMPa5HYT3NzMw9CtejOwjXIzzNzMw9CtejOwjXIzzsUTg+zcxMPa5HYT3NzMw9CtejOwjXIzzsUTg+zcxMPa5HYT3sUTg+CtejuwjXIzzNzMw9zcxMva5HYT3NzMw9zcxMva5HYT3sUTg+CtejuwjXIzzNzMw9zcxMva5HYT3sUTg+CtejuwjXIzzsUTg+zcxMvbgehT3NzMw9Cteju65H4T3NzMw9Cteju65H4T3sUTg+zcxMvbgehT3NzMw9Cteju65H4T3sUTg+zcxMvbgehT3sUTg+Cteju65H4T3NzMw9CtejOwjXIzzNzMw9zcxMPa5HYT3NzMw9Cteju65H4T3sUTg+zcxMPa5HYT3sUTg+CtejOwjXIzzsUTg+Cteju65H4T3NzMw9CtejuwjXIzzNzMw9CtejOwjXIzzNzMw9Cteju65H4T3sUTg+CtejOwjXIzzsUTg+CtejuwjXIzzsUTg+Cteju65H4T3NzMw9zcxMva5HYT3NzMw9CtejuwjXIzzNzMw9Cteju65H4T3sUTg+CtejuwjXIzzsUTg+zcxMva5HYT3sUTg+/7//v1RVVNX/v/+/VFVU1f+//79UVVTV/7//v1RVVNX/v/+/VFVU1f+//79UVVTV/7//P1RVqar/v/8/VFWpqv+//z9UVamq/7//P1RVqar/v/8/VFWpqv+//z9UVamq/z//P1RVVNX/P/8/VFVU1f8//z9UVVTV/z//P1RVVNX/P/8/VFVU1f8//z9UVVTV/z//v1RVqar/P/+/VFWpqv8//79UVamq/z//v1RVqar/P/+/VFWpqv8//79UVamq//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
-[sub_resource type="BoxMesh" id="BoxMesh_nqa6h"]
-material = SubResource("ShaderMaterial_yx1u4")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qtb3i"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.46, 0.4, 0.26, 1)
+shader_parameter/albedo_texture = ExtResource("4_rlngo")
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_f0rrl"]
+material = SubResource("ShaderMaterial_qtb3i")
 size = Vector3(0.08, 0.21, 0.09)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0l3fx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d310b"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
 shader_parameter/albedo = Color(0.74, 0.7, 0.8, 1)
-shader_parameter/albedo_texture = ExtResource("3_18oa8")
+shader_parameter/albedo_texture = ExtResource("4_rlngo")
 shader_parameter/uv_scale = Vector2(8, 8)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
@@ -111,67 +176,64 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_qtb3i"]
-material = SubResource("ShaderMaterial_0l3fx")
+[sub_resource type="BoxMesh" id="BoxMesh_da83n"]
+material = SubResource("ShaderMaterial_d310b")
 size = Vector3(0.07, 0.07, 0.07)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_f0rrl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7rdwa"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.74, 0.7, 0.8, 1)
+shader_parameter/albedo_texture = ExtResource("4_rlngo")
+shader_parameter/uv_scale = Vector2(8, 8)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_lm1yk"]
 _surfaces = [{
 "aabb": AABB(-0.21, 0.00999999, -0.17, 0.42, 0.36, 0.34),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_0l3fx"),
+"material": SubResource("ShaderMaterial_7rdwa"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 84,
 "vertex_data": PackedByteArray("QdhwvaRwvT57FC4+QdhwPaRwvT57FC6+QdhwPaRwvT57FC4+QdhwvaRwvT57FC4+QdhwvaRwvT57FC6+QdhwPaRwvT57FC6+QdhwPaRwvT57FC4+PQpXPhsNYD57FC6+PQpXPhsNYD57FC4+QdhwPaRwvT57FC4+QdhwPaRwvT57FC6+PQpXPhsNYD57FC6+PQpXPhsNYD57FC4+PQpXPp0RJT57FC6+PQpXPp0RJT57FC4+PQpXPhsNYD57FC4+PQpXPhsNYD57FC6+PQpXPp0RJT57FC6+PQpXPp0RJT57FC4+QdhwPQDXIzx7FC6+QdhwPQDXIzx7FC4+PQpXPp0RJT57FC4+PQpXPp0RJT57FC6+QdhwPQDXIzx7FC6+QdhwPQDXIzx7FC4+QdhwvQDXIzx7FC6+QdhwvQDXIzx7FC4+QdhwPQDXIzx7FC4+QdhwPQDXIzx7FC6+QdhwvQDXIzx7FC6+QdhwvQDXIzx7FC4+PQpXvp0RJT57FC6+PQpXvp0RJT57FC4+QdhwvQDXIzx7FC4+QdhwvQDXIzx7FC6+PQpXvp0RJT57FC6+PQpXvp0RJT57FC4+PQpXvhsNYD57FC6+PQpXvhsNYD57FC4+PQpXvp0RJT57FC4+PQpXvp0RJT57FC6+PQpXvhsNYD57FC6+PQpXvhsNYD57FC4+QdhwvaRwvT57FC6+QdhwvaRwvT57FC4+PQpXvhsNYD57FC4+PQpXvhsNYD57FC6+QdhwvaRwvT57FC6+QdhwvaRwvT57FC4+QdhwPaRwvT57FC4+PQpXPhsNYD57FC4+QdhwvaRwvT57FC6+PQpXPhsNYD57FC6+QdhwPaRwvT57FC6+QdhwvaRwvT57FC4+PQpXPhsNYD57FC4+PQpXPp0RJT57FC4+QdhwvaRwvT57FC6+PQpXPp0RJT57FC6+PQpXPhsNYD57FC6+QdhwvaRwvT57FC4+PQpXPp0RJT57FC4+QdhwPQDXIzx7FC4+QdhwvaRwvT57FC6+QdhwPQDXIzx7FC6+PQpXPp0RJT57FC6+QdhwvaRwvT57FC4+QdhwPQDXIzx7FC4+QdhwvQDXIzx7FC4+QdhwvaRwvT57FC6+QdhwvQDXIzx7FC6+QdhwPQDXIzx7FC6+QdhwvaRwvT57FC4+QdhwvQDXIzx7FC4+PQpXvp0RJT57FC4+QdhwvaRwvT57FC6+PQpXvp0RJT57FC6+QdhwvQDXIzx7FC6+QdhwvaRwvT57FC4+PQpXvp0RJT57FC4+PQpXvhsNYD57FC4+QdhwvaRwvT57FC6+PQpXvhsNYD57FC6+PQpXvp0RJT57FC6+/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//7//v1RVVNX/v/+/VFVU1f+//79UVVTV/7//v1RVVNX/v/+/VFVU1f+//79UVVTV////f/9//7////9//3//v////3//f/+/////f/9//7////9//3//v////3//f/+//7//P1RVqar/v/8/VFWpqv+//z9UVamq/7//P1RVqar/v/8/VFWpqv+//z9UVamq/38AAAAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//fwAAAAD/v/9/AAAAAP+//z//P1RVVNX/P/8/VFVU1f8//z9UVVTV/z//P1RVVNX/P/8/VFVU1f8//z9UVVTVAAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//vwAA/3//f/+//z//v1RVqar/P/+/VFWpqv8//79UVamq/z//v1RVqar/P/+/VFWpqv8//79UVamq/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_d310b"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_0enbl"]
 _surfaces = [{
 "aabb": AABB(-0.09, 0.05, -0.22, 0.18, 0.120000005, 0.060000002),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_ufadm"),
+"material": SubResource("ShaderMaterial_nqa6h"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 81,
 "vertex_data": PackedByteArray("MggsvXsULj4K1yO+lUMLPVK4Hj6uR2G+MggsPXsULj4K1yO+MggsvXsULj4K1yO+lUMLvVK4Hj6uR2G+lUMLPVK4Hj6uR2G+MggsPXsULj4K1yO+KVyPPUa28z2uR2G+7FG4PSPb+T0K1yO+MggsPXsULj4K1yO+lUMLPVK4Hj6uR2G+KVyPPUa28z2uR2G+7FG4PSPb+T0K1yO+KVyPPRbZzj2uR2G+7FG4PTm0yD0K1yO+7FG4PSPb+T0K1yO+KVyPPUa28z2uR2G+KVyPPRbZzj2uR2G+7FG4PTm0yD0K1yO+lUMLPbgehT2uR2G+MggsPc3MTD0K1yO+7FG4PTm0yD0K1yO+KVyPPRbZzj2uR2G+lUMLPbgehT2uR2G+MggsPc3MTD0K1yO+lUMLvbgehT2uR2G+Mggsvc3MTD0K1yO+MggsPc3MTD0K1yO+lUMLPbgehT2uR2G+lUMLvbgehT2uR2G+Mggsvc3MTD0K1yO+KVyPvRbZzj2uR2G+7FG4vTm0yD0K1yO+Mggsvc3MTD0K1yO+lUMLvbgehT2uR2G+KVyPvRbZzj2uR2G+7FG4vTm0yD0K1yO+KVyPvUa28z2uR2G+7FG4vSPb+T0K1yO+7FG4vTm0yD0K1yO+KVyPvRbZzj2uR2G+KVyPvUa28z2uR2G+7FG4vSPb+T0K1yO+lUMLvVK4Hj6uR2G+MggsvXsULj4K1yO+7FG4vSPb+T0K1yO+KVyPvUa28z2uR2G+lUMLvVK4Hj6uR2G+MggsvXsULj4K1yO+MggsPXsULj4K1yO+7FG4PSPb+T0K1yO+lUMLvVK4Hj6uR2G+KVyPPUa28z2uR2G+lUMLPVK4Hj6uR2G+MggsvXsULj4K1yO+7FG4PSPb+T0K1yO+7FG4PTm0yD0K1yO+lUMLvVK4Hj6uR2G+KVyPPRbZzj2uR2G+KVyPPUa28z2uR2G+MggsvXsULj4K1yO+7FG4PTm0yD0K1yO+MggsPc3MTD0K1yO+lUMLvVK4Hj6uR2G+lUMLPbgehT2uR2G+KVyPPRbZzj2uR2G+MggsvXsULj4K1yO+MggsPc3MTD0K1yO+Mggsvc3MTD0K1yO+lUMLvVK4Hj6uR2G+lUMLvbgehT2uR2G+lUMLPbgehT2uR2G+MggsvXsULj4K1yO+Mggsvc3MTD0K1yO+7FG4vTm0yD0K1yO+lUMLvVK4Hj6uR2G+KVyPvRbZzj2uR2G+lUMLvbgehT2uR2G+MggsvXsULj4K1yO+7FG4vTm0yD0K1yO+7FG4vSPb+T0K1yO+mZn//xgGwrCZmf//GAbCsJmZ//8YBsKwmZn//xgGwrCZmf//GAbCsJmZ//8YBsKwSspKyipaKtpKykrKKloq2krKSsoqWiraSspKyipaKtpKykrKKloq2krKSsoqWira////n4mdErv///+fiZ0Su////5+JnRK7////n4mdErv///+fiZ0Su////5+JnRK7Ssq0Nepmq6hKyrQ16marqErKtDXqZquoSsq0Nepmq6hKyrQ16marqErKtDXqZquomZkAAHke87yZmQAAeR7zvJmZAAB5HvO8mZkAAHke87yZmQAAeR7zvJmZAAB5HvO8tDW0NRRPFM+0NbQ1FE8Uz7Q1tDUUTxTPtDW0NRRPFM+0NbQ1FE8Uz7Q1tDUUTxTPAAD/n3ViErsAAP+fdWISuwAA/591YhK7AAD/n3ViErsAAP+fdWISuwAA/591YhK7tDVKyrtHq6i0NUrKu0erqLQ1Ssq7R6uotDVKyrtHq6i0NUrKu0erqLQ1Ssq7R6uo/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_da83n"]
-render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.95, 0.45, 0.6, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
-shader_parameter/box_uv = true
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = null
-shader_parameter/emission_strength = null
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_7rdwa"]
-material = SubResource("ShaderMaterial_da83n")
-size = Vector3(0.05, 0.035, 0.02)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lm1yk"]
-render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.06, 0.05, 0.08, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
-shader_parameter/box_uv = true
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = null
-shader_parameter/emission_strength = null
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_0enbl"]
-material = SubResource("ShaderMaterial_lm1yk")
-size = Vector3(0.06, 0.07, 0.02)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ix6vg"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.95, 0.45, 0.6, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
@@ -180,28 +242,44 @@ shader_parameter/emission_from_texture = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_m05br"]
 material = SubResource("ShaderMaterial_ix6vg")
-size = Vector3(0.018, 0.018, 0.01)
+size = Vector3(0.05, 0.035, 0.02)
 
-[sub_resource type="BoxMesh" id="BoxMesh_bwlo7"]
-material = SubResource("ShaderMaterial_0l3fx")
-size = Vector3(0.07, 0.03, 0.01)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bwlo7"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.06, 0.05, 0.08, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_fcb6v"]
-_surfaces = [{
-"aabb": AABB(-0.045, -0.02, -0.36, 0.09, 0.04, 0.36),
-"format": 34359738375,
-"material": SubResource("ShaderMaterial_0l3fx"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 57,
-"vertex_data": PackedByteArray("t/P9vArXozwAAAAAOrTIPI/CdTzsUbi+t/P9PArXozwAAAAAt/P9vArXozwAAAAAOrTIvI/CdTzsUbi+OrTIPI/CdTzsUbi+t/P9PArXozwAAAAAKVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAt/P9PArXozwAAAAAOrTIPI/CdTzsUbi+KVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAKVwPPbx0k7vsUbi+7FE4PaabxLsAAAAA7FE4PaabxDsAAAAAKVwPPbx0kzvsUbi+KVwPPbx0k7vsUbi+7FE4PaabxLsAAAAAOrTIPI/CdbzsUbi+t/P9PArXo7wAAAAA7FE4PaabxLsAAAAAKVwPPbx0k7vsUbi+OrTIPI/CdbzsUbi+t/P9PArXo7wAAAAAOrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAt/P9PArXo7wAAAAAOrTIPI/CdbzsUbi+OrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAKVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAt/P9vArXo7wAAAAAOrTIvI/CdbzsUbi+KVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAKVwPvbx0kzvsUbi+7FE4vaabxDsAAAAA7FE4vaabxLsAAAAAKVwPvbx0k7vsUbi+KVwPvbx0kzvsUbi+7FE4vaabxDsAAAAAOrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4vaabxDsAAAAAKVwPvbx0kzvsUbi+OrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4PaabxLsAAAAAt/P9PArXo7wAAAAAt/P9vArXozwAAAAAt/P9PArXo7wAAAAAt/P9vArXo7wAAAAAOrTIvI/CdTzsUbi+OrTIvI/CdbzsUbi+OrTIPI/CdbzsUbi+wIH//wYAG7/Agf//BgAbv8CB//8GABu/wIH//wYAG7/Agf//BgAbv8CB//8GABu/AMEAwchVx9UAwQDByFXH1QDBAMHIVcfVAMEAwchVx9UAwQDByFXH1QDBAMHIVcfV//91g3SD8r///3WDdIPyv///dYN0g/K///91g3SD8r///3WDdIPyv///dYN0g/K/AMH+PrVWpqoAwf4+tVamqgDB/j61VqaqAMH+PrVWpqoAwf4+tVamqgDB/j61VqaqwIEAAMcB/L/AgQAAxwH8v8CBAADHAfy/wIEAAMcB/L/AgQAAxwH8v8CBAADHAfy//j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7U/j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7UAAB1g4p88r8AAHWDinzyvwAAdYOKfPK/AAB1g4p88r8AAHWDinzyvwAAdYOKfPK//j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
-}]
+[sub_resource type="BoxMesh" id="BoxMesh_fcb6v"]
+material = SubResource("ShaderMaterial_bwlo7")
+size = Vector3(0.06, 0.07, 0.02)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fqqi2"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(1, 0.68, 0.76, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
@@ -210,209 +288,290 @@ shader_parameter/emission_from_texture = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_haw05"]
 material = SubResource("ShaderMaterial_fqqi2")
-size = Vector3(0.05, 0.26, 0.01)
+size = Vector3(0.018, 0.018, 0.01)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_tdco7"]
+[sub_resource type="BoxMesh" id="BoxMesh_tdco7"]
+material = SubResource("ShaderMaterial_d310b")
+size = Vector3(0.07, 0.03, 0.01)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_imxd0"]
 _surfaces = [{
 "aabb": AABB(-0.045, -0.02, -0.36, 0.09, 0.04, 0.36),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_0l3fx"),
+"material": SubResource("ShaderMaterial_7rdwa"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 57,
 "vertex_data": PackedByteArray("t/P9vArXozwAAAAAOrTIPI/CdTzsUbi+t/P9PArXozwAAAAAt/P9vArXozwAAAAAOrTIvI/CdTzsUbi+OrTIPI/CdTzsUbi+t/P9PArXozwAAAAAKVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAt/P9PArXozwAAAAAOrTIPI/CdTzsUbi+KVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAKVwPPbx0k7vsUbi+7FE4PaabxLsAAAAA7FE4PaabxDsAAAAAKVwPPbx0kzvsUbi+KVwPPbx0k7vsUbi+7FE4PaabxLsAAAAAOrTIPI/CdbzsUbi+t/P9PArXo7wAAAAA7FE4PaabxLsAAAAAKVwPPbx0k7vsUbi+OrTIPI/CdbzsUbi+t/P9PArXo7wAAAAAOrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAt/P9PArXo7wAAAAAOrTIPI/CdbzsUbi+OrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAKVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAt/P9vArXo7wAAAAAOrTIvI/CdbzsUbi+KVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAKVwPvbx0kzvsUbi+7FE4vaabxDsAAAAA7FE4vaabxLsAAAAAKVwPvbx0k7vsUbi+KVwPvbx0kzvsUbi+7FE4vaabxDsAAAAAOrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4vaabxDsAAAAAKVwPvbx0kzvsUbi+OrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4PaabxLsAAAAAt/P9PArXo7wAAAAAt/P9vArXozwAAAAAt/P9PArXo7wAAAAAt/P9vArXo7wAAAAAOrTIvI/CdTzsUbi+OrTIvI/CdbzsUbi+OrTIPI/CdbzsUbi+wIH//wYAG7/Agf//BgAbv8CB//8GABu/wIH//wYAG7/Agf//BgAbv8CB//8GABu/AMEAwchVx9UAwQDByFXH1QDBAMHIVcfVAMEAwchVx9UAwQDByFXH1QDBAMHIVcfV//91g3SD8r///3WDdIPyv///dYN0g/K///91g3SD8r///3WDdIPyv///dYN0g/K/AMH+PrVWpqoAwf4+tVamqgDB/j61VqaqAMH+PrVWpqoAwf4+tVamqgDB/j61VqaqwIEAAMcB/L/AgQAAxwH8v8CBAADHAfy/wIEAAMcB/L/AgQAAxwH8v8CBAADHAfy//j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7U/j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7UAAB1g4p88r8AAHWDinzyvwAAdYOKfPK/AAB1g4p88r8AAHWDinzyvwAAdYOKfPK//j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_imxd0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7e4i"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.85, 0.2, 0.22, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(1, 0.68, 0.76, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_i7e4i"]
+[sub_resource type="BoxMesh" id="BoxMesh_j378h"]
+material = SubResource("ShaderMaterial_i7e4i")
+size = Vector3(0.05, 0.26, 0.01)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rov6s"]
+_surfaces = [{
+"aabb": AABB(-0.045, -0.02, -0.36, 0.09, 0.04, 0.36),
+"format": 34359738375,
+"material": SubResource("ShaderMaterial_7rdwa"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 57,
+"vertex_data": PackedByteArray("t/P9vArXozwAAAAAOrTIPI/CdTzsUbi+t/P9PArXozwAAAAAt/P9vArXozwAAAAAOrTIvI/CdTzsUbi+OrTIPI/CdTzsUbi+t/P9PArXozwAAAAAKVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAt/P9PArXozwAAAAAOrTIPI/CdTzsUbi+KVwPPbx0kzvsUbi+7FE4PaabxDsAAAAAKVwPPbx0k7vsUbi+7FE4PaabxLsAAAAA7FE4PaabxDsAAAAAKVwPPbx0kzvsUbi+KVwPPbx0k7vsUbi+7FE4PaabxLsAAAAAOrTIPI/CdbzsUbi+t/P9PArXo7wAAAAA7FE4PaabxLsAAAAAKVwPPbx0k7vsUbi+OrTIPI/CdbzsUbi+t/P9PArXo7wAAAAAOrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAt/P9PArXo7wAAAAAOrTIPI/CdbzsUbi+OrTIvI/CdbzsUbi+t/P9vArXo7wAAAAAKVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAt/P9vArXo7wAAAAAOrTIvI/CdbzsUbi+KVwPvbx0k7vsUbi+7FE4vaabxLsAAAAAKVwPvbx0kzvsUbi+7FE4vaabxDsAAAAA7FE4vaabxLsAAAAAKVwPvbx0k7vsUbi+KVwPvbx0kzvsUbi+7FE4vaabxDsAAAAAOrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4vaabxDsAAAAAKVwPvbx0kzvsUbi+OrTIvI/CdTzsUbi+t/P9vArXozwAAAAA7FE4PaabxLsAAAAAt/P9PArXo7wAAAAAt/P9vArXozwAAAAAt/P9PArXo7wAAAAAt/P9vArXo7wAAAAAOrTIvI/CdTzsUbi+OrTIvI/CdbzsUbi+OrTIPI/CdbzsUbi+wIH//wYAG7/Agf//BgAbv8CB//8GABu/wIH//wYAG7/Agf//BgAbv8CB//8GABu/AMEAwchVx9UAwQDByFXH1QDBAMHIVcfVAMEAwchVx9UAwQDByFXH1QDBAMHIVcfV//91g3SD8r///3WDdIPyv///dYN0g/K///91g3SD8r///3WDdIPyv///dYN0g/K/AMH+PrVWpqoAwf4+tVamqgDB/j61VqaqAMH+PrVWpqoAwf4+tVamqgDB/j61VqaqwIEAAMcB/L/AgQAAxwH8v8CBAADHAfy/wIEAAMcB/L/AgQAAxwH8v8CBAADHAfy//j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7U/j7+Pt9U3tT+Pv4+31Te1P4+/j7fVN7UAAB1g4p88r8AAHWDinzyvwAAdYOKfPK/AAB1g4p88r8AAHWDinzyvwAAdYOKfPK//j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/j4AwftTpqr+PgDB+1Omqv4+AMH7U6aq/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1iwiy"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.85, 0.2, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_thct3"]
 _surfaces = [{
 "aabb": AABB(-0.18, 0.35999998, -0.15, 0.36, 0.100000024, 0.28),
 "format": 34359738375,
-"material": SubResource("ShaderMaterial_imxd0"),
+"material": SubResource("ShaderMaterial_1iwiy"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 78,
 "vertex_data": PackedByteArray("308Nvq5H4T64HgU+KVwPPh+F6z6amRm+308NPq5H4T64HgU+308Nvq5H4T64HgU+KVwPvh+F6z6amRm+KVwPPh+F6z6amRm+308NPq5H4T64HgU+7FE4Pj0K1z6amRm+exQuPmDl0D64HgU+308NPq5H4T64HgU+KVwPPh+F6z6amRm+7FE4Pj0K1z6amRm+exQuPmDl0D64HgU+7FE4Ps3MzD6amRm+exQuPjq0yD64HgU+exQuPmDl0D64HgU+7FE4Pj0K1z6amRm+7FE4Ps3MzD6amRm+exQuPjq0yD64HgU+KVwPPutRuD6amRm+308NPuxRuD64HgU+exQuPjq0yD64HgU+7FE4Ps3MzD6amRm+KVwPPutRuD6amRm+308NPuxRuD64HgU+KVwPvutRuD6amRm+308NvuxRuD64HgU+308NPuxRuD64HgU+KVwPPutRuD6amRm+KVwPvutRuD6amRm+308NvuxRuD64HgU+7FE4vs3MzD6amRm+exQuvjq0yD64HgU+308NvuxRuD64HgU+KVwPvutRuD6amRm+7FE4vs3MzD6amRm+exQuvjq0yD64HgU+7FE4vj0K1z6amRm+exQuvmDl0D64HgU+exQuvjq0yD64HgU+7FE4vs3MzD6amRm+7FE4vj0K1z6amRm+exQuvmDl0D64HgU+KVwPvh+F6z6amRm+308Nvq5H4T64HgU+exQuvmDl0D64HgU+7FE4vj0K1z6amRm+KVwPvh+F6z6amRm+308Nvq5H4T64HgU+308NPq5H4T64HgU+exQuPmDl0D64HgU+KVwPvh+F6z6amRm+7FE4Pj0K1z6amRm+KVwPPh+F6z6amRm+308Nvq5H4T64HgU+exQuPmDl0D64HgU+exQuPjq0yD64HgU+KVwPvh+F6z6amRm+7FE4Ps3MzD6amRm+7FE4Pj0K1z6amRm+308Nvq5H4T64HgU+exQuPjq0yD64HgU+308NPuxRuD64HgU+KVwPvh+F6z6amRm+KVwPPutRuD6amRm+7FE4Ps3MzD6amRm+308Nvq5H4T64HgU+308NPuxRuD64HgU+308NvuxRuD64HgU+KVwPvh+F6z6amRm+KVwPvutRuD6amRm+KVwPPutRuD6amRm+308Nvq5H4T64HgU+308NvuxRuD64HgU+exQuvjq0yD64HgU+KVwPvh+F6z6amRm+7FE4vs3MzD6amRm+KVwPvutRuD6amRm+/3929xkJsb//f3b3GQmxv/9/dvcZCbG//3929xkJsb//f3b3GQmxv/9/dvcZCbG/k72TvS9ULtSTvZO9L1Qu1JO9k70vVC7Uk72TvS9ULtSTvZO9L1Qu1JO9k70vVC7Ulfv/f5Z767+V+/9/lnvrv5X7/3+We+u/lfv/f5Z767+V+/9/lnvrv5X7/3+We+u/xL86QAdVqarEvzpAB1WpqsS/OkAHVamqxL86QAdVqarEvzpAB1WpqsS/OkAHVamq/38AAAAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//fwAAAAD/v/9/AAAAAP+/OkA6QG5VbtU6QDpAblVu1TpAOkBuVW7VOkA6QG5VbtU6QDpAblVu1TpAOkBuVW7VaQT/f2iE679pBP9/aITrv2kE/39ohOu/aQT/f2iE679pBP9/aITrv2kE/39ohOu/a0KTvcNYk6prQpO9w1iTqmtCk73DWJOqa0KTvcNYk6prQpO9w1iTqmtCk73DWJOq/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j378h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_snsw6"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
 shader_parameter/albedo = Color(0.96, 0.95, 0.9, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_rov6s"]
-material = SubResource("ShaderMaterial_j378h")
+[sub_resource type="BoxMesh" id="BoxMesh_eyt7h"]
+material = SubResource("ShaderMaterial_snsw6")
 size = Vector3(0.2, 0.06, 0.02)
 
-[sub_resource type="BoxMesh" id="BoxMesh_1iwiy"]
-material = SubResource("ShaderMaterial_imxd0")
-size = Vector3(0.26, 0.02, 0.12)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_thct3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7agtv"]
 render_priority = 0
-shader = ExtResource("2_f71c2")
-shader_parameter/albedo = Color(0.95, 0.8, 0.35, 1)
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.85, 0.2, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_snsw6"]
-material = SubResource("ShaderMaterial_thct3")
+[sub_resource type="BoxMesh" id="BoxMesh_cowd5"]
+material = SubResource("ShaderMaterial_7agtv")
+size = Vector3(0.26, 0.02, 0.12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a6ogq"]
+render_priority = 0
+shader = ExtResource("2_18oa8")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.95, 0.8, 0.35, 1)
+shader_parameter/albedo_texture = ExtResource("3_i58ab")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_wpc1q"]
+material = SubResource("ShaderMaterial_a6ogq")
 size = Vector3(0.012, 0.012, 0.2)
 
-[node name="BunnyVisual" type="Node3D" unique_id=1537131288]
-script = ExtResource("1_0pnef")
+[node name="BunnyVisual" type="Node3D" unique_id=223595595]
+script = ExtResource("1_f71c2")
 
-[node name="LegLeft" type="Node3D" parent="." unique_id=991236159]
+[node name="LegLeft" type="Node3D" parent="." unique_id=1332684277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.34, 0)
 
-[node name="Leg" type="MeshInstance3D" parent="LegLeft" unique_id=161998692]
+[node name="Leg" type="MeshInstance3D" parent="LegLeft" unique_id=578371123]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
-mesh = SubResource("BoxMesh_rlngo")
-
-[node name="Boot" type="MeshInstance3D" parent="LegLeft" unique_id=971944071]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
 mesh = SubResource("BoxMesh_1635v")
 
-[node name="LegRight" type="Node3D" parent="." unique_id=1896828552]
+[node name="Boot" type="MeshInstance3D" parent="LegLeft" unique_id=1107209022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
+mesh = SubResource("BoxMesh_phxse")
+
+[node name="LegRight" type="Node3D" parent="." unique_id=43477448]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.34, 0)
 
-[node name="Leg" type="MeshInstance3D" parent="LegRight" unique_id=799623447]
+[node name="Leg" type="MeshInstance3D" parent="LegRight" unique_id=1081631571]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
-mesh = SubResource("BoxMesh_rlngo")
-
-[node name="Boot" type="MeshInstance3D" parent="LegRight" unique_id=378038786]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
 mesh = SubResource("BoxMesh_1635v")
 
-[node name="Body" type="Node3D" parent="." unique_id=1061744892]
+[node name="Boot" type="MeshInstance3D" parent="LegRight" unique_id=1799919345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
+mesh = SubResource("BoxMesh_phxse")
+
+[node name="Body" type="Node3D" parent="." unique_id=1530134720]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 
-[node name="Torso" type="MeshInstance3D" parent="Body" unique_id=92309333]
+[node name="Torso" type="MeshInstance3D" parent="Body" unique_id=1809809505]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("ArrayMesh_phxse")
+mesh = SubResource("ArrayMesh_7vigu")
 
-[node name="Shirt" type="MeshInstance3D" parent="Body" unique_id=1203859338]
+[node name="Shirt" type="MeshInstance3D" parent="Body" unique_id=2135047482]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, -0.105)
-mesh = SubResource("BoxMesh_7vigu")
+mesh = SubResource("BoxMesh_sk260")
 
-[node name="Tail" type="MeshInstance3D" parent="Body" unique_id=1887332881]
-mesh = SubResource("ArrayMesh_sk260")
+[node name="Tail" type="MeshInstance3D" parent="Body" unique_id=1213139512]
+mesh = SubResource("ArrayMesh_0l3fx")
 
-[node name="ArmLeft" type="Node3D" parent="Body" unique_id=1273855682]
+[node name="ArmLeft" type="Node3D" parent="Body" unique_id=752414079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0.28, 0)
 
-[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=597971483]
+[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=2101510333]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, -0.1, 0)
-mesh = SubResource("BoxMesh_nqa6h")
+mesh = SubResource("BoxMesh_f0rrl")
 
-[node name="Paw" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=515421060]
+[node name="Paw" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=2028636823]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, -0.24, 0)
-mesh = SubResource("BoxMesh_qtb3i")
+mesh = SubResource("BoxMesh_da83n")
 
-[node name="ArmRight" type="Node3D" parent="Body" unique_id=123244284]
+[node name="ArmRight" type="Node3D" parent="Body" unique_id=1321949766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0.28, 0)
 
-[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmRight" unique_id=1453792143]
+[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmRight" unique_id=197069606]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, -0.1, 0)
-mesh = SubResource("BoxMesh_nqa6h")
+mesh = SubResource("BoxMesh_f0rrl")
 
-[node name="Paw" type="MeshInstance3D" parent="Body/ArmRight" unique_id=1935653718]
+[node name="Paw" type="MeshInstance3D" parent="Body/ArmRight" unique_id=629194522]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, -0.24, 0)
-mesh = SubResource("BoxMesh_qtb3i")
+mesh = SubResource("BoxMesh_da83n")
 
-[node name="Head" type="Node3D" parent="Body" unique_id=2083299850]
+[node name="Head" type="Node3D" parent="Body" unique_id=108975133]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31, 0)
 
-[node name="Skull" type="MeshInstance3D" parent="Body/Head" unique_id=1611326898]
-mesh = SubResource("ArrayMesh_f0rrl")
+[node name="Skull" type="MeshInstance3D" parent="Body/Head" unique_id=1317569155]
+mesh = SubResource("ArrayMesh_lm1yk")
 
-[node name="Snout" type="MeshInstance3D" parent="Body/Head" unique_id=1941214856]
-mesh = SubResource("ArrayMesh_d310b")
+[node name="Snout" type="MeshInstance3D" parent="Body/Head" unique_id=1150744828]
+mesh = SubResource("ArrayMesh_0enbl")
 
-[node name="Nose" type="MeshInstance3D" parent="Body/Head" unique_id=1315177477]
+[node name="Nose" type="MeshInstance3D" parent="Body/Head" unique_id=114295984]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145, -0.225)
-mesh = SubResource("BoxMesh_7rdwa")
+mesh = SubResource("BoxMesh_m05br")
 
-[node name="Eye" type="MeshInstance3D" parent="Body/Head" unique_id=829512471]
+[node name="Eye" type="MeshInstance3D" parent="Body/Head" unique_id=1135684933]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.22, -0.18)
-mesh = SubResource("BoxMesh_0enbl")
+mesh = SubResource("BoxMesh_fcb6v")
 
-[node name="EyeShine" type="MeshInstance3D" parent="Body/Head" unique_id=416489948]
+[node name="EyeShine" type="MeshInstance3D" parent="Body/Head" unique_id=1885768150]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.078, 0.24, -0.192)
-mesh = SubResource("BoxMesh_m05br")
+mesh = SubResource("BoxMesh_haw05")
 
-[node name="Eye2" type="MeshInstance3D" parent="Body/Head" unique_id=1142654386]
+[node name="Eye2" type="MeshInstance3D" parent="Body/Head" unique_id=1378061546]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.22, -0.18)
-mesh = SubResource("BoxMesh_0enbl")
+mesh = SubResource("BoxMesh_fcb6v")
 
-[node name="EyeShine2" type="MeshInstance3D" parent="Body/Head" unique_id=1624232977]
+[node name="EyeShine2" type="MeshInstance3D" parent="Body/Head" unique_id=705345097]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102, 0.24, -0.192)
-mesh = SubResource("BoxMesh_m05br")
+mesh = SubResource("BoxMesh_haw05")
 
-[node name="Eyelids" type="Node3D" parent="Body/Head" unique_id=1335001911]
+[node name="Eyelids" type="Node3D" parent="Body/Head" unique_id=502845049]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.19)
 
-[node name="Lid" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=979351468]
+[node name="Lid" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=1532663245]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0, 0)
-mesh = SubResource("BoxMesh_bwlo7")
+mesh = SubResource("BoxMesh_tdco7")
 
-[node name="Lid2" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=429942430]
+[node name="Lid2" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=1348997959]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
-mesh = SubResource("BoxMesh_bwlo7")
+mesh = SubResource("BoxMesh_tdco7")
 
-[node name="EarLeft" type="Node3D" parent="Body/Head" unique_id=1348383060]
+[node name="EarLeft" type="Node3D" parent="Body/Head" unique_id=428482615]
 transform = Transform3D(0.99280864, -0.119712204, 0, 0.119114146, 0.98784876, -0.09983342, 0.011951279, 0.09911548, 0.9950042, -0.1, 0.36, 0.03)
 
-[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=232631065]
+[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=974810206]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("ArrayMesh_fcb6v")
+mesh = SubResource("ArrayMesh_imxd0")
 
-[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=1944770055]
+[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=518378096]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, -0.021)
-mesh = SubResource("BoxMesh_haw05")
+mesh = SubResource("BoxMesh_j378h")
 
-[node name="EarRight" type="Node3D" parent="Body/Head" unique_id=360790245]
+[node name="EarRight" type="Node3D" parent="Body/Head" unique_id=1996270605]
 transform = Transform3D(0.99280864, 0.119712204, 0, -0.119114146, 0.98784876, -0.09983342, -0.011951279, 0.09911548, 0.9950042, 0.1, 0.36, 0.03)
 
-[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=237401222]
+[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=236056325]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("ArrayMesh_tdco7")
+mesh = SubResource("ArrayMesh_rov6s")
 
-[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=77446598]
+[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=1455466843]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, -0.021)
-mesh = SubResource("BoxMesh_haw05")
+mesh = SubResource("BoxMesh_j378h")
 
-[node name="CapCrown" type="MeshInstance3D" parent="Body/Head" unique_id=289393486]
-mesh = SubResource("ArrayMesh_i7e4i")
+[node name="CapCrown" type="MeshInstance3D" parent="Body/Head" unique_id=742047585]
+mesh = SubResource("ArrayMesh_thct3")
 
-[node name="CapFront" type="MeshInstance3D" parent="Body/Head" unique_id=439843492]
+[node name="CapFront" type="MeshInstance3D" parent="Body/Head" unique_id=1412131858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, -0.16)
-mesh = SubResource("BoxMesh_rov6s")
+mesh = SubResource("BoxMesh_eyt7h")
 
-[node name="CapBrim" type="MeshInstance3D" parent="Body/Head" unique_id=1734460261]
+[node name="CapBrim" type="MeshInstance3D" parent="Body/Head" unique_id=66112039]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37, -0.22)
-mesh = SubResource("BoxMesh_1iwiy")
+mesh = SubResource("BoxMesh_cowd5")
 
-[node name="Wheat" type="MeshInstance3D" parent="Body/Head" unique_id=1423559220]
+[node name="Wheat" type="MeshInstance3D" parent="Body/Head" unique_id=1617575501]
 transform = Transform3D(0.8253356, -0.1396948, -0.5470891, 0, 0.9689124, -0.24740396, 0.5646425, 0.20419131, 0.7996779, 0.1, 0.08, -0.27)
-mesh = SubResource("BoxMesh_snsw6")
+mesh = SubResource("BoxMesh_wpc1q")

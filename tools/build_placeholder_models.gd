@@ -21,6 +21,12 @@ extends SceneTree
 
 
 const SURFACE_SHADER := preload("res://shaders/psx_surface.gdshader")
+## The hub rooms' pre-rendered sets use this one (lit per pixel, see build_hub.gd).
+const SET_SHADER := preload("res://shaders/set_surface.gdshader")
+## "No texture" still gets this: flat paint with a little hand-painted
+## mottling, so nothing is ever a perfectly flat color (that's what made it
+## look like early 3D).
+const PAINT_GRAIN := preload("res://textures/generated/paint_grain.png")
 const HULL := preload("res://textures/generated/hull_panels.png")
 const VENTS := preload("res://textures/generated/vents.png")
 const HAZARD := preload("res://textures/generated/hazard_stripes.png")
@@ -69,6 +75,8 @@ var _flare_script: Script
 # saved scenes small and cheap to draw.
 var _material_cache := {}
 var _box_cache := {}
+## Material -> its twin with painted edges switched on (for boxes).
+var _edged_cache := {}
 
 
 # _initialize runs once the game's autoloads exist; the trail script needs them.
@@ -633,6 +641,10 @@ func _paint(color: Color, texture: Texture2D = HULL, uv_scale: Vector2 = HULL_SC
 		var material := ShaderMaterial.new()
 		material.shader = SURFACE_SHADER
 		material.set_shader_parameter("albedo", color)
+		if texture == null and box_uv:
+			# Flat paint, but hand-painted: a gentle mottle, about 2 m a tile.
+			texture = PAINT_GRAIN
+			uv_scale = Vector2(0.5, 0.5)
 		if texture != null:
 			material.set_shader_parameter("albedo_texture", texture)
 		material.set_shader_parameter("uv_scale", uv_scale)
@@ -675,6 +687,7 @@ func _hazard(stripes_per_meter: float) -> ShaderMaterial:
 # --- Helpers -----------------------------------------------------------------
 
 func _box(parent: Node3D, node_name: String, size: Vector3, where: Vector3, material: Material) -> MeshInstance3D:
+	material = _edged(material)
 	var key := "%s %d" % [size, material.get_instance_id()]
 	if not _box_cache.has(key):
 		var new_box := BoxMesh.new()
@@ -682,6 +695,28 @@ func _box(parent: Node3D, node_name: String, size: Vector3, where: Vector3, mate
 		new_box.material = material
 		_box_cache[key] = new_box
 	return _mesh(parent, node_name, _box_cache[key], where)
+
+
+## The same material with painted bevels and shadow switched on (see
+## shaders/painted_edges.gdshaderinc). Only for boxes, and not for things
+## that glow (signs and screens stay clean).
+func _edged(material: Material) -> Material:
+	var shaded := material as ShaderMaterial
+	if shaded == null or not (shaded.shader == SURFACE_SHADER or shaded.shader == SET_SHADER):
+		return material
+	var glow: Variant = shaded.get_shader_parameter("emission_strength")
+	if glow != null and float(glow) > 0.0:
+		return material
+	if not _edged_cache.has(material):
+		var edged := shaded.duplicate() as ShaderMaterial
+		edged.set_shader_parameter("painted_edges", true)
+		if shaded.shader == SURFACE_SHADER:
+			# Ships and stations: bigger, seen from farther away.
+			edged.set_shader_parameter("edge_width", 0.22)
+			edged.set_shader_parameter("edge_pixels_per_meter", 8.0)
+			edged.set_shader_parameter("edge_floor_reach", 1.5)
+		_edged_cache[material] = edged
+	return _edged_cache[material]
 
 
 func _cylinder(parent: Node3D, node_name: String, radius: float, height: float, where: Vector3,

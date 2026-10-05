@@ -146,7 +146,7 @@ func _cannery_floor(room: Node3D, body: StaticBody3D, dark: Material, metal: Mat
 			_cylinder(room, "PyramidCan", 0.2, 0.42, Vector3(8.2 + i * 0.42 + layer * 0.21, 0.21 + layer * 0.42, 1.2), _set_paint(Color(1.0, 0.55, 0.75)), Vector3.ZERO, 10)
 	# Crates.
 	for crate: Vector3 in [Vector3(3.0, 0.0, 1.5), Vector3(3.0, 1.0, 1.5), Vector3(4.2, 0.0, 1.3)]:
-		_piece(room, body, "Crate", Vector3(1.0, 1.0, 1.0), crate + Vector3(0.0, 0.5, 0.0), _set_paint(Color(1.0, 1.0, 1.0), WOOD, 1.0))
+		_piece(room, body, "Crate", Vector3(1.0, 1.0, 1.0), crate + Vector3(0.0, 0.5, 0.0), _set_paint(Color(1.0, 1.0, 1.0), CRATE, 1.0))
 	# The crane hook, hanging from a rail.
 	_box(room, "CraneRail", Vector3(9.0, 0.2, 0.3), Vector3(5.0, 5.7, -4.0), metal)
 	_beam(room, "CraneCable", Vector3(6.0, 5.6, -4.0), Vector3(6.0, 3.2, -4.0), 0.03, metal)

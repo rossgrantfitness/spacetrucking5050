@@ -48,13 +48,15 @@ vec4 psx_snap(vec4 clip) {
 
 // Texture coordinates projected from the sides of the model (in meters), for
 // shapes that don't have good ones of their own. Each face picks the side it
-// faces most, which is perfect for boxes and fine for everything else.
+// faces most, which is perfect for boxes and fine for everything else. Seen
+// from outside, every side reads the right way round (so stencilled text
+// isn't mirrored).
 vec2 psx_box_uv(vec3 position, vec3 normal) {
 	vec3 facing = abs(normal);
 	if (facing.x > facing.y && facing.x > facing.z) {
-		return vec2(position.z * sign(normal.x), -position.y);
+		return vec2(-position.z * sign(normal.x), -position.y);
 	} else if (facing.y > facing.z) {
 		return vec2(position.x, position.z * sign(normal.y));
 	}
-	return vec2(-position.x * sign(normal.z), -position.y);
+	return vec2(position.x * sign(normal.z), -position.y);
 }

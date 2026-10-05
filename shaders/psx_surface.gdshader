@@ -6,6 +6,7 @@ shader_type spatial;
 render_mode vertex_lighting, diffuse_lambert, specular_disabled;
 
 #include "res://shaders/psx.gdshaderinc"
+#include "res://shaders/painted_edges.gdshaderinc"
 
 // The surface's color. Multiplies the texture.
 uniform vec4 albedo : source_color = vec4(1.0);
@@ -26,13 +27,14 @@ uniform float emission_strength = 0.0;
 uniform bool emission_from_texture = false;
 
 void vertex() {
+	EDGE_VERTEX
 	vec2 uv = box_uv ? psx_box_uv(VERTEX, NORMAL) : UV;
 	PSX_VERTEX(PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0), uv * uv_scale);
 }
 
 void fragment() {
 	vec4 texel = texture(albedo_texture, PSX_UV);
-	vec3 color = albedo.rgb * texel.rgb;
+	vec3 color = albedo.rgb * texel.rgb * painted_edge_shade();
 	if (use_vertex_color) {
 		color *= COLOR.rgb;
 	}

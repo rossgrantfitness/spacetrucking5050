@@ -6,6 +6,9 @@ extends SceneTree
 ##
 ## They're small (32 to 256 pixels), like late PS1 textures, and mostly gray:
 ## the models tint them with their own paint colors.
+##
+## The hand-painted surface textures (walls, floors, hulls, containers,
+## doors, wood, carpet, machinery...) are painted by tools/paint_textures.gd.
 
 
 const OUTPUT_FOLDER: String = "res://textures/generated"
@@ -18,24 +21,16 @@ func _init() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_FOLDER))
 	var images := {
 		"hazard_stripes.png": _hazard_stripes(32, 8),
-		"hull_panels.png": _hull_panels(128),
-		"container.png": _container(128),
 		"chevrons.png": _chevrons(64, 32),
 		"flare.png": _flare(64),
 		"puff.png": _puff(32),
 		"fuzz.png": _fuzz(32),
 		"photo.png": _photo(),
-		"floor_tiles.png": _floor_tiles(64),
-		"wall_panels.png": _wall_panels(64),
-		"carpet.png": _carpet(64),
-		"wood.png": _wood(64),
 		"blanket.png": _blanket(64),
 		"space_view.png": _space_view(256, 128),
 		"job_board.png": _job_board(),
-		"door.png": _door(),
 		"terminal.png": _terminal(),
 		"nebula.png": _nebula(256, 128),
-		"vents.png": _vents(32),
 		"rock.png": _rock(64),
 		"station_windows.png": _station_windows(64),
 		"planet_swirl.png": _planet_swirl(256, 128),
@@ -56,73 +51,6 @@ func _hazard_stripes(image_size: int, stripe_width: int) -> Image:
 		for x in image_size:
 			var yellow := posmod(x + y, stripe_width * 2) < stripe_width
 			image.set_pixel(x, y, HAZARD_YELLOW if yellow else HAZARD_BLACK)
-	return image
-
-
-## Light gray hull plating: a grid of panels, each a slightly different shade,
-## with beveled seams (lit top-left, shadowed bottom-right), rivets, a few
-## vent slots and warning patches, and a little grime. It tiles seamlessly,
-## and models tint it with their paint color.
-func _hull_panels(image_size: int) -> Image:
-	var rng := _rng(1)
-	var grime := _noise(11, 0.06)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	var panel := 32  # Panel size in pixels.
-	var shades := {}
-	for y in image_size:
-		for x in image_size:
-			# Every other row of panels is offset by half, like brickwork.
-			var row := floori(y / float(panel))
-			var shifted_x := posmod(x + (panel >> 1 if row % 2 == 1 else 0), image_size)
-			var cell := Vector2i(floori(shifted_x / float(panel)), row)
-			if not shades.has(cell):
-				shades[cell] = rng.randf_range(0.84, 1.0)
-			var shade: float = shades[cell]
-			var in_x := shifted_x % panel
-			var in_y := y % panel
-			if in_x == 0 or in_y == 0:
-				shade = 0.45  # Seam.
-			elif in_x == 1 or in_y == 1:
-				shade = minf(shade * 1.12, 1.0)  # Lit bevel.
-			elif in_x == panel - 1 or in_y == panel - 1:
-				shade *= 0.8  # Shadowed bevel.
-			elif (in_x == 3 or in_x == panel - 4) and (in_y == 3 or in_y == panel - 4):
-				shade *= 0.62  # Rivet.
-			shade *= 0.93 + 0.07 * grime.get_noise_2d(x, y)
-			image.set_pixel(x, y, Color(shade, shade, shade))
-	# A few details on top: vent slots and little warning-stripe patches.
-	for i in 5:
-		var spot := Vector2i(rng.randi_range(0, 3) * panel + 6, rng.randi_range(0, 3) * panel + 8)
-		if i % 2 == 0:
-			for slot in 4:
-				image.fill_rect(Rect2i(spot.x, spot.y + slot * 4, 18, 2), Color(0.25, 0.25, 0.28))
-		else:
-			for stripe in 12:
-				for line in 6:
-					var px := spot.x + stripe + line
-					var yellow := posmod(stripe, 4) < 2
-					image.set_pixel(px % image_size, (spot.y + line) % image_size, HAZARD_YELLOW if yellow else HAZARD_BLACK)
-	return image
-
-
-## A corrugated shipping container side: vertical ribs, top and bottom rails,
-## a couple of door bars, and invented cargo-company lettering. Light, so the
-## container's paint color tints it.
-func _container(image_size: int) -> Image:
-	var grime := _noise(21, 0.08)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		for x in image_size:
-			var rib := x % 8
-			var shade := [0.78, 0.92, 1.0, 0.95, 0.85, 0.74, 0.7, 0.72][rib] as float
-			if y < 6 or y >= image_size - 6:
-				shade = 0.6 if (y == 5 or y == image_size - 6) else 0.82  # Rails.
-			shade *= 0.92 + 0.08 * grime.get_noise_2d(x, y)
-			image.set_pixel(x, y, Color(shade, shade, shade))
-	for bar_x: int in [image_size - 26, image_size - 14]:
-		image.fill_rect(Rect2i(bar_x, 6, 3, image_size - 12), Color(0.55, 0.55, 0.58))
-	Letters.stamp(image, Vector2i(10, 40), "LZY", 4, Color(0.97, 0.95, 0.9))
-	Letters.stamp(image, Vector2i(10, 76), "FREIGHT", 2, Color(0.97, 0.95, 0.9))
 	return image
 
 
@@ -203,67 +131,6 @@ func _photo() -> Image:
 	return image
 
 
-## Industrial floor tiles: dark blue-gray squares with seams and scuffs.
-func _floor_tiles(image_size: int) -> Image:
-	var rng := _rng(20)
-	var scuffs := _noise(22, 0.15)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	var tile := 32
-	for y in image_size:
-		for x in image_size:
-			var cell := Vector2i(floori(x / float(tile)), floori(y / float(tile)))
-			var shade := 0.36 + 0.04 * ((cell.x + cell.y) % 2)
-			if x % tile == 0 or y % tile == 0:
-				shade = 0.22
-			elif x % tile == 1 or y % tile == 1:
-				shade += 0.06
-			shade *= 0.9 + 0.1 * scuffs.get_noise_2d(x, y) + rng.randf_range(-0.02, 0.02)
-			image.set_pixel(x, y, Color(shade * 0.9, shade * 0.95, shade * 1.15))
-	return image
-
-
-## Wall paneling: tall slate-blue panels with seams and a darker band.
-func _wall_panels(image_size: int) -> Image:
-	var grime := _noise(24, 0.1)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		for x in image_size:
-			var shade := 0.42
-			if x % 32 == 0:
-				shade = 0.25
-			elif x % 32 == 1:
-				shade = 0.5
-			if y >= 44 and y < 50:
-				shade = 0.3  # A darker band.
-			shade *= 0.92 + 0.08 * grime.get_noise_2d(x, y)
-			image.set_pixel(x, y, Color(shade * 0.85, shade * 0.92, shade * 1.15))
-	return image
-
-
-## Worn, speckled carpet. Light, so the paint color tints it.
-func _carpet(image_size: int) -> Image:
-	var rng := _rng(25)
-	var wear := _noise(26, 0.08)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		for x in image_size:
-			var shade := 0.8 + 0.12 * wear.get_noise_2d(x, y) + rng.randf_range(-0.08, 0.08)
-			image.set_pixel(x, y, Color(shade, shade, shade))
-	return image
-
-
-## Wood grain, warm and light.
-func _wood(image_size: int) -> Image:
-	var grain := _noise(27, 0.05)
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		for x in image_size:
-			var ring := sin((x + grain.get_noise_2d(x * 0.2, y * 2.0) * 30.0) * 0.6) * 0.5 + 0.5
-			var shade := 0.7 + 0.15 * ring
-			image.set_pixel(x, y, Color(shade, shade * 0.72, shade * 0.48))
-	return image
-
-
 ## A cozy blanket: wavy zigzag stripes in warm colors (like the sketch's rug).
 func _blanket(image_size: int) -> Image:
 	var stripes: Array[Color] = [Color("e8735a"), Color("f2c75c"), Color("5aa9a0"), Color("f4e9d8"), Color("8a5aa6")]
@@ -319,19 +186,6 @@ func _job_board() -> Image:
 	return image
 
 
-## A sliding sci-fi door: panels, a window slit and hazard stripes.
-func _door() -> Image:
-	var image := Image.create_empty(64, 128, false, Image.FORMAT_RGBA8)
-	image.fill(Color(0.55, 0.58, 0.66))
-	image.fill_rect(Rect2i(31, 0, 2, 128), Color(0.25, 0.27, 0.32))  # The split down the middle.
-	image.fill_rect(Rect2i(10, 24, 44, 8), Color(0.15, 0.2, 0.3))  # Window slit.
-	for y in range(104, 120):
-		for x in 64:
-			var yellow := posmod(x + y, 12) < 6
-			image.set_pixel(x, y, HAZARD_YELLOW if yellow else HAZARD_BLACK)
-	return image
-
-
 ## A green computer terminal screen full of text.
 func _terminal() -> Image:
 	var rng := _rng(33)
@@ -363,17 +217,6 @@ func _nebula(width: int, height: int) -> Image:
 			var amount := clampf((clouds.get_noise_3dv(point) * 0.5 + 0.5) * arm, 0.0, 1.0)
 			amount = amount * amount
 			image.set_pixel(x, y, Color(amount, amount, amount))
-	return image
-
-
-## Dark horizontal grille slats, for engine intakes and vents.
-func _vents(image_size: int) -> Image:
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		var slat := y % 4
-		var shade := [0.12, 0.35, 0.28, 0.18][slat] as float
-		for x in image_size:
-			image.set_pixel(x, y, Color(shade, shade, shade * 1.1))
 	return image
 
 

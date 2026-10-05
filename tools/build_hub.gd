@@ -30,6 +30,10 @@ const SPACE_VIEW := preload("res://textures/generated/space_view.png")
 const JOB_BOARD := preload("res://textures/generated/job_board.png")
 const DOOR := preload("res://textures/generated/door.png")
 const TERMINAL := preload("res://textures/generated/terminal.png")
+const MACHINERY := preload("res://textures/generated/machinery.png")
+const CRATE := preload("res://textures/generated/crate.png")
+const GRATE := preload("res://textures/generated/grate.png")
+const PIPES := preload("res://textures/generated/pipes.png")
 
 const BUNNY_LOOK := {
 	"fur": Color(0.74, 0.7, 0.8), "belly": Color(0.95, 0.93, 0.92), "inner_ear": Color(1.0, 0.68, 0.76),
@@ -154,27 +158,28 @@ func _build_critter(node_name: String, look: Dictionary) -> Node3D:
 
 # --- Sets: shared bits -------------------------------------------------------------
 
-## An ordinary smooth material for the sets (they get pre-rendered, so they
-## can afford to look nicer than the PS1 models). `texture` tiles every
-## `meters` meters, projected from the sides so boxes tile evenly.
-func _set_paint(color: Color, texture: Texture2D = null, meters: float = 1.0, glow: float = 0.0) -> StandardMaterial3D:
+## A material for the sets (they get pre-rendered, so they're lit per pixel
+## with real shadows; see shaders/set_surface.gdshader). `texture` tiles
+## every `meters` meters, projected from the sides so boxes tile evenly. No
+## texture = flat paint with a hand-painted mottle. Boxes also get painted
+## bevels and shadow (_box() switches those on).
+func _set_paint(color: Color, texture: Texture2D = null, meters: float = 1.0, glow: float = 0.0) -> ShaderMaterial:
 	var key := "%s %s %s %s" % [color, texture.resource_path if texture else "", meters, glow]
 	if not _set_materials.has(key):
-		var material := StandardMaterial3D.new()
-		material.albedo_color = color
-		material.roughness = 0.85
+		var material := ShaderMaterial.new()
+		material.shader = SET_SHADER
+		material.set_shader_parameter("albedo", color)
+		if texture == null and glow <= 0.0:
+			texture = PAINT_GRAIN
+			meters = 1.5
 		if texture != null:
-			material.albedo_texture = texture
-			material.uv1_triplanar = true
-			material.uv1_scale = Vector3.ONE / meters
+			material.set_shader_parameter("albedo_texture", texture)
+		material.set_shader_parameter("meters", meters)
 		if glow > 0.0:
 			# Glowing things: dark underneath, so the glow doesn't wash out to white.
-			material.albedo_color = color * 0.15
-			material.emission_enabled = true
-			material.emission = color
-			material.emission_energy_multiplier = glow
-			if texture != null:
-				material.emission_texture = texture
+			material.set_shader_parameter("albedo", color * 0.15)
+			material.set_shader_parameter("emission", color)
+			material.set_shader_parameter("emission_strength", glow)
 		_set_materials[key] = material
 	return _set_materials[key]
 
@@ -260,7 +265,7 @@ func _build_apartment() -> Node3D:
 	# The heater under the window, ribbed.
 	for i in 8:
 		_box(room, "HeaterRib", Vector3(0.12, 0.55, 0.12), Vector3(-1.8 + i * 0.22, 0.35, -2.38), _set_paint(Color(0.85, 0.82, 0.78)))
-	_add_collision(body, _box(room, "HeaterBox", Vector3(1.8, 0.55, 0.2), Vector3(-1.03, 0.35, -2.4), _set_paint(Color(0.85, 0.82, 0.78))))
+	_add_collision(body, _box(room, "HeaterBox", Vector3(1.8, 0.55, 0.2), Vector3(-1.03, 0.35, -2.4), _set_paint(Color(0.85, 0.82, 0.78), VENTS, 0.3)))
 
 	# The unmade bed along the left wall.
 	_piece(room, body, "BedFrame", Vector3(1.1, 0.35, 2.1), Vector3(-2.4, 0.18, 1.3), _set_paint(Color(1, 1, 1), WOOD, 1.0))
@@ -281,7 +286,7 @@ func _build_apartment() -> Node3D:
 	_box(room, "ChairBack", Vector3(0.45, 0.5, 0.08), Vector3(1.95, 0.7, -0.98), _set_paint(Color(0.3, 0.3, 0.38)))
 
 	# An old TV on a crate in the back-left corner.
-	_piece(room, body, "TVCrate", Vector3(0.6, 0.5, 0.5), Vector3(-2.55, 0.25, -1.7), _set_paint(Color(1, 1, 1), WOOD, 0.6))
+	_piece(room, body, "TVCrate", Vector3(0.6, 0.5, 0.5), Vector3(-2.55, 0.25, -1.7), _set_paint(Color(1, 1, 1), CRATE, 0.6))
 	_box(room, "TV", Vector3(0.55, 0.45, 0.45), Vector3(-2.55, 0.73, -1.7), _set_paint(Color(0.25, 0.22, 0.28)))
 	_box(room, "TVScreen", Vector3(0.02, 0.32, 0.36), Vector3(-2.27, 0.74, -1.7), _set_paint(Color(0.35, 0.55, 0.9), null, 1.0, 1.2))
 
@@ -418,6 +423,8 @@ func _build_dispatch() -> Node3D:
 	_box(room, "SignBacking", Vector3(4.0, 1.1, 0.05), Vector3(-1.5, 3.55, -4.47), dark)
 	_sign(room, "DispatchSign", "DISPATCH", 0.007, Color(1.0, 0.8, 0.3), Vector3(-1.5, 3.75, -4.4))
 	_sign(room, "Motto", "WE MOVE IT SO YOU DON'T HAVE TO", 0.0025, Color(0.4, 0.95, 1.0), Vector3(-1.5, 3.2, -4.4))
+	# A bank of humming machinery in the back corner (the dispatch computers).
+	_piece(room, body, "MachineBank", Vector3(0.4, 2.6, 2.2), Vector3(-4.8, 1.3, -3.3), _set_paint(Color(0.9, 0.9, 1.0), MACHINERY, 2.2))
 	# Waiting chairs along the left wall, and a sad potted plant.
 	for i in 3:
 		_piece(room, body, "Chair", Vector3(0.55, 0.45, 0.55), Vector3(-4.5, 0.23, 1.0 + i * 0.8), _set_paint(Color(0.3, 0.6, 0.62)))
