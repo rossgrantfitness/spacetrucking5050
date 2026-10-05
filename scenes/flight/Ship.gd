@@ -227,6 +227,24 @@ static func bonk_strength(impact: float, tuning: Tuning) -> float:
 	return clampf((impact - tuning.bonk_min_speed) / maxf(tuning.bonk_hard_speed - tuning.bonk_min_speed, 0.01), 0.0, 1.0)
 
 
+## A small knock from the road (debris pinging off the hull, a bumpy
+## patch): a little wear on the hull and cargo, a thump and a jolt, and a
+## word under the RIDE bar saying why ("pings", "bumpy"). Never a bonk.
+func knock(hull_loss: float, cargo_loss: float, reason: String) -> void:
+	hull = maxf(hull - hull_loss, 0.0)
+	if not GameState.active_job_id.is_empty():
+		cargo_condition = maxf(cargo_condition - cargo_loss, 0.0)
+	_thump_sound.pitch_scale = randf_range(1.1, 1.6)
+	_thump_sound.play()
+	shake.add_trauma(0.12)
+	if Settings.rumble:
+		Input.start_joy_vibration(0, 0.25, 0.05, 0.08)
+	if cargo_loss > 0.0 and not GameState.active_job_id.is_empty():
+		last_jostle_reason = reason
+		jostles += 1
+		cargo_jostled.emit(reason)
+
+
 ## Patches up the hull a bit (1 = all of it).
 func repair(amount: float) -> void:
 	hull = minf(hull + amount, 1.0)

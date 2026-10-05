@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Fern (approach control)"
+species = "mole"
+voice_pitch = 0.8
+lines = PackedStringArray("Approach control. Take your time. Not too much time.")
+comm_name = "FERN · APPROACH"
+fur_color = Color(0.42, 0.36, 0.34, 1)
+accent_color = Color(0.3, 0.75, 1, 1)

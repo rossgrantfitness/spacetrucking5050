@@ -23,6 +23,9 @@ enum Kind { ION_STORM, SPEED_TRAP }
 ## Speed traps only: the limit, and the fine.
 @export var speed_limit_kmh: float = 250.0
 @export var fine: int = 25
+## Ion storms only: the color of its glow (fully transparent = the usual
+## minty green).
+@export var tint := Color(0.0, 0.0, 0.0, 0.0)
 
 var _flashes: Array[MeshInstance3D] = []
 var _lights: Array[MeshInstance3D] = []
@@ -67,6 +70,8 @@ func _process(delta: float) -> void:
 
 func _build_storm() -> void:
 	var colors: Array[Color] = [Color(0.3, 1.0, 0.8), Color(0.5, 0.9, 1.0), Color(0.4, 1.0, 0.55)]
+	if tint.a > 0.0:
+		colors = [tint, tint.lightened(0.3), tint.darkened(0.2)]
 	for i in 34:
 		var spot := Vector3(rng.randf_range(-1, 1), rng.randf_range(-0.5, 0.5), rng.randf_range(-1, 1)) * radius * 0.7
 		EventKit.glow(self, rng.randf_range(500.0, 1100.0), spot, Color(colors[i % 3], 0.35))

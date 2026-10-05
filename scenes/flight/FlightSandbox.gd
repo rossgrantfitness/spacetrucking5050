@@ -27,7 +27,8 @@ extends Node
 ##   seat. Napping on the bed fast-forwards the trip until you arrive.
 ## - HAZARDS: ion storms and speed traps (scenes/flight/events/HazardZone.gd)
 ##   tell the ship how strongly they're affecting it.
-## - ROUTE EVENTS: random sights along the road (RouteEvents.gd).
+## - ROUTE EVENTS: what happens along the road: sights, calls, little
+##   hazards, radio moments (RouteEvents.gd).
 ## - The camera switch (chase cam <-> cockpit), the radio buttons, the HUD
 ##   buttons and the pause menu.
 ##
@@ -117,9 +118,11 @@ func _ready() -> void:
 	_chatter.start(_ship, _hud.comm, _places)
 	_ship.autopilot_arrived.connect(_on_autopilot_arrived)
 	_ship.cruise_released.connect(_on_cruise_released)
+	GameState.start_haul()  # Every trip out on the road is a new haul.
 	_route_events = RouteEvents.new()
 	add_child(_route_events)
 	_route_events.start(_ship, _events_holder, _chatter, _places, current_system)
+	_route_events.banner_requested.connect(_hud.show_banner)
 	_setup_haze()
 	_blend_systems(true)
 	_pause_menu.resumed.connect(func() -> void:

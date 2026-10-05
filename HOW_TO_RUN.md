@@ -58,9 +58,9 @@ double-click it.
 - A game window opens. To stop, close it, or press **F8** (Mac: **Cmd+.**).
 
 First, a few seconds of **power-on intro** (a self test types itself out,
-then the logo and a chime; any key skips it). Then the **boot screen**: the title, a lazily tumbling cargo
-crate, and an "INPUT CHECK" panel where every control lights up when you press
-it. Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
+then the logo and a chime; any key skips it). Then the **title screen**: the title and a lazily tumbling cargo
+crate. (A small "test your keys and gamepad" link opens an input check where
+every control lights up when you press it.) Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
 wake up in your apartment on the base, or to **continue** where you left off
 (the game saves itself whenever you walk into a room, take a job, get paid
 or buy something). The small buttons below jump straight into flying, or
@@ -70,6 +70,9 @@ to try.
 ---
 
 ## Controls
+
+**In the game, press Esc (Start on a gamepad) and pick CONTROLS** for this
+list on screen, any time.
 
 Gamepad buttons use Xbox names, by position: **A** = bottom button, **B** =
 right, **X** = left, **Y** = top. (On PlayStation: A = ✕, B = ○, X = □,

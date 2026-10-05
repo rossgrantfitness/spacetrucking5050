@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Gus (pigeon post)"
+species = "pigeon"
+voice_pitch = 1.5
+lines = PackedStringArray("COO. Busy. Very busy. Coo.")
+comm_name = "GUS · PIGEON POST"
+fur_color = Color(0.6, 0.62, 0.7, 1)
+accent_color = Color(0.4, 0.9, 0.6, 1)

@@ -404,32 +404,54 @@ extends Resource
 
 @export_group("Route events")
 
-## Something to look at shows up every this-many meters you drive (a
-## random distance between the two). At top speed (about 200 km/h), 4 km is
-## a bit over a minute.
-@export_range(500.0, 50000.0, 100.0, "suffix:m") var event_gap_min: float = 2500.0
-@export_range(500.0, 50000.0, 100.0, "suffix:m") var event_gap_max: float = 6000.0
+## How often something happens, by ZONE (a random time between the two, in
+## seconds of driving). Deep space is quiet on purpose: minutes of nothing
+## but the radio. Traffic lanes near stations and gates are busy.
+@export var event_gap_deep_space := Vector2(180.0, 300.0)
+@export var event_gap_traffic_lanes := Vector2(30.0, 90.0)
+@export var event_gap_station_approach := Vector2(20.0, 45.0)
+@export var event_gap_orbit := Vector2(90.0, 150.0)
+@export var event_gap_weather := Vector2(60.0, 120.0)
 
-## The most random sights out there at once.
+## Where the zones are. Traffic lanes: within this distance of a station or
+## a border gate. (The design list says about 10 km; our map is small, so
+## 10 km would make nearly the whole road a traffic lane.)
+@export_range(1000.0, 30000.0, 500.0, "suffix:m") var event_lane_radius: float = 6000.0
+## Station approach: the final stretch before a station.
+@export_range(500.0, 10000.0, 100.0, "suffix:m") var event_approach_radius: float = 3000.0
+## Orbit: within this height above a planet or moon's surface. (Our planets
+## are huge and far: the whole road is 29-34 km up, so 30 km means "the
+## stretches closest to a planet".)
+@export_range(1000.0, 100000.0, 1000.0, "suffix:m") var event_orbit_altitude: float = 30000.0
+## Weather events (a hail shower, a dust storm) can also happen out in the
+## open, away from a storm, at this share of their usual odds.
+@export_range(0.0, 1.0, 0.05) var event_weather_outside: float = 0.5
+
+## How many hauls before the same event can happen again: common ones,
+## and uncommon (and rare) ones. Legendary ones happen once per save.
+@export_range(0, 50, 1) var event_cooldown_common: int = 3
+@export_range(0, 50, 1) var event_cooldown_uncommon: int = 10
+
+## The most 3D sights out there at once.
 @export_range(1, 10, 1) var event_max_active: int = 3
 
-## Sights don't appear when you're slower than this (parked, docking).
+## Nothing happens when you're slower than this (parked, docking).
 @export_range(0.0, 100.0, 1.0, "suffix:m/s") var event_min_speed: float = 15.0
 
 ## Sights are cleaned up once they're this far behind you.
 @export_range(1000.0, 20000.0, 100.0, "suffix:m") var event_despawn_distance: float = 7000.0
 
-## No random sights within this distance of a station.
+## No 3D sights within this distance of a station (except the station
+## approach's own, which keep well to the side).
 @export_range(0.0, 20000.0, 100.0, "suffix:m") var event_keep_clear: float = 4000.0
 
-## Don't repeat any of the last this-many kinds of sight (no jellyfish
-## twice in a row, or even close).
+## Don't repeat any of the last this-many events (or the same kind of 3D
+## sight: no jellyfish twice in a row, or even close).
 @export_range(0, 8, 1) var event_no_repeat: int = 4
 
-## The chance that a sight is a RARE one instead (a ghost ship, a comet
-## storm...). 0.006 = about one rare sight every dozen long hauls; any
-## particular one, about once in fifty.
-@export_range(0.0, 1.0, 0.001) var event_rare_chance: float = 0.006
+## The chance that an event is a RARE or LEGENDARY one instead (at most
+## one per haul). 0.012 = about one every ten long hauls.
+@export_range(0.0, 1.0, 0.001) var event_rare_chance: float = 0.012
 
 
 @export_group("Comms chatter")

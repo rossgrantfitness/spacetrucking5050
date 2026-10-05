@@ -10,6 +10,10 @@ const TRAIL_COLORS := [Color(1.0, 0.75, 0.35), Color(0.6, 1.0, 0.5), Color(1.0, 
 
 ## How fast the convoy drives, in m/s.
 @export var convoy_speed: float = 60.0
+## Names to pick their ID labels from (empty = the usual funny ones).
+var names := PackedStringArray()
+## One engine-trail color for all of them (fully transparent = a mix).
+var trail_tint := Color(0.0, 0.0, 0.0, 0.0)
 
 var _velocity := Vector3.ZERO
 var _travelled: float = 0.0
@@ -21,9 +25,12 @@ func _ready() -> void:
 	var count := rng.randi_range(3, 5)
 	for i in count:
 		var rig := ConvoyRig.new()
-		rig.trail = TRAIL_COLORS[i % TRAIL_COLORS.size()]
+		rig.trail = trail_tint if trail_tint.a > 0.0 else TRAIL_COLORS[i % TRAIL_COLORS.size()]
 		rig.position = Vector3(0.0, 0.0, i * 90.0)  # Strung out in a line behind the leader.
-		rig.show_on_radar(NAMES.names[rng.randi_range(0, NAMES.names.size() - 1)], 20.0)
+		var label: String = NAMES.names[rng.randi_range(0, NAMES.names.size() - 1)]
+		if not names.is_empty():
+			label = names[i % names.size()]
+		rig.show_on_radar(label, 20.0)
 		rig.add_child((VISUALS[rng.randi_range(0, VISUALS.size() - 1)] as PackedScene).instantiate())
 		EventKit.solid(rig, Vector3(12.0, 8.0, 30.0))
 		add_child(rig)

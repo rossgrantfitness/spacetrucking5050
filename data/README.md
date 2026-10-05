@@ -60,11 +60,17 @@ game's numbers, names and stuff never needs programming.
   `LogbookEntry.gd`, `Logbook.gd`.
 - **`dialogue/bunny_replies.tres`**: the one-liners Jack can say back to
   comm calls, grouped by kind of call. Blueprint: `BunnyReplies.gd`.
-- **`events/route_events.tres`**: the random sights on the road (big
-  ships, convoys, billboards and their ads, whales...): how likely each is,
-  which systems it shows up in, where it appears, and what someone might
-  say about it. How often they appear is in tuning.tres. Blueprints:
-  `EventData.gd`, `RouteEventList.gd`.
+- **`events/route_events.tres`**: everything that can happen on the road:
+  your route events list (1-167 so far) plus the original sights. Each one
+  has its zone (deep space, traffic lanes, station approach, orbit,
+  weather, anywhere), type, tone, rarity and build cost; whether it's
+  built yet (`playable`) and if not, what it `needs`; and what happens: a
+  3D thing (big ship, convoy, sign, a passing ship with a story...), a
+  call with reply choices, a radio line, a banner, a small effect (hull
+  pings, a gravity nudge, dead air...). How busy each zone is, and the
+  cooldowns, are in tuning.tres. Made from `docs/ROUTE_EVENTS_LIST.md` by
+  `tools/route_events/import_route_events.py` (careful: re-running it
+  overwrites edits). Blueprints: `EventData.gd`, `RouteEventList.gd`.
 - **`traffic_names.tres`**: the funny names on passing ships' ID labels.
   Add as many as you like.
 - **The other folders are empty for now** and fill up as their milestones

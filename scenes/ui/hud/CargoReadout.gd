@@ -9,7 +9,8 @@ extends HudWidget
 ## - RIDE: how rough the ride is for the cargo. Green is fine; yellow means
 ##   it's starting to take damage (hard turns, slides, braking, boosting);
 ##   red means it's rattling. Each time the load gets knocked around, a word
-##   flashes under it saying why: HARD TURN, BRAKING or BOOST SHAKE.
+##   flashes under it saying why: HARD TURN, BRAKING, BOOST SHAKE, PINGS or
+##   BUMPY.
 ## (You get paid when you dock and climb out at the destination.)
 
 
@@ -33,7 +34,7 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 	_why_time = maxf(_why_time - delta, 0.0)
 	if rig != null and rig.jostles != _jostles_seen:
 		_jostles_seen = rig.jostles
-		_why = {"turn": "HARD TURN!", "brake": "BRAKING!", "boost": "BOOST SHAKE!"}.get(rig.last_jostle_reason, "")
+		_why = {"turn": "HARD TURN!", "brake": "BRAKING!", "boost": "BOOST SHAKE!", "pings": "PINGS!", "bumpy": "BUMPY!"}.get(rig.last_jostle_reason, "")
 		_why_time = 1.6
 	if job == null or rig == null or not numbers_due:
 		return

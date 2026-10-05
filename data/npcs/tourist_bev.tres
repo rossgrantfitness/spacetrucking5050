@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Bev (tourist)"
+species = "pig"
+voice_pitch = 1.2
+lines = PackedStringArray("Is this the scenic route? It's all so... spacey.")
+comm_name = "BEV · LOST TOURIST"
+fur_color = Color(1, 0.72, 0.75, 1)
+accent_color = Color(1, 0.85, 0.3, 1)

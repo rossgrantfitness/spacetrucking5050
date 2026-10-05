@@ -49,6 +49,8 @@ var _situation: ChatterSet.Situation = ChatterSet.Situation.IDLE
 var _allow_reply: bool = false
 var _picking: bool = false
 var _replies := PackedStringArray()
+## Replies written for this particular call (a route event's choices).
+var _custom_replies := PackedStringArray()
 ## Jack's reply, said once this call has slid away.
 var _queued_reply: String = ""
 var _rng := RandomNumberGenerator.new()
@@ -74,9 +76,11 @@ func _ready() -> void:
 ## Starts a call from `speaker` saying `words` (names like {bunny} are filled
 ## in). Ignored if a call is already up; check is_busy() first. `situation`
 ## is what it's about, for Jack's replies; `repliable` off for her own lines.
-func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = ChatterSet.Situation.IDLE, repliable: bool = true) -> void:
+func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = ChatterSet.Situation.IDLE, repliable: bool = true,
+		replies: PackedStringArray = PackedStringArray()) -> void:
 	if is_busy():
 		return
+	_custom_replies = replies
 	_speaker = speaker
 	_situation = situation
 	_allow_reply = repliable
@@ -110,7 +114,7 @@ func is_picking() -> bool:
 func open_replies() -> void:
 	if not can_reply():
 		return
-	_replies = REPLIES.pick(_situation, 3, _rng)
+	_replies = _custom_replies.slice(0, 3) if not _custom_replies.is_empty() else REPLIES.pick(_situation, 3, _rng)
 	if _replies.is_empty():
 		return
 	_picking = true

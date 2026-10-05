@@ -1,20 +1,19 @@
 # Progress
 
-**Current status:** **Round 9: the intro, the throttle, the cabin, the
-radio lineup and things to buy**, from your round-8 playtest answers. A
-power-on intro and loading screens; a real throttle lever, heavier
-turning, more speed at cruise (spaceway beacons, more dust) and a boost you
-have to commit to; cargo damage you can hear and see; walking around your
-rig's cabin while the autopilot drives (and napping to fast-forward);
-Jack Rabbit's replies on the comms; people who remember; your 20 radio
-stations with DJs who react to you; a logbook with rare sights; a
-Gas-N-Go worth stopping at; new rigs and paint jobs; and a walkable
-Tidewater canteen. Built and validated, **waiting for your playtest** (see
-`PLAYTEST.md`).
-**Next session:** the audit your revised brief asks for (`AUDIT.md` and a
-reworked checklist here), then whatever you choose.
+**Current status:** **Round 10: one font, controls in the Esc menu, your
+design answers, and your route events list.** The HUD's pixel font is now
+the font everywhere; the controls moved off the start screen into a
+CONTROLS card in the Esc menu; your 25 answers are written up with a build
+order (`docs/DESIGN_NOTES.md`); and events 1-167 of your list are in the
+game's data, 49 of them playable now (plus the 11 original sights), with a
+new director that follows your zone and cooldown rules. Built and
+validated, **waiting for your playtest** (see `PLAYTEST.md`) and for
+events 168-250 (the paste was cut off after #167).
+**Next session:** your call: the rest of the event list, the audit
+(`AUDIT.md`), or the first item of the new build order (the economy
+rebalance).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-04 (round 9)
+**Last updated:** 2026-10-05 (round 10)
 
 ---
 
@@ -80,8 +79,10 @@ reworked checklist here), then whatever you choose.
   - [x] Hazards (round 8): ion storms (static, jolts, STORM light) and a speed trap (COPS light, small fine)
   - [x] An optional stop: the Gas-N-Go 47 drive-through (round 9: cheaper fuel, a calming snack, a souvenir, side jobs)
   - [x] Round 9: no repeating sights, rare sights (great migration, leviathans, a ghost ship, a comet storm), a logbook (L), comm replies (T)
+  - [x] Round 10: your route events list (1-167) in the data, 49 playable now (signs, passing ships with stories, processions, calls with reply choices, radio moments, gentle hazards like hull pings, gravity eddies and gravity tides); a director with zones (deep space, traffic lanes, station approach, orbit, weather), haul cooldowns, one hazard at a time, one rare per haul, story and night-only events
   - [x] Route map: the course chart (see M2)
-  - [ ] Gravity wells and slingshots, traffic lanes near stations
+  - [ ] Gravity wells and slingshots
+  - [ ] The rest of the route events: 118 of 167 need a new model or a small new system (the horn, hitchhikers, the convoy you can join, the rival, wipers...); 168-250 still to come
   - [ ] Cockpit gizmos and toys, rumble polish, real 3D comm heads, cockpit poses
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
 - [ ] **M7: Home & style** *(started)*
@@ -95,8 +96,9 @@ reworked checklist here), then whatever you choose.
 
 ## Next up
 
-Your playtest of round 9. Then the audit your revised brief asks for, then
-your call on what's next.
+Your playtest of rounds 9 and 10, and events 168-250 of your list. Then
+the build order in `docs/DESIGN_NOTES.md` (economy rebalance first), and
+the audit your revised brief asks for, in the order you choose.
 
 ## M2 in short
 

@@ -18,6 +18,8 @@ project on a machine without a screen.
 | `generate_world_textures.gd` | Tidewater's ocean planet and the suns' surface (`textures/generated/ocean_planet.png`, `sun_surface.png`). |
 | `build_truck_stop.gd` | The truck stop's inside (`scenes/hub/sets/TruckStopSet.tscn`) and its people's models (`OwlVisual`, `BeaverVisual`, `FrogVisual`, `WalrusVisual`, `HamsterVisual`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/TruckStop.tscn`). |
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per genre (`audio/radio/placeholders/`, shared by stations of a kind: drum & bass, dubstep, synthwave, metal, rock, hip hop, talk radio, a numbers station...), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
+| `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
+| `route_events/import_route_events.py` | The route events list (`data/events/route_events.tres`) from your design list (`docs/ROUTE_EVENTS_LIST.md`) plus what each playable event does (written in the script). Python, not Godot: `python3 tools/route_events/import_route_events.py`. **Re-running overwrites the list**, so make inspector edits in the script too. |
 | `build_placeholder_models.gd` | The rig (`scenes/flight/ShipVisual.tscn`), its cockpit (`scenes/flight/CockpitInterior.tscn`), the traffic ships (`scenes/flight/traffic/`, except the CC0 courier) and the truck stop with its parking deck (`scenes/flight/Station.tscn`) from simple chunky shapes with PS1 materials. **Re-running overwrites those scenes**, so don't if you've edited them by hand. |
 
 ## Checkers

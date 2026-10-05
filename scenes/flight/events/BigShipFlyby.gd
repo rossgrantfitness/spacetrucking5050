@@ -13,13 +13,19 @@ const NAMES := ["RETIREE CRUISE LINER", "NAVY LEISURE BARGE", "DISCOUNT MATTRESS
 
 ## How fast it crosses, in m/s.
 @export var crossing_speed: float = 160.0
+## Names to pick its ID label from (empty = the usual ones).
+var names := PackedStringArray()
+## Its hull color (fully transparent = the usual gray).
+var hull_color := Color(0.0, 0.0, 0.0, 0.0)
+## How fast it crosses compared to normal.
+var speed_scale: float = 1.0
 
 var _velocity := Vector3.ZERO
 var _travelled: float = 0.0
 
 
 func _ready() -> void:
-	var hull := EventKit.paint(Color(0.55, 0.58, 0.68), 0.0, EventKit.HULL, 40.0)
+	var hull := EventKit.paint(hull_color if hull_color.a > 0.0 else Color(0.55, 0.58, 0.68), 0.0, EventKit.HULL, 40.0)
 	var trim := EventKit.paint(Color(0.85, 0.55, 0.3), 0.0, EventKit.HULL, 40.0)
 	var length := 1400.0
 	EventKit.box(self, Vector3(220.0, 160.0, length), Vector3.ZERO, hull)
@@ -41,11 +47,14 @@ func _ready() -> void:
 		across = -across
 	if ship != null:
 		var ahead := maxf((global_position - ship.global_position).length(), 1.0)
-		crossing_speed = clampf(2600.0 * maxf(ship.flight.speed(), 20.0) / ahead, 60.0, 320.0)
+		crossing_speed = clampf(2600.0 * maxf(ship.flight.speed(), 20.0) / ahead, 60.0, 320.0) * speed_scale
 	global_position -= across * 2600.0
 	_velocity = across * crossing_speed
 	look_at(global_position + _velocity, Vector3.UP)  # Nose first (-Z).
-	show_on_radar(NAMES[rng.randi_range(0, NAMES.size() - 1)], 700.0)
+	var label: String = NAMES[rng.randi_range(0, NAMES.size() - 1)]
+	if not names.is_empty():
+		label = names[rng.randi_range(0, names.size() - 1)]
+	show_on_radar(label, 700.0)
 	var rumble := EventKit.sound(self, RUMBLE, 6.0, 5000.0)
 	rumble.play()
 

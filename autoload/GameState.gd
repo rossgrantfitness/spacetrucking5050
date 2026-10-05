@@ -68,6 +68,12 @@ var visits: Dictionary = {}
 var deliveries: int = 0
 ## The logbook: every sight you've seen (its id -> how many times).
 var logbook: Dictionary = {}
+## How many hauls (trips out on the road) you've started, ever. Route
+## events use it for their cooldowns.
+var hauls: int = 0
+## Route events that have happened: event id -> the haul number it last
+## happened on.
+var event_history: Dictionary = {}
 
 # --- Not saved -------------------------------------------------------------------
 ## The pay breakdown from a delivery that just happened, shown when you walk
@@ -111,6 +117,16 @@ func log_sight(id: String) -> bool:
 	var first := not logbook.has(id)
 	logbook[id] = int(logbook.get(id, 0)) + 1
 	return first
+
+
+## A new haul begins (the rig heads out on the road).
+func start_haul() -> void:
+	hauls += 1
+
+
+## Notes that route event `id` just happened (on this haul).
+func note_event(id: String) -> void:
+	event_history[id] = hauls
 
 
 ## Counts a visit to a place (docking there). Returns how many visits
@@ -245,6 +261,8 @@ func to_save_data() -> Dictionary:
 		"visits": visits,
 		"deliveries": deliveries,
 		"logbook": logbook,
+		"hauls": hauls,
+		"event_history": event_history,
 		"ships": owned_ships,
 		"active_ship": active_ship,
 		"paint": paint,
@@ -292,6 +310,13 @@ func apply_save_data(data: Dictionary) -> void:
 			var times: Variant = data["logbook"][id]
 			if sights.find(str(id)) != null and (times is int or times is float):
 				logbook[str(id)] = maxi(int(times), 1)
+	if data.get("hauls") is int or data.get("hauls") is float:
+		hauls = maxi(int(data["hauls"]), 0)
+	if data.get("event_history") is Dictionary:
+		for id: Variant in data["event_history"]:
+			var haul: Variant = data["event_history"][id]
+			if haul is int or haul is float:
+				event_history[str(id)] = maxi(int(haul), 0)
 	if data.get("ships") is Array:
 		for id: Variant in data["ships"]:
 			if ships.find(str(id)) != null and not str(id) in owned_ships:
@@ -320,6 +345,8 @@ func new_game() -> void:
 	visits = {}
 	deliveries = 0
 	logbook = {}
+	hauls = 0
+	event_history = {}
 	pending_payout = {}
 	credits_changed.emit()
 

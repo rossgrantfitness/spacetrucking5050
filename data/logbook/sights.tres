@@ -134,6 +134,31 @@ id = "gas_n_go_keychain"
 display_name = "SOUVENIR: GAS-N-GO 47 KEYCHAIN"
 description = "A tiny plastic sloth holding a tiny plastic fuel nozzle. Moe made them. Slowly."
 
+[sub_resource type="Resource" id="Entry_slowpoke"]
+script = ExtResource("2_entry")
+id = "slowpoke"
+display_name = "SHELDON, THE SLOWPOKE"
+description = "A tortoise doing twelve in the fast lane. He's been in that lane since Tuesday."
+
+[sub_resource type="Resource" id="Entry_student_driver"]
+script = ExtResource("2_entry")
+id = "student_driver"
+display_name = "STUDENT DRIVER"
+description = "Weaving all over the lane. We were all new once. Some of us still are."
+
+[sub_resource type="Resource" id="Entry_half_billboard"]
+script = ExtResource("2_entry")
+id = "half_billboard"
+display_name = "HALF A MESSAGE"
+description = "A wrecked billboard that stops mid-sentence. You'll be wondering about it for days."
+
+[sub_resource type="Resource" id="Entry_whale_breach"]
+script = ExtResource("2_entry")
+id = "whale_breach"
+display_name = "WHALE BREACH"
+description = "A whale jumped clean out of the ocean planet into orbit. Showoff."
+rare = true
+
 [resource]
 script = ExtResource("1_book")
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain")])
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach")])

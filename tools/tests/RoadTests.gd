@@ -1,7 +1,8 @@
 extends "res://tools/tests/TestSuite.gd"
 ## Checks for the round-8 long haul: the size of the road to Tidewater,
 ## the course chart's numbers and choices, the cruise autopilot, solar
-## system colors, sky bodies, hazards and the random sights on the road.
+## system colors, sky bodies and hazards. (The route events have their own
+## tests: RouteEventTests.gd.)
 
 const FLIGHT_SCENE := preload("res://scenes/flight/FlightSandbox.tscn")
 const SHIP_SCENE := preload("res://scenes/flight/Ship.tscn")
@@ -153,21 +154,3 @@ func test_hazards_affect_the_rig() -> void:
 	storm.free()
 	trap.free()
 	ship.free()
-
-
-func test_every_route_event_can_be_built() -> void:
-	var director := RouteEvents.new()
-	for event in RouteEvents.EVENTS.events:
-		check(event != null, "no empty slots in the route events list")
-		if event == null:
-			continue
-		var thing := director.make(event)
-		check(thing != null, "every kind of event builds something")
-		if thing != null:
-			thing.free()
-	director.free()
-	var whales: EventData
-	for event in RouteEvents.EVENTS.events:
-		if event != null and event.log_id == "whales":
-			whales = event
-	check(whales != null and whales.allowed_in("tidewater") and not whales.allowed_in("home"), "whales only swim in Tidewater")

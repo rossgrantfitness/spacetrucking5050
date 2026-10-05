@@ -81,3 +81,46 @@ get within 3 km. The same kind of sight never comes up twice within four.
 - **Wedding barge, parade float, funeral procession:** slow ships with
   streamers to pass respectfully.
 - **Seasonal migrations:** jellyfish that only come through on some days.
+
+## Round 10: your 250-event list
+
+You sent a list of 250 route events (inspired by the spirit of Space
+Dandy, Red Dwarf, Star Trek, Cowboy Bebop and Hitchhiker's Guide, every one
+original). The paste stopped after **#167 ("Clean cut")**, so 168-250
+haven't arrived yet. The list as received is in `docs/ROUTE_EVENTS_LIST.md`.
+
+**All 167 are in the game's data** (`data/events/route_events.tres`) with
+their zone, type, tone, rarity and build cost. **49 are playable now**,
+plus the 11 original sights (60 in all). The rest are switched off with a
+note saying what each still needs: mostly a new model (a vending machine,
+space cows, a piano...) or a small new system (the horn, picking up
+hitchhikers, joining a convoy, the rival, windshield wipers, a cab
+kitten...).
+
+Playable now, by zone:
+
+| Zone | Events |
+|---|---|
+| Deep space | #4 Last-gas sign, #5 Dead air, #8 Jingle satellite, #10 Micrometeoroid sprinkle, #11 Comet tail crossing, #15 You are here, #16 Echo transponder (story), #22 Napping trucker, #26 Gravity eddy, #30 Long nothing, #156 Auto-SOS derelict, #162 Half-message billboard, #164 The twin rig (legendary, story), plus the jellyfish and the giant duck |
+| Traffic lanes | #31 Freighter flyby (more names), #33 Slowpoke, #34 Courier cut-off, #35 Tow ship, #40 Funeral procession, #41 Student driver, #42 Gate merge jam, #45 Breakdown on the shoulder, #46 Fender-bender, #49 Billboard ship, #52 Trucker shuttle, #53 Escort flotilla, #54 Ambulance, #55 Trap warning (Tidewater), #57 Lost tourist, #59 Spilled ball bearings, #61 Lane ends, #157 Junk spills, plus convoys |
+| Station approach | #66 Holding pattern, #67 Docking queue, #72 Customs scan, #74 Stuck hangar door, #76 Ad blimp, #77 Wrong ring, #82 Broken neon, #85 Sleepy controller (nights) |
+| Orbit | #87 Debris belt, #102 Local station, #105 Satellite graveyard, #108 Whale breach (rare, Tidewater) |
+| Weather | #111 Ion storms (green, violet and amber), #116 Ice hail, #120 Gravity tide, #122 Sunspot season, #126 Space thunder, #129 Skip signal |
+| Anywhere | Billboards, Tidewater's whales, and the rare sights (great migration, leviathans, ghost ship, comet storm) |
+
+**How it works:** see `scenes/flight/RouteEvents.gd` (the director) and
+`data/events/EventData.gd` (what an event can do). The rules are yours:
+zones with their own pace (deep space: one every 3-5 minutes; traffic
+lanes: every 30-90 seconds; the approach: every 20-45 seconds; orbit and
+weather in between), never two hazards at once, haul cooldowns (common 3,
+uncommon 10, legendary once per save), at most one rare per haul, weather
+zones skip weather that doesn't match, story events wait for the story,
+and night-only events wait for night. Everyday sights (big ships,
+convoys, billboards, junk, the ion storm) have no haul cooldown, only the
+"not one of the last four" rule, so the road never runs out of traffic.
+
+**Simplified for now** (each is noted in the event's data): replies are
+flavor only, so "share fuel for a tip", "pull over for a courtesy bonus"
+and "carry one letter" have no reward yet. Dead air silences the radio
+but doesn't dim the stars yet. "Wrong ring" is a joke call (you keep your
+ring). The procession and the escort use the convoy and big-ship models.

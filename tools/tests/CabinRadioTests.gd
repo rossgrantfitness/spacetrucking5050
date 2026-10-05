@@ -114,8 +114,10 @@ func test_logbook() -> void:
 func test_every_sight_has_a_logbook_entry() -> void:
 	var rares := 0
 	for event in RouteEvents.EVENTS.events:
-		check(event != null and GameState.sights.find(event.log_id) != null, "route event %s has a logbook entry" % (event.log_id if event != null else "?"))
-		if event != null and event.rare:
+		if event == null or event.log_id.is_empty():
+			continue  # Not every passing ship or radio moment goes in the logbook.
+		check(GameState.sights.find(event.log_id) != null, "route event %s has a logbook entry" % event.log_id)
+		if event.is_rare() and event.playable and event.story_flag.is_empty():
 			rares += 1
 			check(GameState.sights.find(event.log_id).rare, "rare event %s is rare in the logbook too" % event.log_id)
 	check(rares >= 3, "there are a few rare sights to brag about")

@@ -93,6 +93,11 @@ var _talk_left: float = 60.0
 var _queued_reaction: Array = []
 var _reaction_delay: float = 0.0
 var _dropout: float = 0.0
+## Seconds left of total silence (a route event: "dead air").
+var _dead_air: float = 0.0
+## Seconds left of extra crackle (a route event: a jingle satellite, a
+## sunspot, a skip signal).
+var _interference: float = 0.0
 var _rng := RandomNumberGenerator.new()
 
 
@@ -116,6 +121,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_clock += delta
 	_text_ad_left = maxf(_text_ad_left - delta, 0.0)
+	_dead_air = maxf(_dead_air - delta, 0.0)
+	_interference = maxf(_interference - delta, 0.0)
 	_update_levels(delta)
 	_update_talk(delta)
 
@@ -213,6 +220,35 @@ func dj_react(event: String, fill: Dictionary = {}, later: bool = false) -> void
 	for key: String in fill:
 		words = words.replace("{%s}" % key, str(fill[key]))
 	_show_words(radio_station, GameState.names.fill_in(words), false)
+
+
+## The DJ on the station you're tuned to says `words` (a route event). With
+## `from` set, someone else is talking ("JINGLE SAT"). Skipped if the radio's
+## off or out of range.
+func announce(words: String, from: String = "") -> void:
+	if not powered or _context == Context.OFF_AIR or reception() < 0.3 or _dead_air > 0.0:
+		return
+	if from.is_empty():
+		_show_words(station(), GameState.names.fill_in(words), false)
+		return
+	_text_ad = from.to_upper() + ": " + GameState.names.fill_in(words).to_upper()
+	_text_ad_left = TEXT_AD_SECONDS
+	_talk_left = maxf(_talk_left, GameState.tuning.radio_talk_min_seconds * 0.5)
+
+
+## Total silence for `seconds`: no music, no hiss, nothing.
+func dead_air(seconds: float) -> void:
+	_dead_air = maxf(_dead_air, seconds)
+
+
+## Extra static and dropouts for `seconds`.
+func interference(seconds: float) -> void:
+	_interference = maxf(_interference, seconds)
+
+
+## Whether the radio is in a stretch of dead air.
+func is_dead_air() -> bool:
+	return _dead_air > 0.0
 
 
 ## Stops every radio sound (when quitting).
@@ -389,6 +425,8 @@ func _update_levels(delta: float) -> void:
 	# A weak signal: hiss rises and the music cuts out now and then.
 	var clear := reception() if _context != Context.OFF_AIR else 1.0
 	var weakness := clampf(1.0 - signal_strength * clear, 0.0, 1.0)
+	if _interference > 0.0:
+		weakness = maxf(weakness, 0.65)
 	if weakness > 0.3 and _rng.randf() < weakness * delta * 2.0:
 		_dropout = _rng.randf_range(0.15, 0.5)
 	_dropout = maxf(_dropout - delta, 0.0)
@@ -397,12 +435,17 @@ func _update_levels(delta: float) -> void:
 		music_db = -80.0  # Out of range (or off the air): nothing but hiss.
 	_music.volume_db = music_db
 	_hiss.volume_db = linear_to_db(maxf(weakness * 0.5 + 0.02, 0.0001)) + volume - 6.0
+	if _dead_air > 0.0:
+		_music.volume_db = -80.0
+		_hiss.volume_db = -80.0
 	var bus := AudioServer.get_bus_index(RADIO_BUS)
 	var muffle := AudioServer.get_bus_effect(bus, 0) as AudioEffectLowPassFilter
 	muffle.cutoff_hz = ROOM_MUFFLE_HZ if room else WEAK_SIGNAL_MUFFLE_HZ
 	AudioServer.set_bus_effect_enabled(bus, 0, room or weakness > 0.5)
 	# The ambient music swells a touch when you fly fast.
 	_ambient.volume_db = linear_to_db(maxf(Settings.radio_volume, 0.0001)) - 10.0 + intensity * 4.0
+	if _dead_air > 0.0:
+		_ambient.volume_db = -80.0
 
 
 func _load_folder(folder: String, ads: bool) -> Array[Dictionary]:

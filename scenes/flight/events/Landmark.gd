@@ -117,6 +117,7 @@ func _build_derelict() -> void:
 
 
 func _build_border_gate() -> void:
+	add_to_group("border_gates")  # The route events treat gates like stations: busy lanes.
 	var steel := EventKit.paint(Color(0.5, 0.55, 0.62), 0.0, EventKit.HULL, 20.0)
 	for side: float in [-1.0, 1.0]:
 		EventKit.box(self, Vector3(60.0, 700.0, 60.0), Vector3(side * 650.0, 0.0, 0.0), steel)
