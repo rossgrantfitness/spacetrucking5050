@@ -1,20 +1,19 @@
 # Progress
 
-**Current status:** **Round 13: a forgiving autopilot, hub cameras, the
-cinema camera, quieter engines.** Small stick nudges no longer knock off
-the autopilot (it steers back on course); the hub's cameras always find
-the bunny; **V / R3 on autopilot** opens a cinema camera (a director
-cutting between shots, or your own free camera); the engine is quieter
-and the pause menu has Music / Sound effects / Voices sliders. Built and
-validated, **waiting for your playtest of rounds 12 and 13** (see
-`PLAYTEST.md`), and for the reference files (spaceship designs, the
-Japanese radio tracks, the bunny model and character sheet), which still
-haven't arrived.
-**Next session:** your feedback on rounds 12-13; the Japanese station and
-ship designs once the files are in; then your call (the Hyperway, the
-amber desert, events 168-250, the economy rebalance, the audit).
+**Current status:** **Round 14: the Mega Man Legends look, your bunny,
+home is the rig, her PC.** Hand-painted textures and painted bevels on
+everything, a calmer late-90s wobble, your bunny model (chibi, 2.5 heads
+tall) walking around, the apartment / hallway / dispatch now inside your
+rig (parked at the truck stop to start), her CARROT OS computer (mail,
+invoices, Asteroid Alley), a bed that sleeps you to the next stop, and
+HOSHIZORA 83 playing your three tracks. Built and validated, **waiting for
+your playtest** (see `PLAYTEST.md`).
+**Next session:** your ship design sheets as eight rigs to buy at Dusty's
+(each with its own model and handling), then your feedback; after that,
+your call (the Hyperway, the amber desert, events 168-250, the economy
+rebalance, the audit).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 13)
+**Last updated:** 2026-10-05 (round 14)
 
 ---
 
@@ -57,6 +56,9 @@ amber desert, events 168-250, the economy rebalance, the audit).
 - [ ] **M3: The walkable hub** *(started early, at your request)*
   - [x] Pre-rendered backgrounds with fixed FF8-style cameras and camera zones; camera-relative walking that doesn't flip on cuts
   - [x] Round 13: the camera always finds the bunny (arrival spots fixed, plus a switch to a camera that can see her if she's ever hidden)
+  - [x] Round 14: home is the inside of the rig (apartment, hallway with the airlock, dispatch with Dottie and the cockpit stairs); walkable in flight; the old base is the company HQ (scenery)
+  - [x] Round 14: the bunny is the developer's 3D model, cut into parts on the animator's joints and made chibi (2.5 heads tall)
+  - [x] Round 14: her desktop PC (mail, invoices, Asteroid Alley); the bed sleeps to a new day (parked) or to the next stop (in flight)
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades
   - [x] Dialogue boxes with typewriter text and voice blips; Dottie the morning clerk; interact prompts
@@ -72,7 +74,9 @@ amber desert, events 168-250, the economy rebalance, the audit).
   - [x] The radio plays real music from each station's folder, GTA-style (stations keep playing while you're away), with audio or text ads, tuning static, on/off with ambient music, weak-signal hiss, a radio volume slider, and MY TUNES for the player's own files; the truck stop's jukebox
   - [x] Placeholder beats per station until you add music; `audio/radio/README.md`
   - [x] Round 9: your 20-station lineup (DJs, slogans, ads, invented songs, placeholder loops per genre), DJs reacting to storms, tickets, new systems and deliveries, a regional station, a pirate station, a night-only station and a hidden numbers station
-  - [ ] Your music for the stations (you're making these!), DJ voices
+  - [x] Round 14: Mega Man Legends-style hand-painted textures and painted bevels on every box; calmer late-90s wobble
+  - [x] Round 14: HOSHIZORA 83, the Japanese station, playing your first three tracks
+  - [ ] Your music for the other stations, DJ voices
   - [ ] Glow pass, 3D cockpit radar globe, neon hub lighting polish
 - [ ] **M5: Life in space** *(much of it pulled forward)*
   - [x] Comm calls with static and placeholder portraits; chatter from dispatch, truckers, traffic control, hosts and the space patrol; funny ship ID labels; screen shake

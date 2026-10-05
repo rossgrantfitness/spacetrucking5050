@@ -41,12 +41,11 @@ func _process(delta: float) -> void:
 func _draw_prompt() -> void:
 	_draw_wallet()
 	if _notice_left > 0.0 and not _notice.is_empty():
-		var square := 3.0
-		var width := PixelFont.width(_notice, square)
-		var box := Rect2(Vector2((_canvas.size.x - width) * 0.5 - 16.0, 70.0), Vector2(width + 32.0, 40.0))
-		_canvas.draw_rect(box, Color(0.05, 0.06, 0.2, 0.85))
-		_canvas.draw_rect(box, Color(1.0, 0.45, 0.4), false, 2.0)
-		PixelFont.draw(_canvas, box.position + Vector2(16.0, 9.0), _notice, square, Color.WHITE, 0.15)
+		var notice_width := PixelFont.width(_notice, 3.0)
+		var notice_box := Rect2(Vector2((_canvas.size.x - notice_width) * 0.5 - 16.0, 70.0), Vector2(notice_width + 32.0, 40.0))
+		_canvas.draw_rect(notice_box, Color(0.05, 0.06, 0.2, 0.85))
+		_canvas.draw_rect(notice_box, Color(1.0, 0.45, 0.4), false, 2.0)
+		PixelFont.draw(_canvas, notice_box.position + Vector2(16.0, 9.0), _notice, 3.0, Color.WHITE, 0.15)
 	if player == null or player.is_busy() or Dialogue.is_active():
 		return
 	var target := player.nearest_interactable()

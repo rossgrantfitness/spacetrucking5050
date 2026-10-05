@@ -48,6 +48,8 @@ tools/validate.sh                                    # check everything
 godot --headless --path . -s tools/run_tests.gd      # just the self-tests
 godot --headless --path . -s tools/validate_project.gd -- scenes/boot/Boot.gd   # check one file
 godot --headless --path . -s tools/setup_input_map.gd                           # reset controls
+godot --headless --path . -s tools/paint_textures.gd      # repaint the hand-painted textures
+godot --headless --path . -s tools/build_bunny.gd         # rebuild the bunny from her 3D model
 tools/capture.sh 60 /tmp/shots                       # 2 seconds of the main scene as PNGs
 tools/capture.sh 90 /tmp/shots res://scenes/flight/FlightSandbox.tscn          # the flight sandbox
 RES=800x600 tools/capture.sh 60 /tmp/shots                                     # another window size

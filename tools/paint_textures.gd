@@ -110,8 +110,8 @@ func _panel(image: Image, rect: Rect2i, base: Color, raised: bool = true, bevel:
 	var inside := rect.grow(-1)
 	_fill(image, inside, base)
 	# Painted shading bands: a lighter top fifth, a darker bottom quarter.
-	_shade(image, Rect2i(inside.position, Vector2i(inside.size.x, maxi(inside.size.y / 5, 1))), 1.05)
-	var low := maxi(inside.size.y / 4, 1)
+	_shade(image, Rect2i(inside.position, Vector2i(inside.size.x, maxi(floori(inside.size.y / 5.0), 1))), 1.05)
+	var low := maxi(floori(inside.size.y / 4.0), 1)
 	_shade(image, Rect2i(inside.position.x, inside.end.y - low, inside.size.x, low), 0.93)
 	var light := _tone(base, 1.28 if raised else 0.68)
 	var dark := _tone(base, 0.68 if raised else 1.22)
@@ -275,7 +275,7 @@ func _floor_tiles() -> Image:
 				# Raised diamonds: a lit pixel and a dark one, in staggered rows.
 				for y in range(4, 28, 4):
 					for x in range(4, 28, 6):
-						var offset := 3 if (y / 4) % 2 == 0 else 0
+						var offset := 3 if floori(y / 4.0) % 2 == 0 else 0
 						_dot(image, cell.position.x + x + offset, cell.position.y + y, _tone(base, 1.35))
 						_dot(image, cell.position.x + x + offset + 1, cell.position.y + y + 1, _tone(base, 0.6))
 			for corner: Vector2i in [Vector2i(2, 2), Vector2i(28, 2), Vector2i(2, 28), Vector2i(28, 28)]:
@@ -469,7 +469,7 @@ func _machinery() -> Image:
 				var color := Color(0.92, 0.9, 0.82) if r <= 40 else _tone(base, 0.45 if (x + y) > 0 else 1.25)
 				_dot(image, gauge_center.x + x, gauge_center.y + y, color)
 	for i in 5:
-		_dot(image, gauge_center.x - 3 + i, gauge_center.y - i / 2 + 1, Color(0.85, 0.15, 0.1))
+		_dot(image, gauge_center.x - 3 + i, gauge_center.y - floori(i / 2.0) + 1, Color(0.85, 0.15, 0.1))
 	_dot(image, gauge_center.x, gauge_center.y, Color(0.1, 0.1, 0.1))
 	# Right: dials, a hazard-striped breaker and a vent.
 	_panel(image, Rect2i(66, 6, 58, 30), _tone(base, 0.95))

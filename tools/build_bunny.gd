@@ -76,18 +76,18 @@ func _cut(source: Mesh) -> void:
 		var key := _key(positions[corner])
 		if not parent.has(key):
 			parent[key] = key
-	for t in indices.size() / 3:
+	for t in floori(indices.size() / 3.0):
 		var a := _key(positions[indices[t * 3]])
 		for k in range(1, 3):
 			_union(parent, a, _key(positions[indices[t * 3 + k]]))
 	var shells := {}
-	for t in indices.size() / 3:
-		var root: String = _find(parent, _key(positions[indices[t * 3]]))
-		if not shells.has(root):
-			shells[root] = []
-		(shells[root] as Array).append(t)
-	for root: String in shells:
-		var triangles: Array = shells[root]
+	for t in floori(indices.size() / 3.0):
+		var shell_key: String = _find(parent, _key(positions[indices[t * 3]]))
+		if not shells.has(shell_key):
+			shells[shell_key] = []
+		(shells[shell_key] as Array).append(t)
+	for shell: String in shells:
+		var triangles: Array = shells[shell]
 		var box := AABB(positions[indices[triangles[0] * 3]], Vector3.ZERO)
 		var center := Vector3.ZERO
 		for t: int in triangles:

@@ -61,7 +61,7 @@ First, a few seconds of **power-on intro** (a self test types itself out,
 then the logo and a chime; any key skips it). Then the **title screen**: the title and a lazily tumbling cargo
 crate. (A small "test your keys and gamepad" link opens an input check where
 every control lights up when you press it.) Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
-wake up in your apartment on the base, or to **continue** where you left off
+wake up in your apartment (inside your rig, parked at the truck stop), or to **continue** where you left off
 (the game saves itself whenever you walk into a room, take a job, get paid
 or buy something). The small buttons below jump straight into flying, or
 start a **new game** (that forgets your save). See `PLAYTEST.md` for what
@@ -94,7 +94,7 @@ Y = △.)
 | Radio on / off | **R** | D-pad **up** |
 | Hide / show the HUD | **H** | D-pad **down** |
 | Chart a course (autopilot) | **M** | **Back** / **View** |
-| Get up and walk around the cabin (on autopilot) | **F** | **X** |
+| Get up and walk around inside the rig (on autopilot) | **F** | **X** |
 | Reply to a comm call, then pick one | **T**, then **Q** / **R** / **E** (or **1** / **2** / **3**) | **RB**, then D-pad **left** / **up** / **right** |
 | Logbook (sights you've seen) | **L** | (pause menu) |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
@@ -133,8 +133,7 @@ knocked around you hear it thump in the hold, feel a jolt, the cargo hold
 flashes orange on the little rig picture (bottom right), and a word under
 the RIDE bar says why: HARD TURN, BRAKING or BOOST SHAKE. Damaged cargo
 pays a smaller care bonus. Speeding up straight ahead never hurts it.
-Docking at the home base fills both tanks for free; at the truck stop,
-Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
+At the truck stop, Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
 upgrades, **new rigs** (each with its own handling; bigger holds pay more
 per job) and **paint jobs**.
 
@@ -146,7 +145,7 @@ last save, nothing lost. (Crashes can be switched off in tuning.tres,
 
 **Docking:** fly through the big glowing **ring** in front of a station's
 bay and the autopilot takes over and parks you. Then you climb out and walk
-around inside (the base, the truck stop, Tidewater Cannery's canteen,
+around inside (the truck stop, Tidewater Cannery's canteen,
 where Gill works, and The High Roller, Sal's casino in the Glimmer System). The **Gas-N-Go 47** is a drive-through: fly through
 either ring, pull up under the canopy, buy cheap fuel, Moe's calming jerky
 or a souvenir, maybe take a side job, and you roll out the far side still
@@ -174,11 +173,21 @@ the rig, so you can't knock off the autopilot. Press **V** again to go to
 the free camera, and once more for the chase cam (or **C**). Getting up,
 arriving, a crash, or the autopilot switching off also brings you back.
 
-**Get up (F / X) while the autopilot drives:** walk around your rig's
-sleeper cabin (your apartment is the rig's cabin). Walk out the cabin door
-to get back in the seat. Lie down on the bed to **nap**: the trip
-fast-forwards until you wake up (any key) or arrive. Arriving always puts
+**Home is the inside of your rig.** Behind the cab are the dispatch office
+(Dottie rides along), a hallway with the airlock, and your apartment.
+**Get up (F / X) while the autopilot drives:** you come down the cockpit
+stairs into dispatch and can walk all of it while the rig keeps flying.
+The **COCKPIT** door at the top of the stairs puts you back in the seat.
+Lie down on your bed and choose **SLEEP TILL WE GET THERE**: you wake up
+back in the seat just outside the next stop on your course. The trip still
+uses its fuel, and a rush job's clock still runs. Arriving always puts
 you back in the seat.
+
+**Her computer** (the desk in the apartment, **E** / **A**): CARROT OS.
+**Mail** arrives as the story goes along, **Invoices** lists everything
+you've been paid for, and **Asteroid Alley** is a little game: hop lanes
+with left / right, dodge rocks, grab fuel cans. Esc backs out; the mouse
+works too. Parked, the bed starts a **new day**.
 
 **Talk back:** after a comm call, "T: REPLY" shows under it. Press T (RB),
 then pick one of three things Jack says back. Just flavor; nothing changes.
@@ -227,20 +236,23 @@ blips). The engine is quieter than before so the music comes first.
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
 opens the pause menu); click the game window to pick the steering back up.
 
-### Walking around the base
+### Walking around (your rig and the stations)
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Walk | **W A S D** (or arrow keys) | Left stick |
 | Run (hold) | **Shift** | **X** (or click the left stick) |
-| Talk / use / board the ship | **E** | **A** |
+| Talk / use / board your rig | **E** | **A** |
 | Pause menu | **Esc** | **Start** |
 
 "Up" always walks away from the camera. Doors take you to the next room
-when you walk into them. The ship door at the top of the dispatch stairs
-(and the airlock at the truck stop) needs **E** / **A**. To get back from
-flying, dock at a station by flying through its ring, or pause → **Get
-towed home**. Your money is in the top-right corner.
+when you walk into them. Inside your rig: the **AIRLOCK** door in the
+hallway steps out into whatever station you're parked at, and the
+**COCKPIT** door at the top of the dispatch stairs takes the wheel. At a
+station, its airlock (**BOARD YOUR RIG**) brings you back into your
+hallway. Those need **E** / **A**. To get back from flying, dock at a
+station by flying through its ring, or pause → **Get towed to the truck
+stop**. Your money is in the top-right corner.
 
 ### Menus
 
@@ -283,7 +295,17 @@ and the distance haze. The game draws at your screen's own resolution (any
 window from 800x600 up to 4K). The haze *color* belongs
 to each solar system, in `data/systems/home_system.tres`.
 
-**The base's rooms** are `scenes/hub/Apartment.tscn`, `Hallway.tscn` and
+**The look (round 14):** the hand-painted textures (walls, floors, hulls,
+crates, machinery...) are painted by `tools/paint_textures.gd`; tweak and
+re-run it with `godot --headless --path . -s tools/paint_textures.gd`.
+Every box also gets painted bevels and shadow automatically
+(`shaders/painted_edges.gdshaderinc`). **The bunny** is your 3D model in
+`assets/characters/bunny/` (the .obj and its texture), cut into parts and
+made chibi by `tools/build_bunny.gd`: the CHIBI numbers at the top of that
+file set head size, leg length and so on. Replace the model (same file
+names) and re-run it to update her.
+
+**Your rig's rooms** are `scenes/hub/Apartment.tscn`, `Hallway.tscn` and
 `Dispatch.tscn`. Open one and look under **Shots**: each shot has a
 **Camera** (select it, then tick *Preview* in the 3D view to look through
 it) and a **Zone** box (where that camera is used). Move and re-aim them

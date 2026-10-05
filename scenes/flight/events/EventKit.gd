@@ -46,8 +46,8 @@ static func edged(material: Material, size: Vector3) -> Material:
 	var shaded := material as ShaderMaterial
 	if shaded == null or shaded.shader != SURFACE_SHADER:
 		return material
-	var glow: Variant = shaded.get_shader_parameter("emission_strength")
-	if glow != null and float(glow) > 0.0:
+	var brightness: Variant = shaded.get_shader_parameter("emission_strength")
+	if brightness != null and float(brightness) > 0.0:
 		return material
 	var smallest := minf(size.x, minf(size.y, size.z))
 	var width := 0.2 if smallest < 4.0 else (1.5 if smallest < 40.0 else 6.0)

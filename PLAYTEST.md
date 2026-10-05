@@ -1,81 +1,67 @@
-# Playtest: rounds 12 and 13
+# Playtest: round 14 (the new look, your bunny, home is the rig, her PC)
 
-You said your last notes were from round 11, so this playtest covers
-**both** rounds you haven't played yet.
+**What you asked for:** a look more like Mega Man Legends (especially the
+textures), your bunny model (more chibi), the inside of the truck as the
+home base, a computer in the apartment with email, invoices and a game,
+a bed that sleeps you to your destination, and your Japanese radio tracks.
 
-**Time needed:** about 30 minutes.
+**Time needed:** about 30 minutes. **Start a new game** (the title
+screen's small NEW GAME button): the start of the game changed.
 
-> Honest note: I tested everything with automated runs and screenshots
-> (each cinema shot, the pause menu, every hub arrival spot), but how the
-> autopilot nudges feel, whether the cinema shots are pretty, and whether
-> the sound balance is right are yours to judge.
+> Honest note: I checked everything with automated play-throughs and
+> screenshots, but whether it now *feels* like Mega Man Legends, and
+> whether she's chibi enough, is your call.
 
 ---
 
-## Round 13 (what you just asked for)
+## What's new
 
-- **The autopilot forgives small nudges.** A light touch on the stick just
-  leans the rig a little, and the autopilot steers it back on course when
-  you let go. To take over, **hold** the stick firmly (or the throttle) for
-  about half a second; "HOLD TO TAKE THE WHEEL" shows as you start. Boost
-  still takes over instantly.
-- **The hub camera always finds the bunny.** The two rooms where she
-  arrived off-screen (walking into dispatch and into the hallway) are
-  fixed, and if a camera ever loses her for a moment, the room switches to
-  one that can see her.
-- **The cinema camera: V (R3, click the right stick), on autopilot.**
-  - A **director** picks shots by itself and cuts every 7-10 seconds: a
-    slow orbit, a tracking shot alongside, a **fly-by** (the camera waits
-    ahead and the rig whooshes past), a low hero shot, a long-lens wide
-    shot, a high shot from behind. Film bars; the HUD tucks away.
-  - **Touch the stick or mouse and the camera is yours:** swing all the way
-    around the rig, zoom with W / S (triggers) or the mouse wheel.
-  - The stick never steers the rig in this mode, so you can't knock off the
-    autopilot. **V** again → free camera, once more → back to the chase cam.
-- **Quieter engine, and volume sliders.** The engine and boost hum is
-  about half as loud. The pause menu (Esc) now has **Music (radio)**,
-  **Sound effects** and **Voices** sliders.
-
-## Round 12 (the one you skipped)
-
-- **Crashes:** hit something at **boost speed** (or let bonks wear the
-  hull down to nothing) and the rig **loses control**, tumbles, and
-  **blows up**. Then a **WRECKED** card, and you're **back at your last
-  save**, nothing lost. Cruise-speed bonks are still just bonks.
-- **Boost is about 30% faster and wilder:** a wider view, more shake, more
-  slide, and **boost jolts** (the engines cough and shove you sideways).
-  Tidewater is now about 4½ minutes on full boost (it was 6).
-- **Half the space dust**, and **about 8% more traffic** near stations.
-- Your design language document is saved as `docs/DESIGN_LANGUAGE.md`.
+- **Hand-painted textures everywhere.** Walls, floors, hulls, crates and
+  consoles are painted like late-PS1 textures: beveled panels, rivets,
+  vents, stencils, rust streaks, the shading painted in. Every box gets
+  painted edges and a shadow at the bottom, and nothing is a flat color
+  any more. The wobble is calmer (late-90s shimmer instead of early jelly).
+- **Your bunny.** Your model, cut into parts so she walks, swings her arms
+  and her lop ears trail behind. She's more chibi: a bigger head, much
+  shorter legs, bigger boots (2.5 heads tall, was about 3.5).
+- **Home is the inside of your rig.** You wake up in your apartment, in
+  the rig, **parked at the truck stop**. Hallway → the **AIRLOCK** door
+  (5051) steps outside into the truck stop. **Dispatch** (Dottie rides
+  along) has the stairs up to the **COCKPIT**: take the wheel there. At
+  any station, **BOARD YOUR RIG** brings you back into your hallway.
+  On autopilot, **F / X** brings you down the cockpit stairs and you can
+  walk all three rooms while it flies. The old base is now the company's
+  HQ, out the window as scenery.
+- **Her PC** (the desk in the apartment): **Mail**, **Invoices** and
+  **Asteroid Alley** (left / right to hop lanes).
+- **The bed.** In flight: **SLEEP TILL WE GET THERE**, and you wake up in
+  the seat just outside the next stop. Parked: **SLEEP** starts a new day.
+- **HOSHIZORA 83** on the radio (83.0, DJ Tanu-chan) plays your three
+  tracks.
 
 ## Try this
 
-1. Start a new game. Walk from the apartment to the hallway to dispatch.
-   Is she always on screen when you come through a door?
-2. Take a job, launch, press **M** and chart a course. Nudge the stick a
-   little, then let go: does the autopilot keep going and steer back?
-   Then hold the stick hard to take over.
-3. Chart a course again and press **V**. Watch the director for a minute
-   with the radio on. Then touch the stick and fly the camera around the
-   rig. Press **V** to get back.
-4. Open the pause menu and set the three sliders how you like them.
-5. Round 12: **boost**, feel the jolts, then **boost into a rock** and
-   watch the crash.
+1. New game. Look around the apartment. Do the walls, floor and props
+   read as "hand-painted PS1" now? Walk her around: chibi enough?
+2. Sit at the computer. Read some mail, play a round of Asteroid Alley.
+3. Walk out to the hallway, step through the AIRLOCK, take Marge's job,
+   come back aboard, go through dispatch and up to the COCKPIT.
+4. Chart a course (M), tune to **HOSHIZORA 83**, then get up (F), walk to
+   your bed and sleep till you get there.
+5. Look at the rig in the cinema camera (V): do the new hull textures
+   work for you?
 
 ## Questions for you
 
-1. **Autopilot nudges:** is the amount it tolerates right? Should taking
-   over need a firmer or a lighter grab?
-2. **Cinema camera:** which shots do you like, and which would you cut?
-   Should the director cut faster or slower than every 7-10 seconds?
-3. **Sound:** with the engine at the new level, can you hear the music
-   while cruising and boosting? What did you set the sliders to? (I'll
-   make that the default.)
-4. **Crashes (round 12):** dramatic enough? Too long or too short?
-5. **Boost (round 12):** faster and wilder in a good way, or too much? Are
-   the jolts fun or annoying?
-
-**Still missing:** the reference files you mentioned in round 12
-(spaceship designs, music for a Japanese radio station, the bunny's 3D
-model and character sheet) aren't in the repo yet. Push them to the
-branch, or upload them here, and I'll use them next.
+1. **The look:** closer to Mega Man Legends now? Which surfaces still look
+   too "early 3D"? (Characters other than the bunny are still the old
+   blocky placeholders.)
+2. **The bunny:** right proportions now? Bigger head, shorter legs? And
+   the dark tips on her ears come from her texture: keep them or fix them?
+3. **Home in the rig:** does walking out of the airlock into the station
+   feel right? Should Dottie and the neighbors live aboard, or should the
+   rig just be you (and maybe a pet)?
+4. **The PC:** what else should it have? (Ideas: a photo folder that slowly
+   fills with memories, a music player, a shopping site for decor.)
+5. **Your ship sheets** (next round, as rigs to buy): any you want first,
+   and how should each one handle? (Heavy and slow, zippy...)

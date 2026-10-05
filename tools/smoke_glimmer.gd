@@ -75,8 +75,21 @@ func _process(_delta: float) -> bool:
 				_player().global_position = Vector3(9.8, 0.0, 5.8)
 				_next(Step.BOARD)
 		Step.BOARD:
-			if waited % 10 == 0 and current_scene != null and current_scene.name == "HighRollerLounge":
-				_tap("interact")
+			# Board the rig (into its hallway), through dispatch, up to the
+			# cockpit door.
+			if current_scene != null and current_scene.get("_ready_to_play") == true:
+				match current_scene.name:
+					"Hallway":
+						if _player().global_position.z > -19.0:
+							_player().global_position = Vector3(0.0, 0.0, -19.6)
+					"Dispatch":
+						if _player().global_position.y < 2.0:
+							_player().global_position = Vector3(3.6, 2.45, -3.6)
+						if waited % 10 == 0:
+							_tap("interact")
+					_:
+						if waited % 10 == 0:
+							_tap("interact")
 			if current_scene != null and current_scene.name == "FlightSandbox":
 				if _game.get("launch_from") != "high_roller":
 					push_error("Smoke Glimmer: after the casino, the rig should launch from there")

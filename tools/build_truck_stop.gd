@@ -288,7 +288,7 @@ func _garage(room: Node3D, body: StaticBody3D, dark: Material, metal: Material) 
 
 ## Lily's pumps: a kiosk counter with a raised floor behind it, a menu
 ## board, and two big retro fuel pumps.
-func _pumps(room: Node3D, body: StaticBody3D, dark: Material, _metal: Material) -> void:
+func _pumps(room: Node3D, body: StaticBody3D, _dark: Material, _metal: Material) -> void:
 	_piece(room, body, "PumpCounter", Vector3(4.0, 1.0, 0.8), Vector3(10.0, 0.5, 3.5), _set_paint(Color(0.3, 0.75, 0.55)))
 	_box(room, "PumpCounterTop", Vector3(4.2, 0.08, 1.0), Vector3(10.0, 1.04, 3.5), _set_paint(Color(0.9, 0.9, 0.85)))
 	_piece(room, body, "PumpPlatform", Vector3(4.0, 0.3, 2.0), Vector3(10.0, 0.15, 2.0), _set_paint(Color(0.32, 0.32, 0.4)))
