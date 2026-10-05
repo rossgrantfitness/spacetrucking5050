@@ -13,7 +13,7 @@ extends SceneTree
 ## autoloads they use exist, so it pokes at them by name.)
 
 
-enum Step { FLY, CALL, REPLY, RADIO, CINEMA, CABIN, NAP, WAKE, DONE }
+enum Step { FLY, CALL, REPLY, RADIO, CINEMA, CABIN, WALK, NAP, WAKE, DONE }
 
 var _frame := 0
 var _step := Step.FLY
@@ -90,10 +90,24 @@ func _process(_delta: float) -> bool:
 					_fail("getting up should leave the cinema camera")
 				if not current_scene.get_node("World/Ship").get("controls").get("hands_free"):
 					_fail("in the cabin, the rig's controls should ignore the keys")
-				current_scene.call("_nap")
-				_next(Step.NAP)
+				if room.name != "Dispatch":
+					_fail("getting up should bring you down the cockpit stairs into dispatch")
+				# Walk through the rig to the apartment (the hallway door).
+				current_scene.call("_walk_to_room", "res://scenes/hub/Hallway.tscn", "FromDispatch")
+				_next(Step.WALK)
 			elif waited > 3000:
 				_fail("the cabin should open")
+		Step.WALK:
+			var here: Node = current_scene.get("_cabin_room")
+			if here != null and here.name == "Hallway" and here.get("_ready_to_play") == true:
+				current_scene.call("_walk_to_room", "res://scenes/hub/Apartment.tscn", "FromHallway")
+			if here != null and here.name == "Apartment" and here.get("_ready_to_play") == true:
+				if here.get_node_or_null("NapBed") == null:
+					_fail("in flight, the apartment's bed should be for napping")
+				current_scene.call("_nap")
+				_next(Step.NAP)
+			elif waited > 4000:
+				_fail("walking between the rig's rooms in flight got stuck")
 		Step.NAP:
 			if waited == 30:
 				if Engine.time_scale <= 1.0:

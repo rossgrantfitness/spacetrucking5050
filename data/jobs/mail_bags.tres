@@ -6,7 +6,7 @@
 script = ExtResource("1_job")
 id = "mail_bags"
 cargo_name = "Mail bags"
-client_name = "Base Post Office"
+client_name = "Interstellar Post"
 description = "Postcards, bills and a suspicious number of catalogs. Nothing breakable."
 from_place = "base"
 to_place = "truck_stop"

@@ -19,7 +19,7 @@ script = ExtResource("1_mf01i")
 front_text = "THE HIGH ROLLER  53 KM
 GLIMMER SYSTEM"
 back_text = "TRUCK STOP  3 KM
-HOME BASE  13 KM"
+COMPANY HQ  13 KM"
 board_color = Color(0.4, 0.1, 0.35, 1)
 
 [node name="Sign15Km" type="Node3D" parent="." unique_id=1543595139]
@@ -37,7 +37,7 @@ script = ExtResource("1_mf01i")
 front_text = "GLIMMER SYSTEM  3 KM
 PLEASE GAMBLE RESPONSIBLY"
 back_text = "TRUCK STOP  27 KM
-HOME BASE  37 KM"
+COMPANY HQ  37 KM"
 board_color = Color(0.4, 0.1, 0.35, 1)
 
 [node name="Sign40Km" type="Node3D" parent="." unique_id=1857659142]

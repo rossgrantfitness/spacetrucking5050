@@ -56,8 +56,9 @@ var active_ship: String = "lazy_susan"
 var paint: String = "factory"
 ## Upgrades bought (their ids).
 var owned_upgrades: Array[String] = []
-## Which place the rig launches from next time you board (a place id).
-var launch_from: String = "base"
+## Where the rig is parked (a place id): it launches from here, and the
+## rig's airlock opens onto this place. (Home is the inside of the rig.)
+var launch_from: String = "truck_stop"
 ## The room you were last in (a scene path), for "Continue".
 var current_room: String = ""
 ## Jobs that can't be done again (ids of delivered non-repeatable jobs).
@@ -340,7 +341,7 @@ func new_game() -> void:
 	owned_ships = ["lazy_susan"]
 	active_ship = "lazy_susan"
 	paint = "factory"
-	launch_from = "base"
+	launch_from = "truck_stop"  # She wakes up in her rig, parked at the truck stop.
 	current_room = ""
 	finished_jobs = []
 	visits = {}

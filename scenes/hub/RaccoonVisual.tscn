@@ -273,7 +273,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("MggsvXsULj4K1yO+lUMLPVK4Hj6uR2G+MggsPXsULj4K1yO+MggsvXsULj4K1yO+lUMLvVK4Hj6uR2G+lUMLPVK4Hj6uR2G+MggsPXsULj4K1yO+KVyPPUa28z2uR2G+7FG4PSPb+T0K1yO+MggsPXsULj4K1yO+lUMLPVK4Hj6uR2G+KVyPPUa28z2uR2G+7FG4PSPb+T0K1yO+KVyPPRbZzj2uR2G+7FG4PTm0yD0K1yO+7FG4PSPb+T0K1yO+KVyPPUa28z2uR2G+KVyPPRbZzj2uR2G+7FG4PTm0yD0K1yO+lUMLPbgehT2uR2G+MggsPc3MTD0K1yO+7FG4PTm0yD0K1yO+KVyPPRbZzj2uR2G+lUMLPbgehT2uR2G+MggsPc3MTD0K1yO+lUMLvbgehT2uR2G+Mggsvc3MTD0K1yO+MggsPc3MTD0K1yO+lUMLPbgehT2uR2G+lUMLvbgehT2uR2G+Mggsvc3MTD0K1yO+KVyPvRbZzj2uR2G+7FG4vTm0yD0K1yO+Mggsvc3MTD0K1yO+lUMLvbgehT2uR2G+KVyPvRbZzj2uR2G+7FG4vTm0yD0K1yO+KVyPvUa28z2uR2G+7FG4vSPb+T0K1yO+7FG4vTm0yD0K1yO+KVyPvRbZzj2uR2G+KVyPvUa28z2uR2G+7FG4vSPb+T0K1yO+lUMLvVK4Hj6uR2G+MggsvXsULj4K1yO+7FG4vSPb+T0K1yO+KVyPvUa28z2uR2G+lUMLvVK4Hj6uR2G+MggsvXsULj4K1yO+MggsPXsULj4K1yO+7FG4PSPb+T0K1yO+lUMLvVK4Hj6uR2G+KVyPPUa28z2uR2G+lUMLPVK4Hj6uR2G+MggsvXsULj4K1yO+7FG4PSPb+T0K1yO+7FG4PTm0yD0K1yO+lUMLvVK4Hj6uR2G+KVyPPRbZzj2uR2G+KVyPPUa28z2uR2G+MggsvXsULj4K1yO+7FG4PTm0yD0K1yO+MggsPc3MTD0K1yO+lUMLvVK4Hj6uR2G+lUMLPbgehT2uR2G+KVyPPRbZzj2uR2G+MggsvXsULj4K1yO+MggsPc3MTD0K1yO+Mggsvc3MTD0K1yO+lUMLvVK4Hj6uR2G+lUMLvbgehT2uR2G+lUMLPbgehT2uR2G+MggsvXsULj4K1yO+Mggsvc3MTD0K1yO+7FG4vTm0yD0K1yO+lUMLvVK4Hj6uR2G+KVyPvRbZzj2uR2G+lUMLvbgehT2uR2G+MggsvXsULj4K1yO+7FG4vTm0yD0K1yO+7FG4vSPb+T0K1yO+mZn//xgGwrCZmf//GAbCsJmZ//8YBsKwmZn//xgGwrCZmf//GAbCsJmZ//8YBsKwSspKyipaKtpKykrKKloq2krKSsoqWiraSspKyipaKtpKykrKKloq2krKSsoqWira////n4mdErv///+fiZ0Su////5+JnRK7////n4mdErv///+fiZ0Su////5+JnRK7Ssq0Nepmq6hKyrQ16marqErKtDXqZquoSsq0Nepmq6hKyrQ16marqErKtDXqZquomZkAAHke87yZmQAAeR7zvJmZAAB5HvO8mZkAAHke87yZmQAAeR7zvJmZAAB5HvO8tDW0NRRPFM+0NbQ1FE8Uz7Q1tDUUTxTPtDW0NRRPFM+0NbQ1FE8Uz7Q1tDUUTxTPAAD/n3ViErsAAP+fdWISuwAA/591YhK7AAD/n3ViErsAAP+fdWISuwAA/591YhK7tDVKyrtHq6i0NUrKu0erqLQ1Ssq7R6uotDVKyrtHq6i0NUrKu0erqLQ1Ssq7R6uo/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ix6vg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sw50y"]
 render_priority = 0
 shader = ExtResource("2_0pvdp")
 shader_parameter/painted_edges = true
@@ -292,11 +292,11 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_m05br"]
-material = SubResource("ShaderMaterial_ix6vg")
+[sub_resource type="BoxMesh" id="BoxMesh_3fr7m"]
+material = SubResource("ShaderMaterial_sw50y")
 size = Vector3(0.05, 0.035, 0.02)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bwlo7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cm4k4"]
 render_priority = 0
 shader = ExtResource("2_0pvdp")
 shader_parameter/painted_edges = true
@@ -315,15 +315,15 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_sw50y"]
-material = SubResource("ShaderMaterial_bwlo7")
+[sub_resource type="BoxMesh" id="BoxMesh_0g668"]
+material = SubResource("ShaderMaterial_cm4k4")
 size = Vector3(0.36, 0.08, 0.02)
 
-[sub_resource type="BoxMesh" id="BoxMesh_fcb6v"]
-material = SubResource("ShaderMaterial_bwlo7")
+[sub_resource type="BoxMesh" id="BoxMesh_dxmot"]
+material = SubResource("ShaderMaterial_cm4k4")
 size = Vector3(0.06, 0.07, 0.02)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqqi2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0w6t1"]
 render_priority = 0
 shader = ExtResource("2_0pvdp")
 shader_parameter/painted_edges = true
@@ -342,15 +342,15 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_haw05"]
-material = SubResource("ShaderMaterial_fqqi2")
+[sub_resource type="BoxMesh" id="BoxMesh_8ojsv"]
+material = SubResource("ShaderMaterial_0w6t1")
 size = Vector3(0.018, 0.018, 0.01)
 
-[sub_resource type="BoxMesh" id="BoxMesh_3fr7m"]
-material = SubResource("ShaderMaterial_bwlo7")
+[sub_resource type="BoxMesh" id="BoxMesh_eg40j"]
+material = SubResource("ShaderMaterial_cm4k4")
 size = Vector3(0.07, 0.03, 0.01)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_cm4k4"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_7cnab"]
 _surfaces = [{
 "aabb": AABB(-0.05, -0.02, -0.1, 0.1, 0.04, 0.1),
 "format": 34359738375,
@@ -361,7 +361,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("bxIDvQrXozwAAAAAhxbZPI/CdTzNzMy9bxIDPQrXozwAAAAAbxIDvQrXozwAAAAAhxbZvI/CdTzNzMy9hxbZPI/CdTzNzMy9bxIDPQrXozwAAAAACtcjPaabxDrNzMy9zcxMPW4SAzsAAAAAbxIDPQrXozwAAAAAhxbZPI/CdTzNzMy9CtcjPaabxDrNzMy9zcxMPW4SA7sAAAAAhxbZPI/CdbzNzMy9bxIDPQrXo7wAAAAAzcxMPW4SA7sAAAAACtcjPaabxLrNzMy9hxbZPI/CdbzNzMy9bxIDPQrXo7wAAAAAhxbZvI/CdbzNzMy9bxIDvQrXo7wAAAAAbxIDPQrXo7wAAAAAhxbZPI/CdbzNzMy9hxbZvI/CdbzNzMy9bxIDvQrXo7wAAAAACtcjvaabxLrNzMy9zcxMvW4SA7sAAAAAbxIDvQrXo7wAAAAAhxbZvI/CdbzNzMy9CtcjvaabxLrNzMy9zcxMvW4SAzsAAAAAhxbZvI/CdTzNzMy9bxIDvQrXozwAAAAAzcxMvW4SAzsAAAAACtcjvaabxDrNzMy9hxbZvI/CdTzNzMy9bxIDvQrXozwAAAAAbxIDPQrXozwAAAAAzcxMPW4SAzsAAAAAbxIDvQrXozwAAAAAzcxMPW4SA7sAAAAAbxIDPQrXo7wAAAAAhxbZvI/CdTzNzMy9hxbZPI/CdbzNzMy9CtcjPaabxLrNzMy9bxIDvQrXozwAAAAAbxIDPQrXo7wAAAAAbxIDvQrXo7wAAAAAhxbZvI/CdTzNzMy9hxbZvI/CdbzNzMy9hxbZPI/CdbzNzMy9F4b//00AzrwXhv//TQDOvBeG//9NAM68F4b//00AzrwXhv//TQDOvBeG//9NAM68MMMww8ZWxdYwwzDDxlbF1jDDMMPGVsXWMMMww8ZWxdYwwzDDxlbF1jDDMMPGVsXWMMPOPPNZgqoww84881mCqjDDzjzzWYKqMMPOPPNZgqoww84881mCqjDDzjzzWYKqF4YAAGIG2L8XhgAAYgbYvxeGAABiBti/F4YAAGIG2L8XhgAAYgbYvxeGAABiBti/zjzOPMhTyNPOPM48yFPI0848zjzIU8jTzjzOPMhTyNPOPM48yFPI0848zjzIU8jTzjwwwwZRgqrOPDDDBlGCqs48MMMGUYKqzjwwwwZRgqrOPDDDBlGCqs48MMMGUYKq/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g668"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iouqk"]
 render_priority = 0
 shader = ExtResource("2_0pvdp")
 shader_parameter/painted_edges = true
@@ -380,11 +380,11 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_dxmot"]
-material = SubResource("ShaderMaterial_0g668")
+[sub_resource type="BoxMesh" id="BoxMesh_pu1xe"]
+material = SubResource("ShaderMaterial_iouqk")
 size = Vector3(0.05, 0.06, 0.01)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_0w6t1"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_2fkmn"]
 _surfaces = [{
 "aabb": AABB(-0.05, -0.02, -0.1, 0.1, 0.04, 0.1),
 "format": 34359738375,
@@ -395,154 +395,154 @@ _surfaces = [{
 "vertex_data": PackedByteArray("bxIDvQrXozwAAAAAhxbZPI/CdTzNzMy9bxIDPQrXozwAAAAAbxIDvQrXozwAAAAAhxbZvI/CdTzNzMy9hxbZPI/CdTzNzMy9bxIDPQrXozwAAAAACtcjPaabxDrNzMy9zcxMPW4SAzsAAAAAbxIDPQrXozwAAAAAhxbZPI/CdTzNzMy9CtcjPaabxDrNzMy9zcxMPW4SA7sAAAAAhxbZPI/CdbzNzMy9bxIDPQrXo7wAAAAAzcxMPW4SA7sAAAAACtcjPaabxLrNzMy9hxbZPI/CdbzNzMy9bxIDPQrXo7wAAAAAhxbZvI/CdbzNzMy9bxIDvQrXo7wAAAAAbxIDPQrXo7wAAAAAhxbZPI/CdbzNzMy9hxbZvI/CdbzNzMy9bxIDvQrXo7wAAAAACtcjvaabxLrNzMy9zcxMvW4SA7sAAAAAbxIDvQrXo7wAAAAAhxbZvI/CdbzNzMy9CtcjvaabxLrNzMy9zcxMvW4SAzsAAAAAhxbZvI/CdTzNzMy9bxIDvQrXozwAAAAAzcxMvW4SAzsAAAAACtcjvaabxDrNzMy9hxbZvI/CdTzNzMy9bxIDvQrXozwAAAAAbxIDPQrXozwAAAAAzcxMPW4SAzsAAAAAbxIDvQrXozwAAAAAzcxMPW4SA7sAAAAAbxIDPQrXo7wAAAAAhxbZvI/CdTzNzMy9hxbZPI/CdbzNzMy9CtcjPaabxLrNzMy9bxIDvQrXozwAAAAAbxIDPQrXo7wAAAAAbxIDvQrXo7wAAAAAhxbZvI/CdTzNzMy9hxbZvI/CdbzNzMy9hxbZPI/CdbzNzMy9F4b//00AzrwXhv//TQDOvBeG//9NAM68F4b//00AzrwXhv//TQDOvBeG//9NAM68MMMww8ZWxdYwwzDDxlbF1jDDMMPGVsXWMMMww8ZWxdYwwzDDxlbF1jDDMMPGVsXWMMPOPPNZgqoww84881mCqjDDzjzzWYKqMMPOPPNZgqoww84881mCqjDDzjzzWYKqF4YAAGIG2L8XhgAAYgbYvxeGAABiBti/F4YAAGIG2L8XhgAAYgbYvxeGAABiBti/zjzOPMhTyNPOPM48yFPI0848zjzIU8jTzjzOPMhTyNPOPM48yFPI0848zjzIU8jTzjwwwwZRgqrOPDDDBlGCqs48MMMGUYKqzjwwwwZRgqrOPDDDBlGCqs48MMMGUYKq/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA")
 }]
 
-[sub_resource type="BoxMesh" id="BoxMesh_8ojsv"]
-material = SubResource("ShaderMaterial_bwlo7")
+[sub_resource type="BoxMesh" id="BoxMesh_vvodb"]
+material = SubResource("ShaderMaterial_cm4k4")
 size = Vector3(0.44, 0.03, 0.03)
 
-[sub_resource type="BoxMesh" id="BoxMesh_eg40j"]
-material = SubResource("ShaderMaterial_bwlo7")
+[sub_resource type="BoxMesh" id="BoxMesh_udkah"]
+material = SubResource("ShaderMaterial_cm4k4")
 size = Vector3(0.015, 0.015, 0.14)
 
-[node name="RaccoonVisual" type="Node3D" unique_id=1936982062]
+[node name="RaccoonVisual" type="Node3D" unique_id=281700675]
 script = ExtResource("1_ip6eg")
 
-[node name="LegLeft" type="Node3D" parent="." unique_id=1529606378]
+[node name="LegLeft" type="Node3D" parent="." unique_id=1950438991]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.34, 0)
 
-[node name="Leg" type="MeshInstance3D" parent="LegLeft" unique_id=694197733]
+[node name="Leg" type="MeshInstance3D" parent="LegLeft" unique_id=1367775806]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
 mesh = SubResource("BoxMesh_wbcs4")
 
-[node name="Boot" type="MeshInstance3D" parent="LegLeft" unique_id=155622551]
+[node name="Boot" type="MeshInstance3D" parent="LegLeft" unique_id=1712057716]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
 mesh = SubResource("BoxMesh_sh4rj")
 
-[node name="LegRight" type="Node3D" parent="." unique_id=2058276242]
+[node name="LegRight" type="Node3D" parent="." unique_id=948894268]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.34, 0)
 
-[node name="Leg" type="MeshInstance3D" parent="LegRight" unique_id=1275341327]
+[node name="Leg" type="MeshInstance3D" parent="LegRight" unique_id=1376265803]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.13, 0)
 mesh = SubResource("BoxMesh_wbcs4")
 
-[node name="Boot" type="MeshInstance3D" parent="LegRight" unique_id=461481906]
+[node name="Boot" type="MeshInstance3D" parent="LegRight" unique_id=524260087]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29, -0.03)
 mesh = SubResource("BoxMesh_sh4rj")
 
-[node name="Body" type="Node3D" parent="." unique_id=1641775056]
+[node name="Body" type="Node3D" parent="." unique_id=701109198]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 
-[node name="Torso" type="MeshInstance3D" parent="Body" unique_id=1924399244]
+[node name="Torso" type="MeshInstance3D" parent="Body" unique_id=587738642]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("ArrayMesh_v2fm6")
 
-[node name="Shirt" type="MeshInstance3D" parent="Body" unique_id=1935535687]
+[node name="Shirt" type="MeshInstance3D" parent="Body" unique_id=1356289264]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, -0.105)
 mesh = SubResource("BoxMesh_yxol8")
 
-[node name="Tail" type="MeshInstance3D" parent="Body" unique_id=1134041960]
+[node name="Tail" type="MeshInstance3D" parent="Body" unique_id=1647888887]
 mesh = SubResource("ArrayMesh_50ita")
 
-[node name="Tail2" type="MeshInstance3D" parent="Body" unique_id=1258041388]
+[node name="Tail2" type="MeshInstance3D" parent="Body" unique_id=1360459305]
 mesh = SubResource("ArrayMesh_yrdj6")
 
-[node name="Tail3" type="MeshInstance3D" parent="Body" unique_id=1842599686]
+[node name="Tail3" type="MeshInstance3D" parent="Body" unique_id=1941947050]
 mesh = SubResource("ArrayMesh_app7h")
 
-[node name="Tail4" type="MeshInstance3D" parent="Body" unique_id=1639741849]
+[node name="Tail4" type="MeshInstance3D" parent="Body" unique_id=1597997266]
 mesh = SubResource("ArrayMesh_e2wj0")
 
-[node name="ArmLeft" type="Node3D" parent="Body" unique_id=1197202743]
+[node name="ArmLeft" type="Node3D" parent="Body" unique_id=830016993]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0.28, 0)
 
-[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=1847721330]
+[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=738853115]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, -0.1, 0)
 mesh = SubResource("BoxMesh_ndgo7")
 
-[node name="Paw" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=68035991]
+[node name="Paw" type="MeshInstance3D" parent="Body/ArmLeft" unique_id=368063260]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, -0.24, 0)
 mesh = SubResource("BoxMesh_8ac1y")
 
-[node name="ArmRight" type="Node3D" parent="Body" unique_id=1181974732]
+[node name="ArmRight" type="Node3D" parent="Body" unique_id=1711705889]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0.28, 0)
 
-[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmRight" unique_id=877768353]
+[node name="Sleeve" type="MeshInstance3D" parent="Body/ArmRight" unique_id=249041679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, -0.1, 0)
 mesh = SubResource("BoxMesh_ndgo7")
 
-[node name="Paw" type="MeshInstance3D" parent="Body/ArmRight" unique_id=1362929507]
+[node name="Paw" type="MeshInstance3D" parent="Body/ArmRight" unique_id=916751477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, -0.24, 0)
 mesh = SubResource("BoxMesh_8ac1y")
 
-[node name="Head" type="Node3D" parent="Body" unique_id=884692861]
+[node name="Head" type="Node3D" parent="Body" unique_id=1617946800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31, 0)
 
-[node name="Skull" type="MeshInstance3D" parent="Body/Head" unique_id=1503787593]
+[node name="Skull" type="MeshInstance3D" parent="Body/Head" unique_id=664808214]
 mesh = SubResource("ArrayMesh_fpcdq")
 
-[node name="Snout" type="MeshInstance3D" parent="Body/Head" unique_id=539262596]
+[node name="Snout" type="MeshInstance3D" parent="Body/Head" unique_id=778098686]
 mesh = SubResource("ArrayMesh_pxlik")
 
-[node name="Nose" type="MeshInstance3D" parent="Body/Head" unique_id=88972504]
+[node name="Nose" type="MeshInstance3D" parent="Body/Head" unique_id=945880704]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145, -0.225)
-mesh = SubResource("BoxMesh_m05br")
+mesh = SubResource("BoxMesh_3fr7m")
 
-[node name="Mask" type="MeshInstance3D" parent="Body/Head" unique_id=1100749333]
+[node name="Mask" type="MeshInstance3D" parent="Body/Head" unique_id=767824526]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, -0.172)
-mesh = SubResource("BoxMesh_sw50y")
+mesh = SubResource("BoxMesh_0g668")
 
-[node name="Eye" type="MeshInstance3D" parent="Body/Head" unique_id=1419831389]
+[node name="Eye" type="MeshInstance3D" parent="Body/Head" unique_id=2006803804]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.22, -0.18)
-mesh = SubResource("BoxMesh_fcb6v")
+mesh = SubResource("BoxMesh_dxmot")
 
-[node name="EyeShine" type="MeshInstance3D" parent="Body/Head" unique_id=746317650]
+[node name="EyeShine" type="MeshInstance3D" parent="Body/Head" unique_id=1086382676]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.078, 0.24, -0.192)
-mesh = SubResource("BoxMesh_haw05")
-
-[node name="Eye2" type="MeshInstance3D" parent="Body/Head" unique_id=1056503904]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.22, -0.18)
-mesh = SubResource("BoxMesh_fcb6v")
-
-[node name="EyeShine2" type="MeshInstance3D" parent="Body/Head" unique_id=839719836]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102, 0.24, -0.192)
-mesh = SubResource("BoxMesh_haw05")
-
-[node name="Eyelids" type="Node3D" parent="Body/Head" unique_id=1554035547]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.19)
-
-[node name="Lid" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=689932337]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0, 0)
-mesh = SubResource("BoxMesh_3fr7m")
-
-[node name="Lid2" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=2030526482]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
-mesh = SubResource("BoxMesh_3fr7m")
-
-[node name="EarLeft" type="Node3D" parent="Body/Head" unique_id=1065746971]
-transform = Transform3D(0.99280864, -0.119712204, 0, 0.119114146, 0.98784876, -0.09983342, 0.011951279, 0.09911548, 0.9950042, -0.1, 0.36, 0.03)
-
-[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=550045594]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("ArrayMesh_cm4k4")
-
-[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=1112620977]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.021)
-mesh = SubResource("BoxMesh_dxmot")
-
-[node name="EarRight" type="Node3D" parent="Body/Head" unique_id=1200213410]
-transform = Transform3D(0.99280864, 0.119712204, 0, -0.119114146, 0.98784876, -0.09983342, -0.011951279, 0.09911548, 0.9950042, 0.1, 0.36, 0.03)
-
-[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=1405053346]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("ArrayMesh_0w6t1")
-
-[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=846771881]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.021)
-mesh = SubResource("BoxMesh_dxmot")
-
-[node name="Headset" type="MeshInstance3D" parent="Body/Head" unique_id=1736962457]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("BoxMesh_8ojsv")
 
-[node name="Mic" type="MeshInstance3D" parent="Body/Head" unique_id=1042794021]
-transform = Transform3D(0.87758255, 0, 0.47942555, 0, 1, 0, -0.47942555, 0, 0.87758255, 0.2, 0.12, -0.12)
+[node name="Eye2" type="MeshInstance3D" parent="Body/Head" unique_id=658890046]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.22, -0.18)
+mesh = SubResource("BoxMesh_dxmot")
+
+[node name="EyeShine2" type="MeshInstance3D" parent="Body/Head" unique_id=1255606060]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102, 0.24, -0.192)
+mesh = SubResource("BoxMesh_8ojsv")
+
+[node name="Eyelids" type="Node3D" parent="Body/Head" unique_id=809646210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.19)
+
+[node name="Lid" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=477630897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0, 0)
 mesh = SubResource("BoxMesh_eg40j")
+
+[node name="Lid2" type="MeshInstance3D" parent="Body/Head/Eyelids" unique_id=1920508883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
+mesh = SubResource("BoxMesh_eg40j")
+
+[node name="EarLeft" type="Node3D" parent="Body/Head" unique_id=1857961867]
+transform = Transform3D(0.99280864, -0.119712204, 0, 0.119114146, 0.98784876, -0.09983342, 0.011951279, 0.09911548, 0.9950042, -0.1, 0.36, 0.03)
+
+[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=561925006]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("ArrayMesh_7cnab")
+
+[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarLeft" unique_id=130320472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.021)
+mesh = SubResource("BoxMesh_pu1xe")
+
+[node name="EarRight" type="Node3D" parent="Body/Head" unique_id=130484674]
+transform = Transform3D(0.99280864, 0.119712204, 0, -0.119114146, 0.98784876, -0.09983342, -0.011951279, 0.09911548, 0.9950042, 0.1, 0.36, 0.03)
+
+[node name="Ear" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=1753107374]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("ArrayMesh_2fkmn")
+
+[node name="InnerEar" type="MeshInstance3D" parent="Body/Head/EarRight" unique_id=577292247]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.021)
+mesh = SubResource("BoxMesh_pu1xe")
+
+[node name="Headset" type="MeshInstance3D" parent="Body/Head" unique_id=1953019044]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_vvodb")
+
+[node name="Mic" type="MeshInstance3D" parent="Body/Head" unique_id=1643336488]
+transform = Transform3D(0.87758255, 0, 0.47942555, 0, 1, 0, -0.47942555, 0, 0.87758255, 0.2, 0.12, -0.12)
+mesh = SubResource("BoxMesh_udkah")

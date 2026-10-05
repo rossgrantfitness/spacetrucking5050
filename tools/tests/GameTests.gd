@@ -139,10 +139,10 @@ func test_conversations_follow_the_story() -> void:
 func test_chatter_knows_places() -> void:
 	var chatter: FlightChatter = load("res://data/dialogue/flight_chatter.tres")
 	var at_truck_stop := chatter.lines_for(ChatterSet.Situation.APPROACH, "truck_stop")
-	var at_base := chatter.lines_for(ChatterSet.Situation.APPROACH, "base")
-	check(not at_truck_stop.is_empty() and not at_base.is_empty(), "both places need approach calls")
+	var at_tidewater := chatter.lines_for(ChatterSet.Situation.APPROACH, "tidewater")
+	check(not at_truck_stop.is_empty() and not at_tidewater.is_empty(), "both places need approach calls")
 	for pair: Array in at_truck_stop:
-		check(not pair in at_base, "the truck stop's approach calls shouldn't play at the base")
+		check(not pair in at_tidewater, "the truck stop's approach calls shouldn't play at Tidewater")
 
 
 func test_radio_titles_and_playlists() -> void:

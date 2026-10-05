@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_place")
 id = "base"
-display_name = "HOME BASE"
+display_name = "YOUR RIG"
 interior_scene = "res://scenes/hub/Dispatch.tscn"
 arrival_spawn = "FromShip"
-free_fuel = true

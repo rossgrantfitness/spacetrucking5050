@@ -1,8 +1,14 @@
 class_name PlaceData
 extends Resource
-## A place you can fly to and dock at: the home base, the truck stop, and
-## (later) stations in other systems. Each gets its own .tres file in this
-## folder, and res://data/places/places.tres lists them all.
+## A place you can fly to and dock at: the truck stop, stations in other
+## systems, drive-throughs. Each gets its own .tres file in this folder, and
+## res://data/places/places.tres lists them all.
+##
+## One special place isn't out in space: "base" is YOUR RIG. Home is the
+## inside of the rig (the apartment, the hallway and the dispatch office
+## behind the cab), so it has no station in the flight scene. Jobs "from
+## base" are the ones dispatch hands you aboard: you pick them up wherever
+## the rig happens to be.
 ##
 ## In the flight scene, each place is a station with a node named after its
 ## `id` under "Places" (with a DockPoint, an approach ring or two, and a

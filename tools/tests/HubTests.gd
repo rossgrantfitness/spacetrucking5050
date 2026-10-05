@@ -64,6 +64,8 @@ func test_rooms_have_cameras_spawns_and_doors() -> void:
 					"%s: shot %s needs a Camera and a Zone/Shape" % [path, shot.name])
 		check(room.get_node("Spawns").get_child_count() > 0, "%s needs a spawn spot" % path)
 		for exit in room.get_node("Exits").get_children():
+			if exit.get("to_docked_place") == true:
+				continue  # The rig's airlock leads wherever the rig is parked.
 			var target: String = exit.get("target_scene")
 			check(ResourceLoader.exists(target), "%s: door %s leads to a missing scene %s" % [path, exit.name, target])
 			var spawn: String = exit.get("target_spawn")

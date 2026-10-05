@@ -14,7 +14,7 @@ signal back_to_start_pressed
 signal dock_pressed
 signal quit_to_title_pressed
 
-## On in flight: shows "Back to the start" and "Dock at the base", and the
+## On in flight: shows "Back to the start" and "Get towed to the truck stop", and the
 ## flying-only switches.
 @export var flying: bool = true
 

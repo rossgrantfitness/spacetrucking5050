@@ -6,10 +6,10 @@
 script = ExtResource("1_job")
 id = "slot_parts"
 cargo_name = "Used slot machine parts"
-client_name = "Base Scrapyard"
-description = "Reels, levers and a lot of little lights. Some of them still go DING."
+client_name = "Dusty's Garage"
+description = "Reels, levers and a lot of little lights. Some of them still go DING. Dusty says he can make something out of it."
 from_place = "high_roller"
-to_place = "base"
+to_place = "truck_stop"
 base_pay = 1250
 care_bonus = 0
 rush_seconds = 1080.0

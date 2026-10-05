@@ -48,8 +48,8 @@ func test_course_chart_offers_the_gas_n_go_when_its_on_the_way() -> void:
 	check(not from_truck_stop.is_empty() and from_truck_stop[0] == PackedStringArray(["tidewater"]), "the job's destination comes first")
 	check(PackedStringArray(["gas_n_go", "tidewater"]) in from_truck_stop, "Tidewater via the Gas-N-Go is offered (it's on the way)")
 	check(not PackedStringArray(["truck_stop"]) in from_truck_stop, "the place you're sitting at isn't offered")
-	var from_base := CourseChart.possible_courses(spots["base"]["launch"], places, "")
-	check(not PackedStringArray(["gas_n_go", "truck_stop"]) in from_base, "the Gas-N-Go isn't on the way to the truck stop")
+	var from_casino := CourseChart.possible_courses(spots["high_roller"]["launch"], places, "")
+	check(not PackedStringArray(["gas_n_go", "truck_stop"]) in from_casino, "from Glimmer, the Gas-N-Go isn't on the way to the truck stop")
 
 
 func test_systems_blend_by_distance() -> void:

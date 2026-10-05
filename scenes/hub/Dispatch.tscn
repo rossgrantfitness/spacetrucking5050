@@ -104,11 +104,10 @@ shape = SubResource("BoxShape3D_exit0")
 [node name="ShipDoor" type="Area3D" parent="Exits"]
 position = Vector3(3.6, 3.4, -4.2)
 script = ExtResource("4_exit")
-prompt = "BOARD SHIP"
+prompt = "TAKE THE WHEEL"
 target_scene = "res://scenes/flight/FlightSandbox.tscn"
 target_spawn = ""
 needs_button = true
-launch_from = "base"
 
 [node name="Shape" type="CollisionShape3D" parent="Exits/ShipDoor"]
 shape = SubResource("BoxShape3D_exit1")

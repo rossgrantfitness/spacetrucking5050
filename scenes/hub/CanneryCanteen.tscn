@@ -116,8 +116,9 @@ rotation = Vector3(0, 1.5708, 0)
 [node name="Airlock" type="Area3D" parent="Exits"]
 position = Vector3(9.3, 1, 5.5)
 script = ExtResource("4_exit")
-prompt = "BOARD SHIP"
-target_scene = "res://scenes/flight/FlightSandbox.tscn"
+prompt = "BOARD YOUR RIG"
+target_scene = "res://scenes/hub/Hallway.tscn"
+target_spawn = "FromAirlock"
 needs_button = true
 launch_from = "tidewater"
 

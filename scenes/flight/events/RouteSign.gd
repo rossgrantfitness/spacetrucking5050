@@ -7,7 +7,7 @@ extends RoadsideThing
 
 
 @export_multiline var front_text: String = "TIDEWATER  40 KM"
-@export_multiline var back_text: String = "HOME BASE  20 KM"
+@export_multiline var back_text: String = "COMPANY HQ  20 KM"
 @export var board_color: Color = Color(0.1, 0.45, 0.25)
 
 

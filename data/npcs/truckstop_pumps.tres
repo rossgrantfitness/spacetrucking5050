@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("met_lily")
-lines = PackedStringArray("Hi hi! Welcome to Lily's Pumps! Fuel, boost, snacks. Mostly fuel. The snacks are a lie.", "Your base's pumps are free, but out here you pay. Coasting's free everywhere though!")
+lines = PackedStringArray("Hi hi! Welcome to Lily's Pumps! Fuel, boost, snacks. Mostly fuel. The snacks are a lie.", "Fuel costs money, hon. Coasting's free everywhere though!")
 sets_flags = PackedStringArray("met_lily")
 opens_menu = "fuel"
 

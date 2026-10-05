@@ -98,7 +98,7 @@ func test_glimmer_jobs_line_up() -> void:
 		check(GameState.places.find(job.from_place) != null and GameState.places.find(job.to_place) != null, "%s goes between real places" % id)
 		check(job.from_place == "high_roller" or job.to_place == "high_roller", "%s comes from or goes to the casino" % id)
 	var cards := GameState.jobs.find("glimmer_cards")
-	check(cards.completes_flag == "glimmer_open" and cards.from_place == "base", "the cards come from the base and open up Glimmer")
+	check(cards.completes_flag == "glimmer_open" and cards.from_place == "base", "the cards come from dispatch (aboard the rig) and open up Glimmer")
 	check(GameState.jobs.find("sal_jumpsuits").requires_flag == "glimmer_open", "Sal's first story job waits for the first delivery")
 	check(GameState.jobs.find("sal_slot_machine").requires_flag == "sal_jumpsuits_done", "his second waits for the first")
 

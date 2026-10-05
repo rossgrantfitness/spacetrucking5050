@@ -1,9 +1,11 @@
 class_name BaseStation
 extends Node3D
-## The home base seen from space: a huge old starship where about 250
-## animals live. Its look is built by tools/build_world.gd; this script just
-## writes the base's name (from res://data/world_names.tres) on its side and
-## turns the habitat ring slowly.
+## The delivery company's HQ seen from space: a huge old starship where
+## about 250 animals work. (It used to be her home base; now home is the
+## inside of her rig, and the HQ is scenery until the day she can buy the
+## company.) Its look is built by tools/build_world.gd; this script just
+## writes its name (base_name in res://data/world_names.tres) on its side
+## and turns the habitat ring slowly.
 
 
 ## How fast the habitat ring turns, in radians per second.

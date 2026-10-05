@@ -21,10 +21,12 @@ extends Node
 ##                     autopilot rolls you out the far side, still moving
 ## - THE COURSE CHART (M / Back): pick a destination and the cruise
 ##   autopilot drives (CruisePilot.gd). Grab the controls to take over.
-## - THE CABIN (F / X on autopilot): get out of the seat and walk around
-##   the rig's sleeper cabin (the apartment scene, shown in a SubViewport
-##   while the flight keeps going). Walk out the door to get back in the
-##   seat. Napping on the bed fast-forwards the trip until you arrive.
+## - THE RIG'S INSIDE (F / X on autopilot): get out of the seat and walk
+##   around your home, which is the inside of the rig: down the cockpit
+##   stairs into dispatch, the hallway, your apartment (each room shown in a
+##   SubViewport while the flight keeps going). The cockpit door at the top
+##   of the stairs puts you back in the seat. Napping on the apartment's
+##   bed fast-forwards the trip until you arrive.
 ## - THE CINEMATIC CAMERA (V / R3 on autopilot): a film director picks
 ##   shots of the rig (CinemaCamera.gd); touch the stick and you hold the
 ##   camera yourself. V again goes back to the chase cam.
@@ -74,12 +76,17 @@ var _cabin_layer: CanvasLayer
 ## The cinematic camera and its black film bars (made in _ready).
 var _cinema: CinemaCamera
 var _letterbox: CanvasLayer
+var _cabin_view: SubViewport
+## Partway through walking into another room of the rig (fading).
+var _changing_room: bool = false
 var _cabin_room: HubRoom
 ## Napping: time runs fast until you wake up or arrive.
 var _napping: bool = false
 var _nap_screen: CanvasLayer
 
-const CABIN_SCENE := preload("res://scenes/hub/Apartment.tscn")
+## Getting up from the seat, you come down the cockpit stairs into dispatch.
+const CABIN_SCENE: String = "res://scenes/hub/Dispatch.tscn"
+const CABIN_SPAWN: String = "FromShip"
 ## Prices at the Gas-N-Go counter.
 const JERKY_PRICE: int = 15
 const KEYCHAIN_PRICE: int = 5
@@ -149,7 +156,7 @@ func _ready() -> void:
 		_quit_to_title())
 	_pause_menu.dock_pressed.connect(func() -> void:
 		_close_cabin()
-		_arrive("base"))
+		_arrive("truck_stop"))
 	_make_cinema()
 	_set_cockpit_view(false)
 	_capture_mouse()
@@ -440,18 +447,38 @@ func _open_cabin() -> void:
 	frame.stretch = true
 	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_cabin_layer.add_child(frame)
-	var view := SubViewport.new()
-	view.own_world_3d = true  # Its own little world: nothing in it touches space.
-	view.audio_listener_enable_3d = true
-	frame.add_child(view)
-	GameState.next_spawn = "FromHallway"  # Just inside the cabin door.
-	_cabin_room = CABIN_SCENE.instantiate() as HubRoom
+	_cabin_view = SubViewport.new()
+	_cabin_view.own_world_3d = true  # Its own little world: nothing in it touches space.
+	_cabin_view.audio_listener_enable_3d = true
+	frame.add_child(_cabin_view)
+	_load_cabin_room(CABIN_SCENE, CABIN_SPAWN)
+	_fade.fade_in()
+	_hud.show_banner("COCKPIT DOOR: BACK TO THE SEAT   YOUR BED: NAP", 5.0)
+
+
+## Puts one of the rig's rooms in the cabin view, arriving at `spawn`.
+func _load_cabin_room(scene_path: String, spawn: String) -> void:
+	if _cabin_room != null:
+		_cabin_room.queue_free()
+	GameState.next_spawn = spawn
+	_cabin_room = (load(scene_path) as PackedScene).instantiate() as HubRoom
 	_cabin_room.aboard = true
 	_cabin_room.left_cabin.connect(_back_to_seat)
 	_cabin_room.nap_requested.connect(_nap)
-	view.add_child(_cabin_room)
+	_cabin_room.room_change_requested.connect(_walk_to_room)
+	_cabin_view.add_child(_cabin_room)
+
+
+## Walking through a door to another room of the rig, in flight.
+func _walk_to_room(scene_path: String, spawn: String) -> void:
+	if not _in_cabin or _napping or _changing_room:
+		return
+	_changing_room = true
+	await _fade.fade_out()
+	if _in_cabin:
+		_load_cabin_room(scene_path, spawn)
+	_changing_room = false
 	_fade.fade_in()
-	_hud.show_banner("DOOR: BACK TO THE SEAT   BED: NAP", 5.0)
 
 
 ## Back in the driver's seat (walking out the cabin door).
@@ -473,6 +500,7 @@ func _close_cabin() -> void:
 	if _cabin_layer != null:
 		_cabin_layer.queue_free()
 		_cabin_layer = null
+		_cabin_view = null
 		_cabin_room = null
 	_ship.controls.hands_free = false
 	_hud.set_cabin(false)
@@ -542,7 +570,7 @@ func _on_cruise_released() -> void:
 
 ## Puts the rig at a place's launch point, nose out, engines idle.
 func _launch_from(id: String) -> void:
-	var place: Node3D = _places.get(id, _places.get("base"))
+	var place: Node3D = _places.get(id, _places.get("truck_stop"))
 	if place == null:
 		return
 	var launch := place.get_node("LaunchPoint") as Node3D

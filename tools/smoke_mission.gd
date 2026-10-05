@@ -2,10 +2,11 @@ extends SceneTree
 ## Used by tools/validate.sh: plays the first mission on autopilot, from a
 ## new game, to shake out errors in the story, menus and money:
 ##   arrive in the truck stop -> talk to Marge -> take the long haul -> visit
-##   Lily's pumps -> board the rig -> (skip most of the road) -> the cruise
-##   autopilot flies into Tidewater's ring -> climb out in the cannery
-##   canteen: payout card -> board again -> chart a course through the
-##   Gas-N-Go drive-through and roll out the far side.
+##   Lily's pumps -> board the rig (into its hallway) -> through dispatch,
+##   up to the cockpit -> (skip most of the road) -> the cruise autopilot
+##   flies into Tidewater's ring -> climb out in the cannery canteen: payout
+##   card -> board again -> chart a course through the Gas-N-Go
+##   drive-through and roll out the far side.
 ## It checks the job was taken, delivered and paid, then quits politely.
 ## It saves to a scratch file, never the player's real save.
 ##
@@ -13,6 +14,10 @@ extends SceneTree
 
 
 enum Step { ARRIVE, TALK_TO_MARGE, VISIT_LILY, LEAVE_LILY, BOARD, FLY_OUT, AT_TIDEWATER, BOARD_AGAIN, DRIVE_THROUGH, DONE }
+
+## Walking from the rig's airlock to the cockpit: 0 = not yet, 1 = in the
+## hallway, 2 = in dispatch.
+var _walk_stage := 0
 
 var _frame := 0
 var _step := Step.ARRIVE
@@ -59,9 +64,9 @@ func _process(_delta: float) -> bool:
 				_player().global_position = Vector3(18.6, 0.0, 9.0)
 				_next(Step.BOARD)
 		Step.BOARD:
-			if waited % 10 == 0:
-				_tap("interact")
+			_walk_to_cockpit(waited)
 			if current_scene != null and current_scene.name == "FlightSandbox":
+				_walk_stage = 0
 				_next(Step.FLY_OUT)
 		Step.FLY_OUT:
 			if waited == 60:
@@ -82,12 +87,15 @@ func _process(_delta: float) -> bool:
 				_player().global_position = Vector3(8.8, 0.0, 5.5)
 				_next(Step.BOARD_AGAIN)
 		Step.BOARD_AGAIN:
-			if waited % 10 == 0 and current_scene != null and current_scene.name == "CanneryCanteen":
-				_tap("interact")
-			if current_scene != null and current_scene.name == "FlightSandbox" and waited > 120:
+			if current_scene == null or current_scene.name != "FlightSandbox":
+				_walk_to_cockpit(waited)
+			elif _walk_stage != 9:
+				_walk_stage = 9
+				_step_started = _frame
+			elif waited > 120:
 				Engine.time_scale = 4.0
 				_put_ship_before("World/Places/gas_n_go/ApproachRing", 1500.0)
-				current_scene.call("engage_course", PackedStringArray(["gas_n_go", "base"]))
+				current_scene.call("engage_course", PackedStringArray(["gas_n_go", "truck_stop"]))
 				_next(Step.DRIVE_THROUGH)
 		Step.DRIVE_THROUGH:
 			if waited % 15 == 0 and current_scene.get("_at_counter") == true:
@@ -108,6 +116,27 @@ func _process(_delta: float) -> bool:
 		_step = Step.DONE
 		_game.call("quit_game")
 	return false
+
+
+## From a station's airlock to the driver's seat: board (into the rig's
+## hallway), walk into dispatch, climb to the cockpit door, take the wheel.
+func _walk_to_cockpit(waited: int) -> void:
+	if current_scene == null or not _room_ready():
+		return
+	match current_scene.name:
+		"Hallway":
+			if _walk_stage == 0:
+				_walk_stage = 1
+				_player().global_position = Vector3(0.0, 0.0, -19.6)  # Into the dispatch door.
+		"Dispatch":
+			if _walk_stage < 2:
+				_walk_stage = 2
+				_player().global_position = Vector3(3.6, 2.45, -3.6)  # Top of the cockpit stairs.
+			elif waited % 10 == 0:
+				_tap("interact")
+		_:
+			if waited % 10 == 0:
+				_tap("interact")  # The station's airlock: board the rig.
 
 
 func _check_results() -> void:

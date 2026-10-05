@@ -112,21 +112,6 @@ landmark_count = 12
 
 [node name="Places" type="Node3D" parent="World"]
 
-[node name="base" type="Node3D" parent="World/Places"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 250)
-
-[node name="BaseStation" parent="World/Places/base" instance=ExtResource("26_base")]
-
-[node name="DockPoint" type="Marker3D" parent="World/Places/base"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
-
-[node name="ApproachRing" type="Node3D" parent="World/Places/base"]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -300)
-script = ExtResource("27_ring")
-
-[node name="LaunchPoint" type="Marker3D" parent="World/Places/base"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -550)
-
 [node name="truck_stop" type="Node3D" parent="World/Places"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10600)
 
@@ -337,6 +322,9 @@ speed = 50.0
 start_fraction = 0.7
 engine_trail_color = Color(0.6, 1, 0.5, 1)
 hull_size = Vector3(5, 5, 20)
+
+[node name="CompanyHQ" parent="World" instance=ExtResource("26_base")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 250)
 
 [node name="BaseShuttle" type="Node3D" parent="World"]
 script = ExtResource("18_traffic")

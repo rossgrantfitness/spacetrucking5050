@@ -148,7 +148,7 @@ extends Resource
 @export_group("Prices")
 
 ## What filling the main fuel tank from empty costs. A half-empty tank
-## costs half. (Your home base's pumps are free.)
+## costs half.
 @export_range(0, 10000, 5) var fuel_tank_price: int = 90
 
 ## What filling the boost tank from empty costs.

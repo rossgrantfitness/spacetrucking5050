@@ -6,10 +6,10 @@
 script = ExtResource("1_job")
 id = "canned_starfish"
 cargo_name = "Canned starfish"
-client_name = "Base Cafeteria"
-description = "Tidewater's finest, in tins. The cafeteria swears people like it."
+client_name = "Marge's Diner"
+description = "Tidewater's finest, in tins. Marge swears truckers like it."
 from_place = "tidewater"
-to_place = "base"
+to_place = "truck_stop"
 base_pay = 1150
 care_bonus = 0
 rush_seconds = 1500.0

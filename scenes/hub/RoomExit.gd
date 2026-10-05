@@ -13,8 +13,12 @@ extends Interactable
 ## the ship).
 @export var needs_button: bool = false
 ## For doors onto the ship: the place the rig launches from (a place id
-## like "base" or "truck_stop"). Empty for ordinary doors.
+## like "truck_stop"). Empty for ordinary doors, and for the cockpit door
+## inside the rig (it launches from wherever the rig is parked).
 @export var launch_from: String = ""
+## The rig's airlock: leads out into whatever station the rig is parked at
+## (GameState.launch_from), instead of to `target_scene`. Locked in flight.
+@export var to_docked_place: bool = false
 
 
 func _ready() -> void:
@@ -40,7 +44,24 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _leave() -> void:
 	var room := HubRoom.find(self)
+	if to_docked_place:
+		_step_outside(room)
+		return
 	if not launch_from.is_empty():
 		GameState.launch_from = launch_from
 	if room != null:
 		room.leave_to(target_scene, target_spawn)
+
+
+## The airlock: out into the station the rig is parked at.
+func _step_outside(room: HubRoom) -> void:
+	if room == null:
+		return
+	if room.aboard:
+		room.notice_requested.emit("NOT WHILE WE'RE MOVING.")
+		return
+	var place := GameState.places.find(GameState.launch_from)
+	if place == null or place.interior_scene.is_empty():
+		room.notice_requested.emit("NOTHING OUT THERE BUT VACUUM.")
+		return
+	room.leave_to(place.interior_scene, place.arrival_spawn)

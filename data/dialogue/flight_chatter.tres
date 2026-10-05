@@ -15,8 +15,7 @@
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 0
-lines = PackedStringArray("Morning, {bunny}. Marge at the truck stop has work for you. Go see her, hon.", "Dispatch to {bunny}. Truck stop's about ten clicks out, past the rocks. Marge is expecting you.")
-place = "base"
+lines = PackedStringArray("Morning, {bunny}. Marge at the truck stop has work for you. Go see her, hon.", "Dispatch to {bunny}. That's the truck stop behind us. Marge is expecting you.")
 blocked_by_flags = PackedStringArray("met_marge")
 needs_no_job = true
 
@@ -24,8 +23,7 @@ needs_no_job = true
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 0
-lines = PackedStringArray("No job? Joyriding's on your own fuel, hon.", "Taking her out for a spin? Truck stop's always open.")
-place = "base"
+lines = PackedStringArray("No job? Joyriding's on your own fuel, hon.", "Taking her out for a spin? I'll be back here with the coffee.")
 needs_flags = PackedStringArray("first_mission_done")
 needs_no_job = true
 
@@ -33,8 +31,7 @@ needs_no_job = true
 script = ExtResource("2_set")
 speaker = ExtResource("npc_dottie")
 situation = 0
-lines = PackedStringArray("You're clear, {bunny}. Mind the rocks.", "Hangar 7 says you're good to go. Fly safe, or at least fly.")
-place = "base"
+lines = PackedStringArray("You're clear, {bunny}. Mind the rocks.", "Undocked. Fly safe, or at least fly. I'm right behind you. Literally, I'm in the back.")
 
 [sub_resource type="Resource" id="Set_3_dottie_takeoff"]
 script = ExtResource("2_set")

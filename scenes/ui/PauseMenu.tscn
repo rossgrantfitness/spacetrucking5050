@@ -131,7 +131,7 @@ text = "Logbook (sights you've seen)"
 [node name="DockAtBase" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Get towed home to the base"
+text = "Get towed to the truck stop"
 
 [node name="BackToStart" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true

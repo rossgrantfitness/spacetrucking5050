@@ -25,6 +25,14 @@ extends Node3D
 signal left_cabin
 ## Cabin mode: she lay down on the bed for a nap.
 signal nap_requested
+## Cabin mode: she walked through a door to another room of the rig.
+signal room_change_requested(scene_path: String, spawn: String)
+## Something to tell the player (like "the airlock's locked in flight").
+signal notice_requested(text: String)
+
+## The rooms inside the rig (your home): in flight you can walk between them.
+const RIG_ROOMS: PackedStringArray = [
+	"res://scenes/hub/Apartment.tscn", "res://scenes/hub/Hallway.tscn", "res://scenes/hub/Dispatch.tscn"]
 
 const BACKDROP_SHADER := preload("res://shaders/prerendered_backdrop.gdshader")
 const PLAYER_SCENE := preload("res://scenes/hub/Player.tscn")
@@ -83,6 +91,7 @@ func _ready() -> void:
 	var hud := HubHUD.new()
 	hud.player = player
 	add_child(hud)
+	notice_requested.connect(hud.show_notice.bind(2.5))
 	var pause_menu := get_node_or_null("PauseMenu") as PauseMenu
 	if aboard and pause_menu != null:
 		pause_menu.queue_free()  # The flight scene's pause menu covers the cabin.
@@ -126,7 +135,12 @@ func leave_to(scene_path: String, spawn: String) -> void:
 	if _leaving or scene_path.is_empty():
 		return
 	if aboard:
-		left_cabin.emit()  # In flight, every door leads back to the driver's seat.
+		# In flight: the cockpit door leads back to the driver's seat, and the
+		# other doors to the rig's other rooms.
+		if scene_path in RIG_ROOMS:
+			room_change_requested.emit(scene_path, spawn)
+		else:
+			left_cabin.emit()
 		return
 	_leaving = true
 	player.set_busy(true)
@@ -140,6 +154,8 @@ func leave_to(scene_path: String, spawn: String) -> void:
 
 ## Cabin mode: the bed becomes a place to nap while the autopilot drives.
 func _set_up_cabin() -> void:
+	if not scene_file_path.ends_with("Apartment.tscn"):
+		return  # Only the apartment has a bed.
 	var bed := Interactable.new()
 	bed.name = "NapBed"
 	bed.prompt = "NAP"

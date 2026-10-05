@@ -19,7 +19,7 @@ script = ExtResource("1_kiyqa")
 front_text = "TIDEWATER  56 KM
 GAS-N-GO 47  27 KM"
 back_text = "TRUCK STOP  3 KM
-HOME BASE  13 KM"
+COMPANY HQ  13 KM"
 
 [node name="Sign13Km" type="Node3D" parent="." unique_id=1148247425]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 9407.618, 680, -19562.436)
@@ -27,7 +27,7 @@ script = ExtResource("1_kiyqa")
 front_text = "GAS-N-GO 47  17 KM
 TIDEWATER  46 KM"
 back_text = "TRUCK STOP  13 KM
-HOME BASE  23 KM"
+COMPANY HQ  23 KM"
 
 [node name="Sign25Km" type="Node3D" parent="." unique_id=1963612706]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 18296.018, 1160, -27609.635)
@@ -35,7 +35,7 @@ script = ExtResource("1_kiyqa")
 front_text = "GAS-N-GO 47  NEXT RIGHT
 WORLD'S BIGGEST DONUT!"
 back_text = "TRUCK STOP  25 KM
-HOME BASE  35 KM"
+COMPANY HQ  35 KM"
 
 [node name="Sign36Km" type="Node3D" parent="." unique_id=1236684353]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 26443.717, 1599.9999, -34986.234)
@@ -59,7 +59,7 @@ script = ExtResource("1_kiyqa")
 front_text = "TIDEWATER CANNERY  3 KM
 WE CAN, THEREFORE WE ARE"
 back_text = "LEAVING TIDEWATER
-HOME BASE  67 KM"
+COMPANY HQ  67 KM"
 
 [node name="BorderGate" type="Node3D" parent="." unique_id=1482719536]
 transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 22961.701, 1240, -31388.6)

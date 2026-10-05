@@ -346,7 +346,9 @@ func _build_hallway() -> Node3D:
 
 	# Doors along both walls (other people's apartments), with neon numbers.
 	var neon_colors: Array[Color] = [Color(0.4, 0.95, 1.0), Color(1.0, 0.45, 0.8), Color(1.0, 0.8, 0.3), Color(0.5, 1.0, 0.5)]
-	var doors := [[-1.0, 2.0, "5050"], [1.0, 6.0, "5051"], [-1.0, 10.0, "5052"], [1.0, 13.0, "5053"], [-1.0, 16.0, "5054"]]
+	# (5050 is hers; the second door is the rig's airlock, out to wherever
+	# she's parked.)
+	var doors := [[-1.0, 2.0, "5050"], [1.0, 6.0, "AIRLOCK"], [-1.0, 10.0, "5052"], [1.0, 13.0, "5053"], [-1.0, 16.0, "5054"]]
 	for i in doors.size():
 		var side: float = doors[i][0]
 		var z := -float(doors[i][1])
@@ -355,8 +357,8 @@ func _build_hallway() -> Node3D:
 		number.name = "DoorNumber"
 		number.text = doors[i][2]
 		number.font_size = 64
-		number.pixel_size = 0.004
-		number.modulate = neon_colors[i % neon_colors.size()]
+		number.pixel_size = 0.004 if (doors[i][2] as String).length() <= 4 else 0.0026
+		number.modulate = neon_colors[i % neon_colors.size()] if i != 1 else Color(1.0, 0.75, 0.2)
 		number.position = Vector3(1.44 * side, 2.45, z)
 		number.rotation = Vector3(0.0, -side * PI / 2.0, 0.0)
 		hall.add_child(number, true)
@@ -389,7 +391,8 @@ func _build_hallway() -> Node3D:
 # --- Dispatch ------------------------------------------------------------------------
 # A tall room (10 x 9 m, 6 m high): the dispatch counter with the clerk on
 # the left, a job board and waiting chairs, and on the right a staircase up
-# to the door marked SHIP that leads to the hangar.
+# to the door marked COCKPIT. (Dispatch is inside the rig: it's the office
+# right behind the cab.)
 
 func _build_dispatch() -> Node3D:
 	var parts := _new_set("DispatchSet")
@@ -430,7 +433,7 @@ func _build_dispatch() -> Node3D:
 	# The door back to the hallway (front-left).
 	_door_panel(room, "HallwayDoor", Vector3(-3.5, 1.1, 4.47), PI)
 
-	# The staircase up to the SHIP door (right side): 8 solid steps, then a landing.
+	# The staircase up to the COCKPIT door (right side): 8 solid steps, then a landing.
 	var steps := 8
 	var rise := 2.4 / steps
 	var run := 0.6
@@ -470,7 +473,7 @@ func _build_dispatch() -> Node3D:
 	body.add_child(edge, true)
 	# The ship door at the top, with a big sign.
 	_door_panel(room, "ShipDoor", Vector3(3.6, 3.5, -4.47), 0.0)
-	_sign(room, "ShipSign", "SHIP", 0.01, Color(0.4, 0.95, 1.0), Vector3(3.6, 5.0, -4.4))
+	_sign(room, "ShipSign", "COCKPIT", 0.007, Color(0.4, 0.95, 1.0), Vector3(3.6, 5.0, -4.4))
 	_box(room, "ShipSignBacking", Vector3(1.6, 0.8, 0.05), Vector3(3.6, 5.0, -4.47), dark)
 
 	# Lights: warm over the counter, cool over the stairs, neon by the signs.
