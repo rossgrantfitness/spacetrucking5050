@@ -27,17 +27,26 @@ there's no installer.
 
 The project lives on GitHub: https://github.com/rossgrantfitness/spacetrucking5050
 
-All the work so far is on the branch **`claude/fervent-albattani-prfaw0`**
-(right now it's the only branch, so it's what GitHub shows by default).
+All the current work is on the branch **`claude/serene-galileo-035l4z`**.
+(There's also an old branch, `claude/fervent-albattani-prfaw0`, from back
+in round 5. Don't use that one: it's very out of date.) On GitHub, pick
+the branch from the branch menu (top-left of the file list, it may say
+`main` or another name) **before** you download anything.
 
 - **Recommended: GitHub Desktop** (free, https://desktop.github.com). Sign in,
   then *File → Clone repository*, pick `spacetrucking5050`, and click
-  *Clone*. Use the *Current branch* menu at the top to make sure you're on
-  `claude/fervent-albattani-prfaw0`. Whenever I push new work, click
+  *Clone*. Use the *Current branch* menu at the top to switch to
+  `claude/serene-galileo-035l4z`. Whenever I push new work, click
   *Fetch origin*, then *Pull origin*, and you're up to date.
-- **Quick alternative: download a ZIP.** On the GitHub page, click the green
-  **Code** button → **Download ZIP**, then unzip it. (You'd have to
-  re-download it after every update, so GitHub Desktop is nicer long-term.)
+- **Quick alternative: download a ZIP.** On GitHub, switch to the branch
+  above, then click the green **Code** button → **Download ZIP**.
+  **Unzip it before opening it:** right-click the ZIP → **Extract All...**
+  → pick a normal folder (like Documents). Don't double-click
+  `project.godot` *inside* the ZIP: Windows then copies just that one
+  file into a temporary folder, so Godot finds no scenes ("Can't open
+  file Boot.tscn") and can't save anything ("Unable to write to file").
+  You'd also have to re-download after every update, so GitHub Desktop
+  is nicer long-term.
 
 ## 3. Open the project in Godot
 
