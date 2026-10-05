@@ -85,22 +85,22 @@ extends Resource
 
 ## Grip multiplier while boosting (0.3 = 30% of the ship's normal grip).
 ## Lower = boost feels wilder and the rig slides more in turns.
-@export_range(0.05, 1.0, 0.05) var boost_grip: float = 0.3
+@export_range(0.05, 1.0, 0.05) var boost_grip: float = 0.22
 
 ## While boosting, the nose wanders off course by itself this many degrees
 ## per second (at most), even if you're steady. You have to keep correcting.
-@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 3.0
+@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 5.0
 
 ## Extra wandering when the rig is shaky (from jerky steering under boost).
-@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 14.0
+@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 20.0
 
 ## Steering is this much twitchier under boost (1 = normal). Easy to
 ## over-correct.
-@export_range(1.0, 3.0, 0.05) var boost_steer_gain: float = 1.5
+@export_range(1.0, 3.0, 0.05) var boost_steer_gain: float = 1.7
 
 ## How much jerky steering under boost shakes the rig. Higher = you need
 ## smoother hands.
-@export_range(0.0, 2.0, 0.01) var boost_jerk_shake: float = 0.12
+@export_range(0.0, 2.0, 0.01) var boost_jerk_shake: float = 0.16
 
 ## How quickly the shakes settle when you hold steady.
 @export_range(0.05, 5.0, 0.05) var boost_steady_recovery: float = 0.6
@@ -260,7 +260,7 @@ extends Resource
 @export_range(0.5, 20.0, 0.25) var chase_turn_follow: float = 2.2
 
 ## How much farther back the camera drifts while boosting.
-@export_range(0.0, 40.0, 0.25, "suffix:m") var chase_boost_pullback: float = 12.0
+@export_range(0.0, 40.0, 0.25, "suffix:m") var chase_boost_pullback: float = 18.0
 
 ## How quickly that boost pull-back eases in and out.
 @export_range(0.5, 10.0, 0.25) var chase_pullback_response: float = 2.0
@@ -279,7 +279,7 @@ extends Resource
 @export_range(0.0, 30.0, 0.5, "suffix:°") var speed_fov_bonus: float = 10.0
 
 ## Extra widening on top of that while going faster than top speed (boost).
-@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_fov_bonus: float = 16.0
+@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_fov_bonus: float = 26.0
 
 ## The view only starts widening above this fraction of top speed
 ## (0.3 = 30% of top speed).
@@ -287,6 +287,28 @@ extends Resource
 
 ## How smoothly the view widens and narrows.
 @export_range(0.5, 20.0, 0.25) var fov_response: float = 4.0
+
+
+@export_group("Crashes")
+
+## Catastrophic crashes (asked for in round 12): hit something hard enough,
+## or wear the hull down to nothing, and the rig spins out of control and
+## blows up. Then it's straight back to your last save, nothing lost.
+## Off = every hit is just a bonk, like before.
+@export var crashes_enabled: bool = true
+## Hitting something at this speed (or faster) is a crash, not a bonk. The
+## starter rig cruises at 55 m/s, so in practice this means boosting into
+## things (or a head-on with fast traffic). 110 m/s is about 400 km/h.
+@export_range(10.0, 500.0, 1.0, "suffix:m/s") var crash_speed: float = 110.0
+## Also crash when bonks have worn the hull down to nothing.
+@export var crash_on_empty_hull: bool = true
+## How long the rig tumbles out of control before it blows up.
+@export_range(0.5, 10.0, 0.1, "suffix:s") var crash_spin_seconds: float = 2.5
+## How fast it tumbles, in turns per second... roughly (radians per second).
+@export_range(0.0, 30.0, 0.5, "suffix:rad/s") var crash_spin_speed: float = 7.0
+## How long the WRECKED card stays up before you're back at your last save
+## (any key skips it).
+@export_range(0.5, 15.0, 0.5, "suffix:s") var wreck_card_seconds: float = 4.0
 
 
 @export_group("Screen shake")
@@ -302,10 +324,18 @@ extends Resource
 @export_range(0.1, 5.0, 0.05) var shake_decay: float = 1.4
 
 ## How hard the boost kicks the camera when it fires (0 to 1).
-@export_range(0.0, 1.0, 0.05) var boost_kick_shake: float = 0.55
+@export_range(0.0, 1.0, 0.05) var boost_kick_shake: float = 0.85
 
-## A gentle rumble while boosting, as shake held at this level (0 to 1).
-@export_range(0.0, 1.0, 0.05) var boost_rumble_shake: float = 0.25
+## Boost jolts: every so often while boosting, the engines cough and kick
+## the rig sideways (a random time between these, in seconds), this hard
+## (m/s, spread over a third of a second), with this much camera jolt.
+## Push 0 = no jolts.
+@export var boost_jolt_interval := Vector2(0.7, 2.2)
+@export_range(0.0, 20.0, 0.25, "suffix:m/s") var boost_jolt_push: float = 4.0
+@export_range(0.0, 1.0, 0.05) var boost_jolt_shake: float = 0.3
+
+## A rumble while boosting, as shake held at this level (0 to 1).
+@export_range(0.0, 1.0, 0.05) var boost_rumble_shake: float = 0.38
 
 ## A faint road-feel vibration that grows with speed (at top cruise speed),
 ## so going fast feels like going fast. 0 = none.
@@ -329,7 +359,7 @@ extends Resource
 @export_group("Space dust")
 
 ## How many specks of dust float around you. (Read when a flight starts.)
-@export_range(100, 6000, 50) var dust_count: int = 2600
+@export_range(100, 6000, 50) var dust_count: int = 1300
 
 ## The size of the invisible box of dust that travels with the camera.
 ## A smaller box with the same count = denser dust.
@@ -349,7 +379,7 @@ extends Resource
 @export_group("Boost effects")
 
 ## How strong the speed lines are while boosting. 0 = no speed lines.
-@export_range(0.0, 2.0, 0.05) var speed_lines_strength: float = 0.9
+@export_range(0.0, 2.0, 0.05) var speed_lines_strength: float = 1.3
 
 ## How quickly the speed lines fade in and out.
 @export_range(0.5, 20.0, 0.5) var speed_lines_response: float = 6.0
@@ -417,7 +447,7 @@ extends Resource
 ## seconds of driving). Deep space is quiet on purpose: minutes of nothing
 ## but the radio. Traffic lanes near stations and gates are busy.
 @export var event_gap_deep_space := Vector2(180.0, 300.0)
-@export var event_gap_traffic_lanes := Vector2(30.0, 90.0)
+@export var event_gap_traffic_lanes := Vector2(27.5, 83.0)
 @export var event_gap_station_approach := Vector2(20.0, 45.0)
 @export var event_gap_orbit := Vector2(90.0, 150.0)
 @export var event_gap_weather := Vector2(60.0, 120.0)

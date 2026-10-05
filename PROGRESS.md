@@ -1,19 +1,19 @@
 # Progress
 
-**Current status:** **Round 11: the Glimmer System**, the second solar
-system you can drive to (you asked for "the next solar system"). The
-magenta casino system from the brief: The High Roller, Sal Grinwell's
-casino (Sal is the crocodile from the character sketch), a 56 km road the
-other way from the truck stop lined with neon billboards and roadside
-attractions, a walkable casino floor with a slot-machine mini game, Sal's
-first little storyline (three jobs), board jobs in and out, and the
-system's own route events. Built and validated, **waiting for your
-playtest** (see `PLAYTEST.md`).
-**Next session:** your call: the next system (amber desert?), events
-168-250, the audit (`AUDIT.md`), or the economy rebalance from
-`docs/DESIGN_NOTES.md`.
+**Current status:** **Round 12: crashes, a wilder boost, quieter dust.**
+Hit something at boost speed (or run the hull down to nothing) and the rig
+spins out of control and blows up, then you're straight back at your last
+save. Boost is faster and wilder (boost jolts!), there's half the space
+dust and a little more traffic, and your design language document is in
+`docs/DESIGN_LANGUAGE.md`. Built and validated, **waiting for your
+playtest** (see `PLAYTEST.md`), and for the reference files (spaceship
+designs, the Japanese radio tracks, the bunny model and character sheet),
+which didn't arrive.
+**Next session:** the Japanese station and ship designs once the files are
+in; then your call (the Hyperway, the amber desert, events 168-250, the
+economy rebalance, the audit).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 11)
+**Last updated:** 2026-10-05 (round 12)
 
 ---
 
@@ -79,6 +79,7 @@ playtest** (see `PLAYTEST.md`).
   - [x] Hazards (round 8): ion storms (static, jolts, STORM light) and a speed trap (COPS light, small fine)
   - [x] An optional stop: the Gas-N-Go 47 drive-through (round 9: cheaper fuel, a calming snack, a souvenir, side jobs)
   - [x] Round 9: no repeating sights, rare sights (great migration, leviathans, a ghost ship, a comet storm), a logbook (L), comm replies (T)
+  - [x] Round 12 (your call, overriding the brief's "no death"): catastrophic crashes: out of control, an explosion, the WRECKED card, back to your last save with nothing lost
   - [x] Round 10: your route events list (1-167) in the data, 49 playable now (signs, passing ships with stories, processions, calls with reply choices, radio moments, gentle hazards like hull pings, gravity eddies and gravity tides); a director with zones (deep space, traffic lanes, station approach, orbit, weather), haul cooldowns, one hazard at a time, one rare per haul, story and night-only events
   - [x] Route map: the course chart (see M2)
   - [ ] Gravity wells and slingshots
@@ -141,6 +142,7 @@ cartoon bonks that knock your cargo condition, and basic saving.
 
 Ideas that aren't in the plan. Nothing here gets built without your OK.
 
+- **The Hyperway** (round 11 question): slingshot gates that warp you about 5,000x cruise speed between far-apart regions (a "30 days at cruise" trip in about 9 minutes), a toll road with its own sector of space. See the chat answer from round 11.
 - **A casino lounge radio station** for the Glimmer System (like Tide 77
   is Tidewater's): a crooner, slot-machine jingles, ads for the buffet.
 - **Locked places on the course chart** ("???" until reputation or story

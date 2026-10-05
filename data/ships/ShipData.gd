@@ -76,7 +76,8 @@ extends Resource
 @export_range(1.0, 300.0, 1.0, "suffix:m/s²") var boost_acceleration: float = 70.0
 
 ## The boost fuel tank: how many seconds of boosting a full tank holds
-## (6 minutes: enough to boost flat out all the way to Tidewater). Boost
+## (6 minutes: more than enough to boost flat out all the way to
+## Tidewater, about 4½ minutes since round 12). Boost
 ## fuel doesn't refill by itself; buy it at a station's pumps.
 @export_range(1.0, 900.0, 0.5, "suffix:s") var boost_fuel_seconds: float = 360.0
 

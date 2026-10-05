@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="LineList" format=3]
+
+[ext_resource type="Script" path="res://data/dialogue/LineList.gd" id="1_list"]
+
+[resource]
+script = ExtResource("1_list")
+lines = PackedStringArray("...well. That happened.", "Note to self: rocks are solid.", "Rig's gone. Cargo's gone. Coffee's... also gone.", "Insurance is going to have questions.", "I'll just pretend that didn't happen.", "Huh. So that's what the red button was for.", "...okay. Again. Slower.", "Dottie's going to hear about this. Dottie hears about everything.")

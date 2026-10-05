@@ -1,63 +1,60 @@
-# Playtest: round 11 (the Glimmer System)
+# Playtest: round 12 (crashes, a wilder boost, quieter dust)
 
-**What you asked for:** "build the next solar system." I built the
-**magenta casino system** from the brief: the **Glimmer System**, with
-**The High Roller**, a casino run by **Sal Grinwell** (the crocodile from
-your sketch). All the names are placeholders you can change.
+**What you asked for:** catastrophic death and out-of-control ships for
+hitting things (with an instant restart from your last save); boost that
+feels even faster and even more chaotic; 50% fewer stars flying past; and
+5-10% more traffic. I also saved your design language document as
+`docs/DESIGN_LANGUAGE.md`.
 
-**Time needed:** about 45 minutes (a couple of long hauls).
+**One thing missing:** the reference files you mentioned (spaceship
+designs, music for a Japanese radio station, the bunny's 3D model in a
+T-pose and her character sheet) **didn't make it into the repo**. Please
+push them to the branch (or upload them here) and I'll use them next round.
 
-> Honest note: I flew it on autopilot in automated runs (into the casino's
-> ring, the payout, Sal's whole storyline, the slot machine, boarding
-> again) and looked at screenshots. Whether the road feels good to drive,
-> and whether the casino feels cozy rather than seedy, is yours to judge.
+**Time needed:** about 20 minutes.
+
+> Honest note: I tested the crash with an automated run (boosting into a
+> wall: out of control, explosion, the WRECKED card, back to the last save)
+> and looked at screenshots. Whether boost now feels faster and wilder in
+> a good way, and whether the crash feels right, is yours to judge.
 
 ---
 
 ## What's new
 
-- **A second system to drive to**, the other way from the truck stop (56
-  km, about 17 minutes cruising). Pink haze, a magenta gas giant with a
-  gold ring, a gold moon, a pink sun. The border gate glows magenta.
-- **Neon billboards everywhere** (the system's gimmick), more and more as
-  you get close. Roadside attractions for the logbook: **the world's
-  biggest slot machine**, **the giant dice**, and **the Little Chapel of
-  the Void**. Limos, a party bus, a spill of casino chips, a speed trap.
-- **The High Roller:** a roulette wheel the size of a station, turning
-  slowly, and a hotel tower with a giant sign. Fly through the pink ring.
-- **The casino floor** (walkable): Sal behind the cashier cage, slot
-  machines, roulette and card tables, a little stage (the Crooning Crab
-  is never there), a window onto the gas giant, the job board, a pump
-  (pricier than home), a jukebox.
-- **The Lucky Molar**, the gold slot machine: a little mini game, 10
-  credits a pull. The house wins a little over time, like real slots.
-- **Sal's story:** Dottie offers his first job (cards) after your first
-  delivery. Then, in person at the casino: sequined jumpsuits for Marge's
-  karaoke night, then a slot machine for Gill's canteen. Marge and Gill
-  both have something to say about it. Sal mentions one more thing after
-  that...
-- **Glimmer's own route events:** casino billboards, limo convoys, a
-  winner on channel 19, and Sal calling to say hi.
+- **Crashes:** hit anything at **boost speed** (about 400 km/h or more),
+  or let bonks wear the **hull down to nothing**, and the rig **loses
+  control**: it tumbles, throws sparks, trails black smoke, the alarm
+  wails. A couple of seconds later it **blows up** (flash, fireball,
+  shockwave, flying debris). Then a **WRECKED** card with one of Jack's
+  one-liners, and you're **back at your last save**, nothing lost. Bonks at
+  cruise speed are still just bonks.
+- **Boost:** about **30% faster** at the top (the starter rig hits about
+  790 km/h) and it kicks in harder. **Wilder:** a much wider view, the
+  camera pulls back more, stronger speed lines, more shake, more slide in
+  turns, and **boost jolts**: the engines cough and shove you sideways
+  every second or two.
+  - This makes Tidewater about **4½ minutes on full boost** (it was 6, as
+    you asked for in round 7).
+- **Half the dust** streaking past.
+- **A little more traffic** near stations and the border gates (about 8%).
+  Deep space is as empty as before.
 
 ## Try this
 
-1. Load your save (or start one and do Marge's pie run first). Talk to
-   **Dottie** at dispatch and take the **cards**.
-2. Chart a course (M) to **The High Roller** and drive at least part of it
-   yourself. Watch the billboards pile up past the border gate.
-3. Climb out, talk to **Sal**, look around, and pull the **Lucky Molar** a
-   few times.
-4. Take the **jumpsuits** to Marge, then Sal's next job to Gill.
+1. Fly out and **boost**. Feel the jolts. Try to hold a line through a
+   turn.
+2. **Boost straight into a rock** (or a big ship). Watch it go. Press any
+   key on the WRECKED card.
+3. Do a normal haul at cruise and notice the dust and traffic.
 
 ## Questions for you
 
-1. **Does Glimmer feel different enough** from home and Tidewater (the
-   color, the billboards, the attractions)? Too much neon, or not enough?
-2. **Sal:** fun sleazy, or too much? Do the names work (Glimmer, The High
-   Roller, Sal Grinwell), or do you want to rename anything?
-3. **The slot machine:** is a little gambling mini game OK in this game?
-   Are the stakes right (10 credits a pull, small wins)?
-4. **The casino floor:** cozy late-night truck stop, or does it feel
-   seedy? What would you add?
-5. **Next:** another system (the amber desert, with dust storms and
-   derelicts?), events 168-250, the audit, or the economy rebalance?
+1. **The crash:** does it feel dramatic enough? Too long or too short (2.5
+   seconds out of control, 4 seconds of WRECKED card)?
+2. **What should kill you?** Right now only boost-speed hits and an empty
+   hull. Should cruise-speed hits ever be fatal?
+3. **Boost:** faster and wilder in a good way, or too much? Are the jolts
+   fun or annoying?
+4. **The 6-minute boost to Tidewater:** OK at 4½ now, or should I keep 6?
+5. **Dust and traffic:** right amounts now?

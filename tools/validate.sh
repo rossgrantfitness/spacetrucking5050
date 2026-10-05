@@ -8,7 +8,8 @@
 # (3) runs the main scene, then flies the flight sandbox on autopilot
 # (tools/smoke_flight.gd), walks around the base (tools/smoke_hub.gd),
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
-# in the Glimmer System (tools/smoke_glimmer.gd) and tries the cabin,
+# in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
+# (tools/smoke_crash.gd) and tries the cabin,
 # comm replies and radio (tools/smoke_cabin.gd).
 # It fails if Godot printed ANY error or warning.
 set -u
@@ -47,6 +48,7 @@ run -s tools/smoke_hub.gd
 run -s tools/smoke_mission.gd
 run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd
+run -s tools/smoke_crash.gd
 rm -f override.cfg
 
 if grep -E "ERROR|WARNING|Parse Error" "$LOG" >/dev/null; then

@@ -120,6 +120,8 @@ func _ready() -> void:
 	_set_destination(_pick_destination())
 	_chatter.start(_ship, _hud.comm, _places)
 	_ship.autopilot_arrived.connect(_on_autopilot_arrived)
+	_ship.lost_control.connect(_on_lost_control)
+	_ship.exploded.connect(_on_exploded)
 	_ship.cruise_released.connect(_on_cruise_released)
 	GameState.start_haul()  # Every trip out on the road is a new haul.
 	_route_events = RouteEvents.new()
@@ -186,6 +188,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _ship.out_of_control:
+		return  # Nothing answers now. Hold on.
 	if _napping:
 		if event.is_pressed() and not event.is_echo():
 			_wake_up()
@@ -377,6 +381,26 @@ func _open_logbook() -> void:
 	await LogbookView.open(get_tree())
 	get_tree().paused = false
 	_capture_mouse()
+
+
+# --- Crashes --------------------------------------------------------------------------
+
+## A catastrophic hit: out of the cabin (or the nap) at once, back to the
+## chase camera so you can watch, and a warning across the screen.
+func _on_lost_control(reason: String) -> void:
+	_close_cabin()
+	if _in_cockpit:
+		_set_cockpit_view(false)
+	_hud.show_banner("!! HULL BREACH !!" if reason == "hull" else "!! LOST CONTROL !!", 0.0)
+	Radio.interference(GameState.tuning.crash_spin_seconds + 2.0)
+
+
+## The rig blew up. A moment to take it in, then the WRECKED card, then back
+## to the last save.
+func _on_exploded() -> void:
+	_hud.show_banner("", 0.1)
+	var tree := get_tree()
+	tree.create_timer(1.6).timeout.connect(func() -> void: WreckScreen.show_and_restart(tree))
 
 
 # --- The cabin ---------------------------------------------------------------------

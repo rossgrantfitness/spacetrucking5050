@@ -137,6 +137,12 @@ Lily's pumps sell fuel, and Dusty's garage patches the hull and sells
 upgrades, **new rigs** (each with its own handling; bigger holds pay more
 per job) and **paint jobs**.
 
+**Crashes:** bonks at cruise speed just knock the hull and cargo. But hit
+something at boost speed (or let the hull wear down to nothing) and the
+rig spins out of control and blows up. Then you're straight back at your
+last save, nothing lost. (Crashes can be switched off in tuning.tres,
+"Crashes".)
+
 **Docking:** fly through the big glowing **ring** in front of a station's
 bay and the autopilot takes over and parks you. Then you climb out and walk
 around inside (the base, the truck stop, Tidewater Cannery's canteen,
@@ -166,7 +172,7 @@ then pick one of three things Jack says back. Just flavor; nothing changes.
 you might drive fifty hauls before you see one.
 
 **The long haul:** Tidewater, the teal system, is about 59 km past the
-truck stop: 18 minutes cruising, 6 on full boost. Along the way: highway
+truck stop: 18 minutes cruising, about 4½ on full boost. Along the way: highway
 signs, a junk spill, the Gas-N-Go, the world's biggest donut, the border
 gate, a lighthouse, an old derelict, an ion storm (radio static, a few
 jolts), icy rocks, whales, and a space-patrol speed trap near the cannery

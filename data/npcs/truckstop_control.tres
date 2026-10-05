@@ -7,7 +7,7 @@
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("met_marge")
-lines = PackedStringArray("Well, look at you. You must be Dottie's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My cousin Gill runs the canteen at Tidewater Cannery. Way out in the teal, past the border gate. Sixty clicks, give or take.", "Poor things haven't had a decent pie in a year. Thirty crates of nebula pie and a sack of real coffee. It's a long haul, sugar.", "About eighteen minutes at your rig's top speed. Six if you burn a whole tank of boost, but boosting rattles the pies, and they bruise.", "Thirteen hundred {currency}, plus up to five hundred more if they get there pretty. Gas-N-Go's about halfway if you need fuel. What do you say?")
+lines = PackedStringArray("Well, look at you. You must be Dottie's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My cousin Gill runs the canteen at Tidewater Cannery. Way out in the teal, past the border gate. Sixty clicks, give or take.", "Poor things haven't had a decent pie in a year. Thirty crates of nebula pie and a sack of real coffee. It's a long haul, sugar.", "About eighteen minutes at your rig's top speed. Four and a half if you burn a whole tank of boost, but boosting rattles the pies, and they bruise.", "Thirteen hundred {currency}, plus up to five hundred more if they get there pretty. Gas-N-Go's about halfway if you need fuel. What do you say?")
 sets_flags = PackedStringArray("met_marge")
 offers_job = ExtResource("job_first_long_haul")
 

@@ -226,6 +226,46 @@ static func make_spool() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## The out-of-control alarm: a harsh two-tone warble, like a klaxon in a
+## cockpit that's about to have a very bad day. Loops.
+static func make_alarm() -> AudioStreamWAV:
+	var seconds := 0.8
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var phase := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var pitch := 880.0 if t < seconds * 0.5 else 660.0
+		phase += TAU * pitch / MIX_RATE
+		var square := 1.0 if sin(phase) > 0.0 else -1.0
+		samples[i] = (square * 0.6 + sin(phase * 0.5) * 0.4) * 0.35
+	return to_wav(samples, true)
+
+
+## The rig blowing up: a sharp crack, a roaring wall of noise, and a long
+## low rumble that rolls away.
+static func make_explosion() -> AudioStreamWAV:
+	var seconds := 2.8
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 404
+	var low := 0.0
+	var lower := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var noise := rng.randf_range(-1.0, 1.0)
+		low = lerpf(low, noise, 0.08)
+		lower = lerpf(lower, low, 0.04)
+		var crack := noise * exp(-t * 40.0)
+		var roar := low * exp(-t * 2.2) * 2.5
+		var rumble := lower * exp(-t * 0.9) * 6.0 + sin(TAU * lerpf(55.0, 30.0, minf(t, 1.0)) * t) * exp(-t * 1.6) * 0.6
+		samples[i] = tanh((crack * 0.8 + roar + rumble) * 1.4) * 0.9
+	return to_wav(samples, false)
+
+
 ## Packs samples (-1 to 1) into a 16-bit audio stream.
 static func to_wav(samples: PackedFloat32Array, looping: bool) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

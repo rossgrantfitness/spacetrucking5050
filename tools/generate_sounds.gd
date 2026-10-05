@@ -4,11 +4,13 @@ extends SceneTree
 ##     engine_drone.wav, engine_whine.wav, engine_air.wav, engine_growl.wav
 ##         (the engine hum's four loops, from scenes/flight/EngineSynth.gd)
 ##     bonk.wav, blip.wav, static.wav, big_engine.wav, whale_song.wav, whoosh.wav,
-##     power_on.wav, post_beep.wav, thump.wav, rattle.wav, spool.wav
+##     power_on.wav, post_beep.wav, thump.wav, rattle.wav, spool.wav,
+##     alarm.wav, explosion.wav
 ##         (a cartoon bump, a dialogue voice blip, a burst of radio static, a
 ##         big ship's engines, a space whale's song, a comet's whoosh, the
 ##         intro's power-on chime and self-test beep, a crate thumping in the
-##         hold, the cab rattling, and the boost spooling up, from
+##         hold, the cab rattling, the boost spooling up, the out-of-control
+##         alarm and the rig blowing up, from
 ##         scenes/common/SfxSynth.gd)
 ##
 ## Run it from the project folder with:
@@ -42,6 +44,8 @@ func _initialize() -> void:
 		"thump": SfxSynth.make_thump(),
 		"rattle": SfxSynth.make_rattle(),
 		"spool": SfxSynth.make_spool(),
+		"alarm": SfxSynth.make_alarm(),
+		"explosion": SfxSynth.make_explosion(),
 	}
 	var failed := false
 	for file_name: String in loops:

@@ -24,6 +24,11 @@ signal cruise_released
 ## Emitted each time rough flying knocks the cargo around enough to notice
 ## (a thump in the hold). `reason` says why: "turn", "brake" or "boost".
 signal cargo_jostled(reason: String)
+## Emitted when a catastrophic hit sends the rig out of control (`reason`:
+## "crash" for a hit at crash speed, "hull" when the hull gave out).
+signal lost_control(reason: String)
+## Emitted when the out-of-control rig finally blows up.
+signal exploded
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
@@ -75,11 +80,31 @@ var cruise: CruisePilot
 const SPOOL_SOUND := preload("res://audio/generated/spool.wav")
 const THUMP_SOUND := preload("res://audio/generated/thump.wav")
 const RATTLE_SOUND := preload("res://audio/generated/rattle.wav")
+const ALARM_SOUND := preload("res://audio/generated/alarm.wav")
+const EXPLOSION_SOUND := preload("res://audio/generated/explosion.wav")
+## How many sparks fly off the rig while it's out of control.
+const SPARK_COUNT: int = 10
 ## How much cargo damage (0 to 1) adds up to one thump in the hold.
 const DAMAGE_PER_THUMP: float = 0.004
+## How long one boost jolt takes to push the rig sideways, in seconds.
+const JOLT_SECONDS: float = 0.35
 
 var _autopilot_stops: bool = true
 
+## Boost jolts (see _boost_jolts): when the next one comes, which way it
+## pushes, and how long it has left to push.
+var _jolt_clock: float = 1.0
+var _jolt_push := Vector3.ZERO
+var _jolt_left: float = 0.0
+## Out of control after a catastrophic hit: no steering, tumbling, sparks
+## and smoke. Then `destroyed` once it's blown up.
+var out_of_control: bool = false
+var destroyed: bool = false
+var _spin := Vector3.ZERO
+var _wreck_clock: float = 0.0
+var _sparks: Array[MeshInstance3D] = []
+var _alarm_sound: AudioStreamPlayer
+var _boom_sound: AudioStreamPlayer
 var _was_boosting := false
 var _paint_trail := Color(1, 1, 1, 0)
 ## Cargo damage since the last thump in the hold.
@@ -115,9 +140,19 @@ func _ready() -> void:
 	_rattle_sound.stream = RATTLE_SOUND
 	_rattle_sound.volume_db = -80.0
 	add_child(_rattle_sound)
+	_alarm_sound = AudioStreamPlayer.new()
+	_alarm_sound.stream = ALARM_SOUND
+	_alarm_sound.volume_db = -6.0
+	add_child(_alarm_sound)
+	_boom_sound = AudioStreamPlayer.new()
+	_boom_sound.stream = EXPLOSION_SOUND
+	add_child(_boom_sound)
 
 
 func _physics_process(delta: float) -> void:
+	if out_of_control:
+		_tumble(delta)
+		return
 	if not autopilot_route.is_empty():
 		_fly_autopilot(delta)
 		return
@@ -161,6 +196,8 @@ func speed_ratio() -> float:
 ## The color of this ship's engine trails (used by EngineTrail): its paint
 ## job's, or the rig's own.
 func trail_color() -> Color:
+	if out_of_control:
+		return Color(0.18, 0.17, 0.2)  # Black smoke.
 	return _paint_trail if _paint_trail.a > 0.0 else ship_data.trail_color
 
 
@@ -220,6 +257,77 @@ func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
 	if Settings.rumble:
 		Input.start_joy_vibration(0, 0.3 + 0.5 * strength, 0.2 + 0.8 * strength, 0.15 + 0.25 * strength)
 	bonked.emit(strength, where)
+	if tuning.crashes_enabled:
+		if impact >= tuning.crash_speed:
+			lose_control("crash")
+		elif hull <= 0.0 and tuning.crash_on_empty_hull:
+			lose_control("hull")
+
+
+## A catastrophic hit: the rig spins out of control (no steering, the
+## alarm wailing, sparks and black smoke) and blows up a moment later.
+func lose_control(reason: String) -> void:
+	if out_of_control:
+		return
+	var tuning := GameState.tuning
+	out_of_control = true
+	cruise = null
+	autopilot_route.clear()
+	flight.boosting = false
+	_spin = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * tuning.crash_spin_speed
+	_wreck_clock = tuning.crash_spin_seconds
+	shake.add_trauma(1.0)
+	_spool_sound.stop()
+	_alarm_sound.play()
+	var spark_paint := EventKit.paint(Color(1.0, 0.8, 0.35), 2.6)
+	for i in SPARK_COUNT:
+		var spark := EventKit.box(self, Vector3(0.3, 0.3, 0.3), Vector3.ZERO, spark_paint)
+		spark.visible = false
+		_sparks.append(spark)
+	if Settings.rumble:
+		Input.start_joy_vibration(0, 1.0, 1.0, tuning.crash_spin_seconds)
+	lost_control.emit(reason)
+
+
+## Out of control: the rig tumbles (only the model, so the camera stays
+## level), keeps drifting with what's left of its speed, throws sparks,
+## and then blows up.
+func _tumble(delta: float) -> void:
+	shake.update(delta, GameState.tuning.shake_decay)
+	if destroyed:
+		return
+	_wreck_clock -= delta
+	_visual_pivot.rotate(_spin.normalized(), _spin.length() * delta)
+	flight.velocity *= exp(-0.5 * delta)
+	velocity = flight.velocity
+	move_and_slide()
+	flight.velocity = velocity
+	shake.rumble = 0.55
+	for spark in _sparks:
+		spark.visible = randf() < 0.45
+		spark.position = Vector3(randf_range(-4, 4), randf_range(-2, 2), randf_range(-6, 6))
+	if _wreck_clock <= 0.0:
+		_explode()
+
+
+func _explode() -> void:
+	destroyed = true
+	_visual_pivot.visible = false
+	for spark in _sparks:
+		spark.visible = false
+	# Silence the rig (the engine, the alarm, the rattle): it's gone.
+	for player: AudioStreamPlayer in find_children("*", "AudioStreamPlayer", true, false):
+		if player != _boom_sound:
+			player.stop()
+	_boom_sound.play()
+	var boom := Explosion.new()
+	get_parent().add_child(boom)
+	boom.global_position = global_position
+	flight.velocity = Vector3.ZERO
+	velocity = Vector3.ZERO
+	shake.rumble = 0.0
+	shake.add_trauma(1.0)
+	exploded.emit()
 
 
 ## How big a bonk hitting something at `impact` m/s is: 0 (gentlest) to 1.
@@ -335,6 +443,7 @@ func _update_shake(delta: float) -> void:
 	if flight.boosting and not _was_boosting:
 		shake.add_trauma(tuning.boost_kick_shake)  # The boost kicks in: thump!
 	_was_boosting = flight.boosting
+	_boost_jolts(delta)
 	# A rumble while boosting; a faint road-feel vibration that grows with
 	# speed otherwise.
 	var cruise_feel := tuning.cruise_rumble_shake * pow(clampf(speed_ratio(), 0.0, 1.0), 2.0)
@@ -345,6 +454,30 @@ func _update_shake(delta: float) -> void:
 		_spool_sound.play()
 	elif flight.spool <= 0.0 and _spool_sound.playing and not flight.boosting:
 		_spool_sound.stop()
+
+
+## Boost is barely under control: every so often the engines cough and
+## kick the rig sideways, with a jolt of the camera. The push is spread
+## over a moment so it's wild without bruising the cargo by itself.
+func _boost_jolts(delta: float) -> void:
+	var tuning := GameState.tuning
+	if not flight.boosting or tuning.boost_jolt_push <= 0.0:
+		_jolt_left = 0.0
+		_jolt_clock = randf_range(tuning.boost_jolt_interval.x, tuning.boost_jolt_interval.y)
+		return
+	_jolt_clock -= delta
+	if _jolt_clock <= 0.0:
+		_jolt_clock = randf_range(tuning.boost_jolt_interval.x, maxf(tuning.boost_jolt_interval.y, tuning.boost_jolt_interval.x))
+		var basis_now := flight.orientation()
+		_jolt_push = (basis_now.x * randf_range(-1.0, 1.0) + basis_now.y * randf_range(-0.5, 0.5)).normalized() * tuning.boost_jolt_push
+		_jolt_left = JOLT_SECONDS
+		shake.add_trauma(tuning.boost_jolt_shake)
+		if Settings.rumble:
+			Input.start_joy_vibration(0, 0.5, 0.3, 0.15)
+	if _jolt_left > 0.0:
+		var step := minf(delta, _jolt_left)
+		flight.velocity += _jolt_push * (step / JOLT_SECONDS)
+		_jolt_left -= step
 
 
 ## Hands the controls to the docking autopilot, which flies through

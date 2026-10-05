@@ -24,7 +24,7 @@ func _tree() -> SceneTree:
 	return Engine.get_main_loop() as SceneTree
 
 
-func test_the_long_haul_is_18_minutes_cruising_and_6_on_full_boost() -> void:
+func test_the_long_haul_is_18_minutes_cruising_and_4_5_on_full_boost() -> void:
 	var spots := _place_spots()
 	var route := PackedVector3Array([spots["truck_stop"]["launch"], spots["tidewater"]["ring"]])
 	var rig := load("res://data/ships/starter_rig.tres") as ShipData
@@ -32,7 +32,7 @@ func test_the_long_haul_is_18_minutes_cruising_and_6_on_full_boost() -> void:
 	var minutes: float = numbers["cruise_seconds"] / 60.0
 	var boost_minutes: float = numbers["boost_seconds"] / 60.0
 	check(minutes > 16.5 and minutes < 19.0, "cruising to Tidewater should take about 18 minutes (it's %.1f)" % minutes)
-	check(boost_minutes > 5.5 and boost_minutes < 6.5, "boosting all the way should take about 6 minutes (it's %.1f)" % boost_minutes)
+	check(boost_minutes > 4.0 and boost_minutes < 5.0, "boosting all the way should take about 4.5 minutes (it's %.1f)" % boost_minutes)
 	check(numbers["boost_needed"] <= 1.0, "a full boost tank should last the whole way")
 	check(numbers["fuel"] < 0.8, "a full fuel tank should cruise there with fuel to spare")
 	var half := CourseChart.estimate(route, rig, GameState.tuning, 0.5)
