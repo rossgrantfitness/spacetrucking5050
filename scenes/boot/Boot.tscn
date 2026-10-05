@@ -103,7 +103,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.7, 0.86, 1)
 theme_override_font_sizes/font_size = 20
-text = "Milestone 1: the flight sandbox. The engine's warm. The coffee's cold."
+text = "The engine's warm. The coffee's cold."
 horizontal_alignment = 1
 
 [node name="StartFlying" type="Button" parent="UI/Margin/Layout"]
@@ -140,12 +140,25 @@ theme_override_font_sizes/font_size = 16
 text = "or start a new game (forgets your save)"
 flat = true
 
+[node name="InputCheck" type="Button" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.62, 0.95, 1, 0.6)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "or test your keys and gamepad (all the controls are in the Esc menu too)"
+flat = true
+
 [node name="Spacer" type="Control" parent="UI/Margin/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="InputPanel" type="PanelContainer" parent="UI/Margin/Layout"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("Style_panel")
 
@@ -193,8 +206,8 @@ script = ExtResource("3_stick")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(215, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-text = "Ship would: cruise straight"
+theme_override_font_sizes/font_size = 16
+text = "straight ahead"
 horizontal_alignment = 1
 clip_text = true
 
@@ -217,8 +230,8 @@ script = ExtResource("3_stick")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(215, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-text = "Ship would: cruise straight"
+theme_override_font_sizes/font_size = 16
+text = "straight ahead"
 horizontal_alignment = 1
 clip_text = true
 
@@ -228,7 +241,8 @@ size_flags_horizontal = 3
 
 [node name="ActionsTitle" type="Label" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/ActionsColumn"]
 layout_mode = 2
-text = "Every action lights up while you hold it (its keys and buttons are listed underneath)"
+text = "Every action lights up while you hold it"
+autowrap_mode = 3
 
 [node name="Chips" type="HFlowContainer" parent="UI/Margin/Layout/InputPanel/Rows/Gauges/ActionsColumn"]
 unique_name_in_owner = true
@@ -255,7 +269,9 @@ text = "Saved!"
 
 [node name="SystemInfo" type="Label" parent="UI/Margin/Layout"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.5)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
 text = "System info appears here when the game runs."

@@ -111,7 +111,7 @@ func _ready() -> void:
 	_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_description.custom_minimum_size = Vector2(0.0, 48.0)
 	column.add_child(_description)
-	column.add_child(_label("Arrows / D-pad: choose   ·   E / A: pick   ·   Esc / B: back", 15, Color(0.7, 0.72, 0.85)))
+	column.add_child(_label("Arrows / D-pad: choose   ·   E / A: pick   ·   Esc / B: back", 16, Color(0.7, 0.72, 0.85)))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_focus_first()
 

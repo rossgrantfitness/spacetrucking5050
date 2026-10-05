@@ -34,6 +34,11 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[gui]
+
+theme/default_font_antialiasing=0
+theme/custom_font="res://fonts/pixel_font.tres"
+
 [input]
 
 steer_left={

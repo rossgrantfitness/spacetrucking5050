@@ -1,7 +1,7 @@
 class_name PauseMenu
 extends CanvasLayer
-## A small pause menu: keep going, flip a few comfort switches, or head
-## somewhere else. It works with the mouse, the keyboard (arrows + Enter) or
+## A small pause menu: keep going, look up the controls, flip a few comfort
+## switches, or head somewhere else. It works with the mouse, the keyboard (arrows + Enter) or
 ## a gamepad (D-pad + A). (The full options menu comes in M10.)
 ##
 ## Used in flight and on foot; `flying` decides which buttons show.
@@ -27,6 +27,7 @@ signal quit_to_title_pressed
 @onready var _radio_volume: HSlider = %RadioVolume
 @onready var _dock: Button = %DockAtBase
 @onready var _logbook: Button = %Logbook
+@onready var _controls: Button = %Controls
 @onready var _back_to_start: Button = %BackToStart
 @onready var _quit_to_title: Button = %QuitToTitle
 
@@ -55,6 +56,7 @@ func _ready() -> void:
 		flight_only.visible = flying
 	_quit_to_title.pressed.connect(_on_quit_to_title)
 	_logbook.pressed.connect(_on_logbook)
+	_controls.pressed.connect(_on_controls)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -96,6 +98,11 @@ func _on_dock() -> void:
 func _on_logbook() -> void:
 	await LogbookView.open(get_tree())
 	_logbook.grab_focus()
+
+
+func _on_controls() -> void:
+	await ControlsView.open(get_tree())
+	_controls.grab_focus()
 
 
 func _on_quit_to_title() -> void:

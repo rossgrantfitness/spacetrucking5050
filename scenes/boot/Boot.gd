@@ -1,10 +1,10 @@
 extends Node3D
-## The boot screen: a quick "is everything plugged in?" check, and the way
-## into the game.
+## The title screen: the way into the game, plus an optional "is everything
+## plugged in?" check (hidden until you click "test your keys and gamepad").
 ##
-## It proves that the project runs, the 3D renderer works on this computer,
-## the tuning file and player settings load, and every keyboard, mouse and
-## gamepad input reaches the game. "Press Start" carries on your saved game
+## The check proves that the 3D renderer works on this computer, the tuning
+## file and player settings load, and every keyboard, mouse and gamepad
+## input reaches the game. (The full list of controls is in the Esc menu.) "Press Start" carries on your saved game
 ## (or wakes you up in your apartment for a new one); the small buttons below
 ## start over, or jump straight into flying.
 
@@ -33,6 +33,8 @@ const CHIP_LIT_COLOR := Color(1.0, 0.62, 0.28, 0.95)
 @onready var _start_button: Button = %StartFlying
 @onready var _fly_button: Button = %FlySandbox
 @onready var _new_game_button: Button = %NewGame
+@onready var _input_check_button: Button = %InputCheck
+@onready var _input_panel: Control = %InputPanel
 
 var _time := 0.0
 var _crate_home_height := 0.0
@@ -66,6 +68,7 @@ func _ready() -> void:
 	if SaveSystem.has_save():
 		_start_button.text = "PRESS START TO CONTINUE  (Enter / gamepad Start / click here)"
 	_fly_button.pressed.connect(_start_flying)
+	_input_check_button.pressed.connect(_toggle_input_check)
 
 
 func _process(delta: float) -> void:
@@ -142,6 +145,12 @@ func _new_game() -> void:
 	LoadingScreen.go(get_tree(), APARTMENT_SCENE, "start")
 
 
+## Shows or hides the input check (and the system info under it).
+func _toggle_input_check() -> void:
+	_input_panel.visible = not _input_panel.visible
+	_system_info.visible = _input_panel.visible
+
+
 func _start_flying() -> void:
 	GameState.load_game()
 	LoadingScreen.go(get_tree(), FLIGHT_SCENE, "flight")
@@ -160,8 +169,8 @@ func _describe_steering(stick: Vector2) -> String:
 	elif stick.x > 0.2:
 		parts.append("turn right")
 	if parts.is_empty():
-		return "Ship would: cruise straight"
-	return "Ship would: " + ", ".join(parts)
+		return "straight ahead"
+	return ", ".join(parts)
 
 
 ## A lazy spin with a gentle bob, like it's drifting in zero-g.
@@ -185,8 +194,8 @@ func _build_action_chips() -> void:
 		chip.add_theme_stylebox_override("panel", style)
 		var lines := VBoxContainer.new()
 		lines.add_theme_constant_override("separation", -2)
-		lines.add_child(_make_label(String(action).capitalize(), 15, Color.WHITE))
-		lines.add_child(_make_label(InputHints.for_action(action), 11, Color(1.0, 1.0, 1.0, 0.6)))
+		lines.add_child(_make_label(String(action).capitalize(), 16, Color.WHITE))
+		lines.add_child(_make_label(InputHints.for_action(action), 16, Color(1.0, 1.0, 1.0, 0.6)))
 		chip.add_child(lines)
 		_chips_box.add_child(chip)
 		_chip_styles[action] = style

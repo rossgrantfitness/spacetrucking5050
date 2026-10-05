@@ -25,9 +25,6 @@ extends CanvasLayer
 ## What a radar contact is.
 enum Kind { ROCK, SHIP, STATION }
 
-## How long the controls reminder stays up, in seconds.
-const HINT_SECONDS: float = 25.0
-
 ## The rig we're flying, and where we're headed (and its name). The job
 ## being hauled comes from GameState.
 var ship: Ship
@@ -55,7 +52,6 @@ var _widgets: Array[HudWidget] = []
 
 @onready var _pixels: SubViewport = $Pixels
 @onready var _screen: TextureRect = $Screen
-@onready var _hint: Label = $ControlsHint
 @onready var comm: CommPortrait = $Pixels/CommPortrait
 
 
@@ -129,8 +125,6 @@ func nearest_obstacle() -> float:
 
 func _process(delta: float) -> void:
 	time += delta
-	# Fade the controls reminder out over its last 3 seconds.
-	_hint.modulate.a = clampf((HINT_SECONDS - time) / 3.0, 0.0, 1.0)
 	var tuning := GameState.tuning
 	_frame_clock += delta
 	_number_clock += delta
@@ -190,4 +184,3 @@ func _refresh() -> void:
 	for widget in _widgets:
 		widget.visible = (Settings.show_hud or widget.always_shown) and not (_in_cockpit and widget.bottom_row) \
 				and (widget.always_shown or not _in_cabin)
-	_hint.visible = Settings.show_hud and not _in_cabin

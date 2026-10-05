@@ -60,6 +60,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Keep going"
 
+[node name="Controls" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Controls (every key and button)"
+
 [node name="InvertY" type="CheckButton" parent="Center/Panel/Items"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -119,6 +124,6 @@ text = "Quit to the title screen"
 [node name="Hint" type="Label" parent="Center/Panel/Items"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.5)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 16
 text = "Esc / Start: back to the game"
 horizontal_alignment = 1
