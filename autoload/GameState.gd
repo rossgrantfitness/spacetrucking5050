@@ -28,6 +28,7 @@ var upgrades: UpgradeList = preload("res://data/upgrades/upgrades.tres")
 var sights: Logbook = preload("res://data/logbook/sights.tres")
 var ships: ShipList = preload("res://data/ships/ships.tres")
 var paints: PaintList = preload("res://data/ships/paints.tres")
+var emails: EmailList = preload("res://data/pc/emails.tres")
 
 ## How much a new game starts with.
 const STARTING_CREDITS: int = 150
@@ -76,6 +77,14 @@ var hauls: int = 0
 ## Route events that have happened: event id -> the haul number it last
 ## happened on.
 var event_history: Dictionary = {}
+## Paid invoices for the PC (newest last): each is {"cargo", "client",
+## "to", "total", "day"}. Only the latest INVOICE_LIMIT are kept.
+var invoices: Array[Dictionary] = []
+const INVOICE_LIMIT: int = 20
+## Which day it is (sleeping in your bed starts a new one).
+var day: int = 1
+## The best score in Asteroid Alley, the game on her PC.
+var pc_high_score: int = 0
 
 # --- Not saved -------------------------------------------------------------------
 ## The pay breakdown from a delivery that just happened, shown when you walk
@@ -208,6 +217,11 @@ func deliver_at(place_id: String) -> bool:
 	pay["client_name"] = job.client_name
 	pay["condition"] = rig.get("cargo", 1.0)
 	add_credits(pay["total"])
+	var place := places.find(place_id)
+	invoices.append({"cargo": job.cargo_name, "client": job.client_name,
+			"to": place.display_name if place != null else place_id, "total": int(pay["total"]), "day": day})
+	if invoices.size() > INVOICE_LIMIT:
+		invoices.remove_at(0)
 	set_flag(job.completes_flag)
 	deliveries += 1
 	# So people can remember how it went: "<job>_arrived_perfect", "_bumpy"
@@ -268,6 +282,9 @@ func to_save_data() -> Dictionary:
 		"ships": owned_ships,
 		"active_ship": active_ship,
 		"paint": paint,
+		"invoices": invoices,
+		"day": day,
+		"pc_high_score": pc_high_score,
 	}
 
 
@@ -295,6 +312,8 @@ func apply_save_data(data: Dictionary) -> void:
 				owned_upgrades.append(str(id))
 	if data.get("launch_from") is String and places.find(data["launch_from"]) != null:
 		launch_from = data["launch_from"]
+	if launch_from == "base":
+		launch_from = "truck_stop"  # Old saves: there's no home base in space any more.
 	if data.get("room") is String and ResourceLoader.exists(data["room"]):
 		current_room = data["room"]
 	if data.get("finished_jobs") is Array:
@@ -327,6 +346,15 @@ func apply_save_data(data: Dictionary) -> void:
 		active_ship = data["active_ship"]
 	if data.get("paint") is String and paints.find(data["paint"]) != null:
 		paint = data["paint"]
+	if data.get("invoices") is Array:
+		for entry: Variant in data["invoices"]:
+			if entry is Dictionary:
+				invoices.append({"cargo": str(entry.get("cargo", "")), "client": str(entry.get("client", "")),
+						"to": str(entry.get("to", "")), "total": int(entry.get("total", 0)), "day": int(entry.get("day", 1))})
+	if data.get("day") is int or data.get("day") is float:
+		day = maxi(int(data["day"]), 1)
+	if data.get("pc_high_score") is int or data.get("pc_high_score") is float:
+		pc_high_score = maxi(int(data["pc_high_score"]), 0)
 	credits_changed.emit()
 
 
@@ -350,6 +378,9 @@ func new_game() -> void:
 	hauls = 0
 	event_history = {}
 	pending_payout = {}
+	invoices = []
+	day = 1
+	pc_high_score = 0
 	credits_changed.emit()
 
 

@@ -9,9 +9,14 @@ class_name HubServices
 
 
 ## Opens a menu by name ("job_board", "fuel", "mechanic", "jukebox",
-## "vending") and waits until the player is done with it.
+## "vending", "slots", "computer", "bed") and waits until the player is done
+## with it.
 static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 	match menu:
+		"computer":
+			await DesktopPC.open(tree)
+		"bed":
+			await sleep(tree)
 		"job_board":
 			await job_board(tree, place_id)
 		"fuel":
@@ -28,7 +33,42 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 			await vending(tree)
 		"slots":
 			await slots(tree)
-	GameState.save_game()
+	# Saved with everything else, except in flight (the flight saves itself
+	# when you dock).
+	if tree.current_scene == null or not tree.current_scene.scene_file_path.ends_with("FlightSandbox.tscn"):
+		GameState.save_game()
+
+
+## Sleeping in her bed while the rig's parked: lights out, and a new day.
+## (In flight, the bed sleeps all the way to the next stop instead; see
+## FlightSandbox.gd.)
+static func sleep(tree: SceneTree) -> void:
+	var night := CanvasLayer.new()
+	night.layer = 45
+	var dark := Control.new()
+	dark.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var shown := {"time": 0.0}
+	dark.draw.connect(func() -> void:
+		var t: float = shown["time"]
+		var screen := dark.size
+		var square := maxf(2.0, floorf(screen.y / 200.0))
+		dark.draw_rect(Rect2(Vector2.ZERO, screen), Color(0.01, 0.01, 0.03, clampf(t / 0.6, 0.0, 1.0)))
+		if t > 0.7:
+			var z := "Z".repeat(1 + int(t * 2.0) % 3)
+			PixelFont.draw_centered(dark, screen * 0.5 - Vector2(0.0, square * 12.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
+		if t > 1.6:
+			PixelFont.draw_centered(dark, screen * 0.5 + Vector2(0.0, square * 6.0), "DAY %d" % GameState.day, square * 2.0, Color(1.0, 0.85, 0.3)))
+	night.add_child(dark)
+	tree.root.add_child(night)
+	var clock := 0.0
+	while clock < 3.2:
+		await tree.process_frame
+		clock += tree.root.get_process_delta_time()
+		if clock > 1.4 and shown["time"] <= 1.4:
+			GameState.day += 1
+		shown["time"] = clock
+		dark.queue_redraw()
+	night.queue_free()
 
 
 ## "Take the job?" Returns whether the player took it.

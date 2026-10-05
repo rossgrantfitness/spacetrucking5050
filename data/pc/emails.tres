@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="EmailList" format=3]
+
+[ext_resource type="Script" path="res://data/pc/EmailList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/pc/EmailData.gd" id="2_email"]
+
+[sub_resource type="Resource" id="Email_0"]
+script = ExtResource("2_email")
+id = "hq_memo"
+from_name = "COMPANY HQ"
+subject = "Memo: you now live in your truck"
+body = "Effective immediately, all drivers live in their rigs. This saves on rent. It does not, but it saves on the paperwork about rent. Your apartment, hallway and a dispatch office have been fitted behind your cab. Thank you for your service. - Management"
+
+[sub_resource type="Resource" id="Email_1"]
+script = ExtResource("2_email")
+id = "dottie_moving_day"
+from_name = "DOTTIE (DISPATCH)"
+subject = "Moving day!!"
+body = "Hon, the company says the office rides with you now, so I've set up dispatch behind the cab. Coffee's on the left. My chair is not up for discussion. Marge at the truck stop has work for you: she's right outside, through the airlock. - D"
+
+[sub_resource type="Resource" id="Email_2"]
+script = ExtResource("2_email")
+id = "carrot_coin"
+from_name = "CARROT-COIN REWARDS"
+subject = "YOU HAVE WON A CARROT!!!"
+body = "Click nothing. Do nothing. A carrot has been reserved in your name at a warehouse four light years away. Shipping not included. Carrot not guaranteed. Carrot may be a turnip."
+
+[sub_resource type="Resource" id="Email_3"]
+script = ExtResource("2_email")
+id = "trucker_monthly"
+from_name = "SPACE TRUCKER MONTHLY"
+subject = "Issue 812 is here"
+body = "This month: Ten Rest Stops That Are Technically Inside A Whale. Is Your Bobblehead Judging You? (Yes.) Plus: our readers rank every drive-through that has ever said 'pull around'."
+
+[sub_resource type="Resource" id="Email_4"]
+script = ExtResource("2_email")
+id = "stellar_mutual"
+from_name = "STELLAR MUTUAL"
+subject = "Your hull is not insured"
+body = "Your hull is not insured! It is also not uninsured. We checked. It's complicated. Call us during business hours, which are a feeling more than a time."
+
+[sub_resource type="Resource" id="Email_5"]
+script = ExtResource("2_email")
+id = "horoscope"
+from_name = "COSMIC HOROSCOPE"
+subject = "Rabbits: this week"
+body = "Mercury is in retrograde, which in your sector means the vending machine in the hallway eats coins. Avoid it. Lucky number: 5050. Lucky snack: whatever's in the cup holder."
+
+[sub_resource type="Resource" id="Email_6"]
+script = ExtResource("2_email")
+id = "lily_prices"
+from_name = "LILY'S PUMPS"
+subject = "re: fuel prices"
+body = "Hi hi! Prices are fixed, hon, I don't make the rules, I just wear the visor. Coasting's free everywhere. Tell your friends. Do you have friends? Tell them anyway. - Lily"
+requires_flag = "met_marge"
+
+[sub_resource type="Resource" id="Email_7"]
+script = ExtResource("2_email")
+id = "marge_pies"
+from_name = "MARGE"
+subject = "you did good"
+body = "Gill says the pies got there in one piece. That's a first. Come by for coffee, on the house. The coffee, not the house. - M"
+requires_flag = "first_mission_done"
+
+[sub_resource type="Resource" id="Email_8"]
+script = ExtResource("2_email")
+id = "sal_cards"
+from_name = "SAL GRINWELL"
+subject = "A GOLDEN OPPORTUNITY, CHAMP"
+body = "Champ! Sal Grinwell, The High Roller, Glimmer System. I need cards. Lots of cards. Forty thousand decks. Dottie has the paperwork. Don't tell her I said paperwork, she hates that. Smiles, Sal"
+requires_flag = "glimmer_heard"
+
+[sub_resource type="Resource" id="Email_9"]
+script = ExtResource("2_email")
+id = "high_roller_promo"
+from_name = "THE HIGH ROLLER"
+subject = "Your FREE spin is waiting!"
+body = "Come try the Lucky Molar, Glimmer's friendliest slot machine! Ten credits a pull! The house always wins, but it wins NICELY. (Terms, conditions and teeth apply.)"
+requires_flag = "glimmer_open"
+
+[sub_resource type="Resource" id="Email_10"]
+script = ExtResource("2_email")
+id = "no_subject"
+from_name = "(UNKNOWN SENDER)"
+subject = "(no subject)"
+body = "saw your rig at the casino. same color he used to drive. thought you should know somebody else remembers."
+requires_flag = "sal_mentioned_rig"
+
+[resource]
+script = ExtResource("1_list")
+emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10")])

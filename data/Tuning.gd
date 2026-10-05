@@ -465,10 +465,6 @@ extends Resource
 ## once. Let go and the "grab" fades away again.
 @export_range(0.0, 3.0, 0.05, "suffix:s") var autopilot_grab_seconds: float = 0.6
 
-## Napping in the cabin while the autopilot drives fast-forwards the trip:
-## time runs this many times faster until you wake up (or arrive).
-@export_range(1.0, 20.0, 0.5) var nap_time_scale: float = 8.0
-
 
 @export_group("Radio")
 

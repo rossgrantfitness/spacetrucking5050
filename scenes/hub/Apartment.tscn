@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="8_service"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -19,6 +20,12 @@ size = Vector3(6.2, 3, 3.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
 size = Vector3(6.2, 3, 1.9)
+
+[sub_resource type="BoxShape3D" id="Box_computer"]
+size = Vector3(1.4, 1.6, 1.4)
+
+[sub_resource type="BoxShape3D" id="Box_bed"]
+size = Vector3(1.6, 1.2, 2.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit0"]
 size = Vector3(1.1, 2, 0.5)
@@ -88,6 +95,26 @@ target_spawn = "FromApartment"
 shape = SubResource("BoxShape3D_exit0")
 
 [node name="People" type="Node3D" parent="."]
+
+[node name="Things" type="Node3D" parent="."]
+
+[node name="Computer" type="Area3D" parent="Things"]
+position = Vector3(2.1, 0.8, -1.5)
+script = ExtResource("8_service")
+prompt = "USE COMPUTER"
+menu = "computer"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Computer"]
+shape = SubResource("Box_computer")
+
+[node name="Bed" type="Area3D" parent="Things"]
+position = Vector3(-2.3, 0.6, 1.3)
+script = ExtResource("8_service")
+prompt = "SLEEP"
+menu = "bed"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Bed"]
+shape = SubResource("Box_bed")
 
 [node name="PSXScreen" type="CanvasLayer" parent="."]
 layer = 0

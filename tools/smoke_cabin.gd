@@ -4,7 +4,8 @@ extends SceneTree
 ##   chart a course -> a comm call -> Jack replies -> flip through all the
 ##   radio stations (and set off DJ reactions) -> the cinema camera (director,
 ##   free, back to chase) -> get up and walk into the
-##   cabin -> nap (time runs fast) -> wake up -> back in the seat.
+##   cabin -> walk the rig's rooms -> sleep (skips to just outside Tidewater)
+##   -> back in the seat.
 ## It checks each step worked, then quits politely. It saves to a scratch
 ## file, never the player's real save.
 ##
@@ -19,6 +20,7 @@ var _frame := 0
 var _step := Step.FLY
 var _step_started := 0
 var _game: Node
+var _far_before := 0.0
 
 
 func _initialize() -> void:
@@ -109,16 +111,18 @@ func _process(_delta: float) -> bool:
 			elif waited > 4000:
 				_fail("walking between the rig's rooms in flight got stuck")
 		Step.NAP:
-			if waited == 30:
-				if Engine.time_scale <= 1.0:
-					_fail("napping should fast-forward time")
-				current_scene.call("_wake_up")
-				current_scene.call("_back_to_seat")
+			# Sleeping skips ahead: she wakes up back in the seat, just
+			# outside Tidewater.
+			if waited == 1:
+				_far_before = _distance_to_tidewater()
+			if not current_scene.get("_napping") and not current_scene.get("_in_cabin"):
+				if _distance_to_tidewater() > 4000.0 or _distance_to_tidewater() >= _far_before:
+					_fail("sleeping in flight should skip ahead to just outside the next stop")
 				_next(Step.WAKE)
+			elif waited > 2000:
+				_fail("sleeping in flight should end with her back in the seat")
 		Step.WAKE:
 			if waited == 60:
-				if Engine.time_scale != 1.0:
-					_fail("waking up should put time back to normal")
 				if current_scene.get("_in_cabin"):
 					_fail("walking out of the cabin should put you back in the seat")
 				if current_scene.get_node("World/Ship").get("cruise") == null:
@@ -127,6 +131,12 @@ func _process(_delta: float) -> bool:
 	if _frame > 20000 and _step != Step.DONE:
 		_fail("got stuck at step %s" % Step.keys()[_step])
 	return false
+
+
+func _distance_to_tidewater() -> float:
+	var ship: Node3D = current_scene.get_node("World/Ship")
+	var ring: Node3D = current_scene.get_node("World/Places/tidewater/ApproachRing")
+	return ship.global_position.distance_to(ring.global_position)
 
 
 func _next(step: Step) -> void:

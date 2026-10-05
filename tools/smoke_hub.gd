@@ -1,7 +1,8 @@
 extends SceneTree
 ## Used by tools/validate.sh: a quick "smoke test" of walking around your
 ## home, which is the inside of your rig, parked at the truck stop.
-## Wakes up in the apartment, walks out to the hallway, steps out of the
+## Wakes up in the apartment, boots up the PC and shuts it down again,
+## walks out to the hallway, steps out of the
 ## rig's airlock into the truck stop, boards again, walks into dispatch,
 ## talks to Dottie, climbs to the cockpit and takes off, then gets towed
 ## back to the truck stop, so any errors in those code paths show up.
@@ -9,11 +10,12 @@ extends SceneTree
 ## Run it with:  godot --headless --path . -s tools/smoke_hub.gd
 
 
-enum Stage { APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, COCKPIT, FLYING, TOWED, DONE }
+enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, COCKPIT, FLYING, TOWED, DONE }
 
 var _frame := 0
-var _stage := Stage.APARTMENT
+var _stage := Stage.PC
 var _stage_frame := 0
+var _saw_pc := false
 
 
 func _initialize() -> void:
@@ -28,6 +30,23 @@ func _process(_delta: float) -> bool:
 	_frame += 1
 	var waited := _frame - _stage_frame
 	match _stage:
+		Stage.PC:
+			# Sit at the desk, boot up, then shut it down (Esc).
+			if _ready_room() and waited == 20:
+				_player().global_position = Vector3(2.1, 0.0, -1.0)
+			if waited == 30:
+				_tap("interact")
+			var pc := _pc()
+			if pc != null and pc.get("_app") == 1:  # The desktop is up.
+				_tap("ui_cancel")
+			if waited > 40 and pc == null:
+				if not _saw_pc:
+					push_error("Smoke test: the apartment's computer should open")
+				_next(Stage.APARTMENT)
+			_saw_pc = _saw_pc or pc != null
+			if waited > 3000:
+				push_error("Smoke test: the PC should boot up and shut down")
+				_next(Stage.APARTMENT)
 		Stage.APARTMENT:
 			if waited == 20:
 				Input.action_press("move_right")
@@ -105,6 +124,13 @@ func _next(stage: Stage) -> void:
 
 func _in(scene_name: String) -> bool:
 	return current_scene != null and current_scene.name == scene_name
+
+
+func _pc() -> Node:
+	for node in root.get_children():
+		if node.get_script() != null and str(node.get_script().resource_path).ends_with("DesktopPC.gd"):
+			return node
+	return null
 
 
 func _ready_room() -> bool:

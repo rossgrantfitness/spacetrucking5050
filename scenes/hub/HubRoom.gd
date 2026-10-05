@@ -156,9 +156,14 @@ func leave_to(scene_path: String, spawn: String) -> void:
 func _set_up_cabin() -> void:
 	if not scene_file_path.ends_with("Apartment.tscn"):
 		return  # Only the apartment has a bed.
+	# In flight, the bed sleeps you all the way to the next stop instead of
+	# just to morning.
+	var parked_bed := get_node_or_null("Things/Bed") as Interactable
+	if parked_bed != null:
+		parked_bed.enabled = false
 	var bed := Interactable.new()
 	bed.name = "NapBed"
-	bed.prompt = "NAP"
+	bed.prompt = "SLEEP TILL WE GET THERE"
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(1.6, 1.2, 2.6)

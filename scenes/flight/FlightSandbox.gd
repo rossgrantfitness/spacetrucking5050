@@ -508,10 +508,13 @@ func _close_cabin() -> void:
 	_capture_mouse()
 
 
-## A nap on the cabin bed: the screen goes dark and time runs fast while the
-## autopilot drives. Any key wakes you up; arriving does too.
+## Sleeping in the apartment's bed in flight: lights out, and she wakes up
+## back in the seat as the rig pulls up to the next stop on the course
+## (SLEEP_WAKE_DISTANCE out, so she still gets to watch it dock). The miles
+## still cost their fuel, and the clock still runs for rush jobs; she just
+## doesn't have to sit through them. Public so the tests can use it.
 func _nap() -> void:
-	if _napping or _ship.cruise == null:
+	if _napping or _ship.cruise == null or _course.is_empty():
 		return
 	_napping = true
 	_cabin_room.player.set_busy(true)
@@ -522,14 +525,54 @@ func _nap() -> void:
 	dark.draw.connect(func() -> void: _draw_nap(dark))
 	_nap_screen.add_child(dark)
 	add_child(_nap_screen)
-	Engine.time_scale = GameState.tuning.nap_time_scale
+	await get_tree().create_timer(2.2).timeout
+	if not _napping:
+		return  # Something woke her (arriving, a crash).
+	_skip_to_next_stop()
+	await get_tree().create_timer(1.2).timeout
+	if not _napping:
+		return
+	_wake_up()
+	_close_cabin()
+	_hud.show_banner("SLEPT LIKE A ROCK. %s AHEAD." % GameState.places.find(_destination_id).display_name, 4.0)
+
+
+## How far out from the next stop's approach she wakes up, in meters.
+const SLEEP_WAKE_DISTANCE: float = 1500.0
+
+
+## Moves the rig along the course to just outside the next stop, nose in,
+## still cruising, and charges the trip's fuel and time.
+func _skip_to_next_stop() -> void:
+	var points := approach_points(_course[0], _ship.global_position)
+	if points.size() < 2:
+		return
+	var heading_in := (points[1] - points[0]).normalized()
+	var wake_at := points[0] - heading_in * SLEEP_WAKE_DISTANCE
+	if _ship.global_position.distance_to(points[0]) <= SLEEP_WAKE_DISTANCE + 200.0:
+		return  # Nearly there anyway.
+	var numbers := CourseChart.estimate(PackedVector3Array([_ship.global_position, wake_at]), _ship.ship_data, GameState.tuning, 0.0)
+	# Teleporting resets the rig's tanks and throttle; keep them as they were.
+	var fuel := maxf(_ship.flight.fuel - float(numbers["fuel"]), 0.0)
+	var boost_fuel := _ship.flight.boost_fuel
+	var lever := _ship.controls.lever
+	var speed := maxf(_ship.flight.speed(), _ship.ship_data.max_speed * 0.8)
+	_ship.teleport(Transform3D(Basis.looking_at(heading_in, Vector3.UP), wake_at))
+	_ship.flight.fuel = fuel
+	_ship.flight.boost_fuel = boost_fuel
+	_ship.controls.lever = lever
+	_ship.flight.velocity = heading_in * speed
+	if not GameState.active_job_id.is_empty():
+		GameState.job_seconds += float(numbers["cruise_seconds"])
+	_aim_cruise()
+	_chase_camera.snap_behind_target()
+	_blend_systems(true)
 
 
 func _wake_up() -> void:
 	if not _napping:
 		return
 	_napping = false
-	Engine.time_scale = 1.0
 	if _nap_screen != null:
 		_nap_screen.queue_free()
 		_nap_screen = null
@@ -545,9 +588,8 @@ func _draw_nap(canvas: Control) -> void:
 	var left := dock.global_position.distance_to(_ship.global_position) / 1000.0 if dock != null else 0.0
 	var z := "Z".repeat(1 + int(Time.get_ticks_msec() / 600.0) % 3)
 	PixelFont.draw_centered(canvas, screen * 0.5 - Vector2(0.0, square * 14.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
-	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "NAPPING. THE AUTOPILOT'S GOT IT.", square, Color(0.8, 0.82, 0.9))
+	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "SLEEPING. THE AUTOPILOT'S GOT IT.", square, Color(0.8, 0.82, 0.9))
 	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 16.0), "%.1f KM TO GO" % left, square, Color(1.0, 0.85, 0.3))
-	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 30.0), "ANY KEY TO WAKE UP", square * 0.75, Color(0.5, 0.52, 0.6))
 
 
 ## While you push the stick hard on autopilot, say what's about to happen
