@@ -89,6 +89,7 @@ Y = △.)
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
+| Cinema camera (on autopilot): director, then free camera, then back | **V** | **R3** (click the right stick) |
 | Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
 | Radio on / off | **R** | D-pad **up** |
 | Hide / show the HUD | **H** | D-pad **down** |
@@ -155,8 +156,23 @@ yellow diamond on the compass strip points at where you're headed.
 **Chart a course (M):** a map with every place you can go, how far, how
 long cruising vs. on full boost, and how much fuel it takes. Pick one (or
 "via the Gas-N-Go") and the autopilot drives at cruise speed, steers around
-rocks and traffic, and flies you through the ring. Touch the stick,
-throttle or boost and you take over.
+rocks and traffic, and flies you through the ring. **Small nudges don't
+switch it off:** a light touch on the stick just leans the rig a little,
+and the autopilot steers back on course when you let go. To take over,
+**hold** the stick firmly (or the throttle) for about half a second
+("HOLD TO TAKE THE WHEEL" shows as you start), or hit boost (instant).
+
+**The cinema camera (V / R3, on autopilot):** sit back and watch your rig.
+A "director" picks shots by itself and cuts every 7-10 seconds: a slow
+orbit, a tracking shot alongside, a fly-by (the camera waits ahead and the
+rig whooshes past), a low hero shot from the front, a long-lens wide shot,
+and a high shot from behind. Black film bars, and the HUD tucks away (calls
+and messages still show). **Touch the stick or the mouse and you hold the
+camera:** swing it all the way around the rig, and zoom with **W / S**
+(triggers) or the **mouse wheel**. In this mode the stick never steers
+the rig, so you can't knock off the autopilot. Press **V** again to go to
+the free camera, and once more for the chase cam (or **C**). Getting up,
+arriving, a crash, or the autopilot switching off also brings you back.
 
 **Get up (F / X) while the autopilot drives:** walk around your rig's
 sleeper cabin (your apartment is the rig's cabin). Walk out the cabin door
@@ -201,8 +217,11 @@ and genre; DJs react to what you do (storms, tickets, new systems, your
 deliveries). Drop songs into a station's folder and they play (see
 `audio/radio/README.md`). Until then each station plays a little
 placeholder loop. The last station, **MY TUNES**, plays your own
-music files from the game's `radio/custom/` folder. Radio volume is in the
-pause menu.
+music files from the game's `radio/custom/` folder.
+
+**Volume:** the pause menu has three sliders: **Music (radio)**, **Sound
+effects** (engine, boost, bonks...) and **Voices** (the little talking
+blips). The engine is quieter than before so the music comes first.
 
 **The mouse while flying:** it's hidden and locked to the game window, and
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
@@ -233,8 +252,8 @@ towed home**. Your money is in the top-right corner.
 
 **Invert Y:** by default, pushing up points the ship's nose up. If you prefer
 "pilot style" (push up = nose down), flip *Invert Y* in the pause menu (or on
-the boot screen). The pause menu also has *Camera roll*, *Show HUD* and *Screen shake*. All of
-them are remembered between sessions.
+the boot screen). The pause menu also has *Camera roll*, *Show HUD*, *Screen shake*,
+*Gamepad rumble* and the three volume sliders. All of them are remembered between sessions.
 
 You can change any binding in the editor: *Project → Project Settings →
 Input Map*.

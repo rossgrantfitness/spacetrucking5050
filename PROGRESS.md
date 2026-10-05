@@ -1,19 +1,20 @@
 # Progress
 
-**Current status:** **Round 12: crashes, a wilder boost, quieter dust.**
-Hit something at boost speed (or run the hull down to nothing) and the rig
-spins out of control and blows up, then you're straight back at your last
-save. Boost is faster and wilder (boost jolts!), there's half the space
-dust and a little more traffic, and your design language document is in
-`docs/DESIGN_LANGUAGE.md`. Built and validated, **waiting for your
-playtest** (see `PLAYTEST.md`), and for the reference files (spaceship
-designs, the Japanese radio tracks, the bunny model and character sheet),
-which didn't arrive.
-**Next session:** the Japanese station and ship designs once the files are
-in; then your call (the Hyperway, the amber desert, events 168-250, the
-economy rebalance, the audit).
+**Current status:** **Round 13: a forgiving autopilot, hub cameras, the
+cinema camera, quieter engines.** Small stick nudges no longer knock off
+the autopilot (it steers back on course); the hub's cameras always find
+the bunny; **V / R3 on autopilot** opens a cinema camera (a director
+cutting between shots, or your own free camera); the engine is quieter
+and the pause menu has Music / Sound effects / Voices sliders. Built and
+validated, **waiting for your playtest of rounds 12 and 13** (see
+`PLAYTEST.md`), and for the reference files (spaceship designs, the
+Japanese radio tracks, the bunny model and character sheet), which still
+haven't arrived.
+**Next session:** your feedback on rounds 12-13; the Japanese station and
+ship designs once the files are in; then your call (the Hyperway, the
+amber desert, events 168-250, the economy rebalance, the audit).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 12)
+**Last updated:** 2026-10-05 (round 13)
 
 ---
 
@@ -55,6 +56,7 @@ economy rebalance, the audit).
   - [ ] Your playtest: can you finish a delivery, get paid, buy the upgrade and feel it?
 - [ ] **M3: The walkable hub** *(started early, at your request)*
   - [x] Pre-rendered backgrounds with fixed FF8-style cameras and camera zones; camera-relative walking that doesn't flip on cuts
+  - [x] Round 13: the camera always finds the bunny (arrival spots fixed, plus a switch to a camera that can see her if she's ever hidden)
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades
   - [x] Dialogue boxes with typewriter text and voice blips; Dottie the morning clerk; interact prompts
@@ -80,6 +82,7 @@ economy rebalance, the audit).
   - [x] An optional stop: the Gas-N-Go 47 drive-through (round 9: cheaper fuel, a calming snack, a souvenir, side jobs)
   - [x] Round 9: no repeating sights, rare sights (great migration, leviathans, a ghost ship, a comet storm), a logbook (L), comm replies (T)
   - [x] Round 12 (your call, overriding the brief's "no death"): catastrophic crashes: out of control, an explosion, the WRECKED card, back to your last save with nothing lost
+  - [x] Round 13: the autopilot forgives small nudges and steers back on course; a cinema camera on autopilot (V / R3: a director cutting between six shots, or a free orbit camera); a quieter engine and Music / Sound effects / Voices sliders
   - [x] Round 10: your route events list (1-167) in the data, 49 playable now (signs, passing ships with stories, processions, calls with reply choices, radio moments, gentle hazards like hull pings, gravity eddies and gravity tides); a director with zones (deep space, traffic lanes, station approach, orbit, weather), haul cooldowns, one hazard at a time, one rare per haul, story and night-only events
   - [x] Route map: the course chart (see M2)
   - [ ] Gravity wells and slingshots

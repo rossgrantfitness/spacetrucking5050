@@ -32,6 +32,10 @@ const PLAYER_SCENE := preload("res://scenes/hub/Player.tscn")
 const SET_LAYER: int = 2
 
 ## The spawn spot to use when nobody said where to arrive (like a new game).
+## How long the camera can lose sight of the bunny before cutting to one
+## that sees her (a short grace, so walking past a pillar doesn't flicker).
+const UNSEEN_GRACE: float = 0.25
+
 @export var default_spawn: String = ""
 ## Which place this room belongs to (a place id from res://data/places/,
 ## like "base" or "truck_stop"): its job board lists jobs from here.
@@ -48,6 +52,8 @@ var aboard: bool = false
 var player: HubPlayer
 var _shots: Array[RoomShot] = []
 var _active_shot: RoomShot
+## How long the current camera has been unable to see the bunny.
+var _unseen_time: float = 0.0
 var _backdrop := ShaderMaterial.new()
 var _fade: ScreenFade
 var _ready_to_play := false
@@ -210,15 +216,40 @@ func _choose_shot(first_time: bool) -> void:
 	if player == null:
 		return
 	var feet := player.global_position + Vector3.UP * 0.1
-	if _active_shot != null and _active_shot.contains(feet) and not first_time:
-		return
+	var chest := player.global_position + Vector3.UP * 0.7
+	# Keep the current shot while she's in its zone and it can see her. If
+	# it loses sight of her (out of frame, or behind something solid) for
+	# a moment, cut to one that can: she should never be lost off-screen.
+	if not first_time and _active_shot != null and _active_shot.contains(feet):
+		if sees(_active_shot, chest, true):
+			_unseen_time = 0.0
+			return
+		_unseen_time += get_physics_process_delta_time()
+		if _unseen_time < UNSEEN_GRACE:
+			return
 	var chosen: RoomShot = null
+	# 1. The shot for where she's standing, if it can see her.
 	for shot in _shots:
-		if shot.contains(feet):
+		if shot.contains(feet) and sees(shot, chest, not first_time):
 			chosen = shot
 			break
+	# 2. Any shot that can see her (the closest camera).
+	if chosen == null:
+		var best := INF
+		for shot in _shots:
+			var distance := shot.camera().global_position.distance_to(chest) if shot.camera() != null else INF
+			if distance < best and sees(shot, chest, not first_time):
+				best = distance
+				chosen = shot
+	# 3. Nothing sees her (shouldn't happen): the old way, by zone.
+	if chosen == null:
+		for shot in _shots:
+			if shot.contains(feet):
+				chosen = shot
+				break
 	if chosen == null:
 		chosen = _active_shot if _active_shot != null else (_shots[0] if not _shots.is_empty() else null)
+	_unseen_time = 0.0
 	if chosen == null or (chosen == _active_shot and not first_time):
 		return
 	_active_shot = chosen
@@ -226,6 +257,21 @@ func _choose_shot(first_time: bool) -> void:
 	_backdrop.set_shader_parameter("background", chosen.background)
 	if not first_time:
 		player.on_camera_cut()
+
+
+## Whether `shot`'s camera can see `point`: inside its frame and (with
+## `check_walls`) not hidden behind anything solid.
+func sees(shot: RoomShot, point: Vector3, check_walls: bool) -> bool:
+	var cam := shot.camera()
+	if cam == null or not cam.is_inside_tree() or not cam.is_position_in_frustum(point):
+		return false
+	if not check_walls:
+		return true
+	var query := PhysicsRayQueryParameters3D.create(cam.global_position, point)
+	if player != null:
+		query.exclude = [player.get_rid()]
+	var hit := cam.get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or (hit["position"] as Vector3).distance_to(point) < 0.5
 
 
 func _spawn_player() -> void:

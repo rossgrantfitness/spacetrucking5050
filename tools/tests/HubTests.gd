@@ -72,3 +72,35 @@ func test_rooms_have_cameras_spawns_and_doors() -> void:
 				check(other.has_node("Spawns/" + spawn), "%s: door %s arrives at spawn '%s', which %s doesn't have" % [path, exit.name, spawn, target])
 				other.free()
 		room.free()
+
+
+## A node's place relative to `top` (works on scenes that aren't running).
+func _placement(node: Node, top: Node) -> Transform3D:
+	var placed := Transform3D.IDENTITY
+	var walker := node
+	while walker != null and walker != top:
+		if walker is Node3D:
+			placed = (walker as Node3D).transform * placed
+		walker = walker.get_parent()
+	return placed
+
+
+func test_every_arrival_spot_is_in_view() -> void:
+	for file_name in DirAccess.get_files_at("res://scenes/hub"):
+		if not file_name.ends_with(".tscn") or file_name.ends_with("Visual.tscn") or file_name == "Player.tscn":
+			continue
+		var room := (load("res://scenes/hub/" + file_name) as PackedScene).instantiate()
+		if room.has_node("Spawns") and room.has_node("Shots"):
+			for spawn in room.get_node("Spawns").get_children():
+				var feet := _placement(spawn, room).origin
+				var seen := false
+				for shot: RoomShot in room.get_node("Shots").get_children():
+					if not shot.contains_local(_placement(shot, room).affine_inverse() * (feet + Vector3.UP * 0.1)):
+						continue
+					var cam := shot.camera()
+					var local := _placement(cam, room).affine_inverse() * (feet + Vector3.UP * 0.7)
+					var half_v := deg_to_rad(cam.fov) * 0.5
+					var half_h := atan(tan(half_v) * 16.0 / 9.0)
+					seen = seen or (local.z < -0.3 and absf(atan2(local.y, -local.z)) < half_v * 0.92 and absf(atan2(local.x, -local.z)) < half_h * 0.95)
+				check(seen, "%s: arriving at %s, the camera for that spot can see the bunny" % [file_name, spawn.name])
+		room.free()

@@ -270,6 +270,35 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var camera_roll_amount: float = 0.5
 
 
+@export_group("Cinematic camera")
+
+## On autopilot, V / R3 hands the view to a film director: it picks shots by
+## itself (orbits, tracking shots, fly-bys...). Shortest a shot lasts.
+@export_range(2.0, 30.0, 0.5, "suffix:s") var cinema_shot_min: float = 7.0
+
+## Longest a director's shot lasts before it cuts to another.
+@export_range(2.0, 40.0, 0.5, "suffix:s") var cinema_shot_max: float = 10.0
+
+## How fast the director's orbit shot circles the rig.
+@export_range(0.0, 60.0, 1.0, "suffix:deg/s") var cinema_orbit_speed: float = 9.0
+
+## Free camera: how fast the stick (or keys) swings the camera around the rig.
+@export_range(10.0, 360.0, 5.0, "suffix:deg/s") var cinema_free_turn: float = 90.0
+
+## Free camera: how far moving the mouse swings it.
+@export_range(0.01, 1.0, 0.01) var cinema_mouse_turn: float = 0.25
+
+## Free camera: how fast holding the throttle keys / triggers zooms.
+@export_range(0.1, 5.0, 0.1) var cinema_zoom_speed: float = 1.2
+
+## Free camera: closest and farthest it can sit from the rig.
+@export_range(4.0, 100.0, 1.0, "suffix:m") var cinema_min_distance: float = 22.0
+@export_range(20.0, 600.0, 5.0, "suffix:m") var cinema_max_distance: float = 220.0
+
+## How tall the black film bars at the top and bottom are (share of the screen).
+@export_range(0.0, 0.25, 0.01) var cinema_letterbox: float = 0.09
+
+
 @export_group("Field of view")
 
 ## The normal field of view, in degrees. Bigger = a wider, more fish-eye view.
@@ -424,6 +453,18 @@ extends Resource
 
 @export_group("Autopilot")
 
+## The cruise autopilot forgives small inputs: steering up to this much
+## (0 to 1, how far the stick is pushed) just nudges the rig, and the
+## autopilot steers back on course by itself.
+@export_range(0.0, 1.0, 0.05) var autopilot_tolerance: float = 0.55
+## How much of your small nudges the rig actually follows while the
+## autopilot drives (1 = all of it, 0 = none).
+@export_range(0.0, 1.0, 0.05) var autopilot_nudge_share: float = 0.6
+## To take over, push harder than the tolerance (or use the throttle) for
+## this long. A full push takes over twice as fast. Boost takes over at
+## once. Let go and the "grab" fades away again.
+@export_range(0.0, 3.0, 0.05, "suffix:s") var autopilot_grab_seconds: float = 0.6
+
 ## Napping in the cabin while the autopilot drives fast-forwards the trip:
 ## time runs this many times faster until you wake up (or arrive).
 @export_range(1.0, 20.0, 0.5) var nap_time_scale: float = 8.0
@@ -532,7 +573,7 @@ extends Resource
 @export_group("Engine sound")
 
 ## Overall engine loudness in decibels. 0 = full, -6 = about half as loud.
-@export_range(-40.0, 6.0, 0.5, "suffix:dB") var engine_volume_db: float = -6.0
+@export_range(-40.0, 6.0, 0.5, "suffix:dB") var engine_volume_db: float = -13.0
 
 ## Engine pitch when idling (1 = the ship's normal voice).
 @export_range(0.2, 2.0, 0.05) var engine_idle_pitch: float = 0.7

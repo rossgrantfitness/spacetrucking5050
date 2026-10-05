@@ -34,10 +34,27 @@ var rumble: bool = true
 
 ## How loud the radio (and the ambient music when it's off) is, 0 to 1.
 var radio_volume: float = 0.8
+## How loud the sound effects are (the engine, boost, bonks, everything
+## that isn't music or voices), 0 to 1. A bit under the music by default:
+## cruising with the radio on is the heart of the game.
+var sfx_volume: float = 0.7
+## How loud the characters' gibberish voices are, 0 to 1.
+var voice_volume: float = 0.9
+
+## The mixer channels (buses) the sound effects and voices play through.
+## Music has its own ("Radio" and "Ambient", made by the Radio).
+const SFX_BUS: String = "SFX"
+const VOICE_BUS: String = "Voice"
 
 
 func _ready() -> void:
+	_make_bus(SFX_BUS)
+	_make_bus(VOICE_BUS)
 	load_settings()
+	_apply_volumes()
+	# Every sound that isn't sent anywhere in particular is a sound effect:
+	# route it through the SFX channel, so the slider controls it.
+	get_tree().node_added.connect(_route_sound)
 
 
 ## Turns an up/down input (stick, arrow keys or mouse) into a nose direction,
@@ -79,6 +96,40 @@ func set_radio_volume(volume: float) -> void:
 	_changed()
 
 
+func set_sfx_volume(volume: float) -> void:
+	sfx_volume = clampf(volume, 0.0, 1.0)
+	_apply_volumes()
+	_changed()
+
+
+func set_voice_volume(volume: float) -> void:
+	voice_volume = clampf(volume, 0.0, 1.0)
+	_apply_volumes()
+	_changed()
+
+
+func _apply_volumes() -> void:
+	for bus: Array in [[SFX_BUS, sfx_volume], [VOICE_BUS, voice_volume]]:
+		var index := AudioServer.get_bus_index(bus[0])
+		if index != -1:
+			AudioServer.set_bus_volume_db(index, linear_to_db(maxf(float(bus[1]), 0.0001)))
+
+
+func _make_bus(bus_name: String) -> void:
+	if AudioServer.get_bus_index(bus_name) != -1:
+		return
+	AudioServer.add_bus()
+	var index := AudioServer.bus_count - 1
+	AudioServer.set_bus_name(index, bus_name)
+	AudioServer.set_bus_send(index, "Master")
+
+
+func _route_sound(node: Node) -> void:
+	if node is AudioStreamPlayer or node is AudioStreamPlayer2D or node is AudioStreamPlayer3D:
+		if node.get("bus") == &"Master":
+			node.set("bus", SFX_BUS)
+
+
 func save_settings() -> void:
 	SaveSystem.write_json(SETTINGS_PATH, {
 		"version": SETTINGS_VERSION,
@@ -88,6 +139,8 @@ func save_settings() -> void:
 		"screen_shake": screen_shake,
 		"rumble": rumble,
 		"radio_volume": radio_volume,
+		"sfx_volume": sfx_volume,
+		"voice_volume": voice_volume,
 	})
 
 
@@ -103,9 +156,11 @@ func apply_saved_data(data: Dictionary) -> void:
 		var saved: Variant = data.get(option)
 		if saved is bool:
 			set(option, saved)
-	var volume: Variant = data.get("radio_volume")
-	if volume is float or volume is int:
-		radio_volume = clampf(float(volume), 0.0, 1.0)
+	for option: String in ["radio_volume", "sfx_volume", "voice_volume"]:
+		var volume: Variant = data.get(option)
+		if volume is float or volume is int:
+			set(option, clampf(float(volume), 0.0, 1.0))
+	_apply_volumes()
 
 
 func _changed() -> void:

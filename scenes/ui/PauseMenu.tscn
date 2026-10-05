@@ -92,7 +92,7 @@ text = "Gamepad rumble"
 
 [node name="RadioVolumeLabel" type="Label" parent="Center/Panel/Items"]
 layout_mode = 2
-text = "Radio volume"
+text = "Music (radio)"
 
 [node name="RadioVolume" type="HSlider" parent="Center/Panel/Items"]
 unique_name_in_owner = true
@@ -100,6 +100,28 @@ layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 0.8
+
+[node name="SfxVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Sound effects (engine, boost, bonks)"
+
+[node name="SfxVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.7
+
+[node name="VoiceVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Voices"
+
+[node name="VoiceVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.9
 
 [node name="Logbook" type="Button" parent="Center/Panel/Items"]
 unique_name_in_owner = true

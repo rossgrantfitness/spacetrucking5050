@@ -18,6 +18,10 @@ var thrust := 0.0
 ## True while the boost button is held.
 var boost := false
 
+## How hard the throttle keys (or triggers) are pushed this step, -1 to 1
+## (0 = not touching them).
+var throttle_push := 0.0
+
 ## True when the pilot's hands are actually on the controls this step
 ## (moving the throttle lever, boosting, or steering for real). Grabbing the
 ## controls takes over from the cruise autopilot.

@@ -69,6 +69,7 @@ func _ready() -> void:
 	_blip_player = AudioStreamPlayer.new()
 	_blip_player.stream = BLIP_SOUND
 	_blip_player.max_polyphony = 3
+	_blip_player.bus = Settings.VOICE_BUS
 	add_child(_blip_player)
 	_rng.randomize()
 

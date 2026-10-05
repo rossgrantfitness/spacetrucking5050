@@ -161,11 +161,13 @@ func _physics_process(delta: float) -> void:
 	controls.forward_speed = flight.forward_speed()
 	var hands := controls.read(delta)
 	if cruise != null:
-		if hands.is_touched():
+		if cruise.feel_hands(hands, delta):
 			cruise = null
 			cruise_released.emit()
 		else:
+			var nudge := hands
 			hands = cruise.steer(self, delta)
+			CruisePilot.mix_in(hands, nudge, GameState.tuning)
 			# Keep the lever where the autopilot is driving, so taking over
 			# is smooth.
 			controls.lever = clampf(flight.forward_speed() / ship_data.max_speed, 0.0, 1.0)

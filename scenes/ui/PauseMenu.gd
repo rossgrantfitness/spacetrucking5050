@@ -25,6 +25,8 @@ signal quit_to_title_pressed
 @onready var _screen_shake: CheckButton = %ScreenShake
 @onready var _rumble: CheckButton = %Rumble
 @onready var _radio_volume: HSlider = %RadioVolume
+@onready var _sfx_volume: HSlider = %SfxVolume
+@onready var _voice_volume: HSlider = %VoiceVolume
 @onready var _dock: Button = %DockAtBase
 @onready var _logbook: Button = %Logbook
 @onready var _controls: Button = %Controls
@@ -43,12 +45,16 @@ func _ready() -> void:
 	_screen_shake.button_pressed = Settings.screen_shake
 	_rumble.button_pressed = Settings.rumble
 	_radio_volume.value = Settings.radio_volume
+	_sfx_volume.value = Settings.sfx_volume
+	_voice_volume.value = Settings.voice_volume
 	_invert_y.toggled.connect(Settings.set_invert_y)
 	_camera_roll.toggled.connect(Settings.set_camera_roll)
 	_show_hud.toggled.connect(Settings.set_show_hud)
 	_screen_shake.toggled.connect(Settings.set_screen_shake)
 	_rumble.toggled.connect(Settings.set_rumble)
 	_radio_volume.value_changed.connect(Settings.set_radio_volume)
+	_sfx_volume.value_changed.connect(Settings.set_sfx_volume)
+	_voice_volume.value_changed.connect(Settings.set_voice_volume)
 	_resume.pressed.connect(close)
 	_back_to_start.pressed.connect(_on_back_to_start)
 	_dock.pressed.connect(_on_dock)

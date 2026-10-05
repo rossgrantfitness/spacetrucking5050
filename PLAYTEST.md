@@ -1,60 +1,81 @@
-# Playtest: round 12 (crashes, a wilder boost, quieter dust)
+# Playtest: rounds 12 and 13
 
-**What you asked for:** catastrophic death and out-of-control ships for
-hitting things (with an instant restart from your last save); boost that
-feels even faster and even more chaotic; 50% fewer stars flying past; and
-5-10% more traffic. I also saved your design language document as
-`docs/DESIGN_LANGUAGE.md`.
+You said your last notes were from round 11, so this playtest covers
+**both** rounds you haven't played yet.
 
-**One thing missing:** the reference files you mentioned (spaceship
-designs, music for a Japanese radio station, the bunny's 3D model in a
-T-pose and her character sheet) **didn't make it into the repo**. Please
-push them to the branch (or upload them here) and I'll use them next round.
+**Time needed:** about 30 minutes.
 
-**Time needed:** about 20 minutes.
-
-> Honest note: I tested the crash with an automated run (boosting into a
-> wall: out of control, explosion, the WRECKED card, back to the last save)
-> and looked at screenshots. Whether boost now feels faster and wilder in
-> a good way, and whether the crash feels right, is yours to judge.
+> Honest note: I tested everything with automated runs and screenshots
+> (each cinema shot, the pause menu, every hub arrival spot), but how the
+> autopilot nudges feel, whether the cinema shots are pretty, and whether
+> the sound balance is right are yours to judge.
 
 ---
 
-## What's new
+## Round 13 (what you just asked for)
 
-- **Crashes:** hit anything at **boost speed** (about 400 km/h or more),
-  or let bonks wear the **hull down to nothing**, and the rig **loses
-  control**: it tumbles, throws sparks, trails black smoke, the alarm
-  wails. A couple of seconds later it **blows up** (flash, fireball,
-  shockwave, flying debris). Then a **WRECKED** card with one of Jack's
-  one-liners, and you're **back at your last save**, nothing lost. Bonks at
-  cruise speed are still just bonks.
-- **Boost:** about **30% faster** at the top (the starter rig hits about
-  790 km/h) and it kicks in harder. **Wilder:** a much wider view, the
-  camera pulls back more, stronger speed lines, more shake, more slide in
-  turns, and **boost jolts**: the engines cough and shove you sideways
-  every second or two.
-  - This makes Tidewater about **4½ minutes on full boost** (it was 6, as
-    you asked for in round 7).
-- **Half the dust** streaking past.
-- **A little more traffic** near stations and the border gates (about 8%).
-  Deep space is as empty as before.
+- **The autopilot forgives small nudges.** A light touch on the stick just
+  leans the rig a little, and the autopilot steers it back on course when
+  you let go. To take over, **hold** the stick firmly (or the throttle) for
+  about half a second; "HOLD TO TAKE THE WHEEL" shows as you start. Boost
+  still takes over instantly.
+- **The hub camera always finds the bunny.** The two rooms where she
+  arrived off-screen (walking into dispatch and into the hallway) are
+  fixed, and if a camera ever loses her for a moment, the room switches to
+  one that can see her.
+- **The cinema camera: V (R3, click the right stick), on autopilot.**
+  - A **director** picks shots by itself and cuts every 7-10 seconds: a
+    slow orbit, a tracking shot alongside, a **fly-by** (the camera waits
+    ahead and the rig whooshes past), a low hero shot, a long-lens wide
+    shot, a high shot from behind. Film bars; the HUD tucks away.
+  - **Touch the stick or mouse and the camera is yours:** swing all the way
+    around the rig, zoom with W / S (triggers) or the mouse wheel.
+  - The stick never steers the rig in this mode, so you can't knock off the
+    autopilot. **V** again → free camera, once more → back to the chase cam.
+- **Quieter engine, and volume sliders.** The engine and boost hum is
+  about half as loud. The pause menu (Esc) now has **Music (radio)**,
+  **Sound effects** and **Voices** sliders.
+
+## Round 12 (the one you skipped)
+
+- **Crashes:** hit something at **boost speed** (or let bonks wear the
+  hull down to nothing) and the rig **loses control**, tumbles, and
+  **blows up**. Then a **WRECKED** card, and you're **back at your last
+  save**, nothing lost. Cruise-speed bonks are still just bonks.
+- **Boost is about 30% faster and wilder:** a wider view, more shake, more
+  slide, and **boost jolts** (the engines cough and shove you sideways).
+  Tidewater is now about 4½ minutes on full boost (it was 6).
+- **Half the space dust**, and **about 8% more traffic** near stations.
+- Your design language document is saved as `docs/DESIGN_LANGUAGE.md`.
 
 ## Try this
 
-1. Fly out and **boost**. Feel the jolts. Try to hold a line through a
-   turn.
-2. **Boost straight into a rock** (or a big ship). Watch it go. Press any
-   key on the WRECKED card.
-3. Do a normal haul at cruise and notice the dust and traffic.
+1. Start a new game. Walk from the apartment to the hallway to dispatch.
+   Is she always on screen when you come through a door?
+2. Take a job, launch, press **M** and chart a course. Nudge the stick a
+   little, then let go: does the autopilot keep going and steer back?
+   Then hold the stick hard to take over.
+3. Chart a course again and press **V**. Watch the director for a minute
+   with the radio on. Then touch the stick and fly the camera around the
+   rig. Press **V** to get back.
+4. Open the pause menu and set the three sliders how you like them.
+5. Round 12: **boost**, feel the jolts, then **boost into a rock** and
+   watch the crash.
 
 ## Questions for you
 
-1. **The crash:** does it feel dramatic enough? Too long or too short (2.5
-   seconds out of control, 4 seconds of WRECKED card)?
-2. **What should kill you?** Right now only boost-speed hits and an empty
-   hull. Should cruise-speed hits ever be fatal?
-3. **Boost:** faster and wilder in a good way, or too much? Are the jolts
-   fun or annoying?
-4. **The 6-minute boost to Tidewater:** OK at 4½ now, or should I keep 6?
-5. **Dust and traffic:** right amounts now?
+1. **Autopilot nudges:** is the amount it tolerates right? Should taking
+   over need a firmer or a lighter grab?
+2. **Cinema camera:** which shots do you like, and which would you cut?
+   Should the director cut faster or slower than every 7-10 seconds?
+3. **Sound:** with the engine at the new level, can you hear the music
+   while cruising and boosting? What did you set the sliders to? (I'll
+   make that the default.)
+4. **Crashes (round 12):** dramatic enough? Too long or too short?
+5. **Boost (round 12):** faster and wilder in a good way, or too much? Are
+   the jolts fun or annoying?
+
+**Still missing:** the reference files you mentioned in round 12
+(spaceship designs, music for a Japanese radio station, the bunny's 3D
+model and character sheet) aren't in the repo yet. Push them to the
+branch, or upload them here, and I'll use them next.

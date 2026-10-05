@@ -7,7 +7,9 @@ extends RefCounted
 ##
 ## It "holds the stick" by filling in FlightControls, exactly like your
 ## hands do, so the rig flies the same way it does for you (same handling,
-## same fuel burn). Touch the stick, throttle or boost and it lets go (see
+## same fuel burn). It forgives small inputs: a nudge of the stick moves
+## the rig a little and it steers back on course. Push harder (or work the
+## throttle) for a moment, or hit boost, and it lets go (see feel_hands and
 ## Ship.gd). It never boosts: that's your call.
 
 
@@ -22,8 +24,37 @@ var reach: float = 120.0
 var arrival_speed: float = 0.0
 
 var _controls := FlightControls.new()
+## How close the pilot is to taking over: 0 = hands off, 1 = theirs.
+var grab: float = 0.0
 var _avoid := Vector3.ZERO
 var _avoid_clock: float = 0.0
+
+
+## Feels the pilot's hands on the controls this step. Returns true when
+## they've taken over (a firm push held for a moment, the throttle, or
+## boost). Small nudges don't count: they're mixed into the autopilot's own
+## steering by mix_in.
+func feel_hands(hands: FlightControls, delta: float) -> bool:
+	var tuning := GameState.tuning
+	if hands.boost:
+		grab = 1.0
+		return true
+	var push := hands.steer.length()
+	var rate := 0.0
+	if push > tuning.autopilot_tolerance:
+		rate = 2.0 if push > 0.95 else 1.0
+	if absf(hands.throttle_push) > 0.1:
+		rate = maxf(rate, 1.0)
+	if rate > 0.0:
+		grab += rate * delta / maxf(tuning.autopilot_grab_seconds, 0.01)
+	else:
+		grab = maxf(grab - delta / maxf(tuning.autopilot_grab_seconds, 0.01), 0.0)
+	return grab >= 1.0
+
+
+## Mixes a small nudge from the pilot into the autopilot's steering.
+static func mix_in(auto: FlightControls, hands: FlightControls, tuning: Tuning) -> void:
+	auto.steer = (auto.steer + hands.steer * tuning.autopilot_nudge_share).limit_length(1.0)
 
 
 ## Whether it has reached the end of its course.

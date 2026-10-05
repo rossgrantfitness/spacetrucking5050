@@ -53,6 +53,7 @@ func read(delta: float) -> FlightControls:
 		_controls.thrust = thrust_for(lever, forward_speed, max_speed, tuning)
 		_controls.boost = false
 		_controls.touched = false
+		_controls.throttle_push = 0.0
 		boost_blocked = false
 		return _controls
 	var stick := Input.get_vector("steer_left", "steer_right", "steer_up", "steer_down", tuning.stick_deadzone)
@@ -63,6 +64,7 @@ func read(delta: float) -> FlightControls:
 	_controls.steer = Vector2(_smoothed_steer.x, Settings.pitch_from_vertical_input(_smoothed_steer.y))
 	# Move the lever while the throttle keys (or triggers) are held.
 	var push := Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
+	_controls.throttle_push = push
 	lever = clampf(lever + push * tuning.throttle_lever_speed * delta, -tuning.reverse_lever, 1.0)
 	_controls.thrust = thrust_for(lever, forward_speed, max_speed, tuning)
 	var wants_boost := Input.is_action_pressed("boost")

@@ -130,6 +130,36 @@ func test_touching_the_controls_takes_over() -> void:
 	check(hands.is_touched(), "boosting takes over")
 
 
+func test_the_autopilot_forgives_small_nudges() -> void:
+	var tuning := GameState.tuning
+	var pilot := CruisePilot.new()
+	var hands := FlightControls.new()
+	hands.steer = Vector2(tuning.autopilot_tolerance * 0.8, 0.0)
+	var taken := false
+	for i in 120:  # Two seconds of a small nudge.
+		taken = taken or pilot.feel_hands(hands, 1.0 / 60.0)
+	check(not taken, "a small nudge, even held, doesn't take over from the autopilot")
+	var auto := FlightControls.new()
+	CruisePilot.mix_in(auto, hands, tuning)
+	check(auto.steer.x > 0.0, "the nudge still moves the rig a little")
+	hands.steer = Vector2(1.0, 0.0)
+	var frames := 0
+	while not pilot.feel_hands(hands, 1.0 / 60.0) and frames < 600:
+		frames += 1
+	check(frames > 5 and frames < 60, "a full push held for a moment takes over (took %d frames)" % frames)
+	var flick := CruisePilot.new()
+	hands.steer = Vector2(1.0, 0.0)
+	var flicked := false
+	for i in 6:  # A tenth of a second.
+		flicked = flicked or flick.feel_hands(hands, 1.0 / 60.0)
+	hands.steer = Vector2.ZERO
+	for i in 60:
+		flicked = flicked or flick.feel_hands(hands, 1.0 / 60.0)
+	check(not flicked and flick.grab == 0.0, "a quick flick is forgiven, and the grab fades away")
+	hands.boost = true
+	check(CruisePilot.new().feel_hands(hands, 1.0 / 60.0), "boost takes over at once")
+
+
 func test_hazards_affect_the_rig() -> void:
 	var ship: Ship = SHIP_SCENE.instantiate()
 	_tree().root.add_child(ship)

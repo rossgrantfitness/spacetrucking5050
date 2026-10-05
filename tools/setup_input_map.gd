@@ -46,6 +46,8 @@ func _init() -> void:
 	_action("reply", BUTTON, [_key(KEY_T), _button(JOY_BUTTON_RIGHT_SHOULDER)])
 	# The logbook of sights you've seen (also in the pause menu).
 	_action("logbook", BUTTON, [_key(KEY_L)])
+	# The cinematic camera (on autopilot): watch the rig from outside.
+	_action("cinema_camera", BUTTON, [_key(KEY_V), _button(JOY_BUTTON_RIGHT_STICK)])
 	# A developer helper: lights up every HUD warning so the look can be
 	# checked. Keyboard only.
 	_action("hud_demo", BUTTON, [_key(KEY_F9)])

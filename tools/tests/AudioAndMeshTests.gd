@@ -57,3 +57,23 @@ func _samples(wav: AudioStreamWAV) -> PackedInt32Array:
 	for i in range(0, wav.data.size(), 2):
 		samples.append(wav.data.decode_s16(i))
 	return samples
+
+
+func test_sound_effects_and_voices_have_their_own_volume() -> void:
+	check(AudioServer.get_bus_index(Settings.SFX_BUS) != -1 and AudioServer.get_bus_index(Settings.VOICE_BUS) != -1, "there are SFX and voice channels")
+	check(Settings.sfx_volume < Settings.radio_volume or Settings.sfx_volume <= 0.7, "sound effects sit a bit under the music by default")
+	var tree := Engine.get_main_loop() as SceneTree
+	var player := AudioStreamPlayer.new()
+	tree.root.add_child(player)
+	check(player.bus == &"SFX", "a sound with nowhere in particular to go plays through the SFX channel")
+	player.free()
+	var music := AudioStreamPlayer.new()
+	music.bus = &"Radio"
+	tree.root.add_child(music)
+	check(music.bus == &"Radio", "music stays on the music channel")
+	music.free()
+	var before := Settings.sfx_volume
+	Settings.apply_saved_data({"sfx_volume": 0.25, "voice_volume": 0.5})
+	check(is_equal_approx(Settings.sfx_volume, 0.25) and is_equal_approx(Settings.voice_volume, 0.5), "the volumes load from the settings file")
+	check(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(Settings.SFX_BUS)) < -10.0, "turning sound effects down turns their channel down")
+	Settings.apply_saved_data({"sfx_volume": before, "voice_volume": 0.9})

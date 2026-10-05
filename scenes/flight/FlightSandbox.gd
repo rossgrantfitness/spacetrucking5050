@@ -25,6 +25,9 @@ extends Node
 ##   the rig's sleeper cabin (the apartment scene, shown in a SubViewport
 ##   while the flight keeps going). Walk out the door to get back in the
 ##   seat. Napping on the bed fast-forwards the trip until you arrive.
+## - THE CINEMATIC CAMERA (V / R3 on autopilot): a film director picks
+##   shots of the rig (CinemaCamera.gd); touch the stick and you hold the
+##   camera yourself. V again goes back to the chase cam.
 ## - HAZARDS: ion storms and speed traps (scenes/flight/events/HazardZone.gd)
 ##   tell the ship how strongly they're affecting it.
 ## - ROUTE EVENTS: what happens along the road: sights, calls, little
@@ -65,7 +68,12 @@ var _current_system: String = ""
 var _route_events: RouteEvents
 ## Walking around the cabin (out of the seat).
 var _in_cabin: bool = false
+## Whether the "hold to take the wheel" hint is showing for this push.
+var _grab_hinted: bool = false
 var _cabin_layer: CanvasLayer
+## The cinematic camera and its black film bars (made in _ready).
+var _cinema: CinemaCamera
+var _letterbox: CanvasLayer
 var _cabin_room: HubRoom
 ## Napping: time runs fast until you wake up or arrive.
 var _napping: bool = false
@@ -142,6 +150,7 @@ func _ready() -> void:
 	_pause_menu.dock_pressed.connect(func() -> void:
 		_close_cabin()
 		_arrive("base"))
+	_make_cinema()
 	_set_cockpit_view(false)
 	_capture_mouse()
 	Radio.set_context(Radio.Context.FLIGHT)
@@ -170,11 +179,14 @@ func _physics_process(delta: float) -> void:
 	Radio.signal_strength = 1.0 - _ship.storm * 0.8
 	Radio.listener_position = _ship.global_position
 	Radio.intensity = clampf(_ship.speed_ratio(), 0.0, 1.0)
+	_show_grab_hint()
 	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty():
 		_ship.cruise = null  # Got there without docking (it's the pilot's turn).
 		_hud.show_banner("AUTOPILOT OFF", 2.0)
 	if _ship.cruise == null and _docking_at.is_empty():
-		# Nobody's driving: wake up and get back in the seat.
+		# Nobody's driving: wake up, get back in the seat, eyes on the road.
+		if in_cinema():
+			_end_cinema()
 		if _napping:
 			_wake_up()
 		if _in_cabin:
@@ -207,7 +219,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("logbook"):
 		_open_logbook()
 	elif event.is_action_pressed("toggle_camera"):
-		_set_cockpit_view(not _in_cockpit)
+		if in_cinema():
+			_end_cinema()
+		else:
+			_set_cockpit_view(not _in_cockpit)
+	elif event.is_action_pressed("cinema_camera"):
+		_next_cinema_mode()
 	elif event.is_action_pressed("chart_course"):
 		if _docking_at.is_empty():
 			_open_course_chart()
@@ -388,6 +405,7 @@ func _open_logbook() -> void:
 ## A catastrophic hit: out of the cabin (or the nap) at once, back to the
 ## chase camera so you can watch, and a warning across the screen.
 func _on_lost_control(reason: String) -> void:
+	_end_cinema()
 	_close_cabin()
 	if _in_cockpit:
 		_set_cockpit_view(false)
@@ -410,6 +428,7 @@ func _on_exploded() -> void:
 func _open_cabin() -> void:
 	if _in_cabin:
 		return
+	_end_cinema()
 	_in_cabin = true
 	_ship.controls.hands_free = true
 	await _fade.fade_out()
@@ -503,6 +522,17 @@ func _draw_nap(canvas: Control) -> void:
 	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 30.0), "ANY KEY TO WAKE UP", square * 0.75, Color(0.5, 0.52, 0.6))
 
 
+## While you push the stick hard on autopilot, say what's about to happen
+## (once per push).
+func _show_grab_hint() -> void:
+	var grab := _ship.cruise.grab if _ship.cruise != null else 0.0
+	if grab > 0.25 and not _grab_hinted:
+		_grab_hinted = true
+		_hud.show_banner("HOLD TO TAKE THE WHEEL", 1.0)
+	elif grab <= 0.0:
+		_grab_hinted = false
+
+
 func _on_cruise_released() -> void:
 	_course.clear()
 	_hud.show_banner("MANUAL CONTROL", 2.0)
@@ -571,6 +601,7 @@ func _arrive(id: String) -> void:
 	var place := GameState.places.find(id)
 	if place == null:
 		return
+	_end_cinema()
 	GameState.visit(id)
 	match place.kind:
 		PlaceData.Kind.DROP_OFF:
@@ -875,6 +906,76 @@ func _set_cockpit_view(in_cockpit: bool) -> void:
 	_hud.set_cockpit_view(in_cockpit)
 
 
+# --- The cinematic camera -----------------------------------------------------------
+
+func _make_cinema() -> void:
+	_cinema = CinemaCamera.new()
+	_cinema.name = "CinemaCamera"
+	_cinema.target = _ship
+	_cinema.near = 0.5
+	_cinema.far = _chase_camera.far
+	$World.add_child(_cinema)
+	_letterbox = CanvasLayer.new()
+	_letterbox.layer = 4  # Over the 3D view, under the HUD (so calls still show).
+	_letterbox.visible = false
+	var bars := Control.new()
+	bars.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bars.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bars.draw.connect(func() -> void:
+		var bar := bars.size.y * GameState.tuning.cinema_letterbox
+		bars.draw_rect(Rect2(0.0, 0.0, bars.size.x, bar), Color.BLACK)
+		bars.draw_rect(Rect2(0.0, bars.size.y - bar, bars.size.x, bar), Color.BLACK))
+	bars.resized.connect(bars.queue_redraw)
+	_letterbox.add_child(bars)
+	add_child(_letterbox)
+
+
+## Whether the cinematic camera has the view.
+func in_cinema() -> bool:
+	return _cinema != null and _cinema.current
+
+
+## V / R3: chase cam -> director -> free camera -> chase cam. Only while an
+## autopilot drives (someone has to watch the road).
+func _next_cinema_mode() -> void:
+	if not in_cinema():
+		if _ship.cruise == null and _docking_at.is_empty():
+			_hud.show_banner("SET A COURSE FIRST (M)", 2.0)
+			return
+		start_cinema()
+	elif _cinema.mode == CinemaCamera.Mode.DIRECTOR:
+		_cinema.take_over()
+		_hud.show_banner("FREE CAMERA: STICK / MOUSE TO LOOK, W/S TO ZOOM", 3.0)
+	else:
+		_end_cinema()
+
+
+## Hands the view to the cinematic camera's director. Public for the tests.
+func start_cinema() -> void:
+	if in_cinema():
+		return
+	if _in_cockpit:
+		_set_cockpit_view(false)  # The rig has to be visible from outside.
+	_ship.controls.hands_free = true  # Looking around can't knock off the autopilot.
+	_cinema.start()
+	_letterbox.visible = true
+	_hud.set_cinema(true)
+	_hud.show_banner("CINEMA CAM: TOUCH THE STICK TO LOOK AROUND. V: BACK", 3.0)
+
+
+## Back to the chase camera (if the cinematic one was on).
+func _end_cinema() -> void:
+	if not in_cinema():
+		return
+	_cinema.clear_current(false)
+	_chase_camera.make_current()
+	_chase_camera.snap_behind_target()
+	_letterbox.visible = false
+	_hud.set_cinema(false)
+	if not _in_cabin:
+		_ship.controls.hands_free = false
+
+
 ## Hides the mouse and locks it to the window, so moving it steers the ship.
 func _capture_mouse() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -882,6 +983,7 @@ func _capture_mouse() -> void:
 
 ## Pause menu: hop back to where you launched (tanks and cargo as they are).
 func _back_to_launch_point() -> void:
+	_end_cinema()
 	_remember_rig()
 	_docking_at = ""
 	_leaving = false

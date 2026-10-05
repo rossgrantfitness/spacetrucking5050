@@ -186,3 +186,32 @@ func test_bonks_scale_from_gentle_to_hard() -> void:
 	var middle := Ship.bonk_strength((tuning.bonk_min_speed + tuning.bonk_hard_speed) * 0.5, tuning)
 	check(absf(middle - 0.5) < 0.01, "bonk strength grows evenly with impact speed")
 	check(tuning.bonk_damage_max >= tuning.bonk_damage_min, "the biggest bonk should hurt at least as much as the gentlest")
+
+
+func test_the_cinema_camera_always_films_the_rig() -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	var holder := Node3D.new()
+	tree.root.add_child(holder)
+	var ship := (load("res://scenes/flight/Ship.tscn") as PackedScene).instantiate() as Ship
+	holder.add_child(ship)
+	ship.flight.velocity = -ship.global_basis.z * 50.0
+	var cinema := CinemaCamera.new()
+	cinema.target = ship
+	holder.add_child(cinema)
+	cinema.start()
+	check(cinema.current and cinema.mode == CinemaCamera.Mode.DIRECTOR, "the cinema camera starts in director mode")
+	for shot: int in CinemaCamera.Shot.values():
+		cinema.set_shot(shot as CinemaCamera.Shot)
+		for i in 10:
+			cinema.call("_film", 0.1)
+		var shot_name: String = CinemaCamera.Shot.keys()[shot]
+		check(cinema.is_position_in_frustum(ship.global_position), "the %s shot sees the rig" % shot_name)
+		var away := cinema.global_position.distance_to(ship.global_position)
+		check(away > 5.0 and away < 1000.0, "the %s shot isn't inside the rig or miles away (%.0f m)" % [shot_name, away])
+		check(absf(cinema.global_basis.x.y) < 0.01, "the %s shot keeps the horizon level" % shot_name)
+	cinema.take_over()
+	check(cinema.mode == CinemaCamera.Mode.FREE, "touching the controls hands you the camera")
+	cinema.call("_steer_by_hand", Vector2(1.0, 0.0), 1.0)
+	cinema.call("_film", 0.0)
+	check(cinema.is_position_in_frustum(ship.global_position), "the free camera still looks at the rig after swinging around")
+	holder.free()

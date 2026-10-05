@@ -72,8 +72,8 @@ shape = SubResource("BoxShape3D_zone1")
 [node name="Spawns" type="Node3D" parent="."]
 
 [node name="FromApartment" type="Marker3D" parent="Spawns"]
-position = Vector3(-0.7, 0, -2)
-rotation = Vector3(0, -1.5708, 0)
+position = Vector3(-0.4, 0, -3.8)
+rotation = Vector3(0, 0, 0)
 
 [node name="FromDispatch" type="Marker3D" parent="Spawns"]
 position = Vector3(0, 0, -18.6)
