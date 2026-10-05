@@ -6,9 +6,7 @@
 [ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
-[ext_resource type="Script" path="res://scenes/hub/NPC.gd" id="7_npc"]
-[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="8_dottie"]
-[ext_resource type="PackedScene" path="res://scenes/hub/RaccoonVisual.tscn" id="9_raccoon"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="7_service"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -26,15 +24,11 @@ size = Vector3(3.2, 6, 9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit0"]
 size = Vector3(1.1, 2, 0.4)
 
+[sub_resource type="SphereShape3D" id="Sphere_terminal"]
+radius = 0.7
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit1"]
 size = Vector3(1.4, 2, 1)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_talk"]
-radius = 1.0
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
-radius = 0.25
-height = 1.1
 
 [node name="Dispatch" type="Node3D"]
 script = ExtResource("1_room")
@@ -114,23 +108,33 @@ shape = SubResource("BoxShape3D_exit1")
 
 [node name="People" type="Node3D" parent="."]
 
-[node name="Dottie" type="Area3D" parent="People"]
+[node name="Things" type="Node3D" parent="."]
+
+[node name="JobTerminal" type="Area3D" parent="Things"]
+position = Vector3(0.3, 1, -1.4)
+script = ExtResource("7_service")
+prompt = "JOB BOARD"
+menu = "job_board"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/JobTerminal"]
+shape = SubResource("Sphere_terminal")
+
+[node name="CrewSpots" type="Node3D" parent="."]
+
+[node name="Counter" type="Marker3D" parent="CrewSpots"]
 position = Vector3(-1.5, 0.45, -2.6)
-script = ExtResource("7_npc")
-data = ExtResource("8_dottie")
+rotation = Vector3(0, 3.1416, 0)
 
-[node name="Visual" parent="People/Dottie" instance=ExtResource("9_raccoon")]
-transform = Transform3D(-1.15, 0, 0, 0, 1.15, 0, 0, 0, -1.15, 0, 0, 0)
+[node name="Chairs" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-3.9, 0, 1.8)
+rotation = Vector3(0, -1.5708, 0)
 
-[node name="TalkReach" type="CollisionShape3D" parent="People/Dottie"]
-position = Vector3(0, 0.6, 1.2)
-shape = SubResource("SphereShape3D_talk")
+[node name="ChairNap" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-4.5, 0.47, 1.3)
 
-[node name="Body" type="StaticBody3D" parent="People/Dottie"]
-
-[node name="Shape" type="CollisionShape3D" parent="People/Dottie/Body"]
-position = Vector3(0, 0.55, 0)
-shape = SubResource("CapsuleShape3D_npc")
+[node name="MachineBank" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-4.1, 0, -3.3)
+rotation = Vector3(0, 1.5708, 0)
 
 [node name="PSXScreen" type="CanvasLayer" parent="."]
 layer = 0

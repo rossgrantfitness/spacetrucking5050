@@ -3,7 +3,8 @@ extends "res://tools/tests/TestSuite.gd"
 ## zones, names in dialogue, the pixel font and the room scenes' wiring.
 
 
-const ROOMS: Array[String] = ["res://scenes/hub/Apartment.tscn", "res://scenes/hub/Hallway.tscn", "res://scenes/hub/Dispatch.tscn"]
+const ROOMS: Array[String] = ["res://scenes/hub/Apartment.tscn", "res://scenes/hub/Hallway.tscn", "res://scenes/hub/Dispatch.tscn",
+	"res://scenes/hub/Galley.tscn", "res://scenes/hub/EngineRoom.tscn", "res://scenes/hub/CargoBay.tscn"]
 
 
 func test_stick_up_walks_away_from_the_camera() -> void:

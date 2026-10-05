@@ -4,7 +4,8 @@ extends SceneTree
 ##   chart a course -> a comm call -> Jacki replies -> flip through all the
 ##   radio stations (and set off DJ reactions) -> the cinema camera (director,
 ##   free, back to chase) -> get up and walk into the
-##   cabin -> walk the rig's rooms -> sleep (skips to just outside Tidewater)
+##   cabin -> walk the rig's rooms (the galley; the apartment's live window)
+##   -> sleep (skips to just outside Tidewater)
 ##   -> back in the seat.
 ## It checks each step worked, then quits politely. It saves to a scratch
 ## file, never the player's real save.
@@ -21,6 +22,7 @@ var _step := Step.FLY
 var _step_started := 0
 var _game: Node
 var _far_before := 0.0
+var _visited_galley := false
 
 
 func _initialize() -> void:
@@ -101,11 +103,22 @@ func _process(_delta: float) -> bool:
 				_fail("the cabin should open")
 		Step.WALK:
 			var here: Node = current_scene.get("_cabin_room")
+			# Hallway -> galley (to see the crew in flight) -> hallway -> apartment.
 			if here != null and here.name == "Hallway" and here.get("_ready_to_play") == true:
-				current_scene.call("_walk_to_room", "res://scenes/hub/Apartment.tscn", "FromHallway")
+				if _visited_galley:
+					current_scene.call("_walk_to_room", "res://scenes/hub/Apartment.tscn", "FromHallway")
+				else:
+					current_scene.call("_walk_to_room", "res://scenes/hub/Galley.tscn", "FromHallway")
+			if here != null and here.name == "Galley" and here.get("_ready_to_play") == true and not _visited_galley:
+				if not load("res://scenes/hub/ShipLife.gd").get("in_flight"):
+					_fail("aboard in flight, the crew should know the rig is flying")
+				_visited_galley = true
+				current_scene.call("_walk_to_room", "res://scenes/hub/Hallway.tscn", "FromGalley")
 			if here != null and here.name == "Apartment" and here.get("_ready_to_play") == true:
 				if here.get_node_or_null("NapBed") == null:
 					_fail("in flight, the apartment's bed should be for napping")
+				if here.get_node_or_null("LiveWindow") == null:
+					_fail("in flight, the apartment window should show what's outside, live")
 				current_scene.call("_nap")
 				_next(Step.NAP)
 			elif waited > 4000:

@@ -32,7 +32,8 @@ signal notice_requested(text: String)
 
 ## The rooms inside the rig (your home): in flight you can walk between them.
 const RIG_ROOMS: PackedStringArray = [
-	"res://scenes/hub/Apartment.tscn", "res://scenes/hub/Hallway.tscn", "res://scenes/hub/Dispatch.tscn"]
+	"res://scenes/hub/Apartment.tscn", "res://scenes/hub/Hallway.tscn", "res://scenes/hub/Dispatch.tscn",
+	"res://scenes/hub/Galley.tscn", "res://scenes/hub/EngineRoom.tscn", "res://scenes/hub/CargoBay.tscn"]
 
 const BACKDROP_SHADER := preload("res://shaders/prerendered_backdrop.gdshader")
 const PLAYER_SCENE := preload("res://scenes/hub/Player.tscn")
@@ -56,8 +57,12 @@ const UNSEEN_GRACE: float = 0.25
 ## the driver's seat, the bed is for napping, the game doesn't save here,
 ## and the radio plays through the cabin speakers.
 var aboard: bool = false
+## What's outside, live (set by FlightSandbox.gd in flight): shown on the
+## room's window ("SpaceView" in the Set) instead of its painted space.
+var window_feed: Texture2D
 
 var player: HubPlayer
+var _hud: HubHUD
 var _shots: Array[RoomShot] = []
 var _active_shot: RoomShot
 ## How long the current camera has been unable to see the bunny.
@@ -91,13 +96,18 @@ func _ready() -> void:
 	var hud := HubHUD.new()
 	hud.player = player
 	add_child(hud)
+	_hud = hud
 	notice_requested.connect(hud.show_notice.bind(2.5))
+	if scene_file_path in RIG_ROOMS:
+		_bring_the_rig_to_life()
 	var pause_menu := get_node_or_null("PauseMenu") as PauseMenu
 	if aboard and pause_menu != null:
 		pause_menu.queue_free()  # The flight scene's pause menu covers the cabin.
 		pause_menu = null
 	if aboard:
 		_set_up_cabin()
+	if window_feed != null:
+		_show_window_feed()
 	if pause_menu != null:
 		pause_menu.quit_to_title_pressed.connect(func() -> void: leave_to("res://scenes/boot/Boot.tscn", ""))
 	# Repaint the backgrounds if the window changes size (after it settles).
@@ -150,6 +160,97 @@ func leave_to(scene_path: String, spawn: String) -> void:
 		LoadingScreen.go(get_tree(), scene_path, "flight")  # Boarding the rig.
 	else:
 		get_tree().change_scene_to_file(scene_path)
+
+
+## Rooms aboard the rig: puts each crew member who's in here right now at
+## their spot, doing their thing (see ShipLife.gd), plus anything a ship
+## event has left lying around, and announces the event the first time.
+func _bring_the_rig_to_life() -> void:
+	ShipLife.in_flight = aboard
+	var spots := get_node_or_null("CrewSpots")
+	var people := get_node_or_null("People")
+	if spots == null or people == null:
+		return
+	for entry in ShipLife.crew_in(scene_file_path):
+		var activity: CrewActivity = entry["activity"]
+		var marker := spots.get_node_or_null(activity.spot) as Node3D
+		if marker == null:
+			continue
+		var crew_member := CrewNPC.new()
+		crew_member.setup(entry["member"], activity)
+		crew_member.transform = marker.transform
+		people.add_child(crew_member)
+	var event := ShipLife.current_event()
+	if event != null:
+		if event.find_room == scene_file_path and not event.find_item.is_empty() and not ShipLife.has_found(event):
+			var marker := spots.get_node_or_null(event.find_spot) as Node3D
+			if marker != null:
+				_place_lost_thing(event, marker.position)
+		if ShipLife.first_look(event):
+			_hud.show_notice(GameState.names.fill_in(event.title).to_upper(), 4.0)
+	var cargo_sign := get_node_or_null("Things/CargoSign") as Label3D
+	if cargo_sign != null:
+		var job := GameState.active_job()
+		cargo_sign.text = "IN THE BACK: " + (job.cargo_name.to_upper() if job != null else "NOTHING. YET.")
+
+
+## Something lost during a ship event, glinting where it was dropped.
+func _place_lost_thing(event: ShipEvent, where: Vector3) -> void:
+	var thing := Interactable.new()
+	thing.name = "LostThing"
+	thing.prompt = "PICK UP " + event.find_item.to_upper()
+	thing.position = where
+	var reach := CollisionShape3D.new()
+	var sphere := SphereShape3D.new()
+	sphere.radius = 0.9
+	reach.shape = sphere
+	thing.add_child(reach)
+	var glint := MeshInstance3D.new()
+	var box := BoxMesh.new()
+	box.size = Vector3(0.18, 0.06, 0.12)
+	var shine := StandardMaterial3D.new()
+	shine.albedo_color = Color(1.0, 0.85, 0.3)
+	shine.emission_enabled = true
+	shine.emission = Color(1.0, 0.8, 0.3)
+	box.material = shine
+	glint.mesh = box
+	glint.position = Vector3(0.0, 0.05, 0.0)
+	thing.add_child(glint)
+	thing.interacted.connect(func(_who: Node3D) -> void:
+		ShipLife.pick_up(event)
+		var owner_name := GameState.crew.find(event.find_owner).npc.display_name.to_upper() if GameState.crew.find(event.find_owner) != null else "ITS OWNER"
+		_hud.show_notice("FOUND %s! GIVE IT TO %s." % [event.find_item.to_upper(), owner_name], 4.0)
+		thing.queue_free())
+	$People.add_child(thing)
+
+
+## Whether this room has a window that can show what's outside.
+func has_window() -> bool:
+	return _set.find_child("SpaceView", true, false) is MeshInstance3D
+
+
+## Lays the live view (window_feed) over the window's painted space: a
+## flat picture just in front of it, drawn live like the people, so the
+## window bars (painted, in front of it) still cover it.
+func _show_window_feed() -> void:
+	var painted := _set.find_child("SpaceView", true, false) as MeshInstance3D
+	if painted == null or not painted.mesh is BoxMesh:
+		return
+	var size := (painted.mesh as BoxMesh).size
+	var quad := QuadMesh.new()
+	quad.size = Vector2(size.x, size.y)
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST  # Crunchy, like the rest.
+	material.albedo_texture = window_feed
+	material.disable_fog = true
+	quad.material = material
+	var view := MeshInstance3D.new()
+	view.name = "LiveWindow"
+	view.mesh = quad
+	view.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(view)
+	view.global_transform = painted.global_transform.translated_local(Vector3(0.0, 0.0, size.z * 0.5 + 0.01))
 
 
 ## Cabin mode: the bed becomes a place to nap while the autopilot drives.

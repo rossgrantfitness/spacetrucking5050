@@ -263,6 +263,22 @@ hallway. Those need **E** / **A**. To get back from flying, dock at a
 station by flying through its ring, or pause → **Get towed to the truck
 stop**. Your money is in the top-right corner.
 
+**Your crew.** Dottie (dispatch), Digby (the engine room) and Clem (the
+cargo bay) live aboard, along with the **GALLEY**, **ENGINE** and **CARGO**
+doors off the hallway. Every trip and every day they're somewhere new doing
+something new, so go find them and talk (**E** / **A**). Now and then
+something happens aboard (card night, a lost wrench...); a notice tells
+you. If something's lost, find it, pick it up, and take it back to its
+owner. Jobs: talk to Dottie at her counter, or use the **JOB BOARD**
+terminal on the dispatch counter. In flight, the apartment window shows
+where you're heading.
+
+**Changing the crew's lines (no code).** Everything the crew do and say,
+and the ship events, are plain lists in `tools/crew_data/make_crew.py`.
+Edit a line, then run `python3 tools/crew_data/make_crew.py` from the
+project folder (it rewrites `data/crew/crew.tres`). Lines can use
+`{bunny}`, `{husband}`, `{company}`, `{cargo}` and `{place}`.
+
 ### Menus
 
 | What | Keyboard & mouse | Gamepad |

@@ -8,7 +8,7 @@
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("met_marge")
 needs_no_job = true
-lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Got something for you, finally. Marge called. Runs the truck stop out past the rocks.", "Her pie hauler retired to a moon. She needs a new one, and she pays in real {currency}.", "Your rig's up the stairs. Follow the yellow diamond on your compass, fly through the ring, and the autopilot parks you.")
+lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Got something for you, finally. Marge called. Runs the truck stop we're parked at.", "Her pie hauler retired to a moon. She needs a new one, and she pays in real {currency}.", "She's right outside, hon: down the hall, through the airlock. When you fly, follow the yellow diamond and fly through the ring.")
 sets_flags = PackedStringArray("heard_about_marge")
 
 [sub_resource type="Resource" id="Conversation_1"]
@@ -28,11 +28,11 @@ script = ExtResource("2_conv")
 needs_flags = PackedStringArray("met_marge")
 blocked_by_flags = PackedStringArray("first_mission_done")
 needs_no_job = true
-lines = PackedStringArray("Marge says you two met. Did you take her pie job? Truck stop's past the rocks, hon.")
+lines = PackedStringArray("Marge says you two met. Did you take her pie job? She's right outside the airlock, hon.")
 
 [sub_resource type="Resource" id="Conversation_4"]
 script = ExtResource("2_conv")
-lines = PackedStringArray("You've got a load in the back, {bunny}. Ship's up the stairs. Go get paid.")
+lines = PackedStringArray("You've got a load in the back, {bunny}. Cockpit's up the stairs. Go get paid.")
 
 [sub_resource type="Resource" id="Conversation_glimmer"]
 script = ExtResource("2_conv")
@@ -48,7 +48,7 @@ script = ExtResource("1_npc")
 display_name = "Dottie (Dispatch, mornings)"
 species = "raccoon"
 voice_pitch = 1.35
-lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Coffee's burnt, the job board's broken, and somebody fed the vending machine a sock.", "Your rig's up the stairs, same as always. Fly safe, hon. Or at least fly.")
+lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Coffee's burnt, the job board's broken, and somebody fed the vending machine a sock.", "Cockpit's up the stairs, same as always. Fly safe, hon. Or at least fly.")
 comm_name = "DOTTIE · DISPATCH"
 fur_color = Color(0.62, 0.6, 0.66, 1)
 accent_color = Color(1, 0.42, 0.75, 1)

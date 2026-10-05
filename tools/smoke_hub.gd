@@ -4,18 +4,22 @@ extends SceneTree
 ## Wakes up in the apartment, boots up the PC and shuts it down again,
 ## walks out to the hallway, steps out of the
 ## rig's airlock into the truck stop, boards again, walks into dispatch,
-## talks to Dottie, climbs to the cockpit and takes off, then gets towed
-## back to the truck stop, so any errors in those code paths show up.
+## talks to whichever crew member is there, uses the job terminal, pops into
+## the galley (checking the right crew are in it) and back out through the
+## hallway, climbs to the cockpit and takes off, then gets towed back to the
+## truck stop, so any errors in those code paths show up.
 ##
 ## Run it with:  godot --headless --path . -s tools/smoke_hub.gd
 
 
-enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, COCKPIT, FLYING, TOWED, DONE }
+enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, TERMINAL, GALLEY, GALLEY_OUT, STAIRS, COCKPIT, FLYING, TOWED, DONE }
 
 var _frame := 0
 var _stage := Stage.PC
 var _stage_frame := 0
 var _saw_pc := false
+var _saw_dialogue := false
+var _saw_menu := false
 
 
 func _initialize() -> void:
@@ -80,18 +84,57 @@ func _process(_delta: float) -> bool:
 			if _in("Dispatch"):
 				_next(Stage.DISPATCH)
 		Stage.DISPATCH:
-			# Walk up to the counter and talk to the clerk.
+			# Walk up to whoever's in dispatch today and talk to them.
 			if _ready_room() and waited == 30:
-				_player().global_position = Vector3(-1.4, 0.0, -1.15)
+				var crew := _crew_here()
+				if crew.is_empty():
+					_next(Stage.TERMINAL)
+				else:
+					var spot := crew[0].to_global(Vector3(0.0, 0.0, -1.3))
+					_player().global_position = Vector3(spot.x, 0.0, spot.z)
 			if waited == 40:
 				_tap("interact")
 				_next(Stage.TALKING)
 		Stage.TALKING:
-			# Keep pressing E through Dottie's lines (and closing anything she
-			# opens), then climb the stairs.
+			# Keep pressing E through their lines (and closing anything they
+			# open).
+			_saw_dialogue = _saw_dialogue or root.get_node("Dialogue").call("is_active")
 			if waited % 8 == 0:
 				_tap("interact" if root.get_node("Dialogue").call("is_active") else "ui_cancel")
 			if waited > 30 and not (_player() as Node).call("is_busy"):
+				if not _saw_dialogue:
+					push_error("Smoke test: talking to the crew member in dispatch should start a conversation")
+				_next(Stage.TERMINAL)
+		Stage.TERMINAL:
+			# The job terminal on the counter opens the job board.
+			if waited == 10:
+				_player().global_position = Vector3(0.3, 0.0, -0.9)
+			if waited == 20:
+				_tap("interact")
+			_saw_menu = _saw_menu or (waited > 20 and (_player() as Node).call("is_busy"))
+			if waited > 20 and waited % 8 == 0:
+				_tap("ui_cancel")
+			if waited > 60 and not (_player() as Node).call("is_busy"):
+				if not _saw_menu:
+					push_error("Smoke test: the dispatch job terminal should open the job board")
+				_go("res://scenes/hub/Galley.tscn", "FromHallway")
+				_next(Stage.GALLEY)
+		Stage.GALLEY:
+			# The crew in the galley should be the ones ShipLife says.
+			if _ready_room() and waited == 30:
+				var expected: Array = load("res://scenes/hub/ShipLife.gd").call("crew_in", "res://scenes/hub/Galley.tscn")
+				if _crew_here().size() != expected.size():
+					push_error("Smoke test: the galley should have %d crew in it, not %d" % [expected.size(), _crew_here().size()])
+				_player().global_position = Vector3(2.8, 0.0, 2.75)  # Into the door back to the hallway.
+			if _in("Hallway"):
+				_next(Stage.GALLEY_OUT)
+		Stage.GALLEY_OUT:
+			if _ready_room() and waited == 30:
+				_player().global_position = Vector3(0.0, 0.0, -19.6)  # Into the dispatch door.
+			if _in("Dispatch"):
+				_next(Stage.STAIRS)
+		Stage.STAIRS:
+			if _ready_room() and waited == 30:
 				_player().global_position = Vector3(3.6, 2.45, -3.6)
 				_next(Stage.COCKPIT)
 		Stage.COCKPIT:
@@ -124,6 +167,15 @@ func _next(stage: Stage) -> void:
 
 func _in(scene_name: String) -> bool:
 	return current_scene != null and current_scene.name == scene_name
+
+
+## The crew members (CrewNPC) in the current room.
+func _crew_here() -> Array[Node3D]:
+	var found: Array[Node3D] = []
+	for person in current_scene.get_node("People").get_children():
+		if person.get_script() != null and str(person.get_script().resource_path).ends_with("CrewNPC.gd"):
+			found.append(person as Node3D)
+	return found
 
 
 func _pc() -> Node:

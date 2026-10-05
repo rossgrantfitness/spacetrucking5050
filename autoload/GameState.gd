@@ -29,6 +29,7 @@ var sights: Logbook = preload("res://data/logbook/sights.tres")
 var ships: ShipList = preload("res://data/ships/ships.tres")
 var paints: PaintList = preload("res://data/ships/paints.tres")
 var emails: EmailList = preload("res://data/pc/emails.tres")
+var crew: CrewRoster = preload("res://data/crew/crew.tres")
 
 ## How much a new game starts with.
 const STARTING_CREDITS: int = 150
@@ -85,6 +86,9 @@ const INVOICE_LIMIT: int = 20
 var day: int = 1
 ## The best score in Asteroid Alley, the game on her PC.
 var pc_high_score: int = 0
+## What the crew remember (see scenes/hub/ShipLife.gd): days of friendship,
+## small talk already said, lost things found and handed back.
+var crew_memory: Dictionary = {}
 
 # --- Not saved -------------------------------------------------------------------
 ## The pay breakdown from a delivery that just happened, shown when you walk
@@ -285,6 +289,7 @@ func to_save_data() -> Dictionary:
 		"invoices": invoices,
 		"day": day,
 		"pc_high_score": pc_high_score,
+		"crew_memory": crew_memory,
 	}
 
 
@@ -355,6 +360,18 @@ func apply_save_data(data: Dictionary) -> void:
 		day = maxi(int(data["day"]), 1)
 	if data.get("pc_high_score") is int or data.get("pc_high_score") is float:
 		pc_high_score = maxi(int(data["pc_high_score"]), 0)
+	if data.get("crew_memory") is Dictionary:
+		# Plain numbers in little lists; anything odd is dropped.
+		for list: Variant in data["crew_memory"]:
+			var value: Variant = data["crew_memory"][list]
+			if value is Dictionary:
+				var clean := {}
+				for key: Variant in value:
+					if value[key] is int or value[key] is float:
+						clean[str(key)] = int(value[key])
+				crew_memory[str(list)] = clean
+			elif value is int or value is float:
+				crew_memory[str(list)] = int(value)
 	credits_changed.emit()
 
 
@@ -381,6 +398,7 @@ func new_game() -> void:
 	invoices = []
 	day = 1
 	pc_high_score = 0
+	crew_memory = {}
 	credits_changed.emit()
 
 

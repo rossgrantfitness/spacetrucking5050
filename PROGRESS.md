@@ -1,19 +1,19 @@
 # Progress
 
-**Current status:** **Round 14: the Mega Man Legends look, your bunny,
-home is the rig, her PC.** Hand-painted textures and painted bevels on
-everything, a calmer late-90s wobble, your bunny model (chibi, 2.5 heads
-tall) walking around, the apartment / hallway / dispatch now inside your
-rig (parked at the truck stop to start), her CARROT OS computer (mail,
-invoices, Asteroid Alley), a bed that sleeps you to the next stop, and
-HOSHIZORA 83 playing your three tracks. Built and validated, **waiting for
-your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 15: names, the crew, life aboard, a live
+window.** Jacki Rabbit, White and OrbitalEx are in. Your three new
+characters are the rig's crew (Dottie the raccoon, Digby the mole, Clem the
+donkey), there are three new rooms aboard (galley, engine room, cargo bay),
+the crew are always up to something different (activities, ten ship
+events, lost things, friendship, small talk that doesn't repeat), and the
+apartment window shows space live in flight. Built and validated,
+**waiting for your playtest** (see `PLAYTEST.md`).
 **Next session:** your ship design sheets as eight rigs to buy at Dusty's
 (each with its own model and handling), then your feedback; after that,
-your call (the Hyperway, the amber desert, events 168-250, the economy
-rebalance, the audit).
+more crew and ship events as you send character models, texture
+repetition fixes, and the audit.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 14)
+**Last updated:** 2026-10-05 (round 15)
 
 ---
 
@@ -58,6 +58,8 @@ rebalance, the audit).
   - [x] Round 13: the camera always finds the bunny (arrival spots fixed, plus a switch to a camera that can see her if she's ever hidden)
   - [x] Round 14: home is the inside of the rig (apartment, hallway with the airlock, dispatch with Dottie and the cockpit stairs); walkable in flight; the old base is the company HQ (scenery)
   - [x] Round 14: the bunny is the developer's 3D model, cut into parts on the animator's joints and made chibi (2.5 heads tall)
+  - [x] Round 15: the crew (Dottie, Digby, Clem) from your models; galley, engine room and cargo bay; life aboard that changes every trip and day (activities, ship events, lost things, friendship); a job terminal in dispatch
+  - [x] Round 15: the apartment window shows what's outside, live, in flight
   - [x] Round 14: her desktop PC (mail, invoices, Asteroid Alley); the bed sleeps to a new day (parked) or to the next stop (in flight)
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades

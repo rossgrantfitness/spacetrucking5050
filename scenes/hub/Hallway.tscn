@@ -79,6 +79,18 @@ rotation = Vector3(0, 0, 0)
 position = Vector3(0.4, 0, -6.6)
 rotation = Vector3(0, 0, 0)
 
+[node name="FromGalley" type="Marker3D" parent="Spawns"]
+position = Vector3(-0.5, 0, -10)
+rotation = Vector3(0, 0, 0)
+
+[node name="FromEngine" type="Marker3D" parent="Spawns"]
+position = Vector3(0.5, 0, -13)
+rotation = Vector3(0, 0, 0)
+
+[node name="FromCargo" type="Marker3D" parent="Spawns"]
+position = Vector3(-0.5, 0, -16)
+rotation = Vector3(0, 0, 0)
+
 [node name="FromDispatch" type="Marker3D" parent="Spawns"]
 position = Vector3(0, 0, -18.6)
 rotation = Vector3(0, 3.1416, 0)
@@ -112,6 +124,52 @@ to_docked_place = true
 
 [node name="Shape" type="CollisionShape3D" parent="Exits/Airlock"]
 shape = SubResource("BoxShape3D_exit0")
+
+[node name="GalleyDoor" type="Area3D" parent="Exits"]
+position = Vector3(-1.4, 1, -10)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Galley.tscn"
+target_spawn = "FromHallway"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/GalleyDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="EngineDoor" type="Area3D" parent="Exits"]
+position = Vector3(1.4, 1, -13)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/EngineRoom.tscn"
+target_spawn = "FromHallway"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/EngineDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="CargoDoor" type="Area3D" parent="Exits"]
+position = Vector3(-1.4, 1, -16)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/CargoBay.tscn"
+target_spawn = "FromHallway"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/CargoDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="CrewSpots" type="Node3D" parent="."]
+
+[node name="Vending" type="Marker3D" parent="CrewSpots"]
+position = Vector3(1, 0, -16.9)
+
+[node name="MidHall" type="Marker3D" parent="CrewSpots"]
+position = Vector3(0.3, 0, -8.5)
+
+[node name="Broom" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-0.2, 0, -11.6)
+rotation = Vector3(0, 0.8, 0)
+
+[node name="AirlockWindow" type="Marker3D" parent="CrewSpots"]
+position = Vector3(0.75, 0, -6.6)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="LostWrench" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-1, 0, -14)
 
 [node name="People" type="Node3D" parent="."]
 

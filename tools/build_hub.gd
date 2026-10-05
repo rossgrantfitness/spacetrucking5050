@@ -348,7 +348,9 @@ func _build_hallway() -> Node3D:
 	var neon_colors: Array[Color] = [Color(0.4, 0.95, 1.0), Color(1.0, 0.45, 0.8), Color(1.0, 0.8, 0.3), Color(0.5, 1.0, 0.5)]
 	# (5050 is hers; the second door is the rig's airlock, out to wherever
 	# she's parked.)
-	var doors := [[-1.0, 2.0, "5050"], [1.0, 6.0, "AIRLOCK"], [-1.0, 10.0, "5052"], [1.0, 13.0, "5053"], [-1.0, 16.0, "5054"]]
+	# The others lead to the galley, the engine room and the cargo bay
+	# (tools/build_rig_rooms.gd).
+	var doors := [[-1.0, 2.0, "5050"], [1.0, 6.0, "AIRLOCK"], [-1.0, 10.0, "GALLEY"], [1.0, 13.0, "ENGINE"], [-1.0, 16.0, "CARGO"]]
 	for i in doors.size():
 		var side: float = doors[i][0]
 		var z := -float(doors[i][1])

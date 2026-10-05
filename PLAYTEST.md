@@ -1,67 +1,70 @@
-# Playtest: round 14 (the new look, your bunny, home is the rig, her PC)
+# Playtest: round 15 (the crew, life aboard, a live window)
 
-**What you asked for:** a look more like Mega Man Legends (especially the
-textures), your bunny model (more chibi), the inside of the truck as the
-home base, a computer in the apartment with email, invoices and a game,
-a bed that sleeps you to your destination, and your Japanese radio tracks.
+**What you asked for:** her name (Jacki Rabbit), her husband's (White) and
+the company's (OrbitalEx); your new characters as the ship's crew; the
+inside of the ship expanded "in a big way" (more rooms, more crew, more
+things happening, Animal Crossing style, where the crew are always doing
+something different or have something new to say); and a window in the
+apartment that shows what the truck sees.
 
-**Time needed:** about 30 minutes. **Start a new game** (the title
-screen's small NEW GAME button): the start of the game changed.
+**Time needed:** about 30 minutes. Continue your save or start a new game;
+both work.
 
-> Honest note: I checked everything with automated play-throughs and
-> screenshots, but whether it now *feels* like Mega Man Legends, and
-> whether she's chibi enough, is your call.
+> Honest note: I checked all of this with automated play-throughs and
+> screenshots, but whether the crew feel *alive* and *charming* (and
+> whether the lines are funny) is something only you can judge.
 
 ---
 
 ## What's new
 
-- **Hand-painted textures everywhere.** Walls, floors, hulls, crates and
-  consoles are painted like late-PS1 textures: beveled panels, rivets,
-  vents, stencils, rust streaks, the shading painted in. Every box gets
-  painted edges and a shadow at the bottom, and nothing is a flat color
-  any more. The wobble is calmer (late-90s shimmer instead of early jelly).
-- **Your bunny.** Your model, cut into parts so she walks, swings her arms
-  and her lop ears trail behind. She's more chibi: a bigger head, much
-  shorter legs, bigger boots (2.5 heads tall, was about 3.5).
-- **Home is the inside of your rig.** You wake up in your apartment, in
-  the rig, **parked at the truck stop**. Hallway → the **AIRLOCK** door
-  (5051) steps outside into the truck stop. **Dispatch** (Dottie rides
-  along) has the stairs up to the **COCKPIT**: take the wheel there. At
-  any station, **BOARD YOUR RIG** brings you back into your hallway.
-  On autopilot, **F / X** brings you down the cockpit stairs and you can
-  walk all three rooms while it flies. The old base is now the company's
-  HQ, out the window as scenery.
-- **Her PC** (the desk in the apartment): **Mail**, **Invoices** and
-  **Asteroid Alley** (left / right to hop lanes).
-- **The bed.** In flight: **SLEEP TILL WE GET THERE**, and you wake up in
-  the seat just outside the next stop. Parked: **SLEEP** starts a new day.
-- **HOSHIZORA 83** on the radio (83.0, DJ Tanu-chan) plays your three
-  tracks.
+- **The crew:** **Dottie** (raccoon, dispatcher), **Digby** (mole,
+  mechanic) and **Clem** (donkey, cargo hand), built from your models.
+  Digby and Clem are placeholder names; tell me if you want others.
+- **Three new rooms** off the hallway: the **GALLEY**, the **ENGINE**
+  room and the **CARGO** bay.
+- **They're always up to something.** Every new trip and every new day,
+  each crew member is somewhere else doing something else: Dottie napping
+  in the dispatch chairs, Digby under the engine or eating in the galley,
+  Clem sweeping the hallway or fixing the forklift... It holds still while
+  you walk around, so you can go find them.
+- **Ship events** (about 2 trips in 5): card night, movie night, Clem's
+  birthday, an engine hiccup, the coffee machine breaking, karaoke (after
+  you've been to the Glimmer casino), a quiet night, and **lost things**:
+  find the lost item somewhere aboard (the prompt says what it is), bring
+  it back to its owner, get a thank-you and a few credits. A notice tells
+  you when something's up.
+- **Talking:** the first chat each day starts with a hello; then they tell
+  you what they're up to and some small talk. Small talk doesn't repeat
+  until they've run through it. Chat on several different days and they
+  open up more (there's a quiet bit about White in there).
+- **Dispatch has a JOB BOARD terminal** on the counter now, since Dottie
+  isn't always at her desk.
+- **The apartment window is live in flight**: you see where the rig's
+  heading (planets, stations, traffic). Parked, it shows the painted view.
 
-## Try this
+## What to do
 
-1. New game. Look around the apartment. Do the walls, floor and props
-   read as "hand-painted PS1" now? Walk her around: chibi enough?
-2. Sit at the computer. Read some mail, play a round of Asteroid Alley.
-3. Walk out to the hallway, step through the AIRLOCK, take Marge's job,
-   come back aboard, go through dispatch and up to the COCKPIT.
-4. Chart a course (M), tune to **HOSHIZORA 83**, then get up (F), walk to
-   your bed and sleep till you get there.
-5. Look at the rig in the cinema camera (V): do the new hull textures
-   work for you?
+1. Load your game (or start a new one). You're in the apartment. Walk to
+   the hallway and visit each new door: **GALLEY**, **ENGINE**, **CARGO**.
+   Talk to everyone you find (E / A).
+2. Take a job (Dottie, or the terminal at the dispatch counter), take off,
+   set a course (M) and get up (F). Walk around the rig in flight: the
+   crew will be doing different things than when you were parked.
+3. Go to the apartment and look out the window while the rig flies.
+4. Sleep in the bed ("sleep till we get there"), deliver, and walk around
+   again on the next trip. Do this a few times so you see a few ship
+   events and a lost item.
 
-## Questions for you
+## Questions
 
-1. **The look:** closer to Mega Man Legends now? Which surfaces still look
-   too "early 3D"? (Characters other than the bunny are still the old
-   blocky placeholders.)
-2. **The bunny:** right proportions now? Bigger head, shorter legs? And
-   the dark tips on her ears come from her texture: keep them or fix them?
-3. **Home in the rig:** does walking out of the airlock into the station
-   feel right? Should Dottie and the neighbors live aboard, or should the
-   rig just be you (and maybe a pet)?
-4. **The PC:** what else should it have? (Ideas: a photo folder that slowly
-   fills with memories, a music player, a shopping site for decor.)
-5. **Your ship sheets** (next round, as rigs to buy): any you want first,
-   and how should each one handle? (Heavy and slow, zippy...)
+1. Does walking around the rig in flight and chatting with the crew feel
+   like the Animal Crossing vibe you wanted? What would make it more so?
+2. Do Dottie, Digby and Clem feel like different people? Any lines that
+   made you smile, or that fell flat?
+3. Which ship events did you see? What other events would you love (a
+   pet aboard, a stowaway, a crew argument, a holiday...)?
+4. The live window: is it what you pictured? Should other rooms get
+   windows (the galley, the cargo bay's big door)?
+5. Are the new rooms' camera angles nice to look at? Any spot where you
+   lose the bunny or the view feels cramped?

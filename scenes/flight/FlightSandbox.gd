@@ -80,6 +80,10 @@ var _cabin_view: SubViewport
 ## Partway through walking into another room of the rig (fading).
 var _changing_room: bool = false
 var _cabin_room: HubRoom
+## The view out of the rig's nose, for the apartment window (see
+## _load_cabin_room): a little camera riding the ship.
+var _window_view: SubViewport
+var _window_camera: Camera3D
 ## Napping: time runs fast until you wake up or arrive.
 var _napping: bool = false
 var _nap_screen: CanvasLayer
@@ -87,6 +91,10 @@ var _nap_screen: CanvasLayer
 ## Getting up from the seat, you come down the cockpit stairs into dispatch.
 const CABIN_SCENE: String = "res://scenes/hub/Dispatch.tscn"
 const CABIN_SPAWN: String = "FromShip"
+## The window view: how many pixels (small, for the PSX crunch), and where
+## its camera sits on the rig (just past the nose, looking ahead).
+const WINDOW_PIXELS := Vector2i(320, 180)
+const WINDOW_CAMERA_SPOT := Vector3(0.0, 1.5, -16.0)
 ## Prices at the Gas-N-Go counter.
 const JERKY_PRICE: int = 15
 const KEYCHAIN_PRICE: int = 5
@@ -172,6 +180,7 @@ func _process(delta: float) -> void:
 		_spot_sights()
 	if _nap_screen != null:
 		_nap_screen.get_child(0).queue_redraw()
+	_follow_with_window_camera()
 
 
 func _exit_tree() -> void:
@@ -466,7 +475,34 @@ func _load_cabin_room(scene_path: String, spawn: String) -> void:
 	_cabin_room.left_cabin.connect(_back_to_seat)
 	_cabin_room.nap_requested.connect(_nap)
 	_cabin_room.room_change_requested.connect(_walk_to_room)
+	_cabin_room.window_feed = _window_feed()
 	_cabin_view.add_child(_cabin_room)
+	# Only draw the view outside while there's a window to see it through.
+	_window_view.render_target_update_mode = SubViewport.UPDATE_ALWAYS if _cabin_room.has_window() else SubViewport.UPDATE_DISABLED
+
+
+## The live view of space for the rig's window: a small second camera in
+## the flight world, riding the ship's nose. Made once per walk around the
+## cabin (it goes away with the cabin view).
+func _window_feed() -> Texture2D:
+	if _window_view == null:
+		_window_view = SubViewport.new()
+		_window_view.size = WINDOW_PIXELS
+		_window_view.world_3d = _ship.get_world_3d()  # The same space the rig's flying through.
+		_window_view.audio_listener_enable_3d = false
+		_window_camera = Camera3D.new()
+		_window_camera.fov = 60.0
+		_window_camera.near = 1.0
+		_window_camera.far = _cockpit_camera.far
+		_window_view.add_child(_window_camera)
+		_cabin_layer.add_child(_window_view)
+		_follow_with_window_camera()
+	return _window_view.get_texture()
+
+
+func _follow_with_window_camera() -> void:
+	if _window_camera != null:
+		_window_camera.global_transform = _ship.global_transform.translated_local(WINDOW_CAMERA_SPOT)
 
 
 ## Walking through a door to another room of the rig, in flight.
@@ -502,6 +538,8 @@ func _close_cabin() -> void:
 		_cabin_layer = null
 		_cabin_view = null
 		_cabin_room = null
+		_window_view = null
+		_window_camera = null
 	_ship.controls.hands_free = false
 	_hud.set_cabin(false)
 	Radio.set_context(Radio.Context.FLIGHT)

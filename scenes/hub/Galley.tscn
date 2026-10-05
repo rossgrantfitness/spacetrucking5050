@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_w58m0"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/GalleySet.tscn" id="2_1srht"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_po1ch"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_p1n1d"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_m8g8d"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_hmxin"]
+
+[sub_resource type="Environment" id="Environment_few8a"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.4, 0.33, 0.3, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o0dcg"]
+size = Vector3(8.2, 3, 6.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x7vbp"]
+size = Vector3(3.4, 3, 2.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6vntt"]
+size = Vector3(1.1, 2, 0.5)
+
+[node name="Galley" type="Node3D" unique_id=1587472518]
+script = ExtResource("1_w58m0")
+default_spawn = "FromHallway"
+radio_speakers = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1835513437]
+environment = SubResource("Environment_few8a")
+
+[node name="Set" parent="." unique_id=224983624 instance=ExtResource("2_1srht")]
+
+[node name="Shots" type="Node3D" parent="." unique_id=1452412429]
+
+[node name="Wide" type="Node3D" parent="Shots" unique_id=1397837220]
+script = ExtResource("3_po1ch")
+
+[node name="Camera" type="Camera3D" parent="Shots/Wide" unique_id=1368934699]
+transform = Transform3D(0.55470014, -0.27254713, 0.78614616, 0, 0.94483006, 0.32756087, -0.8320503, -0.18169805, 0.5240974, 3.6, 2.6, 2.6)
+fov = 64.0
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Wide" unique_id=1435738854]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Wide/Zone" unique_id=1091987047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("BoxShape3D_o0dcg")
+
+[node name="TowardDoor" type="Node3D" parent="Shots" unique_id=1813045650]
+script = ExtResource("3_po1ch")
+
+[node name="Camera" type="Camera3D" parent="Shots/TowardDoor" unique_id=2142672241]
+transform = Transform3D(-0.6024069, 0.21958378, -0.76739097, 0, 0.96141493, 0.2751024, 0.7981892, 0.16572359, -0.57916296, -3.5, 2.5, -2.4)
+fov = 62.0
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/TowardDoor" unique_id=104300468]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/TowardDoor/Zone" unique_id=446621203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 1.4, 1.8)
+shape = SubResource("BoxShape3D_x7vbp")
+
+[node name="Spawns" type="Node3D" parent="." unique_id=592268069]
+
+[node name="FromHallway" type="Marker3D" parent="Spawns" unique_id=1509578325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0, 2.2)
+
+[node name="Exits" type="Node3D" parent="." unique_id=548917257]
+
+[node name="HallwayDoor" type="Area3D" parent="Exits" unique_id=1205886052]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 1, 2.75)
+script = ExtResource("4_p1n1d")
+target_scene = "res://scenes/hub/Hallway.tscn"
+target_spawn = "FromGalley"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/HallwayDoor" unique_id=1147678395]
+shape = SubResource("BoxShape3D_6vntt")
+
+[node name="People" type="Node3D" parent="." unique_id=1315496220]
+
+[node name="Things" type="Node3D" parent="." unique_id=2046874510]
+
+[node name="CrewSpots" type="Node3D" parent="." unique_id=495263902]
+
+[node name="Coffee" type="Marker3D" parent="CrewSpots" unique_id=351014175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, -1.95)
+
+[node name="Stove" type="Marker3D" parent="CrewSpots" unique_id=714898342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, -1.95)
+
+[node name="Fridge" type="Marker3D" parent="CrewSpots" unique_id=284858702]
+transform = Transform3D(0.921061, 0, 0.38941833, 0, 1, 0, -0.38941833, 0, 0.921061, 2, 0, -1.7)
+
+[node name="TableNorth" type="Marker3D" parent="CrewSpots" unique_id=1481930924]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.2, 0, -0.6)
+
+[node name="TableSouth" type="Marker3D" parent="CrewSpots" unique_id=1518340335]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 1.2)
+
+[node name="TableEast" type="Marker3D" parent="CrewSpots" unique_id=419361287]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0.3)
+
+[node name="CouchLeft" type="Marker3D" parent="CrewSpots" unique_id=1802006426]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.3, 0, 0.7)
+
+[node name="CouchRight" type="Marker3D" parent="CrewSpots" unique_id=1814450830]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.3, 0, 1.9)
+
+[node name="Arcade" type="Marker3D" parent="CrewSpots" unique_id=614388064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0, 0.3)
+
+[node name="Middle" type="Marker3D" parent="CrewSpots" unique_id=1571651311]
+transform = Transform3D(0.921061, 0, -0.38941833, 0, 1, 0, 0.38941833, 0, 0.921061, 1.4, 0, 0.6)
+
+[node name="FindUnderTable" type="Marker3D" parent="CrewSpots" unique_id=118984014]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0.3)
+
+[node name="PSXScreen" type="CanvasLayer" parent="." unique_id=74046809]
+layer = 0
+script = ExtResource("5_m8g8d")
+
+[node name="PauseMenu" parent="." unique_id=1154140398 instance=ExtResource("6_hmxin")]
+flying = false

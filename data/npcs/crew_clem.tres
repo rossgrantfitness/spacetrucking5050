@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Clem"
+species = "donkey"
+voice_pitch = 0.85
+lines = PackedStringArray("Hiya, boss!")
+comm_name = "CLEM · CARGO"
+fur_color = Color(0.5, 0.48, 0.5, 1)
+accent_color = Color(1, 0.45, 0.1, 1)

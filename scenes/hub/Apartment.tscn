@@ -96,6 +96,11 @@ shape = SubResource("BoxShape3D_exit0")
 
 [node name="People" type="Node3D" parent="."]
 
+[node name="CrewSpots" type="Node3D" parent="."]
+
+[node name="Window" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-1, 0, -1.7)
+
 [node name="Things" type="Node3D" parent="."]
 
 [node name="Computer" type="Area3D" parent="Things"]
