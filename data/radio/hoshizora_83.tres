@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/synthwave.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "HOSHIZORA 83"
+frequency = "83.0"
+genre = "J-pop, city pop, anime rock"
+dj_name = "Tanu-chan"
+tagline = "Hoshi o kakeru: racing across the stars, all night long."
+music_folder = "res://audio/radio/hoshizora_83/music"
+ads_folder = "res://audio/radio/hoshizora_83/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("HOSHI O KAKERU", "SLIPSTREAM IGNITION", "AUTOPILOT OFF")
+ads = PackedStringArray("MOCHI MOONS. THE SNACK THAT ORBITS YOUR MOUTH. NOW IN MATCHA.", "KAWAII KARGO INSURANCE. IF YOUR CRATE GETS SAD, WE SEND IT A CARD.", "NEKO NAVIGATION. THE CAT ON YOUR DASH KNOWS THE WAY. PROBABLY.", "STAR-STOP RAMEN. HOT NOODLES AT EVERY RING ON THE ROAD. SLURP RESPONSIBLY.")
+dj_lines = PackedStringArray("Konbanwa, truckers! Tanu-chan here on Hoshizora 83. Keep your eyes on the stars.", "That one's for everybody out on the long haul tonight. Ganbatte!", "Little tanuki fact: we can't fly. That's why I love you truckers so much.", "Window open? Spiritually, I mean. Let the starlight in.", "Requests, compliments and snack recommendations: send them to the tanuki.")
+dj_on_storm = PackedStringArray("Ion storm out there! The sky's doing a light show. Hold on to your cup noodles.")
+dj_on_delivery = PackedStringArray("Otsukaresama, {bunny}! A delivery to {place}. Good job, good job.")
+dj_on_ticket = PackedStringArray("Ehh, a speeding ticket? Racing across the stars is just a song title, trucker.")
+dj_on_new_system = PackedStringArray("Welcome to {system}! New stars, same station. Yoroshiku!")

@@ -14,6 +14,7 @@ real radio, so flipping back lands you mid-song.
    | 101.1 | SUBSPACE FM | Drum & bass, jungle | DJ Static (bat) | `subspace_fm` |
    | 96.6 | WOBBLE BELT | Dubstep, bass music | DJ Big Low (hippo) | `wobble_belt` |
    | 88.8 | NEON DRIFT | Synthwave, outrun | DJ Vapor (flamingo) | `neon_drift` |
+   | 83.0 | HOSHIZORA 83 | J-pop, city pop, anime rock (the developer's own tracks) | Tanu-chan (tanuki) | `hoshizora_83` |
    | 92.3 | AFTERGLOW BLOCK | Downtempo, IDM (night shift only) | K-9000 (robot dog) | `afterglow_block` |
    | 106.5 | HYPERJUMP 180 | Happy hardcore, gabber | DJ Sparkz (hamster) | `hyperjump_180` |
    | 77.1 | TIDE 77 | Dub, trip-hop (clear only near Tidewater) | DJ Kelp (sea lion) | `tide_77` |

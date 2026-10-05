@@ -76,12 +76,17 @@ func test_moe_finishes_his_sentence_next_visit() -> void:
 
 func test_the_radio_dial() -> void:
 	var stations := Radio.lineup.stations
-	check(stations.size() == 21, "20 stations plus MY TUNES (got %d)" % stations.size())
+	check(stations.size() == 22, "21 stations plus MY TUNES (got %d)" % stations.size())
 	var names := {}
 	for radio_station in stations:
 		check(not names.has(radio_station.display_name), "station names are unique (%s)" % radio_station.display_name)
 		names[radio_station.display_name] = true
 		check(radio_station.reads_player_folder or radio_station.placeholder_loop != null, "%s has a placeholder" % radio_station.display_name)
+
+
+func test_hoshizora_plays_the_developers_tracks() -> void:
+	var songs: Array = Radio.call("_load_folder", "res://audio/radio/hoshizora_83/music", false)
+	check(songs.size() == 3, "Hoshizora 83 plays the three tracks in its music folder (found %d)" % songs.size())
 
 
 func test_regional_pirate_night_and_mystery_stations() -> void:

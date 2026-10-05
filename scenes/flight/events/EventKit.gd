@@ -36,7 +36,30 @@ static func paint(color: Color, brightness: float = 0.0, texture: Texture2D = nu
 static func box(parent: Node3D, size: Vector3, where: Vector3, material: Material, turn: Vector3 = Vector3.ZERO) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = size
-	return _add(parent, mesh, where, material, turn)
+	return _add(parent, mesh, where, edged(material, size), turn)
+
+
+## The same material with painted bevels and shadow switched on (the hand-
+## painted Mega Man Legends look, see shaders/painted_edges.gdshaderinc),
+## sized for a box this big. Things that glow stay clean.
+static func edged(material: Material, size: Vector3) -> Material:
+	var shaded := material as ShaderMaterial
+	if shaded == null or shaded.shader != SURFACE_SHADER:
+		return material
+	var glow: Variant = shaded.get_shader_parameter("emission_strength")
+	if glow != null and float(glow) > 0.0:
+		return material
+	var smallest := minf(size.x, minf(size.y, size.z))
+	var width := 0.2 if smallest < 4.0 else (1.5 if smallest < 40.0 else 6.0)
+	var key := "edged %d %s" % [shaded.get_instance_id(), width]
+	if not _cache.has(key):
+		var with_edges := shaded.duplicate() as ShaderMaterial
+		with_edges.set_shader_parameter("painted_edges", true)
+		with_edges.set_shader_parameter("edge_width", width)
+		with_edges.set_shader_parameter("edge_pixels_per_meter", 4.0 / width)
+		with_edges.set_shader_parameter("edge_floor_reach", width * 6.0)
+		_cache[key] = with_edges
+	return _cache[key]
 
 
 static func cylinder(parent: Node3D, radius: float, height: float, where: Vector3, material: Material,

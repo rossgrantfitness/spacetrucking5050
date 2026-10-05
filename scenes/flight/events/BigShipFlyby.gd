@@ -1,8 +1,10 @@
 class_name BigShipFlyby
 extends RoadsideThing
-## A BIG ship crosses the lane ahead of you: a capital freighter well over a
-## kilometer long, built from cheap flat slabs, with rows of lit windows and
-## huge engines. Its deep engine rumble rises as it comes and drops away as
+## A BIG ship crosses the lane ahead of you, well over a kilometer long:
+## one of the designs from the developer's sheets (FleetDesigns.gd: the
+## Stack-Ship barge, the cryo Tanker, the Ore-Crawler, the Ice-Tug, the
+## Hab-Brick or the Garbage Scow), or, when an event asks for a particular
+## color, the classic capital freighter built from flat slabs. Its deep engine rumble rises as it comes and drops away as
 ## it goes (the Doppler effect). The moment the brief calls "the big-ship
 ## flyby".
 
@@ -22,9 +24,23 @@ var speed_scale: float = 1.0
 
 var _velocity := Vector3.ZERO
 var _travelled: float = 0.0
+var _trail := Color(0.5, 0.8, 1.0)
 
 
 func _ready() -> void:
+	if hull_color.a > 0.0:
+		_build_classic()
+	else:
+		var design := FleetDesigns.build(self, rng)
+		EventKit.solid(self, design["size"])
+		_trail = design["trail"]
+		if names.is_empty():
+			names = PackedStringArray(design["names"])
+	_set_off()
+
+
+## The classic capital freighter: flat slabs, windows, big engines.
+func _build_classic() -> void:
 	var hull := EventKit.paint(hull_color if hull_color.a > 0.0 else Color(0.55, 0.58, 0.68), 0.0, EventKit.HULL, 40.0)
 	var trim := EventKit.paint(Color(0.85, 0.55, 0.3), 0.0, EventKit.HULL, 40.0)
 	var length := 1400.0
@@ -40,6 +56,9 @@ func _ready() -> void:
 		EventKit.cylinder(self, 45.0, 60.0, engine + Vector3(0.0, 0.0, length * 0.5 + 30.0), EventKit.paint(Color(0.15, 0.15, 0.2)), Vector3(PI / 2.0, 0.0, 0.0))
 		EventKit.glow(self, 320.0, engine + Vector3(0.0, 0.0, length * 0.5 + 70.0), Color(0.5, 0.8, 1.0))
 	EventKit.solid(self, Vector3(220.0, 160.0, length))
+
+
+func _set_off() -> void:
 	# Cross the lane: start well off to one side and sail across in front,
 	# timed to pass just as you get there.
 	var across := travel.cross(Vector3.UP).normalized()
@@ -69,4 +88,4 @@ func is_done() -> bool:
 
 
 func trail_color() -> Color:
-	return Color(0.5, 0.8, 1.0)
+	return _trail

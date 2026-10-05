@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://data/radio/subspace_fm.tres" id="s0_subspace_fm"]
 [ext_resource type="Resource" path="res://data/radio/wobble_belt.tres" id="s1_wobble_belt"]
 [ext_resource type="Resource" path="res://data/radio/neon_drift.tres" id="s2_neon_drift"]
+[ext_resource type="Resource" path="res://data/radio/hoshizora_83.tres" id="s20_hoshizora_83"]
 [ext_resource type="Resource" path="res://data/radio/afterglow_block.tres" id="s3_afterglow_block"]
 [ext_resource type="Resource" path="res://data/radio/hyperjump_180.tres" id="s4_hyperjump_180"]
 [ext_resource type="Resource" path="res://data/radio/tide_77.tres" id="s5_tide_77"]
@@ -26,4 +27,4 @@
 
 [resource]
 script = ExtResource("1_lineup")
-stations = Array[ExtResource("1_station")]([ExtResource("s0_subspace_fm"), ExtResource("s1_wobble_belt"), ExtResource("s2_neon_drift"), ExtResource("s3_afterglow_block"), ExtResource("s4_hyperjump_180"), ExtResource("s5_tide_77"), ExtResource("s6_krsh_666"), ExtResource("s7_black_hole_radio"), ExtResource("s8_event_horizon"), ExtResource("s9_hull_breach_101"), ExtResource("s10_asteroid_rock"), ExtResource("s11_fuel_injection"), ExtResource("s12_static_cling"), ExtResource("s13_glam_rocket"), ExtResource("s14_orbit_808"), ExtResource("s15_trap_lane_404"), ExtResource("s16_cozy_coil"), ExtResource("s17_mic_check_moon"), ExtResource("s18_long_haul_talk"), ExtResource("s19_numbers"), ExtResource("s99_my_tunes")])
+stations = Array[ExtResource("1_station")]([ExtResource("s0_subspace_fm"), ExtResource("s1_wobble_belt"), ExtResource("s2_neon_drift"), ExtResource("s20_hoshizora_83"), ExtResource("s3_afterglow_block"), ExtResource("s4_hyperjump_180"), ExtResource("s5_tide_77"), ExtResource("s6_krsh_666"), ExtResource("s7_black_hole_radio"), ExtResource("s8_event_horizon"), ExtResource("s9_hull_breach_101"), ExtResource("s10_asteroid_rock"), ExtResource("s11_fuel_injection"), ExtResource("s12_static_cling"), ExtResource("s13_glam_rocket"), ExtResource("s14_orbit_808"), ExtResource("s15_trap_lane_404"), ExtResource("s16_cozy_coil"), ExtResource("s17_mic_check_moon"), ExtResource("s18_long_haul_talk"), ExtResource("s19_numbers"), ExtResource("s99_my_tunes")])
