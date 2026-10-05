@@ -1,7 +1,6 @@
 extends "res://tools/build_placeholder_models.gd"
 ## Builds the placeholder models for walking around the base, and saves them
 ## as ordinary scenes you can open in the editor:
-##     res://scenes/hub/BunnyVisual.tscn          - our chibi bunny trucker
 ##     res://scenes/hub/RaccoonVisual.tscn        - Dottie, the dispatch clerk
 ##     res://scenes/hub/sets/ApartmentSet.tscn    - the rooms' "sets": walls,
 ##     res://scenes/hub/sets/HallwaySet.tscn        furniture, lights and
@@ -15,8 +14,9 @@ extends "res://tools/build_placeholder_models.gd"
 ## and people) are NOT touched, so camera angles you set in the editor are safe.
 ##
 ## It borrows the shape helpers (boxes, lofts...) from build_placeholder_models.gd.
-## Characters use the wobbly PS1 shader; the sets use ordinary smooth
-## materials and real lights, because they get "pre-rendered" into painted
+## (The bunny is built from her 3D model by tools/build_bunny.gd.)
+## Characters use the wobbly PS1 shader; the sets use smooth lit materials
+## with hand-painted textures (shaders/set_surface.gdshader) and real lights, because they get "pre-rendered" into painted
 ## backgrounds (see scenes/hub/HubRoom.gd).
 
 
@@ -35,12 +35,6 @@ const CRATE := preload("res://textures/generated/crate.png")
 const GRATE := preload("res://textures/generated/grate.png")
 const PIPES := preload("res://textures/generated/pipes.png")
 
-const BUNNY_LOOK := {
-	"fur": Color(0.74, 0.7, 0.8), "belly": Color(0.95, 0.93, 0.92), "inner_ear": Color(1.0, 0.68, 0.76),
-	"jacket": Color(0.46, 0.4, 0.26), "shirt": Color(0.92, 0.9, 0.82), "pants": Color(0.3, 0.36, 0.52),
-	"boots": Color(0.32, 0.21, 0.15), "cap": Color(0.85, 0.2, 0.22), "cap_front": Color(0.96, 0.95, 0.9),
-	"ears": "long", "cap_on": true, "wheat": true, "mask": false, "tail": "puff",
-}
 const RACCOON_LOOK := {
 	"fur": Color(0.55, 0.55, 0.6), "belly": Color(0.85, 0.85, 0.86), "inner_ear": Color(0.35, 0.33, 0.38),
 	"jacket": Color(0.2, 0.55, 0.58), "shirt": Color(0.95, 0.95, 0.95), "pants": Color(0.25, 0.25, 0.3),
@@ -55,7 +49,7 @@ var _set_materials := {}
 func _initialize() -> void:
 	_animator_script = load(ANIMATOR_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/hub/sets"))
-	_save(_build_critter("BunnyVisual", BUNNY_LOOK), "res://scenes/hub/BunnyVisual.tscn")
+	# (The bunny herself is built from her 3D model by tools/build_bunny.gd.)
 	_save(_build_critter("RaccoonVisual", RACCOON_LOOK), "res://scenes/hub/RaccoonVisual.tscn")
 	_save(_build_apartment(), "res://scenes/hub/sets/ApartmentSet.tscn")
 	_save(_build_hallway(), "res://scenes/hub/sets/HallwaySet.tscn")
