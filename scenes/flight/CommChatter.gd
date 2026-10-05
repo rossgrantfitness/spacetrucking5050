@@ -140,7 +140,7 @@ func _on_bonked(_strength: float, _where: Vector3) -> void:
 
 ## Someone comments on something (like a sight on the road), if the
 ## comms are free. Not important: skipped if somebody's already talking.
-## `replies` are what Jack can say back (empty = her usual one-liners).
+## `replies` are what Jacki can say back (empty = her usual one-liners).
 ## Returns whether the call went through.
 func say_line(speaker: NPCData, line: String, replies: PackedStringArray = PackedStringArray()) -> bool:
 	if _comm.is_busy() or _quiet < GameState.tuning.comm_quiet_seconds:

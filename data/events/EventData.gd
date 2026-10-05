@@ -118,7 +118,7 @@ enum Effect { NONE, DEAD_AIR, STATIC, PINGS, NUDGE, SWAY, BUMPY }
 ## at random). Optional.
 @export var speaker: NPCData
 @export var lines: PackedStringArray = PackedStringArray()
-## What Jack can say back (press T after the call). Empty = her usual
+## What Jacki can say back (press T after the call). Empty = her usual
 ## one-liners. Always just flavor: no reply changes what happens.
 @export var replies: PackedStringArray = PackedStringArray()
 ## Something said on the radio about it (one picked at random), on

@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1_names")
-bunny_name = "Jack Rabbit"
+bunny_name = "Jacki Rabbit"
+husband_name = "White"
+base_name = "OrbitalEx HQ"
+company_name = "OrbitalEx"

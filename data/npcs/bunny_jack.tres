@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Jack Rabbit"
+display_name = "Jacki Rabbit"
 species = "bunny"
 voice_pitch = 0.85
 lines = PackedStringArray("...")

@@ -39,12 +39,12 @@ func _initialize() -> void:
 	road.name = "TidewaterRoad"
 
 	# Highway signs: front for the trip out, back for the trip home.
-	_sign(road, 3.0, "TIDEWATER  56 KM\nGAS-N-GO 47  27 KM", "TRUCK STOP  3 KM\nCOMPANY HQ  13 KM")
-	_sign(road, 13.0, "GAS-N-GO 47  17 KM\nTIDEWATER  46 KM", "TRUCK STOP  13 KM\nCOMPANY HQ  23 KM")
-	_sign(road, 25.0, "GAS-N-GO 47  NEXT RIGHT\nWORLD'S BIGGEST DONUT!", "TRUCK STOP  25 KM\nCOMPANY HQ  35 KM")
+	_sign(road, 3.0, "TIDEWATER  56 KM\nGAS-N-GO 47  27 KM", "TRUCK STOP  3 KM\nORBITALEX HQ  13 KM")
+	_sign(road, 13.0, "GAS-N-GO 47  17 KM\nTIDEWATER  46 KM", "TRUCK STOP  13 KM\nORBITALEX HQ  23 KM")
+	_sign(road, 25.0, "GAS-N-GO 47  NEXT RIGHT\nWORLD'S BIGGEST DONUT!", "TRUCK STOP  25 KM\nORBITALEX HQ  35 KM")
 	_sign(road, 36.0, "WELCOME TO TIDEWATER\nPLEASE DON'T FEED THE WHALES", "GAS-N-GO 47  6 KM\nTRUCK STOP  36 KM")
 	_sign(road, 47.0, "TIDEWATER CANNERY  12 KM\nION STORMS POSSIBLE", "GAS-N-GO 47  17 KM\nDRIVE SAFE")
-	_sign(road, 56.0, "TIDEWATER CANNERY  3 KM\nWE CAN, THEREFORE WE ARE", "LEAVING TIDEWATER\nCOMPANY HQ  67 KM")
+	_sign(road, 56.0, "TIDEWATER CANNERY  3 KM\nWE CAN, THEREFORE WE ARE", "LEAVING TIDEWATER\nORBITALEX HQ  67 KM")
 
 	# Where the home system ends and Tidewater begins.
 	var gate := _thing(road, LANDMARK, "BorderGate", 31.0, 0.0, 0.0)

@@ -1,7 +1,7 @@
 extends SceneTree
 ## Used by tools/validate.sh: a smoke test of round 9's flight extras, from
 ## a new game on the long haul:
-##   chart a course -> a comm call -> Jack replies -> flip through all the
+##   chart a course -> a comm call -> Jacki replies -> flip through all the
 ##   radio stations (and set off DJ reactions) -> the cinema camera (director,
 ##   free, back to chase) -> get up and walk into the
 ##   cabin -> walk the rig's rooms -> sleep (skips to just outside Tidewater)
@@ -56,7 +56,7 @@ func _process(_delta: float) -> bool:
 			if speaker != null and speaker.get("species") == "bunny":
 				_next(Step.RADIO)
 			elif waited > 3000:
-				_fail("Jack's reply should go out over the comms")
+				_fail("Jacki's reply should go out over the comms")
 		Step.RADIO:
 			var radio := root.get_node("Radio")
 			radio.call("next_station")

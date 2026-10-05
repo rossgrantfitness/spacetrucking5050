@@ -1,5 +1,5 @@
 extends "res://tools/tests/TestSuite.gd"
-## Checks for round 9: Jack's name and replies, people remembering things,
+## Checks for round 9: Jacki's name and replies, people remembering things,
 ## the 20-station radio (regional, pirate, night-only and mystery stations),
 ## the logbook and rare sights, and the loading screen's lines.
 ## Every test puts GameState back the way it found it, and saving goes to a
@@ -23,14 +23,14 @@ func _restore(before: Dictionary) -> void:
 
 
 func test_her_name_is_jack_rabbit() -> void:
-	check(GameState.names.bunny_name == "Jack Rabbit", "the bunny's name is Jack Rabbit")
-	check(GameState.names.fill_in("Hi, {bunny}.") == "Hi, Jack Rabbit.", "{bunny} fills in her name")
+	check(GameState.names.bunny_name == "Jacki Rabbit", "the bunny's name is Jacki Rabbit")
+	check(GameState.names.fill_in("Hi, {bunny}.") == "Hi, Jacki Rabbit.", "{bunny} fills in her name")
 
 
 func test_jack_always_has_three_things_to_say_back() -> void:
 	var replies: BunnyReplies = load("res://data/dialogue/bunny_replies.tres")
 	var rng := RandomNumberGenerator.new()
-	check(replies.voice != null and replies.voice.species == "bunny", "Jack replies in her own voice")
+	check(replies.voice != null and replies.voice.species == "bunny", "Jacki replies in her own voice")
 	for situation in ChatterSet.Situation.values():
 		var picked := replies.pick(situation, 3, rng)
 		check(picked.size() == 3, "three replies for situation %d" % situation)

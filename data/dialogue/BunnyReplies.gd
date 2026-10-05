@@ -1,6 +1,6 @@
 class_name BunnyReplies
 extends Resource
-## What Jack can say back when someone calls on the comms. After a call,
+## What Jacki can say back when someone calls on the comms. After a call,
 ## press T (RB on a gamepad) and pick one of three. Pure flavor: replies
 ## never change anything, they just let her be herself (dry, tired,
 ## unbothered). Three are picked at random from the list for the kind of

@@ -56,9 +56,9 @@ game's numbers, names and stuff never needs programming.
   docking, bonks, boosts, low fuel, rough flying, speeding tickets), optionally only at a place, a point in
   the story or during a job. Blueprints: `ChatterSet.gd`, `FlightChatter.gd`.
 - **`logbook/sights.tres`**: every sight that can go in the logbook (its
-  name, what Jack wrote about it, whether it's rare). Blueprints:
+  name, what Jacki wrote about it, whether it's rare). Blueprints:
   `LogbookEntry.gd`, `Logbook.gd`.
-- **`dialogue/bunny_replies.tres`**: the one-liners Jack can say back to
+- **`dialogue/bunny_replies.tres`**: the one-liners Jacki can say back to
   comm calls, grouped by kind of call. Blueprint: `BunnyReplies.gd`.
 - **`events/route_events.tres`**: everything that can happen on the road:
   your route events list (1-167 so far) plus the original sights. Each one

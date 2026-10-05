@@ -336,7 +336,7 @@ func approach_points(id: String, from: Vector3) -> Array[Vector3]:
 	return [best.global_position - best.through_direction() * 700.0, best.global_position + best.through_direction() * 150.0]
 
 
-## Talking back on the comms: T / RB opens Jack's replies, then Q / R / E
+## Talking back on the comms: T / RB opens Jacki's replies, then Q / R / E
 ## (1 / 2 / 3, D-pad left / up / right) picks one. Returns whether the key
 ## was used for that.
 func _talk_back(event: InputEvent) -> bool:

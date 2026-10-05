@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Email_0"]
 script = ExtResource("2_email")
 id = "hq_memo"
-from_name = "COMPANY HQ"
+from_name = "ORBITALEX HQ"
 subject = "Memo: you now live in your truck"
 body = "Effective immediately, all drivers live in their rigs. This saves on rent. It does not, but it saves on the paperwork about rent. Your apartment, hallway and a dispatch office have been fitted behind your cab. Thank you for your service. - Management"
 

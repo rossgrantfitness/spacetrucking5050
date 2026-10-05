@@ -12,7 +12,7 @@ extends Resource
 @export var id: String = ""
 ## Its name in the logbook.
 @export var display_name: String = ""
-## What Jack wrote about it.
+## What Jacki wrote about it.
 @export_multiline var description: String = ""
 ## Rare sights get a fanfare when you first see one.
 @export var rare: bool = false

@@ -1,6 +1,6 @@
 class_name WreckScreen
 extends CanvasLayer
-## The card after the rig blows up: WRECKED, one of Jack's deadpan
+## The card after the rig blows up: WRECKED, one of Jacki's deadpan
 ## one-liners (res://data/dialogue/wreck_lines.tres), and then straight back
 ## to your last save, nothing lost. Any key skips the wait.
 ##

@@ -10,7 +10,7 @@ extends HudWidget
 ## hides the rest of the HUD.
 ##
 ## Talking back: when a call has finished typing, "T: REPLY" shows under
-## it. Press T (RB) and three of Jack's one-liners pop up; pick one with
+## it. Press T (RB) and three of Jacki's one-liners pop up; pick one with
 ## Q / R / E (or 1 / 2 / 3, or D-pad left / up / right) and she says it
 ## over the comms once the call ends. Pure flavor, no consequences. Her
 ## lines are in res://data/dialogue/bunny_replies.tres.
@@ -51,7 +51,7 @@ var _picking: bool = false
 var _replies := PackedStringArray()
 ## Replies written for this particular call (a route event's choices).
 var _custom_replies := PackedStringArray()
-## Jack's reply, said once this call has slid away.
+## Jacki's reply, said once this call has slid away.
 var _queued_reply: String = ""
 var _rng := RandomNumberGenerator.new()
 
@@ -76,7 +76,7 @@ func _ready() -> void:
 
 ## Starts a call from `speaker` saying `words` (names like {bunny} are filled
 ## in). Ignored if a call is already up; check is_busy() first. `situation`
-## is what it's about, for Jack's replies; `repliable` off for her own lines.
+## is what it's about, for Jacki's replies; `repliable` off for her own lines.
 func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = ChatterSet.Situation.IDLE, repliable: bool = true,
 		replies: PackedStringArray = PackedStringArray()) -> void:
 	if is_busy():
@@ -101,7 +101,7 @@ func is_busy() -> bool:
 	return _state != State.IDLE
 
 
-## Whether Jack can talk back right now (the call has finished typing).
+## Whether Jacki can talk back right now (the call has finished typing).
 func can_reply() -> bool:
 	return _allow_reply and not _picking and _state == State.HOLDING and _card == _cards.size() - 1
 
@@ -111,7 +111,7 @@ func is_picking() -> bool:
 	return _picking
 
 
-## Shows three things Jack could say back.
+## Shows three things Jacki could say back.
 func open_replies() -> void:
 	if not can_reply():
 		return
@@ -122,7 +122,7 @@ func open_replies() -> void:
 	_clock = 0.0
 
 
-## Jack says reply number `index` (0-2) once the call ends.
+## Jacki says reply number `index` (0-2) once the call ends.
 func choose_reply(index: int) -> void:
 	if not _picking or index < 0 or index >= _replies.size():
 		return

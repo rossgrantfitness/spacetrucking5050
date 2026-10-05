@@ -1,6 +1,6 @@
 class_name LineList
 extends Resource
-## A simple list of lines to pick from at random (like Jack's one-liners
+## A simple list of lines to pick from at random (like Jacki's one-liners
 ## on the WRECKED card). Add as many as you like.
 
 

@@ -199,7 +199,7 @@ with left / right, dodge rocks, grab fuel cans. Esc backs out; the mouse
 works too. Parked, the bed starts a **new day**.
 
 **Talk back:** after a comm call, "T: REPLY" shows under it. Press T (RB),
-then pick one of three things Jack says back. Just flavor; nothing changes.
+then pick one of three things Jacki says back. Just flavor; nothing changes.
 
 **The logbook (L, or the pause menu):** every sight you get close to
 (whales, the donut, the derelict, a comet...) goes in it. Some are rare:
