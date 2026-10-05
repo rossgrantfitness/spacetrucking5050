@@ -124,3 +124,24 @@ flavor only, so "share fuel for a tip", "pull over for a courtesy bonus"
 and "carry one letter" have no reward yet. Dead air silences the radio
 but doesn't dim the stars yet. "Wrong ring" is a joke call (you keep your
 ring). The procession and the escort use the convoy and big-ship models.
+
+## Round 11: the road to the Glimmer System
+
+`scenes/flight/GlimmerRoad.tscn` (made by `tools/build_glimmer_road.gd`),
+56 km from the truck stop to The High Roller:
+
+| Km | What |
+|---|---|
+| 3, 15, 27, 40, 52 | Highway signs (magenta boards, both directions) |
+| 12 | A spill of casino chips across the lane |
+| 22 (2.6 km right) | THE WORLD'S BIGGEST SLOT MACHINE |
+| 30 | The border gate into Glimmer (magenta) |
+| 32-55 | Twelve neon billboards, thicker near the casino |
+| 37 (2.8 km left) | The giant dice |
+| 45 (1.7 km right) | The Little Chapel of the Void (event #106) |
+| 53.5 | A space patrol speed trap |
+| all the way | A limo, a chip hauler and a bachelor party bus |
+
+Glimmer's own random events (in `data/events/route_events.tres`, Glimmer
+only): casino billboards (the most common sight there), limo convoys, a
+winner on channel 19, and Sal calling to say hi (after you've met him).

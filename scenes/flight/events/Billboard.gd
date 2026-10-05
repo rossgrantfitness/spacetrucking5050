@@ -1,16 +1,19 @@
 class_name Billboard
 extends RoadsideThing
 ## A giant billboard floating by the lane, advertising something surreal.
-## The ad copy comes from the event's data (res://data/events/).
+## The ad copy comes from the event's data (res://data/events/), or is set
+## here for billboards placed along a road (like the Glimmer System's).
 
 
 ## The ad, as a headline and a smaller line underneath.
-var headline: String = "MOON MILK"
-var tagline: String = "NOW WITH 30% LESS GRAVITY"
+@export var headline: String = "MOON MILK"
+@export var tagline: String = "NOW WITH 30% LESS GRAVITY"
 var colors: Array[Color] = [Color(1.0, 0.45, 0.8), Color(0.45, 0.95, 1.0), Color(1.0, 0.8, 0.3), Color(0.5, 1.0, 0.55)]
 
 
 func _ready() -> void:
+	if ship == null:
+		rng.seed = hash(headline)  # Billboards along a road: each its own color.
 	var accent: Color = colors[rng.randi_range(0, colors.size() - 1)]
 	var frame := EventKit.paint(Color(0.2, 0.2, 0.26), 0.0, EventKit.HULL, 20.0)
 	EventKit.box(self, Vector3(360.0, 160.0, 8.0), Vector3.ZERO, EventKit.paint(Color(0.08, 0.06, 0.16)))
@@ -22,5 +25,7 @@ func _ready() -> void:
 	for x: float in [-150.0, 0.0, 150.0]:
 		EventKit.glow(self, 50.0, Vector3(x, 95.0, 10.0), Color(1.0, 0.95, 0.75))
 	EventKit.solid(self, Vector3(360.0, 160.0, 10.0))
-	# Face the oncoming traffic (you).
-	look_at(global_position + travel, Vector3.UP)
+	# Random ones face the oncoming traffic (you); ones placed along a road
+	# keep the way they were placed.
+	if ship != null:
+		look_at(global_position + travel, Vector3.UP)

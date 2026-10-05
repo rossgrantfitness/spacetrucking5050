@@ -15,7 +15,10 @@ project on a machine without a screen.
 | `build_world.gd` | The stations seen from space: the home base (`BaseStation.tscn`), Tidewater Cannery (`CanneryStation.tscn`) and the Gas-N-Go drive-through (`GasNGo.tscn`), in `scenes/flight/`. **Re-running overwrites them.** |
 | `build_cannery.gd` | Tidewater Cannery's canteen set (`scenes/hub/sets/CanneryCanteenSet.tscn`) and Gill's model (`scenes/hub/OtterVisual.tscn`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/CanneryCanteen.tscn`). |
 | `build_road.gd` | Everything fixed along the road to Tidewater (`scenes/flight/TidewaterRoad.tscn`): signs, landmarks, debris fields, hazards, whales, long-haul traffic, each placed by "km along the road / meters to the side / meters up". **Re-running overwrites it.** |
-| `generate_world_textures.gd` | Tidewater's ocean planet and the suns' surface (`textures/generated/ocean_planet.png`, `sun_surface.png`). |
+| `generate_world_textures.gd` | Tidewater's ocean planet, Glimmer's magenta gas giant and the suns' surface (`textures/generated/ocean_planet.png`, `glimmer_planet.png`, `sun_surface.png`). |
+| `build_high_roller.gd` | Sal's casino seen from space (`scenes/flight/HighRollerStation.tscn`): a turning roulette wheel, a hotel tower, a giant neon sign. **Re-running overwrites it.** |
+| `build_glimmer_road.gd` | Everything fixed along the road to the Glimmer System (`scenes/flight/GlimmerRoad.tscn`): signs, the border gate, neon billboards, the giant slot machine, the dice, the chapel, a chip spill, the speed trap, limos. **Re-running overwrites it.** |
+| `build_casino_lounge.gd` | The casino floor's set (`scenes/hub/sets/HighRollerLoungeSet.tscn`) and Sal's model (`scenes/hub/CrocodileVisual.tscn`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/HighRollerLounge.tscn`). |
 | `build_truck_stop.gd` | The truck stop's inside (`scenes/hub/sets/TruckStopSet.tscn`) and its people's models (`OwlVisual`, `BeaverVisual`, `FrogVisual`, `WalrusVisual`, `HamsterVisual`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/TruckStop.tscn`). |
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per genre (`audio/radio/placeholders/`, shared by stations of a kind: drum & bass, dubstep, synthwave, metal, rock, hip hop, talk radio, a numbers station...), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
 | `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
@@ -26,7 +29,7 @@ project on a machine without a screen.
 
 | File | What it does |
 |---|---|
-| `validate.sh` | Full health check: imports the project, loads every file with GDScript warnings treated as errors, runs the self-tests, runs the boot screen, flies on autopilot, walks the base (`smoke_hub.gd`) and plays the first mission (`smoke_mission.gd`). Fails on any error or warning. The automated runs save to a scratch file, never your real save. |
+| `validate.sh` | Full health check: imports the project, loads every file with GDScript warnings treated as errors, runs the self-tests, runs the boot screen, flies on autopilot, walks the base (`smoke_hub.gd`), plays the first mission (`smoke_mission.gd`), tries the cabin (`smoke_cabin.gd`) and makes the trip to Sal's casino (`smoke_glimmer.gd`). Fails on any error or warning. The automated runs save to a scratch file, never your real save. |
 | `validate_project.gd` | Loads every script, scene and resource (or just the files you list) so Godot reports problems. |
 | `strict_warnings.gd` | Used by `validate.sh`: temporarily turns GDScript warnings into errors (via a throwaway `override.cfg`). |
 | `run_tests.gd` + `tests/` | A tiny self-test runner. Each `*Tests.gd` file in `tests/` holds `test_...` functions. |

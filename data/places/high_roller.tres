@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="2_sal"]
+
+[resource]
+script = ExtResource("1_place")
+id = "high_roller"
+display_name = "THE HIGH ROLLER"
+interior_scene = "res://scenes/hub/HighRollerLounge.tscn"
+arrival_spawn = "FromShip"
+host = ExtResource("2_sal")
+host_lines = PackedStringArray("Champ! Welcome to The High Roller, where everybody's a winner! Terms and conditions apply.", "Look who's back! Valet's on break. Valet's always on break. Dock wherever.", "My favorite hauler! Come in, come in. Don't touch the carpet, it's new. It's been new for nine years.")
+host_lines_in_order = true
+fuel_price_factor = 1.25

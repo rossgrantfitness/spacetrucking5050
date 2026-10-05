@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/sal_jumpsuits.tres" id="job_jumpsuits"]
+[ext_resource type="Resource" path="res://data/jobs/sal_slot_machine.tres" id="job_slot"]
+
+[sub_resource type="Resource" id="Conversation_meet"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("glimmer_open")
+blocked_by_flags = PackedStringArray("sal_met")
+lines = PackedStringArray("Champ! The cards! Forty thousand decks, and every one of 'em still has all its aces. Mostly.", "Sal Grinwell. I own the joint. The lights, the carpet, the smell. All me.", "Stick around. I always got something that needs moving. Legally. Ninety percent legally.")
+sets_flags = PackedStringArray("sal_met")
+
+[sub_resource type="Resource" id="Conversation_jumpsuits"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_met")
+blocked_by_flags = PackedStringArray("sal_jumpsuits_done")
+needs_no_job = true
+lines = PackedStringArray("Champ. Business proposition. My lounge act retired. Moved to a moon. Happens to the best of 'em.", "She left me a closet full of sequined jumpsuits. Your friend Marge, at the truck stop? Karaoke night. You see where I'm going.", "Don't snag the sequins. Sequins are forever. Like diamonds, but cheaper.")
+offers_job = ExtResource("job_jumpsuits")
+
+[sub_resource type="Resource" id="Conversation_slot"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_jumpsuits_done")
+blocked_by_flags = PackedStringArray("sal_slot_done")
+needs_no_job = true
+lines = PackedStringArray("Marge called. She sang. I heard it from here. Beautiful. Terrifying.", "Next thing: expansion. A slot machine for that otter's canteen out in Tidewater. A little lucky one. Gill's gonna love it.", "Has Gill been asked? Champ. Nobody's ever asked about anything. That's how you know it's a gift.")
+offers_job = ExtResource("job_slot")
+
+[sub_resource type="Resource" id="Conversation_rig"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_slot_done")
+blocked_by_flags = PackedStringArray("sal_mentioned_rig")
+lines = PackedStringArray("Gill sent a note. Says 'why.' Just 'why.' I'm framing it.", "Say... that old rig of yours. The big lazy one, sounds like a cough when it starts?", "I knew a guy who drove one just like it. Long time ago. Tipped great. Terrible at cards.", "...Anyway! Board's by the cage. Always something going out.")
+sets_flags = PackedStringArray("sal_mentioned_rig")
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_met")
+lines = PackedStringArray("Champ! My favorite hauler. Don't tell the others. There are no others. You're it.", "Board's by the cage. And don't play the slots. I mean it. Play them a little.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Welcome to The High Roller, where everybody's a winner! Terms and conditions apply.", "If you're hauling, the board's by the cage. If you're gambling, I love you.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Sal Grinwell (The High Roller)"
+species = "crocodile"
+voice_pitch = 0.6
+lines = PackedStringArray("Champ! Welcome to The High Roller!")
+comm_name = "SAL · HIGH ROLLER"
+fur_color = Color(0.36, 0.6, 0.32, 1)
+accent_color = Color(1, 0.3, 0.8, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_meet"), SubResource("Conversation_jumpsuits"), SubResource("Conversation_slot"), SubResource("Conversation_rig"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

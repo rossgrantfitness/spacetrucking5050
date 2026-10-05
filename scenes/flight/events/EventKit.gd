@@ -8,6 +8,7 @@ class_name EventKit
 const SURFACE_SHADER := preload("res://shaders/psx_surface.gdshader")
 const HULL := preload("res://textures/generated/hull_panels.png")
 const FLARE := preload("res://textures/generated/flare.png")
+const ROCK := preload("res://textures/generated/rock.png")
 
 static var _cache := {}
 

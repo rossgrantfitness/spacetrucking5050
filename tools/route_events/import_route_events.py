@@ -42,6 +42,7 @@ NPCS = {
     "dusty": "res://data/npcs/truckstop_mechanic.tres", "jack": "res://data/npcs/bunny_jack.tres",
     "fern": "res://data/npcs/approach_fern.tres", "gus": "res://data/npcs/courier_gus.tres",
     "bev": "res://data/npcs/tourist_bev.tres", "ch19": "res://data/npcs/open_channel.tres",
+    "sal": "res://data/npcs/casino_sal.tres",
 }
 SOUNDS = {"thunder": "res://audio/generated/big_engine.wav"}
 
@@ -227,6 +228,7 @@ NEEDS = {
     119: "A way for events to shift the haze color.",
     127: "A Geiger counter sound and a belt you can fly around.",
     130: "The in-game clock (M6) and a slow-motion moment.",
+    106: "It's built as a fixed landmark on the road to the Glimmer System (the Little Chapel of the Void), not a random event.",
     131: "A whale that follows the rig for a while.",
     132: "Things that can stick to the windshield.",
 }
@@ -267,6 +269,30 @@ CLASSICS = [
          type="Hazard", tone="Serious", rarity="U", build="Reuse", zone="WEATHER", weather="ion",
          kind="ION_STORM", log_id="ion_storm", tint=(1.0, 0.7, 0.25), ahead=6000, side=(0, 600), height=(-100, 100), speaker="dottie",
          lines=["Amber storm on your route, hon. Radio's gonna fuzz out. Sing to yourself."]),
+    # --- The Glimmer System (the casino system): its gimmick is neon
+    # billboards everywhere, so they're common there and never wait.
+    dict(id="glimmer_billboard", title="Glimmer billboard", summary="Casino ads in neon, everywhere you look in the Glimmer System.",
+         type="Sight", tone="Silly", rarity="C", build="Reuse", zone="ANYWHERE", systems=["glimmer"],
+         kind="BILLBOARD", log_id="billboard", weight=3.0, cooldown=0, ahead=3500, side=(200, 500), height=(-50, 200),
+         texts=["THE HIGH ROLLER|EVERYBODY'S A WINNER* · *TERMS APPLY", "LOOSEST SLOTS IN THE SECTOR|PROBABLY", "ALL-YOU-CAN-EAT SHRIMP|ALL NIGHT · ALL SHRIMP · ALL YOU",
+                "LIVE TONIGHT: THE CROONING CRAB|TWO SHOWS · BOTH SIDEWAYS", "FEELING LUCKY?|YOU SHOULD. YOU REALLY SHOULD.",
+                "LITTLE CHAPEL OF THE VOID|WEDDINGS · VOW RENEWALS · NO REFUNDS", "CASH 4 RIGS|WE BUY ANYTHING THAT FLIES (OR USED TO)",
+                "SAL SAYS: COME ON IN|SAL ALWAYS SAYS THAT", "FREE DRINKS FOR PLAYERS|DEFINE 'PLAYER'", "LOST? GOOD.|THE HIGH ROLLER · NEXT EXIT"]),
+    dict(id="limo_convoy", title="Limo convoy", summary="A line of stretch limos heading for the casino, honking.",
+         type="Sight", tone="Silly", rarity="C", build="Reuse", zone="TRAFFIC_LANES", systems=["glimmer"],
+         kind="CONVOY", log_id="convoy", tint=(1.0, 0.3, 0.8), names=["HIGH ROLLER LIMO", "VIP SHUTTLE", "BACHELOR PARTY BUS", "STRETCH LIMO (VERY)"],
+         ahead=3500, side=(180, 260), height=(-30, 30), speaker="wendell",
+         lines=["Limos. Every night it's limos out here. Somebody's always getting married or broke. Or both."]),
+    dict(id="channel19_winner", title="A winner on channel 19", summary="Somebody on the open channel just won big. Sort of.",
+         type="Radio", tone="Silly", rarity="U", build="Cheap", zone="ANYWHERE", systems=["glimmer"], speaker="ch19",
+         lines=["—I WON! I WON! —won what? —...a coupon. For the buffet. —that's still winning, buddy.",
+                "—anybody need a ride home? I lost my rig. —at the tables? —at the tables."],
+         replies=["Congrats?", "The house always wins.", "Buffet's not bad, actually."]),
+    dict(id="sal_calls", title="Sal calls", summary="Sal calls to say hi. Sal always calls to say hi.",
+         type="Encounter", tone="Silly", rarity="U", build="Cheap", zone="ANYWHERE", systems=["glimmer"], speaker="sal",
+         story="sal_met", lines=["Champ! Saw you on the scope. Swing by, the shrimp's fresh. Fresh-ish.",
+                                 "Champ, quick one: if anybody asks, the dice were always that shape. Okay bye."],
+         replies=["Hi, Sal.", "What dice?", "...fresh-ish?"]),
     dict(id="great_migration", title="THE GREAT MIGRATION", summary="A jellyfish swarm four times the size.",
          type="Sight", tone="Cute", rarity="R", build="Reuse", zone="ANYWHERE",
          kind="JELLYFISH", log_id="great_migration", size=4.0, ahead=7000, side=(800, 1600), height=(-300, 400), speaker="gill",

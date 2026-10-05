@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="npc_gill"]
 [ext_resource type="Resource" path="res://data/npcs/gasngo_moe.tres" id="npc_moe"]
 [ext_resource type="Resource" path="res://data/npcs/space_deputy.tres" id="npc_deputy"]
+[ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="npc_sal"]
 
 [sub_resource type="Resource" id="Set_0_dottie_takeoff"]
 script = ExtResource("2_set")
@@ -259,6 +260,35 @@ speaker = ExtResource("npc_deputy")
 situation = 8
 lines = PackedStringArray("Space Patrol. Clocked you hot past the buoy. Small fine, no fuss. Ease up near the stations, okay?", "Deputy Biscuit here. That was fast. Like, impressively fast. Still a fine though. Drive safe.")
 
+[sub_resource type="Resource" id="Set_sal_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_sal")
+situation = 0
+lines = PackedStringArray("Come back soon, champ! The tables miss you already. I can hear them.", "Drive safe! And if anybody asks, you never saw the dice.")
+place = "high_roller"
+
+[sub_resource type="Resource" id="Set_sal_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_sal")
+situation = 2
+lines = PackedStringArray("Champ! I see you! Big pink ring, can't miss it. Literally, we made it impossible to miss.", "Welcome to The High Roller! Fly through the ring and the valet bots do the rest. Tip the bots. They remember.")
+place = "high_roller"
+
+[sub_resource type="Resource" id="Set_sal_approach_cards"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_sal")
+situation = 2
+lines = PackedStringArray("Is that my cards? That's my cards! Through the pink ring, champ. Sal Grinwell, owner, operator, admirer of your rig.")
+place = "high_roller"
+needs_active_job = "glimmer_cards"
+
+[sub_resource type="Resource" id="Set_sal_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_sal")
+situation = 6
+lines = PackedStringArray("Valet bots have you. Don't let 'em sell you a timeshare.", "Easy... easy... perfect. Like a dealer laying down an ace.")
+place = "high_roller"
+
 [resource]
 script = ExtResource("1_chatter")
-sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding")])
+sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding"), SubResource("Set_sal_takeoff"), SubResource("Set_sal_approach_cards"), SubResource("Set_sal_approach"), SubResource("Set_sal_docking")])

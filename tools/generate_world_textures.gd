@@ -4,6 +4,8 @@ extends SceneTree
 ##     ocean_planet.png  - Tidewater's ocean world: teal seas, white cloud
 ##                         swirls, a few green islands
 ##     sun_surface.png   - a bright, boiling sun surface (tinted per sun)
+##     glimmer_planet.png - the Glimmer System's gas giant: bands of magenta
+##                         and violet, swirly storms, glittering specks
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/generate_world_textures.gd
@@ -17,6 +19,7 @@ func _init() -> void:
 	var images := {
 		"ocean_planet.png": _ocean_planet(256, 128),
 		"sun_surface.png": _sun_surface(128, 64),
+		"glimmer_planet.png": _glimmer_planet(256, 128),
 	}
 	var failed := false
 	for file_name: String in images:
@@ -48,6 +51,27 @@ func _ocean_planet(width: int, height: int) -> Image:
 				color = color.lerp(Color(0.95, 0.98, 1.0), clampf((cloud - 0.1) * 3.0, 0.0, 0.85))
 			if latitude > 0.86:
 				color = color.lerp(Color(0.92, 0.97, 1.0), 0.85)  # Ice caps.
+			image.set_pixel(x, y, color)
+	return image
+
+
+func _glimmer_planet(width: int, height: int) -> Image:
+	var bands := _noise(91, 0.9)
+	var swirl := _noise(92, 0.7)
+	var sparkle := _noise(93, 6.0)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	var colors: Array[Color] = [Color("5a1a6e"), Color("c0287e"), Color("ff5fb4"), Color("8a3ad0"), Color("ffb3e0")]
+	for y in height:
+		for x in width:
+			var angle := TAU * x / width
+			var p := Vector3(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.04)
+			# Bands that wobble, pushed around by swirls (like a gas giant).
+			var twist := swirl.get_noise_3dv(p) * 3.0
+			var band := float(y) / height * 7.0 + twist + bands.get_noise_3dv(p * 0.5) * 1.5
+			var index := posmod(int(floor(band)), colors.size())
+			var color: Color = colors[index].lerp(colors[(index + 1) % colors.size()], band - floor(band))
+			if sparkle.get_noise_3dv(p * 2.0) > 0.55:
+				color = color.lerp(Color("ffe08a"), 0.7)  # City lights? Casinos. Definitely casinos.
 			image.set_pixel(x, y, color)
 	return image
 

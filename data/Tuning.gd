@@ -160,6 +160,15 @@ extends Resource
 ## A can of neon soda from the vending machine.
 @export_range(0, 1000, 1) var soda_price: int = 2
 
+## The Lucky Molar (the slot machine at The High Roller): what a pull costs,
+## and what it pays for two of a kind, three of a kind, and three SEVENs.
+## With five symbols, these numbers give back about 88% of what goes in
+## over time (like a real casino, the house wins a little).
+@export_range(0, 1000, 1) var slots_price: int = 10
+@export_range(0, 10000, 1) var slots_pair_pays: int = 8
+@export_range(0, 10000, 1) var slots_three_pays: int = 80
+@export_range(0, 100000, 1) var slots_jackpot_pays: int = 300
+
 
 @export_group("On foot")
 

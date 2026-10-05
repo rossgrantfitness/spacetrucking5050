@@ -43,7 +43,8 @@ extends Node
 
 
 ## The solar systems in this world. Their colors blend by how close you
-## are to each one's center.
+## are to each one's center. Empty = every system in
+## res://data/systems/systems.tres.
 @export var systems: Array[SystemData] = []
 ## How fast the docking autopilot flies, in m/s.
 @export var docking_speed: float = 45.0
@@ -98,6 +99,8 @@ const LOG_DISTANCE: float = 3000.0
 
 
 func _ready() -> void:
+	if systems.is_empty():
+		systems = GameState.systems.systems
 	_rng.randomize()
 	_fade = ScreenFade.new()
 	add_child(_fade)

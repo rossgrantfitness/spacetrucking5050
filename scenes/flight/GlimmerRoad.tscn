@@ -1,0 +1,222 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_mf01i"]
+[ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_87abc"]
+[ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_6d4y0"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="4_p3ofn"]
+[ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="5_so67c"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_jbol7"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="7_pywuu"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="8_un1w7"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="9_4st0q"]
+[ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="10_ip1qw"]
+
+[node name="GlimmerRoad" type="Node3D" unique_id=143934679]
+
+[node name="Sign3Km" type="Node3D" parent="." unique_id=2013525657]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -2597.4104, 100, -12135.708)
+script = ExtResource("1_mf01i")
+front_text = "THE HIGH ROLLER  53 KM
+GLIMMER SYSTEM"
+back_text = "TRUCK STOP  3 KM
+HOME BASE  13 KM"
+board_color = Color(0.4, 0.1, 0.35, 1)
+
+[node name="Sign15Km" type="Node3D" parent="." unique_id=1543595139]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -12195.011, -139.99997, -19334.508)
+script = ExtResource("1_mf01i")
+front_text = "THE HIGH ROLLER  41 KM
+LOOSEST SLOTS IN THE SECTOR*"
+back_text = "TRUCK STOP  15 KM
+*PROBABLY"
+board_color = Color(0.4, 0.1, 0.35, 1)
+
+[node name="Sign27Km" type="Node3D" parent="." unique_id=1653455110]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -21792.61, -379.99994, -26533.309)
+script = ExtResource("1_mf01i")
+front_text = "GLIMMER SYSTEM  3 KM
+PLEASE GAMBLE RESPONSIBLY"
+back_text = "TRUCK STOP  27 KM
+HOME BASE  37 KM"
+board_color = Color(0.4, 0.1, 0.35, 1)
+
+[node name="Sign40Km" type="Node3D" parent="." unique_id=1857659142]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -32190.008, -639.99994, -34332.008)
+script = ExtResource("1_mf01i")
+front_text = "THE HIGH ROLLER  16 KM
+LITTLE CHAPEL OF THE VOID  5 KM"
+back_text = "LEAVING THE STRIP
+TRUCK STOP  40 KM"
+board_color = Color(0.4, 0.1, 0.35, 1)
+
+[node name="Sign52Km" type="Node3D" parent="." unique_id=562965529]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -41787.613, -880, -41530.81)
+script = ExtResource("1_mf01i")
+front_text = "THE HIGH ROLLER  4 KM
+VALET PARKING (SOMETIMES)"
+back_text = "YOU'LL BE BACK
+TRUCK STOP  52 KM"
+board_color = Color(0.4, 0.1, 0.35, 1)
+
+[node name="BorderGate" type="Node3D" parent="." unique_id=1125998066]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -23994, -599.99994, -28597)
+script = ExtResource("2_87abc")
+kind = 4
+label = "NOW ENTERING GLIMMER SYSTEM"
+back_label = "NOW LEAVING GLIMMER · YOU'LL BE BACK"
+glow_color = Color(1, 0.35, 0.8, 1)
+log_id = "border_gate"
+
+[node name="BiggestSlotMachine" type="Node3D" parent="." unique_id=484855409]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -16035.517, -140, -25877.738)
+script = ExtResource("2_87abc")
+kind = 5
+log_id = "biggest_slot"
+
+[node name="GiantDice" type="Node3D" parent="." unique_id=1921267859]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -31272.69, -240, -30556.367)
+script = ExtResource("2_87abc")
+kind = 6
+log_id = "giant_dice"
+
+[node name="LittleChapel" type="Node3D" parent="." unique_id=1656686836]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -34970.94, -1000, -38955.46)
+script = ExtResource("2_87abc")
+kind = 7
+log_id = "void_chapel"
+
+[node name="Billboard320Km" type="Node3D" parent="." unique_id=1497646262]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -25281.582, -520, -30212.79)
+script = ExtResource("3_6d4y0")
+headline = "WELCOME TO GLIMMER"
+tagline = "WHERE THE NIGHT NEVER ENDS (WE HID THE CLOCKS)"
+log_id = "billboard"
+
+[node name="Billboard350Km" type="Node3D" parent="." unique_id=301135923]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -28305.018, -580, -31180.512)
+script = ExtResource("3_6d4y0")
+headline = "THE HIGH ROLLER"
+tagline = "EVERYBODY'S A WINNER* · *TERMS APPLY"
+log_id = "billboard"
+
+[node name="Billboard380Km" type="Node3D" parent="." unique_id=1082813422]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -30080.38, -640, -33812.188)
+script = ExtResource("3_6d4y0")
+headline = "LOOSEST SLOTS IN THE SECTOR"
+tagline = "PROBABLY"
+log_id = "billboard"
+
+[node name="Billboard410Km" type="Node3D" parent="." unique_id=1013167691]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -33103.813, -700, -34779.91)
+script = ExtResource("3_6d4y0")
+headline = "ALL-YOU-CAN-EAT SHRIMP"
+tagline = "ALL NIGHT · ALL SHRIMP · ALL YOU"
+log_id = "billboard"
+
+[node name="Billboard435Km" type="Node3D" parent="." unique_id=987625861]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -34479.28, -750, -37111.637)
+script = ExtResource("3_6d4y0")
+headline = "LIVE TONIGHT: THE CROONING CRAB"
+tagline = "TWO SHOWS · BOTH SIDEWAYS"
+log_id = "billboard"
+
+[node name="Billboard460Km" type="Node3D" parent="." unique_id=1204958881]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -37102.813, -799.99994, -37779.41)
+script = ExtResource("3_6d4y0")
+headline = "CASH 4 RIGS"
+tagline = "WE BUY ANYTHING THAT FLIES (OR USED TO)"
+log_id = "billboard"
+
+[node name="Billboard480Km" type="Node3D" parent="." unique_id=1406986710]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -38078.383, -840, -39811.19)
+script = ExtResource("3_6d4y0")
+headline = "FEELING LUCKY?"
+tagline = "YOU SHOULD. YOU REALLY SHOULD."
+log_id = "billboard"
+
+[node name="Billboard495Km" type="Node3D" parent="." unique_id=1594300054]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -39902.113, -869.99994, -39879.063)
+script = ExtResource("3_6d4y0")
+headline = "FREE DRINKS FOR PLAYERS"
+tagline = "DEFINE 'PLAYER'"
+log_id = "billboard"
+
+[node name="Billboard510Km" type="Node3D" parent="." unique_id=238073515]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -40477.78, -900, -41610.887)
+script = ExtResource("3_6d4y0")
+headline = "SAL SAYS: COME ON IN"
+tagline = "SAL ALWAYS SAYS THAT"
+log_id = "billboard"
+
+[node name="Billboard525Km" type="Node3D" parent="." unique_id=1404440211]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -42301.516, -930, -41678.76)
+script = ExtResource("3_6d4y0")
+headline = "LITTLE CHAPEL OF THE VOID"
+tagline = "WEDDINGS · VOW RENEWALS · NO REFUNDS"
+log_id = "billboard"
+
+[node name="Billboard540Km" type="Node3D" parent="." unique_id=1152445921]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -42877.184, -959.9999, -43410.59)
+script = ExtResource("3_6d4y0")
+headline = "LOST? GOOD."
+tagline = "THE HIGH ROLLER · NEXT EXIT"
+log_id = "billboard"
+
+[node name="Billboard550Km" type="Node3D" parent="." unique_id=1233077440]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -44301.016, -980, -43178.51)
+script = ExtResource("3_6d4y0")
+headline = "DON'T FORGET YOUR RIG"
+tagline = "(PEOPLE DO)"
+log_id = "billboard"
+
+[node name="ChipSpill" type="Node3D" parent="." unique_id=1049787976]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -9597.6, -240, -17798.8)
+script = ExtResource("4_p3ofn")
+rock_count = 220
+field_size = Vector3(1600, 400, 2800)
+rock_radius_range = Vector2(2, 10)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 2801
+rock_colors = PackedColorArray(1, 0.3, 0.6, 1, 0.3, 0.6, 1, 1, 1, 0.85, 0.3, 1, 0.95, 0.95, 0.9, 1, 0.2, 0.2, 0.25, 1)
+
+[node name="SpeedTrap" type="Node3D" parent="." unique_id=504339410]
+transform = Transform3D(0.6002362, 0, 0.7998228, 0, 1, 0, -0.7998228, 0, 0.6002362, -42633.293, -1009.9999, -42902.64)
+script = ExtResource("5_so67c")
+kind = 1
+radius = 2500.0
+log_id = "speed_trap"
+
+[node name="Limo" type="Node3D" parent="." unique_id=1675560968]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("7_pywuu")
+waypoints = PackedVector3Array(-1067.6929, 60, -11675.845, -15837.591, -309.99997, -22809.193, -31859.99, -669.99994, -34771.996, -43057.19, -989.9999, -43170.598, -43721.11, -1000, -43118.55, -32124.006, -749.99994, -34420.004, -16154.407, -309.99997, -22386.807, -1331.707, 60, -11323.8545)
+speed = 85.0
+start_fraction = 0.2
+engine_trail_color = Color(1, 0.35, 0.8, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "HIGH ROLLER LIMO"
+
+[node name="ChipHauler" type="Node3D" parent="." unique_id=217039882]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("8_un1w7")
+waypoints = PackedVector3Array(-1379.7096, -100, -11259.856, -16212.011, -469.99997, -22310.008, -32172.008, -829.99994, -34356.008, -43369.207, -1149.9999, -42754.61, -43409.094, -1160, -43534.54, -31811.988, -909.99994, -34835.992, -15779.987, -469.99997, -22885.992, -1019.6903, -100, -11739.843)
+speed = 55.0
+start_fraction = 0.55
+engine_trail_color = Color(1, 0.8, 0.35, 1)
+hull_size = Vector3(14, 7, 34)
+
+[node name="PartyBus" type="Node3D" parent="." unique_id=937049146]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("9_4st0q")
+waypoints = PackedVector3Array(-1103.6948, 170, -11627.846, -15880.793, -199.99997, -22751.596, -31895.992, -559.99994, -34723.996, -43093.195, -879.9999, -43122.598, -43685.105, -890, -43166.55, -32088.004, -639.99994, -34468.004, -16111.205, -199.99997, -22444.404, -1295.7051, 170, -11371.854)
+speed = 70.0
+start_fraction = 0.8
+hull_size = Vector3(14, 7, 34)
+id_label = "BACHELOR PARTY BUS"
+
+[node name="SpacewayGlimmer" type="MultiMeshInstance3D" parent="." unique_id=1519352169]
+script = ExtResource("10_ip1qw")
+points = PackedVector3Array(-719.81995, -18, -11139.91, -44468.875, -1112, -43954.438)
+left_color = Color(1, 0.35, 0.8, 1)
+right_color = Color(1, 0.85, 0.45, 1)

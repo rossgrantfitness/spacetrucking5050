@@ -1,19 +1,19 @@
 # Progress
 
-**Current status:** **Round 10: one font, controls in the Esc menu, your
-design answers, and your route events list.** The HUD's pixel font is now
-the font everywhere; the controls moved off the start screen into a
-CONTROLS card in the Esc menu; your 25 answers are written up with a build
-order (`docs/DESIGN_NOTES.md`); and events 1-167 of your list are in the
-game's data, 49 of them playable now (plus the 11 original sights), with a
-new director that follows your zone and cooldown rules. Built and
-validated, **waiting for your playtest** (see `PLAYTEST.md`) and for
-events 168-250 (the paste was cut off after #167).
-**Next session:** your call: the rest of the event list, the audit
-(`AUDIT.md`), or the first item of the new build order (the economy
-rebalance).
+**Current status:** **Round 11: the Glimmer System**, the second solar
+system you can drive to (you asked for "the next solar system"). The
+magenta casino system from the brief: The High Roller, Sal Grinwell's
+casino (Sal is the crocodile from the character sketch), a 56 km road the
+other way from the truck stop lined with neon billboards and roadside
+attractions, a walkable casino floor with a slot-machine mini game, Sal's
+first little storyline (three jobs), board jobs in and out, and the
+system's own route events. Built and validated, **waiting for your
+playtest** (see `PLAYTEST.md`).
+**Next session:** your call: the next system (amber desert?), events
+168-250, the audit (`AUDIT.md`), or the economy rebalance from
+`docs/DESIGN_NOTES.md`.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 10)
+**Last updated:** 2026-10-05 (round 11)
 
 ---
 
@@ -88,7 +88,9 @@ rebalance).
 - [ ] **M7: Home & style** *(started)*
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
   - [ ] Wardrobe, decor, a bigger apartment, docking computer, forklift minigame
-- [ ] **M8: Story & clients**: clients and systems with storylines; the husband's story
+- [ ] **M8: Story & clients** *(started early, at your request)*
+  - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
+  - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest; the husband's story
 - [ ] **M9: Endgame & completion**: buy the company, completion percentage
 - [ ] **M10: Polish & ship**: menus, options, credits, controller glyphs, exports, performance
 
@@ -138,6 +140,11 @@ cartoon bonks that knock your cargo condition, and basic saving.
 ## Later ideas
 
 Ideas that aren't in the plan. Nothing here gets built without your OK.
+
+- **A casino lounge radio station** for the Glimmer System (like Tide 77
+  is Tidewater's): a crooner, slot-machine jingles, ads for the buffet.
+- **Locked places on the course chart** ("???" until reputation or story
+  opens them), per your answer about unlocking places.
 
 - **The Megahauler, for real**: is flying something the size of an
   aircraft carrier fun? It could be, if the game leans in: slow, majestic

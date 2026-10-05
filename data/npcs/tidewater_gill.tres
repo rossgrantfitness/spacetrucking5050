@@ -33,6 +33,13 @@ lines = PackedStringArray("Oh, hey. It's you again. Coffee's in the... somewhere
 script = ExtResource("2_conv")
 lines = PackedStringArray("Mmh? Oh. Hi. Welcome to Tidewater. Fish?", "The board by the window has loads going out. The pump's by your airlock.")
 
+[sub_resource type="Resource" id="Conversation_slot"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_slot_done")
+blocked_by_flags = PackedStringArray("gill_slot")
+lines = PackedStringArray("...Why is there a slot machine in my canteen.", "Mmh. The crew loves it. Nobody's working. I won six fish.", "Tell Sal... 'why.' Just 'why.' He'll know.")
+sets_flags = PackedStringArray("gill_slot")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Gill"
@@ -42,4 +49,4 @@ lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
 comm_name = "GILL · TIDEWATER"
 fur_color = Color(0.52, 0.38, 0.28, 1)
 accent_color = Color(0.95, 0.8, 0.3, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

@@ -1,0 +1,227 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/HighRollerLoungeSet.tscn" id="2_set"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scenes/hub/NPC.gd" id="7_npc"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="8_service"]
+[ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
+[ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="d_Sal"]
+[ext_resource type="PackedScene" path="res://scenes/hub/CrocodileVisual.tscn" id="v_Sal"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.05, 0.02, 0.06, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.55, 0.32, 0.52, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="SphereShape3D" id="Sphere_talk"]
+radius = 1.3
+
+[sub_resource type="SphereShape3D" id="Sphere_use"]
+radius = 1.2
+
+[sub_resource type="CapsuleShape3D" id="Capsule_npc"]
+radius = 0.3
+height = 1.2
+
+[sub_resource type="BoxShape3D" id="Box_airlock"]
+size = Vector3(1.4, 2, 2.2)
+
+[sub_resource type="BoxShape3D" id="Box_board"]
+size = Vector3(1.6, 2, 3.2)
+
+[sub_resource type="BoxShape3D" id="Box_zone0"]
+size = Vector3(13, 7, 18)
+
+[sub_resource type="BoxShape3D" id="Box_zone1"]
+size = Vector3(9, 7, 12)
+
+[sub_resource type="BoxShape3D" id="Box_zone2"]
+size = Vector3(9, 7, 6)
+
+[node name="HighRollerLounge" type="Node3D"]
+script = ExtResource("1_room")
+default_spawn = "FromShip"
+place_id = "high_roller"
+radio_speakers = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_room")
+
+[node name="Set" parent="." instance=ExtResource("2_set")]
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="Floor" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Floor"]
+position = Vector3(4, 4.5, 8.5)
+rotation = Vector3(-0.223, 0.624, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Floor"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Floor/Zone"]
+position = Vector3(-4.5, 3.5, 0)
+shape = SubResource("Box_zone0")
+
+[node name="Slots" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Slots"]
+position = Vector3(-1, 4.5, 7.5)
+rotation = Vector3(-0.265, -0.62, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Slots"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Slots/Zone"]
+position = Vector3(6.5, 3.5, -3)
+shape = SubResource("Box_zone1")
+
+[node name="Airlock" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Airlock"]
+position = Vector3(1.5, 4.5, 1)
+rotation = Vector3(-0.341, -2.102, 0)
+fov = 62
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Airlock"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Airlock/Zone"]
+position = Vector3(6.5, 3.5, 6)
+shape = SubResource("Box_zone2")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="FromShip" type="Marker3D" parent="Spawns"]
+position = Vector3(8.2, 0, 5.8)
+rotation = Vector3(0, 1.5708, 0)
+
+[node name="Exits" type="Node3D" parent="."]
+
+[node name="Airlock" type="Area3D" parent="Exits"]
+position = Vector3(10.3, 1, 5.8)
+script = ExtResource("4_exit")
+prompt = "BOARD SHIP"
+target_scene = "res://scenes/flight/FlightSandbox.tscn"
+needs_button = true
+launch_from = "high_roller"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/Airlock"]
+shape = SubResource("Box_airlock")
+
+[node name="People" type="Node3D" parent="."]
+
+[node name="Sal" type="Area3D" parent="People"]
+position = Vector3(-7, 0.6, -5.6)
+script = ExtResource("7_npc")
+data = ExtResource("d_Sal")
+
+[node name="Visual" parent="People/Sal" instance=ExtResource("v_Sal")]
+rotation = Vector3(0, 3.1416, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="TalkReach" type="CollisionShape3D" parent="People/Sal"]
+position = Vector3(0, 0.3, 2.0)
+shape = SubResource("Sphere_talk")
+
+[node name="Body" type="StaticBody3D" parent="People/Sal"]
+
+[node name="Shape" type="CollisionShape3D" parent="People/Sal/Body"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Capsule_npc")
+
+[node name="Things" type="Node3D" parent="."]
+
+[node name="JobBoard" type="Area3D" parent="Things"]
+position = Vector3(-10, 1, -1)
+script = ExtResource("8_service")
+prompt = "JOB BOARD"
+menu = "job_board"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/JobBoard"]
+shape = SubResource("Box_board")
+
+[node name="Pump" type="Area3D" parent="Things"]
+position = Vector3(9.2, 1, 4.3)
+script = ExtResource("8_service")
+prompt = "FUEL"
+menu = "fuel"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Pump"]
+shape = SubResource("Sphere_use")
+
+[node name="Jukebox" type="Area3D" parent="Things"]
+position = Vector3(-9.7, 1, 3)
+script = ExtResource("8_service")
+prompt = "JUKEBOX"
+menu = "jukebox"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Jukebox"]
+shape = SubResource("Sphere_use")
+
+[node name="LuckySlot" type="Area3D" parent="Things"]
+position = Vector3(6.6, 1, 1.8)
+script = ExtResource("8_service")
+prompt = "PLAY SLOTS"
+menu = "slots"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/LuckySlot"]
+shape = SubResource("Sphere_use")
+
+[node name="Window" type="Area3D" parent="Things"]
+position = Vector3(1, 1, -8)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("The gas giant fills the window, pink and violet and swirling. The little gold specks are more casinos.", "...It's kind of beautiful. Don't tell Sal.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Window"]
+shape = SubResource("Sphere_use")
+
+[node name="Roulette" type="Area3D" parent="Things"]
+position = Vector3(-1, 1, -0.2)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("A roulette table. The croupier's on break. The croupier has been on break since she got here.", "She puts a mental chip on 17. It comes up 4. Figures.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Roulette"]
+shape = SubResource("Sphere_use")
+
+[node name="Stage" type="Area3D" parent="Things"]
+position = Vector3(-7.5, 1, 4.4)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("A tiny stage, a red curtain, one microphone. TONIGHT: THE CROONING CRAB.", "The crab is not here. The crab is never here. The sign has said tonight for nine years.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Stage"]
+shape = SubResource("Sphere_use")
+
+[node name="ClockGhost" type="Area3D" parent="Things"]
+position = Vector3(0, 1, 8)
+script = ExtResource("9_examine")
+prompt = "LOOK"
+lines = PackedStringArray("A pale square on the wall where a clock used to be.", "Sal had it taken down. Sal had all of them taken down.")
+
+[node name="Shape" type="CollisionShape3D" parent="Things/ClockGhost"]
+shape = SubResource("Sphere_use")
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("5_psx")
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+flying = false

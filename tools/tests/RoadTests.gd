@@ -54,15 +54,19 @@ func test_course_chart_offers_the_gas_n_go_when_its_on_the_way() -> void:
 
 func test_systems_blend_by_distance() -> void:
 	var world := FLIGHT_SCENE.instantiate()
-	var systems: Array[SystemData] = world.get("systems")
-	check(systems.size() == 2, "the flight scene knows both systems")
+	var systems: Array[SystemData] = GameState.systems.systems
+	world.set("systems", systems)  # (The scene fills this in itself when it starts.)
+	check(systems.size() == 3, "there are three systems: home, Tidewater and Glimmer")
 	var at_home: PackedFloat32Array = world.call("system_weights", systems[0].center)
 	var halfway: PackedFloat32Array = world.call("system_weights", (systems[0].center + systems[1].center) * 0.5)
 	var at_tidewater: PackedFloat32Array = world.call("system_weights", systems[1].center)
+	var at_glimmer: PackedFloat32Array = world.call("system_weights", systems[2].center)
 	check(at_home[0] > 0.99, "at home, it's all home colors")
-	check(absf(halfway[0] - 0.5) < 0.01, "halfway, the colors are half and half")
+	check(absf(halfway[0] - halfway[1]) < 0.01 and halfway[0] > 0.45, "halfway to Tidewater, the colors are half and half")
 	check(at_tidewater[1] > 0.99, "at Tidewater, it's all Tidewater colors")
+	check(at_glimmer[2] > 0.99, "at Glimmer, it's all Glimmer colors")
 	check(systems[1].signature_color != systems[0].signature_color, "Tidewater has its own color")
+	check(systems[2].signature_color != systems[0].signature_color and systems[2].signature_color != systems[1].signature_color, "Glimmer has its own color")
 	world.free()
 
 

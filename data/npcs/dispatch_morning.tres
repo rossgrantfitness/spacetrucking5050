@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/glimmer_cards.tres" id="job_glimmer_cards"]
 
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
@@ -33,6 +34,15 @@ lines = PackedStringArray("Marge says you two met. Did you take her pie job? Tru
 script = ExtResource("2_conv")
 lines = PackedStringArray("You've got a load in the back, {bunny}. Ship's up the stairs. Go get paid.")
 
+[sub_resource type="Resource" id="Conversation_glimmer"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done")
+blocked_by_flags = PackedStringArray("glimmer_heard")
+needs_no_job = true
+lines = PackedStringArray("Hon. Got a call from out in the Glimmer System. The pink one, past the rocks the other way.", "Casino guy. Sal something. Wants forty thousand decks of cards, and he asked for 'the hauler with the old rig.' That's you.", "He smiles a lot. Like, a LOT. But his money's real. I checked. Twice.")
+sets_flags = PackedStringArray("glimmer_heard")
+offers_job = ExtResource("job_glimmer_cards")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Dottie (Dispatch, mornings)"
@@ -42,4 +52,4 @@ lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jac
 comm_name = "DOTTIE · DISPATCH"
 fur_color = Color(0.62, 0.6, 0.66, 1)
 accent_color = Color(1, 0.42, 0.75, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_glimmer"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])

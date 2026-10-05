@@ -55,6 +55,13 @@ lines = PackedStringArray("Job board's by the big window. Lily's got fuel, Dusty
 script = ExtResource("2_conv")
 lines = PackedStringArray("Coffee's on. Pie's on. I'm on.", "Don't let Wendell tell you about his cat. Too late? Too late.")
 
+[sub_resource type="Resource" id="Conversation_sequins"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_jumpsuits_done")
+blocked_by_flags = PackedStringArray("marge_sequins")
+lines = PackedStringArray("SEQUINS, hon. I have SEQUINS. Karaoke night is never going to be the same.", "Tell that crocodile thanks. Then tell him he still owes me for the pie he 'borrowed' in '43.")
+sets_flags = PackedStringArray("marge_sequins")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Marge (truck stop)"
@@ -64,4 +71,4 @@ lines = PackedStringArray("Coffee's on. Pie's on. I'm on.")
 comm_name = "MARGE · TRUCK STOP"
 fur_color = Color(0.72, 0.55, 0.38, 1)
 accent_color = Color(0.35, 0.95, 1, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_sequins"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])

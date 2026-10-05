@@ -139,8 +139,8 @@ per job) and **paint jobs**.
 
 **Docking:** fly through the big glowing **ring** in front of a station's
 bay and the autopilot takes over and parks you. Then you climb out and walk
-around inside (the base, the truck stop, and Tidewater Cannery's canteen,
-where Gill works). The **Gas-N-Go 47** is a drive-through: fly through
+around inside (the base, the truck stop, Tidewater Cannery's canteen,
+where Gill works, and The High Roller, Sal's casino in the Glimmer System). The **Gas-N-Go 47** is a drive-through: fly through
 either ring, pull up under the canopy, buy cheap fuel, Moe's calming jerky
 or a souvenir, maybe take a side job, and you roll out the far side still
 moving. The
@@ -173,6 +173,16 @@ jolts), icy rocks, whales, and a space-patrol speed trap near the cannery
 (the **COPS** light warns you; over 250 km/h right past it costs a small
 fine). Random sights come and go too: big ships crossing, convoys,
 billboards, comets, jellyfish, junk.
+
+**The Glimmer System** (the pink one) is the other way from the truck
+stop, about 56 km: 17 minutes cruising. Dottie at dispatch has the first
+job out there (after your first delivery). Neon billboards get thicker the
+closer you get, plus the world's biggest slot machine, two giant tumbling
+dice, the Little Chapel of the Void, limos, and another speed trap by the
+casino. At **The High Roller** you climb out on the casino floor: Sal (a
+crocodile) has jobs for you, the board by the cashier cage has loads, and
+the gold slot machine (**The Lucky Molar**, 10 credits a pull) is a little
+mini game. Like real slots, it keeps a bit more than it pays out over time.
 
 **The HUD** (in the style of Wipeout): speed and boost bottom-left, the
 radar globe bottom-middle, fuel and the hull picture bottom-right, the
@@ -264,7 +274,8 @@ Select one to change its speed or the list of spots it flies through
 
 **The road to Tidewater** (signs, landmarks, debris, the speed trap, the
 long-haul truckers) is `scenes/flight/TidewaterRoad.tscn`, made by
-`tools/build_road.gd`: edit the numbers there ("how far along the road,
+`tools/build_road.gd` (the road to Glimmer is `GlimmerRoad.tscn`, made by
+`tools/build_glimmer_road.gd`): edit the numbers there ("how far along the road,
 how far to the side") and run it again. The random sights (big ships,
 convoys, billboards...) are in `data/events/route_events.tres`, and how
 often they show up is in tuning.tres under "Route events". Planets and

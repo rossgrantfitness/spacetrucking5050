@@ -26,6 +26,8 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 			await jukebox(tree)
 		"vending":
 			await vending(tree)
+		"slots":
+			await slots(tree)
 	GameState.save_game()
 
 
@@ -239,6 +241,66 @@ static func vending(tree: SceneTree) -> void:
 			await Dialogue.say(GameState.names.bunny_name, ["*clunk* ...it's lukewarm. Perfect."], 0.85)
 		else:
 			await _too_poor(tree)
+
+
+## The Lucky Molar, the slot machine at The High Roller: a little mini
+## game. Each pull costs a few credits and spins three reels; matching
+## symbols pay (prices in tuning.tres). Over time it keeps a bit more than
+## it pays, like any slot machine. Pull as often as you like, or walk away.
+static func slots(tree: SceneTree) -> void:
+	var tuning := GameState.tuning
+	var currency := GameState.names.currency_short
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var body := "Three reels. A crocodile painted on the side, grinning. %d %s a pull." % [tuning.slots_price, currency]
+	while true:
+		var choice := await MenuPanel.ask(tree, "THE LUCKY MOLAR", body + "\n\nWallet: %d %s" % [GameState.credits, currency], [
+				{"text": "PULL", "detail": "%d %s" % [tuning.slots_price, currency], "description": "Two alike pays %d. Three alike pays %d. Three SEVENs pays %d." % [tuning.slots_pair_pays, tuning.slots_three_pays, tuning.slots_jackpot_pays]},
+				{"text": "WALK AWAY", "description": "Quit while you're... wherever you are."}])
+		if choice != 0:
+			return
+		if not GameState.spend(tuning.slots_price):
+			await _too_poor(tree)
+			return
+		GameState.set_flag("played_slots")
+		var reels := spin_reels(rng)
+		var won := slots_payout(reels, tuning)
+		if won > 0:
+			GameState.add_credits(won)
+		body = "[ %s | %s | %s ]\n%s" % [reels[0], reels[1], reels[2], _slots_words(won, tuning, rng)]
+
+
+## The symbols on the Lucky Molar's reels.
+const SLOT_SYMBOLS: Array[String] = ["CHERRY", "BELL", "BAR", "SEVEN", "CROC"]
+
+
+## Three random symbols.
+static func spin_reels(rng: RandomNumberGenerator) -> PackedStringArray:
+	var reels := PackedStringArray()
+	for i in 3:
+		reels.append(SLOT_SYMBOLS[rng.randi_range(0, SLOT_SYMBOLS.size() - 1)])
+	return reels
+
+
+## What a spin pays: three SEVENs, three of a kind, two of a kind, or nothing.
+static func slots_payout(reels: PackedStringArray, tuning: Tuning) -> int:
+	if reels[0] == reels[1] and reels[1] == reels[2]:
+		return tuning.slots_jackpot_pays if reels[0] == "SEVEN" else tuning.slots_three_pays
+	if reels[0] == reels[1] or reels[1] == reels[2] or reels[0] == reels[2]:
+		return tuning.slots_pair_pays
+	return 0
+
+
+static func _slots_words(won: int, tuning: Tuning, rng: RandomNumberGenerator) -> String:
+	var currency := GameState.names.currency_short
+	if won >= tuning.slots_jackpot_pays:
+		return "JACKPOT! +%d %s. Lights, bells, a recording of Sal yelling CHAMP!" % [won, currency]
+	if won >= tuning.slots_three_pays:
+		return "Three of a kind! +%d %s. She allows herself one (1) small smile." % [won, currency]
+	if won > 0:
+		return "Two alike. +%d %s. Not quite your money back." % [won, currency]
+	var shrugs := ["Nothing. The croc keeps grinning.", "Nope.", "The machine plays a sad little tune.", "So close. (Not close.)"]
+	return shrugs[rng.randi_range(0, shrugs.size() - 1)]
 
 
 ## The card after a delivery: what it paid, bonus by bonus.

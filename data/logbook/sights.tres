@@ -159,6 +159,24 @@ display_name = "WHALE BREACH"
 description = "A whale jumped clean out of the ocean planet into orbit. Showoff."
 rare = true
 
+[sub_resource type="Resource" id="Entry_biggest_slot"]
+script = ExtResource("2_entry")
+id = "biggest_slot"
+display_name = "THE WORLD'S BIGGEST SLOT MACHINE"
+description = "Three reels the size of houses. Somebody pulls the lever every hour. It has never paid out."
+
+[sub_resource type="Resource" id="Entry_giant_dice"]
+script = ExtResource("2_entry")
+id = "giant_dice"
+display_name = "THE GIANT DICE"
+description = "Two dice the size of moons, tumbling forever. Locals bet on them. Nobody has ever seen them land."
+
+[sub_resource type="Resource" id="Entry_void_chapel"]
+script = ExtResource("2_entry")
+id = "void_chapel"
+display_name = "LITTLE CHAPEL OF THE VOID"
+description = "Weddings, vow renewals, no refunds. The neon heart buzzes in a way you can feel in your teeth."
+
 [resource]
 script = ExtResource("1_book")
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach")])
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel")])

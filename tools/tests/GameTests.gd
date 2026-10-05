@@ -124,10 +124,13 @@ func test_conversations_follow_the_story() -> void:
 	check(hauling != null and hauling.offers_job == null, "while hauling her pies, Marge doesn't offer them again")
 	GameState.deliver_at("tidewater")
 	var dottie: NPCData = load("res://data/npcs/dispatch_morning.tres")
+	var pitch := dottie.pick_conversation()
+	check(pitch != null and pitch.offers_job != null and pitch.offers_job.id == "glimmer_cards", "after the first mission, Dottie pitches Sal's casino job")
+	GameState.set_flag("glimmer_heard")
 	var after := dottie.pick_conversation()
-	check(after != null and after.opens_menu == "job_board", "after the first mission, Dottie opens the job board")
+	check(after != null and after.opens_menu == "job_board", "after that, Dottie opens the job board")
 	for npc_file in ["dispatch_morning", "truckstop_control", "truckstop_mechanic", "truckstop_pumps", "trucker_wendell", "trucker_pip",
-			"tidewater_gill", "gasngo_moe", "space_deputy"]:
+			"tidewater_gill", "gasngo_moe", "space_deputy", "casino_sal"]:
 		var npc: NPCData = load("res://data/npcs/%s.tres" % npc_file)
 		check(not npc.comm_name.is_empty(), "%s needs a comm name" % npc_file)
 	_restore(before)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "sal_slot_machine"
+cargo_name = "A lucky slot machine (fragile)"
+client_name = "Gill, Tidewater Cannery (from Sal)"
+description = "Sal wants a slot machine in Gill's canteen. Gill has not been asked. It's a long way, so take it easy over the bumps."
+from_place = "high_roller"
+to_place = "tidewater"
+base_pay = 1900
+care_bonus = 600
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = false
+repeatable = false
+requires_flag = "sal_jumpsuits_done"
+completes_flag = "sal_slot_done"

@@ -17,7 +17,6 @@ extends Control
 
 
 const MAP_SIZE := Vector2(440.0, 440.0)
-const SYSTEMS: Array[SystemData] = [preload("res://data/systems/home_system.tres"), preload("res://data/systems/tidewater.tres")]
 
 ## Every route's points, in the world (starting at the rig), one per option.
 var routes: Array[PackedVector3Array] = []
@@ -158,7 +157,7 @@ func _draw() -> void:
 		draw_line(_to_map(Vector3(bounds.position.x, 0.0, z), bounds), _to_map(Vector3(bounds.end.x, 0.0, z), bounds), grid)
 		z += step
 	# Each solar system: a soft glow in its color.
-	for system in SYSTEMS:
+	for system in GameState.systems.systems:
 		var middle := _to_map(system.center, bounds)
 		for ring in 4:
 			draw_circle(middle, 70.0 - ring * 15.0, Color(system.signature_color, 0.06))

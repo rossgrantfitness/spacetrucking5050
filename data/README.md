@@ -14,11 +14,11 @@ game's numbers, names and stuff never needs programming.
   paint shop's colors. Blueprints: `ShipData.gd`, `ShipList.gd`,
   `PaintJob.gd`, `PaintList.gd`.
 - **`systems/`**: one file per solar system (`home_system.tres`,
-  `tidewater.tres`): its middle, its signature color (tints the space dust,
+  `tidewater.tres`, `glimmer.tres`), listed in `systems.tres`: its middle, its signature color (tints the space dust,
   the nebula and the HUD frames), haze color (the distance haze faraway
   things fade into), sunlight, fill light and nebula brightness. Flying
   between systems blends their colors. Its planets and sun are SkyBody
-  nodes in the flight scene. Blueprint: `SystemData.gd`.
+  nodes in the flight scene. Blueprints: `SystemData.gd`, `SystemList.gd`.
 - **`npcs/`**: one file per person: name, voice pitch, portrait colors and
   what they say. What they say can depend on the story: each person has a
   list of conversations (`Conversation.gd`) with conditions (story flags,
@@ -33,7 +33,7 @@ game's numbers, names and stuff never needs programming.
   HUD). Dialogue fills them in where it says `{bunny}`, `{husband}`,
   `{base}` or `{currency}`.
 - **`places/`**: one file per place you can dock at (the home base, the
-  truck stop, Tidewater Cannery, the Gas-N-Go): its name, its kind (walk
+  truck stop, Tidewater Cannery, the Gas-N-Go, The High Roller): its name, its kind (walk
   around inside, a drop-off where you stay in the cab, or a drive-through),
   the counters it has, and who says hello. `places.tres` lists them.
   Blueprint: `PlaceData.gd`.

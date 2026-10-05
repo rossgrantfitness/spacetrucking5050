@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SystemData" format=3]
+
+[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="1_system"]
+
+[resource]
+script = ExtResource("1_system")
+id = "glimmer"
+display_name = "Glimmer System"
+center = Vector3(-44800, -1120, -44200)
+signature_color = Color(1, 0.3, 0.8, 1)
+haze_color = Color(0.3, 0.05, 0.27, 1)
+sun_color = Color(1, 0.82, 0.95, 1)
+sun_energy = 1.35
+ambient_color = Color(0.55, 0.32, 0.52, 1)
+nebula_strength = 0.6

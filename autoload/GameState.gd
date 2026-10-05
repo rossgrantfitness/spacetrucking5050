@@ -22,6 +22,7 @@ var tuning: Tuning = preload("res://data/tuning.tres")
 var names: WorldNames = preload("res://data/world_names.tres")
 ## Every place, job and upgrade in the game (see res://data/).
 var places: PlaceList = preload("res://data/places/places.tres")
+var systems: SystemList = preload("res://data/systems/systems.tres")
 var jobs: JobList = preload("res://data/jobs/jobs.tres")
 var upgrades: UpgradeList = preload("res://data/upgrades/upgrades.tres")
 var sights: Logbook = preload("res://data/logbook/sights.tres")
@@ -372,9 +373,21 @@ func quit_game() -> void:
 	if _quitting:
 		return
 	_quitting = true
+	Radio.stop_everything()
+	_silence_everything()
+	await get_tree().create_timer(0.1, true).timeout
+	# Once more, in case something started a sound in the meantime (a scene
+	# that was still loading, say).
+	_silence_everything()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	get_tree().quit()
+
+
+## Stops every sound and lets go of it, so nothing is still holding audio
+## when the game closes (that shows up as "leaked" warnings).
+func _silence_everything() -> void:
 	for type_name: String in ["AudioStreamPlayer", "AudioStreamPlayer2D", "AudioStreamPlayer3D"]:
 		for player in get_tree().root.find_children("*", type_name, true, false):
 			player.call("stop")
-	Radio.stop_everything()
-	await get_tree().create_timer(0.1, true).timeout
-	get_tree().quit()
+			player.set("stream", null)

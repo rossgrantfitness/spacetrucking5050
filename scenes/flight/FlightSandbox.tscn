@@ -1,15 +1,15 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
-[ext_resource type="Resource" path="res://data/systems/home_system.tres" id="2_system"]
-[ext_resource type="Resource" path="res://data/systems/tidewater.tres" id="40_tidewater_system"]
-[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="41_system_data"]
 [ext_resource type="Script" path="res://scenes/common/SkyBody.gd" id="42_sky_body"]
 [ext_resource type="Texture2D" path="res://textures/generated/ocean_planet.png" id="43_ocean_tex"]
 [ext_resource type="Texture2D" path="res://textures/generated/sun_surface.png" id="44_sun_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/CanneryStation.tscn" id="45_cannery"]
 [ext_resource type="PackedScene" path="res://scenes/flight/GasNGo.tscn" id="46_gas_n_go"]
 [ext_resource type="PackedScene" path="res://scenes/flight/TidewaterRoad.tscn" id="47_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/HighRollerStation.tscn" id="48_high_roller"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GlimmerRoad.tscn" id="49_glimmer_road"]
+[ext_resource type="Texture2D" path="res://textures/generated/glimmer_planet.png" id="50_glimmer_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/BaseStation.tscn" id="26_base"]
 [ext_resource type="Script" path="res://scenes/flight/ApproachRing.gd" id="27_ring"]
 [ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
@@ -58,7 +58,6 @@ shader = ExtResource("11_lines_shader")
 
 [node name="FlightSandbox" type="Node"]
 script = ExtResource("1_sandbox")
-systems = Array[ExtResource("41_system_data")]([ExtResource("2_system"), ExtResource("40_tidewater_system")])
 
 [node name="World" type="Node3D" parent="."]
 
@@ -180,6 +179,22 @@ color = Color(1, 0.75, 0.3, 1)
 [node name="LaunchPoint" type="Marker3D" parent="World/Places/gas_n_go"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 600)
 
+[node name="high_roller" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.6, 0, 0.8, 0, 1, 0, -0.8, 0, 0.6, -44790, -1120, -44194)
+
+[node name="HighRollerStation" parent="World/Places/high_roller" instance=ExtResource("48_high_roller")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/high_roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/high_roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(1, 0.35, 0.8, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/high_roller"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
 [node name="SkyBodies" type="Node3D" parent="World"]
 
 [node name="HomePlanet" type="Node3D" parent="World/SkyBodies"]
@@ -232,7 +247,43 @@ uv_scale = Vector2(1, 1)
 drift_speed = 0.01
 night_glow = 1.0
 
+[node name="GlimmerPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-68790, -17120, -74194)
+true_radius = 16000.0
+system_id = "glimmer"
+texture = ExtResource("50_glimmer_tex")
+drift_speed = 0.004
+night_glow = 0.6
+ring_size = 2.0
+ring_color = Color(1, 0.8, 0.4, 1)
+ring_tilt = Vector3(0.5, 0.0, -0.2)
+
+[node name="GlimmerMoon" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-50790, 7880, -58194)
+true_radius = 2000.0
+system_id = "glimmer"
+texture = ExtResource("17_planet_tex")
+tint = Color(1, 0.85, 0.45, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.0
+
+[node name="GlimmerSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-134790, 43880, -144194)
+true_radius = 12000.0
+system_id = "glimmer"
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(1, 0.7, 0.9, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
 [node name="Roadside" parent="World" instance=ExtResource("47_road")]
+
+[node name="GlimmerRoadside" parent="World" instance=ExtResource("49_glimmer_road")]
 
 [node name="Events" type="Node3D" parent="World"]
 

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SystemList" format=3]
+
+[ext_resource type="Script" path="res://data/systems/SystemList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="2_system"]
+[ext_resource type="Resource" path="res://data/systems/home_system.tres" id="3_home"]
+[ext_resource type="Resource" path="res://data/systems/tidewater.tres" id="4_tidewater"]
+[ext_resource type="Resource" path="res://data/systems/glimmer.tres" id="5_glimmer"]
+
+[resource]
+script = ExtResource("1_list")
+systems = Array[ExtResource("2_system")]([ExtResource("3_home"), ExtResource("4_tidewater"), ExtResource("5_glimmer")])
