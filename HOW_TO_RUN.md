@@ -343,11 +343,39 @@ crate rack and gold solar sails.
 ### Loading cargo (the forklift)
 
 When you take a job you can let the **dock crew** load it (the default),
-or **drive the forklift** yourself: a little top-down game. Arrows / stick
-drive, **E** / **A** lifts a pallet (point the forks at it) and sets it
-down in a marked spot in your rig's hold (it snaps in), and **Esc** / **B**
-lets the crew finish. Load it all and it's a **snug load**: your cargo
-takes 20% less of a knock until you deliver it. Bumps are only bumps.
+or pick **I'LL DRIVE THE FORKLIFT**. Once you're done talking, you're off
+to the **loading dock**, in 3D: your rig is backed up at the far end with
+its hold open.
+
+| What | Keyboard | Gamepad |
+|---|---|---|
+| Walk to the forklift, climb on | **W A S D**, then **E** | Left stick, then **A** |
+| Drive (it steers from the back wheels) | **W / S** forward and back, **A / D** steer | Left stick |
+| Forks: lift a pallet / set it down | **E** (slide the forks right under a pallet first) | **A** |
+| Climb off | **F** | **X** |
+| Let the crew finish | **Esc** | **B** / **Start** |
+
+Set each pallet down on a glowing spot in the hold (it locks in). Fill
+them all and it's a **snug load**: your cargo takes 20% less of a knock
+until you deliver it. Then you're back where you were. Bumps are just bumps.
+
+### Vending machines
+
+At the truck stop, in your rig's hallway (it works in flight too), in
+the Tidewater canteen and in the casino. Walk up, press **E** / **A**, and
+pick something. The galaxy's brands (Moon Milk, Zoom Juice, Star-Stop
+Ramen, Neon Soda, Galaxy Gumballs...) are the same ones on the radio and
+the billboards. Local treats only sell at home: Marge's pie at the truck
+stop, canned starfish at Tidewater, Chip Chips at the casino.
+
+- She holds it, eats or drinks it, and says what she thinks. The first time
+  she tries a brand, she reads its story off the back of the packet.
+- Most snacks just taste of something. Food like jerky, noodles and pie
+  gives **steady hands** for the next trip. Zoom Juice and coffee top up
+  your **boost tank**.
+- The machine counts how many of the galaxy's snacks you've tried.
+- All brands and snacks are in `tools/brand_data/make_brands.py`: edit the
+  lists and run `python3 tools/brand_data/make_brands.py`.
 
 ### Menus
 

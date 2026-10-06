@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
 [ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="d_Sal"]
 [ext_resource type="PackedScene" path="res://scenes/hub/CrocodileVisual.tscn" id="v_Sal"]
+[ext_resource type="PackedScene" path="res://scenes/hub/VendingMachine.tscn" id="vending_machine"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -226,3 +227,6 @@ script = ExtResource("5_psx")
 
 [node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
 flying = false
+
+[node name="VendingMachine" parent="Things" instance=ExtResource("vending_machine")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10.6, 0, -4.5)

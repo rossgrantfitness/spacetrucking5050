@@ -1,0 +1,392 @@
+[gd_resource type="Resource" script_class="BrandCatalog" format=3]
+
+[ext_resource type="Script" path="res://data/brands/BrandCatalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://data/brands/BrandData.gd" id="2_brand"]
+[ext_resource type="Script" path="res://data/brands/ProductData.gd" id="3_product"]
+
+[sub_resource type="Resource" id="brand_moon_milk"]
+script = ExtResource("2_brand")
+id = "moon_milk"
+display_name = "MOON MILK"
+slogan = "Now with 30% less gravity."
+story = "Bottled on the dairy moons of Home Space, where the cows graze in low gravity and the milk floats up out of the pail if you're not quick. Every trucker's had a Moon Milk at three in the morning. Most of them have had it on the ceiling."
+color = Color(0.92, 0.94, 1, 1)
+
+[sub_resource type="Resource" id="brand_neon"]
+script = ExtResource("2_brand")
+id = "neon"
+display_name = "NEON SODA WORKS"
+slogan = "Tastes like a sunset. Glows a bit."
+story = "Started in a casino basement in the Glimmer System by a bartender who spilled something into the jukebox. The glow is natural. Mostly. The cans are collectible, if you're the kind of person who keeps cans."
+color = Color(1, 0.35, 0.75, 1)
+
+[sub_resource type="Resource" id="brand_zoom"]
+script = ExtResource("2_brand")
+id = "zoom"
+display_name = "ZOOM JUICE"
+slogan = "Now with 40% more zoom."
+story = "An energy drink first brewed on a racing asteroid by a pit crew who never slept. Haulers swear by it. Dentists swear at it. Nobody knows what the first 100% of zoom was."
+color = Color(1, 0.85, 0.1, 1)
+
+[sub_resource type="Resource" id="brand_old_orbit"]
+script = ExtResource("2_brand")
+id = "old_orbit"
+display_name = "OLD ORBIT SPACE JERKY"
+slogan = "Mysteriously chewy since forever."
+story = "Nobody knows what animal it's from. The packet just says 'space'. The founder took the recipe to his grave and then, they say, came back for a bag."
+color = Color(0.7, 0.35, 0.2, 1)
+
+[sub_resource type="Resource" id="brand_galaxy_gumballs"]
+script = ExtResource("2_brand")
+id = "galaxy_gumballs"
+display_name = "GALAXY GUMBALLS"
+slogan = "Collect all 9000."
+story = "Every gumball has a tiny planet printed on it, and there are 9,000 planets. Nobody has ever collected them all. Somebody in the Glimmer System has 8,999 and won't talk about it."
+color = Color(0.4, 0.6, 1, 1)
+
+[sub_resource type="Resource" id="brand_mochi_moons"]
+script = ExtResource("2_brand")
+id = "mochi_moons"
+display_name = "MOCHI MOONS"
+slogan = "The snack that orbits your mouth."
+story = "Soft rice-cake moons from a little family bakery that came loose from its station in a solar storm and just kept baking. Matcha is the classic. Sakura is for special occasions, like Tuesday."
+color = Color(0.6, 0.85, 0.5, 1)
+
+[sub_resource type="Resource" id="brand_star_stop"]
+script = ExtResource("2_brand")
+id = "star_stop"
+display_name = "STAR-STOP RAMEN"
+slogan = "Hot noodles at every ring on the road."
+story = "The cup noodles of the spaceways: add hot water, wait three minutes, burn your tongue anyway. Every cab in the galaxy smells a little of it. There's a Star-Stop in every machine, and nobody remembers putting them there."
+color = Color(0.95, 0.3, 0.2, 1)
+
+[sub_resource type="Resource" id="brand_cozy_coil"]
+script = ExtResource("2_brand")
+id = "cozy_coil"
+display_name = "COZY COIL COCOA"
+slogan = "Drop one in space. It just floats there. Cozy."
+story = "Hot cocoa cubes from the people who sponsor the late-night lo-fi on Cozy Coil radio. Drop one in hot water, or just let it float around the cab and smell it."
+color = Color(0.55, 0.35, 0.25, 1)
+
+[sub_resource type="Resource" id="brand_dr_sprinkle"]
+script = ExtResource("2_brand")
+id = "dr_sprinkle"
+display_name = "DR. SPRINKLE'S"
+slogan = "Hull putty. It's also a snack."
+story = "Dr. Sprinkle invented a hull putty so good it patched a moon. Then he noticed it tasted like birthday cake. The company sells both, out of the same tub. Please read the label."
+color = Color(1, 0.75, 0.9, 1)
+
+[sub_resource type="Resource" id="brand_tidewater_cannery"]
+script = ExtResource("2_brand")
+id = "tidewater_cannery"
+display_name = "TIDEWATER CANNERY"
+slogan = "We can, therefore we are."
+story = "The cannery in the teal Tidewater system. Gill's family has canned whatever the tide brings in for nine generations. Some of it is fish."
+color = Color(0.2, 0.8, 0.8, 1)
+
+[sub_resource type="Resource" id="brand_marges"]
+script = ExtResource("2_brand")
+id = "marges"
+display_name = "MARGE'S"
+slogan = "Pie's on. Coffee's on. She's on."
+story = "Marge's diner at the truck stop, home of the Nebula Pie. Marge puts slices in the vending machine at night so nobody goes hungry while she sleeps. She knows if you take two."
+color = Color(1, 0.75, 0.3, 1)
+
+[sub_resource type="Resource" id="brand_high_roller"]
+script = ExtResource("2_brand")
+id = "high_roller"
+display_name = "THE HIGH ROLLER"
+slogan = "The house always wins. The snacks always lose."
+story = "Sal Grinwell's casino in the Glimmer System sells its own snacks, shaped like the things you're losing. Sal says that's called branding."
+color = Color(0.8, 0.3, 1, 1)
+
+[sub_resource type="Resource" id="product_moon_milk"]
+script = ExtResource("3_product")
+id = "moon_milk"
+display_name = "Moon Milk"
+brand_id = "moon_milk"
+kind = "drink"
+price = 4
+blurb = "The original. Shake it before it floats off."
+taste_lines = PackedStringArray("Cold. Floaty. Tastes like being a kid on a slow ship.", "*glug* ...I have a milk mustache, don't I.")
+effect = "steady"
+package = "bottle"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_moon_milk_strawberry"]
+script = ExtResource("3_product")
+id = "moon_milk_strawberry"
+display_name = "Moon Milk: Strawberry Phase"
+brand_id = "moon_milk"
+kind = "drink"
+price = 5
+blurb = "Pink. For the inner child. And the outer one."
+taste_lines = PackedStringArray("Pink milk. I'm thirty-five. Don't look at me.", "Strawberry Phase. I've been in one since forever.")
+effect = "none"
+package = "bottle"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_moon_milk_capsules"]
+script = ExtResource("3_product")
+id = "moon_milk_capsules"
+display_name = "Moon Milk Warm Capsules"
+brand_id = "moon_milk"
+kind = "drink"
+price = 6
+blurb = "For haulers who can't sleep. Or won't."
+taste_lines = PackedStringArray("Warm milk out of a capsule. Like a hug from a vending machine.", "Okay. Okay, that's nice.")
+effect = "steady"
+package = "cup"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_neon_soda"]
+script = ExtResource("3_product")
+id = "neon_soda"
+display_name = "Neon Soda"
+brand_id = "neon"
+kind = "drink"
+price = 3
+blurb = "Classic pink. Glows a bit."
+taste_lines = PackedStringArray("*clunk* ...it's lukewarm. Perfect.", "Tastes like a sunset. My tongue's glowing, isn't it.")
+effect = "none"
+package = "can"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_neon_lime_zero"]
+script = ExtResource("3_product")
+id = "neon_lime_zero"
+display_name = "Neon Lime Zero"
+brand_id = "neon"
+kind = "drink"
+price = 3
+blurb = "Zero sugar. All the glow."
+taste_lines = PackedStringArray("Lime. Zero sugar. Zero joy. Still glowing, though.")
+effect = "none"
+package = "can"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_neon_after_dark"]
+script = ExtResource("3_product")
+id = "neon_after_dark"
+display_name = "Neon After Dark"
+brand_id = "neon"
+kind = "drink"
+price = 6
+blurb = "Only in the Glimmer System. Purple. Very purple."
+taste_lines = PackedStringArray("It's purple. It tastes like a casino carpet at four in the morning. ...Again.")
+effect = "zoom"
+package = "can"
+sold_at = PackedStringArray("high_roller")
+
+[sub_resource type="Resource" id="product_zoom_juice"]
+script = ExtResource("3_product")
+id = "zoom_juice"
+display_name = "Zoom Juice"
+brand_id = "zoom"
+kind = "drink"
+price = 7
+blurb = "40% more zoom. Tops up your boost."
+taste_lines = PackedStringArray("*crack* *glug* ...my ears are ringing. In a good way.", "I can see sounds. Let's haul.")
+effect = "zoom"
+package = "can"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_zoom_turbo"]
+script = ExtResource("3_product")
+id = "zoom_turbo"
+display_name = "Zoom Juice Turbo"
+brand_id = "zoom"
+kind = "drink"
+price = 12
+blurb = "For emergencies. Do not drink two."
+taste_lines = PackedStringArray("Oh no. Oh, I can hear my own fur growing.")
+effect = "zoom"
+package = "can"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_space_jerky"]
+script = ExtResource("3_product")
+id = "space_jerky"
+display_name = "Space Jerky: Original"
+brand_id = "old_orbit"
+kind = "food"
+price = 6
+blurb = "Mysteriously chewy since forever."
+taste_lines = PackedStringArray("Still chewing. ...Still chewing.", "What animal is this. ...No. Don't tell me.")
+effect = "steady"
+package = "bag"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_space_jerky_teriyaki"]
+script = ExtResource("3_product")
+id = "space_jerky_teriyaki"
+display_name = "Space Jerky: Teriyaki Nebula"
+brand_id = "old_orbit"
+kind = "food"
+price = 7
+blurb = "Sweet, smoky, and it lasts the whole trip."
+taste_lines = PackedStringArray("Sweet and smoky. I'll be chewing this till the next system.")
+effect = "steady"
+package = "bag"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_galaxy_gumballs"]
+script = ExtResource("3_product")
+id = "galaxy_gumballs"
+display_name = "Galaxy Gumballs"
+brand_id = "galaxy_gumballs"
+kind = "food"
+price = 2
+blurb = "One gumball, one tiny planet. Collect all 9000."
+taste_lines = PackedStringArray("Got... planet number 4,112. Again.", "A gumball with a little planet on it. I'll name it after me.")
+effect = "none"
+package = "box"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_mochi_matcha"]
+script = ExtResource("3_product")
+id = "mochi_matcha"
+display_name = "Mochi Moons: Matcha"
+brand_id = "mochi_moons"
+kind = "food"
+price = 5
+blurb = "Soft, green, round. The classic."
+taste_lines = PackedStringArray("Soft. Green. It does kind of orbit your mouth. Huh.")
+effect = "steady"
+package = "box"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_mochi_sakura"]
+script = ExtResource("3_product")
+id = "mochi_sakura"
+display_name = "Mochi Moons: Sakura"
+brand_id = "mochi_moons"
+kind = "food"
+price = 6
+blurb = "Cherry blossom. For special occasions."
+taste_lines = PackedStringArray("Cherry blossom. It's Tuesday somewhere. Special occasion.")
+effect = "steady"
+package = "box"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_star_stop_ramen"]
+script = ExtResource("3_product")
+id = "star_stop_ramen"
+display_name = "Star-Stop Ramen"
+brand_id = "star_stop"
+kind = "food"
+price = 4
+blurb = "Hot noodles at every ring on the road."
+taste_lines = PackedStringArray("Three minutes. I waited two. Worth it.", "Burned my tongue. Every time. Every single time.")
+effect = "steady"
+package = "cup"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_star_stop_comet"]
+script = ExtResource("3_product")
+id = "star_stop_comet"
+display_name = "Star-Stop Spicy Comet"
+brand_id = "star_stop"
+kind = "food"
+price = 5
+blurb = "Hot noodles. HOT noodles."
+taste_lines = PackedStringArray("SPICY. Okay. Okay. My ears are sweating. Is that possible?")
+effect = "steady"
+package = "cup"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_cozy_cocoa"]
+script = ExtResource("3_product")
+id = "cozy_cocoa"
+display_name = "Cozy Coil Cocoa Cube"
+brand_id = "cozy_coil"
+kind = "drink"
+price = 3
+blurb = "Hot cocoa from a little floating cube."
+taste_lines = PackedStringArray("Hot cocoa in the middle of nowhere. Cozy, like the radio said.")
+effect = "steady"
+package = "cup"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_sprinkle_putty"]
+script = ExtResource("3_product")
+id = "sprinkle_putty"
+display_name = "Dr. Sprinkle's Snack Putty"
+brand_id = "dr_sprinkle"
+kind = "food"
+price = 4
+blurb = "It's also a hull putty. Read the label."
+taste_lines = PackedStringArray("Birthday cake. And... a hint of hull. Delicious, honestly.")
+effect = "none"
+package = "box"
+sold_at = PackedStringArray()
+
+[sub_resource type="Resource" id="product_canned_starfish"]
+script = ExtResource("3_product")
+id = "canned_starfish"
+display_name = "Tidewater Canned Starfish"
+brand_id = "tidewater_cannery"
+kind = "food"
+price = 6
+blurb = "Fresh from the tide, nine generations of know-how."
+taste_lines = PackedStringArray("It's starfish. In a can. It's... honestly not bad. Don't tell Gill I said honestly.")
+effect = "steady"
+package = "can"
+sold_at = PackedStringArray("tidewater")
+
+[sub_resource type="Resource" id="product_kelp_crisps"]
+script = ExtResource("3_product")
+id = "kelp_crisps"
+display_name = "Tidewater Kelp Crisps"
+brand_id = "tidewater_cannery"
+kind = "food"
+price = 3
+blurb = "Salty, crunchy, a little bit ocean."
+taste_lines = PackedStringArray("Salty, crunchy, a little bit ocean. I could eat the whole tide.")
+effect = "none"
+package = "bag"
+sold_at = PackedStringArray("tidewater")
+
+[sub_resource type="Resource" id="product_nebula_pie"]
+script = ExtResource("3_product")
+id = "nebula_pie"
+display_name = "Marge's Nebula Pie (a slice)"
+brand_id = "marges"
+kind = "food"
+price = 8
+blurb = "From the diner, for the night owls."
+taste_lines = PackedStringArray("Marge's pie. Out of a machine. Still the best in the system.", "...I'm taking two. She'll know. Worth it.")
+effect = "steady"
+package = "box"
+sold_at = PackedStringArray("truck_stop", "base")
+
+[sub_resource type="Resource" id="product_marges_coffee"]
+script = ExtResource("3_product")
+id = "marges_coffee"
+display_name = "Marge's Night Coffee"
+brand_id = "marges"
+kind = "drink"
+price = 3
+blurb = "Black as space. Hot as a sun."
+taste_lines = PackedStringArray("Black as space. Hot as a sun. Thanks, Marge.")
+effect = "zoom"
+package = "cup"
+sold_at = PackedStringArray("truck_stop", "base")
+
+[sub_resource type="Resource" id="product_chip_chips"]
+script = ExtResource("3_product")
+id = "chip_chips"
+display_name = "High Roller Chip Chips"
+brand_id = "high_roller"
+kind = "food"
+price = 5
+blurb = "Crisps shaped like casino chips. Not legal tender."
+taste_lines = PackedStringArray("Tried to bet one at the slots. Sal laughed for a full minute.")
+effect = "none"
+package = "bag"
+sold_at = PackedStringArray("high_roller")
+
+[resource]
+script = ExtResource("1_catalog")
+brands = Array[ExtResource("2_brand")]([SubResource("brand_moon_milk"), SubResource("brand_neon"), SubResource("brand_zoom"), SubResource("brand_old_orbit"), SubResource("brand_galaxy_gumballs"), SubResource("brand_mochi_moons"), SubResource("brand_star_stop"), SubResource("brand_cozy_coil"), SubResource("brand_dr_sprinkle"), SubResource("brand_tidewater_cannery"), SubResource("brand_marges"), SubResource("brand_high_roller")])
+products = Array[ExtResource("3_product")]([SubResource("product_moon_milk"), SubResource("product_moon_milk_strawberry"), SubResource("product_moon_milk_capsules"), SubResource("product_neon_soda"), SubResource("product_neon_lime_zero"), SubResource("product_neon_after_dark"), SubResource("product_zoom_juice"), SubResource("product_zoom_turbo"), SubResource("product_space_jerky"), SubResource("product_space_jerky_teriyaki"), SubResource("product_galaxy_gumballs"), SubResource("product_mochi_matcha"), SubResource("product_mochi_sakura"), SubResource("product_star_stop_ramen"), SubResource("product_star_stop_comet"), SubResource("product_cozy_cocoa"), SubResource("product_sprinkle_putty"), SubResource("product_canned_starfish"), SubResource("product_kelp_crisps"), SubResource("product_nebula_pie"), SubResource("product_marges_coffee"), SubResource("product_chip_chips")])

@@ -7,6 +7,7 @@
 # GDScript warnings promoted to errors and runs the self-tests in tools/tests/, and
 # (3) runs the main scene, then flies the flight sandbox on autopilot
 # (tools/smoke_flight.gd), walks around the base (tools/smoke_hub.gd),
+# loads the rig with the forklift at the loading dock (tools/smoke_dock.gd),
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
 # in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
 # (tools/smoke_crash.gd) and tries the cabin,
@@ -45,6 +46,7 @@ echo "== 3/3 Running the playable scenes"
 run --quit-after 600
 run -s tools/smoke_flight.gd
 run -s tools/smoke_hub.gd
+run -s tools/smoke_dock.gd
 run -s tools/smoke_mission.gd
 run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd

@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
 [ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="d_Gill"]
 [ext_resource type="PackedScene" path="res://scenes/hub/OtterVisual.tscn" id="v_Gill"]
+[ext_resource type="PackedScene" path="res://scenes/hub/VendingMachine.tscn" id="vending_machine"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -226,3 +227,6 @@ script = ExtResource("5_psx")
 
 [node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
 flying = false
+
+[node name="VendingMachine" parent="Things" instance=ExtResource("vending_machine")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -9.6, 0, -3)

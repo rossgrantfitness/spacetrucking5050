@@ -1,4 +1,57 @@
-# Playtest: round 20, M7 ship upgrades (on top of rounds 18 and 19 below)
+# Playtest: round 21, the 3D forklift and vending brands (round 20 below)
+
+**What you asked for:** the forklift as a third-person 3D game where she
+climbs on and drives it to pick up 3D boxes (or scrap it), and vending
+machines with food and drink from in-game brands that are the same
+across the galaxy.
+
+**Time needed:** about 20 minutes.
+
+> Honest note: a play-through test drives the forklift, loads every pallet
+> and comes back, and I checked it with screenshots. Whether it handles
+> nicely is a feel thing only you can judge. Every number (speed, steering,
+> fork height) is at the top of `scenes/dock/Forklift.gd`.
+
+## What's new
+
+- **The loading dock:** take a job, pick **I'LL DRIVE THE FORKLIFT**, and
+  once you're done talking you're at a 3D loading dock with your rig's hold
+  open.
+  - Walk to the forklift and press **E** to climb on.
+  - Drive with **W/S** and **A/D** (it steers from the back, like a real
+    one).
+  - Slide the forks under a pallet and press **E** to lift it.
+  - Drive into the hold and press **E** to set it down on a glowing spot.
+  - Fill every spot for a snug load. Then you're back where you were.
+- **Vending machines:** 12 brands, 22 snacks and drinks, the same brands
+  as the radio ads and billboards. Machines are at the truck stop, in your
+  rig's hallway, in the Tidewater canteen and in the casino.
+  - She holds what you buy, eats or drinks it, and says what she thinks.
+  - The first time she tries a brand, she reads its story off the back of
+    the packet.
+  - Food steadies her hands for the next trip; energy drinks top up the
+    boost tank.
+
+## What to do
+
+1. Buy something from the truck stop machine. Watch her eat it, and read
+   the packet. Try a few brands.
+2. Try the machine in your rig's hallway, in flight.
+3. Take a job and choose the forklift. Load the whole hold.
+4. Try the Tidewater or casino machine for the local treats.
+
+## Questions
+
+1. The forklift: does driving it feel good? Too fast, too slow, too twitchy?
+2. Is lining the forks up under a pallet satisfying, or fiddly?
+3. Want more on the dock (a timer for a bonus, bigger loads, dock workers
+   who chat)?
+4. The brands: any you love, or want renamed? Ideas for more?
+5. Should snacks do more (or less) than steady hands and boost?
+
+---
+
+# Round 20: M7 ship upgrades
 
 **What you asked for:** M7, but "focus on ship upgrades and stuff" instead
 of outfits; and the date card smaller, in a corner, in fewer colors, with a

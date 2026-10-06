@@ -155,6 +155,15 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# She chose to load the cargo herself: off to the loading dock, once
+	# she's done talking.
+	if GameState.wants_dock and _ready_to_play and player != null and not player.is_busy() and not Dialogue.is_active() and not aboard:
+		GameState.wants_dock = false
+		GameState.return_scene = scene_file_path
+		GameState.return_position = player.global_position
+		player.set_busy(true)
+		LoadingScreen.go(get_tree(), "res://scenes/dock/LoadingDock.tscn", "start")
+		return
 	if _ready_to_play:
 		if _walk_out_of_frame(delta):
 			return
@@ -454,6 +463,11 @@ func _spawn_player() -> void:
 	add_child(player)
 	var spawn_name := GameState.next_spawn if not GameState.next_spawn.is_empty() else default_spawn
 	GameState.next_spawn = ""
+	if spawn_name == "@return":
+		# Back from the loading dock: right where she was.
+		player.global_position = GameState.return_position
+		player.reset_physics_interpolation()
+		return
 	var spawn := get_node_or_null("Spawns/" + spawn_name) as Node3D
 	if spawn == null and has_node("Spawns") and $Spawns.get_child_count() > 0:
 		spawn = $Spawns.get_child(0) as Node3D

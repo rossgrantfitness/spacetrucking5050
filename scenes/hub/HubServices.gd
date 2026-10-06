@@ -32,7 +32,7 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 		"jukebox":
 			await jukebox(tree)
 		"vending":
-			await vending(tree)
+			await vending(tree, place_id)
 		"slots":
 			await slots(tree)
 	# Saved with everything else, except in flight (the flight saves itself
@@ -92,22 +92,20 @@ static func offer_job(tree: SceneTree, job: JobData) -> bool:
 	return taken
 
 
-## Who loads it: the dock crew (instant, the default), or you, on the
-## forklift (a little minigame; a tidy load rides better).
+## Who loads it: the dock crew (instant, the default), or you: off to the
+## loading dock to drive the forklift (scenes/dock/LoadingDock.gd; a tidy
+## load rides better). Only where there's a dock to walk to (not in flight).
 static func load_cargo(tree: SceneTree, job: JobData) -> void:
+	if not tree.current_scene is HubRoom or (tree.current_scene as HubRoom).aboard:
+		return
 	var gentler := roundi((1.0 - GameState.tuning.snug_load_care) * 100.0)
 	var choice := await MenuPanel.ask(tree, "WHO LOADS IT?", "%s is waiting on the dock." % job.cargo_name, [
 		{"text": "DOCK CREW, PLEASE", "description": "They'll have it aboard by the time you're in the seat."},
-		{"text": "I'LL DRIVE THE FORKLIFT", "description": "Load it yourself. A tidy load rides better: your cargo takes %d%% less of a knock this trip." % gentler}])
+		{"text": "I'LL DRIVE THE FORKLIFT", "description": "Out to the loading dock: drive the forklift, load the pallets into your rig's hold yourself. A tidy load rides better: your cargo takes %d%% less of a knock this trip." % gentler}])
 	if choice != 1:
 		return
-	var result := await ForkliftGame.play(tree, pallets_for(job))
-	if result.get("done", false):
-		GameState.rig["snug"] = 1.0
-		var bumps := int(result.get("bumps", 0))
-		await MenuPanel.ask(tree, "SNUG LOAD", "Strapped down tight in %s%s. Your cargo takes %d%% less of a knock until you deliver it." % [
-				HudWidget.clock(float(result.get("seconds", 0.0))), (", %d bump%s" % [bumps, "" if bumps == 1 else "s"]) if bumps > 0 else ", not a single bump", gentler],
-				[{"text": "NICE"}])
+	GameState.dock_pallets = pallets_for(job)
+	GameState.wants_dock = true  # (The room takes her there once she's done talking.)
 
 
 ## How many pallets a job is: a few, a couple more for big or careful loads.
@@ -373,17 +371,26 @@ static func jukebox(tree: SceneTree) -> void:
 		Radio.toggle_power()
 
 
-static func vending(tree: SceneTree) -> void:
-	var price := GameState.tuning.soda_price
+static func vending(tree: SceneTree, place_id: String) -> void:
 	var currency := GameState.names.currency_short
-	var choice := await MenuPanel.ask(tree, "VENDING MACHINE", "It hums. One button is labeled NEON.", [
-			{"text": "NEON SODA", "detail": "%d %s" % [price, currency], "description": "Tastes like a sunset. Glows a bit."},
-			{"text": "LEAVE"}])
-	if choice == 0:
-		if GameState.spend(price):
-			await Dialogue.say(GameState.names.bunny_name, ["*clunk* ...it's lukewarm. Perfect."], Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
-		else:
-			await _too_poor(tree)
+	var stock := GameState.brands.stocked_at(place_id)
+	var options: Array = []
+	for product in stock:
+		var brand := GameState.brands.find_brand(product.brand_id)
+		var new := int(GameState.tasted.get(product.id, 0)) == 0
+		var effect := {"steady": " (Steady hands next trip.)", "zoom": " (Tops up your boost.)"}.get(product.effect, "") as String
+		options.append({"text": product.display_name.to_upper(), "detail": ("NEW!  " if new else "") + "%d %s" % [product.price, currency],
+				"description": "%s: \"%s\"\n%s%s" % [brand.display_name if brand != null else "?", brand.slogan if brand != null else "", product.blurb, effect]})
+	options.append({"text": "LEAVE", "description": "Maybe later."})
+	var choice := await MenuPanel.ask(tree, "VENDING MACHINE", "It hums. You've tried %d of the %d snacks in the galaxy. Wallet: %d %s." % [
+			Snack.tried_count(), GameState.brands.products.size(), GameState.credits, currency], options)
+	if choice < 0 or choice >= stock.size():
+		return
+	var product := stock[choice]
+	if not GameState.spend(product.price):
+		await _too_poor(tree)
+		return
+	await Snack.enjoy(tree, product)
 
 
 ## The Lucky Molar, the slot machine at The High Roller: a little mini

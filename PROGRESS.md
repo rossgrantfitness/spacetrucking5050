@@ -1,16 +1,17 @@
 # Progress
 
-**Current status:** **Round 20: M7, ship upgrades first** (outfits and
-decor parked, your call). Dusty's parts are on four shelves, with ten new
-upgrades and parts you can see on the rig. There's a docking computer that
-docks you to a waltz, an air horn, and a forklift minigame for loading
-cargo yourself. The date card is now small, in the bottom-left corner.
+**Current status:** **Round 21: the 3D forklift and galaxy brands.**
+Loading your own cargo is now a 3D loading dock: walk to a forklift, climb
+on, drive it, lift pallets into your rig's hold. Vending machines sell 22
+snacks and drinks from 12 made-up brands; they're the same brands as on
+the radio and billboards. She holds what she bought, eats it, and reads
+the story off the packet. (Round 20, the M7 ship upgrades, is in too.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 20)
+**Last updated:** 2026-10-06 (round 21)
 
 ---
 
@@ -107,7 +108,8 @@ systems, the husband's story).
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
   - [x] Round 16: your nine design-sheet rigs at Dusty's (Garbage Scow, Ice-Tug, SLAB, Catamaran, Cryo Tanker, Hab-Brick, Bulk-Ore, Ore-Crawler, Omega Ore Crawler), each with its own model, handling and pay
   - [x] Docking computer upgrade with its own (original) lounge waltz; it docks you from 4 km out
-  - [x] Cargo loading forklift minigame (optional; a tidy load rides better)
+  - [x] Cargo loading forklift minigame: round 21, a 3D loading dock (walk to the forklift, drive it, lift pallets into the hold; optional, a tidy load rides better)
+  - [x] Round 21 extra: vending machines with 12 galaxy brands and 22 snacks (the same brands as the radio ads)
   - [x] Round 20 extras: Dusty's shelves, ten new upgrades (cargo cradles, bumpers, racks, eco injectors, radar dish, air horn...), and upgrades you can see on the rig
   - [ ] Outfit slots, sockets and wardrobe (parked: her cap is already its own piece); decor placement; a bigger apartment
 - [ ] **M8: Story & clients** *(started early, at your request)*

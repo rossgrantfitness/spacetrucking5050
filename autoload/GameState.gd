@@ -30,6 +30,8 @@ var ships: ShipList = preload("res://data/ships/ships.tres")
 var paints: PaintList = preload("res://data/ships/paints.tres")
 var emails: EmailList = preload("res://data/pc/emails.tres")
 var crew: CrewRoster = preload("res://data/crew/crew.tres")
+## Every brand and snack in the galaxy's vending machines.
+var brands: BrandCatalog = preload("res://data/brands/brands.tres")
 
 ## How much a new game starts with.
 const STARTING_CREDITS: int = 150
@@ -93,6 +95,12 @@ var minute: float = 480.0
 ## When you took the job you're hauling (Economy.now_minutes), so the payout
 ## can say how long it was on the road.
 var job_started: float = 0.0
+## The loading dock (scenes/dock/LoadingDock.gd), not saved: how many
+## pallets, whether to go there once she's free, and where to come back to.
+var dock_pallets: int = 4
+var wants_dock: bool = false
+var return_scene: String = ""
+var return_position := Vector3.ZERO
 ## Show the date card (the day, the month, the year) when the next room or
 ## the flight comes up: set when a game is started or loaded.
 var show_date_card: bool = false
@@ -106,6 +114,9 @@ var ship_xp: Dictionary = {}
 var pc_high_score: int = 0
 ## Best scores on the TV console's games (TVConsole.gd): game id -> score.
 var console_scores: Dictionary = {}
+## Snacks and drinks she's tried from vending machines: product id -> how
+## many times (the first taste of a brand, she reads the back of the packet).
+var tasted: Dictionary = {}
 ## What the crew remember (see scenes/hub/ShipLife.gd): days of friendship,
 ## small talk already said, lost things found and handed back.
 var crew_memory: Dictionary = {}
@@ -344,6 +355,7 @@ func to_save_data() -> Dictionary:
 		"insured": insured,
 		"ship_xp": ship_xp,
 		"console_scores": console_scores,
+		"tasted": tasted,
 		"crew_memory": crew_memory,
 	}
 
@@ -433,6 +445,11 @@ func apply_save_data(data: Dictionary) -> void:
 			var best: Variant = data["console_scores"][game]
 			if best is int or best is float:
 				console_scores[str(game)] = maxi(int(best), 0)
+	if data.get("tasted") is Dictionary:
+		for id: Variant in data["tasted"]:
+			var times: Variant = data["tasted"][id]
+			if brands.find_product(str(id)) != null and (times is int or times is float):
+				tasted[str(id)] = maxi(int(times), 0)
 	if data.get("crew_memory") is Dictionary:
 		# Plain numbers in little lists; anything odd is dropped.
 		for list: Variant in data["crew_memory"]:
@@ -478,6 +495,7 @@ func new_game() -> void:
 	ship_xp = {}
 	pc_high_score = 0
 	console_scores = {}
+	tasted = {}
 	crew_memory = {}
 	credits_changed.emit()
 

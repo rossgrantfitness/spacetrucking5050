@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="9_service"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -25,6 +26,9 @@ size = Vector3(0.4, 2, 1.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit1"]
 size = Vector3(1.1, 2, 0.4)
+
+[sub_resource type="SphereShape3D" id="Sphere_vending"]
+radius = 1.0
 
 [node name="Hallway" type="Node3D"]
 script = ExtResource("1_room")
@@ -179,3 +183,14 @@ script = ExtResource("5_psx")
 
 [node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
 flying = false
+
+[node name="Things" type="Node3D" parent="."]
+
+[node name="Vending" type="Area3D" parent="Things"]
+position = Vector3(1, 1, -17.2)
+script = ExtResource("9_service")
+prompt = "VENDING"
+menu = "vending"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/Vending"]
+shape = SubResource("Sphere_vending")
