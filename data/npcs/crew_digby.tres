@@ -4,13 +4,13 @@
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Digby"
+display_name = "Chang Ma"
 species = "mole"
 voice_pitch = 0.7
 voice_type = "gruff"
 voice_key = 0
 voice_scale = "minor"
 lines = PackedStringArray("Mm. Engine's fine. You're fine. Everything's fine. Go away. Nicely.")
-comm_name = "DIGBY · ENGINE"
+comm_name = "CHANG MA · ENGINE"
 fur_color = Color(0.42, 0.32, 0.28, 1)
 accent_color = Color(0.85, 0.65, 0.2, 1)

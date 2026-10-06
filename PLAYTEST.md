@@ -1,3 +1,67 @@
+# Playtest: round 24, the opening and objectives (round 23's sounds below)
+
+**What you asked for:**
+- the bed fixed;
+- the opening: Raccoony sends you to the wheel, then calls you to the
+  truck stop, with a marker over Marge;
+- an objective on screen at all times;
+- the radio dipping for story calls;
+- the names: Thumper, Chang Ma, Raccoony.
+
+**Time needed:** about 15 minutes. **Start a NEW GAME** (title screen,
+the small new-game button), or you'll skip the opening.
+
+## What's new
+
+- **The bed works in flight.** E at the bed now puts her to sleep till the
+  next stop (the same press used to wake her straight back up).
+- **The opening:**
+  - You start in dispatch and Raccoony starts talking right away.
+  - Go up the stairs and take the wheel. A moment later he calls you:
+    pull into the truck stop.
+  - Follow the yellow diamond, fly through the ring, walk out the airlock
+    and find Marge.
+- **Objective line:**
+  - On foot it's at the top left; flying, it's under the compass.
+  - On foot, a yellow diamond bobs over the door or stairs it means.
+  - A solid yellow "!" hangs over the person you need, and over anyone
+    with a job for you.
+- **Story calls dip the radio** to half volume until they're done.
+- **Names:** your rig is the Thumper; the engineer is Chang Ma; dispatch
+  is Raccoony (he).
+
+## What to do
+
+1. New game. Listen to Raccoony, then follow only the objective line and
+   markers. Never look anything up.
+2. Take the wheel. Have the radio on (Subspace FM is good) when Raccoony
+   calls: does the music dip and come back?
+3. Fly to the truck stop, go in, find Marge, take her job.
+4. In flight on the long haul, set a course (M), get up (F), go to your bed, press E. You
+   should sleep and wake up near Tidewater.
+
+## Questions
+
+1. Did you ever not know what to do? Where?
+2. Is the objective line easy to read, and in the right spots?
+3. Is the "!" over Marge easy to spot? Too small?
+4. The radio dip: right amount? Too slow or quick to come back?
+5. Raccoony's opening lines: does his voice feel right as a "he"? Want
+   different words?
+
+## Waiting on you (not built)
+
+See `SYSTEMS_PLAN.md`:
+- **Forklift:** scrap it (my recommendation) or rebuild it GTA-style
+  (2–3 rounds).
+- **Flight physics:** momentum yes (about 2 rounds); "Flight Assist Off"
+  breaks your brief's "no Newtonian drift" rule.
+- **"The thrust needs tweaking":** tell me which way (too slow to get
+  going, too slow to stop, too floaty, boost too weak or too strong) and
+  I'll tune it.
+
+---
+
 # Playtest: round 23, pleasant sounds (rounds 21 and 22 below)
 
 **What you asked for:** sound effects that feel good, following the

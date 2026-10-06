@@ -152,6 +152,9 @@ func _ready() -> void:
 		player.set_busy(true)
 		await HubServices.show_payout(get_tree())
 		player.set_busy(false)
+	# A brand-new game: Raccoony starts talking as soon as the lights come up.
+	if GameState.in_opening() and not GameState.has_flag("intro_heard") and not aboard:
+		await _start_the_opening()
 
 
 func _physics_process(delta: float) -> void:
@@ -198,6 +201,26 @@ func _walk_out_of_frame(delta: float) -> bool:
 			door.walk_through()
 			return true
 	return false
+
+
+## The opening: if the crew member who works a post here (Raccoony, at his
+## dispatch counter) is in this room, she steps up to them and they start
+## talking. (Walk away and it waits: the "!" over him and the objective say so.)
+func _start_the_opening() -> void:
+	var host: CrewNPC = null
+	for node in find_children("*", "CrewNPC", true, false):
+		var crew := node as CrewNPC
+		if crew.member != null and not crew.member.post_activity.is_empty():
+			host = crew
+	if host == null or player == null:
+		return
+	var front := -host.global_basis.z.normalized()  # (People face -Z; their talk reach is out front.)
+	player.global_position = Vector3(host.global_position.x, player.global_position.y, host.global_position.z) + front * 1.5
+	player.face(atan2(front.x, front.z))
+	_choose_shot(true)
+	await get_tree().create_timer(0.4).timeout
+	if is_inside_tree() and not Dialogue.is_active():
+		host.interact(player)
 
 
 ## Fades out and goes to another room (or scene), arriving at `spawn`.

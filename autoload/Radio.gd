@@ -80,6 +80,10 @@ var listener_position := Vector3.ZERO
 ## Turn the radio down for something else (0 = normal, 1 = silent), like the
 ## docking computer's waltz. It fades there smoothly.
 var duck: float = 0.0
+## On while a story call is on the comm (CommPortrait sets it): the radio
+## drops to half volume (TALK_DUCK) until the call's over, so you hear it.
+var talk_duck: bool = false
+const TALK_DUCK: float = 0.5
 var _duck_level: float = 0.0
 
 var _context: Context = Context.OFF_AIR
@@ -424,7 +428,8 @@ func _show_words(radio_station: RadioStation, words: String, is_ad: bool) -> voi
 
 ## Volume, muffling, hiss and dropouts, every frame.
 func _update_levels(delta: float) -> void:
-	_duck_level = move_toward(_duck_level, clampf(duck, 0.0, 1.0), delta * 0.8)
+	var wanted_duck := maxf(clampf(duck, 0.0, 1.0), TALK_DUCK if talk_duck else 0.0)
+	_duck_level = move_toward(_duck_level, wanted_duck, delta * 1.5)
 	var volume := linear_to_db(maxf(Settings.radio_volume * (1.0 - _duck_level), 0.0001))
 	var room := _context == Context.ROOM
 	# A weak signal: hiss rises and the music cuts out now and then.

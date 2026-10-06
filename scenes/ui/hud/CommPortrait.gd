@@ -46,6 +46,8 @@ var _blip_player: AudioStreamPlayer
 ## What kind of call this is (for picking fitting replies).
 var _situation: ChatterSet.Situation = ChatterSet.Situation.IDLE
 var _allow_reply: bool = false
+## Whether this call (and Jacki's answer to it) turns the radio down.
+var _story: bool = false
 var _picking: bool = false
 var _replies := PackedStringArray()
 ## Replies written for this particular call (a route event's choices).
@@ -76,10 +78,13 @@ func _ready() -> void:
 ## Starts a call from `speaker` saying `words` (names like {bunny} are filled
 ## in). Ignored if a call is already up; check is_busy() first. `situation`
 ## is what it's about, for Jacki's replies; `repliable` off for her own lines.
+## `story` on for calls that matter (the story, your job, traffic control):
+## the radio drops to half volume until it's over (Radio.talk_duck).
 func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = ChatterSet.Situation.IDLE, repliable: bool = true,
-		replies: PackedStringArray = PackedStringArray()) -> void:
+		replies: PackedStringArray = PackedStringArray(), story: bool = false) -> void:
 	if is_busy():
 		return
+	_story = story
 	_custom_replies = replies
 	_speaker = speaker
 	_situation = situation
@@ -143,6 +148,7 @@ func is_showing() -> bool:
 
 func hud_step(delta: float, _numbers_due: bool) -> void:
 	var tuning := GameState.tuning
+	Radio.talk_duck = _story and is_busy()
 	_clock += delta
 	_pop.want = _state in [State.STATIC_IN, State.TYPING, State.HOLDING, State.STATIC_OUT]
 	_pop.update(delta)
@@ -183,7 +189,11 @@ func hud_step(delta: float, _numbers_due: bool) -> void:
 				if not _queued_reply.is_empty():
 					var reply := _queued_reply
 					_queued_reply = ""
-					call_in(REPLIES.voice, reply, ChatterSet.Situation.IDLE, false)
+					call_in(REPLIES.voice, reply, ChatterSet.Situation.IDLE, false, PackedStringArray(), _story)
+
+
+func _exit_tree() -> void:
+	Radio.talk_duck = false  # Never leave the radio turned down.
 
 
 func _set_state(state: State) -> void:

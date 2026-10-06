@@ -2,7 +2,7 @@ extends Node
 ## Dialogue boxes: typewriter text with Animal Crossing-style gibberish voice
 ## blips (each character has their own pitch).
 ##
-##     await Dialogue.say("Dottie", ["Morning, {bunny}."], 1.3)
+##     await Dialogue.say("Raccoony", ["Morning, {bunny}."], 1.3)
 ##     await Dialogue.say(npc.display_name, lines, npc.voice_pitch, npc)
 ##
 ## Passing the speaker's NPCData gives the blips their own voice (type, key

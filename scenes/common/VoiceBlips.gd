@@ -2,7 +2,7 @@ class_name VoiceBlips
 ## The gibberish voices: which blip sound a character uses, and which note
 ## each letter plays. Every character talks in their own musical key and
 ## scale (set in their NPC data file), so their chatter sounds like a little
-## tune of their own instead of random beeps: Digby grumbles in C minor,
+## tune of their own instead of random beeps: Chang Ma grumbles in C minor,
 ## Pip squeaks in A major, Sal croons the blues.
 ##
 ## Each letter always plays the same note of the scale (so the same word

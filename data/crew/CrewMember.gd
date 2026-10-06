@@ -16,7 +16,7 @@ extends Resource
 @export var small_talk: Array[CrewLine] = []
 ## The first thing they say to you each day (one is picked).
 @export var greetings: PackedStringArray = PackedStringArray()
-## A menu they open when you talk to them during `post_activity` (Dottie at
+## A menu they open when you talk to them during `post_activity` (Raccoony at
 ## her counter opens the job board).
 @export var menu: String = ""
 @export var post_activity: String = ""

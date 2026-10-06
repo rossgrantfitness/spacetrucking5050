@@ -97,6 +97,14 @@ const CABIN_SPAWN: String = "FromShip"
 ## its camera sits on the rig (just past the nose, looking ahead).
 const WINDOW_PIXELS := Vector2i(320, 180)
 const WINDOW_CAMERA_SPOT := Vector3(0.0, 1.5, -16.0)
+## A new game starts parked here, out past the company HQ (which sits at
+## the origin), facing down the road toward the truck stop.
+const OPEN_SPACE_SPOT := Vector3(0.0, 60.0, -1700.0)
+const OPEN_SPACE_FACING := Vector3(0.0, 0.0, -1.0)
+## The opening's first comm call: who, what, and how long after taking the wheel.
+const OPENING_CALLER: String = "res://data/npcs/dispatch_morning.tres"
+const OPENING_CALL_LINE: String = "Okay, you're up. Pull into the truck stop, hon. Marge there has our next delivery order. Follow the yellow diamond, and fly slow through the glowing ring."
+const OPENING_CALL_DELAY: float = 2.5
 ## Prices at the Gas-N-Go counter.
 const JERKY_PRICE: int = 15
 const KEYCHAIN_PRICE: int = 5
@@ -154,6 +162,8 @@ func _ready() -> void:
 	_ship.exploded.connect(_on_exploded)
 	_ship.cruise_released.connect(_on_cruise_released)
 	GameState.start_haul()  # Every trip out on the road is a new haul.
+	if GameState.in_opening():
+		_opening_call()
 	_route_events = RouteEvents.new()
 	add_child(_route_events)
 	_route_events.start(_ship, _events_holder, _chatter, _places, current_system)
@@ -182,6 +192,18 @@ func _ready() -> void:
 	if GameState.show_date_card:
 		GameState.show_date_card = false
 		DateCard.pop_up(get_tree())
+
+
+## The opening, once she's at the wheel for the first time: Raccoony calls
+## and sends her to the truck stop, where Marge has the first job.
+func _opening_call() -> void:
+	GameState.set_flag("took_the_wheel")
+	_chatter.skip_takeoff_call()  # Raccoony's call is the takeoff call this time.
+	await get_tree().create_timer(OPENING_CALL_DELAY).timeout
+	if not is_inside_tree():
+		return
+	var raccoony := load(OPENING_CALLER) as NPCData
+	_hud.comm.call_in(raccoony, OPENING_CALL_LINE, ChatterSet.Situation.TAKEOFF, true, PackedStringArray(), true)
 
 
 func _process(delta: float) -> void:
@@ -237,7 +259,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _ship.out_of_control:
 		return  # Nothing answers now. Hold on.
 	if _napping:
-		if event.is_pressed() and not event.is_echo():
+		# Any button wakes her, but not the very press that put her to bed
+		# (the cabin hands it on to us too): only once she's been down a moment.
+		if event.is_pressed() and not event.is_echo() and Time.get_ticks_msec() - _nap_started_msec > NAP_WAKE_GRACE_MSEC:
 			_wake_up()
 		return
 	if _in_cabin:
@@ -290,6 +314,9 @@ func _pick_destination() -> String:
 	var job := GameState.active_job()
 	if job != null and _places.has(job.to_place):
 		return job.to_place
+	# Before the first job: Marge at the truck stop has it.
+	if job == null and not GameState.has_flag("met_marge") and _places.has("truck_stop"):
+		return "truck_stop"
 	for id: String in _places:
 		if id != GameState.launch_from and GameState.places.find(id).kind != PlaceData.Kind.DRIVE_THROUGH:
 			return id
@@ -691,6 +718,7 @@ func _nap() -> void:
 			engage_course(PackedStringArray([job.to_place]))
 	_nap_in_place = _ship.cruise == null or _course.is_empty()
 	_napping = true
+	_nap_started_msec = Time.get_ticks_msec()
 	_cabin_room.player.set_busy(true)
 	_nap_screen = CanvasLayer.new()
 	_nap_screen.layer = 45
@@ -721,6 +749,10 @@ func _nap() -> void:
 
 ## On while she naps with no course set (she wakes up where she was).
 var _nap_in_place := false
+## When the nap started (Time.get_ticks_msec), and how long after that a
+## button press counts as "wake up" (so the E that started it doesn't).
+var _nap_started_msec := 0
+const NAP_WAKE_GRACE_MSEC: int = 600
 
 ## How far out from the next stop's approach she wakes up, in meters.
 const SLEEP_WAKE_DISTANCE: float = 1500.0
@@ -908,6 +940,11 @@ func _honk() -> void:
 
 ## Puts the rig at a place's launch point, nose out, engines idle.
 func _launch_from(id: String) -> void:
+	if id == GameState.OPEN_SPACE:
+		# A new game: parked out past the company HQ, nose toward the truck stop.
+		_ship.teleport(Transform3D(Basis.looking_at(OPEN_SPACE_FACING, Vector3.UP), OPEN_SPACE_SPOT))
+		_chase_camera.snap_behind_target()
+		return
 	var place: Node3D = _places.get(id, _places.get("truck_stop"))
 	if place == null:
 		return
@@ -1058,7 +1095,7 @@ func _greet(place: PlaceData, banner: String) -> void:
 	_ship.process_mode = Node.PROCESS_MODE_DISABLED  # Parked: hands off.
 	_hud.show_banner(banner, 0.0)
 	if place.host != null and not place.host_lines.is_empty():
-		_hud.comm.call_in(place.host, place.host_line(int(GameState.visits.get(place.id, 1)), _rng), ChatterSet.Situation.DOCKING)
+		_hud.comm.call_in(place.host, place.host_line(int(GameState.visits.get(place.id, 1)), _rng), ChatterSet.Situation.DOCKING, true, PackedStringArray(), true)
 	await get_tree().create_timer(2.5).timeout
 
 

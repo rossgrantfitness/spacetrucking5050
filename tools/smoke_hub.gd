@@ -26,6 +26,9 @@ func _initialize() -> void:
 	# Never touch the player's real save.
 	root.get_node("SaveSystem").set("save_path", "user://smoke_test_save.json")
 	root.get_node("GameState").call("new_game")
+	# Past the opening: parked at the truck stop (smoke_opening.gd plays the opening).
+	root.get_node("GameState").call("set_flag", "took_the_wheel")
+	root.get_node("GameState").set("launch_from", "truck_stop")
 	root.get_node("GameState").set("next_spawn", "Bed")
 	change_scene_to_file("res://scenes/hub/Apartment.tscn")
 

@@ -18,7 +18,7 @@ extends Resource
 @export var roles: Array[CrewActivity] = []
 
 @export_group("Something to find")
-## What's lost ("Digby's lucky wrench"). Empty = nothing to find.
+## What's lost ("Chang Ma's lucky wrench"). Empty = nothing to find.
 @export var find_item: String = ""
 @export_file("*.tscn") var find_room: String = ""
 ## A Marker3D under the room's "CrewSpots" node.

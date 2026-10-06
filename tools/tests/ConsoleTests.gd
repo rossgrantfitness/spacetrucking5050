@@ -36,11 +36,11 @@ func test_comet_tail_grows_and_crashes() -> void:
 func test_paddle_pods_points_and_winner() -> void:
 	var game := PaddlePods.new()
 	game.start()
-	# Digby misses one.
+	# Chang Ma misses one.
 	game.ball = Vector2(PaddlePods.WIDTH + 3.0, 10.0)
 	game.ball_velocity = Vector2(80.0, 0.0)
 	game.cpu_y = PaddlePods.HEIGHT - PaddlePods.PADDLE_HALF
-	check(game.step(STEP, 0.0) == "point" and game.you == 1 and game.score == 1, "the pod past Digby is your point")
+	check(game.step(STEP, 0.0) == "point" and game.you == 1 and game.score == 1, "the pod past Chang Ma is your point")
 	game.you = PaddlePods.WIN_POINTS - 1
 	game.ball = Vector2(PaddlePods.WIDTH + 3.0, 10.0)
 	game.ball_velocity = Vector2(80.0, 0.0)

@@ -109,7 +109,7 @@ lines = PackedStringArray("Mmh. Fish are biting. Or the fish are sleeping. Hard 
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
 situation = 2
-lines = PackedStringArray("Truck stop control. You must be Dottie's trucker. Fly through the ring, I'll bring you in.")
+lines = PackedStringArray("Truck stop control. You must be Raccoony's trucker. Fly through the ring, I'll bring you in.")
 place = "truck_stop"
 blocked_by_flags = PackedStringArray("met_marge")
 

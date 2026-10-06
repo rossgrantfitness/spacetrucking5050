@@ -66,6 +66,12 @@ func restart() -> void:
 	_reset_idle_timer()
 
 
+## No takeoff call this trip (someone's already calling, like Raccoony
+## in the opening).
+func skip_takeoff_call() -> void:
+	_takeoff_timer = 0.0
+
+
 ## Something happened that someone might comment on (at `place`, a place
 ## id, if it's about a place).
 func say(situation: ChatterSet.Situation, place: String = "") -> void:
@@ -160,7 +166,9 @@ func _play(situation: ChatterSet.Situation, place: String = "") -> void:
 		return
 	var pick: Array = options[_rng.randi_range(0, options.size() - 1)]
 	_last_line = pick[1]
-	_comm.call_in(pick[0], pick[1], situation)
+	# Calls about the trip itself (takeoff, approach, docking, fuel, speeding)
+	# turn the radio down; idle chatter plays over it.
+	_comm.call_in(pick[0], pick[1], situation, true, PackedStringArray(), situation in IMPORTANT)
 
 
 func _reset_idle_timer() -> void:

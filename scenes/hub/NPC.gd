@@ -65,6 +65,24 @@ func interact(player: Node3D) -> void:
 	_talking = false
 
 
+## Whether they have a job for you (one they haven't given you yet): the
+## on-foot HUD hangs a "!" over them. (So does being who the objective
+## points at; see HubHUD.)
+func has_news() -> bool:
+	var story := data.pick_conversation() if data != null else null
+	if story == null or story.offers_job == null:
+		return false
+	var job := story.offers_job
+	return GameState.active_job_id != job.id and not job.id in GameState.finished_jobs
+
+
+func _has_new_flags(story: Conversation) -> bool:
+	for flag in story.sets_flags:
+		if not GameState.has_flag(flag):
+			return true
+	return false
+
+
 func _exit_tree() -> void:
 	if _listener != null:
 		Dialogue.cancel()  # Leaving the room mid-sentence (walked through a door).

@@ -6,7 +6,7 @@ game's numbers, names and stuff never needs programming.
 - **`tuning.tres`** (with its blueprint `Tuning.gd`): every feel number shared
   by all ships: steering, camera, field of view, dust, trails, engine sound.
   Double-click it and use the Inspector; hover a value to see what it does.
-- **`ships/`**: one file per rig. `starter_rig.tres` is *The Lazy Susan*,
+- **`ships/`**: one file per rig. `starter_rig.tres` is *The Thumper*,
   your inherited rig; the others are for sale at Dusty's garage (price,
   model, how much more each job pays for a bigger hold). Each has its own
   top speed, acceleration, how heavy it turns, boost, trail color and
@@ -24,7 +24,7 @@ game's numbers, names and stuff never needs programming.
   list of conversations (`Conversation.gd`) with conditions (story flags,
   the job you're hauling), and the first one that fits is used. A
   conversation can set story flags, offer a job or open a menu (job board,
-  pumps, garage). `dispatch_morning.tres` is Dottie; the truck stop folks
+  pumps, garage). `dispatch_morning.tres` is Raccoony; the truck stop folks
   are `truckstop_*.tres`. Blueprint: `NPCData.gd`.
   The truckers you only hear on the comms (Big Wendell, Pip) live here too,
   with a short `comm_name` for the comm portrait.

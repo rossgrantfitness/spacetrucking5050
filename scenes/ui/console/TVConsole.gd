@@ -5,7 +5,7 @@ extends CanvasLayer
 ## the TV. Pick a game cartridge:
 ## - CARROT CATCH (CarrotCatch.gd): catch carrots, dodge space junk.
 ## - COMET TAIL (CometTail.gd): a comet that grows as it eats stars.
-## - PADDLE PODS (PaddlePods.gd): pong against Digby.
+## - PADDLE PODS (PaddlePods.gd): pong against Chang Ma.
 ## Each one's best score is saved (GameState.console_scores).
 ##
 ## Keys: arrows / D-pad / stick to move, E / Enter / A to start, Esc / B to
@@ -24,7 +24,7 @@ const PICTURE := Vector2(160.0, 120.0)
 const GAMES: Array = [
 	["CARROT CATCH", "carrot_catch", "SLIDE TO CATCH. DODGE THE JUNK."],
 	["COMET TAIL", "comet_tail", "EAT STARS. DON'T BITE YOUR TAIL."],
-	["PADDLE PODS", "paddle_pods", "BEAT DIGBY. FIRST TO 5."],
+	["PADDLE PODS", "paddle_pods", "BEAT CHANG MA. FIRST TO 5."],
 ]
 const SMALL := PixelFont.Face.SMALL
 const NO_SHADOW := Color(0, 0, 0, 0)
@@ -228,7 +228,7 @@ func _draw_title_or_over() -> void:
 	var title: String = GAMES[_pick][0]
 	if state == 2:
 		var won: bool = _game is PaddlePods and (_game as PaddlePods).you_won
-		title = "YOU BEAT DIGBY!" if won else "GAME OVER"
+		title = "YOU BEAT CHANG MA!" if won else "GAME OVER"
 		_centered(58.0, "SCORE %d   BEST %d" % [int(_game.get("score")), int(GameState.console_scores.get(_game_id, 0))], Color(0.5, 0.9, 0.6))
 	_centered(46.0, title, Color(1.0, 0.8, 0.35))
 	if fposmod(_clock, 1.0) < 0.6:
@@ -276,4 +276,4 @@ func _draw_paddle_pods(game: PaddlePods) -> void:
 	_canvas.draw_rect(Rect2(PICTURE.x - 6.0, game.cpu_y - PaddlePods.PADDLE_HALF, 3.0, PaddlePods.PADDLE_HALF * 2.0), Color(0.6, 0.45, 0.4))
 	if game.ball.x > 2.0 and game.ball.x < PICTURE.x - 2.0:  # (Off the edge: gone.)
 		_canvas.draw_rect(Rect2(game.ball.round() - Vector2(2, 2), Vector2(4, 4)), Color(0.5, 1.0, 0.9))
-	_centered(3.0, "JACKI %d   DIGBY %d" % [game.you, game.cpu], Color(0.75, 0.75, 0.9))
+	_centered(3.0, "JACKI %d   CHANG MA %d" % [game.you, game.cpu], Color(0.75, 0.75, 0.9))

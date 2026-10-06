@@ -19,7 +19,7 @@ room = "res://scenes/hub/Dispatch.tscn"
 spot = "Counter"
 pose = "stand"
 prop = "clipboard"
-lines = PackedStringArray("Dispatch, this is Dottie. Oh, it's you. Hi, hon.")
+lines = PackedStringArray("Dispatch, this is Raccoony. Oh, it's you. Hi, hon.")
 weight = 3.0
 
 [sub_resource type="Resource" id="R_2"]
@@ -97,7 +97,7 @@ lines = PackedStringArray("Clem asked me what a manifest is. I said it's when yo
 
 [sub_resource type="Resource" id="R_11"]
 script = ExtResource("s_line")
-lines = PackedStringArray("Digby fixed the toaster. Now it's faster than the rig.")
+lines = PackedStringArray("Chang Ma fixed the toaster. Now it's faster than the rig.")
 
 [sub_resource type="Resource" id="R_12"]
 script = ExtResource("s_line")
@@ -419,7 +419,7 @@ situation = 7
 
 [sub_resource type="Resource" id="R_58"]
 script = ExtResource("s_line")
-lines = PackedStringArray("Dottie says you're the best driver she ever had. Except one. She don't say who. She gets quiet.")
+lines = PackedStringArray("Raccoony says you're the best driver he ever had. Except one. He don't say who. He gets quiet.")
 min_friendship = 2
 
 [sub_resource type="Resource" id="R_59"]
@@ -519,9 +519,9 @@ lines = PackedStringArray("My lucky wrench. Gone. Can't fix a thing without it."
 [sub_resource type="Resource" id="R_70"]
 script = ExtResource("s_event")
 id = "lost_wrench"
-title = "DIGBY LOST HIS LUCKY WRENCH"
+title = "CHANG MA LOST HIS LUCKY WRENCH"
 roles = Array[ExtResource("s_activity")]([SubResource("R_69")])
-find_item = "Digby's lucky wrench"
+find_item = "Chang Ma's lucky wrench"
 find_room = "res://scenes/hub/Hallway.tscn"
 find_spot = "LostWrench"
 find_owner = "digby"
@@ -579,7 +579,7 @@ crew = "dottie"
 room = "res://scenes/hub/Galley.tscn"
 spot = "TableNorth"
 pose = "sit"
-lines = PackedStringArray("Digby baked a cake. In the engine. It's... warm.")
+lines = PackedStringArray("Chang Ma baked a cake. In the engine. It's... warm.")
 
 [sub_resource type="Resource" id="R_77"]
 script = ExtResource("s_activity")
@@ -609,9 +609,9 @@ lines = PackedStringArray("Has anyone seen my clipboard? It has everything on it
 [sub_resource type="Resource" id="R_80"]
 script = ExtResource("s_event")
 id = "lost_clipboard"
-title = "DOTTIE CAN'T FIND HER CLIPBOARD"
+title = "RACCOONY CAN'T FIND HIS CLIPBOARD"
 roles = Array[ExtResource("s_activity")]([SubResource("R_79")])
-find_item = "Dottie's clipboard"
+find_item = "Raccoony's clipboard"
 find_room = "res://scenes/hub/CargoBay.tscn"
 find_spot = "FindBetweenCrates"
 find_owner = "dottie"

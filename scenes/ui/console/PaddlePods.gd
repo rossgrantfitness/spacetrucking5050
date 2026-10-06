@@ -1,7 +1,7 @@
 class_name PaddlePods
 extends RefCounted
 ## PADDLE PODS, a game on Jacki's TV console (TVConsole.gd): bat a glowing
-## pod back and forth against Digby (the computer player, who's good but
+## pod back and forth against Chang Ma (the computer player, who's good but
 ## slow). First to WIN_POINTS wins. Your score is the points you got.
 ##
 ## Just the rules; TVConsole.gd draws it. Sizes are in the TV's own pixels.
@@ -13,7 +13,7 @@ const WIDTH: float = 160.0
 const HEIGHT: float = 120.0
 const PADDLE_HALF: float = 11.0
 const PADDLE_SPEED: float = 110.0
-## Digby's paddle is slower than yours (so you can beat him).
+## Chang Ma's paddle is slower than yours (so you can beat him).
 const CPU_SPEED: float = 70.0
 const START_BALL: float = 70.0
 const WIN_POINTS: int = 5
@@ -52,7 +52,7 @@ func step(delta: float, move: float) -> String:
 	if state != State.PLAYING:
 		return ""
 	you_y = clampf(you_y + move * PADDLE_SPEED * delta, PADDLE_HALF, HEIGHT - PADDLE_HALF)
-	# Digby follows the pod, but only so fast (and lazily when it's going away).
+	# Chang Ma follows the pod, but only so fast (and lazily when it's going away).
 	var chase := CPU_SPEED * (1.0 if ball_velocity.x > 0.0 else 0.4)
 	cpu_y = move_toward(cpu_y, ball.y, chase * delta)
 	cpu_y = clampf(cpu_y, PADDLE_HALF, HEIGHT - PADDLE_HALF)
@@ -60,7 +60,7 @@ func step(delta: float, move: float) -> String:
 	if ball.y < 2.0 or ball.y > HEIGHT - 2.0:
 		ball.y = clampf(ball.y, 2.0, HEIGHT - 2.0)
 		ball_velocity.y = -ball_velocity.y
-	# Your paddle on the left, Digby's on the right.
+	# Your paddle on the left, Chang Ma's on the right.
 	if ball_velocity.x < 0.0 and ball.x < 8.0 and ball.x > 2.0 and absf(ball.y - you_y) < PADDLE_HALF + 2.0:
 		_bounce(you_y, 1.0)
 		return "hit"

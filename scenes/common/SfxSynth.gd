@@ -49,7 +49,7 @@ static func make_blip() -> AudioStreamWAV:
 ## their data file (`voice_type`):
 ##   square - a hard 8-bit beep (robots, clerks, Marge)
 ##   reed   - nasal and buzzy, like a kazoo (Sal, Moe)
-##   gruff  - low and growly, with a little rasp (Digby, Wendell)
+##   gruff  - low and growly, with a little rasp (Chang Ma, Wendell)
 ##   chirp  - a quick upward bird chirp (Pip, the owl)
 ## ("soft" is `blip` above.)
 static func make_voice(kind: String) -> AudioStreamWAV:

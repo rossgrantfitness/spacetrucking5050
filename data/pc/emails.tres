@@ -13,7 +13,7 @@ body = "Effective immediately, all drivers live in their rigs. This saves on ren
 [sub_resource type="Resource" id="Email_1"]
 script = ExtResource("2_email")
 id = "dottie_moving_day"
-from_name = "DOTTIE (DISPATCH)"
+from_name = "RACCOONY (DISPATCH)"
 subject = "Moving day!!"
 body = "Hon, the company says the office rides with you now, so I've set up dispatch behind the cab. Coffee's on the left. My chair is not up for discussion. Marge at the truck stop has work for you: she's right outside, through the airlock. - D"
 
@@ -66,7 +66,7 @@ script = ExtResource("2_email")
 id = "sal_cards"
 from_name = "SAL GRINWELL"
 subject = "A GOLDEN OPPORTUNITY, CHAMP"
-body = "Champ! Sal Grinwell, The High Roller, Glimmer System. I need cards. Lots of cards. Forty thousand decks. Dottie has the paperwork. Don't tell her I said paperwork, she hates that. Smiles, Sal"
+body = "Champ! Sal Grinwell, The High Roller, Glimmer System. I need cards. Lots of cards. Forty thousand decks. Raccoony has the paperwork. Don't tell him I said paperwork, he hates that. Smiles, Sal"
 requires_flag = "glimmer_heard"
 
 [sub_resource type="Resource" id="Email_9"]
@@ -96,7 +96,7 @@ requires_flag = "first_bills"
 [sub_resource type="Resource" id="Email_12"]
 script = ExtResource("2_email")
 id = "dottie_tab"
-from_name = "DOTTIE (DISPATCH)"
+from_name = "RACCOONY (DISPATCH)"
 subject = "about that tab"
 body = "Hon, billing says you're running a tab. Don't you worry about it, it comes out of your next job, nobody's breaking any kneecaps. I told them you're good for it. You ARE good for it. Eat something. - D"
 requires_flag = "ran_a_tab"

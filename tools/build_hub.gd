@@ -1,7 +1,7 @@
 extends "res://tools/build_placeholder_models.gd"
 ## Builds the placeholder models for walking around the base, and saves them
 ## as ordinary scenes you can open in the editor:
-##     res://scenes/hub/RaccoonVisual.tscn        - Dottie, the dispatch clerk
+##     res://scenes/hub/RaccoonVisual.tscn        - Raccoony, the dispatch clerk
 ##     res://scenes/hub/sets/ApartmentSet.tscn    - the rooms' "sets": walls,
 ##     res://scenes/hub/sets/HallwaySet.tscn        furniture, lights and
 ##     res://scenes/hub/sets/DispatchSet.tscn       collision

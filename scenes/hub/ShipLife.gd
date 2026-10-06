@@ -57,6 +57,8 @@ static func fits(situation: Situation, needs_flag: String) -> bool:
 
 ## The ship event happening right now, or null.
 static func current_event() -> ShipEvent:
+	if GameState.in_opening():
+		return null  # A calm start: nothing going on aboard yet.
 	var rng := _rng("event")
 	if rng.randf() > EVENT_CHANCE:
 		return null
@@ -69,6 +71,11 @@ static func current_event() -> ShipEvent:
 
 ## What `member` is up to right now.
 static func activity_for(member: CrewMember) -> CrewActivity:
+	# The opening: Raccoony's at his counter in dispatch, where the game starts.
+	if GameState.in_opening() and member.post_activity != "":
+		for activity in member.activities:
+			if activity != null and activity.id == member.post_activity:
+				return activity
 	var event := current_event()
 	if event != null:
 		for role in event.roles:

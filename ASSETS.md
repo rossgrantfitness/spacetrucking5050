@@ -21,7 +21,7 @@ cut it into parts and check it in game.
 ## Your pipeline (and a few upgrades to it)
 
 Your plan is good: **sketch → another AI refines it → Meshy makes the
-model → hand it to me.** It already worked for Jacki, Dottie, Digby and
+model → hand it to me.** It already worked for Jacki, Raccoony, Chang Ma and
 Clem. These tweaks will save you a lot of redos.
 
 ### 1. Make a style anchor first (once)
@@ -129,11 +129,11 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 - [ ] **Jacki: separate accessories**
   - Cigarette (her default), a soda can, a coffee cup.
   - Small props, any style.
-- [ ] **Dottie** (raccoon, dispatch): face sheet, 64×64 (2×4 cells).
-- [ ] **Digby** (mole, mechanic): face sheet, 64×64.
+- [ ] **Raccoony** (raccoon, dispatch): face sheet, 64×64 (2×4 cells).
+- [ ] **Chang Ma** (mole, engineer): face sheet, 64×64.
 - [ ] **Clem** (donkey, cargo hand): face sheet, 64×64.
 
-### Your rig: FACTORY (as inherited)
+### Your rig: The Thumper
 - [ ] **Exterior model.** The one you look at for hours. Gunmetal, amber
   cockpit glass, silver engine pods with yellow trim (see
   `reference/ship_bb42_cargo_aircraft.webp`). Mark where the **engine
@@ -163,7 +163,7 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 ### Rig rooms (her home while she flies)
 - [ ] **Textures** for the cabin (apartment), hallway, galley, cargo bay
   and engine room: one wall, one floor and one accent tile each. They
-  share the same tint per rig, so one set does all 15 rigs.
+  share the same tint per rig, so one set does all 14 rigs.
 - [ ] **Bed, TV, desk computer, kitchen counter, fridge**: one model each,
   or textures for the current boxes.
 
@@ -197,7 +197,7 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 - [ ] **Deputy Biscuit** (dog, Space Patrol)
 - [ ] **Bev** (pig, tourist)
 
-### The other 14 rigs (buyable at Dusty's)
+### The other 13 rigs (buyable at Dusty's)
 Each is a big sale moment, so it should look like what it's called.
 - [ ] **The Garbage Scow**
 - [ ] **The Zippy Zenith**
@@ -207,7 +207,6 @@ Each is a big sale moment, so it should look like what it's called.
 - [ ] **The Capsule Cruiser** (see `reference/ship_capsule_hauler_sketch.png`)
 - [ ] **The Catamaran**
 - [ ] **The Cryo Tanker**
-- [ ] **The Lazy Susan**
 - [ ] **The Hab-Brick**
 - [ ] **The Bulk-Ore**
 - [ ] **The Ore-Crawler**
@@ -415,7 +414,7 @@ file next to each track. Format: `.ogg`. Details are in
 
 ## Suggested order
 
-1. Jacki's face sheet, and the FACTORY rig exterior.
+1. Jacki's face sheet, and the Thumper's exterior.
 2. Truck stop textures, plus Marge, Lily and Dusty.
 3. Music for Subspace FM and Cozy Coil.
 4. Asteroids and planet textures.

@@ -1,19 +1,21 @@
 # Progress
 
-**Current status:** **Round 23: polish, pleasant sounds.** Every menu
-and game sound remade in one gentle key (A major pentatonic) from soft
-wood, glass and felt tones, with no shrill highs, a new startup chime and
-sounds that never repeat exactly. (Round 22, the window, is in too.)
-Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 24: the opening, objectives, fixes.** The
+bed works again in flight. A new game opens with Raccoony telling you to
+take the wheel, then a call sending you to Marge. A yellow objective
+line is always on screen, with markers on foot. Story calls dip the
+radio. Renames: the Thumper, Chang Ma, Raccoony. Built and validated,
+**waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
-**New systems waiting for your go:** `SYSTEMS_PLAN.md` (seven cards
-with time, difficulty and cost; nothing built until you pick one).
+**Waiting for your go:** `SYSTEMS_PLAN.md`: seven system cards, plus the
+forklift (scrap or rebuild) and the flight physics assessment. Nothing is
+built until you pick.
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 23)
+**Last updated:** 2026-10-06 (round 24)
 
 ---
 

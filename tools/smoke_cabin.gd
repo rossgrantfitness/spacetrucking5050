@@ -121,7 +121,10 @@ func _process(_delta: float) -> bool:
 					_fail("in flight, the apartment's bed should be for napping")
 				if here.get_node_or_null("LiveWindow") == null:
 					_fail("in flight, the apartment window should show what's outside, live")
-				current_scene.call("_nap")
+				# Walk up to the bed (well, appear next to it) and press E for
+				# real, the way a player does (the button has to get through
+				# the cabin's little viewport, and not wake her straight back up).
+				(here.get("player") as Node3D).global_position = Vector3(-2.3, 0.1, 2.9)
 				_next(Step.NAP)
 			elif waited > 4000:
 				_fail("walking between the rig's rooms in flight got stuck")
@@ -130,6 +133,10 @@ func _process(_delta: float) -> bool:
 			# outside Tidewater.
 			if waited == 1:
 				_far_before = _distance_to_tidewater()
+			if waited == 15:
+				_tap("interact")
+			if waited == 60 and not current_scene.get("_napping") and current_scene.get("_in_cabin"):
+				_fail("pressing E at the bed in flight should start a nap (and keep her asleep)")
 			if not current_scene.get("_napping") and not current_scene.get("_in_cabin"):
 				if _distance_to_tidewater() > 4000.0 or _distance_to_tidewater() >= _far_before:
 					_fail("sleeping in flight should skip ahead to just outside the next stop")
@@ -216,3 +223,11 @@ func _finish() -> void:
 	_step = Step.DONE
 	Engine.time_scale = 1.0
 	_game.call("quit_game")
+
+
+func _tap(action: String) -> void:
+	for pressed: bool in [true, false]:
+		var event := InputEventAction.new()
+		event.action = action
+		event.pressed = pressed
+		Input.parse_input_event(event)

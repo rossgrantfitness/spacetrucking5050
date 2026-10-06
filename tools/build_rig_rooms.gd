@@ -1,7 +1,7 @@
 extends "res://tools/build_hub.gd"
 ## Builds the newer rooms inside the rig, off the hallway:
 ##     GALLEY      (door "GALLEY")  - kitchen, dining table, couch, TV, arcade
-##     ENGINE ROOM (door "ENGINE")  - Digby's engine, workbench and cot
+##     ENGINE ROOM (door "ENGINE")  - Chang Ma's engine, workbench and cot
 ##     CARGO BAY   (door "CARGO")   - Clem's forklift, containers and crates
 ## Each gets its set (res://scenes/hub/sets/<Room>Set.tscn, pre-rendered like
 ## the others) and, the first time, its room scene (res://scenes/hub/<Room>.tscn)
@@ -244,7 +244,7 @@ func _build_galley() -> Node3D:
 
 # --- The engine room ------------------------------------------------------------------
 # 7 x 6 m, 3.6 m tall: the big engine (a drum with a glowing core) at the
-# back, pipes, a machinery wall, Digby's workbench and cot, an oil drum.
+# back, pipes, a machinery wall, Chang Ma's workbench and cot, an oil drum.
 
 func _build_engine_room() -> Node3D:
 	var size := Vector3(7.0, 3.6, 6.0)
@@ -267,7 +267,7 @@ func _build_engine_room() -> Node3D:
 	for x: float in [-2.9, -2.5, 1.1, 1.5]:
 		_box(room, "Pipe", Vector3(0.3, 3.6, 0.3), Vector3(x, 1.8, -2.8), hull)
 	_box(room, "MachineWall", Vector3(0.1, 2.4, 2.2), Vector3(-3.45, 1.4, -1.4), _set_paint(Color(0.9, 0.9, 1.0), MACHINERY, 2.2))
-	# Digby's workbench along the right wall, with tools on a board.
+	# Chang Ma's workbench along the right wall, with tools on a board.
 	_piece(room, body, "Workbench", Vector3(0.8, 0.9, 2.4), Vector3(3.05, 0.45, -0.6), _set_paint(Color(1.0, 1.0, 1.0), WOOD, 0.8))
 	_box(room, "ToolBoard", Vector3(0.05, 1.2, 2.2), Vector3(3.45, 1.7, -0.6), _set_paint(Color(0.9, 0.9, 1.0), MACHINERY, 1.4))
 	_box(room, "Vise", Vector3(0.25, 0.2, 0.2), Vector3(3.0, 1.0, -1.4), dark)

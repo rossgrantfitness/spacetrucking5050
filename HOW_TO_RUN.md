@@ -70,11 +70,18 @@ First, a few seconds of **power-on intro** (a self test types itself out,
 then the logo and a chime; any key skips it). Then the **title screen**: the title and a lazily tumbling cargo
 crate. (A small "test your keys and gamepad" link opens an input check where
 every control lights up when you press it.) Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
-wake up in your apartment (inside your rig, parked at the truck stop), or to **continue** where you left off
+start a new game in dispatch (inside your rig, the Thumper, parked out past the company HQ), where Raccoony starts talking, or to **continue** where you left off
 (the game saves itself whenever you walk into a room, take a job, get paid
 or buy something). The small buttons below jump straight into flying, or
 start a **new game** (that forgets your save). See `PLAYTEST.md` for what
 to try.
+
+**Never lost:** a yellow line at the top left (on foot) or under the
+compass (flying) always says what to do next. On foot, a **yellow
+diamond** bobs over the door or stairs it means, and a **solid yellow
+"!"** hangs over whoever has a job for you or who you're meant to talk
+to. Story calls on the comm turn the radio down to half until they're
+done.
 
 ---
 
@@ -192,7 +199,7 @@ the free camera, and once more for the chase cam (or **C**). Getting up,
 arriving, a crash, or the autopilot switching off also brings you back.
 
 **Home is the inside of your rig.** Behind the cab are the dispatch office
-(Dottie rides along), a hallway with the airlock, and your apartment.
+(Raccoony rides along), a hallway with the airlock, and your apartment.
 **Get up (F / X) while the autopilot drives:** you come down the cockpit
 stairs into dispatch and can walk all of it while the rig keeps flying.
 The **COCKPIT** door at the top of the stairs puts you back in the seat.
@@ -224,7 +231,7 @@ fine). Random sights come and go too: big ships crossing, convoys,
 billboards, comets, jellyfish, junk.
 
 **The Glimmer System** (the pink one) is the other way from the truck
-stop, about 56 km: 17 minutes cruising. Dottie at dispatch has the first
+stop, about 56 km: 17 minutes cruising. Raccoony at dispatch has the first
 job out there (after your first delivery). Neon billboards get thicker the
 closer you get, plus the world's biggest slot machine, two giant tumbling
 dice, the Little Chapel of the Void, limos, and another speed trap by the
@@ -284,13 +291,13 @@ stop**. Your money is in the top-right corner.
 **E** / **A** to play Carrot Catch, Comet Tail or Paddle Pods (arrows or
 stick to move, Esc / B to go back or switch it off).
 
-**Your crew.** Dottie (dispatch), Digby (the engine room) and Clem (the
+**Your crew.** Raccoony (dispatch), Chang Ma (the engine room) and Clem (the
 cargo bay) live aboard, along with the **GALLEY**, **ENGINE** and **CARGO**
 doors off the hallway. Every trip and every day they're somewhere new doing
 something new, so go find them and talk (**E** / **A**). Now and then
 something happens aboard (card night, a lost wrench...); a notice tells
 you. If something's lost, find it, pick it up, and take it back to its
-owner. Jobs: talk to Dottie at her counter, or use the **JOB BOARD**
+owner. Jobs: talk to Raccoony at his counter, or use the **JOB BOARD**
 terminal on the dispatch counter. In flight, the apartment window shows
 where you're heading.
 
@@ -456,7 +463,7 @@ names) and re-run it to update her.
 **Camera** (select it, then tick *Preview* in the 3D view to look through
 it) and a **Zone** box (where that camera is used). Move and re-aim them
 freely; the backgrounds repaint themselves from the new angle every time
-the room loads. What people say lives in `data/npcs/` (Dottie is
+the room loads. What people say lives in `data/npcs/` (Raccoony is
 `dispatch_morning.tres`), and the big names (the bunny, her husband, the
 base) are in `data/world_names.tres`.
 

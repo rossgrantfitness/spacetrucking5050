@@ -12,6 +12,7 @@ func _fresh() -> Dictionary:
 	SaveSystem.save_path = SCRATCH_SAVE
 	var before := GameState.to_save_data()
 	GameState.new_game()
+	GameState.set_flag("took_the_wheel")  # Past the opening (where Raccoony waits at his counter).
 	ShipLife.in_flight = false
 	return before
 
@@ -66,7 +67,7 @@ func test_crew_stay_put_within_a_moment_and_move_on_later() -> void:
 		seen[ShipLife.activity_for(dottie).id] = true
 		var event := ShipLife.current_event()
 		events[event.id if event != null else ""] = true
-	check(seen.size() >= 3, "over a couple of months Dottie should get up to at least 3 different things (got %d)" % seen.size())
+	check(seen.size() >= 3, "over a couple of months Raccoony should get up to at least 3 different things (got %d)" % seen.size())
 	check(events.size() >= 3 and events.has(""), "some days have ship events and some are quiet")
 	_restore(before)
 
@@ -90,7 +91,7 @@ func test_talking_builds_friendship_and_varies_small_talk() -> void:
 	var digby := GameState.crew.find("digby")
 	var activity := ShipLife.activity_for(digby)
 	var first := ShipLife.conversation(digby, activity)
-	check(not first.is_empty(), "Digby should have something to say")
+	check(not first.is_empty(), "Chang Ma should have something to say")
 	check(ShipLife.friendship("digby") == 1, "the first chat of the day counts as a day of friendship")
 	var second := ShipLife.conversation(digby, activity)
 	check(ShipLife.friendship("digby") == 1, "chatting again the same day doesn't count twice")
@@ -136,5 +137,5 @@ func test_crew_memory_survives_saving() -> void:
 	GameState.new_game()
 	check(ShipLife.friendship("dottie") == 0, "a new game forgets the crew")
 	GameState.apply_save_data(saved)
-	check(ShipLife.friendship("dottie") == 1, "loading a save remembers chatting with Dottie")
+	check(ShipLife.friendship("dottie") == 1, "loading a save remembers chatting with Raccoony")
 	_restore(before)

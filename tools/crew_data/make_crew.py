@@ -30,7 +30,7 @@ CREW = [
      "greetings": ["Morning, {bunny}. You look like you slept in your jacket again.", "Hey hon. Coffee's fresh-ish.",
                    "There she is. The pride of {company}.", "Hon. You eat today? Eat something."],
      "activities": [
-        A("counter", "dispatch", "Counter", "stand", "clipboard", "ANY", 3.0, "", ["Dispatch, this is Dottie. Oh, it's you. Hi, hon."]),
+        A("counter", "dispatch", "Counter", "stand", "clipboard", "ANY", 3.0, "", ["Dispatch, this is Raccoony. Oh, it's you. Hi, hon."]),
         A("coffee", "galley", "Coffee", "stand", "mug", "ANY", 1.5, "", ["Third cup. Don't count, it's rude."]),
         A("stories", "galley", "CouchLeft", "sit", "", "IN_FLIGHT", 1.0, "", ["My stories are on. Two freighters, star-crossed. He's a tanker, she's refrigerated. Shh."]),
         A("machines", "dispatch", "MachineBank", "work", "", "ANY", 1.0, "", ["The dispatch computer's making the noise again. I hit it. Lovingly."]),
@@ -42,7 +42,7 @@ CREW = [
      "talk": [
         ("ANY", "", 0, "", ["{company} sent another memo. 'Synergy.' I used it as a coaster."]),
         ("ANY", "", 0, "", ["Clem asked me what a manifest is. I said it's when you want something real bad.", "He's been staring at the cargo for an hour."]),
-        ("ANY", "", 0, "", ["Digby fixed the toaster. Now it's faster than the rig."]),
+        ("ANY", "", 0, "", ["Chang Ma fixed the toaster. Now it's faster than the rig."]),
         ("HAS_JOB", "", 0, "", ["That {cargo} in the back? Client says handle with care. Clients say that about everything."]),
         ("NO_JOB", "", 0, "", ["Board's got work if you want it, hon. Or don't. I'm not your mother. Eat something, though."]),
         ("JUST_PAID", "", 0, "", ["Payment cleared! I did a little dance. Nobody saw. Clem saw."]),
@@ -103,7 +103,7 @@ CREW = [
         ("IN_FLIGHT", "", 0, "", ["I love when we're flyin'. My ears go all floaty."]),
         ("PARKED", "", 0, "", ["We're at {place}! Can I get a souvenir? Just a little one. A keychain. Two keychains."]),
         ("JUST_PAID", "", 0, "", ["We got paid! Does that mean I get paid? I get paid in sandwiches, right?"]),
-        ("ANY", "", 2, "", ["Dottie says you're the best driver she ever had. Except one. She don't say who. She gets quiet."]),
+        ("ANY", "", 2, "", ["Raccoony says you're the best driver he ever had. Except one. He don't say who. He gets quiet."]),
         ("ANY", "", 4, "", ["Boss? Thanks for keepin' me on. I know I'm slow. But I'm careful slow."]),
      ]},
 ]
@@ -120,20 +120,20 @@ EVENTS = [
         ("digby", "galley", "Coffee", "work", "wrench", ["Coffee machine's dead. Somebody poured soup in it.", "...Clem."]),
         ("dottie", "galley", "TableNorth", "sit", "", ["No coffee. I'm running on spite now, hon."]),
         ("clem", "galley", "Middle", "stand", "", ["I thought it was a soup machine! It looked hungry!"])], None),
-    ("lost_wrench", "DIGBY LOST HIS LUCKY WRENCH", "ANY", 1.0, "", [
+    ("lost_wrench", "CHANG MA LOST HIS LUCKY WRENCH", "ANY", 1.0, "", [
         ("digby", "engine", "Engine", "stand", "", ["My lucky wrench. Gone. Can't fix a thing without it.", "Well, I can. But I won't."])],
-        ("Digby's lucky wrench", "hallway", "LostWrench", "digby", 60, ["My wrench! Where was it? ...The hallway? I've never been to the hallway.", "Here. Gas money. Don't spend it on gas."])),
+        ("Chang Ma's lucky wrench", "hallway", "LostWrench", "digby", 60, ["My wrench! Where was it? ...The hallway? I've never been to the hallway.", "Here. Gas money. Don't spend it on gas."])),
     ("movie_night", "MOVIE NIGHT IN THE GALLEY", "IN_FLIGHT", 1.0, "", [
         ("dottie", "galley", "CouchLeft", "sit", "", ["Shh. This is the part where the freighter says 'I love you' in Morse code."]),
         ("clem", "galley", "CouchRight", "sit", "", ["I'm not cryin'. My eyes are just sweatin'."]),
         ("digby", "galley", "TableEast", "eat", "plate", ["Seen it. The engine dies at the end. Spoilers."])], None),
     ("clem_birthday", "IT'S CLEM'S BIRTHDAY!", "ANY", 0.5, "", [
         ("clem", "galley", "Middle", "dance", "", ["It's my birthday! I'm thirty-one! Or nineteen! Mama lost the papers!"]),
-        ("dottie", "galley", "TableNorth", "sit", "", ["Digby baked a cake. In the engine. It's... warm."]),
+        ("dottie", "galley", "TableNorth", "sit", "", ["Chang Ma baked a cake. In the engine. It's... warm."]),
         ("digby", "galley", "Stove", "work", "", ["Cake's done when the smoke detector says so."])], None),
-    ("lost_clipboard", "DOTTIE CAN'T FIND HER CLIPBOARD", "ANY", 1.0, "", [
+    ("lost_clipboard", "RACCOONY CAN'T FIND HIS CLIPBOARD", "ANY", 1.0, "", [
         ("dottie", "dispatch", "Counter", "stand", "", ["Has anyone seen my clipboard? It has everything on it. EVERYTHING, hon."])],
-        ("Dottie's clipboard", "cargo", "FindBetweenCrates", "dottie", 40, ["My clipboard! Bless you. I was about to start remembering things myself."])),
+        ("Raccoony's clipboard", "cargo", "FindBetweenCrates", "dottie", 40, ["My clipboard! Bless you. I was about to start remembering things myself."])),
     ("karaoke", "KARAOKE IN THE GALLEY", "ANY", 0.8, "glimmer_open", [
         ("clem", "galley", "Middle", "dance", "", ["This one's called 'Hauling My Heart Across the Stars.' I wrote it! It's mostly the word 'haul'!"]),
         ("dottie", "galley", "CouchLeft", "sit", "", ["He's been practicing all week. Clap, hon. Clap for him."]),
@@ -242,7 +242,7 @@ def write_crew():
 
 # (file, name, species, voice pitch, (voice type, key 0=C..11=B, scale), comm name, fur, accent, lines)
 NPCS = [
-    ("crew_digby.tres", "Digby", "mole", 0.7, ("gruff", 0, "minor"), "DIGBY · ENGINE", "Color(0.42, 0.32, 0.28, 1)", "Color(0.85, 0.65, 0.2, 1)",
+    ("crew_digby.tres", "Chang Ma", "mole", 0.7, ("gruff", 0, "minor"), "CHANG MA · ENGINE", "Color(0.42, 0.32, 0.28, 1)", "Color(0.85, 0.65, 0.2, 1)",
      ["Mm. Engine's fine. You're fine. Everything's fine. Go away. Nicely."]),
     ("crew_clem.tres", "Clem", "donkey", 0.85, ("reed", 7, "major"), "CLEM · CARGO", "Color(0.5, 0.48, 0.5, 1)", "Color(1, 0.45, 0.1, 1)",
      ["Hiya, boss!"]),

@@ -8,6 +8,7 @@
 # (3) runs the main scene, then flies the flight sandbox on autopilot
 # (tools/smoke_flight.gd), walks around the base (tools/smoke_hub.gd),
 # loads the rig with the forklift at the loading dock (tools/smoke_dock.gd),
+# plays the opening of a new game (tools/smoke_opening.gd),
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
 # in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
 # (tools/smoke_crash.gd) and tries the cabin,
@@ -47,6 +48,7 @@ run --quit-after 600
 run -s tools/smoke_flight.gd
 run -s tools/smoke_hub.gd
 run -s tools/smoke_dock.gd
+run -s tools/smoke_opening.gd
 run -s tools/smoke_mission.gd
 run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd

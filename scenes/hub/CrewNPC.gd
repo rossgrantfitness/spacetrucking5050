@@ -3,8 +3,8 @@ extends NPC
 ## A crew member aboard the rig, placed by HubRoom at the spot their
 ## current activity says (see ShipLife.gd), in its pose, maybe holding
 ## something. Talking to them plays ShipLife's conversation; their story
-## conversations (like Dottie's job offers) still come first when one is
-## waiting, and Dottie at her counter opens the job board.
+## conversations (like Raccoony's job offers) still come first when one is
+## waiting, and Raccoony at his counter opens the job board.
 
 
 const PROP_COLORS := {
@@ -79,13 +79,6 @@ func interact(player: Node3D) -> void:
 		await HubServices.open(member.menu, get_tree(), room.place_id if room != null else "")
 	hub_player.set_busy(false)
 	_talking = false
-
-
-func _has_new_flags(story: Conversation) -> bool:
-	for flag in story.sets_flags:
-		if not GameState.has_flag(flag):
-			return true
-	return false
 
 
 ## A little thing in their right hand (built from simple shapes).

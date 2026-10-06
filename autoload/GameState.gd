@@ -64,7 +64,11 @@ var paint: String = "factory"
 var owned_upgrades: Array[String] = []
 ## Where the rig is parked (a place id): it launches from here, and the
 ## rig's airlock opens onto this place. (Home is the inside of the rig.)
+## OPEN_SPACE is the start of a new game: drifting out past the company HQ.
 var launch_from: String = "truck_stop"
+## Parked in open space, out past the company HQ, where a new game starts
+## (no station: the airlock opens onto vacuum).
+const OPEN_SPACE: String = "open_space"
 ## The room you were last in (a scene path), for "Continue".
 var current_room: String = ""
 ## Jobs that can't be done again (ids of delivered non-repeatable jobs).
@@ -148,6 +152,13 @@ func _notification(what: int) -> void:
 
 
 # --- Story flags ------------------------------------------------------------------
+
+## Whether the opening is still going: talk to Raccoony, take the wheel,
+## pull into the truck stop. (Saves from before the opening existed count
+## as past it.)
+func in_opening() -> bool:
+	return not has_flag("took_the_wheel") and not has_flag("met_marge")
+
 
 func has_flag(flag: String) -> bool:
 	return flags.get(flag, false)
@@ -382,7 +393,7 @@ func apply_save_data(data: Dictionary) -> void:
 		for id: Variant in data["upgrades"]:
 			if upgrades.find(str(id)) != null and not str(id) in owned_upgrades:
 				owned_upgrades.append(str(id))
-	if data.get("launch_from") is String and places.find(data["launch_from"]) != null:
+	if data.get("launch_from") is String and (places.find(data["launch_from"]) != null or data["launch_from"] == OPEN_SPACE):
 		launch_from = data["launch_from"]
 	if launch_from == "base":
 		launch_from = "truck_stop"  # Old saves: there's no home base in space any more.
@@ -476,7 +487,7 @@ func new_game() -> void:
 	owned_ships = ["lazy_susan"]
 	active_ship = "lazy_susan"
 	paint = "factory"
-	launch_from = "truck_stop"  # She wakes up in her rig, parked at the truck stop.
+	launch_from = OPEN_SPACE  # She starts out in her rig, drifting past the company HQ.
 	current_room = ""
 	finished_jobs = []
 	visits = {}

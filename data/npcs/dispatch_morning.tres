@@ -4,11 +4,19 @@
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
 [ext_resource type="Resource" path="res://data/jobs/glimmer_cards.tres" id="job_glimmer_cards"]
 
+[sub_resource type="Resource" id="Conversation_intro"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("intro_heard", "met_marge")
+needs_no_job = true
+lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "We're drifting out past HQ with an empty hold. That's not trucking, hon, that's camping.", "Go on up the stairs and take the wheel. I'll call you once you're settled.")
+sets_flags = PackedStringArray("intro_heard")
+
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
-blocked_by_flags = PackedStringArray("met_marge")
+needs_flags = PackedStringArray("took_the_wheel")
+blocked_by_flags = PackedStringArray("met_marge", "heard_about_marge")
 needs_no_job = true
-lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Got something for you, finally. Marge called. Runs the truck stop we're parked at.", "Her pie hauler retired to a moon. She needs a new one, and she pays in real {currency}.", "She's right outside, hon: down the hall, through the airlock. When you fly, follow the yellow diamond and fly through the ring.")
+lines = PackedStringArray("Marge called again. Runs the truck stop. Her pie hauler retired to a moon.", "She needs a new one, and she pays in real {currency}.", "Pull in there, go down the hall, through the airlock, and talk to her. She's the owl. You can't miss her.")
 sets_flags = PackedStringArray("heard_about_marge")
 
 [sub_resource type="Resource" id="Conversation_1"]
@@ -45,14 +53,14 @@ offers_job = ExtResource("job_glimmer_cards")
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Dottie (Dispatch, mornings)"
+display_name = "Raccoony (Dispatch)"
 species = "raccoon"
 voice_pitch = 1.35
 voice_type = "soft"
 voice_key = 5
 voice_scale = "major"
 lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Coffee's burnt, the job board's broken, and somebody fed the vending machine a sock.", "Cockpit's up the stairs, same as always. Fly safe, hon. Or at least fly.")
-comm_name = "DOTTIE · DISPATCH"
+comm_name = "RACCOONY · DISPATCH"
 fur_color = Color(0.62, 0.6, 0.66, 1)
 accent_color = Color(1, 0.42, 0.75, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_glimmer"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_intro"), SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_glimmer"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_ship")
 id = "lazy_susan"
-display_name = "The Lazy Susan"
+display_name = "The Thumper"
 description = "Your husband's old rig. Heavy, lazy, stubborn. Gets there."
 max_speed = 55.0
 acceleration = 9.0

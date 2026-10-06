@@ -3,7 +3,7 @@ class_name PortraitPainter
 ## calling, from their NPC data: species, fur color and accent color.
 ## Knows: raccoon, owl, walrus, hamster, pig, cat, crocodile, bunny, otter,
 ## sloth and dog (anything else gets plain round ears).
-## Flat color blocks and one feature that's theirs alone (Dottie's mask,
+## Flat color blocks and one feature that's theirs alone (Raccoony's mask,
 ## Marge's ear tufts, Wendell's tusks, Pip's cheeks...), per
 ## CHARACTER_BIBLE.md. M5 replaces these with real 3D heads.
 
