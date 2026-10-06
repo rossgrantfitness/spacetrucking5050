@@ -13,3 +13,6 @@ host = ExtResource("2_moe")
 host_lines = PackedStringArray("Welcome... to... Gas-N-Go. You... ever... wonder... why they call it... a gas... station...", "...when it's... in space... and the gas... is... rocket fuel... and it doesn't... station... anywhere...", "...anyway. That's... what I... was saying. Last time. Pumps... are on.", "Welcome... back. Jerky... is... warm. Ish. Fuel's... cheap. Cheaper... than Lily's. Don't... tell her.", "Long... haul? ...Same.")
 host_lines_in_order = true
 fuel_price_factor = 0.7
+surrounding_field = "junk"
+field_radii = Vector2(1000, 1900)
+field_rock_count = 1600

@@ -1,19 +1,19 @@
 # Progress
 
-**Current status:** **Round 15: names, the crew, life aboard, a live
-window.** Jacki Rabbit, White and OrbitalEx are in. Your three new
-characters are the rig's crew (Dottie the raccoon, Digby the mole, Clem the
-donkey), there are three new rooms aboard (galley, engine room, cargo bay),
-the crew are always up to something different (activities, ten ship
-events, lost things, friendship, small talk that doesn't repeat), and the
-apartment window shows space live in flight. Built and validated,
-**waiting for your playtest** (see `PLAYTEST.md`).
-**Next session:** your ship design sheets as eight rigs to buy at Dusty's
-(each with its own model and handling), then your feedback; after that,
-more crew and ship events as you send character models, texture
-repetition fixes, and the audit.
+**Current status:** **Round 16: leaving conversations, sounds and
+voices, rocks all around, thrusters, speed wobbles, nine rigs.** Walk away
+or press Esc / B to end a conversation; new sounds (accepting jobs, the nav
+computer, money, doors, menus); every character talks in their own voice,
+key and scale; stations sit inside a 360-degree ball of rocks with a
+traffic lane in; new engine flames and plasma trails; mouse wheel zoom;
+boost gives speed wobbles instead of swerves; MML / MGS1 painted planets
+and rocks; and your design sheets are nine rigs to buy at Dusty's. Built and
+validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Next session:** your feedback; then more of the main game (your call:
+the economy and time of M6, the next solar system, more clients and story,
+the docking computer), polish as you send notes, and the audit.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-05 (round 15)
+**Last updated:** 2026-10-06 (round 16)
 
 ---
 
@@ -60,6 +60,7 @@ repetition fixes, and the audit.
   - [x] Round 14: the bunny is the developer's 3D model, cut into parts on the animator's joints and made chibi (2.5 heads tall)
   - [x] Round 15: the crew (Dottie, Digby, Clem) from your models; galley, engine room and cargo bay; life aboard that changes every trip and day (activities, ship events, lost things, friendship); a job terminal in dispatch
   - [x] Round 15: the apartment window shows what's outside, live, in flight
+  - [x] Round 16: walk away (or Esc / B) to leave a conversation; voices in their own pitch, key and scale
   - [x] Round 14: her desktop PC (mail, invoices, Asteroid Alley); the bed sleeps to a new day (parked) or to the next stop (in flight)
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades
@@ -91,12 +92,14 @@ repetition fixes, and the audit.
   - [x] Round 13: the autopilot forgives small nudges and steers back on course; a cinema camera on autopilot (V / R3: a director cutting between six shots, or a free orbit camera); a quieter engine and Music / Sound effects / Voices sliders
   - [x] Round 10: your route events list (1-167) in the data, 49 playable now (signs, passing ships with stories, processions, calls with reply choices, radio moments, gentle hazards like hull pings, gravity eddies and gravity tides); a director with zones (deep space, traffic lanes, station approach, orbit, weather), haul cooldowns, one hazard at a time, one rare per haul, story and night-only events
   - [x] Route map: the course chart (see M2)
+  - [x] Round 16: a 360-degree ball of rocks (or ice, junk, casino chips) round every station with a traffic lane in, and an autopilot that goes round it; engine flames, sparks and plasma trails; mouse wheel zoom; boost speed wobbles; MML / MGS1 painted planets and rocks; sounds for jobs, the nav computer, money, doors and menus
   - [ ] Gravity wells and slingshots
   - [ ] The rest of the route events: 118 of 167 need a new model or a small new system (the horn, hitchhikers, the convoy you can join, the rival, wipers...); 168-250 still to come
   - [ ] Cockpit gizmos and toys, rumble polish, real 3D comm heads, cockpit poses
 - [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
 - [ ] **M7: Home & style** *(started)*
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
+  - [x] Round 16: your nine design-sheet rigs at Dusty's (Garbage Scow, Ice-Tug, SLAB, Catamaran, Cryo Tanker, Hab-Brick, Bulk-Ore, Ore-Crawler, Omega Ore Crawler), each with its own model, handling and pay
   - [ ] Wardrobe, decor, a bigger apartment, docking computer, forklift minigame
 - [ ] **M8: Story & clients** *(started early, at your request)*
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)

@@ -20,11 +20,17 @@ var _exit_code := 0
 ## The tests run on the first frame (not at startup), once the scene tree
 ## is up, so tests can add nodes to it. Then it waits a few frames before
 ## quitting, so sounds that tests started can finish tidying up.
+var _silenced_at := 0
+
+
 func _process(_delta: float) -> bool:
 	_frame += 1
 	if _frame == 1:
 		_run_all()
-	elif _frame == 40:
+	elif _frame == 38:
+		root.get_node("GameState").call("_silence_everything")  # (Tests ring the till.)
+		_silenced_at = Time.get_ticks_msec()
+	elif _frame > 40 and Time.get_ticks_msec() - _silenced_at > 250:
 		quit(_exit_code)
 	return false
 

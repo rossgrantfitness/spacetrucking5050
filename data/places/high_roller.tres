@@ -13,3 +13,6 @@ host = ExtResource("2_sal")
 host_lines = PackedStringArray("Champ! Welcome to The High Roller, where everybody's a winner! Terms and conditions apply.", "Look who's back! Valet's on break. Valet's always on break. Dock wherever.", "My favorite hauler! Come in, come in. Don't touch the carpet, it's new. It's been new for nine years.")
 host_lines_in_order = true
 fuel_price_factor = 1.25
+surrounding_field = "chips"
+field_radii = Vector2(1500, 2600)
+field_rock_count = 2600

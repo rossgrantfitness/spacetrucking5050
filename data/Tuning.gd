@@ -87,12 +87,28 @@ extends Resource
 ## Lower = boost feels wilder and the rig slides more in turns.
 @export_range(0.05, 1.0, 0.05) var boost_grip: float = 0.22
 
-## While boosting, the nose wanders off course by itself this many degrees
-## per second (at most), even if you're steady. You have to keep correcting.
-@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 5.0
+## SPEED WOBBLES. Boosting is like a car going too fast on the highway:
+## the rig shakes harder and harder the longer you hold boost, and as it
+## shakes it slowly drifts off course, so you keep correcting.
+##
+## The drift: this many degrees per second off course at full shakes (a
+## slow, steady pull one way, not a sudden swerve).
+@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 2.0
 
-## Extra wandering when the rig is shaky (from jerky steering under boost).
-@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 20.0
+## Extra drift when the rig is shaky from jerky steering under boost.
+@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 3.0
+
+## How many seconds of boosting until the shakes are at their worst.
+@export_range(0.5, 20.0, 0.5, "suffix:s") var boost_wobble_build_seconds: float = 3.5
+
+## The shimmy: how far the nose snaps side to side at the worst (degrees),
+## how fast (shakes per second), and how far the hull rocks (degrees).
+@export_range(0.0, 10.0, 0.1, "suffix:°") var boost_shimmy_degrees: float = 1.6
+@export_range(1.0, 12.0, 0.5, "suffix:Hz") var boost_shimmy_hz: float = 5.5
+@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_shimmy_roll_degrees: float = 9.0
+
+## Extra screen shake at the worst of the wobbles, on top of the boost rumble.
+@export_range(0.0, 1.0, 0.05) var boost_shimmy_shake: float = 0.3
 
 ## Steering is this much twitchier under boost (1 = normal). Easy to
 ## over-correct.
@@ -251,6 +267,14 @@ extends Resource
 ## How far above the ship the camera hangs.
 @export_range(0.0, 40.0, 0.25, "suffix:m") var chase_height: float = 12.0
 
+## Mouse wheel zoom while flying: how close (0.4 = 40% of the usual
+## distance) and how far (2.5 = two and a half times) the camera can go,
+## how much one click of the wheel moves it, and how quickly it glides there.
+@export_range(0.2, 1.0, 0.05) var chase_zoom_min: float = 0.4
+@export_range(1.0, 5.0, 0.1) var chase_zoom_max: float = 2.5
+@export_range(1.01, 1.5, 0.01) var chase_zoom_step: float = 1.12
+@export_range(1.0, 20.0, 0.5) var chase_zoom_response: float = 8.0
+
 ## How far ahead of the ship the camera looks. Bigger = the ship sits lower on
 ## screen and you see more of the road ahead.
 @export_range(0.0, 150.0, 1.0, "suffix:m") var chase_look_ahead: float = 60.0
@@ -360,7 +384,7 @@ extends Resource
 ## (m/s, spread over a third of a second), with this much camera jolt.
 ## Push 0 = no jolts.
 @export var boost_jolt_interval := Vector2(0.7, 2.2)
-@export_range(0.0, 20.0, 0.25, "suffix:m/s") var boost_jolt_push: float = 4.0
+@export_range(0.0, 20.0, 0.25, "suffix:m/s") var boost_jolt_push: float = 0.75
 @export_range(0.0, 1.0, 0.05) var boost_jolt_shake: float = 0.3
 
 ## A rumble while boosting, as shake held at this level (0 to 1).

@@ -8,3 +8,6 @@ id = "truck_stop"
 display_name = "TRUCK STOP"
 interior_scene = "res://scenes/hub/TruckStop.tscn"
 arrival_spawn = "FromShip"
+surrounding_field = "rocks"
+field_radii = Vector2(1500, 2700)
+field_rock_count = 3200

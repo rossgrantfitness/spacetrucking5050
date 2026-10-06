@@ -8,6 +8,8 @@ extends Camera3D
 ## - It keeps the horizon level, even while the rig leans into turns. Only if
 ##   the player switches on "camera roll" does it lean along (a lot of people
 ##   get motion sick from a rolling camera, so it's off by default).
+## - The mouse wheel zooms it in and out (it remembers the zoom until you
+##   quit the game).
 ##
 ## All the numbers live in res://data/tuning.tres, under "Chase camera" and
 ## "Field of view".
@@ -20,6 +22,10 @@ extends Camera3D
 var _heading := 0.0
 var _pitch := 0.0
 var _pullback := 0.0
+## How zoomed out the camera is (1 = the usual distance). Shared by every
+## chase camera, so the zoom you picked is kept after docking.
+static var zoom_goal := 1.0
+var _zoom := 1.0
 
 
 ## The field of view for the ship's speed: normal until 70% of top speed (by
@@ -44,12 +50,28 @@ func snap_behind_target() -> void:
 	_pitch = facing.x
 	_heading = facing.y
 	_pullback = 0.0
+	_zoom = zoom_goal
 	fov = GameState.tuning.base_fov
 	_place(ship_transform.origin, 0.0)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	var wheel := event as InputEventMouseButton
+	if not current or wheel == null or not wheel.pressed:
+		return
+	var tuning := GameState.tuning
+	if wheel.button_index == MOUSE_BUTTON_WHEEL_UP:
+		zoom_goal = maxf(zoom_goal / tuning.chase_zoom_step, tuning.chase_zoom_min)
+	elif wheel.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		zoom_goal = minf(zoom_goal * tuning.chase_zoom_step, tuning.chase_zoom_max)
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+
 func _process(delta: float) -> void:
 	var tuning := GameState.tuning
+	_zoom = lerpf(_zoom, zoom_goal, 1.0 - exp(-tuning.chase_zoom_response * delta))
 	# get_global_transform_interpolated() = where the ship APPEARS this frame,
 	# smoothed between physics steps, so the camera never jitters.
 	var ship_transform := target.get_global_transform_interpolated()
@@ -79,7 +101,7 @@ func _place(ship_position: Vector3, roll: float) -> void:
 	# A view direction made of only heading and pitch, never roll: that's what
 	# keeps the horizon level.
 	var view := Basis.from_euler(Vector3(_pitch, _heading, 0.0))
-	global_position = ship_position + view * Vector3(0.0, tuning.chase_height, tuning.chase_distance + _pullback)
+	global_position = ship_position + view * Vector3(0.0, tuning.chase_height * _zoom, tuning.chase_distance * _zoom + _pullback)
 	look_at(ship_position + view * Vector3(0.0, 0.0, -tuning.chase_look_ahead), view.y)
 	if roll != 0.0:
 		rotate_object_local(Vector3.BACK, roll)

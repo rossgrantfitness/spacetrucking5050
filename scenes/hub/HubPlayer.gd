@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _busy or not event.is_action_pressed("interact"):
+	if _busy or Dialogue.is_active() or not event.is_action_pressed("interact"):
 		return
 	var target := nearest_interactable()
 	if target != null:

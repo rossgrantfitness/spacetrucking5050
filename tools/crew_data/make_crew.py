@@ -240,20 +240,22 @@ def write_crew():
         f.write("\n".join(text))
 
 
+# (file, name, species, voice pitch, (voice type, key 0=C..11=B, scale), comm name, fur, accent, lines)
 NPCS = [
-    ("crew_digby.tres", "Digby", "mole", 0.7, "DIGBY · ENGINE", "Color(0.42, 0.32, 0.28, 1)", "Color(0.85, 0.65, 0.2, 1)",
+    ("crew_digby.tres", "Digby", "mole", 0.7, ("gruff", 0, "minor"), "DIGBY · ENGINE", "Color(0.42, 0.32, 0.28, 1)", "Color(0.85, 0.65, 0.2, 1)",
      ["Mm. Engine's fine. You're fine. Everything's fine. Go away. Nicely."]),
-    ("crew_clem.tres", "Clem", "donkey", 0.85, "CLEM · CARGO", "Color(0.5, 0.48, 0.5, 1)", "Color(1, 0.45, 0.1, 1)",
+    ("crew_clem.tres", "Clem", "donkey", 0.85, ("reed", 7, "major"), "CLEM · CARGO", "Color(0.5, 0.48, 0.5, 1)", "Color(1, 0.45, 0.1, 1)",
      ["Hiya, boss!"]),
 ]
 
 
 def write_npcs():
-    for file_name, name, species, pitch, comm, fur, accent, lines in NPCS:
+    for file_name, name, species, pitch, voice, comm, fur, accent, lines in NPCS:
         text = ['[gd_resource type="Resource" script_class="NPCData" format=3]', "",
                 '[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]', "",
                 "[resource]", 'script = ExtResource("1_npc")', "display_name = " + q(name),
-                "species = " + q(species), "voice_pitch = %s" % pitch, "lines = " + plist(lines),
+                "species = " + q(species), "voice_pitch = %s" % pitch,
+                "voice_type = " + q(voice[0]), "voice_key = %d" % voice[1], "voice_scale = " + q(voice[2]), "lines = " + plist(lines),
                 "comm_name = " + q(comm), "fur_color = " + fur, "accent_color = " + accent, ""]
         with open(os.path.join(ROOT, "data", "npcs", file_name), "w") as f:
             f.write("\n".join(text))

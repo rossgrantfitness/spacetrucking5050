@@ -2,14 +2,18 @@ class_name DialogueBox
 extends CanvasLayer
 ## The RPG text box: the speaker's name in chunky pixel letters, then their
 ## words typed out letter by letter with Animal Crossing-style gibberish
-## blips. Press Interact (E / A) or Enter to finish the line or go on.
+## blips. Press Interact (E / A) or Enter to finish the line or go on;
+## Cancel (Esc / B) closes it early (so does walking away from whoever's
+## talking: see NPC.gd).
 ##
 ## Made by the Dialogue autoload; use Dialogue.say(...) rather than this.
 
 
 signal done
 
-const BLIP := preload("res://audio/generated/blip.wav")
+## Whether the conversation was closed early (Cancel, or walking away).
+var cancelled := false
+
 ## Letters typed per second.
 const TYPE_SPEED: float = 42.0
 const NAME_COLOR := Color(1.0, 0.85, 0.25)
@@ -18,12 +22,14 @@ var _lines := PackedStringArray()
 var _line := 0
 var _shown := 0.0
 var _pitch := 1.0
+var _voice: NPCData
 var _speaker := ""
 var _label: Label
 var _nameplate: Control
 var _next_arrow: Label
 var _blip: AudioStreamPlayer
 var _letters_since_blip := 0
+var _hint: Label
 
 
 func _ready() -> void:
@@ -77,18 +83,31 @@ func _ready() -> void:
 	_next_arrow.offset_left = -96.0
 	_next_arrow.offset_top = -72.0
 	add_child(_next_arrow)
+	# How to leave, small, in the box's bottom-left corner.
+	_hint = Label.new()
+	_hint.text = "ESC / B: BYE"
+	_hint.add_theme_font_size_override("font_size", 14)
+	_hint.add_theme_color_override("font_color", Color(0.6, 0.65, 0.9))
+	_hint.anchor_top = 1.0
+	_hint.anchor_bottom = 1.0
+	_hint.offset_left = 92.0
+	_hint.offset_top = -62.0
+	add_child(_hint)
 	_blip = AudioStreamPlayer.new()
-	_blip.stream = BLIP
+	_blip.stream = VoiceBlips.stream("soft")
 	_blip.max_polyphony = 3
 	_blip.bus = Settings.VOICE_BUS
 	add_child(_blip)
 
 
 ## Shows the lines one by one and returns when the last one is closed.
-func run(speaker: String, lines: PackedStringArray, voice_pitch: float) -> void:
+func run(speaker: String, lines: PackedStringArray, voice_pitch: float, voice: NPCData = null) -> void:
 	_speaker = speaker
 	_lines = lines
 	_pitch = voice_pitch
+	_voice = voice
+	if voice != null:
+		_blip.stream = VoiceBlips.stream(voice.voice_type)
 	_line = 0
 	_start_line()
 	await done
@@ -107,7 +126,20 @@ func _process(delta: float) -> void:
 	_next_arrow.visible = _shown >= total and fposmod(Time.get_ticks_msec() / 1000.0, 0.8) < 0.5
 
 
+## Closes the box now, partway through (see `cancelled`).
+func cancel() -> void:
+	if _line >= _lines.size():
+		return
+	cancelled = true
+	_line = _lines.size()
+	done.emit()
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()  # (Esc: not the pause menu too.)
+		cancel()
+		return
 	if not (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept")):
 		return
 	get_viewport().set_input_as_handled()
@@ -128,7 +160,8 @@ func _start_line() -> void:
 	_nameplate.queue_redraw()
 
 
-## A blip for every other letter, at the speaker's pitch with a little wobble.
+## A blip for every other letter, on the note that letter plays in the
+## speaker's key (see VoiceBlips.gd).
 func _maybe_blip(text: String, index: int) -> void:
 	if index >= text.length() or text[index] == " ":
 		return
@@ -136,7 +169,10 @@ func _maybe_blip(text: String, index: int) -> void:
 	if _letters_since_blip < 2:
 		return
 	_letters_since_blip = 0
-	_blip.pitch_scale = _pitch * randf_range(0.88, 1.15)
+	if _voice != null:
+		_blip.pitch_scale = VoiceBlips.pitch_scale(_voice.voice_pitch, _voice.voice_key, _voice.voice_scale, text, index)
+	else:
+		_blip.pitch_scale = VoiceBlips.pitch_scale(_pitch, 9, "major", text, index)
 	_blip.play()
 
 

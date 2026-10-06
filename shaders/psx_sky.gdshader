@@ -6,7 +6,9 @@ render_mode vertex_lighting, diffuse_lambert, specular_disabled, fog_disabled;
 #include "res://shaders/psx.gdshaderinc"
 
 uniform vec4 albedo : source_color = vec4(1.0);
-uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
+// Nearest, no mipmaps: planets keep their crisp painted pixels instead of
+// going soft and smoothed (no anti-aliased mush), PS1 style.
+uniform sampler2D albedo_texture : source_color, filter_nearest, repeat_enable, hint_default_white;
 // How many times the texture repeats across the model's texture coordinates.
 uniform vec2 uv_scale = vec2(1.0);
 // Slowly turns the texture sideways (a planet's clouds drifting), per second.

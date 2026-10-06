@@ -6,6 +6,10 @@ extends SceneTree
 ##     bonk.wav, blip.wav, static.wav, big_engine.wav, whale_song.wav, whoosh.wav,
 ##     power_on.wav, post_beep.wav, thump.wav, rattle.wav, spool.wav,
 ##     alarm.wav, explosion.wav
+##     voice_square.wav, voice_reed.wav, voice_gruff.wav, voice_chirp.wav
+##         (the other gibberish voices; "soft" is blip.wav)
+##     cue_*.wav (menus, accepting a job, the nav computer, money, finding
+##         things, notices, doors: see SfxSynth.make_cue)
 ##         (a cartoon bump, a dialogue voice blip, a burst of radio static, a
 ##         big ship's engines, a space whale's song, a comet's whoosh, the
 ##         intro's power-on chime and self-test beep, a crate thumping in the
@@ -47,6 +51,10 @@ func _initialize() -> void:
 		"alarm": SfxSynth.make_alarm(),
 		"explosion": SfxSynth.make_explosion(),
 	}
+	for kind: String in ["square", "reed", "gruff", "chirp"]:
+		loops["voice_" + kind] = SfxSynth.make_voice(kind)
+	for cue: String in ["ui_move", "ui_confirm", "ui_back", "job_accept", "course_set", "autopilot_off", "cash", "pickup", "notice", "door"]:
+		loops["cue_" + cue] = SfxSynth.make_cue(cue)
 	var failed := false
 	for file_name: String in loops:
 		var path := ProjectSettings.globalize_path(OUTPUT_FOLDER.path_join(file_name + ".wav"))

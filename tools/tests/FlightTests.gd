@@ -215,3 +215,22 @@ func test_the_cinema_camera_always_films_the_rig() -> void:
 	cinema.call("_film", 0.0)
 	check(cinema.is_position_in_frustum(ship.global_position), "the free camera still looks at the rig after swinging around")
 	holder.free()
+
+
+func test_boost_gives_speed_wobbles_not_a_swerve() -> void:
+	var model := _cruising()
+	var controls := FlightControls.new()
+	controls.thrust = 1.0
+	controls.boost = true
+	var start := model.heading
+	_fly(model, controls, GameState.tuning.boost_spool_seconds + 0.5)
+	var early := model.shimmy
+	_fly(model, controls, GameState.tuning.boost_wobble_build_seconds)
+	check(model.boosting and model.shimmy > early and model.shimmy > 0.9, "the longer you boost, the worse the wobbles")
+	# Over a few seconds of boosting hands-off, the rig drifts off course,
+	# but slowly: a handful of degrees, not a swerve.
+	var drift := rad_to_deg(absf(angle_difference(start, model.heading)))
+	check(drift < 25.0, "boosting should drift slowly off course, not swerve (drifted %.1f°)" % drift)
+	controls.boost = false
+	_fly(model, controls, 6.0)
+	check(model.shimmy < 0.05, "the wobbles settle down after boosting")

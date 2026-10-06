@@ -23,6 +23,7 @@ var _ages: Array[float] = []
 var _source: Node3D  # The ship this trail belongs to.
 var _ribbon := ImmediateMesh.new()
 var _material := StandardMaterial3D.new()
+var _clock := 0.0
 
 
 func _ready() -> void:
@@ -69,10 +70,11 @@ func clear() -> void:
 
 
 func _redraw(lifetime: float) -> void:
+	_clock = Time.get_ticks_msec() * 0.001
 	_ribbon.clear_surfaces()
 	var camera := get_viewport().get_camera_3d()
 	var tuning := GameState.tuning
-	var brightness := tuning.trail_brightness * clampf(float(_source.call("speed_ratio")), 0.0, 2.0)
+	var brightness := tuning.trail_brightness * clampf(float(_source.call("speed_ratio")), 0.0, 1.3)
 	if camera == null or _points.size() < 2 or brightness <= 0.01:
 		return
 	var eye := camera.global_position
@@ -96,7 +98,11 @@ func _add_ribbon(lifetime: float, eye: Vector3, color: Color, brightness: float,
 		# Sideways, at right angles to both the trail and the line of sight,
 		# so the ribbon always shows its face to the camera.
 		var side := along.cross(eye - spot).normalized() * tuning.trail_width * 0.5 * width_scale * (0.3 + 0.7 * life)
-		var glow := Color(color.r, color.g, color.b, brightness * life * life)
+		# Pulses of hot plasma racing down the trail, and the color cooling
+		# toward the tail (a hue shift: orange burns out to red-purple).
+		var pulse := 0.7 + 0.3 * sin(float(_points.size() - i) * 0.8 - _clock * 30.0)
+		var cooled := color.lerp(Color.from_hsv(fposmod(color.h - 0.12, 1.0), color.s, color.v * 0.8), 1.0 - life)
+		var glow := Color(cooled.r, cooled.g, cooled.b, brightness * life * life * pulse)
 		_ribbon.surface_set_color(glow)
 		_ribbon.surface_add_vertex(spot - side)
 		_ribbon.surface_set_color(glow)

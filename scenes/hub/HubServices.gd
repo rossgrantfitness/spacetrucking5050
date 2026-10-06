@@ -81,7 +81,10 @@ static func offer_job(tree: SceneTree, job: JobData) -> bool:
 		{"text": "NOT RIGHT NOW", "description": "No rush. It'll keep."}])
 	if choice != 0:
 		return false
-	return GameState.accept_job(job)
+	var taken := GameState.accept_job(job)
+	if taken:
+		Sfx.play("job_accept")
+	return taken
 
 
 ## The job board at a place: every job you can take from here.
@@ -224,7 +227,8 @@ static func rig_dealer(tree: SceneTree) -> void:
 ## A rig in a few words: speed, handling, hold.
 static func rig_summary(rig: ShipData) -> String:
 	var handling := "turns like a bus" if rig.turn_rate < 25.0 else ("steady" if rig.turn_rate < 35.0 else "nimble")
-	var words := "%s Top speed %d km/h, %s." % [rig.description, roundi(rig.max_speed * 3.6), handling]
+	var feel := " Slides around." if rig.grip < 1.2 else (" Corners on rails." if rig.grip > 2.2 else "")
+	var words := "%s Top speed %d km/h, %s.%s" % [rig.description, roundi(rig.max_speed * 3.6), handling, feel]
 	if rig.pay_bonus > 1.0:
 		words += " Pays +%d%% per job." % roundi((rig.pay_bonus - 1.0) * 100.0)
 	return words
@@ -278,7 +282,7 @@ static func vending(tree: SceneTree) -> void:
 			{"text": "LEAVE"}])
 	if choice == 0:
 		if GameState.spend(price):
-			await Dialogue.say(GameState.names.bunny_name, ["*clunk* ...it's lukewarm. Perfect."], 0.85)
+			await Dialogue.say(GameState.names.bunny_name, ["*clunk* ...it's lukewarm. Perfect."], Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
 		else:
 			await _too_poor(tree)
 

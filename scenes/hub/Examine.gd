@@ -24,6 +24,6 @@ func interact(player: Node3D) -> void:
 	_busy = true
 	var hub_player := player as HubPlayer
 	hub_player.set_busy(true)
-	await Dialogue.say(GameState.names.bunny_name, lines, 0.85)
+	await Dialogue.say(GameState.names.bunny_name, lines, Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
 	hub_player.set_busy(false)
 	_busy = false

@@ -40,6 +40,8 @@ func _process(_delta: float) -> bool:
 	var comm: Node = current_scene.get_node("FlightHUD").get("comm") if current_scene != null and current_scene.has_node("FlightHUD") else null
 	match _step:
 		Step.FLY:
+			if waited == 20:
+				_check_routes_go_round_the_rocks()
 			if waited == 30:
 				current_scene.call("engage_course", PackedStringArray(["tidewater"]))
 				if current_scene.get_node("World/Ship").get("cruise") == null:
@@ -144,6 +146,31 @@ func _process(_delta: float) -> bool:
 	if _frame > 20000 and _step != Step.DONE:
 		_fail("got stuck at step %s" % Step.keys()[_step])
 	return false
+
+
+## The autopilot's routes into a station with rocks all around it should
+## go round them to the lane, never straight through: from every side, no
+## leg of the route (before the lane) dips into the ball of rocks.
+func _check_routes_go_round_the_rocks() -> void:
+	var shells: Dictionary = current_scene.get("_shells")
+	for id: String in ["truck_stop", "tidewater"]:
+		var field: Node3D = shells.get(id)
+		if field == null:
+			_fail("%s should have rocks all around it" % id)
+			continue
+		var center := field.global_position
+		var outer: float = (field.get("shell_radii") as Vector2).y
+		for side: Vector3 in [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT, Vector3.UP, Vector3(1, -1, 1).normalized()]:
+			var start := center + side * 9000.0
+			var points: Array = current_scene.call("approach_points", id, start)
+			var here := start
+			for i in points.size() - 2:  # (The last two legs run down the lane.)
+				var point: Vector3 = points[i]
+				var nearest := Geometry3D.get_closest_point_to_segment(center, here, point)
+				if nearest.distance_to(center) < outer - 50.0:
+					_fail("the route into %s from %s cuts through its rocks" % [id, side])
+					break
+				here = point
 
 
 func _distance_to_tidewater() -> float:

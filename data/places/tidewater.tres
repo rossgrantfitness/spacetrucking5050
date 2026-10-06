@@ -12,3 +12,6 @@ arrival_spawn = "FromShip"
 host = ExtResource("2_gill")
 host_lines = PackedStringArray("Mmh. You made it. Long way out, huh. Fish?", "Oh hey, it's you. The pie trucker. Coffee's in the... somewhere.", "Back again. The crane missed you. I didn't say that. The crane did.", "Welcome to Tidewater. We can, therefore we are.")
 host_lines_in_order = true
+surrounding_field = "ice"
+field_radii = Vector2(1400, 2500)
+field_rock_count = 2800

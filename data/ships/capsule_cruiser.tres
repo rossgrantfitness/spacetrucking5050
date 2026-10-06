@@ -7,7 +7,7 @@
 script = ExtResource("1_ship")
 id = "capsule_cruiser"
 display_name = "The Capsule Cruiser"
-description = "A smooth, quick long-hauler with a comfy cab. A bit of everything. Pays +15% per job."
+description = "A smooth, quick long-hauler with a comfy cab. A bit of everything."
 price = 14000
 pay_bonus = 1.15
 visual_scene = ExtResource("2_visual")

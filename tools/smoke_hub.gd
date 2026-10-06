@@ -12,7 +12,7 @@ extends SceneTree
 ## Run it with:  godot --headless --path . -s tools/smoke_hub.gd
 
 
-enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, TERMINAL, GALLEY, GALLEY_OUT, STAIRS, COCKPIT, FLYING, TOWED, DONE }
+enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, WALK_AWAY, TERMINAL, GALLEY, GALLEY_OUT, STAIRS, COCKPIT, FLYING, TOWED, DONE }
 
 var _frame := 0
 var _stage := Stage.PC
@@ -104,6 +104,24 @@ func _process(_delta: float) -> bool:
 			if waited > 30 and not (_player() as Node).call("is_busy"):
 				if not _saw_dialogue:
 					push_error("Smoke test: talking to the crew member in dispatch should start a conversation")
+				_next(Stage.WALK_AWAY)
+		Stage.WALK_AWAY:
+			# Talk to them again, then walk off mid-sentence: that ends it.
+			var crew := _crew_here()
+			if crew.is_empty():
+				_next(Stage.TERMINAL)
+			elif waited == 10:
+				var spot := crew[0].to_global(Vector3(0.0, 0.0, -1.3))
+				_player().global_position = Vector3(spot.x, 0.0, spot.z)
+			elif waited == 20:
+				_tap("interact")
+			elif waited == 30:
+				if not root.get_node("Dialogue").call("is_active"):
+					push_error("Smoke test: talking to the crew a second time should start a conversation")
+				_player().global_position = crew[0].global_position + Vector3(3.5, 0.0, 2.0)
+			elif waited == 45:
+				if root.get_node("Dialogue").call("is_active") or (_player() as Node).call("is_busy"):
+					push_error("Smoke test: walking away from someone should end the conversation")
 				_next(Stage.TERMINAL)
 		Stage.TERMINAL:
 			# The job terminal on the counter opens the job board.

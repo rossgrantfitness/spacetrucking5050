@@ -4,6 +4,12 @@ extends Node3D
 ## region of space, plus a few giant landmark rocks to steer around, with
 ## collision so you can't fly straight through them.
 ##
+## Set `layout` to "shell" and the rocks surround this node on every side
+## instead: a ball of rocks around a station, between two radii, so there's
+## no flying over, under or around it. Lanes (`lane_starts` to `lane_ends`)
+## are kept clear: the traffic lanes in to the approach rings. FlightSandbox
+## puts one round each station whose place data asks for it.
+##
 ## Switch on `junk` and it's a debris field instead: tumbling hull panels,
 ## barrels, girders and crates in scrap-metal colors (a spilled cargo, an
 ## old scrapyard). Same bonks.
@@ -22,6 +28,17 @@ const JUNK_COLORS := [Color(0.7, 0.42, 0.28), Color(0.35, 0.62, 0.62), Color(0.9
 
 ## On: a debris field of junk instead of rocks.
 @export var junk: bool = false
+## "egg": rocks fill an egg-shaped region (field_size). "shell": rocks
+## surround this spot on every side, between shell_radii.x and .y meters out.
+@export_enum("egg", "shell") var layout: String = "egg"
+@export var shell_radii := Vector2(1500.0, 2600.0)
+## Clear lanes through the rocks, each from a start to an end (global
+## coordinates), lane_radius wide.
+@export var lane_starts := PackedVector3Array()
+@export var lane_ends := PackedVector3Array()
+@export var lane_radius: float = 170.0
+## Past this distance the rocks aren't drawn (0 = always drawn).
+@export var draw_distance: float = 0.0
 
 ## How many ordinary rocks.
 @export var rock_count: int = 420
@@ -54,6 +71,11 @@ var _rng := RandomNumberGenerator.new()
 # Every rock's center (in world space) and radius, for rocks_within().
 var _rock_centers := PackedVector3Array()
 var _rock_radii := PackedFloat32Array()
+# The rocks sorted into big cubes of space, so rocks_within() only checks the
+# rocks near the point (a field can have thousands): cube -> rock indices.
+const GRID_CELL: float = 500.0
+var _grid := {}
+var _biggest_radius := 0.0
 
 
 func _ready() -> void:
@@ -62,17 +84,24 @@ func _ready() -> void:
 	var spots := PackedVector3Array()
 	var radii := PackedFloat32Array()
 	for i in landmark_count:
-		spots.append(_random_spot(false))
 		radii.append(_rng.randf_range(landmark_radius_range.x, landmark_radius_range.y))
+		spots.append(_random_spot(false, radii[-1]))
 	for i in rock_count:
-		spots.append(_random_spot(_rng.randf() < near_route_fraction))
 		# Cubing a 0..1 random number makes small rocks common and big ones rare.
 		radii.append(lerpf(rock_radius_range.x, rock_radius_range.y, pow(_rng.randf(), 3.0)))
+		spots.append(_random_spot(_rng.randf() < near_route_fraction, radii[-1]))
 	_build_rocks(spots, radii)
 	_build_collision(spots, radii)
 	add_to_group("asteroid_fields")  # So the HUD's radar can find us.
 	for i in spots.size():
 		_rock_centers.append(to_global(spots[i]))
+		var cell := _cell_of(_rock_centers[i])
+		if not _grid.has(cell):
+			_grid[cell] = PackedInt32Array()
+		var members: PackedInt32Array = _grid[cell]
+		members.append(i)
+		_grid[cell] = members  # (Packed arrays are copies: put it back.)
+		_biggest_radius = maxf(_biggest_radius, radii[i])
 	_rock_radii = radii
 
 
@@ -81,11 +110,32 @@ func _ready() -> void:
 ## The HUD's radar globe and proximity light use this.
 func rocks_within(point: Vector3, reach: float) -> Array[Vector4]:
 	var found: Array[Vector4] = []
-	for i in _rock_centers.size():
-		var center := _rock_centers[i]
-		if center.distance_to(point) - _rock_radii[i] <= reach:
-			found.append(Vector4(center.x, center.y, center.z, _rock_radii[i]))
+	var low := _cell_of(point - Vector3.ONE * (reach + _biggest_radius))
+	var high := _cell_of(point + Vector3.ONE * (reach + _biggest_radius))
+	if (high - low).length_squared() > 400:
+		# A huge reach: just check every rock.
+		low = Vector3i.ZERO
+		high = Vector3i(-1, -1, -1)
+		for i in _rock_centers.size():
+			_maybe_add(found, i, point, reach)
+	for x in range(low.x, high.x + 1):
+		for y in range(low.y, high.y + 1):
+			for z in range(low.z, high.z + 1):
+				var cell := Vector3i(x, y, z)
+				if _grid.has(cell):
+					for i: int in _grid[cell]:
+						_maybe_add(found, i, point, reach)
 	return found
+
+
+func _maybe_add(found: Array[Vector4], i: int, point: Vector3, reach: float) -> void:
+	var center := _rock_centers[i]
+	if center.distance_to(point) - _rock_radii[i] <= reach:
+		found.append(Vector4(center.x, center.y, center.z, _rock_radii[i]))
+
+
+func _cell_of(point: Vector3) -> Vector3i:
+	return Vector3i((point / GRID_CELL).floor())
 
 
 ## Hands each rock to one of a few shared rock shapes, drawn with MultiMeshes
@@ -120,6 +170,7 @@ func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 		drawer.name = "Rocks%d" % shape
 		drawer.multimesh = rocks
 		drawer.material_override = material
+		drawer.visibility_range_end = draw_distance
 		add_child(drawer)
 
 
@@ -167,23 +218,36 @@ func _build_collision(spots: PackedVector3Array, radii: PackedFloat32Array) -> v
 		body.add_child(shape)
 
 
-## A random spot inside the egg-shaped field, away from the keep-clear spots.
-func _random_spot(near_route: bool) -> Vector3:
+## A random spot for a rock of this radius: inside the egg (or the shell),
+## away from the keep-clear spots and out of the lanes.
+func _random_spot(near_route: bool, radius: float) -> Vector3:
 	var spot := Vector3.ZERO
-	for attempt in 50:
-		var unit := Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0))
-		if unit.length_squared() > 1.0:
-			continue  # Outside the egg; try again.
-		if near_route:
-			unit *= Vector3(0.06, 0.1, 1.0)  # Squeeze toward the middle line.
-		spot = unit * field_size * 0.5
-		if _is_clear(to_global(spot)):
+	for attempt in 60:
+		if layout == "shell":
+			# Any direction, any distance between the two radii (evenly by
+			# volume, so the outside isn't sparser than the inside).
+			var direction := Vector3(_rng.randfn(), _rng.randfn(), _rng.randfn()).normalized()
+			var inner := pow(shell_radii.x, 3.0)
+			var outer := pow(shell_radii.y, 3.0)
+			spot = direction * pow(lerpf(inner, outer, _rng.randf()), 1.0 / 3.0)
+		else:
+			var unit := Vector3(_rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0), _rng.randf_range(-1.0, 1.0))
+			if unit.length_squared() > 1.0:
+				continue  # Outside the egg; try again.
+			if near_route:
+				unit *= Vector3(0.06, 0.1, 1.0)  # Squeeze toward the middle line.
+			spot = unit * field_size * 0.5
+		if _is_clear(to_global(spot), radius):
 			break
 	return spot
 
 
-func _is_clear(global_spot: Vector3) -> bool:
+func _is_clear(global_spot: Vector3, radius: float) -> bool:
 	for clear_spot in keep_clear_spots:
 		if global_spot.distance_to(clear_spot) < keep_clear_radius:
+			return false
+	for i in mini(lane_starts.size(), lane_ends.size()):
+		var nearest := Geometry3D.get_closest_point_to_segment(global_spot, lane_starts[i], lane_ends[i])
+		if global_spot.distance_to(nearest) < lane_radius + radius:
 			return false
 	return true

@@ -44,6 +44,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _leave() -> void:
 	var room := HubRoom.find(self)
+	Sfx.play("door", -3.0)
 	if to_docked_place:
 		_step_outside(room)
 		return

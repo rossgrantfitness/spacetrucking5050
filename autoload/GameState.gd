@@ -156,6 +156,8 @@ func visit(place_id: String) -> int:
 func add_credits(amount: int) -> void:
 	credits += amount
 	credits_changed.emit()
+	if amount > 0:
+		Sfx.play("cash")
 
 
 ## Pays `amount` if there's enough money. Returns whether it worked.
@@ -164,6 +166,8 @@ func spend(amount: int) -> bool:
 		return false
 	credits -= amount
 	credits_changed.emit()
+	if amount > 0:
+		Sfx.play("cash", -4.0, 0.9)  # A slightly lower ka-ching for paying out.
 	return true
 
 

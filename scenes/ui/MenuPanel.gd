@@ -27,6 +27,7 @@ var _options: Array = []
 var _buttons: Array[Button] = []
 var _description: Label
 var _done: bool = false
+var _shown := false
 var _side: Control
 
 
@@ -114,6 +115,7 @@ func _ready() -> void:
 	column.add_child(_label("Arrows / D-pad: choose   ·   E / A: pick   ·   Esc / B: back", 16, Color(0.7, 0.72, 0.85)))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_focus_first()
+	_shown = true  # (From now on, moving between buttons ticks.)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -133,10 +135,13 @@ func _pick(index: int) -> void:
 	if _done:
 		return
 	_done = true
+	Sfx.play("ui_confirm" if index >= 0 else "ui_back")
 	chosen.emit(index)
 
 
 func _describe(index: int) -> void:
+	if _shown:
+		Sfx.play("ui_move", -6.0)
 	_description.text = (_options[index] as Dictionary).get("description", "")
 	focused.emit(index)
 

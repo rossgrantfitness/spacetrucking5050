@@ -1,70 +1,75 @@
-# Playtest: round 15 (the crew, life aboard, a live window)
+# Playtest: round 16 (leaving conversations, sounds and voices, rocks all around, thrusters, speed wobbles, nine rigs)
 
-**What you asked for:** her name (Jacki Rabbit), her husband's (White) and
-the company's (OrbitalEx); your new characters as the ship's crew; the
-inside of the ship expanded "in a big way" (more rooms, more crew, more
-things happening, Animal Crossing style, where the crew are always doing
-something different or have something new to say); and a window in the
-apartment that shows what the truck sees.
+**What you asked for:**
+- walk away from (or cancel) conversations;
+- more sound effects;
+- voices in different pitches and keys;
+- asteroid fields that surround the stations in 360 degrees;
+- MML / MGS1 textures on the asteroids and planets, with less smoothing on the planets;
+- cooler thrusters and mouse wheel zoom;
+- boost that shakes like speed wobbles instead of veering off;
+- more of the main game: your design sheets as rigs to buy.
 
-**Time needed:** about 30 minutes. Continue your save or start a new game;
-both work.
+**Time needed:** about 30 to 40 minutes. Continue your save or start a new
+game; both work. To try the rigs quickly, a new game won't have enough
+money, so play a few deliveries first (or try the cheap Garbage Scow at
+4,500).
 
 > Honest note: I checked all of this with automated play-throughs and
-> screenshots, but whether the crew feel *alive* and *charming* (and
-> whether the lines are funny) is something only you can judge.
+> screenshots, but how the voices sound, how the speed wobbles feel and
+> how hard the rocks are to fly through are things only you can judge.
 
 ---
 
 ## What's new
 
-- **The crew:** **Dottie** (raccoon, dispatcher), **Digby** (mole,
-  mechanic) and **Clem** (donkey, cargo hand), built from your models.
-  Digby and Clem are placeholder names; tell me if you want others.
-- **Three new rooms** off the hallway: the **GALLEY**, the **ENGINE**
-  room and the **CARGO** bay.
-- **They're always up to something.** Every new trip and every new day,
-  each crew member is somewhere else doing something else: Dottie napping
-  in the dispatch chairs, Digby under the engine or eating in the galley,
-  Clem sweeping the hallway or fixing the forklift... It holds still while
-  you walk around, so you can go find them.
-- **Ship events** (about 2 trips in 5): card night, movie night, Clem's
-  birthday, an engine hiccup, the coffee machine breaking, karaoke (after
-  you've been to the Glimmer casino), a quiet night, and **lost things**:
-  find the lost item somewhere aboard (the prompt says what it is), bring
-  it back to its owner, get a thank-you and a few credits. A notice tells
-  you when something's up.
-- **Talking:** the first chat each day starts with a hello; then they tell
-  you what they're up to and some small talk. Small talk doesn't repeat
-  until they've run through it. Chat on several different days and they
-  open up more (there's a quiet bit about White in there).
-- **Dispatch has a JOB BOARD terminal** on the counter now, since Dottie
-  isn't always at her desk.
-- **The apartment window is live in flight**: you see where the rig's
-  heading (planets, stations, traffic). Parked, it shows the painted view.
+- **Leaving a conversation:** press **Esc / B** (it says "BYE" in the box's
+  corner), or just **walk away**. Leave early and they'll say it again next
+  time, job offers included.
+- **Sounds:**
+  - menus tick and blip;
+  - accepting a job stamps it;
+  - setting an autopilot course gets a nav computer beep-beep-boop, and two falling beeps when the autopilot lets go;
+  - getting paid and buying things ring a cash register;
+  - finding a lost thing sparkles, ship events chime, doors hiss.
+- **Voices:** everyone has their own voice type, key and scale. Every letter is a real note, so each character's chatter is a little tune of their own:
+  - Digby grumbles in C minor;
+  - Pip squeaks in A major;
+  - Sal croons the blues;
+  - Jacki drawls in D blues.
+- **Rocks all the way round:** the truck stop, Tidewater (ice), the Gas-N-Go (scrap) and Sal's casino (casino chips) sit inside a ball of rocks 1.5 to 2.7 km out.
+  - No going over, under or around.
+  - One clear **traffic lane** leads in to the approach ring; off the lane, you pick your way through.
+  - The autopilot goes round the ball to the lane.
+- **Thrusters:** flickering flames that stretch with the throttle and shower sparks; boost flashes, roars out long and blue-white, and gets shock-diamond bands. The trails pulse with plasma and fade to purple.
+- **Mouse wheel** zooms the chase camera in and out.
+- **Boost = speed wobbles:** the longer you hold boost, the harder it shakes (the nose shimmies, the hull rocks, the screen shakes), and it slowly pulls off course. Let go and it settles.
+- **Planets and rocks** are repainted MML / MGS1 style, with crisp pixels on the planets.
+- **Nine new rigs at Dusty's**, from your design sheets, each with its own handling and pay:
+  - Garbage Scow
+  - Ice-Tug
+  - SLAB (Stack-Ship)
+  - Catamaran
+  - Cryo Tanker
+  - Hab-Brick
+  - Bulk-Ore
+  - Ore-Crawler
+  - Omega Ore Crawler
 
 ## What to do
 
-1. Load your game (or start a new one). You're in the apartment. Walk to
-   the hallway and visit each new door: **GALLEY**, **ENGINE**, **CARGO**.
-   Talk to everyone you find (E / A).
-2. Take a job (Dottie, or the terminal at the dispatch counter), take off,
-   set a course (M) and get up (F). Walk around the rig in flight: the
-   crew will be doing different things than when you were parked.
-3. Go to the apartment and look out the window while the rig flies.
-4. Sleep in the bed ("sleep till we get there"), deliver, and walk around
-   again on the next trip. Do this a few times so you see a few ship
-   events and a lost item.
+1. Talk to the crew aboard. Walk away mid-sentence once, and press Esc once. Listen to how different everyone sounds.
+2. Take a job and listen for the stamp. Undock and fly to the truck stop's rock ball.
+3. Try to fly through the rocks off the lane. Then find the lane (follow the approach ring's direction) and fly it in.
+4. Set a course (M), listen for the nav computer, and let the autopilot take you somewhere. Watch it go round the rocks.
+5. Hold boost for a few seconds in open space. Feel the speed wobbles build, then let go.
+6. Scroll the mouse wheel while flying.
+7. Earn some money and buy a new rig at Dusty's (the mechanic's menu, then RIGS FOR SALE). Fly it and feel the difference.
 
 ## Questions
 
-1. Does walking around the rig in flight and chatting with the crew feel
-   like the Animal Crossing vibe you wanted? What would make it more so?
-2. Do Dottie, Digby and Clem feel like different people? Any lines that
-   made you smile, or that fell flat?
-3. Which ship events did you see? What other events would you love (a
-   pet aboard, a stowaway, a crew argument, a holiday...)?
-4. The live window: is it what you pictured? Should other rooms get
-   windows (the galley, the cargo bay's big door)?
-5. Are the new rooms' camera angles nice to look at? Any spot where you
-   lose the bunny or the view feels cramped?
+1. Do the voices sound like different characters now? Anyone's voice that doesn't fit them?
+2. The rocks: too thick, too thin, or about right? Is the lane easy to find?
+3. Boost speed wobbles: does it feel like what you described (shaking harder, drifting slowly)? More shake or less?
+4. The thrusters and the plasma trails: cool enough, or do you want them bigger or brighter?
+5. Which new rig is your favorite, and does any feel wrong for how it looks?

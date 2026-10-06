@@ -44,6 +44,184 @@ static func make_blip() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## The other voice blips (all on the same note, A, like `blip`, so the
+## dialogue box can play them in any key). Each character picks one in
+## their data file (`voice_type`):
+##   square - a hard 8-bit beep (robots, clerks, Marge)
+##   reed   - nasal and buzzy, like a kazoo (Sal, Moe)
+##   gruff  - low and growly, with a little rasp (Digby, Wendell)
+##   chirp  - a quick upward bird chirp (Pip, the owl)
+## ("soft" is `blip` above.)
+static func make_voice(kind: String) -> AudioStreamWAV:
+	var seconds := 0.075
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 77
+	var phase := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var hz := 440.0
+		if kind == "chirp":
+			hz = 440.0 * lerpf(0.8, 1.25, t / seconds)  # Sweeps up through the note.
+		phase += TAU * hz / MIX_RATE
+		var wave := 0.0
+		match kind:
+			"square":
+				wave = (1.0 if sin(phase) > 0.0 else -1.0) * 0.55
+			"reed":
+				# A sawtooth through a little wobble: nasal.
+				wave = (fposmod(phase / TAU, 1.0) * 2.0 - 1.0) * 0.6 + sin(phase * 3.0) * 0.15
+			"gruff":
+				# Down an octave in its overtones, with a raspy buzz.
+				wave = sin(phase) * 0.6 + sin(phase * 0.5) * 0.5 + rng.randf_range(-1.0, 1.0) * 0.18
+				wave = tanh(wave * 1.8) * 0.7
+			_:
+				wave = sin(phase) * 0.8 + sin(phase * 2.0) * 0.2
+		var envelope := minf(t / 0.004, 1.0) * clampf((seconds - t) / 0.03, 0.0, 1.0)
+		samples[i] = wave * envelope * 0.4
+	return to_wav(samples, false)
+
+
+## Little game sounds (menus, jobs, the nav computer, money, doors). Each is
+## a few short notes; see `_notes`.
+##   ui_move     - a soft tick moving between menu buttons
+##   ui_confirm  - a bright two-note "ba-ding" pressing a button
+##   ui_back     - a two-note drop backing out of a menu
+##   job_accept  - a rubber stamp "ka-chunk" and a happy little three-note run
+##   course_set  - the nav computer: beep-beep-boop and a relay click
+##   autopilot_off - the nav computer letting go: two falling beeps
+##   cash        - coins and a register bell (getting paid, buying things)
+##   pickup      - a sparkly little rise (finding something)
+##   notice      - a soft two-note chime (something's up aboard)
+##   door        - a short pneumatic hiss (doors between rooms)
+static func make_cue(cue: String) -> AudioStreamWAV:
+	match cue:
+		"ui_move":
+			return _notes([[0.0, 1760.0, 0.03, "square", 0.08]], 0.05)
+		"ui_confirm":
+			return _notes([[0.0, 988.0, 0.06, "square", 0.12], [0.06, 1319.0, 0.12, "square", 0.12]], 0.2)
+		"ui_back":
+			return _notes([[0.0, 880.0, 0.06, "square", 0.1], [0.06, 587.0, 0.1, "square", 0.1]], 0.18)
+		"job_accept":
+			return _mix(_stamp(), _notes([[0.12, 784.0, 0.1, "bell", 0.22], [0.22, 988.0, 0.1, "bell", 0.22], [0.32, 1319.0, 0.35, "bell", 0.25]], 0.75))
+		"course_set":
+			return _mix(_notes([[0.0, 1568.0, 0.07, "square", 0.1], [0.1, 1568.0, 0.07, "square", 0.1], [0.2, 2093.0, 0.18, "square", 0.11]], 0.5), _click(0.42))
+		"autopilot_off":
+			return _notes([[0.0, 1568.0, 0.08, "square", 0.1], [0.11, 1047.0, 0.16, "square", 0.1]], 0.32)
+		"cash":
+			return _mix(_coins(), _notes([[0.18, 2637.0, 0.5, "bell", 0.2], [0.18, 3520.0, 0.4, "bell", 0.1]], 0.8))
+		"pickup":
+			return _notes([[0.0, 1047.0, 0.06, "bell", 0.18], [0.05, 1319.0, 0.06, "bell", 0.18], [0.1, 1568.0, 0.06, "bell", 0.18], [0.15, 2093.0, 0.3, "bell", 0.2]], 0.5)
+		"notice":
+			return _notes([[0.0, 1175.0, 0.25, "bell", 0.16], [0.14, 1568.0, 0.45, "bell", 0.16]], 0.65)
+		"door":
+			return _hiss()
+	return _notes([[0.0, 1000.0, 0.05, "square", 0.1]], 0.08)
+
+
+## A few notes: each [start seconds, Hz, length, "square" or "bell", volume].
+static func _notes(notes: Array, seconds: float) -> AudioStreamWAV:
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	for note: Array in notes:
+		var start := int(float(note[0]) * MIX_RATE)
+		var hz: float = note[1]
+		var length: float = note[2]
+		var volume: float = note[4]
+		for i in range(start, mini(count, start + int((length + 0.3) * MIX_RATE))):
+			var t := float(i - start) / MIX_RATE
+			var wave := 0.0
+			var envelope := minf(t / 0.003, 1.0)
+			if note[3] == "bell":
+				wave = sin(TAU * hz * t + 1.2 * sin(TAU * hz * 2.0 * t) * exp(-t * 8.0))
+				envelope *= exp(-t * 3.0 / maxf(length, 0.05))
+			else:
+				wave = 1.0 if sin(TAU * hz * t) > 0.0 else -1.0
+				envelope *= clampf((length - t) / 0.015, 0.0, 1.0)
+			samples[i] += wave * envelope * volume
+	return to_wav(samples, false)
+
+
+## A rubber stamp coming down: a thud and a papery slap.
+static func _stamp() -> AudioStreamWAV:
+	var count := int(MIX_RATE * 0.75)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 12
+	var smooth := 0.0
+	for i in mini(count, int(MIX_RATE * 0.2)):
+		var t := float(i) / MIX_RATE
+		smooth = lerpf(smooth, rng.randf_range(-1.0, 1.0), 0.3)
+		var thud := sin(TAU * lerpf(180.0, 70.0, minf(t / 0.05, 1.0)) * t) * exp(-t * 30.0)
+		samples[i] = tanh((thud * 0.9 + smooth * exp(-t * 45.0) * 1.2) * 1.3) * 0.7
+	return to_wav(samples, false)
+
+
+## The relay click of the nav computer locking in.
+static func _click(at: float) -> AudioStreamWAV:
+	var count := int(MIX_RATE * 0.5)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	var start := int(at * MIX_RATE)
+	for i in range(start, mini(count, start + int(MIX_RATE * 0.03))):
+		var t := float(i - start) / MIX_RATE
+		samples[i] = rng.randf_range(-1.0, 1.0) * exp(-t * 200.0) * 0.6
+	return to_wav(samples, false)
+
+
+## Coins tumbling into a tray: a handful of quick, bright metallic ticks.
+static func _coins() -> AudioStreamWAV:
+	var count := int(MIX_RATE * 0.8)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 50
+	for coin in 7:
+		var start := int(rng.randf_range(0.0, 0.2) * MIX_RATE)
+		var hz := rng.randf_range(3000.0, 5200.0)
+		for i in range(start, mini(count, start + int(MIX_RATE * 0.12))):
+			var t := float(i - start) / MIX_RATE
+			samples[i] += (sin(TAU * hz * t) + 0.5 * sin(TAU * hz * 1.5 * t)) * exp(-t * 40.0) * 0.12
+	return to_wav(samples, false)
+
+
+## A door sliding: a short puff of filtered air.
+static func _hiss() -> AudioStreamWAV:
+	var seconds := 0.45
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 9
+	var smooth := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		smooth = lerpf(smooth, rng.randf_range(-1.0, 1.0), 0.25)
+		var swell := minf(t / 0.03, 1.0) * exp(-t * 7.0)
+		samples[i] = smooth * swell * 0.45
+	return to_wav(samples, false)
+
+
+## Two sounds played at once (the first sets the length).
+static func _mix(a: AudioStreamWAV, b: AudioStreamWAV) -> AudioStreamWAV:
+	var out := PackedFloat32Array()
+	var a_bytes := a.data
+	var b_bytes := b.data
+	out.resize(floori(a_bytes.size() / 2.0))
+	for i in out.size():
+		var sample := a_bytes.decode_s16(i * 2) / 32767.0
+		if i * 2 + 1 < b_bytes.size():
+			sample += b_bytes.decode_s16(i * 2) / 32767.0
+		out[i] = sample
+	return to_wav(out, false)
+
+
 ## A short burst of radio static: hiss with crackles, swelling in and out.
 ## Plays before and after every comm call, and when you flip stations.
 static func make_static() -> AudioStreamWAV:

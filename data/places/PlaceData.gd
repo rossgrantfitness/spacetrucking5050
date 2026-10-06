@@ -47,6 +47,18 @@ enum Kind {
 ## Fuel here costs this much compared with the usual price (0.7 = 30% off).
 @export_range(0.1, 3.0, 0.05) var fuel_price_factor: float = 1.0
 
+@export_group("Rocks all around")
+## What surrounds the station on every side (see AsteroidField.gd's
+## "shell"): nothing, rocks, ice, junk (scrap) or chips (casino chips). A
+## clear traffic lane runs through it to each approach ring.
+@export_enum("none", "rocks", "ice", "junk", "chips") var surrounding_field: String = "none"
+## How far out the rocks start and end (meters from the station).
+@export var field_radii := Vector2(1500.0, 2600.0)
+## How many rocks (a few thousand is a proper wall of rocks).
+@export var field_rock_count: int = 3000
+## How wide the traffic lanes through it are (meters from the middle).
+@export var field_lane_radius: float = 170.0
+
 
 ## What the host says on visit number `visit` (1 = the first time).
 func host_line(visit: int, rng: RandomNumberGenerator) -> String:

@@ -56,6 +56,8 @@ extends Node
 
 ## Place id -> its node under World/Places.
 var _places: Dictionary = {}
+## Place id -> the ball of rocks around it (only places that have one).
+var _shells: Dictionary = {}
 var _destination_id: String = ""
 var _docking_at: String = ""
 ## Rolling out of a drive-through (the autopilot still has the wheel).
@@ -134,6 +136,7 @@ func _ready() -> void:
 	for node in $World/Places.get_children():
 		if GameState.places.find(node.name) != null:
 			_places[node.name] = node
+			_surround_with_rocks(node as Node3D, GameState.places.find(node.name))
 	_launch_from(GameState.launch_from)
 	_restore_rig()
 	_dust.ship = _ship
@@ -199,6 +202,7 @@ func _physics_process(delta: float) -> void:
 	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty():
 		_ship.cruise = null  # Got there without docking (it's the pilot's turn).
 		_hud.show_banner("AUTOPILOT OFF", 2.0)
+		Sfx.play("autopilot_off")
 	if _ship.cruise == null and _docking_at.is_empty():
 		# Nobody's driving: wake up, get back in the seat, eyes on the road.
 		if in_cinema():
@@ -302,7 +306,48 @@ func _open_course_chart() -> void:
 			_course.clear()
 			_ship.cruise = null
 			_hud.show_banner("AUTOPILOT OFF", 2.0)
+			Sfx.play("autopilot_off")
 	_capture_mouse()
+
+
+## Rock colors for the fields that surround stations.
+const SURROUND_COLORS := {
+	"rocks": [Color(0.56, 0.42, 0.52), Color(0.56, 0.41, 0.31), Color(0.4, 0.42, 0.53), Color(0.7, 0.6, 0.46), Color(0.62, 0.34, 0.26)],
+	"ice": [Color(0.75, 0.9, 1.0), Color(0.6, 0.8, 0.9), Color(0.85, 0.95, 0.95), Color(0.5, 0.75, 0.85), Color(0.7, 0.85, 0.8)],
+	"chips": [Color(1.0, 0.3, 0.6), Color(0.3, 0.6, 1.0), Color(1.0, 0.85, 0.3), Color(0.95, 0.95, 0.9), Color(0.2, 0.2, 0.25)],
+}
+
+
+## Puts a ball of rocks all the way around a station, if its place data asks
+## for one (`surrounding_field`), with a clear traffic lane out from each
+## approach ring. No flying over or around it: through the lane, or pick
+## your way through the rocks.
+func _surround_with_rocks(place_node: Node3D, place: PlaceData) -> void:
+	if place.surrounding_field == "none":
+		return
+	var field := AsteroidField.new()
+	field.name = "SurroundingRocks"
+	field.layout = "shell"
+	field.junk = place.surrounding_field == "junk"
+	field.shell_radii = place.field_radii
+	field.rock_count = place.field_rock_count
+	field.landmark_count = 8
+	field.landmark_radius_range = Vector2(70.0, 140.0)
+	field.rock_radius_range = Vector2(3.0, 16.0) if place.surrounding_field in ["junk", "chips"] else Vector2(4.0, 55.0)
+	field.keep_clear_spots = PackedVector3Array()
+	field.lane_radius = place.field_lane_radius
+	field.field_seed = hash(place.id) % 100000
+	field.draw_distance = place.field_radii.y + 9000.0
+	if SURROUND_COLORS.has(place.surrounding_field):
+		field.rock_colors = PackedColorArray(SURROUND_COLORS[place.surrounding_field])
+	for ring in place_node.get_children():
+		if ring is ApproachRing:
+			var outward := -(ring as ApproachRing).through_direction()
+			field.lane_starts.append(place_node.global_position)
+			field.lane_ends.append((ring as Node3D).global_position + outward * (place.field_radii.y + 600.0))
+	field.position = place_node.global_position
+	$World.add_child(field)  # (Not under the place: it doesn't turn with it.)
+	_shells[place.id] = field
 
 
 ## Hands the wheel to the cruise autopilot, to visit `stops` (place ids) in
@@ -311,6 +356,7 @@ func engage_course(stops: PackedStringArray) -> void:
 	_course = stops.duplicate()
 	_aim_cruise()
 	if _ship.cruise != null:
+		Sfx.play("course_set")
 		_hud.show_banner("AUTOPILOT > " + GameState.places.find(_course[_course.size() - 1]).display_name, 3.0)
 		get_tree().create_timer(3.5).timeout.connect(func() -> void:
 			if is_instance_valid(_ship) and _ship.cruise != null and not _in_cabin:
@@ -335,14 +381,79 @@ func approach_points(id: String, from: Vector3) -> Array[Vector3]:
 	var best: ApproachRing = null
 	var best_distance := INF
 	for ring in _rings(id):
-		var line_up := ring.global_position - ring.through_direction() * 700.0
-		if from.distance_to(line_up) < best_distance:
-			best_distance = from.distance_to(line_up)
+		var ring_line_up := ring.global_position - ring.through_direction() * 700.0
+		if from.distance_to(ring_line_up) < best_distance:
+			best_distance = from.distance_to(ring_line_up)
 			best = ring
 	if best == null:
 		var dock := _dock_node(id)
 		return [dock.global_position] if dock != null else []
-	return [best.global_position - best.through_direction() * 700.0, best.global_position + best.through_direction() * 150.0]
+	var points: Array[Vector3] = []
+	var here := from
+	var line_up := best.global_position - best.through_direction() * 700.0
+	# Out of any ball of rocks we're inside, by its nearest lane.
+	var left: AsteroidField = null
+	for shell_id: String in _shells:
+		var leaving := _shells[shell_id] as AsteroidField
+		if shell_id != id and here.distance_to(leaving.global_position) < leaving.shell_radii.y + 100.0:
+			here = _lane_mouth(leaving, here)
+			points.append(here)
+			left = leaving
+	# Where we're headed next: the mouth of the lane to this ring, if this
+	# place has rocks all around it (and we're outside them).
+	var target := line_up
+	var arriving := _shells.get(id) as AsteroidField
+	var mouth := best.global_position - best.through_direction() * ((arriving.shell_radii.y if arriving != null else 0.0) + 600.0)
+	var in_lane := arriving != null and here.distance_to(Geometry3D.get_closest_point_to_segment(here, best.global_position, mouth)) < arriving.lane_radius * 2.0
+	if arriving != null and not in_lane and here.distance_to(arriving.global_position) > arriving.shell_radii.x:
+		target = mouth
+	else:
+		arriving = null  # Already in the lane (or inside the rocks): straight on in.
+	# Round the rocks we just left if what's next is behind them...
+	if left != null:
+		points.append_array(_around(left.global_position, here, target, left.shell_radii.y + 800.0))
+		if not points.is_empty():
+			here = points[points.size() - 1]
+	# ...and round the destination's rocks (not through them) to its lane.
+	if arriving != null:
+		points.append_array(_around(arriving.global_position, here, target, arriving.shell_radii.y + 800.0))
+		points.append(target)
+	points.append(line_up)
+	points.append(best.global_position + best.through_direction() * 150.0)
+	return points
+
+
+## The outside end of the lane through `field` nearest to `here`.
+func _lane_mouth(field: AsteroidField, here: Vector3) -> Vector3:
+	var best := field.global_position
+	var best_distance := INF
+	for end in field.lane_ends:
+		if end.distance_to(here) < best_distance:
+			best_distance = end.distance_to(here)
+			best = end
+	return best
+
+
+## Waypoints that go around a ball (at `radius` from `center`) from `from`
+## to `to`, both outside it, instead of straight through the middle. Empty
+## if the straight line doesn't need it (they're on the same side).
+func _around(center: Vector3, from: Vector3, to: Vector3, radius: float) -> Array[Vector3]:
+	var points: Array[Vector3] = []
+	var start := (from - center).normalized()
+	var finish := (to - center).normalized()
+	var angle := start.angle_to(finish)
+	if angle <= deg_to_rad(80.0):
+		return points  # Coming in from this side anyway: the straight line misses the rocks.
+	if angle > PI - 0.01:
+		finish = (finish + start.cross(Vector3.UP).normalized() * 0.05).normalized()  # Exactly opposite: pick a side.
+		angle = start.angle_to(finish)
+	# First to the side of the ball (a line from far away just skims it),
+	# then round its edge in steps of 40 degrees at most.
+	var at := deg_to_rad(80.0)
+	while at < angle - 0.01:
+		points.append(center + start.slerp(finish, at / angle).normalized() * radius)
+		at += deg_to_rad(40.0)
+	return points
 
 
 ## Talking back on the comms: T / RB opens Jacki's replies, then Q / R / E
@@ -585,9 +696,10 @@ func _skip_to_next_stop() -> void:
 	var points := approach_points(_course[0], _ship.global_position)
 	if points.size() < 2:
 		return
-	var heading_in := (points[1] - points[0]).normalized()
-	var wake_at := points[0] - heading_in * SLEEP_WAKE_DISTANCE
-	if _ship.global_position.distance_to(points[0]) <= SLEEP_WAKE_DISTANCE + 200.0:
+	var line_up := points[points.size() - 2]  # (The route's last two points: line up, through the ring.)
+	var heading_in := (points[points.size() - 1] - line_up).normalized()
+	var wake_at := line_up - heading_in * SLEEP_WAKE_DISTANCE
+	if _ship.global_position.distance_to(line_up) <= SLEEP_WAKE_DISTANCE + 200.0:
 		return  # Nearly there anyway.
 	var numbers := CourseChart.estimate(PackedVector3Array([_ship.global_position, wake_at]), _ship.ship_data, GameState.tuning, 0.0)
 	# Teleporting resets the rig's tanks and throttle; keep them as they were.
@@ -642,6 +754,7 @@ func _show_grab_hint() -> void:
 
 
 func _on_cruise_released() -> void:
+	Sfx.play("autopilot_off")
 	_course.clear()
 	_hud.show_banner("MANUAL CONTROL", 2.0)
 

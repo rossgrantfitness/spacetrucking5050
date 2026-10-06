@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShipData" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+[ext_resource type="PackedScene" path="res://scenes/flight/rigs/OmegaCrawlerVisual.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_ship")
+id = "omega_crawler"
+display_name = "The Omega Ore Crawler (Oreo class)"
+description = "The Guild's deluxe hauler. Big hold, big engines, and it actually turns. The one the other drivers wave at."
+price = 45000
+pay_bonus = 1.7
+visual_scene = ExtResource("2_visual")
+max_speed = 68.0
+acceleration = 10.0
+retro_thrust = 8.0
+turn_rate = 26.0
+pitch_rate = 21.0
+turn_response = 1.4
+grip = 1.8
+max_bank = 26.0
+boost_speed_bonus = 3.2
+boost_acceleration = 115.0
+boost_fuel_seconds = 360.0
+fuel_tank_seconds = 420.0
+trail_color = Color(1, 0.75, 0.4, 1)
+engine_pitch = 0.85

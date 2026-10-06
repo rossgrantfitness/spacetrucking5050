@@ -6,6 +6,9 @@ extends SceneTree
 ##     sun_surface.png   - a bright, boiling sun surface (tinted per sun)
 ##     glimmer_planet.png - the Glimmer System's gas giant: bands of magenta
 ##                         and violet, swirly storms, glittering specks
+##     moon_craters.png  - a pockmarked gray moon (tinted per moon)
+## All painted MML / MGS style: a few flat tones per color, dithered where
+## they meet, light painted in (see tools/texture_paint.gd).
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/generate_world_textures.gd
@@ -13,13 +16,15 @@ extends SceneTree
 
 
 const OUTPUT_FOLDER: String = "res://textures/generated"
+const Paint := preload("res://tools/texture_paint.gd")
 
 
 func _init() -> void:
 	var images := {
-		"ocean_planet.png": _ocean_planet(256, 128),
-		"sun_surface.png": _sun_surface(128, 64),
-		"glimmer_planet.png": _glimmer_planet(256, 128),
+		"ocean_planet.png": Paint.paint_pass(_ocean_planet(256, 128), 6),
+		"sun_surface.png": Paint.paint_pass(_sun_surface(128, 64), 5, 1.0),
+		"glimmer_planet.png": Paint.paint_pass(_glimmer_planet(256, 128), 6),
+		"moon_craters.png": Paint.moon(256, 128, 77),
 	}
 	var failed := false
 	for file_name: String in images:

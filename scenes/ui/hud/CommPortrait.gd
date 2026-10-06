@@ -25,7 +25,6 @@ const STATIC_SOUND := preload("res://audio/generated/static.wav")
 const REPLIES: BunnyReplies = preload("res://data/dialogue/bunny_replies.tres")
 ## How long the reply picker waits for a choice, in seconds.
 const PICK_SECONDS: float = 8.0
-const BLIP_SOUND := preload("res://audio/generated/blip.wav")
 const MAX_WIDTH: float = 180.0
 const HEIGHT: float = 38.0
 const STATIC_SECONDS: float = 0.3
@@ -67,7 +66,7 @@ func _ready() -> void:
 	_static_player.volume_db = -10.0
 	add_child(_static_player)
 	_blip_player = AudioStreamPlayer.new()
-	_blip_player.stream = BLIP_SOUND
+	_blip_player.stream = VoiceBlips.stream("soft")
 	_blip_player.max_polyphony = 3
 	_blip_player.bus = Settings.VOICE_BUS
 	add_child(_blip_player)
@@ -192,7 +191,8 @@ func _set_state(state: State) -> void:
 	_clock = 0.0
 
 
-## A blip every other letter at the speaker's pitch, and the mouth flaps.
+## A blip every other letter in the speaker's own voice and key (see
+## VoiceBlips.gd), and the mouth flaps.
 func _maybe_blip(index: int) -> void:
 	var letter := _card_text().substr(index, 1)
 	if letter == " " or letter == "." or letter == ",":
@@ -203,7 +203,8 @@ func _maybe_blip(index: int) -> void:
 		return
 	_letters_since_blip = 0
 	_mouth_open = not _mouth_open
-	_blip_player.pitch_scale = _speaker.voice_pitch * randf_range(0.88, 1.15)
+	_blip_player.stream = VoiceBlips.stream(_speaker.voice_type)
+	_blip_player.pitch_scale = VoiceBlips.pitch_scale(_speaker.voice_pitch, _speaker.voice_key, _speaker.voice_scale, _card_text(), index)
 	_blip_player.play()
 
 

@@ -15,6 +15,9 @@ const OUTPUT_FOLDER: String = "res://textures/generated"
 const HAZARD_YELLOW := Color("ffc21a")
 const HAZARD_BLACK := Color("1c1a22")
 const Letters := preload("res://scenes/ui/PixelFont.gd")
+## The MML / MGS painter for rocks and planets (flat tones, dither, light
+## painted in).
+const Paint := preload("res://tools/texture_paint.gd")
 
 
 func _init() -> void:
@@ -31,9 +34,9 @@ func _init() -> void:
 		"job_board.png": _job_board(),
 		"terminal.png": _terminal(),
 		"nebula.png": _nebula(256, 128),
-		"rock.png": _rock(64),
+		"rock.png": Paint.rock(128, 3),
 		"station_windows.png": _station_windows(64),
-		"planet_swirl.png": _planet_swirl(256, 128),
+		"planet_swirl.png": Paint.paint_pass(_planet_swirl(256, 128), 6),
 	}
 	var failed := false
 	for file_name: String in images:
@@ -217,22 +220,6 @@ func _nebula(width: int, height: int) -> Image:
 			var amount := clampf((clouds.get_noise_3dv(point) * 0.5 + 0.5) * arm, 0.0, 1.0)
 			amount = amount * amount
 			image.set_pixel(x, y, Color(amount, amount, amount))
-	return image
-
-
-## Speckled, cracked stone, light gray so each rock's color shows through.
-func _rock(image_size: int) -> Image:
-	var rng := _rng(3)
-	var lumps := _noise(31, 0.09)
-	var cracks := _noise(32, 0.05)
-	cracks.fractal_type = FastNoiseLite.FRACTAL_RIDGED
-	var image := Image.create_empty(image_size, image_size, false, Image.FORMAT_RGBA8)
-	for y in image_size:
-		for x in image_size:
-			var shade := 0.82 + 0.14 * lumps.get_noise_2d(x, y) + rng.randf_range(-0.06, 0.06)
-			if cracks.get_noise_2d(x, y) > 0.62:
-				shade *= 0.6
-			image.set_pixel(x, y, Color(shade, shade * 0.98, shade * 0.95))
 	return image
 
 

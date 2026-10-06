@@ -187,7 +187,7 @@ func _physics_process(delta: float) -> void:
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
 	# never rolls, so the camera's horizon stays level.
-	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank)
+	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank + flight.shimmy_roll(GameState.tuning))
 
 
 ## 0 when stopped, 1 at normal top speed, above 1 when boosted past it.
@@ -211,14 +211,45 @@ func apply_look(paint: PaintJob) -> void:
 			old.queue_free()
 		var look := ship_data.visual_scene.instantiate() as Node3D
 		_visual_pivot.add_child(look)
-	if paint == null:
-		return
-	_paint_trail = paint.trail_color
-	if paint.strength > 0.0:
-		for part in _visual_pivot.find_children("*", "MeshInstance3D", true, false):
-			_tint(part as MeshInstance3D, paint)
-	for flare in _visual_pivot.find_children("*", "EngineFlare", true, false):
-		(flare as EngineFlare).refresh_color()
+	if paint != null:
+		_paint_trail = paint.trail_color
+		if paint.strength > 0.0:
+			for part in _visual_pivot.find_children("*", "MeshInstance3D", true, false):
+				_tint(part as MeshInstance3D, paint)
+		for flare in _visual_pivot.find_children("*", "EngineFlare", true, false):
+			(flare as EngineFlare).refresh_color()
+	_add_exhausts()
+
+
+## Puts a flame (EngineExhaust) on every engine nozzle of the model, sized
+## to the glowing engine plate it sits on.
+func _add_exhausts() -> void:
+	for nozzle in _visual_pivot.find_children("Nozzle*", "Marker3D", true, false):
+		if nozzle.is_queued_for_deletion() or nozzle.get_parent().is_queued_for_deletion():
+			continue
+		var exhaust := nozzle.get_node_or_null("Exhaust") as EngineExhaust
+		if exhaust != null:
+			exhaust.refresh_color()
+			continue
+		exhaust = EngineExhaust.new()
+		exhaust.name = "Exhaust"
+		exhaust.radius = _nozzle_radius(nozzle as Node3D)
+		exhaust.length = exhaust.radius * 7.5
+		nozzle.add_child(exhaust)
+
+
+## Half the size of the glowing engine plate nearest the nozzle (or 1.2 m).
+func _nozzle_radius(nozzle: Node3D) -> float:
+	var best := 1.2
+	var nearest := INF
+	for glow in nozzle.get_parent().get_children():
+		if glow is MeshInstance3D and str(glow.name).begins_with("EngineGlow") and (glow as MeshInstance3D).mesh is BoxMesh:
+			var gap := (glow as Node3D).position.distance_to(nozzle.position)
+			if gap < nearest:
+				nearest = gap
+				var size := ((glow as MeshInstance3D).mesh as BoxMesh).size
+				best = minf(size.x, size.y) * 0.45
+	return best
 
 
 ## Tints one part of the model, leaving glowing bits (lights, engines) alone.
@@ -449,7 +480,7 @@ func _update_shake(delta: float) -> void:
 	# A rumble while boosting; a faint road-feel vibration that grows with
 	# speed otherwise.
 	var cruise_feel := tuning.cruise_rumble_shake * pow(clampf(speed_ratio(), 0.0, 1.0), 2.0)
-	shake.rumble = tuning.boost_rumble_shake if flight.boosting else cruise_feel
+	shake.rumble = tuning.boost_rumble_shake + tuning.boost_shimmy_shake * flight.shimmy if flight.boosting else cruise_feel
 	shake.update(delta, tuning.shake_decay)
 	# The boost spooling up: a rising whine while the button's held.
 	if flight.spool > 0.0 and not _spool_sound.playing:

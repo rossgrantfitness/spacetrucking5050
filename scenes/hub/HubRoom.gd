@@ -188,6 +188,7 @@ func _bring_the_rig_to_life() -> void:
 				_place_lost_thing(event, marker.position)
 		if ShipLife.first_look(event):
 			_hud.show_notice(GameState.names.fill_in(event.title).to_upper(), 4.0)
+			Sfx.play("notice")
 	var cargo_sign := get_node_or_null("Things/CargoSign") as Label3D
 	if cargo_sign != null:
 		var job := GameState.active_job()
@@ -218,6 +219,7 @@ func _place_lost_thing(event: ShipEvent, where: Vector3) -> void:
 	thing.add_child(glint)
 	thing.interacted.connect(func(_who: Node3D) -> void:
 		ShipLife.pick_up(event)
+		Sfx.play("pickup")
 		var owner_name := GameState.crew.find(event.find_owner).npc.display_name.to_upper() if GameState.crew.find(event.find_owner) != null else "ITS OWNER"
 		_hud.show_notice("FOUND %s! GIVE IT TO %s." % [event.find_item.to_upper(), owner_name], 4.0)
 		thing.queue_free())

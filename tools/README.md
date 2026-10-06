@@ -10,7 +10,7 @@ project on a machine without a screen.
 |---|---|
 | `setup_input_map.gd` | The default controls in `project.godot`. Re-running resets those actions to the defaults. |
 | `generate_placeholder_textures.gd` | Small PS1-style textures in `textures/generated/` (hazard stripes, hull plating, cargo containers, chevrons, vents, rock, station windows, engine flare, nebula, the planet). |
-| `generate_sounds.gd` | The engine hum's four loops (from `scenes/flight/EngineSynth.gd`) plus the bonk, the dialogue blip, the radio static burst, a big ship's engine rumble, whale song, a whoosh, the intro's power-on chime and self-test beep, a crate thump, the cab rattle and the boost spool (from `scenes/common/SfxSynth.gd`), in `audio/generated/`, made from math. |
+| `generate_sounds.gd` | The engine hum's four loops (from `scenes/flight/EngineSynth.gd`) plus the bonk, the dialogue blip, the radio static burst, a big ship's engine rumble, whale song, a whoosh, the intro's power-on chime and self-test beep, a crate thump, the cab rattle, the boost spool, the four other voice types (square, reed, gruff, chirp) and the game cues `cue_*.wav` (menus, jobs, the nav computer, money, doors; played with `Sfx.play`) (from `scenes/common/SfxSynth.gd`), in `audio/generated/`, made from math. |
 | `build_hub.gd` | The base: the bunny and Dottie models (`scenes/hub/*Visual.tscn`) and the rooms' sets (`scenes/hub/sets/`). **Re-running overwrites those**, but never the rooms' cameras, doors or people. |
 | `build_world.gd` | The stations seen from space: the home base (`BaseStation.tscn`), Tidewater Cannery (`CanneryStation.tscn`) and the Gas-N-Go drive-through (`GasNGo.tscn`), in `scenes/flight/`. **Re-running overwrites them.** |
 | `build_cannery.gd` | Tidewater Cannery's canteen set (`scenes/hub/sets/CanneryCanteenSet.tscn`) and Gill's model (`scenes/hub/OtterVisual.tscn`). **Re-running overwrites those**, but never the room's cameras, doors, people or things to use (`scenes/hub/CanneryCanteen.tscn`). |
@@ -23,6 +23,8 @@ project on a machine without a screen.
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per genre (`audio/radio/placeholders/`, shared by stations of a kind: drum & bass, dubstep, synthwave, metal, rock, hip hop, talk radio, a numbers station...), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
 | `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
 | `route_events/import_route_events.py` | The route events list (`data/events/route_events.tres`) from your design list (`docs/ROUTE_EVENTS_LIST.md`) plus what each playable event does (written in the script). Python, not Godot: `python3 tools/route_events/import_route_events.py`. **Re-running overwrites the list**, so make inspector edits in the script too. |
+| `build_rigs.gd` | The nine rigs from the design sheets, for sale at Dusty's (`scenes/flight/rigs/*Visual.tscn`). Each has "Nozzle" markers on its engines (the flames and trails hang there). **Re-running overwrites them.** Their handling is in `data/ships/*.tres`. |
+| `texture_paint.gd` | Not run by itself: the MML / MGS painter used by the two texture generators (flat dithered tones for planets, faceted rock, cratered moons). |
 | `build_crew.gd` | The crew's models (`scenes/hub/crew/DottieVisual.tscn`, `MoleVisual.tscn`, `DonkeyVisual.tscn`) from your Meshy models in `assets/characters/crew_*/source.glb`: cut into parts the walk animation swings, arms dropped from the T-pose, stood on the floor. Add a character with a new entry in its CREW list. **Re-running overwrites those.** |
 | `build_rig_rooms.gd` | The rig's galley, engine room and cargo bay: their sets (`scenes/hub/sets/GalleySet.tscn`, ...) every time, and their room scenes (`scenes/hub/Galley.tscn`, ...) **only if they don't exist yet**, so cameras and crew spots you move in the editor are kept. |
 | `crew_data/make_crew.py` | The crew's activities, small talk, greetings and the ship events (`data/crew/crew.tres`), plus Digby's and Clem's name files, from plain lists. Python: `python3 tools/crew_data/make_crew.py`. **Re-running overwrites crew.tres**, so make edits in the script. |
@@ -54,6 +56,8 @@ godot --headless --path . -s tools/setup_input_map.gd                           
 godot --headless --path . -s tools/paint_textures.gd      # repaint the hand-painted textures
 godot --headless --path . -s tools/build_bunny.gd         # rebuild the bunny from her 3D model
 godot --headless --path . -s tools/build_crew.gd          # rebuild the crew from their 3D models
+godot --headless --path . -s tools/build_rigs.gd          # rebuild the nine rigs at Dusty's
+godot --headless --path . -s tools/generate_sounds.gd     # remake the sounds (engine, voices, menu and game cues)
 godot --headless --path . -s tools/build_rig_rooms.gd     # rebuild the galley, engine room and cargo bay
 python3 tools/crew_data/make_crew.py                      # rewrite the crew's lines and ship events
 tools/capture.sh 60 /tmp/shots                       # 2 seconds of the main scene as PNGs

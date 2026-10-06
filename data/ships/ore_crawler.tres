@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShipData" format=3]
+
+[ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+[ext_resource type="PackedScene" path="res://scenes/flight/rigs/OreCrawlerVisual.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_ship")
+id = "ore_crawler"
+display_name = "The Ore-Crawler"
+description = "A mobile refinery that eats asteroids. Biggest jaws in the galaxy, slowest turn in the galaxy. Big engines, though."
+price = 32000
+pay_bonus = 1.6
+visual_scene = ExtResource("2_visual")
+max_speed = 52.0
+acceleration = 6.5
+retro_thrust = 5.5
+turn_rate = 18.0
+pitch_rate = 15.0
+turn_response = 0.8
+grip = 1.5
+max_bank = 18.0
+boost_speed_bonus = 3.0
+boost_acceleration = 110.0
+boost_fuel_seconds = 360.0
+fuel_tank_seconds = 400.0
+trail_color = Color(1, 0.8, 0.3, 1)
+engine_pitch = 0.7

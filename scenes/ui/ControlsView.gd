@@ -31,6 +31,7 @@ const GROUPS: Array = [
 		["Reply to a call", ["reply"]],
 		["Pick a reply", ["Q R E  or  1 2 3", "D-pad"]],
 		["Cockpit / chase camera", ["toggle_camera"]],
+		["Zoom the chase camera", ["Mouse wheel", ""]],
 		["Cinema camera (on autopilot)", ["cinema_camera"]],
 		["Look around", ["look_left", "look_right", "look_up", "look_down"]],
 		["Hide the HUD", ["toggle_hud"]],

@@ -98,6 +98,7 @@ Y = △.)
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
 | Switch camera (chase / cockpit) | **C** | **Y** |
+| Zoom the chase camera in / out | Mouse wheel | — |
 | Cinema camera (on autopilot): director, then free camera, then back | **V** | **R3** (click the right stick) |
 | Radio: next / previous station | **E** / **Q** | D-pad **right** / **left** |
 | Radio on / off | **R** | D-pad **up** |
@@ -131,9 +132,14 @@ commitment: it only works with the throttle at full, it **spools up** for
 a moment while you hold it (SPOOL blinks), and once lit it burns for at
 least 3 seconds even if you let go. It burns **boost fuel** (the tiny
 **BST** bar), which doesn't refill by itself; a full boost tank lasts 6
-minutes. **Boosting is hard to hold steady:** the
-rig wanders off course, and jerky steering makes it shake worse. Smooth,
-small corrections calm it down.
+minutes. **Boosting gives you speed wobbles**, like a car going too fast
+on the highway: the longer you hold it, the harder the rig shakes, and it
+slowly pulls off course, so keep correcting. Jerky steering makes it shake
+worse; let go of boost and it settles.
+
+**Rocks all the way round.** Stations sit inside a ball of rocks (or ice,
+or junk). Fly in down the clear **traffic lane** that leads to the approach
+ring, or pick your way through. The autopilot always uses the lane.
 
 **Mind the cargo.** Hard turns, slides, hard braking and boosting flat out
 rattle the load (the **RIDE** bar under the cargo readout, top right:
@@ -252,6 +258,7 @@ opens the pause menu); click the game window to pick the steering back up.
 | Walk | **W A S D** (or arrow keys) | Left stick |
 | Run (hold) | **Shift** | **X** (or click the left stick) |
 | Talk / use / board your rig | **E** | **A** |
+| Leave a conversation (or just walk away) | **Esc** | **B** |
 | Pause menu | **Esc** | **Start** |
 
 "Up" always walks away from the camera. Doors take you to the next room

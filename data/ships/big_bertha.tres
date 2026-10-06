@@ -7,7 +7,7 @@
 script = ExtResource("1_ship")
 id = "big_bertha"
 display_name = "Big Bertha"
-description = "A box hauler with a hold like a cathedral. Turns like a cathedral too. Pays +35% per job."
+description = "A box hauler with a hold like a cathedral. Turns like a cathedral too."
 price = 9000
 pay_bonus = 1.35
 visual_scene = ExtResource("2_visual")

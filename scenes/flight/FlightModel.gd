@@ -18,9 +18,11 @@ extends RefCounted
 ##     rig gets wild. Afterwards the extra speed bleeds off slowly. It's a
 ##     commitment: it spools up for a moment while you hold the button
 ##     before it lights, and once lit it burns for a few seconds minimum.
-##   - Boosting also makes the rig hard to keep on course: the nose wanders
-##     off by itself, steering gets twitchy, and jerky steering makes it
-##     wander worse. Hold steady and it settles down.
+##   - Boosting gives the rig speed wobbles, like a car going too fast on
+##     the highway: it shakes harder the longer you hold boost (the nose
+##     shimmies side to side and the hull rocks), and while it shakes it
+##     slowly drifts off course. Steering gets twitchy too, and jerky
+##     steering makes the shakes worse. Let off and it settles down.
 ##   - Thrusting burns main fuel: speeding up drinks it (more at high
 ##     speed), holding top speed on the limiter just sips it, coasting is
 ##     free. An empty tank never strands you: the engines keep going "on
@@ -58,6 +60,9 @@ var slip := 0.0
 ## How shaky the rig is under boost, 0 (steady) to 1 (all over the place).
 ## Jerky steering while boosting raises it; holding steady calms it.
 var wobble := 0.0
+## How bad the speed wobbles are right now, 0 to 1: builds up the longer you
+## boost (and with jerky steering), settles when you stop.
+var shimmy := 0.0
 ## How easily jerky steering shakes the rig (1 = normal; a calming snack
 ## from the Gas-N-Go makes it 0.5 for the trip).
 var shakiness := 1.0
@@ -136,6 +141,7 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	burn_left = 0.0
 	slip = 0.0
 	wobble = 0.0
+	shimmy = 0.0
 	bank = 0.0
 	nose_tilt = 0.0
 
@@ -247,10 +253,13 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	turn_speed = lerpf(turn_speed, wanted_turn, catch_up)
 	pitch_speed = lerpf(pitch_speed, wanted_pitch, catch_up)
 
-	# Under boost the nose wanders off course by itself, worse when shaky.
+	# Under boost the nose drifts slowly off course by itself (worse the
+	# worse the wobbles are), and shimmies quickly side to side.
 	var wander := wander_amount(tuning)
-	heading = wrapf(heading + (turn_speed + wander * _drift(0.0)) * delta, -PI, PI)
-	pitch += wander * 0.5 * _drift(10.0) * delta
+	var omega := TAU * tuning.boost_shimmy_hz
+	var snap := deg_to_rad(tuning.boost_shimmy_degrees) * shimmy * omega
+	heading = wrapf(heading + (turn_speed + wander * _pull(0.0) + snap * cos(_time * omega)) * delta, -PI, PI)
+	pitch += (wander * 0.4 * _pull(10.0) + snap * 0.35 * cos(_time * omega * 1.3 + 1.0)) * delta
 	var pitch_limit := deg_to_rad(tuning.max_pitch_degrees)
 	pitch = clampf(pitch + pitch_speed * delta, -pitch_limit, pitch_limit)
 	if absf(pitch) >= pitch_limit and signf(pitch_speed) == signf(pitch):
@@ -262,7 +271,13 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 func wander_amount(tuning: Tuning) -> float:
 	if not boosting:
 		return 0.0
-	return deg_to_rad(tuning.boost_wander_degrees + wobble * tuning.boost_wobble_degrees)
+	return deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees)
+
+
+## How far the hull is rocking from the wobbles right now (radians, for the
+## model's roll: purely looks).
+func shimmy_roll(tuning: Tuning) -> float:
+	return deg_to_rad(tuning.boost_shimmy_roll_degrees) * shimmy * sin(_time * TAU * tuning.boost_shimmy_hz * 0.97 + 0.6)
 
 
 ## Jerky steering under boost makes the rig shaky; holding steady calms it.
@@ -272,13 +287,19 @@ func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> v
 	if boosting:
 		wobble += jerk * tuning.boost_jerk_shake * shakiness * delta
 	wobble = clampf(wobble * exp(-tuning.boost_steady_recovery * delta), 0.0, 1.0)
+	# The speed wobbles build while boosting and settle quickly after.
+	if boosting:
+		shimmy = minf(shimmy + delta / tuning.boost_wobble_build_seconds * shakiness, 1.0)
+	else:
+		shimmy = maxf(shimmy - delta * 1.5, 0.0)
+	shimmy = maxf(shimmy, minf(wobble, 1.0) if boosting else 0.0)
 
 
-## A smooth, wandering push from -1 to 1 (a few slow waves added together,
-## so it never repeats in an obvious way). `offset` gives a different one.
-func _drift(offset: float) -> float:
+## A slow pull to one side, -1 to 1, that changes its mind only every
+## ten seconds or so (so the drift feels like a steady pull, not swerving).
+func _pull(offset: float) -> float:
 	var t := _time + offset
-	return (sin(t * 0.9) + 0.6 * sin(t * 2.3 + 1.7) + 0.35 * sin(t * 4.7 + 0.4)) / 1.95
+	return clampf((sin(t * 0.21 + offset) + 0.3 * sin(t * 0.53)) * 1.4, -1.0, 1.0)
 
 
 func _update_lean(delta: float, ship: ShipData, tuning: Tuning) -> void:

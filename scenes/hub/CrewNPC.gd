@@ -72,8 +72,9 @@ func interact(player: Node3D) -> void:
 	if _visual != null and activity.pose != "sleep":
 		_visual.rotation.y = atan2(-to_player.x, -to_player.z) - global_rotation.y
 	hub_player.face(atan2(to_player.x, to_player.z))
-	await Dialogue.say(data.display_name, ShipLife.conversation(member, activity), data.voice_pitch)
-	if not member.menu.is_empty() and activity.id == member.post_activity:
+	var heard := await _talk(hub_player, ShipLife.conversation(member, activity))
+	if heard and not member.menu.is_empty() and activity.id == member.post_activity:
+		hub_player.set_busy(true)
 		var room := HubRoom.find(self)
 		await HubServices.open(member.menu, get_tree(), room.place_id if room != null else "")
 	hub_player.set_busy(false)
