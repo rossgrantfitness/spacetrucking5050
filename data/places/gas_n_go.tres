@@ -16,4 +16,4 @@ fuel_price_factor = 0.7
 surrounding_field = "junk"
 field_radii = Vector2(1000, 1900)
 field_rock_count = 1600
-map_position = Vector3(23207, 1189, -29184)
+map_position = Vector3(23207, 8500, -29184)

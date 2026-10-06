@@ -6,7 +6,7 @@
 script = ExtResource("1_system")
 id = "glimmer"
 display_name = "Glimmer System"
-center = Vector3(-44800, -1120, -44200)
+center = Vector3(-44800, -15000, -44200)
 signature_color = Color(1, 0.3, 0.8, 1)
 haze_color = Color(0.3, 0.05, 0.27, 1)
 sun_color = Color(1, 0.82, 0.95, 1)

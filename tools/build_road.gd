@@ -19,7 +19,7 @@ extends SceneTree
 ## Where the road starts (the truck stop) and which way it runs (toward
 ## Tidewater). Must match the places in FlightSandbox.tscn.
 const START := Vector3(0.0, 0.0, -10600.0)
-const ALONG := Vector3(0.7407, 0.04, -0.6706)
+const ALONG := Vector3(0.7126, 0.2754, -0.6452)
 ## Turns things so their front (+Z) faces travelers coming from the truck stop.
 const FACING_YAW: float = -0.835
 
@@ -117,7 +117,9 @@ func _thing(road: Node3D, script_path: String, thing_name: String, km: float, si
 	thing.set_script(load(script_path))
 	thing.name = thing_name
 	thing.position = spot(km, side, up)
-	thing.rotation = Vector3(0.0, FACING_YAW, 0.0)
+	# Faces travelers coming from the truck stop: turned toward them, and
+	# tipped up or down to match the road's climb.
+	thing.rotation = Vector3(asin(ALONG.y), FACING_YAW, 0.0)
 	road.add_child(thing)
 	return thing
 

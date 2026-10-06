@@ -88,6 +88,14 @@ static func open(tree: SceneTree, ship: Ship, places: Dictionary, approach: Call
 ## Every course worth offering from `from`: straight to each place, and to
 ## each place via a drive-through that's roughly on the way. The job's
 ## destination comes first. `place_spots` is place id -> where it is.
+## "17 KM UP" / "15 KM DOWN" for a place `meters` above (+) or below (-)
+## you, or "" when it's about level (within a kilometer).
+static func height_text(meters: float) -> String:
+	if absf(meters) < 1000.0:
+		return ""
+	return "%d KM %s" % [roundi(absf(meters) / 1000.0), "UP" if meters > 0.0 else "DOWN"]
+
+
 static func possible_courses(from: Vector3, place_spots: Dictionary, job_to_place: String) -> Array[PackedStringArray]:
 	var courses: Array[PackedStringArray] = []
 	var ids: Array = place_spots.keys()
@@ -215,6 +223,10 @@ func _draw() -> void:
 		# Labels near the right edge go on the left of the dot, to stay on the map.
 		var at := dot + Vector2(8.0, 4.0) if dot.x + 8.0 + width < MAP_SIZE.x - 6.0 else dot + Vector2(-8.0 - width, 4.0)
 		draw_string(_font, at, words, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, color)
+		# How far above or below you it is (the map is flat; space isn't).
+		var climb := height_text((spots[id] as Vector3).y - ship_spot.y)
+		if not climb.is_empty():
+			draw_string(_font, at + Vector2(0.0, 14.0), climb, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color(color, 0.8))
 	# The rig: a little arrow pointing the way the nose points.
 	var here := _to_map(ship_spot, bounds)
 	var facing := Vector2(ship_facing.x, ship_facing.z).normalized()

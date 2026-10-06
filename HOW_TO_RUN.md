@@ -357,6 +357,9 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
 - **Job tags** on the board: **RUSH** (bonus for being quick), **FRAGILE**,
   **PERISHABLE**, **LIVE** (bonus that shrinks if you bump the cargo), and
   the trip length in days. Your invoices and bills are on the PC.
+- **Up and down:** stations sit at different heights (Tidewater is way
+  up, the casino way down). The course map (M) says how far up or down
+  each one is ("17 KM UP").
 - **Where your load goes** is always **hot pink**: on the course chart (M)
   it's the pink target with the "YOUR LOAD" flag and the pink route, and
   in flight the waypoint is pink with "LOAD" under it.

@@ -15,4 +15,4 @@ host_lines_in_order = true
 surrounding_field = "ice"
 field_radii = Vector2(1400, 2500)
 field_rock_count = 2800
-map_position = Vector3(43998, 2378, -50436)
+map_position = Vector3(43998, 17000, -50436)

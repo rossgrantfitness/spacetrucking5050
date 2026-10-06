@@ -121,7 +121,7 @@ script = ExtResource("27_ring")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
 
 [node name="tidewater" type="Node3D" parent="World/Places"]
-transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 43998, 2378, -50436)
+transform = Transform3D(0.671178, 0, -0.741296, 0.229073, 0.951057, 0.207405, 0.705015, -0.309017, 0.638328, 43998, 17000, -50436)
 
 [node name="CanneryStation" parent="World/Places/tidewater" instance=ExtResource("45_cannery")]
 
@@ -137,7 +137,7 @@ color = Color(0.4, 1, 0.85, 1)
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
 
 [node name="gas_n_go" type="Node3D" parent="World/Places"]
-transform = Transform3D(0.6711777, 0, -0.74129647, 0, 1, 0, 0.74129647, 0, 0.6711777, 23207, 1189, -29184)
+transform = Transform3D(0.671178, 0, -0.741296, 0.179336, 0.970296, 0.162373, 0.719277, -0.241922, 0.651241, 23207, 8500, -29184)
 
 [node name="GasNGo" parent="World/Places/gas_n_go" instance=ExtResource("46_gas_n_go")]
 
@@ -158,7 +158,7 @@ color = Color(1, 0.75, 0.3, 1)
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 600)
 
 [node name="high_roller" type="Node3D" parent="World/Places"]
-transform = Transform3D(0.6, 0, 0.8, 0, 1, 0, -0.8, 0, 0.6, -44790, -1120, -44194)
+transform = Transform3D(0.6, -0, 0.8, 0.247214, 0.951057, -0.18541, -0.760845, 0.309017, 0.570634, -44790, -15000, -44194)
 
 [node name="HighRollerStation" parent="World/Places/high_roller" instance=ExtResource("48_high_roller")]
 
@@ -194,9 +194,21 @@ uv_scale = Vector2(1, 1)
 drift_speed = 0.01
 night_glow = 1.0
 
+[node name="HomeGiantBelow" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-30000, -42000, -20000)
+true_radius = 26000.0
+texture = ExtResource("50_glimmer_tex")
+tint = Color(0.55, 0.75, 1, 1)
+drift_speed = 0.002
+night_glow = 0.3
+ring_size = 1.6
+ring_color = Color(0.7, 0.85, 1, 1)
+ring_tilt = Vector3(0.3, 0.0, 0.4)
+
 [node name="TidewaterPlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(13998, -5622, -85436)
+true_position = Vector3(13998, 9000, -85436)
 true_radius = 18000.0
 system_id = "tidewater"
 texture = ExtResource("43_ocean_tex")
@@ -205,7 +217,7 @@ night_glow = 0.2
 
 [node name="TidewaterMoon" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(30000, 9000, -78000)
+true_position = Vector3(30000, 23622, -78000)
 true_radius = 2500.0
 system_id = "tidewater"
 texture = ExtResource("17_moon_tex")
@@ -215,7 +227,7 @@ drift_speed = 0.0
 
 [node name="TidewaterSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(113998, 47378, -160436)
+true_position = Vector3(113998, 62000, -160436)
 true_radius = 14000.0
 system_id = "tidewater"
 is_sun = true
@@ -227,7 +239,7 @@ night_glow = 1.0
 
 [node name="GlimmerPlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(-68790, -17120, -74194)
+true_position = Vector3(-68790, -31000, -74194)
 true_radius = 16000.0
 system_id = "glimmer"
 texture = ExtResource("50_glimmer_tex")
@@ -239,7 +251,7 @@ ring_tilt = Vector3(0.5, 0.0, -0.2)
 
 [node name="GlimmerMoon" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(-50790, 7880, -58194)
+true_position = Vector3(-50790, -6000, -58194)
 true_radius = 2000.0
 system_id = "glimmer"
 texture = ExtResource("17_moon_tex")
@@ -249,7 +261,7 @@ drift_speed = 0.0
 
 [node name="GlimmerSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
-true_position = Vector3(-134790, 43880, -144194)
+true_position = Vector3(-134790, 30000, -144194)
 true_radius = 12000.0
 system_id = "glimmer"
 is_sun = true

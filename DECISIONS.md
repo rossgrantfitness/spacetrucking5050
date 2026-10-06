@@ -512,3 +512,24 @@ be revisited; just say so.
   - One-piece models can't bend, so `ModelVisual` fakes poses: a dance sways and hops, a nap droops and breathes slowly (and they nap standing up; ostriches do).
   - The old placeholder owl and sheep models are gone.
 - Size note for the Windows build: the paintings are stored at full quality (about 5 MB each in the game). Fine for now; can be compressed later if the download gets big.
+
+## 2026-10-07 (Space gets an up and a down; new Jacki and Lily)
+
+- **The world isn't flat any more** (your note: "everything is on the same plane... like I'm quasi-driving"). Your call was gentle-to-medium now, wilder in later systems, as a difficulty curve.
+  - **Home** (company HQ and the truck stop) stays level: the gentle start.
+  - **Tidewater** is 17 km up: a 16° climb all the way.
+  - **Gas-N-Go** sits partway up that climb (8.5 km up).
+  - **The High Roller** is 15 km down: a 15° dive.
+  - Planets, moons and suns move with their systems. Home gets a big pale-blue gas giant far below, so "down" has something to look at.
+  - **Tilted stations:** Tidewater and Gas-N-Go tip 18° and 14° so you swoop up into the dock; the casino tips the other way so you drop down onto it. The truck stop stays level.
+  - **Roads follow the slopes:** both roadside strips (`tools/build_road.gd`, `tools/build_glimmer_road.gd`) run along the new directions, and their signs and landmarks tip to face drivers coming up or down.
+  - **The course map shows heights:** "17 KM UP" / "15 KM DOWN" under each station, relative to you.
+  - The camera still keeps the horizon level (comfort).
+  - Trips are a little longer: about 62 km to Tidewater instead of 59.
+  - Later systems will be wilder: steeper climbs, steeper tilts, maybe stations stacked above each other.
+- **New Jacki** (your Rocket Cap Rabbit model): `tools/build_bunny.gd` now cuts your model into moving parts by where each triangle sits, since it's one connected piece. The parts are legs, body, arms and head.
+  - The arms swing down from the T-pose to her sides.
+  - The lop ears ride on her head in one piece: cut separately they tore at the seam.
+  - Her walk, idle and the rest of `BunnyAnimator` work as before.
+  - The old model's files are gone.
+- **Lily at the pumps** is your frog shopkeeper model.

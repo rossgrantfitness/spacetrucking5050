@@ -1,10 +1,11 @@
 # Progress
 
-**Current status:** **Your art is in.**
-- FF7-style painted backgrounds in all the rig rooms (12 cameras).
-- The lion boss, the vending machine, the truck stop station and the space billboards are your models.
-- New crew mascot Olivia (ostrich); Marge, Bonnie (polar bear) and Mort (weasel) use your models.
+**Current status:** **Space has an up and a down.**
+- Tidewater is 17 km up, the casino 15 km down, and the stations are tilted.
+- The roads follow the slopes, and the course map shows heights.
+- New Jacki and Lily models.
 
+(Before that: your art went in, crew models.)
 (Beta step 2, the trucking company, is just before this.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
@@ -16,7 +17,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (your art goes in)
+**Last updated:** 2026-10-07 (an up and a down)
 
 ---
 

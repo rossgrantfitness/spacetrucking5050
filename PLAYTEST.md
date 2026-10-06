@@ -1,3 +1,32 @@
+# Playtest: up and down, new Jacki (your art round below)
+
+**What's new:**
+- The stations aren't on one flat plane any more: Tidewater is 17 km up, Gas-N-Go halfway up, the casino 15 km down.
+- The stations are tilted.
+- The roads and traffic follow the slopes.
+- The course map (M) says how far up or down each stop is.
+- Jacki and Lily are your new models.
+
+**Time needed:** 15 minutes.
+
+## What to do
+
+1. Walk Jacki around the rig: does she look right walking, standing and turning? Any torn seams (shoulders, ears)?
+2. Say hi to Lily at the truck stop pumps.
+3. Open the course map (M): read the "KM UP" / "KM DOWN" under each stop.
+4. F10, then jump 5 minutes out from Tidewater: climb up to it and dock (try flying it yourself too).
+5. F10, then jump 5 minutes out from the casino: dive down to it.
+6. Do one full trip from the truck stop to Tidewater or the casino if you have time.
+
+## Questions
+
+1. Does it still feel like driving on a flat road, or like flying in space now?
+2. Is the climb and dive about right for the early game, or should it be steeper already?
+3. Are the tilted docks fun, or fiddly to line up with by hand?
+4. How does the new Jacki look moving around?
+
+---
+
 # Playtest: your art in the game (beta step 2 below)
 
 **What's new:**
