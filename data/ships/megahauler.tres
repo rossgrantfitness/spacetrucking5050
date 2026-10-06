@@ -16,3 +16,4 @@ turn_rate = 8.0
 pitch_rate = 6.0
 turn_response = 0.5
 engine_pitch = 0.4
+interior_tint = Color(1, 0.78, 0.74, 1)

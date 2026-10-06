@@ -47,6 +47,14 @@ enum Kind {
 ## Fuel here costs this much compared with the usual price (0.7 = 30% off).
 @export_range(0.1, 3.0, 0.05) var fuel_price_factor: float = 1.0
 
+@export_group("On the map")
+## Whether it's a place out in space (the rig itself, "base", isn't).
+@export var on_the_map: bool = true
+## Where it is in space, in meters: the same spot as its node under
+## World/Places in FlightSandbox.tscn (a self-test checks they match). The
+## job board uses it to say how long a trip takes.
+@export var map_position: Vector3 = Vector3.ZERO
+
 @export_group("Rocks all around")
 ## What surrounds the station on every side (see AsteroidField.gd's
 ## "shell"): nothing, rocks, ice, junk (scrap) or chips (casino chips). A

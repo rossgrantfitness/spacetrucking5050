@@ -55,6 +55,11 @@ func _ready() -> void:
 			_build_dice()
 		Kind.CHAPEL:
 			_build_chapel()
+	# Every sign on a board, held up by a strut (the lettering's measured a
+	# frame after it's built).
+	await get_tree().process_frame
+	if is_inside_tree():
+		SignBoards.mount_in_space(self)
 
 
 func _process(delta: float) -> void:

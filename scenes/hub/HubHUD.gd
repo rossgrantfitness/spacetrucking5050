@@ -78,13 +78,23 @@ func _draw_wallet() -> void:
 	var box := Rect2(Vector2(_canvas.size.x - width - 52.0, 24.0), Vector2(width + 28.0, 36.0))
 	_canvas.draw_rect(box, Color(0.05, 0.06, 0.2, 0.75))
 	PixelFont.draw(_canvas, box.position + Vector2(14.0, 8.0), text, square, Color(0.4, 1.0, 0.5), 0.15)
-	# Under it: the calendar, when the bills are due, and any tab.
-	var small := 2.0
-	var lines := [Economy.calendar_text(), "BILLS IN %d DAY%s" % [Economy.days_to_bills(), "" if Economy.days_to_bills() == 1 else "S"]]
+	# Under it: the clock, the date, when the bills are due, and any tab.
+	var lines := [[Economy.clock_text(), 3.0, Color(0.45, 0.95, 1.0)], [Economy.date_text(), 2.0, Color(1.0, 0.85, 0.3)],
+			["BILLS IN %d DAY%s" % [Economy.days_to_bills(), "" if Economy.days_to_bills() == 1 else "S"], 2.0, Color(0.7, 0.75, 0.95)]]
 	if GameState.tab > 0:
-		lines.append("TAB %d %s" % [GameState.tab, GameState.names.currency_short])
-	var y := box.end.y + 8.0
-	for line: String in lines:
-		var line_width := PixelFont.width(line, small)
-		PixelFont.draw(_canvas, Vector2(box.end.x - line_width - 12.0, y), line, small, Color(0.7, 0.75, 0.95) if not line.begins_with("TAB") else Color(1.0, 0.7, 0.4), 0.15)
-		y += 20.0
+		lines.append(["TAB %d %s" % [GameState.tab, GameState.names.currency_short], 2.0, Color(1.0, 0.7, 0.4)])
+	# Aboard your rig: which one (its rooms are tinted its own color too).
+	var room := HubRoom.find(player)
+	if room != null and room.scene_file_path in HubRoom.RIG_ROOMS:
+		var rig := GameState.active_ship_data()
+		lines.append([rig.display_name.to_upper().split(" (")[0], 2.0, rig.interior_tint.lerp(Color(0.7, 0.75, 0.95), 0.3)])
+	var widest := 0.0
+	for line: Array in lines:
+		widest = maxf(widest, PixelFont.width(line[0], line[1]))
+	var panel := Rect2(Vector2(box.end.x - widest - 24.0, box.end.y + 6.0), Vector2(widest + 24.0, 22.0 + lines.size() * 21.0))
+	_canvas.draw_rect(panel, Color(0.05, 0.06, 0.2, 0.6))
+	var y := panel.position.y + 9.0
+	for line: Array in lines:
+		var line_width := PixelFont.width(line[0], line[1])
+		PixelFont.draw(_canvas, Vector2(panel.end.x - line_width - 12.0, y), line[0], line[1], line[2], 0.15)
+		y += 21.0 + (4.0 if line[1] > 2.0 else 0.0)

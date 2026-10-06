@@ -11,7 +11,6 @@ description = "Ninety minutes of slow jams for Lily at the truck stop. It took M
 from_place = "gas_n_go"
 to_place = "truck_stop"
 base_pay = 450
-trip_days = 4
 care_kind = "fragile"
 care_bonus = 200
 rush_seconds = 0.0

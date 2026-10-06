@@ -17,6 +17,11 @@ extends Control
 
 
 const MAP_SIZE := Vector2(440.0, 440.0)
+## Your job's drop-off, and the route there, are in hot pink: nothing else
+## on the chart uses it, so where your load goes always jumps out.
+const JOB_COLOR := Color(1.0, 0.3, 0.75)
+## The highlighted (other) route.
+const ROUTE_COLOR := Color(1.0, 0.85, 0.25)
 
 ## Every route's points, in the world (starting at the rig), one per option.
 var routes: Array[PackedVector3Array] = []
@@ -28,6 +33,9 @@ var job_to: String = ""
 
 var _shown: int = 0
 var _font: Font
+var _time: float = 0.0
+## Which routes end at the job's drop-off.
+var _job_routes: Array[bool] = []
 
 
 ## Opens the chart and waits for the player's choice. `places` is place id
@@ -53,11 +61,16 @@ static func open(tree: SceneTree, ship: Ship, places: Dictionary, approach: Call
 		if stops.size() > 1:
 			text += " VIA " + GameState.places.find(stops[0]).display_name
 		if stops[stops.size() - 1] == job_to_place:
-			text = "* " + text
-		options.append({"text": text, "detail": "%d KM" % roundi(numbers["meters"] / 1000.0),
-				"description": describe(numbers, ship.flight, stops[stops.size() - 1] == job_to_place)})
+			text = "> " + text  # (And it's pink.)
+		var is_job := stops[stops.size() - 1] == job_to_place
+		var option := {"text": text, "detail": "%d KM" % roundi(numbers["meters"] / 1000.0),
+				"description": describe(numbers, ship.flight, is_job)}
+		if is_job:
+			option["color"] = JOB_COLOR
+		options.append(option)
 		choices.append(stops)
 		chart.routes.append(route)
+		chart._job_routes.append(is_job)
 	if engaged:
 		options.append({"text": "AUTOPILOT OFF", "description": "Take the wheel back. (Touching the stick, throttle or boost does that too.)"})
 	options.append({"text": "NEVER MIND", "description": "Close the chart."})
@@ -118,14 +131,15 @@ static func estimate(route: PackedVector3Array, ship: ShipData, tuning: Tuning, 
 
 ## The words under a course: times, fuel, and a heads-up if you're short.
 static func describe(numbers: Dictionary, flight: FlightModel, is_job: bool) -> String:
-	var words := "Cruising: %s     Full boost: %s\n" % [HudWidget.clock(numbers["cruise_seconds"]), HudWidget.clock(numbers["boost_seconds"])]
-	words += "Fuel: about %d%% of a tank (you have %d%%).  Boost all the way: %d%% (you have %d%%)." % [
+	var words := "Cruising: %s     Full boost: %s     On the calendar: about %s\n" % [HudWidget.clock(numbers["cruise_seconds"]),
+			HudWidget.clock(numbers["boost_seconds"]), Economy.span_text(float(numbers["cruise_seconds"]) * GameState.tuning.flight_minutes_per_second).to_lower()]
+	words += "Fuel: about %d%% of a tank (you have %d%%). Boost all the way: %d%% (you have %d%%)." % [
 			roundi(numbers["fuel"] * 100.0), roundi(flight.fuel * 100.0),
 			roundi(numbers["boost_needed"] * 100.0), roundi(flight.boost_fuel * 100.0)]
 	if numbers["fuel"] > flight.fuel:
 		words += "\nNOT ENOUGH FUEL to cruise there. Fill up on the way."
 	if is_job:
-		words += "\nYour load goes here."
+		words += "\nYOUR LOAD GOES HERE (the pink one on the map)."
 	return words
 
 
@@ -133,6 +147,12 @@ func _ready() -> void:
 	custom_minimum_size = MAP_SIZE
 	_font = ThemeDB.fallback_font
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	if not job_to.is_empty():
+		queue_redraw()  # The drop-off pulses.
 
 
 ## Highlights option number `index`'s route (MenuPanel calls this).
@@ -162,18 +182,34 @@ func _draw() -> void:
 		for ring in 4:
 			draw_circle(middle, 70.0 - ring * 15.0, Color(system.signature_color, 0.06))
 		draw_string(_font, middle + Vector2(-60.0, -62.0), system.display_name.to_upper(), HORIZONTAL_ALIGNMENT_CENTER, 120.0, 12, Color(system.signature_color, 0.8))
-	# The routes: the highlighted one bright, the rest faint.
+	# The routes: the highlighted one bright, the rest faint. Routes to the
+	# job's drop-off are always pink, so you can see the way even while
+	# looking at other options.
 	for i in routes.size():
 		if i != _shown:
-			_draw_route(routes[i], bounds, Color(0.6, 0.7, 1.0, 0.25), 1.5)
+			var faint := Color(JOB_COLOR, 0.55) if _job_routes[i] else Color(0.6, 0.7, 1.0, 0.25)
+			_draw_route(routes[i], bounds, faint, 2.0 if _job_routes[i] else 1.5)
 	if _shown >= 0 and _shown < routes.size():
-		_draw_route(routes[_shown], bounds, Color(1.0, 0.85, 0.25), 3.0)
-	# The places.
+		_draw_route(routes[_shown], bounds, JOB_COLOR if _job_routes[_shown] else ROUTE_COLOR, 3.0)
+	# The places. The job's drop-off gets a big pulsing pink target.
 	for id: String in spots:
 		var place := GameState.places.find(id)
 		var dot := _to_map(spots[id], bounds)
-		var color := Color(1.0, 0.85, 0.25) if id == job_to else Color(0.6, 0.95, 1.0)
-		draw_rect(Rect2(dot - Vector2(4.0, 4.0), Vector2(8.0, 8.0)), color)
+		var is_job := id == job_to
+		var color := JOB_COLOR if is_job else Color(0.6, 0.95, 1.0)
+		if is_job:
+			var pulse := fposmod(_time, 1.2) / 1.2
+			draw_arc(dot, 10.0 + pulse * 18.0, 0.0, TAU, 32, Color(JOB_COLOR, 1.0 - pulse), 2.0)
+			draw_arc(dot, 11.0, 0.0, TAU, 24, JOB_COLOR, 2.0)
+			draw_colored_polygon(PackedVector2Array([dot + Vector2(0, -7), dot + Vector2(7, 0), dot + Vector2(0, 7), dot + Vector2(-7, 0)]), JOB_COLOR)
+			# A flag over it: "YOUR LOAD".
+			var flag := "YOUR LOAD"
+			var flag_width := _font.get_string_size(flag, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12).x
+			var flag_at := dot + Vector2(-flag_width * 0.5, -22.0)
+			draw_rect(Rect2(flag_at - Vector2(4.0, 12.0), Vector2(flag_width + 8.0, 16.0)), Color(JOB_COLOR, 0.9))
+			draw_string(_font, flag_at, flag, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, Color(0.05, 0.02, 0.1))
+		else:
+			draw_rect(Rect2(dot - Vector2(4.0, 4.0), Vector2(8.0, 8.0)), color)
 		var words: String = place.display_name if place != null else id
 		var width := _font.get_string_size(words, HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13).x
 		# Labels near the right edge go on the left of the dot, to stay on the map.

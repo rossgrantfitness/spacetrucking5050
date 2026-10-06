@@ -1,4 +1,80 @@
-# Playtest: round 18, money and time on the road (M6)
+# Playtest: round 19 (on top of round 18 below)
+
+**What you asked for this time:**
+- a calendar and an in-lore clock on the HUD, with a 10-minute delivery
+  lasting one to three days;
+- a 12-month, 365-day calendar with made-up month names, shown on screen
+  when you sleep and when the game loads;
+- a stronger "go here" for your job on the autopilot map, in its own color;
+- signs on boards instead of floating (Lily's pumps and every other one);
+- other rigs' interiors mostly the same, with a slight color tint so you
+  know which rig you're in.
+
+Round 18 (money: weekly bills, the tab, insurance, rig levels) is in this
+build too. Its section is below; play both together. **Time needed:**
+about 30 minutes. Start a **new game** to see the calendar from 1 Kindling.
+
+> Honest note: I checked all of this with automated tests and screenshots.
+> How fast time should run, and whether the tints are too subtle or too
+> strong, are calls only you can make. Both are one number each to change.
+
+## What's new
+
+- **The calendar:** 365 days in 12 months: KINDLING, HEARTHFROST, THAWING,
+  WAYFARE, BLOSSOM, LONGLIGHT, HIGHSUN, HAULWIND, GLEANING, LANTERN,
+  DRIFTFALL, STARSLEEP (a year's life, from spark to sleep). Each has a
+  little line about it.
+- **The clock (GST, galactic standard time) runs while you play:** about
+  an hour every 15 seconds while flying (so 10 minutes on the road is
+  about a day and two-thirds; the long cruise to Tidewater is 3 to 4
+  days), an hour a minute while you walk around parked, and a whole night
+  when you sleep. Menus and pauses stop it.
+- **On screen:** under your money (clock, date, bills countdown, which rig
+  you're in), top right in flight (clock and date; the date flashes when
+  a day rolls over), on loading screens, and on the **date card** that
+  pops up when you load or start a game, and shows in the dark when you
+  sleep.
+- **Your load's drop-off is hot pink.** Course chart (M): a pulsing pink
+  target with a "YOUR LOAD" flag, pink routes, pink menu options. In
+  flight: a pink waypoint with "LOAD" under it. The chart also says how
+  long each route takes on the calendar, and the job board shows ~days.
+- **Signs on boards:** every sign in every room (Lily's pumps, the docks,
+  the motel, DISPATCH, the door plates...) now sits on a dark board with
+  a neon rim, hanging from the ceiling on cables if there's no wall
+  behind it. The big signs in space (the donut, the slot machine, the
+  chapel, the border gate) got boards on struts.
+- **Rig tints:** every rig has the same rooms inside, with its own soft
+  color (the Lazy Susan is unchanged). Its name shows under the calendar.
+
+## What to do
+
+1. **New game.** Watch for the date card (1 KINDLING 5050). Walk around
+   for a minute: the clock ticks.
+2. Look at **Lily's pumps** at the truck stop and the other signs in the
+   rooms. Any still floating?
+3. Take a job, take off, and press **M**. Find your load (pink). Pick it
+   and fly a while: watch the clock top right.
+4. Get up and **sleep in the bunk**: the date shows in the dark, and the
+   days jump on.
+5. Deliver: the payout card says how long it was on the road and the date.
+6. Sleep in your bed while parked: the date card in the dark, and you wake
+   at 7:00.
+7. If you've got the money, buy a second rig at Dusty's and walk around
+   inside. Can you tell it's a different rig?
+
+## Questions
+
+1. **Time speed:** does 10 minutes of flying = about a day and two-thirds
+   feel right? Faster or slower?
+2. Do the month names fit? Any you'd rename?
+3. Is the pink drop-off easy to find now, on the chart and in flight?
+4. Signs: any still floating, or any board that looks wrong (too big,
+   cables in odd places)?
+5. Rig tints: too subtle, too strong, or about right?
+
+---
+
+# Round 18: money and time on the road (M6)
 
 **What you asked for:** build out the next phase of the game, with no
 shifts: space truckers' deliveries take a long time (about a week), not
@@ -15,10 +91,9 @@ on day 1 with no XP).
 
 ## What's new
 
-- **No clocks, no shifts. A calendar.** Each job takes a number of days
-  (short hops 3 to 4 days, long hauls a week or more). Sleeping in your
-  bed is one night. The day, the week and "BILLS IN n DAYS" are under your
-  money.
+- **No shifts. A calendar** (round 19 made it a real calendar with a clock:
+  see above). Sleeping in your bed takes you to the next morning.
+  "BILLS IN n DAYS" is under your money.
 - **Weekly bills:** 1,500 credits a week to OrbitalEx (berth and dispatch).
   Can't pay? It goes on a **tab**, paid off from your next delivery. No
   interest, no game over.
@@ -37,7 +112,7 @@ on day 1 with no XP).
 ## What to do
 
 1. New game. Look at the top-right corner: day 1, week 1, bills in 7 days.
-2. Open the job board and read the tags. Take a long haul (about 7D).
+2. Open the job board and read the tags. Take a long haul (the ~3D or ~4D ones).
 3. Deliver it. Watch the payout card (days on the road, XP), then the
    **WEEKLY BILLS** card.
 4. Visit Dusty: check your rig's level and XP, and switch insurance on.

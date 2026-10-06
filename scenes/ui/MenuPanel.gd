@@ -103,6 +103,12 @@ func _ready() -> void:
 		button.disabled = option.get("disabled", false)
 		button.add_theme_font_size_override("font_size", 22)
 		_style_button(button)
+		if option.has("color"):
+			# A highlighted option (like your job's drop-off on the course chart).
+			var color: Color = option["color"]
+			button.add_theme_color_override("font_color", color)
+			button.add_theme_color_override("font_focus_color", color.lightened(0.35))
+			button.add_theme_color_override("font_hover_color", color.lightened(0.35))
 		button.pressed.connect(_pick.bind(i))
 		button.focus_entered.connect(_describe.bind(i))
 		button.mouse_entered.connect(button.grab_focus)

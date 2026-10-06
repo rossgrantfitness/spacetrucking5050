@@ -80,8 +80,14 @@ func _draw_waypoint() -> void:
 	var spot := hud.destination.global_position
 	var screen := hud.to_hud(spot)
 	var area := Rect2(Vector2.ONE * EDGE, size - Vector2.ONE * EDGE * 2.0)
+	# Where your load goes is pink (like on the course chart), with a tag.
+	var color := JOB_PINK if hud.destination_is_job else YELLOW
 	if not hud.is_behind(spot) and area.has_point(screen):
-		pixels(screen.round() - Vector2(2, 2), ["..#..", ".#.#.", "#...#", ".#.#.", "..#.."], YELLOW)
+		var at := screen.round()
+		pixels(at - Vector2(2, 2), ["..#..", ".#.#.", "#...#", ".#.#.", "..#.."], color)
+		if hud.destination_is_job:
+			pixels(at - Vector2(4, 4), ["....#....", "...#.#...", "..#...#..", ".#.....#.", "#.......#", ".#.....#.", "..#...#..", "...#.#...", "....#...."], Color(color, 0.6 if blink(0.8) else 0.25))
+			text_centered(at + Vector2(0, 7), "LOAD", color)
 		return
 	# Off screen: a chevron on the edge, pointing the way.
 	var direction := screen - area.get_center()
@@ -99,7 +105,7 @@ func _draw_waypoint() -> void:
 	if blink(1.0):
 		draw_colored_polygon(PackedVector2Array([
 			(edge + direction * 4.0).round(), (edge - direction * 2.0 + side * 3.0).round(),
-			(edge - direction * 2.0 - side * 3.0).round()]), YELLOW)
+			(edge - direction * 2.0 - side * 3.0).round()]), color)
 
 
 func _draw_docking(rig: Ship) -> void:

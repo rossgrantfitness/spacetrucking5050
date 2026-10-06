@@ -102,6 +102,9 @@ func _draw_lines() -> void:
 			var at := left + PixelFont.width(label + "........", square) + square * 3.0
 			PixelFont.draw(_canvas, Vector2(at, y), line[1], square, GREEN, 0.0, Color(0, 0, 0, 0))
 		y += square * 10.0
+	# The date and time, bottom left: life goes on while it loads.
+	PixelFont.draw(_canvas, Vector2(left, screen.y - square * 15.0), "%s  ·  %s" % [Economy.date_text(), Economy.clock_text()],
+			square, Color(1.0, 0.85, 0.3), 0.0, Color(0, 0, 0, 0))
 	# A little spinning wheel in the corner while it works.
 	var center := screen - Vector2(square * 14.0, square * 14.0)
 	for k in 8:

@@ -11,7 +11,6 @@ description = "Marge wants fresh eggs. The hens want a smooth ride. Everybody wa
 from_place = "tidewater"
 to_place = "truck_stop"
 base_pay = 1150
-trip_days = 7
 care_kind = "live"
 care_bonus = 400
 rush_seconds = 0.0

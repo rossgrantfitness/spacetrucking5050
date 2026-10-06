@@ -63,6 +63,9 @@ func _process(_delta: float) -> bool:
 			# truck stop).
 			if waited == 40:
 				Input.action_press("move_forward")
+				# Every sign sits on a board (SignBoards.gd), none floating.
+				if current_scene.find_children("SignBoard*", "Node3D", true, false).is_empty():
+					push_error("Smoke test: the hallway's signs should be on boards")
 			if waited == 70:
 				Input.action_release("move_forward")
 				_player().global_position = Vector3(1.0, 0.0, -6.0)

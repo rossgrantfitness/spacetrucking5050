@@ -25,3 +25,4 @@ boost_fuel_seconds = 360.0
 fuel_tank_seconds = 340.0
 trail_color = Color(0.9, 0.55, 1, 1)
 engine_pitch = 0.95
+interior_tint = Color(0.74, 1, 0.98, 1)

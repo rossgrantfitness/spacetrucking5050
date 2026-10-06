@@ -11,7 +11,6 @@ description = "Three hundred little guppies that glow when they're happy. Keep t
 from_place = "truck_stop"
 to_place = "tidewater"
 base_pay = 1250
-trip_days = 7
 care_kind = "live"
 care_bonus = 450
 rush_seconds = 0.0

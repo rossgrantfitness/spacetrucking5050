@@ -176,10 +176,20 @@ extends Resource
 
 @export_group("Time and bills")
 
-## Space trucking is slow: a delivery takes days on the road (each job says
-## how many; this is for jobs that don't). The calendar only moves when you
-## deliver, or sleep in your bed while parked (one night).
-@export_range(1, 30, 1, "suffix:days") var default_trip_days: int = 7
+## The calendar (365 days, 12 months: see res://data/calendar.tres) and the
+## clock run while you play. Flying, time goes fast: this many in-game
+## minutes pass per real second (4 = an hour every 15 seconds, so a
+## 10-minute haul is about a day and two-thirds on the road).
+@export_range(0.0, 60.0, 0.1, "suffix:min/s") var flight_minutes_per_second: float = 4.0
+## Walking around while parked, time goes gently: this many in-game minutes
+## per real second (1 = an hour every real minute).
+@export_range(0.0, 60.0, 0.1, "suffix:min/s") var aboard_minutes_per_second: float = 1.0
+## Napping in the bunk with no course set: this many hours pass.
+@export_range(0.0, 24.0, 0.5, "suffix:h") var nap_hours: float = 4.0
+## Sleeping in your bed while parked, you wake up at this hour (0 to 23).
+@export_range(0, 23, 1) var wake_up_hour: int = 7
+## A new game starts at this hour on day 1.
+@export_range(0, 23, 1) var start_hour: int = 8
 
 ## The weekly bills, paid every 7 days on the calendar: OrbitalEx's berth
 ## and dispatch fee (the company keeps your rig on its books and feeds you

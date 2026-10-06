@@ -47,7 +47,7 @@ func test_first_mission_unlocks_the_job_boards() -> void:
 	var credits := GameState.credits
 	check(GameState.deliver_at("tidewater"), "delivering at Tidewater should work")
 	check(int(GameState.pending_payout["total"]) == first.base_pay + first.care_bonus, "perfect cargo, no rush: base pay plus the full care bonus")
-	check(GameState.credits == credits + first.base_pay + first.care_bonus - GameState.tuning.weekly_dispatch_fee, "...minus the week's bills (the haul took a week)")
+	check(GameState.credits == credits + first.base_pay + first.care_bonus, "...and it all goes in the wallet")
 	check(GameState.has_flag("first_mission_done"), "the first mission sets its story flag")
 	check(not GameState.pending_payout.is_empty(), "a delivery leaves a payout card to show")
 	check(not GameState.job_available(first), "the first mission can't be done twice")

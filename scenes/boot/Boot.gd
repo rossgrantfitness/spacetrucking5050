@@ -141,6 +141,7 @@ func _new_game() -> void:
 	_starting = true
 	SaveSystem.delete_save()
 	GameState.new_game()
+	GameState.show_date_card = true
 	GameState.next_spawn = "Bed"
 	LoadingScreen.go(get_tree(), APARTMENT_SCENE, "start")
 

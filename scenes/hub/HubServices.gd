@@ -41,7 +41,8 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 		GameState.save_game()
 
 
-## Sleeping in her bed while the rig's parked: lights out, and a new day.
+## Sleeping in her bed while the rig's parked: lights out, and she wakes up
+## the next morning (the date shows while it's dark).
 ## (In flight, the bed sleeps all the way to the next stop instead; see
 ## FlightSandbox.gd.)
 static func sleep(tree: SceneTree) -> void:
@@ -55,19 +56,19 @@ static func sleep(tree: SceneTree) -> void:
 		var screen := dark.size
 		var square := maxf(2.0, floorf(screen.y / 200.0))
 		dark.draw_rect(Rect2(Vector2.ZERO, screen), Color(0.01, 0.01, 0.03, clampf(t / 0.6, 0.0, 1.0)))
-		if t > 0.7:
+		if t > 0.7 and t < 1.6:
 			var z := "Z".repeat(1 + int(t * 2.0) % 3)
 			PixelFont.draw_centered(dark, screen * 0.5 - Vector2(0.0, square * 12.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
 		if t > 1.6:
-			PixelFont.draw_centered(dark, screen * 0.5 + Vector2(0.0, square * 6.0), "DAY %d" % GameState.day, square * 2.0, Color(1.0, 0.85, 0.3)))
+			DateCard.draw_date(dark, screen * 0.5, square, clampf((t - 1.6) / 0.4, 0.0, 1.0)))
 	night.add_child(dark)
 	tree.root.add_child(night)
 	var clock := 0.0
-	while clock < 3.2:
+	while clock < 5.2:
 		await tree.process_frame
 		clock += tree.root.get_process_delta_time()
 		if clock > 1.4 and shown["time"] <= 1.4:
-			Economy.pass_days(1)  # One night. (The week's bills may come due.)
+			Economy.sleep_until_morning()  # One night. (The week's bills may come due.)
 		shown["time"] = clock
 		dark.queue_redraw()
 	night.queue_free()
@@ -119,7 +120,9 @@ static func job_tags(job: JobData) -> String:
 		tags.append("RUSH")
 	if job.is_fragile() and not job.care_kind in job.cargo_name.to_lower():
 		tags.append(job.care_kind.to_upper())  # (Unless the cargo's name already says so.)
-	tags.append("%dD" % Economy.trip_days(job))
+	var minutes := Economy.job_trip_minutes(job)
+	if minutes > 0.0:
+		tags.append("~%dD" % maxi(roundi(minutes / Economy.MINUTES_PER_DAY), 1) if minutes >= 720.0 else "<1D")
 	return " ".join(tags) + "   "
 
 
@@ -127,8 +130,10 @@ static func job_tags(job: JobData) -> String:
 static func job_summary(job: JobData) -> String:
 	var to := GameState.places.find(job.to_place)
 	var currency := GameState.names.currency_short
-	var words := "%s wants it at %s, %d days on the road. Pays %d %s." % [job.client_name, to.display_name if to != null else "?",
-			Economy.trip_days(job), job.base_pay, currency]
+	var minutes := Economy.job_trip_minutes(job)
+	var road := ", about %s on the road" % Economy.span_text(minutes).to_lower() if minutes > 0.0 else ""
+	var words := "%s wants it at %s%s. Pays %d %s." % [job.client_name, to.display_name if to != null else "?",
+			road, job.base_pay, currency]
 	if job.is_fragile():
 		var kind := {"perishable": "PERISHABLE: up to +%d %s if it arrives fresh.", "live": "LIVE CARGO: up to +%d %s if they arrive happy."}
 		words += " " + (kind.get(job.care_kind, "FRAGILE: up to +%d %s if it arrives without a scratch.") as String) % [job.care_bonus, currency]
@@ -404,8 +409,8 @@ static func show_payout(tree: SceneTree) -> void:
 	if int(pay.get("tab_paid", 0)) > 0:
 		lines.append("Paid off your tab:  -%d %s" % [pay["tab_paid"], currency])
 	lines.append("")
-	if pay.has("days"):
-		lines.append("%d days on the road. It's day %d (week %d)." % [pay["days"], pay["arrived_day"], Economy.week_of(int(pay["arrived_day"]))])
+	if pay.has("road_minutes"):
+		lines.append("%s on the road. It's %s, %s." % [Economy.span_text(float(pay["road_minutes"])), Economy.date_text(), Economy.clock_text()])
 		var rig_name := GameState.active_ship_data().display_name
 		if int(pay.get("levels", 0)) > 0:
 			lines.append("+%d XP. %s is now LEVEL %d!" % [pay["xp"], rig_name, pay["level"]])

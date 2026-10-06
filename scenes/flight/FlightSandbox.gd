@@ -173,7 +173,12 @@ func _ready() -> void:
 	_set_cockpit_view(false)
 	_capture_mouse()
 	Radio.set_context(Radio.Context.FLIGHT)
+	# Bills come due on the road too (the calendar runs while you fly).
+	Economy.bills_paid.connect(_on_bills_paid)
 	_fade.fade_in()
+	if GameState.show_date_card:
+		GameState.show_date_card = false
+		DateCard.pop_up(get_tree())
 
 
 func _process(delta: float) -> void:
@@ -289,6 +294,8 @@ func _set_destination(id: String) -> void:
 	var place_name := place.display_name if place != null else ""
 	_hud.destination = dock
 	_hud.destination_name = place_name
+	var job := GameState.active_job()
+	_hud.destination_is_job = job != null and job.to_place == id
 	_ship.cockpit.destination = dock
 	_ship.cockpit.destination_name = place_name
 
@@ -687,6 +694,7 @@ func _nap() -> void:
 		return  # Something woke her (arriving, a crash).
 	if _nap_in_place:
 		# Nowhere to go: a quick nap, and she wakes up where she was.
+		Economy.advance_minutes(GameState.tuning.nap_hours * 60.0)
 		await get_tree().create_timer(1.2).timeout
 		_wake_up()
 		_hud.show_banner("A QUICK NAP. NO COURSE SET, SO WE STAYED PUT (M CHARTS ONE).", 4.0)
@@ -732,6 +740,8 @@ func _skip_to_next_stop() -> void:
 	_ship.flight.velocity = heading_in * speed
 	if not GameState.active_job_id.is_empty():
 		GameState.job_seconds += float(numbers["cruise_seconds"])
+	# The calendar runs on while she sleeps, as if she'd driven it.
+	Economy.advance_minutes(float(numbers["cruise_seconds"]) * GameState.tuning.flight_minutes_per_second)
 	_aim_cruise()
 	_chase_camera.snap_behind_target()
 	_blend_systems(true)
@@ -756,6 +766,8 @@ func _draw_nap(canvas: Control) -> void:
 	var left := dock.global_position.distance_to(_ship.global_position) / 1000.0 if dock != null else 0.0
 	var z := "Z".repeat(1 + int(Time.get_ticks_msec() / 600.0) % 3)
 	PixelFont.draw_centered(canvas, screen * 0.5 - Vector2(0.0, square * 14.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
+	# The date, under the Zs (it moves on while she sleeps).
+	DateCard.draw_date(canvas, screen * 0.5 + Vector2(0.0, square * 66.0), square, 1.0, false)
 	if _nap_in_place:
 		PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "JUST RESTING HER EYES.", square, Color(0.8, 0.82, 0.9))
 		return
@@ -772,6 +784,16 @@ func _show_grab_hint() -> void:
 		_hud.show_banner("HOLD TO TAKE THE WHEEL", 1.0)
 	elif grab <= 0.0:
 		_grab_hinted = false
+
+
+## The week's bills came due while you were on the road: a heads-up (the
+## bills card itself shows at the next stop).
+func _on_bills_paid(bill: Dictionary) -> void:
+	var on_tab := int(bill.get("on_tab", 0))
+	var words := "WEEKLY BILLS PAID: %d %s" % [int(bill.get("paid", 0)), GameState.names.currency_short]
+	if on_tab > 0:
+		words += " (%d ON THE TAB)" % on_tab
+	_hud.show_banner(words, 4.0)
 
 
 func _on_cruise_released() -> void:

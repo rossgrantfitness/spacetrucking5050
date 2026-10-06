@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CalendarData" format=3]
+
+[ext_resource type="Script" path="res://data/CalendarData.gd" id="1_calendar"]
+
+[resource]
+script = ExtResource("1_calendar")
+month_names = PackedStringArray("KINDLING", "HEARTHFROST", "THAWING", "WAYFARE", "BLOSSOM", "LONGLIGHT", "HIGHSUN", "HAULWIND", "GLEANING", "LANTERN", "DRIFTFALL", "STARSLEEP")
+month_days = PackedInt32Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+month_notes = PackedStringArray("The year catches like a pilot light. Everyone swears this is the year they quit.", "The cold month. Rigs idle with the heaters on, and the coffee's never strong enough.", "The ice lanes crack open, and so does everybody's mail.", "The roads open up. Every trucker in the galaxy hits the lanes at once.", "Even the asteroid farms bloom. Allergy season, somehow, in a vacuum.", "The suns won't set. The longest hauls of the year.", "The hot month. Hull paint bubbles, and the jellyfish migrate.", "Peak hauling. The job boards fill up faster than anyone can empty them.", "Harvest month. The farm moons ship everything they grew.", "The nights draw in. Truck stops hang their lanterns out.", "Things slow down. Old rigs get retired, and old friends call.", "The galaxy rests. Quiet lanes, long naps, and a toast to who's gone.")
+start_year = 5050
+clock_name = "GST"

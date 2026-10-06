@@ -276,7 +276,7 @@ func _draw_desktop() -> void:
 	_canvas.draw_rect(Rect2(2.0, 228.0, 38.0, 10.0), GRAY.lightened(0.15))
 	_draw_carrot(Vector2(5.0, 229.0), 0.5)
 	_text(Vector2(14.0, 230.0), "START")
-	var tray := "DAY %d  %d %s" % [GameState.day, GameState.credits, GameState.names.currency_short]
+	var tray := "%s  %s  %d %s" % [Economy.short_date_text(), Economy.clock_text().left(5), GameState.credits, GameState.names.currency_short]
 	var width := PixelFont.width(tray, 1.0, SMALL)
 	_canvas.draw_rect(Rect2(SCREEN.x - width - 10.0, 228.0, width + 8.0, 10.0), GRAY.darkened(0.1))
 	_text(Vector2(SCREEN.x - width - 6.0, 230.0), tray)
@@ -408,7 +408,7 @@ func _draw_invoices() -> void:
 		if y > inside.end.y - 24.0:
 			break
 		var invoice: Dictionary = GameState.invoices[i]
-		_text(Vector2(inside.position.x + 4.0, y), "DAY %d  %s" % [int(invoice["day"]), _fit(str(invoice["cargo"]), 150.0)])
+		_text(Vector2(inside.position.x + 4.0, y), "%s  %s" % [Economy.short_date_text(int(invoice["day"])), _fit(str(invoice["cargo"]), 150.0)])
 		var bill := int(invoice["total"]) < 0  # Weekly bills: money out.
 		var who := str(invoice["client"]) if bill else "%s > %s" % [invoice["client"], invoice["to"]]
 		_text(Vector2(inside.position.x + 12.0, y + 7.0), _fit(who, 170.0), Color(0.4, 0.4, 0.45))

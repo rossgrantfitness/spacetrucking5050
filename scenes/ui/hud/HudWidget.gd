@@ -15,6 +15,8 @@ extends Control
 const GREEN := Color("62ff7e")
 const YELLOW := Color("ffd21f")
 const RED := Color("ff3d32")
+## Where your job's load goes (the same pink as on the course chart).
+const JOB_PINK := Color("ff4dbf")
 ## Dark see-through panel behind readouts, so they read over bright space.
 const BACKING := Color(0.0, 0.0, 0.03, 0.6)
 const SHADOW := Color(0.0, 0.0, 0.0, 0.7)

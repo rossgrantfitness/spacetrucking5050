@@ -101,3 +101,8 @@ extends Resource
 ## The engine's voice: below 1 = deeper and bigger, above 1 = higher and
 ## smaller.
 @export_range(0.3, 3.0, 0.05) var engine_pitch: float = 0.9
+
+## Inside, every rig has the same rooms (so you never get lost), but each
+## has its own color cast over them, so you can tell which rig you're in.
+## White = none. Keep it soft: a little goes a long way.
+@export var interior_tint: Color = Color.WHITE

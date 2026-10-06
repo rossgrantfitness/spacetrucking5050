@@ -90,6 +90,10 @@ static func find(node: Node) -> HubRoom:
 
 func _ready() -> void:
 	_backdrop.shader = BACKDROP_SHADER
+	# Each rig's rooms have their own color cast, so you know which rig
+	# you're aboard (same rooms, different mood).
+	if scene_file_path in RIG_ROOMS:
+		_backdrop.set_shader_parameter("tint", GameState.active_ship_data().interior_tint)
 	_fade = ScreenFade.new()
 	add_child(_fade)
 	_fade.cover()
@@ -122,6 +126,12 @@ func _ready() -> void:
 	_resize_timer.timeout.connect(_repaint)
 	add_child(_resize_timer)
 	get_viewport().size_changed.connect(_resize_timer.start)
+	# Every sign on a board (the lettering's measured a frame after it loads).
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return  # Already left the room (it happens when you go straight through).
+	SignBoards.mount_all([_set, get_node_or_null("Things") as Node3D])
+	_put_set_on_its_layer(_set)
 	await paint_backgrounds()
 	_choose_shot(true)
 	_ready_to_play = true
@@ -133,6 +143,10 @@ func _ready() -> void:
 		GameState.current_room = scene_file_path
 		GameState.save_game()
 	await _fade.fade_in()
+	# A game just started or loaded: what day is it?
+	if GameState.show_date_card:
+		GameState.show_date_card = false
+		DateCard.pop_up(get_tree())
 	# Just docked with a delivery? Here's what it paid.
 	if not GameState.pending_payout.is_empty():
 		player.set_busy(true)

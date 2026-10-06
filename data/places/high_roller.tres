@@ -16,3 +16,4 @@ fuel_price_factor = 1.25
 surrounding_field = "chips"
 field_radii = Vector2(1500, 2600)
 field_rock_count = 2600
+map_position = Vector3(-44790, -1120, -44194)

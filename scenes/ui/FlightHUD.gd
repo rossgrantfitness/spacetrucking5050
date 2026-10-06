@@ -30,6 +30,9 @@ enum Kind { ROCK, SHIP, STATION, PLACE }
 var ship: Ship
 var destination: Node3D
 var destination_name: String = ""
+## On when the destination is where your job's load goes (it's marked in
+## pink then, like on the course chart).
+var destination_is_job: bool = false
 ## Place id -> its station node (set by the flight scene), so the HUD can
 ## name stations as you get near (green ID label, like ships).
 var places: Dictionary = {}

@@ -8,3 +8,4 @@ id = "base"
 display_name = "YOUR RIG"
 interior_scene = "res://scenes/hub/Dispatch.tscn"
 arrival_spawn = "FromShip"
+on_the_map = false

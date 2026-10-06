@@ -35,10 +35,6 @@ extends Resource
 ## (breaks), perishable (spoils) or live (it's alive. Be nice).
 @export_enum("fragile", "perishable", "live") var care_kind: String = "fragile"
 
-## How many days the trip takes on the calendar (0 = the usual, see
-## tuning.tres "Time and bills"). Space trucking is slow.
-@export_range(0, 30, 1, "suffix:days") var trip_days: int = 0
-
 ## Rush jobs: arrive within this many seconds for the rush bonus.
 ## 0 = not a rush job (no timer at all).
 @export_range(0.0, 3600.0, 5.0, "suffix:s") var rush_seconds: float = 0.0

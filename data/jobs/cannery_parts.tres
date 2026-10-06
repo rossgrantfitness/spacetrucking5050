@@ -11,7 +11,6 @@ description = "The can-sealer is making a noise. Dusty sent spares. Gill would l
 from_place = "truck_stop"
 to_place = "tidewater"
 base_pay = 1200
-trip_days = 7
 care_bonus = 0
 rush_seconds = 900.0
 rush_bonus = 300

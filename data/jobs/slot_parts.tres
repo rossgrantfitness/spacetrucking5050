@@ -11,7 +11,6 @@ description = "Reels, levers and a lot of little lights. Some of them still go D
 from_place = "high_roller"
 to_place = "truck_stop"
 base_pay = 1250
-trip_days = 6
 care_bonus = 0
 rush_seconds = 1080.0
 rush_bonus = 250

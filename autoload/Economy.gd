@@ -3,10 +3,10 @@ extends Node
 ## this holds the rules. Every price and rate is in res://data/tuning.tres
 ## ("Time and bills", "Rig levels") or in the data files, never here.
 ##
-## TIME: space trucking is slow. A delivery takes days on the calendar (the
-## job's trip_days, about a week for a long haul), and sleeping in your bed
-## while parked is one night. Nothing else moves the calendar: no clocks,
-## no shifts, no hurry.
+## TIME: the calendar is 365 days in 12 months (res://data/calendar.tres),
+## and the clock runs while you play: fast while you fly (a 10-minute haul is
+## a day or two on the road), gently while you're parked, and a whole night
+## when you sleep. TimeOfDay.gd ticks it; the rates are in tuning.tres.
 ##
 ## BILLS: every 7 days on the calendar, OrbitalEx's berth and dispatch fee
 ## comes due (plus insurance, if you have it). What you can't pay goes on a
@@ -23,14 +23,43 @@ const DAYS_PER_WEEK: int = 7
 signal bills_paid(bill: Dictionary)
 
 
+const MINUTES_PER_DAY: float = 1440.0
+
+## The galaxy's calendar (month names and lengths).
+var calendar: CalendarData = preload("res://data/calendar.tres")
+
+
 ## Which week of the calendar `on_day` is in (week 1 = days 1 to 7).
 func week_of(on_day: int) -> int:
 	return floori((on_day - 1) / float(DAYS_PER_WEEK)) + 1
 
 
-## "DAY 12 · WEEK 2", for the HUD and the PC.
+## A date, like "14 HAULWIND 5050" (today's if `on_day` is 0).
+func date_text(on_day: int = 0) -> String:
+	var date := calendar.date_of(on_day if on_day > 0 else GameState.day)
+	return "%d %s %d" % [date["day"], calendar.month_name(date["month"]), date["year"]]
+
+
+## A short date, like "14 HAU" (for tight spots like the PC's lists).
+func short_date_text(on_day: int = 0) -> String:
+	var date := calendar.date_of(on_day if on_day > 0 else GameState.day)
+	return "%d %s" % [date["day"], calendar.month_name(date["month"]).substr(0, 3)]
+
+
+## The time on the galaxy's clock, like "06:42 GST".
+func clock_text() -> String:
+	var minutes := floori(GameState.minute)
+	return "%02d:%02d %s" % [floori(minutes / 60.0), minutes % 60, calendar.clock_name]
+
+
+## The hour of the day (0 to 23).
+func hour() -> int:
+	return floori(GameState.minute / 60.0)
+
+
+## "14 HAULWIND 5050", for the HUD and the PC.
 func calendar_text() -> String:
-	return "DAY %d  ·  WEEK %d" % [GameState.day, week_of(GameState.day)]
+	return date_text()
 
 
 ## Days left until the next bills (1 to 7).
@@ -38,11 +67,63 @@ func days_to_bills() -> int:
 	return DAYS_PER_WEEK - (GameState.day - 1) % DAYS_PER_WEEK
 
 
-## How many days `job` takes on the road.
-func trip_days(job: JobData) -> int:
-	if job != null and job.trip_days > 0:
-		return job.trip_days
-	return GameState.tuning.default_trip_days
+## All the time since day 1 began, in minutes (for "how long did that take").
+func now_minutes() -> float:
+	return (GameState.day - 1) * MINUTES_PER_DAY + GameState.minute
+
+
+## Moves the clock on `minutes`, rolling over into new days (and paying the
+## bills for every week that ends). Returns how many days went by.
+func advance_minutes(minutes: float) -> int:
+	if minutes <= 0.0:
+		return 0
+	GameState.minute += minutes
+	var days := floori(GameState.minute / MINUTES_PER_DAY)
+	if days > 0:
+		GameState.minute -= days * MINUTES_PER_DAY
+		pass_days(days)
+	return days
+
+
+## Sleeps until the next morning (tuning: wake_up_hour). Returns the days
+## that went by (1, or 0 if it's still before morning, say a 3 a.m. bedtime).
+func sleep_until_morning() -> int:
+	var wake := GameState.tuning.wake_up_hour * 60.0
+	var minutes := wake - GameState.minute
+	if minutes <= 60.0:
+		minutes += MINUTES_PER_DAY  # (Under an hour's sleep isn't a night: sleep to tomorrow.)
+	return advance_minutes(minutes)
+
+
+## How long a trip of `meters` takes on the calendar at the rig's cruising
+## speed, in minutes.
+func trip_minutes(meters: float, ship: ShipData = null) -> float:
+	var rig := ship if ship != null else GameState.active_ship_data()
+	return meters / maxf(rig.max_speed, 1.0) * GameState.tuning.flight_minutes_per_second
+
+
+## About how long `job` takes on the road, in minutes (from where it's
+## picked up, or from `from_place` for jobs handed out aboard).
+func job_trip_minutes(job: JobData, from_place: String = "") -> float:
+	var from := GameState.places.find(job.from_place)
+	if from == null or not from.on_the_map:
+		from = GameState.places.find(from_place if not from_place.is_empty() else GameState.launch_from)
+	var to := GameState.places.find(job.to_place)
+	if from == null or to == null or not from.on_the_map or not to.on_the_map:
+		return 0.0
+	return trip_minutes(from.map_position.distance_to(to.map_position))
+
+
+## A length of calendar time in words: "2 DAYS 5 HRS", "9 HRS", "40 MIN".
+func span_text(minutes: float) -> String:
+	var whole := roundi(minutes)
+	var days := floori(whole / MINUTES_PER_DAY)
+	var hours := floori((whole % int(MINUTES_PER_DAY)) / 60.0)
+	if days > 0:
+		return "%d DAY%s %d HR%s" % [days, "" if days == 1 else "S", hours, "" if hours == 1 else "S"]
+	if hours > 0:
+		return "%d HR%s" % [hours, "" if hours == 1 else "S"]
+	return "%d MIN" % maxi(whole, 1)
 
 
 ## What a week's bills come to: {"dispatch", "insurance", "total"}.
@@ -76,6 +157,10 @@ func pay_bills(weeks: int) -> Dictionary:
 	var result := {"weeks": weeks, "dispatch": int(bill["dispatch"]) * weeks, "insurance": int(bill["insurance"]) * weeks,
 			"total": total, "paid": paid, "on_tab": total - paid, "day": GameState.day}
 	GameState.pending_bills = result
+	# On the PC's invoice list too (as money going out).
+	GameState.invoices.append({"cargo": "WEEKLY BILLS", "client": GameState.names.company_name, "to": "", "total": -total, "day": GameState.day})
+	if GameState.invoices.size() > GameState.INVOICE_LIMIT:
+		GameState.invoices.remove_at(0)
 	GameState.set_flag("first_bills")  # (Billing sends a statement: see the PC's mail.)
 	if total - paid > 0:
 		GameState.set_flag("ran_a_tab")

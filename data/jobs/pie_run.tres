@@ -11,7 +11,6 @@ description = "A round of Marge's pies for the cannery canteen. Gill pretends no
 from_place = "truck_stop"
 to_place = "tidewater"
 base_pay = 420
-trip_days = 7
 care_kind = "perishable"
 care_bonus = 150
 rush_seconds = 0.0

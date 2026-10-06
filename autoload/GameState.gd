@@ -82,8 +82,18 @@ var event_history: Dictionary = {}
 ## "to", "total", "day"}. Only the latest INVOICE_LIMIT are kept.
 var invoices: Array[Dictionary] = []
 const INVOICE_LIMIT: int = 20
-## Which day it is (sleeping in your bed starts a new one).
+## Which day it is (day 1 = the day the game starts; see Economy.date_text
+## for the calendar date).
 var day: int = 1
+## The time of day on the galaxy's clock, in minutes after midnight (0 to
+## 1440). TimeOfDay.gd moves it on while you play.
+var minute: float = 480.0
+## When you took the job you're hauling (Economy.now_minutes), so the payout
+## can say how long it was on the road.
+var job_started: float = 0.0
+## Show the date card (the day, the month, the year) when the next room or
+## the flight comes up: set when a game is started or loaded.
+var show_date_card: bool = false
 ## Bills you couldn't pay yet (Economy.gd): paid off from your next delivery.
 var tab: int = 0
 ## Signed up for insurance at Dusty's (weekly premium, cheaper repairs).
@@ -213,6 +223,7 @@ func accept_job(job: JobData) -> bool:
 		return false
 	active_job_id = job.id
 	job_seconds = 0.0
+	job_started = Economy.now_minutes()
 	rig["cargo"] = 1.0
 	save_game()
 	return true
@@ -235,21 +246,17 @@ func deliver_at(place_id: String) -> bool:
 	pay["client_name"] = job.client_name
 	pay["condition"] = rig.get("cargo", 1.0)
 	add_credits(pay["total"])
-	# The trip took days: the calendar moves on (and bills may come due),
-	# the rig earns experience, and any tab gets paid off.
-	var days := Economy.trip_days(job)
-	pay["days"] = days
+	# How long it was on the road (the calendar ran the whole way), the rig
+	# earns experience, and any tab gets paid off.
+	pay["road_minutes"] = maxf(Economy.now_minutes() - job_started, 0.0)
 	pay["xp"] = Economy.xp_for(int(pay["total"]))
 	pay["levels"] = Economy.add_xp(int(pay["xp"]))
 	pay["level"] = Economy.level_of()
 	pay["tab_paid"] = Economy.settle_tab()
-	Economy.pass_days(days)
 	pay["arrived_day"] = day
 	var place := places.find(place_id)
 	invoices.append({"cargo": job.cargo_name, "client": job.client_name,
 			"to": place.display_name if place != null else place_id, "total": int(pay["total"]), "day": day})
-	if not pending_bills.is_empty():
-		invoices.append({"cargo": "WEEKLY BILLS", "client": "OrbitalEx", "to": "", "total": -int(pending_bills["total"]), "day": day})
 	if invoices.size() > INVOICE_LIMIT:
 		invoices.remove_at(0)
 	set_flag(job.completes_flag)
@@ -315,6 +322,8 @@ func to_save_data() -> Dictionary:
 		"paint": paint,
 		"invoices": invoices,
 		"day": day,
+		"minute": minute,
+		"job_started": job_started,
 		"pc_high_score": pc_high_score,
 		"tab": tab,
 		"insured": insured,
@@ -389,6 +398,10 @@ func apply_save_data(data: Dictionary) -> void:
 						"to": str(entry.get("to", "")), "total": int(entry.get("total", 0)), "day": int(entry.get("day", 1))})
 	if data.get("day") is int or data.get("day") is float:
 		day = maxi(int(data["day"]), 1)
+	if data.get("minute") is int or data.get("minute") is float:
+		minute = clampf(float(data["minute"]), 0.0, 1439.0)
+	if data.get("job_started") is int or data.get("job_started") is float:
+		job_started = maxf(float(data["job_started"]), 0.0)
 	if data.get("pc_high_score") is int or data.get("pc_high_score") is float:
 		pc_high_score = maxi(int(data["pc_high_score"]), 0)
 	if data.get("tab") is int or data.get("tab") is float:
@@ -443,6 +456,8 @@ func new_game() -> void:
 	pending_bills = {}
 	invoices = []
 	day = 1
+	minute = tuning.start_hour * 60.0
+	job_started = 0.0
 	tab = 0
 	insured = false
 	ship_xp = {}
@@ -462,6 +477,7 @@ func load_game() -> bool:
 	if data.is_empty():
 		return false
 	apply_save_data(data)
+	show_date_card = true
 	return true
 
 

@@ -9,7 +9,10 @@ render_mode unshaded, fog_disabled;
 
 // The picture painted from the current camera.
 uniform sampler2D background : source_color, filter_linear;
+// A soft color cast over the whole room (each rig's rooms have their own;
+// see interior_tint in res://data/ships/). White = none.
+uniform vec3 tint : source_color = vec3(1.0);
 
 void fragment() {
-	ALBEDO = texture(background, SCREEN_UV).rgb;
+	ALBEDO = texture(background, SCREEN_UV).rgb * tint;
 }

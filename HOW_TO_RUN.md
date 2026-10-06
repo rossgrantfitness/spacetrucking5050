@@ -294,10 +294,15 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
 
 ### Money and time on the road
 
-- **The calendar** sits under your money in the top-right corner: the day,
-  the week, and how many days until the bills. Time only moves when you
-  do something slow. A delivery takes days (the job board shows how many,
-  e.g. **7D**), and sleeping in your bed while parked is one night.
+- **The calendar and clock** sit under your money (and top right while
+  flying): the time on the galaxy's clock (GST), the date, and how many
+  days until the bills. The year has 365 days in 12 months (Kindling,
+  Hearthfrost, Thawing, Wayfare, Blossom, Longlight, Highsun, Haulwind,
+  Gleaning, Lantern, Driftfall, Starsleep). Time runs while you play:
+  fast while you fly (about 2 days per 10 minutes of driving), gently while
+  you walk around, and a whole night when you sleep. The date card shows
+  when you load a game and when you wake up. The job board says about how
+  many days a job takes on the road (**~2D**).
 - **Weekly bills:** every 7 days, OrbitalEx takes its berth and dispatch
   fee (plus insurance, if you bought it). If you can't pay it all, the
   rest goes on a **TAB** (shown in orange). It's paid off from your next
@@ -311,6 +316,11 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
 - **Job tags** on the board: **RUSH** (bonus for being quick), **FRAGILE**,
   **PERISHABLE**, **LIVE** (bonus that shrinks if you bump the cargo), and
   the trip length in days. Your invoices and bills are on the PC.
+- **Where your load goes** is always **hot pink**: on the course chart (M)
+  it's the pink target with the "YOUR LOAD" flag and the pink route, and
+  in flight the waypoint is pink with "LOAD" under it.
+- **Which rig you're in:** every rig has the same rooms inside, but each
+  has its own soft color cast, and its name shows under the calendar.
 
 ### Menus
 
@@ -383,10 +393,14 @@ long-haul truckers) is `scenes/flight/TidewaterRoad.tscn`, made by
 `tools/build_glimmer_road.gd`): edit the numbers there ("how far along the road,
 how far to the side") and run it again. The random sights (big ships,
 convoys, billboards...) are in `data/events/route_events.tres`, and how
-often they show up is in tuning.tres under "Route events". Bills, trip
-length and rig levels are under "Time and bills" and "Rig levels"; each
-job's days on the road is *Trip Days* in its file in `data/jobs/`, and
-each part's price and level is in `data/upgrades/`. Planets and
+often they show up is in tuning.tres under "Route events". Bills, how
+fast time runs, and rig levels are under "Time and bills" and "Rig
+levels"; the month names (and the line about each) are in
+`data/calendar.tres`; each rig's interior color is *Interior Tint* in its
+file in `data/ships/`; and each part's price and level is in
+`data/upgrades/`. Signs get their boards automatically
+(`scenes/hub/SignBoards.gd`); to keep one floating, add the metadata
+`no_board` = true to its Label3D. Planets and
 suns are the *SkyBody* nodes under *World/SkyBodies*; each solar system's
 colors are in `data/systems/`.
 

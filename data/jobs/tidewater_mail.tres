@@ -11,7 +11,6 @@ description = "Letters, parcels and one very insistent birthday card."
 from_place = "base"
 to_place = "tidewater"
 base_pay = 1250
-trip_days = 7
 care_bonus = 0
 rush_seconds = 0.0
 rush_bonus = 0
