@@ -292,6 +292,26 @@ Edit a line, then run `python3 tools/crew_data/make_crew.py` from the
 project folder (it rewrites `data/crew/crew.tres`). Lines can use
 `{bunny}`, `{husband}`, `{company}`, `{cargo}` and `{place}`.
 
+### Money and time on the road
+
+- **The calendar** sits under your money in the top-right corner: the day,
+  the week, and how many days until the bills. Time only moves when you
+  do something slow. A delivery takes days (the job board shows how many,
+  e.g. **7D**), and sleeping in your bed while parked is one night.
+- **Weekly bills:** every 7 days, OrbitalEx takes its berth and dispatch
+  fee (plus insurance, if you bought it). If you can't pay it all, the
+  rest goes on a **TAB** (shown in orange). It's paid off from your next
+  delivery. No interest, no penalty, nobody comes after you.
+- **Insurance** (at Dusty's, the mechanic): a small weekly fee, and
+  repairs cost half. Switch it on or off any time.
+- **Rig levels:** every delivery earns your rig XP. Each level makes it
+  a little faster, punchier, nimbler and longer-legged on fuel. Dusty's
+  menu shows your level and how much XP is left to the next one. Some
+  parts need a rig of a certain level (they show **LEVEL n** until then).
+- **Job tags** on the board: **RUSH** (bonus for being quick), **FRAGILE**,
+  **PERISHABLE**, **LIVE** (bonus that shrinks if you bump the cargo), and
+  the trip length in days. Your invoices and bills are on the PC.
+
 ### Menus
 
 | What | Keyboard & mouse | Gamepad |
@@ -363,7 +383,10 @@ long-haul truckers) is `scenes/flight/TidewaterRoad.tscn`, made by
 `tools/build_glimmer_road.gd`): edit the numbers there ("how far along the road,
 how far to the side") and run it again. The random sights (big ships,
 convoys, billboards...) are in `data/events/route_events.tres`, and how
-often they show up is in tuning.tres under "Route events". Planets and
+often they show up is in tuning.tres under "Route events". Bills, trip
+length and rig levels are under "Time and bills" and "Rig levels"; each
+job's days on the road is *Trip Days* in its file in `data/jobs/`, and
+each part's price and level is in `data/upgrades/`. Planets and
 suns are the *SkyBody* nodes under *World/SkyBodies*; each solar system's
 colors are in `data/systems/`.
 

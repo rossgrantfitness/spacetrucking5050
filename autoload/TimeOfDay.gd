@@ -1,17 +1,13 @@
 extends Node
-## The base's gentle clock: days, and three shifts per day (morning, evening,
-## night).
-##
-## Empty for now. Fills in at M3 (which dispatch employee is on shift) and M6
-## (each flight uses up one shift, sleeping starts a new day, rent is weekly).
-##
-## This is never a stressful timer: time only moves forward when the player
-## does something (flies a job, goes to sleep).
+## Night and day. There are no shifts (the developer's call: space truckers
+## don't do three deliveries a day; a haul takes about a week). The calendar
+## (days, weeks, bills) lives in Economy.gd and only moves when you deliver
+## or sleep.
 
 
-## Whether it's the night shift. Until shifts arrive (M6), it follows the
-## player's own clock: 9 p.m. to 6 a.m. (The Afterglow Block radio station
-## only broadcasts at night.)
+## Whether it's night: it follows the player's own clock, 9 p.m. to 6 a.m.
+## (The Afterglow Block radio station only broadcasts at night, and the crew
+## turn in.)
 func is_night() -> bool:
 	var hour: int = Time.get_datetime_dict_from_system()["hour"]
 	return hour >= 21 or hour < 6

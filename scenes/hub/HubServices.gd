@@ -67,10 +67,11 @@ static func sleep(tree: SceneTree) -> void:
 		await tree.process_frame
 		clock += tree.root.get_process_delta_time()
 		if clock > 1.4 and shown["time"] <= 1.4:
-			GameState.day += 1
+			Economy.pass_days(1)  # One night. (The week's bills may come due.)
 		shown["time"] = clock
 		dark.queue_redraw()
 	night.queue_free()
+	await show_bills(tree)
 
 
 ## "Take the job?" Returns whether the player took it.
@@ -102,20 +103,35 @@ static func job_board(tree: SceneTree, place_id: String) -> void:
 		return
 	var options: Array = []
 	for job in jobs:
-		options.append({"text": job.cargo_name.to_upper(), "detail": "%d %s" % [job.base_pay, GameState.names.currency_short], "description": job_summary(job)})
+		options.append({"text": job.cargo_name.to_upper(), "detail": "%s%d %s" % [job_tags(job), job.base_pay, GameState.names.currency_short],
+				"description": job_summary(job)})
 	options.append({"text": "LEAVE", "description": "Maybe later."})
 	var choice := await MenuPanel.ask(tree, "JOB BOARD", "Pick a load. One at a time.", options)
 	if choice >= 0 and choice < jobs.size():
 		await offer_job(tree, jobs[choice])
 
 
+## The job's tier, for the job board: RUSH, FRAGILE, PERISHABLE, LIVE (or
+## nothing for a standard job), and how long it takes.
+static func job_tags(job: JobData) -> String:
+	var tags := PackedStringArray()
+	if job.is_rush():
+		tags.append("RUSH")
+	if job.is_fragile() and not job.care_kind in job.cargo_name.to_lower():
+		tags.append(job.care_kind.to_upper())  # (Unless the cargo's name already says so.)
+	tags.append("%dD" % Economy.trip_days(job))
+	return " ".join(tags) + "   "
+
+
 ## A job in a few words: where to, pay, bonuses.
 static func job_summary(job: JobData) -> String:
 	var to := GameState.places.find(job.to_place)
 	var currency := GameState.names.currency_short
-	var words := "%s wants it at %s. Pays %d %s." % [job.client_name, to.display_name if to != null else "?", job.base_pay, currency]
+	var words := "%s wants it at %s, %d days on the road. Pays %d %s." % [job.client_name, to.display_name if to != null else "?",
+			Economy.trip_days(job), job.base_pay, currency]
 	if job.is_fragile():
-		words += " FRAGILE: up to +%d %s if it arrives without a scratch." % [job.care_bonus, currency]
+		var kind := {"perishable": "PERISHABLE: up to +%d %s if it arrives fresh.", "live": "LIVE CARGO: up to +%d %s if they arrive happy."}
+		words += " " + (kind.get(job.care_kind, "FRAGILE: up to +%d %s if it arrives without a scratch.") as String) % [job.care_bonus, currency]
 	if job.is_rush():
 		words += " RUSH: +%d %s if you make it in %s." % [job.rush_bonus, currency, HudWidget.clock(job.rush_seconds)]
 	if not job.description.is_empty():
@@ -152,25 +168,38 @@ static func fuel(tree: SceneTree, title: String = "LILY'S PUMPS", goodbye: Strin
 static func mechanic(tree: SceneTree) -> void:
 	while true:
 		var currency := GameState.names.currency_short
-		var repair_cost := ceili((1.0 - GameState.rig["hull"]) * GameState.tuning.hull_repair_price)
+		var repair_cost := Economy.repair_cost()
+		var level := Economy.level_of()
+		var insurance_text := "INSURED" if GameState.insured else "%d %s/WEEK" % [GameState.tuning.weekly_insurance, currency]
 		var options: Array = [{"text": "PATCH THE HULL", "detail": "%d %s" % [repair_cost, currency], "disabled": repair_cost <= 0,
-				"description": "Hull is at %d%%. Dusty bangs the dents out." % roundi(GameState.rig["hull"] * 100.0)},
+				"description": "Hull is at %d%%. Dusty bangs the dents out.%s" % [roundi(GameState.rig["hull"] * 100.0), " (Insurance pays half.)" if GameState.insured else ""]},
 				{"text": "RIGS FOR SALE", "detail": "%d OWNED" % GameState.owned_ships.size(),
 				"description": "New rigs, each with its own handling. Bigger holds pay more per job."},
 				{"text": "PAINT SHOP", "detail": GameState.paints.find(GameState.paint).display_name,
-				"description": "A fresh coat for the hull, and a matching engine trail."}]
+				"description": "A fresh coat for the hull, and a matching engine trail."},
+				{"text": "INSURANCE", "detail": insurance_text,
+				"description": ("You're covered: repairs cost half. Pick this to cancel (no hard feelings)." if GameState.insured
+					else "Rig insurance: %d %s a week with your bills, and every repair costs half." % [GameState.tuning.weekly_insurance, currency])}]
 		var shop: Array[UpgradeData] = []
 		for upgrade in GameState.upgrades.upgrades:
 			if upgrade == null:
 				continue
 			var owned := GameState.owns_upgrade(upgrade.id)
 			var locked := not upgrade.requires_upgrade.is_empty() and not GameState.owns_upgrade(upgrade.requires_upgrade)
-			var detail := "INSTALLED" if owned else ("LOCKED" if locked else "%d %s" % [upgrade.price, currency])
-			options.append({"text": upgrade.display_name.to_upper(), "detail": detail, "disabled": owned or locked,
-					"description": upgrade.description + ("\n(Needs the %s first.)" % GameState.upgrades.find(upgrade.requires_upgrade).display_name if locked else "")})
+			var too_green := level < upgrade.min_level
+			var detail := "INSTALLED" if owned else ("LOCKED" if locked else ("LEVEL %d" % upgrade.min_level if too_green else "%d %s" % [upgrade.price, currency]))
+			var why := ""
+			if locked:
+				why = "\n(Needs the %s first.)" % GameState.upgrades.find(upgrade.requires_upgrade).display_name
+			elif too_green and not owned:
+				why = "\n(Only fits a level %d rig. Yours is level %d: keep hauling.)" % [upgrade.min_level, level]
+			options.append({"text": upgrade.display_name.to_upper(), "detail": detail, "disabled": owned or locked or too_green,
+					"description": upgrade.description + why})
 			shop.append(upgrade)
 		options.append({"text": "LEAVE", "description": "\"Don't be a stranger.\""})
-		var choice := await MenuPanel.ask(tree, "DUSTY'S GARAGE", "You've got %d %s." % [GameState.credits, currency], options)
+		var rig := GameState.active_ship_data()
+		var xp_note := "%d XP to level %d" % [Economy.xp_to_next(), level + 1] if Economy.xp_to_next() > 0 else "top level"
+		var choice := await MenuPanel.ask(tree, "DUSTY'S GARAGE", "You've got %d %s. %s: LEVEL %d (%s)." % [GameState.credits, currency, rig.display_name, level, xp_note], options)
 		if choice == 0:
 			if GameState.spend(repair_cost):
 				GameState.rig["hull"] = 1.0
@@ -180,8 +209,12 @@ static func mechanic(tree: SceneTree) -> void:
 			await rig_dealer(tree)
 		elif choice == 2:
 			await paint_shop(tree)
-		elif choice > 2 and choice <= shop.size() + 2:
-			var upgrade := shop[choice - 3]
+		elif choice == 3:
+			GameState.insured = not GameState.insured
+			await MenuPanel.ask(tree, "INSURANCE", "You're covered. Repairs cost half, and it's on your weekly bills." if GameState.insured
+					else "Cancelled. Dusty shrugs. \"Your rig, your call.\"", [{"text": "OKAY"}])
+		elif choice > 3 and choice <= shop.size() + 3:
+			var upgrade := shop[choice - 4]
 			if GameState.spend(upgrade.price):
 				GameState.owned_upgrades.append(upgrade.id)
 				await MenuPanel.ask(tree, "INSTALLED!", "%s is on your rig. You'll feel it next time you fly." % upgrade.display_name, [{"text": "NICE"}])
@@ -367,8 +400,45 @@ static func show_payout(tree: SceneTree) -> void:
 	if int(pay.get("hold", 0)) > 0:
 		lines.append("Big hold bonus:  +%d %s" % [pay["hold"], currency])
 	lines.append("")
-	lines.append("TOTAL:  +%d %s        Wallet: %d %s" % [pay["total"], currency, GameState.credits, currency])
+	lines.append("TOTAL:  +%d %s" % [pay["total"], currency])
+	if int(pay.get("tab_paid", 0)) > 0:
+		lines.append("Paid off your tab:  -%d %s" % [pay["tab_paid"], currency])
+	lines.append("")
+	if pay.has("days"):
+		lines.append("%d days on the road. It's day %d (week %d)." % [pay["days"], pay["arrived_day"], Economy.week_of(int(pay["arrived_day"]))])
+		var rig_name := GameState.active_ship_data().display_name
+		if int(pay.get("levels", 0)) > 0:
+			lines.append("+%d XP. %s is now LEVEL %d!" % [pay["xp"], rig_name, pay["level"]])
+		else:
+			lines.append("+%d XP for %s (level %d)." % [pay["xp"], rig_name, pay["level"]])
+	if GameState.pending_bills.is_empty():
+		lines.append("Wallet: %d %s" % [GameState.credits, currency])  # (Otherwise it's on the bills card.)
+	if int(pay.get("levels", 0)) > 0:
+		Sfx.play("pickup")
 	await MenuPanel.ask(tree, "DELIVERED!", "\n".join(lines), [{"text": "NICE"}])
+	await show_bills(tree)
+
+
+## The weekly bills card, if bills came due (GameState.pending_bills).
+static func show_bills(tree: SceneTree) -> void:
+	var bill := GameState.pending_bills
+	if bill.is_empty():
+		return
+	GameState.pending_bills = {}
+	var currency := GameState.names.currency_short
+	var lines := PackedStringArray()
+	var weeks := int(bill["weeks"])
+	lines.append("%s for %d week%s on %s's books." % ["Berth and dispatch fee", weeks, "s" if weeks > 1 else "", GameState.names.company_name])
+	lines.append("")
+	lines.append("Berth and dispatch:  %d %s" % [bill["dispatch"], currency])
+	if int(bill["insurance"]) > 0:
+		lines.append("Insurance:  %d %s" % [bill["insurance"], currency])
+	lines.append("")
+	lines.append("Paid:  %d %s" % [bill["paid"], currency])
+	if int(bill["on_tab"]) > 0:
+		lines.append("On your tab:  %d %s (paid off from your next delivery, no rush)" % [bill["on_tab"], currency])
+	lines.append("Wallet: %d %s" % [GameState.credits, currency])
+	await MenuPanel.ask(tree, "WEEKLY BILLS", "\n".join(lines), [{"text": "SIGH. OKAY"}])
 
 
 static func _too_poor(tree: SceneTree) -> void:

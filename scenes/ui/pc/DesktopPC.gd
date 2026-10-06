@@ -392,12 +392,13 @@ func _draw_letter() -> void:
 
 
 func _draw_invoices() -> void:
-	var inside := _draw_window("INVOICES - PAID")
+	var inside := _draw_window("INVOICES AND BILLS")
 	_canvas.draw_rect(inside, PAPER)
 	var total := 0
 	for invoice in GameState.invoices:
 		total += int(invoice["total"])
-	_text(inside.position + Vector2(4.0, 3.0), "DELIVERIES: %d   EARNED: %d %s" % [GameState.deliveries, total, GameState.names.currency_short], INK)
+	_text(inside.position + Vector2(4.0, 3.0), "DELIVERIES: %d   NET: %d %s   %s" % [GameState.deliveries, total, GameState.names.currency_short,
+			"TAB: %d" % GameState.tab if GameState.tab > 0 else Economy.calendar_text()], INK)
 	_canvas.draw_rect(Rect2(inside.position + Vector2(4.0, 11.0), Vector2(inside.size.x - 8.0, 1.0)), Color(0.6, 0.6, 0.65))
 	if GameState.invoices.is_empty():
 		_text(inside.position + Vector2(4.0, 20.0), "NOTHING YET. GO HAUL SOMETHING.")
@@ -408,9 +409,11 @@ func _draw_invoices() -> void:
 			break
 		var invoice: Dictionary = GameState.invoices[i]
 		_text(Vector2(inside.position.x + 4.0, y), "DAY %d  %s" % [int(invoice["day"]), _fit(str(invoice["cargo"]), 150.0)])
-		_text(Vector2(inside.position.x + 12.0, y + 7.0), _fit("%s > %s" % [invoice["client"], invoice["to"]], 170.0), Color(0.4, 0.4, 0.45))
-		var amount := "+%d" % int(invoice["total"])
-		_text(Vector2(inside.end.x - 70.0, y + 3.0), amount, Color(0.15, 0.5, 0.25))
+		var bill := int(invoice["total"]) < 0  # Weekly bills: money out.
+		var who := str(invoice["client"]) if bill else "%s > %s" % [invoice["client"], invoice["to"]]
+		_text(Vector2(inside.position.x + 12.0, y + 7.0), _fit(who, 170.0), Color(0.4, 0.4, 0.45))
+		var amount := ("%d" if bill else "+%d") % int(invoice["total"])
+		_text(Vector2(inside.end.x - 70.0, y + 3.0), amount, Color(0.7, 0.2, 0.2) if bill else Color(0.15, 0.5, 0.25))
 		# The PAID stamp.
 		_canvas.draw_rect(Rect2(inside.end.x - 32.0, y + 1.0, 26.0, 10.0), Color(0.8, 0.2, 0.2), false)
 		_text(Vector2(inside.end.x - 29.0, y + 3.0), "PAID", Color(0.8, 0.2, 0.2))

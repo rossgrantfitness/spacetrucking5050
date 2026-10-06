@@ -36,13 +36,14 @@ func test_deliveries_become_invoices() -> void:
 	var before := _fresh()
 	GameState.accept_job(GameState.jobs.find("first_long_haul"))
 	check(GameState.deliver_at("tidewater"), "the first long haul delivers at Tidewater")
-	check(GameState.invoices.size() == 1, "a delivery leaves a paid invoice")
+	# A 7-day haul crosses into week 2, so the weekly bills are on the list too.
+	check(GameState.invoices.size() == 2 and int(GameState.invoices[1]["total"]) < 0, "a delivery leaves a paid invoice (and the week's bills)")
 	var invoice := GameState.invoices[0]
 	check(int(invoice["total"]) > 0 and str(invoice["to"]) == GameState.places.find("tidewater").display_name, "the invoice says what it paid and where")
 	var saved := GameState.to_save_data()
 	GameState.new_game()
 	GameState.apply_save_data(saved)
-	check(GameState.invoices.size() == 1, "invoices are saved")
+	check(GameState.invoices.size() == 2, "invoices are saved")
 	_restore(before)
 
 

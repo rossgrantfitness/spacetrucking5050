@@ -1,15 +1,16 @@
 # Progress
 
-**Current status:** **Round 17: gentler wobbles, doors, sleep, the
-TATER-16, physical crashes, station names.** Plus round 16 (leaving
-conversations, voices and sounds, rocks all around, thrusters, nine rigs)
-and solid-color ship panels. Built and validated, **waiting for your
-playtest** (see `PLAYTEST.md`).
-**Next session:** your feedback; then more of the main game (your call:
-the economy and time of M6, the next solar system, more clients and story,
-the docking computer), polish as you send notes, and the audit.
+**Current status:** **Round 18: M6, money and time on the road.** Every
+delivery takes days on the calendar (about a week for a long haul; no
+shifts), weekly bills with a no-stress tab, insurance, rig XP and ten
+levels you can feel, level-gated upgrades, job tiers on the board, two
+live-cargo jobs. Built and validated, **waiting for your playtest** (see
+`PLAYTEST.md`).
+**Next session:** your feedback; then M7 (home and style: outfits,
+decor, docking computer, forklift) or M8 (more clients and systems, the
+husband's story), your call.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 17)
+**Last updated:** 2026-10-06 (round 18)
 
 ---
 
@@ -94,7 +95,13 @@ the docking computer), polish as you send notes, and the audit.
   - [ ] Gravity wells and slingshots
   - [ ] The rest of the route events: 118 of 167 need a new model or a small new system (the horn, hitchhikers, the convoy you can join, the rival, wipers...); 168-250 still to come
   - [ ] Cockpit gizmos and toys, rumble polish, real 3D comm heads, cockpit poses
-- [ ] **M6: Economy & time**: shifts, sleep, rent, fuel, repairs, insurance, job tiers, ship XP
+- [x] **M6: Economy & time** *(round 18; your playtest pending)*
+  - [x] Time: no shifts (your call); each delivery takes days on the calendar (about a week for a long haul); sleeping parked is one night
+  - [x] Weekly bills (OrbitalEx berth and dispatch fee, insurance), with a no-penalty tab paid from the next delivery
+  - [x] Fuel at the pumps (since round 7), repairs at Dusty's, insurance (repairs half price)
+  - [x] Job tiers: standard, rush, fragile / perishable / live (tagged on the board), with bonuses
+  - [x] Rig XP and ten levels with felt stat boosts; level-gated upgrades (nine upgrades now)
+  - [x] Everything saved; tests for all of it
 - [ ] **M7: Home & style** *(started)*
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
   - [x] Round 16: your nine design-sheet rigs at Dusty's (Garbage Scow, Ice-Tug, SLAB, Catamaran, Cryo Tanker, Hab-Brick, Bulk-Ore, Ore-Crawler, Omega Ore Crawler), each with its own model, handling and pay

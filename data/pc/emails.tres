@@ -85,6 +85,30 @@ subject = "(no subject)"
 body = "saw your rig at the casino. same color he used to drive. thought you should know somebody else remembers."
 requires_flag = "sal_mentioned_rig"
 
+[sub_resource type="Resource" id="Email_11"]
+script = ExtResource("2_email")
+id = "orbitalex_billing"
+from_name = "ORBITALEX BILLING"
+subject = "Your weekly statement"
+body = "Thank you for choosing OrbitalEx for your berth, your dispatch, your jobs, and your entire life. This week's fee has been collected. If you could not pay, it is on your tab. We do not charge interest. We do not need to. We have patience, and a lot of paperwork. - Billing"
+requires_flag = "first_bills"
+
+[sub_resource type="Resource" id="Email_12"]
+script = ExtResource("2_email")
+id = "dottie_tab"
+from_name = "DOTTIE (DISPATCH)"
+subject = "about that tab"
+body = "Hon, billing says you're running a tab. Don't you worry about it, it comes out of your next job, nobody's breaking any kneecaps. I told them you're good for it. You ARE good for it. Eat something. - D"
+requires_flag = "ran_a_tab"
+
+[sub_resource type="Resource" id="Email_13"]
+script = ExtResource("2_email")
+id = "dusty_level"
+from_name = "DUSTY'S GARAGE"
+subject = "your rig's coming along"
+body = "Noticed your rig's got some miles on her now. Rigs settle in, you know. Engines loosen up, she starts listening to you. I've got parts that only fit a rig that knows what it's doing. Come by. - Dusty"
+requires_flag = "rig_level_3"
+
 [resource]
 script = ExtResource("1_list")
-emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10")])
+emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13")])

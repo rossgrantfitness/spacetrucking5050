@@ -11,6 +11,7 @@ description = "A casino out in the magenta Glimmer System wants cards. Lots of c
 from_place = "base"
 to_place = "high_roller"
 base_pay = 1400
+trip_days = 6
 care_bonus = 0
 rush_seconds = 1080.0
 rush_bonus = 300

@@ -11,6 +11,7 @@ description = "A crate of Moe's famous jerky for the cannery canteen. Mysterious
 from_place = "gas_n_go"
 to_place = "tidewater"
 base_pay = 550
+trip_days = 4
 care_bonus = 0
 rush_seconds = 0.0
 rush_bonus = 0

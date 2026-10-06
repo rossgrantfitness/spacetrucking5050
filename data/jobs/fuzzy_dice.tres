@@ -11,6 +11,7 @@ description = "Big enough to sit on. Sal wants them hanging in the lobby."
 from_place = "truck_stop"
 to_place = "high_roller"
 base_pay = 1250
+trip_days = 6
 care_bonus = 0
 rush_seconds = 1020.0
 rush_bonus = 250

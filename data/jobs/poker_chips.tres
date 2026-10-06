@@ -11,6 +11,7 @@ description = "Gill's crew plays for chips now. Real chips, not the fish kind. M
 from_place = "high_roller"
 to_place = "tidewater"
 base_pay = 1800
+trip_days = 9
 care_bonus = 0
 rush_seconds = 0.0
 rush_bonus = 0

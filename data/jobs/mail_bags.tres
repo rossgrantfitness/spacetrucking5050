@@ -11,6 +11,7 @@ description = "Postcards, bills and a suspicious number of catalogs. Nothing bre
 from_place = "base"
 to_place = "truck_stop"
 base_pay = 350
+trip_days = 3
 care_bonus = 0
 rush_seconds = 0.0
 rush_bonus = 0

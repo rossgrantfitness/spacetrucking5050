@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "handling_2"
+display_name = "Racing Gyros"
+description = "Gyroscopes from a junked courier racer. She turns like she means it."
+price = 3200
+requires_upgrade = "handling_1"
+min_level = 4
+turn_rate = 1.15
+grip = 1.1

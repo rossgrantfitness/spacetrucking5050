@@ -1,4 +1,65 @@
-# Playtest: round 17 (on top of round 16 below)
+# Playtest: round 18, money and time on the road (M6)
+
+**What you asked for:** build out the next phase of the game, with no
+shifts: space truckers' deliveries take a long time (about a week), not
+three a day.
+
+**Time needed:** about 20 to 30 minutes. A **new game** is best, so you
+start with a fresh calendar (continuing your save also works: you start
+on day 1 with no XP).
+
+> Honest note: I checked all of this with automated tests and screenshots,
+> but whether the money feels right (too tight? too easy?) is something
+> only playing can tell. Every number is in tuning.tres and the data files,
+> so it's quick to change.
+
+## What's new
+
+- **No clocks, no shifts. A calendar.** Each job takes a number of days
+  (short hops 3 to 4 days, long hauls a week or more). Sleeping in your
+  bed is one night. The day, the week and "BILLS IN n DAYS" are under your
+  money.
+- **Weekly bills:** 1,500 credits a week to OrbitalEx (berth and dispatch).
+  Can't pay? It goes on a **tab**, paid off from your next delivery. No
+  interest, no game over.
+- **Insurance** at Dusty's: 250 a week, repairs half price.
+- **Rig levels 1 to 10:** deliveries earn XP; each level makes the rig a
+  bit better at everything. The payout card shows XP and a fanfare on a
+  level-up.
+- **Better parts, locked by level:** Nitro Keg (L2), Mag-Tread Stabilizers
+  (L2), Long-Haul Saddle Tanks (L3), Twin Afterburner Kit (now L3), Racing
+  Gyros (L4), Ion Overdrive (L6).
+- **Job tags:** RUSH, FRAGILE, PERISHABLE, LIVE and the trip length on the
+  job board. Two new live-cargo jobs: glow guppies and space hens.
+- **The PC** shows bills next to your invoices, and a few new emails turn
+  up (OrbitalEx billing, Dottie, Dusty).
+
+## What to do
+
+1. New game. Look at the top-right corner: day 1, week 1, bills in 7 days.
+2. Open the job board and read the tags. Take a long haul (about 7D).
+3. Deliver it. Watch the payout card (days on the road, XP), then the
+   **WEEKLY BILLS** card.
+4. Visit Dusty: check your rig's level and XP, and switch insurance on.
+   Look at the parts marked LEVEL n.
+5. Do a few more deliveries. Try to run a tab once (spend most of your
+   money first), then see it paid off by the next delivery.
+6. Sleep in your bed a couple of times and watch the calendar move.
+
+## Questions
+
+1. Do trips feel long now, like a real haul, or should they be even longer?
+2. Bills: 1,500 a week. Too tight, too easy, or about right?
+3. Does levelling the rig feel rewarding? Can you feel it get better?
+4. Is the tab a good "cozy" answer to running out of money, or should
+   something else happen?
+5. What next: **M7 home and style** (outfits, decor, new rigs' handling,
+   the docking computer, forklift) or **M8 clients and story** (more
+   clients and systems, the husband's story)?
+
+---
+
+# Round 17 (wobbles, doors, bed, TV console, crashes, station labels)
 
 **What you asked for this time:**
 - speed wobbles about 50% gentler;

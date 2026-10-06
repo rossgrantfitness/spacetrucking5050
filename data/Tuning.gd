@@ -173,6 +173,43 @@ extends Resource
 ## What patching a fully battered hull costs at a garage.
 @export_range(0, 10000, 5) var hull_repair_price: int = 220
 
+
+@export_group("Time and bills")
+
+## Space trucking is slow: a delivery takes days on the road (each job says
+## how many; this is for jobs that don't). The calendar only moves when you
+## deliver, or sleep in your bed while parked (one night).
+@export_range(1, 30, 1, "suffix:days") var default_trip_days: int = 7
+
+## The weekly bills, paid every 7 days on the calendar: OrbitalEx's berth
+## and dispatch fee (the company keeps your rig on its books and feeds you
+## jobs)...
+@export_range(0, 100000, 10) var weekly_dispatch_fee: int = 1500
+## ...and insurance, if you've signed up at Dusty's.
+@export_range(0, 100000, 10) var weekly_insurance: int = 250
+## With insurance, repairs cost this much of the usual price (0.5 = half).
+@export_range(0.0, 1.0, 0.05) var insured_repair_share: float = 0.5
+## Bills you can't pay go on a tab, paid off from your next delivery. No
+## interest, no penalty: it's a cozy galaxy.
+
+
+@export_group("Rig levels")
+
+## Every rig earns experience from its deliveries: this many points per
+## credit the delivery paid (0.05 = 60 XP for a 1,200 credit job), plus a
+## few just for showing up.
+@export_range(0.0, 1.0, 0.005) var xp_per_credit: float = 0.05
+@export_range(0, 1000, 1) var xp_per_delivery: int = 10
+## The XP a rig needs to reach each level (level 1 is 0; ten levels).
+@export var level_xp := PackedInt32Array([0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200])
+## What each level above 1 adds to the rig (0.02 = +2% per level), so
+## upgrades and levels are felt: top speed, push, turning, grip, fuel tank.
+@export_range(0.0, 0.2, 0.005) var level_speed: float = 0.02
+@export_range(0.0, 0.2, 0.005) var level_acceleration: float = 0.03
+@export_range(0.0, 0.2, 0.005) var level_turn: float = 0.025
+@export_range(0.0, 0.2, 0.005) var level_grip: float = 0.02
+@export_range(0.0, 0.2, 0.005) var level_fuel: float = 0.04
+
 ## A can of neon soda from the vending machine.
 @export_range(0, 1000, 1) var soda_price: int = 2
 

@@ -2,11 +2,16 @@
 
 [ext_resource type="Script" path="res://data/upgrades/UpgradeList.gd" id="1_list"]
 [ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="2_upgrade"]
-[ext_resource type="Resource" path="res://data/upgrades/speed_1.tres" id="3_speed_1"]
-[ext_resource type="Resource" path="res://data/upgrades/speed_2.tres" id="4_speed_2"]
-[ext_resource type="Resource" path="res://data/upgrades/handling_1.tres" id="5_handling_1"]
-[ext_resource type="Resource" path="res://data/upgrades/tank_1.tres" id="6_tank_1"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_1.tres" id="u0"]
+[ext_resource type="Resource" path="res://data/upgrades/handling_1.tres" id="u1"]
+[ext_resource type="Resource" path="res://data/upgrades/tank_1.tres" id="u2"]
+[ext_resource type="Resource" path="res://data/upgrades/boost_tank_1.tres" id="u3"]
+[ext_resource type="Resource" path="res://data/upgrades/grip_1.tres" id="u4"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_2.tres" id="u5"]
+[ext_resource type="Resource" path="res://data/upgrades/tank_2.tres" id="u6"]
+[ext_resource type="Resource" path="res://data/upgrades/handling_2.tres" id="u7"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_3.tres" id="u8"]
 
 [resource]
 script = ExtResource("1_list")
-upgrades = Array[ExtResource("2_upgrade")]([ExtResource("3_speed_1"), ExtResource("4_speed_2"), ExtResource("5_handling_1"), ExtResource("6_tank_1")])
+upgrades = Array[ExtResource("2_upgrade")]([ExtResource("u0"), ExtResource("u1"), ExtResource("u2"), ExtResource("u3"), ExtResource("u4"), ExtResource("u5"), ExtResource("u6"), ExtResource("u7"), ExtResource("u8")])

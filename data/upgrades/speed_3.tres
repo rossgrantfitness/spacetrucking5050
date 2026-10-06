@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "speed_3"
+display_name = "Ion Overdrive"
+description = "The big one. Dusty only fits it on rigs he trusts. More top speed and more push."
+price = 6500
+requires_upgrade = "speed_2"
+min_level = 6
+max_speed = 1.15
+acceleration = 1.15

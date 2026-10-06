@@ -4,15 +4,16 @@
 
 [resource]
 script = ExtResource("1_job")
-id = "tidewater_mail"
-cargo_name = "Mail for Tidewater"
-client_name = "Interstellar Post"
-description = "Letters, parcels and one very insistent birthday card."
-from_place = "base"
+id = "glow_guppies"
+cargo_name = "A tank of glow-guppies (live)"
+client_name = "The Tidewater Aquarium"
+description = "Three hundred little guppies that glow when they're happy. Keep them happy: easy on the turns."
+from_place = "truck_stop"
 to_place = "tidewater"
 base_pay = 1250
 trip_days = 7
-care_bonus = 0
+care_kind = "live"
+care_bonus = 450
 rush_seconds = 0.0
 rush_bonus = 0
 on_job_board = true

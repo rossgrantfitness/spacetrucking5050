@@ -11,6 +11,7 @@ description = "Tidewater's finest, in tins. Marge swears truckers like it."
 from_place = "tidewater"
 to_place = "truck_stop"
 base_pay = 1150
+trip_days = 7
 care_bonus = 0
 rush_seconds = 1500.0
 rush_bonus = 250

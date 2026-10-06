@@ -84,6 +84,12 @@ var invoices: Array[Dictionary] = []
 const INVOICE_LIMIT: int = 20
 ## Which day it is (sleeping in your bed starts a new one).
 var day: int = 1
+## Bills you couldn't pay yet (Economy.gd): paid off from your next delivery.
+var tab: int = 0
+## Signed up for insurance at Dusty's (weekly premium, cheaper repairs).
+var insured: bool = false
+## Experience each rig has earned: rig id -> XP (see Economy.level_of).
+var ship_xp: Dictionary = {}
 ## The best score in Asteroid Alley, the game on her PC.
 var pc_high_score: int = 0
 ## Best scores on the TV console's games (TVConsole.gd): game id -> score.
@@ -96,6 +102,8 @@ var crew_memory: Dictionary = {}
 ## The pay breakdown from a delivery that just happened, shown when you walk
 ## inside ({} = nothing to show).
 var pending_payout: Dictionary = {}
+## The last weekly bills, waiting to be shown on the bills card (or {}).
+var pending_bills: Dictionary = {}
 
 ## The smallest the game window can get. Everything is drawn at the screen's
 ## own resolution, from this up to 4K.
@@ -227,9 +235,21 @@ func deliver_at(place_id: String) -> bool:
 	pay["client_name"] = job.client_name
 	pay["condition"] = rig.get("cargo", 1.0)
 	add_credits(pay["total"])
+	# The trip took days: the calendar moves on (and bills may come due),
+	# the rig earns experience, and any tab gets paid off.
+	var days := Economy.trip_days(job)
+	pay["days"] = days
+	pay["xp"] = Economy.xp_for(int(pay["total"]))
+	pay["levels"] = Economy.add_xp(int(pay["xp"]))
+	pay["level"] = Economy.level_of()
+	pay["tab_paid"] = Economy.settle_tab()
+	Economy.pass_days(days)
+	pay["arrived_day"] = day
 	var place := places.find(place_id)
 	invoices.append({"cargo": job.cargo_name, "client": job.client_name,
 			"to": place.display_name if place != null else place_id, "total": int(pay["total"]), "day": day})
+	if not pending_bills.is_empty():
+		invoices.append({"cargo": "WEEKLY BILLS", "client": "OrbitalEx", "to": "", "total": -int(pending_bills["total"]), "day": day})
 	if invoices.size() > INVOICE_LIMIT:
 		invoices.remove_at(0)
 	set_flag(job.completes_flag)
@@ -263,6 +283,7 @@ func upgraded_ship(base: ShipData) -> ShipData:
 		var upgrade := upgrades.find(id)
 		if upgrade != null:
 			upgrade.apply_to(ship)
+	Economy.apply_level(ship, Economy.level_of(base.id))
 	return ship
 
 
@@ -295,6 +316,9 @@ func to_save_data() -> Dictionary:
 		"invoices": invoices,
 		"day": day,
 		"pc_high_score": pc_high_score,
+		"tab": tab,
+		"insured": insured,
+		"ship_xp": ship_xp,
 		"console_scores": console_scores,
 		"crew_memory": crew_memory,
 	}
@@ -367,6 +391,15 @@ func apply_save_data(data: Dictionary) -> void:
 		day = maxi(int(data["day"]), 1)
 	if data.get("pc_high_score") is int or data.get("pc_high_score") is float:
 		pc_high_score = maxi(int(data["pc_high_score"]), 0)
+	if data.get("tab") is int or data.get("tab") is float:
+		tab = maxi(int(data["tab"]), 0)
+	if data.get("insured") is bool:
+		insured = data["insured"]
+	if data.get("ship_xp") is Dictionary:
+		for id: Variant in data["ship_xp"]:
+			var xp: Variant = data["ship_xp"][id]
+			if xp is int or xp is float:
+				ship_xp[str(id)] = maxi(int(xp), 0)
 	if data.get("console_scores") is Dictionary:
 		for game: Variant in data["console_scores"]:
 			var best: Variant = data["console_scores"][game]
@@ -407,8 +440,12 @@ func new_game() -> void:
 	hauls = 0
 	event_history = {}
 	pending_payout = {}
+	pending_bills = {}
 	invoices = []
 	day = 1
+	tab = 0
+	insured = false
+	ship_xp = {}
 	pc_high_score = 0
 	console_scores = {}
 	crew_memory = {}

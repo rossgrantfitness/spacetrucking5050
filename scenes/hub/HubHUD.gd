@@ -78,3 +78,13 @@ func _draw_wallet() -> void:
 	var box := Rect2(Vector2(_canvas.size.x - width - 52.0, 24.0), Vector2(width + 28.0, 36.0))
 	_canvas.draw_rect(box, Color(0.05, 0.06, 0.2, 0.75))
 	PixelFont.draw(_canvas, box.position + Vector2(14.0, 8.0), text, square, Color(0.4, 1.0, 0.5), 0.15)
+	# Under it: the calendar, when the bills are due, and any tab.
+	var small := 2.0
+	var lines := [Economy.calendar_text(), "BILLS IN %d DAY%s" % [Economy.days_to_bills(), "" if Economy.days_to_bills() == 1 else "S"]]
+	if GameState.tab > 0:
+		lines.append("TAB %d %s" % [GameState.tab, GameState.names.currency_short])
+	var y := box.end.y + 8.0
+	for line: String in lines:
+		var line_width := PixelFont.width(line, small)
+		PixelFont.draw(_canvas, Vector2(box.end.x - line_width - 12.0, y), line, small, Color(0.7, 0.75, 0.95) if not line.begins_with("TAB") else Color(1.0, 0.7, 0.4), 0.15)
+		y += 20.0

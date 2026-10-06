@@ -11,6 +11,7 @@ description = "The cannery's conveyor is out of gaskets again. They'd love them 
 from_place = "truck_stop"
 to_place = "tidewater"
 base_pay = 380
+trip_days = 7
 care_bonus = 0
 rush_seconds = 230.0
 rush_bonus = 120

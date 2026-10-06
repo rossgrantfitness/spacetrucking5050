@@ -31,6 +31,13 @@ extends Resource
 ## Fragile bonus: all of it for perfect cargo, less for every bonk.
 ## 0 = not a fragile job.
 @export_range(0, 100000, 10) var care_bonus: int = 0
+## What kind of careful cargo it is (for the job board's tag): fragile
+## (breaks), perishable (spoils) or live (it's alive. Be nice).
+@export_enum("fragile", "perishable", "live") var care_kind: String = "fragile"
+
+## How many days the trip takes on the calendar (0 = the usual, see
+## tuning.tres "Time and bills"). Space trucking is slow.
+@export_range(0, 30, 1, "suffix:days") var trip_days: int = 0
 
 ## Rush jobs: arrive within this many seconds for the rush bonus.
 ## 0 = not a rush job (no timer at all).

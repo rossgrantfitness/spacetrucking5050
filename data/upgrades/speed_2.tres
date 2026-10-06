@@ -9,6 +9,7 @@ display_name = "Twin Afterburner Kit"
 description = "Even more go. Another big jump in top speed."
 price = 2600
 requires_upgrade = "speed_1"
+min_level = 3
 max_speed = 1.2
 acceleration = 1.25
 turn_rate = 1.0
