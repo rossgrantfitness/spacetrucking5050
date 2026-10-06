@@ -32,6 +32,7 @@ func _initialize() -> void:
 	_trail_script = load(TRAIL_SCRIPT_PATH)
 	_flare_script = load(FLARE_SCRIPT_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/flight/rigs"))
+	_ship_mode = true  # Solid paint with panel details, not a tiled texture.
 	var rigs := {
 		"StackShipVisual": _stack_ship(),
 		"BulkOreVisual": _bulk_ore(),

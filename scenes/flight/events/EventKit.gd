@@ -22,6 +22,12 @@ static func paint(color: Color, brightness: float = 0.0, texture: Texture2D = nu
 	var material := ShaderMaterial.new()
 	material.shader = SURFACE_SHADER
 	material.set_shader_parameter("albedo", color)
+	if texture == HULL:
+		# Hulls: one solid color per panel with a few painted details (seams,
+		# trim, bolts), not a tiled texture. See "Panel decals" in
+		# shaders/painted_edges.gdshaderinc; edged() sizes the details.
+		material.set_shader_parameter("panel_decals", true)
+		texture = null
 	if texture != null:
 		material.set_shader_parameter("albedo_texture", texture)
 		material.set_shader_parameter("uv_scale", Vector2.ONE / meters)
@@ -58,6 +64,8 @@ static func edged(material: Material, size: Vector3) -> Material:
 		with_edges.set_shader_parameter("edge_width", width)
 		with_edges.set_shader_parameter("edge_pixels_per_meter", 4.0 / width)
 		with_edges.set_shader_parameter("edge_floor_reach", width * 6.0)
+		with_edges.set_shader_parameter("panel_scale", width / 0.2)
+		with_edges.set_shader_parameter("panel_pixels_per_meter", 14.0 * 0.2 / width)
 		_cache[key] = with_edges
 	return _cache[key]
 

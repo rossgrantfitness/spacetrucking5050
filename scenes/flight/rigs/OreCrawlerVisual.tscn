@@ -2,12 +2,36 @@
 
 [ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="1_j23ja"]
 [ext_resource type="Texture2D" path="res://textures/generated/hazard_stripes.png" id="2_h4mv1"]
-[ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_ukvcj"]
 [ext_resource type="Texture2D" path="res://textures/generated/rock.png" id="4_7bew0"]
-[ext_resource type="Texture2D" path="res://textures/generated/hull_panels.png" id="5_710y5"]
 [ext_resource type="Script" path="res://scenes/flight/EngineTrail.gd" id="6_1hene"]
 [ext_resource type="Script" path="res://scenes/flight/EngineFlare.gd" id="7_a8vna"]
 [ext_resource type="Script" path="res://scenes/flight/Blinker.gd" id="8_f7vhs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4q4ax"]
+render_priority = 0
+shader = ExtResource("1_j23ja")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("2_h4mv1")
+shader_parameter/uv_scale = Vector2(0.3, 0.3)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_tfgkm"]
+material = SubResource("ShaderMaterial_4q4ax")
+size = Vector3(8.4, 2.4, 7)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j23ja"]
 render_priority = 0
@@ -19,9 +43,11 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/albedo_texture = ExtResource("2_h4mv1")
-shader_parameter/uv_scale = Vector2(0.3, 0.3)
+shader_parameter/panel_decals = true
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(0.9, 0.9, 0.85, 1)
+shader_parameter/uv_scale = null
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
@@ -30,32 +56,9 @@ shader_parameter/emission_from_texture = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_h4mv1"]
 material = SubResource("ShaderMaterial_j23ja")
-size = Vector3(8.4, 2.4, 7)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ukvcj"]
-render_priority = 0
-shader = ExtResource("1_j23ja")
-shader_parameter/painted_edges = true
-shader_parameter/edge_width = 0.22
-shader_parameter/edge_pixels_per_meter = 8.0
-shader_parameter/edge_light = null
-shader_parameter/edge_shadow = null
-shader_parameter/edge_floor_shadow = null
-shader_parameter/edge_floor_reach = 1.5
-shader_parameter/albedo = Color(0.9, 0.9, 0.85, 1)
-shader_parameter/albedo_texture = ExtResource("3_ukvcj")
-shader_parameter/uv_scale = Vector2(0.5, 0.5)
-shader_parameter/box_uv = true
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = null
-shader_parameter/emission_strength = null
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_7bew0"]
-material = SubResource("ShaderMaterial_ukvcj")
 size = Vector3(0.9, 0.9, 0.9)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_710y5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ukvcj"]
 render_priority = 0
 shader = ExtResource("1_j23ja")
 shader_parameter/painted_edges = null
@@ -65,6 +68,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.55, 0.48, 0.42, 1)
 shader_parameter/albedo_texture = ExtResource("4_7bew0")
 shader_parameter/uv_scale = Vector2(0.35, 0.35)
@@ -74,12 +80,37 @@ shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_1hene"]
-material = SubResource("ShaderMaterial_710y5")
+[sub_resource type="SphereMesh" id="SphereMesh_7bew0"]
+material = SubResource("ShaderMaterial_ukvcj")
 radius = 1.6
 height = 3.2
 radial_segments = 12
 rings = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_710y5"]
+render_priority = 0
+shader = ExtResource("1_j23ja")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = true
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(0.12, 0.1, 0.12, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_1hene"]
+material = SubResource("ShaderMaterial_710y5")
+size = Vector3(7, 3.6, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vna"]
 render_priority = 0
@@ -91,9 +122,11 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
-shader_parameter/albedo = Color(0.12, 0.1, 0.12, 1)
-shader_parameter/albedo_texture = ExtResource("3_ukvcj")
-shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/panel_decals = true
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(1, 0.78, 0.16, 1)
+shader_parameter/uv_scale = null
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
@@ -102,32 +135,9 @@ shader_parameter/emission_from_texture = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_f7vhs"]
 material = SubResource("ShaderMaterial_a8vna")
-size = Vector3(7, 3.6, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gmrt4"]
-render_priority = 0
-shader = ExtResource("1_j23ja")
-shader_parameter/painted_edges = true
-shader_parameter/edge_width = 0.22
-shader_parameter/edge_pixels_per_meter = 8.0
-shader_parameter/edge_light = null
-shader_parameter/edge_shadow = null
-shader_parameter/edge_floor_shadow = null
-shader_parameter/edge_floor_reach = 1.5
-shader_parameter/albedo = Color(1, 0.78, 0.16, 1)
-shader_parameter/albedo_texture = ExtResource("5_710y5")
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
-shader_parameter/box_uv = true
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = null
-shader_parameter/emission_strength = null
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_brq2u"]
-material = SubResource("ShaderMaterial_gmrt4")
 size = Vector3(8.8, 8.8, 3)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hmu6j"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gmrt4"]
 render_priority = 0
 shader = ExtResource("1_j23ja")
 shader_parameter/painted_edges = null
@@ -137,24 +147,60 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = true
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.42, 0.42, 0.46, 1)
-shader_parameter/albedo_texture = ExtResource("5_710y5")
-shader_parameter/uv_scale = Vector2(0.25, 0.25)
+shader_parameter/uv_scale = null
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_5kjta"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_brq2u"]
 _surfaces = [{
 "aabb": AABB(-3.8, -3.8, -6.5, 7.6, 7.6, 19.5),
-"format": 34359738375,
-"material": SubResource("ShaderMaterial_hmu6j"),
+"attribute_data": PackedByteArray("AAAAAAAAAADm0IJANQacQQAAgD8AAAAA5tCCQDUGnEEAAIA/AACAP+bQgkA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAIA/5tCCQDUGnEEAAAAAAACAP+bQgkA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAAAAyFsRQDUGnEEAAIA/AACAP8hbEUA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAIA/yFsRQDUGnEEAAAAAAACAP8hbEUA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAAAA5tCCQDUGnEEAAIA/AACAP+bQgkA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAIA/5tCCQDUGnEEAAAAAAACAP+bQgkA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAAAAyFsRQDUGnEEAAIA/AACAP8hbEUA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAIA/yFsRQDUGnEEAAAAAAACAP8hbEUA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAAAA5tCCQDUGnEEAAIA/AACAP+bQgkA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAIA/5tCCQDUGnEEAAAAAAACAP+bQgkA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAAAAyFsRQDUGnEEAAIA/AACAP8hbEUA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAIA/yFsRQDUGnEEAAAAAAACAP8hbEUA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAAAA5tCCQDUGnEEAAIA/AACAP+bQgkA1BpxBAAAAAAAAAADm0IJANQacQQAAgD8AAIA/5tCCQDUGnEEAAAAAAACAP+bQgkA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAAAAyFsRQDUGnEEAAIA/AACAP8hbEUA1BpxBAAAAAAAAAADIWxFANQacQQAAgD8AAIA/yFsRQDUGnEEAAAAAAACAP8hbEUA1BpxBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
+"format": 34359738423,
+"material": SubResource("ShaderMaterial_gmrt4"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 84,
 "vertex_data": PackedByteArray("JzEIwDMzc0AAANDAJzEIQDMzc0AAANDASOH6PwAAYEAAAFBBJzEIwDMzc0AAANDASOH6PwAAYEAAAFBBSOH6vwAAYEAAAFBBJzEIQDMzc0AAANDAMzNzQCcxCEAAANDAAABgQEjh+j8AAFBBJzEIQDMzc0AAANDAAABgQEjh+j8AAFBBSOH6PwAAYEAAAFBBMzNzQCcxCEAAANDAMzNzQCcxCMAAANDAAABgQEjh+r8AAFBBMzNzQCcxCEAAANDAAABgQEjh+r8AAFBBAABgQEjh+j8AAFBBMzNzQCcxCMAAANDAJzEIQDMzc8AAANDASOH6PwAAYMAAAFBBMzNzQCcxCMAAANDASOH6PwAAYMAAAFBBAABgQEjh+r8AAFBBJzEIQDMzc8AAANDAJzEIwDMzc8AAANDASOH6vwAAYMAAAFBBJzEIQDMzc8AAANDASOH6vwAAYMAAAFBBSOH6PwAAYMAAAFBBJzEIwDMzc8AAANDAMzNzwCcxCMAAANDAAABgwEjh+r8AAFBBJzEIwDMzc8AAANDAAABgwEjh+r8AAFBBSOH6vwAAYMAAAFBBMzNzwCcxCMAAANDAMzNzwCcxCEAAANDAAABgwEjh+j8AAFBBMzNzwCcxCMAAANDAAABgwEjh+j8AAFBBAABgwEjh+r8AAFBBMzNzwCcxCEAAANDAJzEIwDMzc0AAANDASOH6vwAAYEAAAFBBMzNzwCcxCEAAANDASOH6vwAAYEAAAFBBAABgwEjh+j8AAFBBJzEIwDMzc0AAANDAMzNzQCcxCEAAANDAJzEIQDMzc0AAANDASOH6vwAAYEAAAFBBSOH6PwAAYEAAAFBBAABgQEjh+j8AAFBBJzEIwDMzc0AAANDAMzNzQCcxCMAAANDAMzNzQCcxCEAAANDASOH6vwAAYEAAAFBBAABgQEjh+j8AAFBBAABgQEjh+r8AAFBBJzEIwDMzc0AAANDAJzEIQDMzc8AAANDAMzNzQCcxCMAAANDASOH6vwAAYEAAAFBBAABgQEjh+r8AAFBBSOH6PwAAYMAAAFBBJzEIwDMzc0AAANDAJzEIwDMzc8AAANDAJzEIQDMzc8AAANDASOH6vwAAYEAAAFBBSOH6PwAAYMAAAFBBSOH6vwAAYMAAAFBBJzEIwDMzc0AAANDAMzNzwCcxCMAAANDAJzEIwDMzc8AAANDASOH6vwAAYEAAAFBBSOH6vwAAYMAAAFBBAABgwEjh+r8AAFBBJzEIwDMzc0AAANDAMzNzwCcxCEAAANDAMzNzwCcxCMAAANDASOH6vwAAYEAAAFBBAABgwEjh+r8AAFBBAABgwEjh+j8AAFBB/38O/vcB+7//fw7+9wH7v/9/Dv73Afu//38O/vcB+7//fw7+9wH7v/9/Dv73Afu/PL88v/xU/NQ8vzy//FT81Dy/PL/8VPzUPL88v/xU/NQ8vzy//FT81Dy/PL/8VPzUDv7/fw9++78O/v9/D377vw7+/38Pfvu/Dv7/fw9++78O/v9/D377vw7+/38Pfvu/PL/CQFFUp6o8v8JAUVSnqjy/wkBRVKeqPL/CQFFUp6o8v8JAUVSnqjy/wkBRVKeq/3/wAQcAA7//f/ABBwADv/9/8AEHAAO//3/wAQcAA7//f/ABBwADv/9/8AEHAAO/wkDCQKtVq9XCQMJAq1Wr1cJAwkCrVavVwkDCQKtVq9XCQMJAq1Wr1cJAwkCrVavV8AH/f++B+7/wAf9/74H7v/AB/3/vgfu/8AH/f++B+7/wAf9/74H7v/AB/3/vgfu/wkA8v11Wp6rCQDy/XVanqsJAPL9dVqeqwkA8v11Wp6rCQDy/XVanqsJAPL9dVqeq//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2ris"]
+render_priority = 0
+shader = ExtResource("1_j23ja")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(0.35, 0.2, 0.05, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 0.72, 0.3, 1)
+shader_parameter/emission_strength = 1.0
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hmu6j"]
+_surfaces = [{
+"aabb": AABB(-1.875, 4.05, -9.65, 3.75, 1.4499998, 2.6499996),
+"attribute_data": PackedByteArray("AAAAAAAAAAB8PzVAJQUyQAAAgD8AAAAAfD81QCUFMkAAAIA/AACAP3w/NUAlBTJAAAAAAAAAAAB8PzVAJQUyQAAAgD8AAIA/fD81QCUFMkAAAAAAAACAP3w/NUAlBTJAAAAAAAAAAAAHVZc+ArQxQAAAgD8AAAAAB1WXPgK0MUAAAIA/AACAPwdVlz4CtDFAAAAAAAAAAAAHVZc+ArQxQAAAgD8AAIA/B1WXPgK0MUAAAAAAAACAPwdVlz4CtDFAAAAAAAAAAAAoMQg/P8EvQAAAgD8AAAAAKDEIPz/BL0AAAIA/AACAPygxCD8/wS9AAAAAAAAAAAAoMQg/P8EvQAAAgD8AAIA/KDEIPz/BL0AAAAAAAACAPygxCD8/wS9AAAAAAAAAAAAHVZc+zyUtQAAAgD8AAAAAB1WXPs8lLUAAAIA/AACAPwdVlz7PJS1AAAAAAAAAAAAHVZc+zyUtQAAAgD8AAIA/B1WXPs8lLUAAAAAAAACAPwdVlz7PJS1AAAAAAAAAAAB8PzVAACwsQAAAgD8AAAAAfD81QAAsLEAAAIA/AACAP3w/NUAALCxAAAAAAAAAAAB8PzVAACwsQAAAgD8AAIA/fD81QAAsLEAAAAAAAACAP3w/NUAALCxAAAAAAAAAAAAHVZc+zyUtQAAAgD8AAAAAB1WXPs8lLUAAAIA/AACAPwdVlz7PJS1AAAAAAAAAAAAHVZc+zyUtQAAAgD8AAIA/B1WXPs8lLUAAAAAAAACAPwdVlz7PJS1AAAAAAAAAAAAoMQg/P8EvQAAAgD8AAAAAKDEIPz/BL0AAAIA/AACAPygxCD8/wS9AAAAAAAAAAAAoMQg/P8EvQAAAgD8AAIA/KDEIPz/BL0AAAAAAAACAPygxCD8/wS9AAAAAAAAAAAAHVZc+ArQxQAAAgD8AAAAAB1WXPgK0MUAAAIA/AACAPwdVlz4CtDFAAAAAAAAAAAAHVZc+ArQxQAAAgD8AAIA/B1WXPgK0MUAAAAAAAACAPwdVlz4CtDFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
+"format": 34359738423,
+"material": SubResource("ShaderMaterial_u2ris"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 84,
+"vertex_data": PackedByteArray("ukmcvwAAmEBmZhrBukmcPwAAmEBmZhrBPzXOPwAAsEAAAODAukmcvwAAmEBmZhrBPzXOPwAAsEAAAODAPzXOvwAAsEAAAODAukmcPwAAmEBmZhrBAACwP28Sk0BmZhrBAADwP1CNp0AAAODAukmcPwAAmEBmZhrBAADwP1CNp0AAAODAPzXOPwAAsEAAAODAAACwP28Sk0BmZhrBAACwPyuHhkBmZhrBAADwP0oMkkAAAODAAACwP28Sk0BmZhrBAADwP0oMkkAAAODAAADwP1CNp0AAAODAAACwPyuHhkBmZhrBukmcP5qZgUBmZhrBPzXOP5qZiUAAAODAAACwPyuHhkBmZhrBPzXOP5qZiUAAAODAAADwP0oMkkAAAODAukmcP5qZgUBmZhrBukmcv5qZgUBmZhrBPzXOv5qZiUAAAODAukmcP5qZgUBmZhrBPzXOv5qZiUAAAODAPzXOP5qZiUAAAODAukmcv5qZgUBmZhrBAACwvyuHhkBmZhrBAADwv0oMkkAAAODAukmcv5qZgUBmZhrBAADwv0oMkkAAAODAPzXOv5qZiUAAAODAAACwvyuHhkBmZhrBAACwv28Sk0BmZhrBAADwv1CNp0AAAODAAACwvyuHhkBmZhrBAADwv1CNp0AAAODAAADwv0oMkkAAAODAAACwv28Sk0BmZhrBukmcvwAAmEBmZhrBPzXOvwAAsEAAAODAAACwv28Sk0BmZhrBPzXOvwAAsEAAAODAAADwv1CNp0AAAODAukmcvwAAmEBmZhrBAACwP28Sk0BmZhrBukmcPwAAmEBmZhrBPzXOvwAAsEAAAODAPzXOPwAAsEAAAODAAADwP1CNp0AAAODAukmcvwAAmEBmZhrBAACwPyuHhkBmZhrBAACwP28Sk0BmZhrBPzXOvwAAsEAAAODAAADwP1CNp0AAAODAAADwP0oMkkAAAODAukmcvwAAmEBmZhrBukmcP5qZgUBmZhrBAACwPyuHhkBmZhrBPzXOvwAAsEAAAODAAADwP0oMkkAAAODAPzXOP5qZiUAAAODAukmcvwAAmEBmZhrBukmcv5qZgUBmZhrBukmcP5qZgUBmZhrBPzXOvwAAsEAAAODAPzXOP5qZiUAAAODAPzXOv5qZiUAAAODAukmcvwAAmEBmZhrBAACwvyuHhkBmZhrBukmcv5qZgUBmZhrBPzXOvwAAsEAAAODAPzXOv5qZiUAAAODAAADwv0oMkkAAAODAukmcvwAAmEBmZhrBAACwv28Sk0BmZhrBAACwvyuHhkBmZhrBPzXOvwAAsEAAAODAAADwv0oMkkAAAODAAADwv1CNp0AAAODAO5z//4UH8q47nP//hQfyrjuc//+FB/KuO5z//4UH8q47nP//hQfyrjuc//+FB/KuU8tTy65artpTy1PLrlqu2lPLU8uuWq7aU8tTy65artpTy1PLrlqu2lPLU8uuWq7a//9QlLmTIr7//1CUuZMivv//UJS5kyK+//9QlLmTIr7//1CUuZMivv//UJS5kyK+pMFaPp9Xn6qkwVo+n1efqqTBWj6fV5+qpMFaPp9Xn6qkwVo+n1efqqTBWj6fV5+q/38ICwgBArr/fwgLCAECuv9/CAsIAQK6/38ICwgBArr/fwgLCAECuv9/CAsIAQK6Wj5aPpFUkNRaPlo+kVSQ1Fo+Wj6RVJDUWj5aPpFUkNRaPlo+kVSQ1Fo+Wj6RVJDUAABQlEVsIr4AAFCURWwivgAAUJRFbCK+AABQlEVsIr4AAFCURWwivgAAUJRFbCK+qzRTy4VGL6irNFPLhUYvqKs0U8uFRi+oqzRTy4VGL6irNFPLhUYvqKs0U8uFRi+o//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2yi5n"]
@@ -167,35 +213,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
-shader_parameter/albedo = Color(0.35, 0.2, 0.05, 1)
-shader_parameter/uv_scale = null
-shader_parameter/box_uv = null
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = Color(1, 0.72, 0.3, 1)
-shader_parameter/emission_strength = 1.0
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_w3hul"]
-_surfaces = [{
-"aabb": AABB(-1.875, 4.05, -9.65, 3.75, 1.4499998, 2.6499996),
-"format": 34359738375,
-"material": SubResource("ShaderMaterial_2yi5n"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 84,
-"vertex_data": PackedByteArray("ukmcvwAAmEBmZhrBukmcPwAAmEBmZhrBPzXOPwAAsEAAAODAukmcvwAAmEBmZhrBPzXOPwAAsEAAAODAPzXOvwAAsEAAAODAukmcPwAAmEBmZhrBAACwP28Sk0BmZhrBAADwP1CNp0AAAODAukmcPwAAmEBmZhrBAADwP1CNp0AAAODAPzXOPwAAsEAAAODAAACwP28Sk0BmZhrBAACwPyuHhkBmZhrBAADwP0oMkkAAAODAAACwP28Sk0BmZhrBAADwP0oMkkAAAODAAADwP1CNp0AAAODAAACwPyuHhkBmZhrBukmcP5qZgUBmZhrBPzXOP5qZiUAAAODAAACwPyuHhkBmZhrBPzXOP5qZiUAAAODAAADwP0oMkkAAAODAukmcP5qZgUBmZhrBukmcv5qZgUBmZhrBPzXOv5qZiUAAAODAukmcP5qZgUBmZhrBPzXOv5qZiUAAAODAPzXOP5qZiUAAAODAukmcv5qZgUBmZhrBAACwvyuHhkBmZhrBAADwv0oMkkAAAODAukmcv5qZgUBmZhrBAADwv0oMkkAAAODAPzXOv5qZiUAAAODAAACwvyuHhkBmZhrBAACwv28Sk0BmZhrBAADwv1CNp0AAAODAAACwvyuHhkBmZhrBAADwv1CNp0AAAODAAADwv0oMkkAAAODAAACwv28Sk0BmZhrBukmcvwAAmEBmZhrBPzXOvwAAsEAAAODAAACwv28Sk0BmZhrBPzXOvwAAsEAAAODAAADwv1CNp0AAAODAukmcvwAAmEBmZhrBAACwP28Sk0BmZhrBukmcPwAAmEBmZhrBPzXOvwAAsEAAAODAPzXOPwAAsEAAAODAAADwP1CNp0AAAODAukmcvwAAmEBmZhrBAACwPyuHhkBmZhrBAACwP28Sk0BmZhrBPzXOvwAAsEAAAODAAADwP1CNp0AAAODAAADwP0oMkkAAAODAukmcvwAAmEBmZhrBukmcP5qZgUBmZhrBAACwPyuHhkBmZhrBPzXOvwAAsEAAAODAAADwP0oMkkAAAODAPzXOP5qZiUAAAODAukmcvwAAmEBmZhrBukmcv5qZgUBmZhrBukmcP5qZgUBmZhrBPzXOvwAAsEAAAODAPzXOP5qZiUAAAODAPzXOv5qZiUAAAODAukmcvwAAmEBmZhrBAACwvyuHhkBmZhrBukmcv5qZgUBmZhrBPzXOvwAAsEAAAODAPzXOv5qZiUAAAODAAADwv0oMkkAAAODAukmcvwAAmEBmZhrBAACwv28Sk0BmZhrBAACwvyuHhkBmZhrBPzXOvwAAsEAAAODAAADwv0oMkkAAAODAAADwv1CNp0AAAODAO5z//4UH8q47nP//hQfyrjuc//+FB/KuO5z//4UH8q47nP//hQfyrjuc//+FB/KuU8tTy65artpTy1PLrlqu2lPLU8uuWq7aU8tTy65artpTy1PLrlqu2lPLU8uuWq7a//9QlLmTIr7//1CUuZMivv//UJS5kyK+//9QlLmTIr7//1CUuZMivv//UJS5kyK+pMFaPp9Xn6qkwVo+n1efqqTBWj6fV5+qpMFaPp9Xn6qkwVo+n1efqqTBWj6fV5+q/38ICwgBArr/fwgLCAECuv9/CAsIAQK6/38ICwgBArr/fwgLCAECuv9/CAsIAQK6Wj5aPpFUkNRaPlo+kVSQ1Fo+Wj6RVJDUWj5aPpFUkNRaPlo+kVSQ1Fo+Wj6RVJDUAABQlEVsIr4AAFCURWwivgAAUJRFbCK+AABQlEVsIr4AAFCURWwivgAAUJRFbCK+qzRTy4VGL6irNFPLhUYvqKs0U8uFRi+oqzRTy4VGL6irNFPLhUYvqKs0U8uFRi+o//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA//////9/AID//////38AgP//////fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
-}]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wce2i"]
-render_priority = 0
-shader = ExtResource("1_j23ja")
-shader_parameter/painted_edges = null
-shader_parameter/edge_width = null
-shader_parameter/edge_pixels_per_meter = null
-shader_parameter/edge_light = null
-shader_parameter/edge_shadow = null
-shader_parameter/edge_floor_shadow = null
-shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.95, 0.8, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
@@ -204,19 +224,19 @@ shader_parameter/emission = Color(1, 0.95, 0.8, 1)
 shader_parameter/emission_strength = 1.4
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_yb7jt"]
-material = SubResource("ShaderMaterial_wce2i")
+[sub_resource type="BoxMesh" id="BoxMesh_74ywc"]
+material = SubResource("ShaderMaterial_2yi5n")
 size = Vector3(0.5, 0.3, 0.12)
 
-[sub_resource type="BoxMesh" id="BoxMesh_0cdoy"]
-material = SubResource("ShaderMaterial_gmrt4")
+[sub_resource type="BoxMesh" id="BoxMesh_5kjta"]
+material = SubResource("ShaderMaterial_a8vna")
 size = Vector3(0.4, 4, 0.4)
 
-[sub_resource type="BoxMesh" id="BoxMesh_w64px"]
-material = SubResource("ShaderMaterial_gmrt4")
+[sub_resource type="BoxMesh" id="BoxMesh_w3hul"]
+material = SubResource("ShaderMaterial_a8vna")
 size = Vector3(0.4, 0.4, 6)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ve1f3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cdoy"]
 render_priority = 0
 shader = ExtResource("1_j23ja")
 shader_parameter/painted_edges = true
@@ -226,24 +246,26 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = true
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.2, 0.2, 0.22, 1)
-shader_parameter/albedo_texture = ExtResource("3_ukvcj")
-shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/uv_scale = null
 shader_parameter/box_uv = true
 shader_parameter/use_vertex_color = null
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_0q8f2"]
-material = SubResource("ShaderMaterial_ve1f3")
+[sub_resource type="BoxMesh" id="BoxMesh_w64px"]
+material = SubResource("ShaderMaterial_0cdoy")
 size = Vector3(0.08, 2, 0.08)
 
-[sub_resource type="BoxMesh" id="BoxMesh_djpvi"]
-material = SubResource("ShaderMaterial_gmrt4")
+[sub_resource type="BoxMesh" id="BoxMesh_ve1f3"]
+material = SubResource("ShaderMaterial_a8vna")
 size = Vector3(0.9, 0.6, 0.9)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwqrm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q8f2"]
 render_priority = 0
 shader = ExtResource("1_j23ja")
 shader_parameter/painted_edges = null
@@ -253,6 +275,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.8, 0.3, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
@@ -261,9 +286,34 @@ shader_parameter/emission = Color(1, 0.8, 0.3, 1)
 shader_parameter/emission_strength = 1.0
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_gklsc"]
-material = SubResource("ShaderMaterial_vwqrm")
+[sub_resource type="BoxMesh" id="BoxMesh_djpvi"]
+material = SubResource("ShaderMaterial_0q8f2")
 size = Vector3(3, 3, 0.15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4eqh1"]
+render_priority = 0
+shader = ExtResource("1_j23ja")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(1, 0.15, 0.15, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 0.15, 0.15, 1)
+shader_parameter/emission_strength = 1.6
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_fs4tp"]
+material = SubResource("ShaderMaterial_4eqh1")
+size = Vector3(0.35, 0.35, 0.35)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_on4ij"]
 render_priority = 0
@@ -275,11 +325,14 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
-shader_parameter/albedo = Color(1, 0.15, 0.15, 1)
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
+shader_parameter/albedo = Color(0.2, 1, 0.35, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
 shader_parameter/use_vertex_color = null
-shader_parameter/emission = Color(1, 0.15, 0.15, 1)
+shader_parameter/emission = Color(0.2, 1, 0.35, 1)
 shader_parameter/emission_strength = 1.6
 shader_parameter/emission_from_texture = null
 
@@ -297,28 +350,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
-shader_parameter/albedo = Color(0.2, 1, 0.35, 1)
-shader_parameter/uv_scale = null
-shader_parameter/box_uv = null
-shader_parameter/use_vertex_color = null
-shader_parameter/emission = Color(0.2, 1, 0.35, 1)
-shader_parameter/emission_strength = 1.6
-shader_parameter/emission_from_texture = null
-
-[sub_resource type="BoxMesh" id="BoxMesh_hnkpc"]
-material = SubResource("ShaderMaterial_lxvje")
-size = Vector3(0.35, 0.35, 0.35)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rwl8q"]
-render_priority = 0
-shader = ExtResource("1_j23ja")
-shader_parameter/painted_edges = null
-shader_parameter/edge_width = null
-shader_parameter/edge_pixels_per_meter = null
-shader_parameter/edge_light = null
-shader_parameter/edge_shadow = null
-shader_parameter/edge_floor_shadow = null
-shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.45, 0.1, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
@@ -327,135 +361,135 @@ shader_parameter/emission = Color(1, 0.45, 0.1, 1)
 shader_parameter/emission_strength = 1.8
 shader_parameter/emission_from_texture = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_k84ff"]
-material = SubResource("ShaderMaterial_rwl8q")
+[sub_resource type="BoxMesh" id="BoxMesh_hnkpc"]
+material = SubResource("ShaderMaterial_lxvje")
 size = Vector3(0.5, 0.35, 0.5)
 
-[node name="OreCrawlerVisual" type="Node3D" unique_id=2071174682]
+[node name="OreCrawlerVisual" type="Node3D" unique_id=111726270]
 
-[node name="UpperJaw" type="MeshInstance3D" parent="." unique_id=928918635]
+[node name="UpperJaw" type="MeshInstance3D" parent="." unique_id=423128942]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -13)
-mesh = SubResource("BoxMesh_h4mv1")
+mesh = SubResource("BoxMesh_tfgkm")
 
-[node name="LowerJaw" type="MeshInstance3D" parent="." unique_id=1368365281]
+[node name="LowerJaw" type="MeshInstance3D" parent="." unique_id=755333389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, -13)
+mesh = SubResource("BoxMesh_tfgkm")
+
+[node name="Tooth" type="MeshInstance3D" parent="." unique_id=732165742]
+transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, -3, 1.6, -16)
 mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth" type="MeshInstance3D" parent="." unique_id=1845027132]
-transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, -3, 1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
-
-[node name="Tooth2" type="MeshInstance3D" parent="." unique_id=1569552350]
+[node name="Tooth2" type="MeshInstance3D" parent="." unique_id=847629969]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, -3, -1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth3" type="MeshInstance3D" parent="." unique_id=1787560453]
+[node name="Tooth3" type="MeshInstance3D" parent="." unique_id=513210293]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, -1, 1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth4" type="MeshInstance3D" parent="." unique_id=2097210476]
+[node name="Tooth4" type="MeshInstance3D" parent="." unique_id=278975325]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, -1, -1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth5" type="MeshInstance3D" parent="." unique_id=1731428058]
+[node name="Tooth5" type="MeshInstance3D" parent="." unique_id=1414846531]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, 1, 1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth6" type="MeshInstance3D" parent="." unique_id=382048897]
+[node name="Tooth6" type="MeshInstance3D" parent="." unique_id=1092553894]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, 1, -1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth7" type="MeshInstance3D" parent="." unique_id=1783161829]
+[node name="Tooth7" type="MeshInstance3D" parent="." unique_id=222109420]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, 3, 1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="Tooth8" type="MeshInstance3D" parent="." unique_id=684779333]
+[node name="Tooth8" type="MeshInstance3D" parent="." unique_id=644287585]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, 3, -1.6, -16)
-mesh = SubResource("BoxMesh_7bew0")
+mesh = SubResource("BoxMesh_h4mv1")
 
-[node name="MouthRock" type="MeshInstance3D" parent="." unique_id=1182031469]
+[node name="MouthRock" type="MeshInstance3D" parent="." unique_id=356262486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, -12.5)
-mesh = SubResource("SphereMesh_1hene")
+mesh = SubResource("SphereMesh_7bew0")
 
-[node name="Throat" type="MeshInstance3D" parent="." unique_id=839768009]
+[node name="Throat" type="MeshInstance3D" parent="." unique_id=1805495700]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
+mesh = SubResource("BoxMesh_1hene")
+
+[node name="Collar" type="MeshInstance3D" parent="." unique_id=936449133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 mesh = SubResource("BoxMesh_f7vhs")
 
-[node name="Collar" type="MeshInstance3D" parent="." unique_id=1269829210]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-mesh = SubResource("BoxMesh_brq2u")
+[node name="Body" type="MeshInstance3D" parent="." unique_id=291131613]
+mesh = SubResource("ArrayMesh_brq2u")
 
-[node name="Body" type="MeshInstance3D" parent="." unique_id=346712300]
-mesh = SubResource("ArrayMesh_5kjta")
+[node name="CabGlass" type="MeshInstance3D" parent="." unique_id=1488308819]
+mesh = SubResource("ArrayMesh_hmu6j")
 
-[node name="CabGlass" type="MeshInstance3D" parent="." unique_id=140648893]
-mesh = SubResource("ArrayMesh_w3hul")
-
-[node name="Headlight" type="MeshInstance3D" parent="." unique_id=141741877]
+[node name="Headlight" type="MeshInstance3D" parent="." unique_id=1520262262]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 3, -9.68)
-mesh = SubResource("BoxMesh_yb7jt")
+mesh = SubResource("BoxMesh_74ywc")
 
-[node name="Headlight2" type="MeshInstance3D" parent="." unique_id=1938982055]
+[node name="Headlight2" type="MeshInstance3D" parent="." unique_id=231650251]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 3, -9.68)
-mesh = SubResource("BoxMesh_yb7jt")
+mesh = SubResource("BoxMesh_74ywc")
 
-[node name="CraneMast" type="MeshInstance3D" parent="." unique_id=1842299493]
+[node name="CraneMast" type="MeshInstance3D" parent="." unique_id=1423253630]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.6, -2)
-mesh = SubResource("BoxMesh_0cdoy")
+mesh = SubResource("BoxMesh_5kjta")
 
-[node name="CraneJib" type="MeshInstance3D" parent="." unique_id=1279376248]
+[node name="CraneJib" type="MeshInstance3D" parent="." unique_id=1513210595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 7.6, -4.4)
-mesh = SubResource("BoxMesh_w64px")
+mesh = SubResource("BoxMesh_w3hul")
 
-[node name="CraneCable" type="MeshInstance3D" parent="." unique_id=1174710858]
+[node name="CraneCable" type="MeshInstance3D" parent="." unique_id=154023084]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 6.6, -7.2)
-mesh = SubResource("BoxMesh_0q8f2")
-
-[node name="CraneMast2" type="MeshInstance3D" parent="." unique_id=1760672515]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.6, 6)
-mesh = SubResource("BoxMesh_0cdoy")
-
-[node name="CraneJib2" type="MeshInstance3D" parent="." unique_id=346521944]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 7.6, 3.6)
 mesh = SubResource("BoxMesh_w64px")
 
-[node name="CraneCable2" type="MeshInstance3D" parent="." unique_id=1683501284]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 6.6, 0.8)
-mesh = SubResource("BoxMesh_0q8f2")
+[node name="CraneMast2" type="MeshInstance3D" parent="." unique_id=1679349214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.6, 6)
+mesh = SubResource("BoxMesh_5kjta")
 
-[node name="Grabber" type="MeshInstance3D" parent="." unique_id=2017800357]
+[node name="CraneJib2" type="MeshInstance3D" parent="." unique_id=1932744113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 7.6, 3.6)
+mesh = SubResource("BoxMesh_w3hul")
+
+[node name="CraneCable2" type="MeshInstance3D" parent="." unique_id=400755495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 6.6, 0.8)
+mesh = SubResource("BoxMesh_w64px")
+
+[node name="Grabber" type="MeshInstance3D" parent="." unique_id=869258878]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.4, 0.8)
+mesh = SubResource("BoxMesh_ve1f3")
+
+[node name="EngineGlow" type="MeshInstance3D" parent="." unique_id=1684699694]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 13.1)
 mesh = SubResource("BoxMesh_djpvi")
 
-[node name="EngineGlow" type="MeshInstance3D" parent="." unique_id=239691228]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 13.1)
-mesh = SubResource("BoxMesh_gklsc")
-
-[node name="Nozzle" type="Marker3D" parent="." unique_id=784553145]
+[node name="Nozzle" type="Marker3D" parent="." unique_id=310703038]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 13.35)
 
-[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=232533514]
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=794069052]
 script = ExtResource("6_1hene")
 
-[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=980938365]
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=853942792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 script = ExtResource("7_a8vna")
 
-[node name="EngineGlow2" type="MeshInstance3D" parent="." unique_id=524849563]
+[node name="EngineGlow2" type="MeshInstance3D" parent="." unique_id=696023085]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 13.1)
-mesh = SubResource("BoxMesh_gklsc")
+mesh = SubResource("BoxMesh_djpvi")
 
-[node name="Nozzle2" type="Marker3D" parent="." unique_id=229889467]
+[node name="Nozzle2" type="Marker3D" parent="." unique_id=1069288967]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 13.35)
 
-[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=1982278119]
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=105592856]
 script = ExtResource("6_1hene")
 
-[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=611506599]
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=1010540683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 script = ExtResource("7_a8vna")
 
-[node name="Sign" type="Label3D" parent="." unique_id=627252752]
+[node name="Sign" type="Label3D" parent="." unique_id=1210323294]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.86, 1, 3)
 pixel_size = 0.011
 double_sided = false
@@ -465,7 +499,7 @@ text = "M  MINING GUILD"
 font_size = 96
 outline_size = 14
 
-[node name="Sign2" type="Label3D" parent="." unique_id=1101599163]
+[node name="Sign2" type="Label3D" parent="." unique_id=109328954]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.86, 1, 3)
 pixel_size = 0.011
 double_sided = false
@@ -475,19 +509,19 @@ text = "M  MINING GUILD"
 font_size = 96
 outline_size = 14
 
-[node name="NavLight" type="MeshInstance3D" parent="." unique_id=1236512799]
+[node name="NavLight" type="MeshInstance3D" parent="." unique_id=383534844]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 0, 11)
-mesh = SubResource("BoxMesh_mjcwt")
+mesh = SubResource("BoxMesh_fs4tp")
 script = ExtResource("8_f7vhs")
 
-[node name="NavLight2" type="MeshInstance3D" parent="." unique_id=172198813]
+[node name="NavLight2" type="MeshInstance3D" parent="." unique_id=1773600880]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9, 0, 11)
-mesh = SubResource("BoxMesh_hnkpc")
+mesh = SubResource("BoxMesh_mjcwt")
 script = ExtResource("8_f7vhs")
 offset = 0.5
 
-[node name="Beacon" type="MeshInstance3D" parent="." unique_id=2042189186]
+[node name="Beacon" type="MeshInstance3D" parent="." unique_id=1262550965]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 10)
-mesh = SubResource("BoxMesh_k84ff")
+mesh = SubResource("BoxMesh_hnkpc")
 script = ExtResource("8_f7vhs")
 offset = 0.25

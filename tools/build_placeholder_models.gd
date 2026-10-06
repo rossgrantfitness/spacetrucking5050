@@ -74,6 +74,10 @@ var _flare_script: Script
 # Identical materials and boxes are made once and shared, which keeps the
 # saved scenes small and cheap to draw.
 var _material_cache := {}
+## On while building ships: hull paint is one solid color per panel with a
+## few painted details (seams, trim, bolts) instead of a tiled hull texture.
+## See "Panel decals" in shaders/painted_edges.gdshaderinc.
+var _ship_mode := false
 var _box_cache := {}
 ## Material -> its twin with painted edges switched on (for boxes).
 var _edged_cache := {}
@@ -85,9 +89,11 @@ func _initialize() -> void:
 	_trail_script = load(TRAIL_SCRIPT_PATH)
 	_flare_script = load(FLARE_SCRIPT_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/flight/traffic"))
+	_ship_mode = true
 	_save(_build_rig(), "res://scenes/flight/ShipVisual.tscn")
 	_save(_build_capsule_hauler("CapsuleHaulerVisual", CAPSULE_PAINTS[0], true), "res://scenes/flight/traffic/CapsuleHaulerVisual.tscn")
 	_save(_build_box_hauler("BoxHaulerVisual", BOX_PAINTS[1], true), "res://scenes/flight/traffic/BoxHaulerVisual.tscn")
+	_ship_mode = false
 	_save(_build_station(), "res://scenes/flight/Station.tscn")
 	_save(_build_cockpit(), "res://scenes/flight/CockpitInterior.tscn")
 	quit()
@@ -528,14 +534,26 @@ func _loft(parent: Node3D, node_name: String, front_center: Vector3, front_size:
 	var front := _octagon(front_center, front_size, bevel)
 	var back := _octagon(back_center, back_size, bevel)
 	var triangles: Array[PackedVector3Array] = []
+	var uvs: Array[PackedVector2Array] = []
+	var sizes := PackedVector2Array()
 	for i in 8:
 		var j := (i + 1) % 8
+		# Each side is one panel: across it, and along the hull.
+		var size := Vector2((front[i].distance_to(front[j]) + back[i].distance_to(back[j])) * 0.5,
+				(front[i].distance_to(back[i]) + front[j].distance_to(back[j])) * 0.5)
 		triangles.append(PackedVector3Array([front[i], front[j], back[j]]))
+		uvs.append(PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1)]))
+		sizes.append(size)
 		triangles.append(PackedVector3Array([front[i], back[j], back[i]]))
+		uvs.append(PackedVector2Array([Vector2(0, 0), Vector2(1, 1), Vector2(0, 1)]))
+		sizes.append(size)
 	for i in range(1, 7):
 		triangles.append(PackedVector3Array([front[0], front[i], front[i + 1]]))
 		triangles.append(PackedVector3Array([back[0], back[i], back[i + 1]]))
-	return _mesh(parent, node_name, _flat_mesh(triangles, (front_center + back_center) * 0.5, material), Vector3.ZERO)
+		for cap in 2:
+			uvs.append(PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]))
+			sizes.append(Vector2.ZERO)  # End caps: no panel details.
+	return _mesh(parent, node_name, _flat_mesh(triangles, (front_center + back_center) * 0.5, material, uvs, sizes), Vector3.ZERO)
 
 
 ## A flat slab (like a wing): a convex outline in the X/Z plane (seen from
@@ -575,14 +593,22 @@ func _octagon(center: Vector3, size: Vector2, bevel: float) -> PackedVector3Arra
 
 ## Turns a list of triangles into a flat-shaded mesh. Works for any convex
 ## shape: each triangle is turned to face away from the shape's `middle`.
-func _flat_mesh(triangles: Array[PackedVector3Array], middle: Vector3, material: Material) -> ArrayMesh:
+## Optional: `uvs` (three per triangle) and `sizes` (one per triangle, put
+## in UV2) for panel decals (see _loft).
+func _flat_mesh(triangles: Array[PackedVector3Array], middle: Vector3, material: Material,
+		uvs: Array[PackedVector2Array] = [], sizes: PackedVector2Array = PackedVector2Array()) -> ArrayMesh:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	surface.set_material(material)
-	for triangle in triangles:
+	for t in triangles.size():
+		var triangle := triangles[t]
 		var a := triangle[0]
 		var b := triangle[1]
 		var c := triangle[2]
+		var corner_uvs := uvs[t] if t < uvs.size() else PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+		var uv_a := corner_uvs[0]
+		var uv_b := corner_uvs[1]
+		var uv_c := corner_uvs[2]
 		var outward := (b - a).cross(c - a)
 		if outward.length_squared() < 0.000001:
 			continue  # A squashed, zero-size triangle: skip it.
@@ -594,9 +620,15 @@ func _flat_mesh(triangles: Array[PackedVector3Array], middle: Vector3, material:
 			var swap := b
 			b = c
 			c = swap
+			var swap_uv := uv_b
+			uv_b = uv_c
+			uv_c = swap_uv
 		surface.set_normal(outward.normalized())
-		for corner in [a, b, c]:
-			surface.add_vertex(corner)
+		var size := sizes[t] if t < sizes.size() else Vector2.ZERO
+		for corner: Array in [[a, uv_a], [b, uv_b], [c, uv_c]]:
+			surface.set_uv(corner[1])
+			surface.set_uv2(size)
+			surface.add_vertex(corner[0])
 	return surface.commit()
 
 
@@ -636,11 +668,19 @@ func _mirrored(outline: PackedVector2Array) -> PackedVector2Array:
 ## from the sides in meters; turn it off for round shapes that bring their
 ## own texture coordinates (cylinders, rings).
 func _paint(color: Color, texture: Texture2D = HULL, uv_scale: Vector2 = HULL_SCALE, box_uv: bool = true) -> ShaderMaterial:
-	var key := "paint %s %s %s %s" % [color, texture.resource_path if texture else "none", uv_scale, box_uv]
+	var panels := _ship_mode and box_uv and (texture == HULL or texture == null)
+	if panels:
+		texture = null  # Solid color: the panel details are painted by the shader.
+	var key := "paint %s %s %s %s %s" % [color, texture.resource_path if texture else "none", uv_scale, box_uv, panels]
 	if not _material_cache.has(key):
 		var material := ShaderMaterial.new()
 		material.shader = SURFACE_SHADER
 		material.set_shader_parameter("albedo", color)
+		if panels:
+			material.set_shader_parameter("panel_decals", true)
+			material.set_shader_parameter("box_uv", true)
+			_material_cache[key] = material
+			return material
 		if texture == null and box_uv:
 			# Flat paint, but hand-painted: a gentle mottle, about 2 m a tile.
 			texture = PAINT_GRAIN

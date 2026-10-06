@@ -34,12 +34,29 @@ varying flat vec3 edge_half;
 varying vec3 edge_normal;
 
 // Use in vertex(), before anything changes VERTEX.
-#define EDGE_VERTEX { edge_local = VERTEX; edge_half = abs(VERTEX); edge_normal = NORMAL; }
+#define EDGE_VERTEX { edge_local = VERTEX; edge_half = abs(VERTEX); edge_normal = NORMAL; panel_uv = UV; panel_size = UV2; }
+
+// "Panel decals" (ships): instead of a texture tiled over and over, every
+// panel is one solid color with a few painted details, once per panel: a
+// thin dark seam round its edge, a darker band along its top and left, a
+// bright trim line along its bottom and right, and a bolt in two opposite
+// corners. Works on boxes (with painted_edges on) and on the model
+// builders' lofted hull panels (which carry each panel's 0-1 position in UV
+// and its size in meters in UV2).
+uniform bool panel_decals = false;
+// The decals are painted in chunky pixels this many per meter.
+uniform float panel_pixels_per_meter = 14.0;
+uniform vec4 bolt_color : source_color = vec4(0.45, 0.45, 0.5, 1.0);
+// How big the details are (1 = rig size; huge ships use more).
+uniform float panel_scale = 1.0;
+
+varying vec2 panel_uv;
+varying flat vec2 panel_size;
 
 // The painted light/shade to multiply this pixel's color by (1 = no change).
 float painted_edge_shade() {
-	if (!painted_edges) {
-		return 1.0;
+	if (!painted_edges || panel_decals) {
+		return 1.0;  // (Panels paint their own edges: see paint_panel.)
 	}
 	vec3 facing = abs(edge_normal);
 	// 1 on the axis this face points along, 0 on the other two.
@@ -91,4 +108,75 @@ float painted_edge_shade() {
 		shade *= 1.0 - edge_floor_shadow * low;
 	}
 	return shade;
+}
+
+
+// One bolt: lit on its top half, with a "/" slot across it, and a dark ring
+// of shadow round it. `d` is this pixel's offset from the bolt's middle.
+vec3 panel_bolt(vec3 color, vec2 d, float r, float px) {
+	float dist = length(d);
+	if (dist < r) {
+		vec3 bolt = bolt_color.rgb * (d.y < 0.0 ? 1.2 : 0.8);
+		if (abs(d.x + d.y) < r * 0.35) {
+			bolt *= 0.35;  // The screwdriver slot.
+		}
+		return bolt;
+	}
+	if (dist < r + 1.0 / px) {
+		return color * 0.55;
+	}
+	return color;
+}
+
+// Paints this pixel's panel details over `color` (see "Panel decals").
+vec3 paint_panel(vec3 color) {
+	if (!panel_decals) {
+		return color;
+	}
+	vec2 p;  // Where on the panel, in meters from its top-left corner.
+	vec2 size;  // The panel's size in meters.
+	if (painted_edges) {
+		vec3 facing = abs(edge_normal);
+		vec2 local;
+		vec2 half_size;
+		if (facing.x >= facing.y && facing.x >= facing.z) {
+			local = vec2(edge_local.z * sign(edge_normal.x), -edge_local.y);
+			half_size = edge_half.zy;
+		} else if (facing.y >= facing.z) {
+			local = vec2(edge_local.x, edge_local.z * sign(edge_normal.y));
+			half_size = edge_half.xz;
+		} else {
+			local = vec2(-edge_local.x * sign(edge_normal.z), -edge_local.y);
+			half_size = edge_half.xy;
+		}
+		p = local + half_size;
+		size = half_size * 2.0;
+	} else if (panel_size.x > 0.01 && panel_size.y > 0.01) {
+		p = panel_uv * panel_size;
+		size = panel_size;
+	} else {
+		return color;  // Not a panel (an end cap): just the solid color.
+	}
+	float px = max(panel_pixels_per_meter, 1.0);
+	p = (floor(p * px) + 0.5) / px;  // Chunky painted pixels.
+	vec2 far_side = size - p;
+	float smallest = min(size.x, size.y);
+	float band = clamp(smallest * 0.05, 1.0 / px, 0.25 * panel_scale);
+	float seam = 1.0 / px;
+	float shade = 1.0;
+	if (min(min(p.x, p.y), min(far_side.x, far_side.y)) < seam) {
+		shade = 0.6;  // The seam between panels.
+	} else if (far_side.x < band + seam || far_side.y < band + seam) {
+		shade = 1.32;  // The bright trim line, bottom and right.
+	} else if (p.x < band + seam || p.y < band + seam) {
+		shade = 0.8;  // The darker band, top and left.
+	}
+	vec3 result = color * shade;
+	if (smallest > panel_scale) {
+		float r = clamp(smallest * 0.045, 0.1 * panel_scale, 0.32 * panel_scale);
+		float inset = band + r * 2.0;
+		result = panel_bolt(result, p - vec2(inset), r, px);
+		result = panel_bolt(result, p - (size - vec2(inset)), r, px);
+	}
+	return result;
 }

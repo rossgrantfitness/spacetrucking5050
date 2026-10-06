@@ -18,6 +18,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_texture = ExtResource("3_v6230")
 shader_parameter/uv_scale = Vector2(0.75, 0.75)
@@ -41,6 +44,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.13, 0.13, 0.18, 1)
 shader_parameter/albedo_texture = ExtResource("4_1p3va")
 shader_parameter/uv_scale = Vector2(0.25, 0.25)
@@ -72,6 +78,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.24, 0.24, 0.3, 1)
 shader_parameter/albedo_texture = ExtResource("4_1p3va")
 shader_parameter/uv_scale = Vector2(0.25, 0.25)
@@ -99,6 +108,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.55, 0.82, 1)
 shader_parameter/albedo_texture = ExtResource("5_hlmiv")
 shader_parameter/uv_scale = Vector2(4, 4)
@@ -132,6 +144,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.08, 0.1, 0.09, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -159,6 +174,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.82, 0.84, 0.9, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -185,6 +203,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.35, 0.2, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
@@ -207,6 +228,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.5, 1, 0.6, 1)
 shader_parameter/uv_scale = null
 shader_parameter/box_uv = null
@@ -244,6 +268,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_texture = ExtResource("7_446nx")
 shader_parameter/uv_scale = Vector2(1, 1)
@@ -267,6 +294,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.9, 0.35, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -298,6 +328,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.55, 0.82, 1)
 shader_parameter/albedo_texture = ExtResource("5_hlmiv")
 shader_parameter/uv_scale = Vector2(4, 4)
@@ -340,6 +373,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.82, 0.84, 0.9, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -363,6 +399,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.9, 0.2, 0.2, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -386,6 +425,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/albedo_texture = ExtResource("3_v6230")
 shader_parameter/uv_scale = Vector2(7.5, 7.5)
@@ -409,6 +451,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.45, 0.1, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -440,6 +485,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.3, 0.3, 0.3, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -463,6 +511,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.5, 0.1, 0.1, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -486,6 +537,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.9, 0.9, 0.9, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -509,6 +563,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(1, 0.5, 0.8, 1)
 shader_parameter/albedo_texture = ExtResource("5_hlmiv")
 shader_parameter/uv_scale = Vector2(12, 12)
@@ -536,6 +593,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.3, 0.85, 0.4, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -548,7 +608,8 @@ shader_parameter/emission_from_texture = null
 [sub_resource type="ArrayMesh" id="ArrayMesh_wpf18"]
 _surfaces = [{
 "aabb": AABB(-0.05, -0.002, 0, 0.1, 0.004, 0.12),
-"format": 34359738375,
+"attribute_data": PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
+"format": 34359738423,
 "material": SubResource("ShaderMaterial_8mkrs"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -566,6 +627,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.55, 0.3, 0.7, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -593,6 +657,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.45, 0.95, 0.5, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -605,7 +672,8 @@ shader_parameter/emission_from_texture = null
 [sub_resource type="ArrayMesh" id="ArrayMesh_qb4pj"]
 _surfaces = [{
 "aabb": AABB(-0.045, -0.04, -0.04, 0.09, 0.08, 0.08),
-"format": 34359738375,
+"attribute_data": PackedByteArray("AAAAAAAAAAD2/dQ8CtejPQAAgD8AAAAA9v3UPArXoz0AAIA/AACAP/b91DwK16M9AAAAAAAAAAD2/dQ8CtejPQAAgD8AAIA/9v3UPArXoz0AAAAAAACAP/b91DwK16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAAAAIV05PQrXoz0AAIA/AACAPyFdOT0K16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAIA/IV05PQrXoz0AAAAAAACAPyFdOT0K16M9AAAAAAAAAABuEoM8CtejPQAAgD8AAAAAbhKDPArXoz0AAIA/AACAP24SgzwK16M9AAAAAAAAAABuEoM8CtejPQAAgD8AAIA/bhKDPArXoz0AAAAAAACAP24SgzwK16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAAAAIV05PQrXoz0AAIA/AACAPyFdOT0K16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAIA/IV05PQrXoz0AAAAAAACAPyFdOT0K16M9AAAAAAAAAAD2/dQ8CtejPQAAgD8AAAAA9v3UPArXoz0AAIA/AACAP/b91DwK16M9AAAAAAAAAAD2/dQ8CtejPQAAgD8AAIA/9v3UPArXoz0AAAAAAACAP/b91DwK16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAAAAIV05PQrXoz0AAIA/AACAPyFdOT0K16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAIA/IV05PQrXoz0AAAAAAACAPyFdOT0K16M9AAAAAAAAAABuEoM8CtejPQAAgD8AAAAAbhKDPArXoz0AAIA/AACAP24SgzwK16M9AAAAAAAAAABuEoM8CtejPQAAgD8AAIA/bhKDPArXoz0AAAAAAACAP24SgzwK16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAAAAIV05PQrXoz0AAIA/AACAPyFdOT0K16M9AAAAAAAAAAAhXTk9CtejPQAAgD8AAIA/IV05PQrXoz0AAAAAAACAPyFdOT0K16M9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
+"format": 34359738423,
 "material": SubResource("ShaderMaterial_wp12d"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -623,6 +691,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.05, 0.05, 0.08, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -646,6 +717,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.45, 0.95, 0.5, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -669,6 +743,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.95, 0.92, 0.85, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -696,6 +773,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = null
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.35, 0.22, 0.15, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -723,6 +803,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.55, 0.38, 0.22, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -746,6 +829,9 @@ shader_parameter/edge_light = null
 shader_parameter/edge_shadow = null
 shader_parameter/edge_floor_shadow = null
 shader_parameter/edge_floor_reach = 1.5
+shader_parameter/panel_decals = null
+shader_parameter/panel_pixels_per_meter = null
+shader_parameter/bolt_color = null
 shader_parameter/albedo = Color(0.96, 0.95, 0.9, 1)
 shader_parameter/albedo_texture = ExtResource("6_eskul")
 shader_parameter/uv_scale = Vector2(0.5, 0.5)
@@ -759,343 +845,343 @@ shader_parameter/emission_from_texture = null
 material = SubResource("ShaderMaterial_fcqeb")
 size = Vector3(0.21, 0.004, 0.27)
 
-[node name="CockpitInterior" type="Node3D" unique_id=640681223]
+[node name="CockpitInterior" type="Node3D" unique_id=345601741]
 script = ExtResource("1_tqi1r")
 
-[node name="Pillar" type="MeshInstance3D" parent="." unique_id=2092411]
+[node name="Pillar" type="MeshInstance3D" parent="." unique_id=741355165]
 transform = Transform3D(-0.9201546, -0.36986333, -0.1285171, 0, 0.32822216, -0.9446006, 0.39155525, -0.86917853, -0.30201513, -1.28, 0.285, -1.185)
 mesh = SubResource("BoxMesh_ifpa2")
 
-[node name="SideWall" type="MeshInstance3D" parent="." unique_id=477238020]
+[node name="SideWall" type="MeshInstance3D" parent="." unique_id=1977971389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.1, -0.2)
 mesh = SubResource("BoxMesh_f2eav")
 
-[node name="Pillar2" type="MeshInstance3D" parent="." unique_id=1072385425]
+[node name="Pillar2" type="MeshInstance3D" parent="." unique_id=85481223]
 transform = Transform3D(-0.9201546, 0.36986333, 0.1285171, 0, 0.32822216, -0.9446006, -0.39155525, -0.86917853, -0.30201513, 1.28, 0.285, -1.185)
 mesh = SubResource("BoxMesh_ifpa2")
 
-[node name="SideWall2" type="MeshInstance3D" parent="." unique_id=166655200]
+[node name="SideWall2" type="MeshInstance3D" parent="." unique_id=812235745]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.1, -0.2)
 mesh = SubResource("BoxMesh_f2eav")
 
-[node name="RoofBar" type="MeshInstance3D" parent="." unique_id=999747431]
+[node name="RoofBar" type="MeshInstance3D" parent="." unique_id=826454268]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 1.02, -0.95)
 mesh = SubResource("BoxMesh_mo4xw")
 
-[node name="Roof" type="MeshInstance3D" parent="." unique_id=924926676]
+[node name="Roof" type="MeshInstance3D" parent="." unique_id=244947897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12, -0.1)
 mesh = SubResource("BoxMesh_5r3ww")
 
-[node name="DashTop" type="MeshInstance3D" parent="." unique_id=144868557]
+[node name="DashTop" type="MeshInstance3D" parent="." unique_id=1693352892]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, -1.1)
 mesh = SubResource("BoxMesh_qdoy3")
 
-[node name="DashFront" type="MeshInstance3D" parent="." unique_id=593576977]
+[node name="DashFront" type="MeshInstance3D" parent="." unique_id=444214199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, -0.62)
 mesh = SubResource("BoxMesh_nq4dh")
 
-[node name="DashMat" type="MeshInstance3D" parent="." unique_id=565423123]
+[node name="DashMat" type="MeshInstance3D" parent="." unique_id=36479296]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, -1.4)
 mesh = SubResource("BoxMesh_yx4f0")
 
-[node name="Instruments" type="Node3D" parent="." unique_id=2100855821]
+[node name="Instruments" type="Node3D" parent="." unique_id=1735757715]
 transform = Transform3D(1, 0, 0, 0, 0.9393727, 0.3428978, 0, -0.3428978, 0.9393727, 0, -0.3, -1)
 
-[node name="InstrumentPanel" type="MeshInstance3D" parent="Instruments" unique_id=1525795548]
+[node name="InstrumentPanel" type="MeshInstance3D" parent="Instruments" unique_id=183869774]
 mesh = SubResource("BoxMesh_jnyn3")
 
-[node name="StatusScreen" type="MeshInstance3D" parent="Instruments" unique_id=1302618209]
+[node name="StatusScreen" type="MeshInstance3D" parent="Instruments" unique_id=1508549267]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72, 0, 0.045)
 mesh = SubResource("QuadMesh_w2tov")
 
-[node name="NavScreen" type="MeshInstance3D" parent="Instruments" unique_id=1864798404]
+[node name="NavScreen" type="MeshInstance3D" parent="Instruments" unique_id=502085990]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.72, 0, 0.045)
 mesh = SubResource("QuadMesh_ar1nn")
 
-[node name="SpeedDial" type="MeshInstance3D" parent="Instruments" unique_id=1588367114]
+[node name="SpeedDial" type="MeshInstance3D" parent="Instruments" unique_id=1937029327]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.24, 0.04, 0.05)
 mesh = SubResource("CylinderMesh_gttsc")
 
-[node name="Bezel" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1365167753]
+[node name="Bezel" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=402528660]
 mesh = SubResource("TorusMesh_ac371")
 
-[node name="Needle" type="Node3D" parent="Instruments/SpeedDial" unique_id=1296451529]
+[node name="Needle" type="Node3D" parent="Instruments/SpeedDial" unique_id=1060887717]
 
-[node name="NeedleBar" type="MeshInstance3D" parent="Instruments/SpeedDial/Needle" unique_id=1112694211]
+[node name="NeedleBar" type="MeshInstance3D" parent="Instruments/SpeedDial/Needle" unique_id=1619549415]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.016, -0.03)
 mesh = SubResource("BoxMesh_yek4n")
 
-[node name="Tick" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1275867684]
+[node name="Tick" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1747521873]
 transform = Transform3D(-0.58850116, 0, 0.80849636, 0, 1, 0, -0.80849636, 0, -0.58850116, -0.054977756, 0.012, 0.040018074)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick2" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1978429263]
+[node name="Tick2" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1102097294]
 transform = Transform3D(0.10394155, 0, 0.9945834, 0, 1, 0, -0.9945834, 0, 0.10394155, -0.06763167, 0.012, -0.0070680277)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick3" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=702850930]
+[node name="Tick3" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1955981783]
 transform = Transform3D(0.74294734, 0, 0.66934985, 0, 1, 0, -0.66934985, 0, 0.74294734, -0.04551579, 0.012, -0.05052042)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick4" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=434065399]
+[node name="Tick4" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=524492169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, -0.068)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick5" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1234681984]
+[node name="Tick5" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1188602968]
 transform = Transform3D(0.74294734, 0, -0.66934985, 0, 1, 0, 0.66934985, 0, 0.74294734, 0.04551579, 0.012, -0.05052042)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick6" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=977417115]
+[node name="Tick6" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=944221849]
 transform = Transform3D(0.10394155, 0, -0.9945834, 0, 1, 0, 0.9945834, 0, 0.10394155, 0.06763167, 0.012, -0.0070680277)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick7" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1605935180]
+[node name="Tick7" type="MeshInstance3D" parent="Instruments/SpeedDial" unique_id=1010026580]
 transform = Transform3D(-0.58850116, 0, -0.80849636, 0, 1, 0, 0.80849636, 0, -0.58850116, 0.054977756, 0.012, 0.040018074)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="HullDial" type="MeshInstance3D" parent="Instruments" unique_id=33213337]
+[node name="HullDial" type="MeshInstance3D" parent="Instruments" unique_id=1142549324]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.24, 0.04, 0.05)
 mesh = SubResource("CylinderMesh_ttrmu")
 
-[node name="Bezel" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=842065423]
+[node name="Bezel" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1678655398]
 mesh = SubResource("TorusMesh_5fsgs")
 
-[node name="Needle" type="Node3D" parent="Instruments/HullDial" unique_id=1213159102]
+[node name="Needle" type="Node3D" parent="Instruments/HullDial" unique_id=869342925]
 
-[node name="NeedleBar" type="MeshInstance3D" parent="Instruments/HullDial/Needle" unique_id=1889456950]
+[node name="NeedleBar" type="MeshInstance3D" parent="Instruments/HullDial/Needle" unique_id=2021033882]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.016, -0.03)
 mesh = SubResource("BoxMesh_yek4n")
 
-[node name="Tick" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1460810114]
+[node name="Tick" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=403786423]
 transform = Transform3D(-0.58850116, 0, 0.80849636, 0, 1, 0, -0.80849636, 0, -0.58850116, -0.054977756, 0.012, 0.040018074)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick2" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1877009105]
+[node name="Tick2" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1703845475]
 transform = Transform3D(0.10394155, 0, 0.9945834, 0, 1, 0, -0.9945834, 0, 0.10394155, -0.06763167, 0.012, -0.0070680277)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick3" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=51003206]
+[node name="Tick3" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1699420228]
 transform = Transform3D(0.74294734, 0, 0.66934985, 0, 1, 0, -0.66934985, 0, 0.74294734, -0.04551579, 0.012, -0.05052042)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick4" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=941866753]
+[node name="Tick4" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=461326800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, -0.068)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick5" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=505512071]
+[node name="Tick5" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1780814678]
 transform = Transform3D(0.74294734, 0, -0.66934985, 0, 1, 0, 0.66934985, 0, 0.74294734, 0.04551579, 0.012, -0.05052042)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick6" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=2065070704]
+[node name="Tick6" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=979648305]
 transform = Transform3D(0.10394155, 0, -0.9945834, 0, 1, 0, 0.9945834, 0, 0.10394155, 0.06763167, 0.012, -0.0070680277)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Tick7" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=1549639283]
+[node name="Tick7" type="MeshInstance3D" parent="Instruments/HullDial" unique_id=871182031]
 transform = Transform3D(-0.58850116, 0, -0.80849636, 0, 1, 0, 0.80849636, 0, -0.58850116, 0.054977756, 0.012, 0.040018074)
 mesh = SubResource("BoxMesh_guhbw")
 
-[node name="Photo" type="MeshInstance3D" parent="Instruments" unique_id=464140917]
+[node name="Photo" type="MeshInstance3D" parent="Instruments" unique_id=1433714522]
 transform = Transform3D(0.99280864, -0.119712204, 0, 0.119712204, 0.99280864, 0, 0, 0, 1, -1.13, 0.04, 0.05)
 mesh = SubResource("QuadMesh_vj2js")
 
-[node name="StickyNote" type="MeshInstance3D" parent="Instruments" unique_id=2055834325]
+[node name="StickyNote" type="MeshInstance3D" parent="Instruments" unique_id=2059464117]
 transform = Transform3D(0.9950042, 0.09983342, 0, -0.09983342, 0.9950042, 0, 0, 0, 1, 1.1, 0.12, 0.05)
 mesh = SubResource("QuadMesh_q6y2g")
 
-[node name="StickyNote2" type="MeshInstance3D" parent="Instruments" unique_id=2040517923]
+[node name="StickyNote2" type="MeshInstance3D" parent="Instruments" unique_id=1914719862]
 transform = Transform3D(0.9887711, -0.14943814, 0, 0.14943814, 0.9887711, 0, 0, 0, 1, 1.12, -0.06, 0.05)
 mesh = SubResource("QuadMesh_xhpyl")
 
-[node name="WheelColumn" type="Node3D" parent="." unique_id=144976201]
+[node name="WheelColumn" type="Node3D" parent="." unique_id=1230897547]
 transform = Transform3D(1, 0, 0, 0, 0.57352, -0.8191916, 0, 0.8191916, 0.57352, 0, -0.44, -0.62)
 
-[node name="ColumnShaft" type="MeshInstance3D" parent="WheelColumn" unique_id=447168981]
+[node name="ColumnShaft" type="MeshInstance3D" parent="WheelColumn" unique_id=1114116110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 mesh = SubResource("BoxMesh_sh6v4")
 
-[node name="Wheel" type="Node3D" parent="WheelColumn" unique_id=856929983]
+[node name="Wheel" type="Node3D" parent="WheelColumn" unique_id=1128807994]
 
-[node name="Rim" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=1191711641]
+[node name="Rim" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=17318337]
 mesh = SubResource("TorusMesh_svjys")
 
-[node name="Hub" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=2954606]
+[node name="Hub" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=263493706]
 mesh = SubResource("CylinderMesh_gic87")
 
-[node name="Spoke" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=2070240368]
+[node name="Spoke" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=294082106]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6.7355576e-18, 0, 0.11)
 mesh = SubResource("BoxMesh_27wx8")
 
-[node name="Spoke2" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=725294359]
+[node name="Spoke2" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=506928598]
 transform = Transform3D(-0.8660254, 0, 0.49999997, 0, 1, 0, -0.49999997, 0, -0.8660254, -0.095262796, 0, -0.055)
 mesh = SubResource("BoxMesh_27wx8")
 
-[node name="Spoke3" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=1435966411]
+[node name="Spoke3" type="MeshInstance3D" parent="WheelColumn/Wheel" unique_id=92793484]
 transform = Transform3D(0.8660253, 0, 0.5000002, 0, 1, 0, -0.5000002, 0, 0.8660253, 0.095262796, 0, -0.055)
 mesh = SubResource("BoxMesh_27wx8")
 
-[node name="LeverBase" type="MeshInstance3D" parent="." unique_id=1373665361]
+[node name="LeverBase" type="MeshInstance3D" parent="." unique_id=1721522922]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.5, -0.6)
 mesh = SubResource("BoxMesh_kr3yr")
 
-[node name="ThrottleLever" type="Node3D" parent="." unique_id=1782309956]
+[node name="ThrottleLever" type="Node3D" parent="." unique_id=491059192]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.48, -0.6)
 
-[node name="LeverStick" type="MeshInstance3D" parent="ThrottleLever" unique_id=159927107]
+[node name="LeverStick" type="MeshInstance3D" parent="ThrottleLever" unique_id=2007585115]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0)
 mesh = SubResource("BoxMesh_g13yx")
 
-[node name="LeverKnob" type="MeshInstance3D" parent="ThrottleLever" unique_id=1446187794]
+[node name="LeverKnob" type="MeshInstance3D" parent="ThrottleLever" unique_id=191205746]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 mesh = SubResource("BoxMesh_3vae5")
 
-[node name="ButtonBase" type="MeshInstance3D" parent="." unique_id=115133531]
+[node name="ButtonBase" type="MeshInstance3D" parent="." unique_id=783331374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, -0.5, -0.64)
 mesh = SubResource("BoxMesh_mgwuc")
 
-[node name="BoostButton" type="MeshInstance3D" parent="." unique_id=1009956738]
+[node name="BoostButton" type="MeshInstance3D" parent="." unique_id=1240018959]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, -0.47, -0.64)
 mesh = SubResource("CylinderMesh_i4pjm")
 
-[node name="OverheadPanel" type="MeshInstance3D" parent="." unique_id=1438180732]
+[node name="OverheadPanel" type="MeshInstance3D" parent="." unique_id=1774486458]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.55)
 mesh = SubResource("BoxMesh_q0ykf")
 
-[node name="Led" type="MeshInstance3D" parent="." unique_id=16921310]
+[node name="Led" type="MeshInstance3D" parent="." unique_id=273779388]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led2" type="MeshInstance3D" parent="." unique_id=320488387]
+[node name="Led2" type="MeshInstance3D" parent="." unique_id=955996162]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led3" type="MeshInstance3D" parent="." unique_id=311976728]
+[node name="Led3" type="MeshInstance3D" parent="." unique_id=417666538]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led4" type="MeshInstance3D" parent="." unique_id=531198448]
+[node name="Led4" type="MeshInstance3D" parent="." unique_id=2109323336]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led5" type="MeshInstance3D" parent="." unique_id=2110830113]
+[node name="Led5" type="MeshInstance3D" parent="." unique_id=1513584254]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led6" type="MeshInstance3D" parent="." unique_id=1533704850]
+[node name="Led6" type="MeshInstance3D" parent="." unique_id=755914525]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led7" type="MeshInstance3D" parent="." unique_id=642176388]
+[node name="Led7" type="MeshInstance3D" parent="." unique_id=2097630538]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led8" type="MeshInstance3D" parent="." unique_id=1011584841]
+[node name="Led8" type="MeshInstance3D" parent="." unique_id=173050002]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.945, -0.72)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led9" type="MeshInstance3D" parent="." unique_id=835750758]
+[node name="Led9" type="MeshInstance3D" parent="." unique_id=1873494110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led10" type="MeshInstance3D" parent="." unique_id=1516718602]
+[node name="Led10" type="MeshInstance3D" parent="." unique_id=128444694]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led11" type="MeshInstance3D" parent="." unique_id=1056971293]
+[node name="Led11" type="MeshInstance3D" parent="." unique_id=2054965911]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led12" type="MeshInstance3D" parent="." unique_id=551922069]
+[node name="Led12" type="MeshInstance3D" parent="." unique_id=766301657]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led13" type="MeshInstance3D" parent="." unique_id=1622780146]
+[node name="Led13" type="MeshInstance3D" parent="." unique_id=575520104]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led14" type="MeshInstance3D" parent="." unique_id=1897886467]
+[node name="Led14" type="MeshInstance3D" parent="." unique_id=2068764261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led15" type="MeshInstance3D" parent="." unique_id=554768049]
+[node name="Led15" type="MeshInstance3D" parent="." unique_id=174737274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="Led16" type="MeshInstance3D" parent="." unique_id=1599660205]
+[node name="Led16" type="MeshInstance3D" parent="." unique_id=836327782]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.945, -0.6)
 mesh = SubResource("BoxMesh_m70op")
 
-[node name="AlarmLight" type="MeshInstance3D" parent="." unique_id=1870826348]
+[node name="AlarmLight" type="MeshInstance3D" parent="." unique_id=438024573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.93, -0.8)
 mesh = SubResource("BoxMesh_a3rx6")
 
-[node name="Dice" type="Node3D" parent="." unique_id=2012420695]
+[node name="Dice" type="Node3D" parent="." unique_id=1887220502]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 0.94, -0.95)
 
-[node name="String" type="MeshInstance3D" parent="Dice" unique_id=725068820]
+[node name="String" type="MeshInstance3D" parent="Dice" unique_id=787736813]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
 mesh = SubResource("BoxMesh_2shr2")
 
-[node name="Die" type="MeshInstance3D" parent="Dice" unique_id=1499254726]
+[node name="Die" type="MeshInstance3D" parent="Dice" unique_id=1002155291]
 transform = Transform3D(0.9279484, 0.0225534, 0.37202555, 0.09537451, 0.95056385, -0.29552022, -0.360299, 0.3097093, 0.87992316, -0.03, -0.25, 0)
 mesh = SubResource("BoxMesh_gu650")
 
-[node name="Die2" type="MeshInstance3D" parent="Dice" unique_id=2143315804]
+[node name="Die2" type="MeshInstance3D" parent="Dice" unique_id=1257772703]
 transform = Transform3D(0.547857, -0.3323707, 0.76771253, 0.2896295, 0.9362934, 0.19866933, -0.784836, 0.11350981, 0.6092192, 0.04, -0.28, 0.01)
 mesh = SubResource("BoxMesh_gu650")
 
-[node name="Freshener" type="Node3D" parent="." unique_id=383075187]
+[node name="Freshener" type="Node3D" parent="." unique_id=2077241017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.94, -1)
 
-[node name="String" type="MeshInstance3D" parent="Freshener" unique_id=186882928]
+[node name="String" type="MeshInstance3D" parent="Freshener" unique_id=1033294797]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.07, 0)
 mesh = SubResource("BoxMesh_lkm2j")
 
-[node name="Tree" type="MeshInstance3D" parent="Freshener" unique_id=1543149377]
+[node name="Tree" type="MeshInstance3D" parent="Freshener" unique_id=1334060400]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("ArrayMesh_wpf18")
 
-[node name="Bobblehead" type="Node3D" parent="." unique_id=1683729852]
+[node name="Bobblehead" type="Node3D" parent="." unique_id=842828709]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, -0.43, -1.2)
 
-[node name="BobbleBody" type="MeshInstance3D" parent="Bobblehead" unique_id=1133105839]
+[node name="BobbleBody" type="MeshInstance3D" parent="Bobblehead" unique_id=1649077221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
 mesh = SubResource("CylinderMesh_8w31n")
 
-[node name="Head" type="Node3D" parent="Bobblehead" unique_id=2122017923]
+[node name="Head" type="Node3D" parent="Bobblehead" unique_id=1533602376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
-[node name="HeadShape" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=1497817292]
+[node name="HeadShape" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=1195360831]
 mesh = SubResource("ArrayMesh_qb4pj")
 
-[node name="Eye" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=250073222]
+[node name="Eye" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=1187393482]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0.005, 0.042)
 mesh = SubResource("BoxMesh_ntyhi")
 
-[node name="Eye2" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=1803373108]
+[node name="Eye2" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=1846560856]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.005, 0.042)
 mesh = SubResource("BoxMesh_ntyhi")
 
-[node name="Antenna" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=249834475]
+[node name="Antenna" type="MeshInstance3D" parent="Bobblehead/Head" unique_id=312284755]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0)
 mesh = SubResource("BoxMesh_f4hl6")
 
-[node name="Coffee" type="MeshInstance3D" parent="." unique_id=1289611690]
+[node name="Coffee" type="MeshInstance3D" parent="." unique_id=710496040]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.37, -0.95)
 mesh = SubResource("CylinderMesh_vvhpg")
 
-[node name="CoffeeLid" type="MeshInstance3D" parent="." unique_id=1796832248]
+[node name="CoffeeLid" type="MeshInstance3D" parent="." unique_id=410677768]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.305, -0.95)
 mesh = SubResource("CylinderMesh_ekd64")
 
-[node name="Clipboard" type="MeshInstance3D" parent="." unique_id=1085027656]
+[node name="Clipboard" type="MeshInstance3D" parent="." unique_id=336728607]
 transform = Transform3D(0.9553365, 0, 0.29552022, 0, 1, 0, -0.29552022, 0, 0.9553365, -1.05, -0.425, -1.05)
 mesh = SubResource("BoxMesh_asid6")
 
-[node name="Paper" type="MeshInstance3D" parent="Clipboard" unique_id=376268172]
+[node name="Paper" type="MeshInstance3D" parent="Clipboard" unique_id=1861914139]
 transform = Transform3D(0.99875027, 0, 0.04997917, 0, 1, 0, -0.04997917, 0, 0.99875027, 0, 0.006, 0.01)
 mesh = SubResource("BoxMesh_rkb32")
 
-[node name="CabLight" type="OmniLight3D" parent="." unique_id=2017981446]
+[node name="CabLight" type="OmniLight3D" parent="." unique_id=181154763]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.3)
 light_color = Color(1, 0.72, 0.5, 1)
 light_energy = 0.7

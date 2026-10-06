@@ -34,7 +34,7 @@ void vertex() {
 
 void fragment() {
 	vec4 texel = texture(albedo_texture, PSX_UV);
-	vec3 color = albedo.rgb * texel.rgb * painted_edge_shade();
+	vec3 color = paint_panel(albedo.rgb * texel.rgb * painted_edge_shade());
 	if (use_vertex_color) {
 		color *= COLOR.rgb;
 	}
