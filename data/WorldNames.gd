@@ -17,7 +17,7 @@ extends Resource
 ## The delivery company she drives for (and might buy one day).
 @export var company_name: String = "[COMPANY_NAME]"
 ## The company's regional manager at the truck stop: your boss, and a
-## real piece of work (a weasel in a short-sleeve shirt and a tie).
+## real piece of work (a lion in a short-sleeve shirt and a tie).
 @export var boss_name: String = "[BOSS_NAME]"
 ## What money is called.
 @export var currency: String = "credits"

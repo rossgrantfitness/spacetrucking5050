@@ -1,12 +1,10 @@
 # Progress
 
-**Current status:** **Beta step 2: the trucking company.**
-- You work for OrbitalEx: pay shows at 10×, minus their 90%.
-- Checks wait at the office (entry, lobby, the boss's desk; FF8 cameras) until you check in.
-- People at stations tell you their problems; you tell them to call the company, and the boss hands you the job.
-- Buy the company for 2,500,000; completion %.
-- The game opens in flight, on the way to collect a pitiful check.
+**Current status:** **Your art is in.**
+- FF7-style painted backgrounds in all the rig rooms (12 cameras).
+- The lion boss, the vending machine, the truck stop station and the space billboards are your models.
 
+(Beta step 2, the trucking company, is just before this.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
@@ -17,7 +15,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (beta step 2)
+**Last updated:** 2026-10-06 (your art goes in)
 
 ---
 

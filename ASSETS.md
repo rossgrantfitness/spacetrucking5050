@@ -62,24 +62,28 @@ game.
   use the base color.
 - Download as **GLB**.
 
-### 4. Where to put files (important)
+### 4. Where to put files
 
-**Don't put game models in `reference/`.** That folder is hidden from
-Godot on purpose (it's for other people's mood-board images), so nothing
-in it gets into the game. I've been moving things out of it by hand.
-Instead, use:
+Uploading to `reference/` is fine: I move each file into the game's art
+folder and wire it up. The game's art lives in `art/`:
 
 ```
-assets/characters/<name>/source.glb     (Jacki, crew, NPCs)
-assets/ships/<name>/source.glb          (rigs and traffic)
-assets/stations/<name>/source.glb
-assets/props/<name>/source.glb          (vending machine, snacks...)
-assets/textures/<name>.png              (wall/floor tiles, posters, planets)
-assets/sounds/<name>.wav                (any recordings)
-assets/music/<station>/<track>.ogg      (radio)
+art/backgrounds/<room>/<shot>.jpg   pre-rendered room backgrounds (FF7 style)
+art/models/<name>.glb               models (characters, props, stations)
+art/alternates/                     spare versions not used yet (hidden from Godot)
 ```
 
-Sketches and concept images can still go in `reference/`.
+**Background names:** `<room>` is the room's scene name and `<shot>` is
+the camera's name, both in lower_case_with_underscores, e.g.
+`art/backgrounds/engine_room/toward_door.jpg`. The 29 screenshots I sent
+(and `cameras.txt`) list every room and camera. A picture there replaces
+the game's own painting for that camera. Nothing else is needed; a missing
+one just falls back to the game's own. Any 16:9-ish size works: the
+picture's full height fills the screen.
+
+**Blank signs:** if your painting leaves a sign board blank, I can have
+the game draw that sign's words live on top (per camera; the dispatch
+and engine room signs work like this now).
 
 ### 5. What I do with each model
 
@@ -132,6 +136,8 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 - [ ] **Raccoony** (raccoon, dispatch): face sheet, 64×64 (2×4 cells).
 - [ ] **Chang Ma** (mole, engineer): face sheet, 64×64.
 - [ ] **Clem** (donkey, cargo hand): face sheet, 64×64.
+- [x] **The boss** (Dale Pembrook, lion): your model is in, in the OrbitalEx office.
+- [ ] **Olivia** (ostrich, ditzy crew mascot): waiting for the model file.
 
 ### Your rig: The Thumper
 - [ ] **Exterior model.** The one you look at for hours. Gunmetal, amber
@@ -158,14 +164,13 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
   - diner counter;
   - neon strips (green, purple, orange, cyan);
   - one window-onto-space tile.
-- [ ] **Truck stop exterior** (seen in flight).
+- [x] **Truck stop exterior** (seen in flight): your model is in.
 
 ### Rig rooms (her home while she flies)
-- [ ] **Textures** for the cabin (apartment), hallway, galley, cargo bay
-  and engine room: one wall, one floor and one accent tile each. They
-  share the same tint per rig, so one set does all 14 rigs.
-- [ ] **Bed, TV, desk computer, kitchen counter, fridge**: one model each,
-  or textures for the current boxes.
+- [x] **Pre-rendered backgrounds** for all 12 rig cameras (cabin, hallway,
+  dispatch, galley, cargo bay, engine room): yours are in.
+- [ ] **Pre-rendered backgrounds** for the truck stop (8 cameras), the
+  OrbitalEx office (3), the Tidewater canteen (3) and the casino (3).
 
 ### Flight, every trip
 - [ ] **Asteroids:** 3 to 4 chunky rock models (rough, round, long, flat)
@@ -223,8 +228,8 @@ Each is a big sale moment, so it should look like what it's called.
 - [ ] **Space whales:** one model, gently swimming. It can have a swinging
   tail part.
 - [ ] **Cosmic jellyfish:** one model, see-through look (I do the glow).
-- [ ] **Billboards:** one frame model, plus **ad images** (2D, 128×64)
-  for the brands.
+- [x] **Billboards:** your frame model is in (the game prints each ad on
+  its white screen). Optional later: **ad images** (2D) for the brands.
 - [ ] **Derelicts and junk:**
   - 2 or 3 wrecks;
   - a floating couch, a fridge, a shopping cart (for the junk clouds).
@@ -237,8 +242,7 @@ Each is a big sale moment, so it should look like what it's called.
   I fit them to every rig.
 
 ### Vending and snacks
-- [ ] **Vending machine** model (front left blank; I draw the glowing
-  panel).
+- [x] **Vending machine** model: yours is in (Tidewater and the casino).
 - [ ] **Brand logos** (2D, 64 px) for the 12 brands:
   - Moon Milk
   - Neon Soda Works

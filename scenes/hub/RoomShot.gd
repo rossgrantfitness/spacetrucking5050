@@ -14,9 +14,18 @@ extends Node3D
 ## loads; see HubRoom.gd.
 
 
+## Signs (Label3D names in the room's Set) to draw live over this shot's
+## hand-made background art, for boards the art left blank. (With the
+## game's own painted backgrounds, every sign is painted in.)
+@export var live_signs: PackedStringArray = PackedStringArray()
+
 ## The painted background for this shot. Filled in by HubRoom when the room
-## loads.
+## loads: hand-made art if there is some (see HubRoom.ART_FOLDER), or a
+## picture the game paints itself.
 var background: Texture2D
+## Whether `background` is hand-made art (a fixed picture, not painted to
+## fit the screen).
+var has_art := false
 
 
 ## The camera for this shot.

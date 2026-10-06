@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scenes/hub/NPC.gd" id="7_npc"]
 [ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
 [ext_resource type="Resource" path="res://data/npcs/company_boss.tres" id="d_Boss"]
-[ext_resource type="PackedScene" path="res://scenes/hub/WeaselVisual.tscn" id="v_Boss"]
+[ext_resource type="PackedScene" path="res://scenes/hub/LionBossVisual.tscn" id="v_Boss"]
 [ext_resource type="Resource" path="res://data/npcs/company_greeter.tres" id="d_Bonnie"]
 [ext_resource type="PackedScene" path="res://scenes/hub/SheepVisual.tscn" id="v_Bonnie"]
 
@@ -148,7 +148,6 @@ data = ExtResource("d_Boss")
 
 [node name="Visual" parent="People/Boss" instance=ExtResource("v_Boss")]
 rotation = Vector3(0, 3.1416, 0)
-scale = Vector3(1.1, 1.1, 1.1)
 
 [node name="TalkReach" type="CollisionShape3D" parent="People/Boss"]
 position = Vector3(0, 0.3, 2.3)

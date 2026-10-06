@@ -36,6 +36,15 @@ const RIG_ROOMS: PackedStringArray = [
 	"res://scenes/hub/Galley.tscn", "res://scenes/hub/EngineRoom.tscn", "res://scenes/hub/CargoBay.tscn"]
 
 const BACKDROP_SHADER := preload("res://shaders/prerendered_backdrop.gdshader")
+## Hand-made background art: a picture here is used instead of the one the
+## game paints, for that room and camera:
+##     res://art/backgrounds/<room>/<shot>.jpg   (or .png / .webp)
+## <room> is the room scene's name and <shot> the shot's name, in
+## snake_case: e.g. art/backgrounds/engine_room/toward_door.jpg for
+## EngineRoom.tscn's "TowardDoor" shot. Make it from that shot's camera
+## (same angle, same field of view; any 16:9-ish size).
+const ART_FOLDER := "res://art/backgrounds/"
+const ART_TYPES: PackedStringArray = ["jpg", "png", "webp", "jpeg"]
 const PLAYER_SCENE := preload("res://scenes/hub/Player.tscn")
 ## Visual layer 2 holds the Set (what gets painted); layer 1 holds people.
 const SET_LAYER: int = 2
@@ -337,8 +346,20 @@ func active_shot() -> RoomShot:
 
 ## Paints every shot's background picture (see the notes at the top).
 func paint_backgrounds() -> void:
+	var to_paint: Array[RoomShot] = []
+	for shot in _shots:
+		var art := art_for(shot)
+		shot.has_art = art != null
+		if art != null:
+			shot.background = art
+		else:
+			to_paint.append(shot)
 	if DisplayServer.get_name() == "headless":
 		return  # No screen, nothing to paint (the automated tests run like this).
+	if to_paint.is_empty():
+		_show_set_for_painting(false)
+		_show_backdrop(_active_shot)
+		return
 	_show_set_for_painting(true)
 	var window := Vector2(get_window().size)
 	var painter := SubViewport.new()
@@ -350,7 +371,7 @@ func paint_backgrounds() -> void:
 	brush.cull_mask = 1 << (SET_LAYER - 1)  # Only the Set; no people in the paint.
 	painter.add_child(brush)
 	add_child(painter)
-	for shot in _shots:
+	for shot in to_paint:
 		var camera := shot.camera()
 		if camera == null:
 			continue
@@ -365,8 +386,37 @@ func paint_backgrounds() -> void:
 		shot.background = ImageTexture.create_from_image(painter.get_texture().get_image())
 	painter.queue_free()
 	_show_set_for_painting(false)
-	if _active_shot != null:
-		_backdrop.set_shader_parameter("background", _active_shot.background)
+	_show_backdrop(_active_shot)
+
+
+## Hand-made art for `shot` (see ART_FOLDER), or null.
+func art_for(shot: RoomShot) -> Texture2D:
+	var folder := ART_FOLDER + scene_file_path.get_file().get_basename().to_snake_case() + "/"
+	for type in ART_TYPES:
+		var path := folder + String(shot.name).to_snake_case() + "." + type
+		if ResourceLoader.exists(path):
+			return load(path) as Texture2D
+	return null
+
+
+## Puts `shot`'s background on the room's shapes, and (over hand-made art)
+## draws the signs its art left blank.
+func _show_backdrop(shot: RoomShot) -> void:
+	if shot == null:
+		return
+	_backdrop.set_shader_parameter("background", shot.background)
+	var aspect := 0.0
+	if shot.has_art and shot.background != null:
+		aspect = float(shot.background.get_width()) / float(shot.background.get_height())
+	_backdrop.set_shader_parameter("background_aspect", aspect)
+	if shot.has_art or shot.background != null:
+		for node in _set.find_children("*", "Label3D", true, false):
+			(node as Label3D).visible = shot.has_art and node.name in shot.live_signs
+	# The live view out of the window lines up with the painted window, not
+	# with hand-made art (which has its own view out).
+	var live_window := get_node_or_null("LiveWindow") as Node3D
+	if live_window != null:
+		live_window.visible = not shot.has_art
 
 
 ## Switches the Set between its real look (for painting) and the painted
@@ -431,7 +481,7 @@ func _choose_shot(first_time: bool) -> void:
 		return
 	_active_shot = chosen
 	chosen.camera().make_current()
-	_backdrop.set_shader_parameter("background", chosen.background)
+	_show_backdrop(chosen)
 	if not first_time:
 		player.on_camera_cut()
 

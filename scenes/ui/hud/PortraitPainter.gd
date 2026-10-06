@@ -44,6 +44,8 @@ static func paint(canvas: CanvasItem, corner: Vector2, who: NPCData, talking: bo
 			_rect(canvas, o + Vector2(21, 8), Vector2(3, 14), fur.darkened(0.1))
 		"walrus", "crocodile", "sloth":
 			pass
+		"lion":
+			canvas.draw_circle(head, 11.5, fur.darkened(0.45))  # The mane.
 		"otter":
 			canvas.draw_circle(o + Vector2(8, 8), 2.0, fur.darkened(0.2))
 			canvas.draw_circle(o + Vector2(20, 8), 2.0, fur.darkened(0.2))

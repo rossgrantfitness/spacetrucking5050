@@ -45,7 +45,7 @@ sets_flags = PackedStringArray("gill_slot")
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("gill_thanked")
 blocked_by_flags = PackedStringArray("gill_called_ice", "gill_ice_done")
-lines = PackedStringArray("Mmh. {bunny}. Can I tell you something? The ice machine broke.", "Three hundred million tons of fish, and nothing keeping them cold. They're getting... opinions.", "> Call {company} at the truck stop. They'll haul you some ice.", "Mmh. Okay. I'll call. ...Is it the weasel? It's always the weasel.")
+lines = PackedStringArray("Mmh. {bunny}. Can I tell you something? The ice machine broke.", "Three hundred million tons of fish, and nothing keeping them cold. They're getting... opinions.", "> Call {company} at the truck stop. They'll haul you some ice.", "Mmh. Okay. I'll call. ...Is it the lion? It's always the lion.")
 sets_flags = PackedStringArray("gill_called_ice")
 places_order = ExtResource("job_ice")
 
@@ -53,7 +53,7 @@ places_order = ExtResource("job_ice")
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("gill_called_ice")
 blocked_by_flags = PackedStringArray("gill_ice_done")
-lines = PackedStringArray("I called. The weasel put me on hold. The hold music was just him, humming.", "The fish say hurry. Politely. Mostly.")
+lines = PackedStringArray("I called. The lion put me on hold. The hold music was just him, humming.", "The fish say hurry. Politely. Mostly.")
 
 [sub_resource type="Resource" id="Conversation_iced"]
 script = ExtResource("2_conv")

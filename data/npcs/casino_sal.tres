@@ -24,7 +24,7 @@ places_order = ExtResource("job_jumpsuits")
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("sal_called_karaoke")
 blocked_by_flags = PackedStringArray("sal_jumpsuits_done")
-lines = PackedStringArray("Called your company. Some weasel answered. Charming guy. Very... fee-forward.", "Marge's machine is at his depot whenever you are, champ.")
+lines = PackedStringArray("Called your company. Some lion answered. Charming guy. Very... fee-forward.", "Marge's machine is at his depot whenever you are, champ.")
 
 [sub_resource type="Resource" id="Conversation_slot"]
 script = ExtResource("2_conv")
@@ -38,7 +38,7 @@ places_order = ExtResource("job_slot")
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("sal_called_slot")
 blocked_by_flags = PackedStringArray("sal_slot_done")
-lines = PackedStringArray("Your weasel's got the order. Tried to charge me a 'luck handling fee.' I respect it.")
+lines = PackedStringArray("Your lion's got the order. Tried to charge me a 'luck handling fee.' I respect it.")
 
 [sub_resource type="Resource" id="Conversation_rig"]
 script = ExtResource("2_conv")

@@ -44,6 +44,7 @@ environment = SubResource("Environment_room")
 
 [node name="Lobby" type="Node3D" parent="Shots"]
 script = ExtResource("3_shot")
+live_signs = PackedStringArray("DispatchSign", "Motto")
 
 [node name="Camera" type="Camera3D" parent="Shots/Lobby"]
 position = Vector3(-3.9, 2.9, 3.4)
@@ -60,6 +61,7 @@ shape = SubResource("BoxShape3D_zone0")
 
 [node name="Stairs" type="Node3D" parent="Shots"]
 script = ExtResource("3_shot")
+live_signs = PackedStringArray("DispatchSign", "Motto")
 
 [node name="Camera" type="Camera3D" parent="Shots/Stairs"]
 position = Vector3(-0.6, 3.4, 3.9)

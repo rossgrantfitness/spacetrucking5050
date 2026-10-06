@@ -1,3 +1,31 @@
+# Playtest: your art in the game (beta step 2 below)
+
+**What's new:**
+- Your 12 rig-room paintings are the backgrounds.
+- The lion boss, your vending machine, your truck stop station and your billboard are in the game.
+
+**Time needed:** 10 minutes.
+
+## What to do
+
+1. Walk through every room of the rig: cabin, hallway, dispatch, galley, cargo bay, engine room. Use both camera angles in each.
+   - Watch Jacki walk **behind** things: the dispatch counter, the galley table, the bed, the crates, the engine. Does she hide where the painting says she should?
+   - Does she ever look like she's floating, or standing inside furniture?
+2. Look at the signs in dispatch (DISPATCH and its motto) and the engine room (ENGINE ROOM): the game draws them on your blank boards. Right size and place?
+3. Visit the OrbitalEx office and meet the lion.
+4. F10 → jump near the truck stop: look at your station. Fly past a few billboards (they're random sights on the road; the Glimmer road has a row of them).
+5. At Tidewater or the casino, find the new vending machine.
+
+## Questions
+
+1. Any spot where Jacki doesn't line up with the painting? (Tell me the room and camera; a screenshot is perfect.)
+2. Dirty hallway or clean hallway?
+3. Is the lion the right size? Should he be bigger than everyone else?
+4. Is the vending machine the right size and shape (it's stretched a little taller)?
+5. Does the station read as a truck stop from far away?
+
+---
+
 # Playtest: beta step 2, the trucking company (round 27 below)
 
 **What you asked for:**

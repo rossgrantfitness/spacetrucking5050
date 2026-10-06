@@ -491,3 +491,18 @@ be revisited; just say so.
   - It's counted from the data, so new content counts automatically (`scenes/ui/Completion.gd`).
 - **Save version 2:** checks and orders are saved. Old saves load fine (no checks waiting).
 - Cleanup: two leftover `.uid` files for scripts that no longer exist were removed.
+
+## 2026-10-06 (Your art goes in)
+
+- **Pre-rendered backgrounds, FF7 style** (your paintings): a picture in `art/backgrounds/<room>/<shot>.jpg` replaces the game's own painting for that camera (`HubRoom.ART_FOLDER`, `art_for`). The room's invisible blocks still hide people behind things, so a painting must keep the original camera and layout.
+  - The picture's full height fills the screen and the sides are trimmed to fit any window (`background_aspect` in `prerendered_backdrop.gdshader`).
+  - All 12 rig cameras use your paintings. They line up closely; the dispatch counter and the apartment plant/lamp moved a little, which doesn't matter because people never walk behind those spots.
+  - Two hallway versions: I used the **dirty** one, because the dispatch-end painting has the same mess on the floor and the cut between them matches. The clean one is kept in `art/alternates/`. Say if you want the clean one.
+  - **Blank sign boards** get live lettering: `live_signs` on a shot (DISPATCH and its motto in both dispatch shots, ENGINE ROOM in the engine room's wide shot). Signs your paintings include are left alone.
+  - The cabin's live view out of the window is turned off over painted art (your painting has its own stars and planet).
+- **The boss is a lion** (your model, `art/models/boss_lion.glb` → `LionBossVisual.tscn`): it breathes and sways a little (`ModelVisual.gd`, for any one-piece model). Comm portrait: lion colors with a mane. His voice is lower and gruffer. Lines that called him a weasel now say lion. The weasel model and its builder are gone.
+- **Vending machine** (your model): `VendingMachine.tscn` is now hand-made around it, about 1.6 m wide and 1.45 m tall (your model is squat; stretched a little taller so it stands over Jacki without warping). The old box builder is gone.
+- **Truck stop station** (your model): replaces the placeholder hub and ring, 720 m across. The docking bay, sign board and parking deck stay on its front. You bonk off its exact shape (`tools/build_station_model.gd`).
+- **Space billboards** (your model): every billboard in flight uses it. The ad is printed on its white screen in the billboard's color, shrinking to fit long ads.
+- **Olivia the ostrich** (new crew mascot): waiting for her model file; it hadn't reached GitHub yet.
+- Size note for the Windows build: the paintings are stored at full quality (about 5 MB each in the game). Fine for now; can be compressed later if the download gets big.

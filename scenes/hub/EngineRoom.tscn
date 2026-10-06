@@ -36,6 +36,7 @@ environment = SubResource("Environment_8lj11")
 
 [node name="Wide" type="Node3D" parent="Shots" unique_id=1991302356]
 script = ExtResource("3_jjgkr")
+live_signs = PackedStringArray("EngineSign")
 
 [node name="Camera" type="Camera3D" parent="Shots/Wide" unique_id=1084677176]
 transform = Transform3D(0.66896474, -0.2812711, 0.68802094, 0, 0.9256375, 0.37841153, -0.7432942, -0.25314397, 0.6192188, 3, 3, 2.6)
