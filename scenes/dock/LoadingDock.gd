@@ -156,13 +156,14 @@ func _climb_off() -> void:
 func _on_forklift(what: String, pallet: Node3D) -> void:
 	match what:
 		"lift":
-			Sfx.play("ui_move", 0.0, 0.7)
+			Sfx.play("forks_up")
 			_say("INTO THE HOLD WITH IT", 2.0)
 		"no_pallet":
+			Sfx.play("nope")
 			_say("SLIDE THE FORKS RIGHT UNDER A PALLET", 2.0)
 		"bump":
 			bumps += 1
-			Sfx.play("door", -8.0, 0.4)
+			Sfx.play("bump", -2.0)
 		"drop":
 			_on_set_down(pallet)
 
@@ -176,7 +177,7 @@ func _on_set_down(pallet: Node3D) -> void:
 			best = i
 			best_distance = distance
 	if best < 0:
-		Sfx.play("ui_move", 0.0, 0.5)
+		Sfx.play("nope")
 		if pallet.global_position.z < HOLD_DOOR_Z:
 			_say("A LITTLE CLOSER TO A GLOWING SPOT", 2.0)
 		return

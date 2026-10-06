@@ -1103,6 +1103,7 @@ func _counter(id: String, place: PlaceData, delivered: bool) -> void:
 				GameState.rig["snack"] = 1.0
 				await MenuPanel.ask(tree, "MOE'S JERKY", "You chew. And chew. A deep calm settles over you. Your hands feel... steady.", [{"text": "*CHEW*"}])
 			else:
+				Sfx.play("nope")
 				await MenuPanel.ask(tree, "NOT ENOUGH", "Moe... understands... completely.", [{"text": "OKAY"}])
 		elif action == "souvenir":
 			if GameState.spend(KEYCHAIN_PRICE):

@@ -250,6 +250,13 @@ music files from the game's `radio/custom/` folder.
 effects** (engine, boost, bonks...) and **Voices** (the little talking
 blips). The engine is quieter than before so the music comes first.
 
+**The little sounds** (menus, doors, money, the nav computer) are made
+from math by `scenes/common/SfxSynth.gd` and saved as `cue_*.wav` files in
+`audio/generated/`. They're all in one gentle key, made of soft wood,
+glass and felt tones. To try your own, replace a file and keep its name
+(the busy ones also have `_2` and `_3` versions, picked in turn so they
+never repeat exactly).
+
 **The mouse while flying:** it's hidden and locked to the game window, and
 moving it steers the rig. Press **Esc** to get your mouse pointer back (that
 opens the pause menu); click the game window to pick the steering back up.

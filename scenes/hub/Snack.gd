@@ -22,7 +22,7 @@ static func enjoy(tree: SceneTree, product: ProductData) -> void:
 	var brand := GameState.brands.find_brand(product.brand_id)
 	var first_of_brand := not tried_brand(product.brand_id)
 	GameState.tasted[product.id] = int(GameState.tasted.get(product.id, 0)) + 1
-	Sfx.play("door", -6.0, 0.6)  # *clunk*
+	Sfx.play("clunk")  # *clunk*
 	var room := HubRoom.find(tree.current_scene) if tree.current_scene != null else null
 	if room == null:
 		room = _room_in(tree)

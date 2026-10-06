@@ -186,6 +186,7 @@ static func fuel(tree: SceneTree, title: String = "LILY'S PUMPS", goodbye: Strin
 		elif choice == 1 and GameState.spend(boost_cost):
 			GameState.rig["boost_fuel"] = 1.0
 		elif choice in [0, 1]:
+			Sfx.play("nope")
 			await MenuPanel.ask(tree, "NOT ENOUGH", "The attendant squints at your wallet. \"Come back after a job.\"" if title != "LILY'S PUMPS" else "Lily squints at your wallet. \"Come back after a job, sugar.\"", [{"text": "OKAY"}])
 		else:
 			return
@@ -513,4 +514,5 @@ static func show_bills(tree: SceneTree) -> void:
 
 
 static func _too_poor(tree: SceneTree) -> void:
+	Sfx.play("nope")
 	await MenuPanel.ask(tree, "NOT ENOUGH", "You check your wallet. Then you check it again. Nope.", [{"text": "OKAY"}])

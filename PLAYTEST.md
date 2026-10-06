@@ -1,3 +1,62 @@
+# Playtest: round 23, pleasant sounds (rounds 21 and 22 below)
+
+**What you asked for:** sound effects that feel good, following the
+Japanese idea of pleasant product sounds: consonant notes, soft starts,
+no shrill highs, sounds that don't nag when you hear them a lot.
+
+**Time needed:** about 10 minutes. **Use headphones or decent speakers**
+for at least part of it, and play at a normal volume.
+
+> Honest note: I can measure sounds (how much harsh treble, how loud, how
+> fast they start) but I can't hear them. Whether they *feel* nice is
+> yours to judge. Every sound is made from math in
+> `scenes/common/SfxSynth.gd`; tell me "warmer", "brighter", "shorter",
+> "more wood", whatever you hear.
+
+## What's new
+
+- **One key, one signature:** every menu and game sound plays notes from
+  one gentle five-note scale (A major pentatonic), so they never clash.
+  The startup chime, taking a job, getting paid and notices all share a
+  little three-note signature (up, then up again).
+- **Wood, glass and felt** instead of electronic beeps: a little marimba
+  tick when you move through menus, a glass "ba-ding" to confirm, soft
+  felt notes stepping down to go back.
+- **No sound plays exactly the same twice:** busy sounds have three
+  versions, and the menu tick wanders between notes as you scroll, like a
+  wind chime.
+- **New startup chime:** a soft breath, the signature on glass, then a
+  warm chord that blooms in slowly.
+- **New little sounds:** the vending machine's clunk, the forklift's forks
+  lifting, a padded bump, and a gentle "mm-mm" when something doesn't work
+  (missing a pallet, not enough money). No buzzers.
+- The out-of-control alarm is the only "sour" sound left (that's its job),
+  but it's rounder now.
+
+## What to do
+
+1. Start the game and listen to the startup chime.
+2. In the title screen and pause menu, scroll up and down through buttons
+   for a while. Confirm and back out a few times.
+3. Take a job, set a course, let the autopilot go. Get paid.
+4. Buy something from a vending machine. Try to buy something you can't
+   afford.
+5. Walk through a few doors.
+6. If you like, load a rig with the forklift.
+
+## Questions
+
+1. Does the startup chime feel like *your* game saying hello? Too long,
+   too quiet, too sleepy?
+2. Scrolling menus for a minute: pleasant or annoying? Should the tick
+   stay on one note instead of wandering?
+3. Is anything now too quiet or too soft to notice (doors, the menu tick)?
+4. Getting paid: does it feel rewarding enough? (It used to be bright
+   coins; now it's softer and warmer.)
+5. Any sound you miss from before?
+
+---
+
 # Playtest: rounds 21 and 22 (round 20 below)
 
 **Round 22, the window (try it first, it's quick):** drag the window's

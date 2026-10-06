@@ -1,15 +1,17 @@
 # Progress
 
-**Current status:** **Round 22: the window.** Drag it to any size with no
-black bars. F11 / Alt+Enter switches borderless fullscreen. Mode, size and
-spot are remembered, and there's a menu and HUD size setting. (Round 21,
-the 3D forklift and galaxy brands, is in too.) Built and validated,
-**waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 23: polish, pleasant sounds.** Every menu
+and game sound remade in one gentle key (A major pentatonic) from soft
+wood, glass and felt tones, with no shrill highs, a new startup chime and
+sounds that never repeat exactly. (Round 22, the window, is in too.)
+Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
+plus tips for your sketch → AI → Meshy pipeline).
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 22)
+**Last updated:** 2026-10-06 (round 23)
 
 ---
 
@@ -114,7 +116,7 @@ systems, the husband's story).
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
   - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest; the husband's story
 - [ ] **M9: Endgame & completion**: buy the company, completion percentage
-- [ ] **M10: Polish & ship**: menus, options, credits, controller glyphs, exports, performance
+- [ ] **M10: Polish & ship**: menus, options, credits, controller glyphs, exports, performance. *Partial:* the window (round 22) and pleasant sound design (round 23) are done early, at your request.
 
 ---
 

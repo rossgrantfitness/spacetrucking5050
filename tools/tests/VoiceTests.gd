@@ -28,5 +28,51 @@ func test_everyone_has_a_voice() -> void:
 
 
 func test_every_cue_has_a_sound() -> void:
-	for cue in ["ui_move", "ui_confirm", "ui_back", "job_accept", "course_set", "autopilot_off", "cash", "pickup", "notice", "door"]:
+	for cue in SfxSynth.CUES:
 		check(ResourceLoader.exists("res://audio/generated/cue_%s.wav" % cue), "the %s sound should exist" % cue)
+	for cue in SfxSynth.VARIED_CUES:
+		check(SfxSynth.CUES.has(cue), "%s is varied, so it should be a cue" % cue)
+		check(Sfx.takes_of(cue).size() == 3, "the %s sound should have three takes" % cue)
+
+
+## The "pleasant sounds" rules (SfxSynth.make_cue): no shrill highs, gentle
+## starts, and nothing too loud.
+func test_cues_are_gentle() -> void:
+	for cue in SfxSynth.CUES:
+		var samples := _samples(SfxSynth.make_cue(cue))
+		# How much a sound changes sample to sample, against how loud it is:
+		# a quick, rough measure of how much high treble it has. A pure note
+		# at 1.8 kHz scores about 0.25; the old square-wave beeps scored 0.4-0.9.
+		var energy := 0.0
+		var change := 0.0
+		var peak := 0.0
+		for i in range(1, samples.size()):
+			energy += samples[i] * samples[i]
+			change += (samples[i] - samples[i - 1]) * (samples[i] - samples[i - 1])
+			peak = maxf(peak, absf(samples[i]))
+		check(energy > 0.0, "%s should make a sound" % cue)
+		check(change / maxf(energy, 0.000001) < 0.2, "%s should have no shrill highs (scored %.2f)" % [cue, change / maxf(energy, 0.000001)])
+		check(peak < 0.7, "%s should stay well under full volume (peak %.2f)" % [cue, peak])
+		check(absf(samples[0]) < 0.05, "%s should start softly, not with a click" % cue)
+
+
+func test_repeated_sounds_vary() -> void:
+	var pitches := {}
+	for i in 40:
+		var pitch: float = Sfx.varied_pitch("notice")
+		check(absf(1200.0 * log(pitch) / log(2.0)) <= Sfx.DRIFT_CENTS + 0.01, "a drift stays a hair, not out of tune")
+	for i in 40:
+		var cents := 1200.0 * log(Sfx.varied_pitch("ui_move")) / log(2.0)
+		var step := roundi(cents / 100.0)
+		check(absf(cents - step * 100.0) <= Sfx.DRIFT_CENTS + 0.01, "the menu tick wanders by whole notes")
+		check((Sfx.WANDER["ui_move"] as Array).has(step), "the menu tick stays in the home key")
+		pitches[step] = true
+	check(pitches.size() > 1, "the menu tick shouldn't play the same note every time")
+
+
+static func _samples(wav: AudioStreamWAV) -> PackedFloat32Array:
+	var out := PackedFloat32Array()
+	out.resize(floori(wav.data.size() / 2.0))
+	for i in out.size():
+		out[i] = wav.data.decode_s16(i * 2) / 32767.0
+	return out

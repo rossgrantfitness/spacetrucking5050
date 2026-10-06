@@ -10,7 +10,9 @@ extends SceneTree
 ##     voice_square.wav, voice_reed.wav, voice_gruff.wav, voice_chirp.wav
 ##         (the other gibberish voices; "soft" is blip.wav)
 ##     cue_*.wav (menus, accepting a job, the nav computer, money, finding
-##         things, notices, doors: see SfxSynth.make_cue)
+##         things, notices, doors, the vending tray, the forklift: see
+##         SfxSynth.make_cue; the busiest ones also get cue_*_2.wav and
+##         cue_*_3.wav, slightly different takes so they never repeat exactly)
 ##         (a cartoon bump, a dialogue voice blip, a burst of radio static, a
 ##         big ship's engines, a space whale's song, a comet's whoosh, the
 ##         intro's power-on chime and self-test beep, a crate thumping in the
@@ -56,8 +58,11 @@ func _initialize() -> void:
 	}
 	for kind: String in ["square", "reed", "gruff", "chirp"]:
 		loops["voice_" + kind] = SfxSynth.make_voice(kind)
-	for cue: String in ["ui_move", "ui_confirm", "ui_back", "job_accept", "course_set", "autopilot_off", "cash", "pickup", "notice", "door"]:
+	for cue: String in SfxSynth.CUES:
 		loops["cue_" + cue] = SfxSynth.make_cue(cue)
+		if cue in SfxSynth.VARIED_CUES:
+			loops["cue_%s_2" % cue] = SfxSynth.make_cue(cue, 1)
+			loops["cue_%s_3" % cue] = SfxSynth.make_cue(cue, 2)
 	var failed := false
 	for file_name: String in loops:
 		var path := ProjectSettings.globalize_path(OUTPUT_FOLDER.path_join(file_name + ".wav"))
