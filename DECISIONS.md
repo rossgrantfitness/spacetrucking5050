@@ -533,3 +533,13 @@ be revisited; just say so.
   - Her walk, idle and the rest of `BunnyAnimator` work as before.
   - The old model's files are gone.
 - **Lily at the pumps** is your frog shopkeeper model.
+
+## 2026-10-07 (Jacki's ears: overlapping animation)
+
+- **Bendy ears** (your ask): Jacki's head is now one skinned mesh on a small skeleton (`EarRig`). It has a root bone for the head, and two bones per ear (upper, then tip). Every point on an ear blends from the head near the root to the ear bones further down, and the ear's edges fade in too, so nothing tears (the old rigid ear pieces tore at the seam). Built by `tools/build_bunny.gd` (`_add_bendy_head`, `_ear_weights`).
+- **Overlapping action** (`BunnyAnimator._swing_bendy_ears`): each ear segment is a damped spring, shoved by how her head really moves.
+  - Speeding up throws them back; stopping flops them forward and they wobble; bobbing flaps them; turning swings them out.
+  - The tip spring is driven by the upper ear's swing, so the tips lag behind and overshoot.
+  - Walking trails them back a little.
+  - Angles are kept gentle: big bends stretch like taffy.
+- **Tuning:** under "Bendy ears" on BunnyVisual's root node in the editor: stiffness, damping, tip stiffness and damping, how hard movement throws them (`ear_inertia`), and the walking trail.

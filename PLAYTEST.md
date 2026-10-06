@@ -12,6 +12,7 @@
 ## What to do
 
 1. Walk Jacki around the rig: does she look right walking, standing and turning? Any torn seams (shoulders, ears)?
+   - **Her ears now swing** with overlapping action. Start and stop walking, and turn on the spot: do they feel floppy enough, too floppy, or too stiff?
 2. Say hi to Lily at the truck stop pumps.
 3. Open the course map (M): read the "KM UP" / "KM DOWN" under each stop.
 4. F10, then jump 5 minutes out from Tidewater: climb up to it and dock (try flying it yourself too).

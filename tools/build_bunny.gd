@@ -41,7 +41,11 @@ const ARM_BAND := Vector2(-0.14, 0.17)  # Arms live between these heights.
 const NECK_Y: float = 0.11  # Above this: the head (and cap).
 const EAR_BACK_Z: float = -0.07  # Behind this and out to the side: the
 const EAR_SIDE_X: float = 0.13  # lop ears, hanging by her shoulders (they go with the head).
-const EAR_ROOT := Vector3(0.11, 0.22, -0.14)  # Where the ears hang from.
+## The ears bend (they're skinned onto two bones each, see _ear_weights):
+## where each ear hangs from, where it bends, and how far down its tip is.
+const EAR_ROOT := Vector3(0.13, 0.27, -0.12)
+const EAR_BEND := Vector3(0.22, 0.08, -0.21)
+const EAR_TIP_Y: float = -0.12
 
 ## Part name -> [triangle corner positions, normals, uvs].
 var _parts := {}
@@ -77,6 +81,9 @@ func _cut(source: Mesh, to_model: Transform3D) -> void:
 		for k in 3:
 			center += to_model * positions[indices[t * 3 + k]] / 3.0
 		var part := _which_part(center)
+		for k in 3:  # Touching an ear at all: it bends with the ear (no torn slivers).
+			if _is_ear(to_model * positions[indices[t * 3 + k]]):
+				part = "Head"
 		for k in 3:
 			var corner := indices[t * 3 + k]
 			_add(part, to_model * positions[corner], to_model.basis * normals[corner] if not normals.is_empty() else Vector3.UP,
@@ -87,8 +94,8 @@ func _cut(source: Mesh, to_model: Transform3D) -> void:
 ## so its +X side is her left.)
 func _which_part(c: Vector3) -> String:
 	var side := "Left" if c.x > 0.0 else "Right"
-	if c.z < EAR_BACK_Z and c.y > -0.2 and absf(c.x) > EAR_SIDE_X:
-		return "Head"  # The lop ears ride on the head in one piece (cut, they tear).
+	if (c.z < EAR_BACK_Z and c.y > -0.2 and absf(c.x) > EAR_SIDE_X) or _is_ear(c):
+		return "Head"  # The ears are part of the head mesh (they bend; see _ear_weights).
 	if c.y < HIP_Y:
 		return "Leg" + side
 	if absf(c.x) > SHOULDER.x and c.y > ARM_BAND.x and c.y < ARM_BAND.y:
@@ -135,8 +142,6 @@ func _pivot(joint: String) -> Vector3:
 			return Vector3(SHOULDER.x * sign_x, SHOULDER.y, SHOULDER.z)
 		"Head":
 			return Vector3(0.0, NECK_Y, 0.0)
-		"EarLeft", "EarRight":
-			return Vector3(EAR_ROOT.x * sign_x, EAR_ROOT.y, EAR_ROOT.z)
 	return Vector3(0.0, HIP_Y, 0.0)
 
 
@@ -169,7 +174,7 @@ func _assemble(texture: Texture2D) -> Node3D:
 
 	var nodes := {}
 	var joints := [["LegLeft", ""], ["LegRight", ""], ["Body", ""], ["ArmLeft", "Body"], ["ArmRight", "Body"],
-			["Head", "Body"], ["EarLeft", "Body/Head"], ["EarRight", "Body/Head"]]
+			["Head", "Body"]]
 	for joint: Array in joints:
 		var joint_name: String = joint[0]
 		var node := Node3D.new()
@@ -185,10 +190,13 @@ func _assemble(texture: Texture2D) -> Node3D:
 		nodes[joint_name] = node
 	# Which joint carries each cut part.
 	var carriers := {"LegLeft": "LegLeft", "LegRight": "LegRight", "Torso": "Body", "ArmLeft": "ArmLeft",
-			"ArmRight": "ArmRight", "Head": "Head", "EarLeft": "EarLeft", "EarRight": "EarRight"}
+			"ArmRight": "ArmRight", "Head": "Head"}
 	for part: String in _parts:
 		var joint_name: String = carriers[part]
 		var joint_world := place * _pivot(joint_name)
+		if part == "Head":
+			_add_bendy_head(nodes["Head"] as Node3D, place, joint_world, material)
+			continue
 		var mesh := _part_mesh(part, place * _part_transform(part), joint_world, material)
 		var instance := MeshInstance3D.new()
 		instance.name = part + "Mesh"
@@ -216,3 +224,91 @@ func _part_mesh(part: String, to_world: Transform3D, joint_world: Vector3, mater
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	mesh.surface_set_material(0, material)
 	return mesh
+
+
+# --- 4. Bendy ears ------------------------------------------------------------------
+
+## The head (with the cap and both ears) as one skinned mesh on a little
+## skeleton, "EarRig": a root bone for the head, and two bones down each ear
+## (EarLeft, then EarLeftTip). Every point on an ear follows the head near
+## the root and the ear bones further down, blended smoothly, so the ears
+## bend without tearing. BunnyAnimator swings the bones on springs.
+func _add_bendy_head(head: Node3D, place: Transform3D, joint_world: Vector3, material: Material) -> void:
+	var rig := Skeleton3D.new()
+	rig.name = "EarRig"
+	head.add_child(rig, true)
+	var skin := Skin.new()
+	rig.add_bone("Head")
+	skin.add_named_bind("Head", Transform3D.IDENTITY)
+	for side in ["Left", "Right"]:
+		var sign_x := 1.0 if side == "Left" else -1.0
+		var ear_root := place * Vector3(EAR_ROOT.x * sign_x, EAR_ROOT.y, EAR_ROOT.z) - joint_world
+		var bend := place * Vector3(EAR_BEND.x * sign_x, EAR_BEND.y, EAR_BEND.z) - joint_world
+		var upper := rig.add_bone("Ear" + side)
+		rig.set_bone_parent(upper, 0)
+		rig.set_bone_rest(upper, Transform3D(Basis(), ear_root))
+		skin.add_named_bind("Ear" + side, Transform3D(Basis(), -ear_root))
+		var lower := rig.add_bone("Ear" + side + "Tip")
+		rig.set_bone_parent(lower, upper)
+		rig.set_bone_rest(lower, Transform3D(Basis(), bend - ear_root))
+		skin.add_named_bind("Ear" + side + "Tip", Transform3D(Basis(), -bend))
+	rig.reset_bone_poses()
+	var data: Array = _parts["Head"]
+	var to_world := place
+	var points := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var bones := PackedInt32Array()
+	var weights := PackedFloat32Array()
+	var normal_basis := to_world.basis.inverse().transposed()
+	for i in (data[0] as PackedVector3Array).size():
+		var model_point: Vector3 = data[0][i]
+		points.append(to_world * model_point - joint_world)
+		normals.append((normal_basis * (data[1][i] as Vector3)).normalized())
+		var w := _ear_weights(model_point)
+		var side_base := 1 if model_point.x > 0.0 else 3  # Left ear bones 1-2, right 3-4.
+		bones.append_array(PackedInt32Array([0, side_base, side_base + 1, 0]))
+		weights.append_array(PackedFloat32Array([w.x, w.y, w.z, 0.0]))
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = data[2]
+	arrays[Mesh.ARRAY_BONES] = bones
+	arrays[Mesh.ARRAY_WEIGHTS] = weights
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh.surface_set_material(0, material)
+	var instance := MeshInstance3D.new()
+	instance.name = "HeadMesh"
+	instance.mesh = mesh
+	instance.skin = skin
+	rig.add_child(instance, true)
+	instance.skeleton = NodePath("..")
+
+
+## How much a point (model units) is on an ear, 0 to 1: behind her and out
+## to the side, below the root (her back is never further back than about
+## -0.067). It fades in over a little distance instead of switching on, so
+## the ear's edge blends into the head without tearing.
+func _ear_amount(p: Vector3) -> float:
+	if p.y > EAR_ROOT.y + 0.03 or p.y < -0.2:
+		return 0.0
+	return smoothstep(-0.055, -0.09, p.z) * smoothstep(0.08, 0.12, absf(p.x))
+
+
+func _is_ear(p: Vector3) -> bool:
+	return _ear_amount(p) > 0.0
+
+
+## How much a point (model units) follows [the head, the upper ear, the ear
+## tip]. Points on an ear (behind and to the side, below the root) hand over
+## from the head to the ear the further down they hang; the bottom half
+## hands over again to the tip bone.
+func _ear_weights(p: Vector3) -> Vector3:
+	var amount := _ear_amount(p)
+	if amount <= 0.0:
+		return Vector3(1.0, 0.0, 0.0)
+	var down := clampf((EAR_ROOT.y - p.y) / (EAR_ROOT.y - EAR_TIP_Y), 0.0, 1.0)
+	var ear := smoothstep(0.02, 0.35, down) * amount
+	var tip := smoothstep(0.4, 0.85, down)
+	return Vector3(1.0 - ear, ear * (1.0 - tip), ear * tip)

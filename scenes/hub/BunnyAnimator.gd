@@ -23,6 +23,24 @@ extends Node3D
 ## What they're doing when not walking (see the list above).
 @export var pose: String = "stand"
 
+@export_group("Bendy ears")
+## For models with bendy ears (an "EarRig" skeleton in the head, like
+## Jacki's): each ear is two springy segments that lag behind the head's
+## movement, the tips lagging behind the bases (overlapping action). Start
+## walking and they swing back; stop and they flop forward and wobble; turn
+## and they swing out.
+## How stiff the upper ear is (higher = snappier, less floppy).
+@export var ear_stiffness: float = 55.0
+## How quickly the upper ear's wobble dies down (lower = wobblier).
+@export var ear_damping: float = 5.5
+## How stiff the ear tips are (they lag behind the upper ear).
+@export var ear_tip_stiffness: float = 80.0
+@export var ear_tip_damping: float = 4.5
+## How strongly the head's movement throws the ears around.
+@export var ear_inertia: float = 0.035
+## How far back the ears trail at a full walk (radians).
+@export var ear_walk_trail: float = 0.22
+
 var _time := 0.0
 var _walk := 0.0
 var _ear_lag := 0.0
@@ -42,6 +60,15 @@ var _snore: Label3D
 @onready var _ear_left: Node3D = get_node_or_null("Body/Head/EarLeft")
 @onready var _ear_right: Node3D = get_node_or_null("Body/Head/EarRight")
 @onready var _eyelids: Node3D = get_node_or_null("Body/Head/Eyelids")
+@onready var _ear_rig: Skeleton3D = get_node_or_null("Body/Head/EarRig")
+
+## Bendy ears: for each side, [upper angle (x: back/forward, z: out/in),
+## its speed, tip angle, its speed].
+var _ears := {}
+var _last_head_position := Vector3.ZERO
+var _last_head_velocity := Vector3.ZERO
+var _last_head_yaw := 0.0
+var _ears_started := false
 
 
 func _ready() -> void:
@@ -74,6 +101,8 @@ func animate(delta: float, walking: float) -> void:
 	if _ear_left != null:
 		_ear_left.rotation.x = (0.15 + _ear_lag + sin(_time * 2.0) * 0.08 * amount) * ear_swing
 		_ear_right.rotation.x = (0.05 + _ear_lag * 0.8 + sin(_time * 2.0 + 0.6) * 0.08 * amount) * ear_swing
+	if _ear_rig != null and _head != null:
+		_swing_bendy_ears(delta, amount)
 	if _head != null:
 		_head.rotation.x = sin(_time * 2.0) * 0.03 * amount
 	_pose_time += delta
@@ -151,6 +180,63 @@ func _apply_pose(strength: float) -> void:
 			rotation.z = 0.1 * strength
 			_arm_left.rotation.x = 0.6 * strength
 			_arm_right.rotation.x = 0.6 * strength
+
+
+## The bendy ears: two springs per ear, shoved around by how the head
+## actually moves (speeding up, slowing down, bobbing, turning). The tip
+## spring is shoved by the upper ear's own swing, so it lags behind it and
+## overshoots: overlapping action.
+func _swing_bendy_ears(delta: float, amount: float) -> void:
+	if delta <= 0.0:
+		return
+	var head_position := _head.global_position
+	var head_basis := _head.global_basis.orthonormalized()
+	var yaw := atan2(head_basis.z.x, head_basis.z.z)
+	if not _ears_started:
+		_ears_started = true
+		_last_head_position = head_position
+		_last_head_yaw = yaw
+		for side in ["Left", "Right"]:
+			_ears[side] = [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]
+	var velocity := (head_position - _last_head_position) / delta
+	var acceleration := (velocity - _last_head_velocity) / delta
+	acceleration = acceleration.limit_length(40.0)  # (Teleports and cuts don't fling them.)
+	var turn_rate := clampf(wrapf(yaw - _last_head_yaw, -PI, PI) / delta, -8.0, 8.0)
+	_last_head_position = head_position
+	_last_head_velocity = velocity
+	_last_head_yaw = yaw
+	# The push on the ears, in the head's own directions (its face looks
+	# down -Z): speeding up forward throws the tips back, bobbing up and
+	# down flaps them, moving sideways swings them the other way.
+	var push := head_basis.inverse() * acceleration * ear_inertia
+	var trail := ear_swing * (0.12 + ear_walk_trail * amount)
+	var steps := maxi(1, ceili(delta / 0.008))  # Small steps keep the springs steady.
+	var step := delta / steps
+	for side: String in _ears:
+		var outward := -1.0 if side == "Left" else 1.0  # (Her left is at -X once she faces -Z.)
+		var state: Array = _ears[side]
+		var upper: Vector2 = state[0]
+		var upper_speed: Vector2 = state[1]
+		var tip: Vector2 = state[2]
+		var tip_speed: Vector2 = state[3]
+		var shove := Vector2(push.z * ear_swing * -1.0 + push.y * 0.5, -push.x + absf(turn_rate) * 0.025 * outward)
+		for i in steps:
+			var upper_force := (Vector2(trail, 0.0) - upper) * ear_stiffness - upper_speed * ear_damping + shove * ear_stiffness
+			upper_speed += upper_force * step
+			upper += upper_speed * step
+			var tip_force := -tip * ear_tip_stiffness - tip_speed * ear_tip_damping - upper_force * 0.35 + shove * ear_tip_stiffness * 0.5
+			tip_speed += tip_force * step
+			tip += tip_speed * step
+		# Kept to gentle angles: past these, bent ears stretch like taffy.
+		upper = upper.clamp(Vector2(-0.55, -0.22), Vector2(0.55, 0.22))
+		tip = tip.clamp(Vector2(-0.45, -0.18), Vector2(0.45, 0.18))
+		_ears[side] = [upper, upper_speed, tip, tip_speed]
+		var upper_bone := _ear_rig.find_bone("Ear" + side)
+		var tip_bone := _ear_rig.find_bone("Ear" + side + "Tip")
+		if upper_bone >= 0:
+			_ear_rig.set_bone_pose_rotation(upper_bone, Quaternion(Basis.from_euler(Vector3(upper.x, 0.0, upper.y))))
+		if tip_bone >= 0:
+			_ear_rig.set_bone_pose_rotation(tip_bone, Quaternion(Basis.from_euler(Vector3(tip.x, 0.0, tip.y))))
 
 
 ## Tired, heavy blinks every few seconds.
