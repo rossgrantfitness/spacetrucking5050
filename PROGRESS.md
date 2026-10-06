@@ -7,6 +7,8 @@ sounds that never repeat exactly. (Round 22, the window, is in too.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
+**New systems waiting for your go:** `SYSTEMS_PLAN.md` (seven cards
+with time, difficulty and cost; nothing built until you pick one).
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
