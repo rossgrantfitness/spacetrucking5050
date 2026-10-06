@@ -234,3 +234,63 @@ func test_boost_gives_speed_wobbles_not_a_swerve() -> void:
 	controls.boost = false
 	_fly(model, controls, 6.0)
 	check(model.shimmy < 0.05, "the wobbles settle down after boosting")
+
+
+func test_throttle_stops_at_idle_before_reverse() -> void:
+	# Holding "down" from cruising: it slides to idle and stops there.
+	var lever := 0.3
+	for i in 20:
+		lever = ShipControls.move_lever(lever, -0.05, 1, 0.25)
+	check(is_equal_approx(lever, 0.0), "holding throttle-down from ahead stops at idle, not reverse")
+	# Let go, press again: now it goes into reverse.
+	for i in 20:
+		lever = ShipControls.move_lever(lever, -0.05, 0, 0.25)
+	check(is_equal_approx(lever, -0.25), "a fresh press at idle backs up (to full reverse)")
+	# And back up the other way: it stops at idle again.
+	for i in 20:
+		lever = ShipControls.move_lever(lever, 0.05, -1, 0.25)
+	check(is_equal_approx(lever, 0.0), "holding throttle-up from reverse stops at idle too")
+
+
+func test_heavy_loads_are_slower_to_start_stop_and_turn() -> void:
+	# Speeding up: 5 seconds of full thrust, empty vs a full load.
+	var controls := FlightControls.new()
+	controls.thrust = 1.0
+	var empty := FlightModel.new()
+	var heavy := FlightModel.new()
+	heavy.load_share = 1.0
+	_fly(empty, controls, 5.0)
+	_fly(heavy, controls, 5.0)
+	check(heavy.speed() < empty.speed() * 0.8, "a full load should get going noticeably slower")
+	# Stopping: from cruise, how far until it's (almost) stopped?
+	var brakes := FlightControls.new()
+	brakes.thrust = -1.0
+	var distances: Array[float] = []
+	for share: float in [0.0, 1.0]:
+		var model := _cruising()
+		model.load_share = share
+		var travelled := 0.0
+		for i in 60 * 60:
+			if model.forward_speed() < 1.0:
+				break
+			travelled += model.forward_speed() * STEP
+			model.update(STEP, brakes, RIG, GameState.tuning)
+		distances.append(travelled)
+	check(distances[1] > distances[0] * 1.4, "a full load should take noticeably longer to stop (%.0f m vs %.0f m)" % [distances[1], distances[0]])
+	# Turning: a full load turns slower, but still goes where the nose points.
+	var steer := FlightControls.new()
+	steer.steer = Vector2(1.0, 0.0)
+	var light := _cruising()
+	var loaded := _cruising()
+	loaded.load_share = 1.0
+	_fly(light, steer, 3.0)
+	_fly(loaded, steer, 3.0)
+	check(absf(loaded.heading) < absf(light.heading), "a full load should turn slower")
+	_fly(loaded, FlightControls.new(), 8.0)
+	check(loaded.velocity.normalized().dot(loaded.nose()) > 0.99, "even loaded, the rig ends up going where its nose points (no drift)")
+
+
+func test_galactic_tons_read_nicely() -> void:
+	check(HudWidget.tons_text(450000000.0) == "450M T", "450 million tons is 450M T (got %s)" % HudWidget.tons_text(450000000.0))
+	check(HudWidget.tons_text(1800000000.0) == "1.8B T", "1.8 billion tons is 1.8B T")
+	check(HudWidget.tons_text(1800000000.0, true) == "1.8 billion tons", "and in words for the job board")

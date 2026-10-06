@@ -10,6 +10,7 @@ client_name = "The High Roller"
 description = "Gill's crew makes it from kelp. Sal sells it as 'ocean pearls' for 90 credits a spoon."
 from_place = "tidewater"
 to_place = "high_roller"
+weight = 250000000.0
 base_pay = 1800
 care_kind = "perishable"
 care_bonus = 300

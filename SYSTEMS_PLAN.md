@@ -87,6 +87,8 @@ Cheap wins first. Shared parts get reused. The riskiest work comes last.
 
 ### 1. Truck weight (heavy loads feel heavy)
 
+> **Done (round 25)** as "momentum and mass", with the weight on the HUD.
+
 **How it plays:**
 - Every load has a weight. Heavy loads give slower acceleration, wider
   turns and longer stopping.
@@ -350,7 +352,10 @@ favorites.
 
 ---
 
-### 8. The forklift: rework it or scrap it (your call)
+### 8. The forklift: rework it or scrap it
+
+> **Decided (round 25): scrapped for now.** The dock crew always loads.
+> The code is in git history if it ever comes back.
 
 You said the loading dock "is cool but it sucks": not fun to play. The
 two honest options:
@@ -397,6 +402,8 @@ self-contained project we can pick up any time.
 
 ### 9. Phones: iOS and Android versions
 
+> **Decided (round 25): not for now.** PC first.
+
 **Yes, it's possible.** Godot exports to both, and the game already uses
 Godot's "Compatibility" renderer, the one made for phones and older
 hardware. The game itself doesn't need rewriting. What's missing is
@@ -427,6 +434,10 @@ there.
 ---
 
 ## The flight physics question: Newtonian inertia vs. heavy truck controls
+
+> **Decided (round 25): momentum and mass are in** (they replace card 1,
+> truck weight). **No drift** (no Flight Assist Off). The throttle now
+> stops at idle before reverse.
 
 You asked how achievable the "hybrid" model is before deciding. Short
 answer: **it's not a monumental job. One part is cheap and fits the

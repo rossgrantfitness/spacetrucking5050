@@ -134,6 +134,19 @@ static func clock(seconds: float) -> String:
 
 
 ## A distance, short: "850M" up close, "5.3KM" farther away.
+## A cargo weight, galactic style: "450M T", "1.8B T" (or, with `long`,
+## "450 million tons", "1.8 billion tons").
+static func tons_text(tons: float, long: bool = false) -> String:
+	var steps := [[1e12, "T", "trillion"], [1e9, "B", "billion"], [1e6, "M", "million"], [1e3, "K", "thousand"]]
+	for step: Array in steps:
+		var unit: float = step[0]
+		if tons >= unit:
+			var amount := tons / unit
+			var number := ("%d" % roundi(amount)) if amount >= 10.0 or is_equal_approx(amount, roundf(amount)) else ("%.1f" % amount)
+			return ("%s %s tons" % [number, step[2]]) if long else ("%s%s T" % [number, step[1]])
+	return ("%d tons" % roundi(tons)) if long else ("%d T" % roundi(tons))
+
+
 static func distance_text(meters: float) -> String:
 	if meters < 1000.0:
 		return "%dM" % roundi(meters)

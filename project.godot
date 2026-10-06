@@ -27,6 +27,7 @@ TimeOfDay="*res://autoload/TimeOfDay.gd"
 Radio="*res://autoload/Radio.gd"
 Dialogue="*res://autoload/Dialogue.gd"
 Sfx="*res://autoload/Sfx.gd"
+DebugMenu="*res://autoload/DebugMenu.gd"
 
 [display]
 

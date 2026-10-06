@@ -10,6 +10,7 @@ client_name = "Marge's Diner"
 description = "The High Roller's buffet throws out more food in a night than Marge sells in a week. Marge will take it. Fast and gentle."
 from_place = "high_roller"
 to_place = "truck_stop"
+weight = 600000000.0
 base_pay = 1100
 care_kind = "perishable"
 care_bonus = 300

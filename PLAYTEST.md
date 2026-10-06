@@ -1,3 +1,67 @@
+# Playtest: round 25, heavy loads, watch mode, the debug menu (round 24 below)
+
+**What you asked for:**
+- momentum and mass, no drift;
+- the throttle stopping at zero before reverse;
+- cargo weight on the HUD, in ridiculous numbers;
+- a debug menu to start a few minutes out;
+- leaving the game running while you work;
+- the forklift scrapped.
+
+**Time needed:** about 20 minutes (much less with the debug menu).
+
+> Honest note: tests prove a full load speeds up slower, stops in a much
+> longer distance, turns slower and still goes where its nose points.
+> Whether it FEELS like hauling 1.8 billion tons is yours to judge. Every
+> number is under "Load weight" in tuning.tres.
+
+## What's new
+
+- **Heavy loads:**
+  - Your load's weight shows under PAY on the flight HUD
+    (**LOAD 450M T**): green is light, yellow heavy, red overloaded for
+    your rig.
+  - A heavy load is slow to get going, slow to stop (brake early!), turns
+    wider and rocks a little after a turn.
+  - The job board tells you the weight and warns you when it's heavy for
+    the Thumper.
+- **Throttle:** holding S now stops at idle. Let go and press S again to
+  back up.
+- **Watch mode:** set a course with M and the game lets go of your mouse.
+  Leave it running and do something else; it docks itself.
+- **Debug menu: F10** anywhere.
+  - Jump 1, 3 or 5 minutes out from any station, lined up on autopilot.
+  - Skip the opening.
+  - Get +5,000 credits.
+  - Fill up and fix up.
+- **Forklift:** gone. Jobs load instantly again.
+
+## What to do
+
+1. F10, "SKIP THE OPENING", then F10, "GIVE ME A JOB": pick a heavy one
+   (**poker chips**, 1.8 billion tons, or **cannery parts**, 2.2
+   billion).
+2. Fly it by hand for a minute: speed up, turn, and brake hard. Then try
+   a light one (mail bags, 150 million tons) and compare.
+3. F10, jump 3 minutes out from Tidewater, and fly the approach yourself.
+   Is braking for the ring a fun bit of planning, or annoying?
+4. Set a course (M), zoom out with the wheel, click another window and
+   leave it running for a few minutes. Does it keep going? Is the mouse
+   free?
+5. Slow down with S and keep holding: it should stop at zero, not
+   reverse.
+
+## Questions
+
+1. Do heavy loads feel heavy? Too much, too little?
+2. Is the braking distance with a heavy load OK, or does it make docking
+   a chore?
+3. The galactic tons on the HUD: funny? Readable?
+4. Watch mode: anything that interrupted it (calls, popups)?
+5. Is the debug menu missing anything that would save you time?
+
+---
+
 # Playtest: round 24, the opening and objectives (round 23's sounds below)
 
 **What you asked for:**

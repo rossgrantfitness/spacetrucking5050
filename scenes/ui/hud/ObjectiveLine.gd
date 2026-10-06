@@ -23,6 +23,8 @@ func _draw() -> void:
 	var top := MARGIN + 27.0  # Under the nav tape and its ETA.
 	var width := text_width(_text) + 10.0
 	var left := floorf((size.x - width) * 0.5)
+	if hud.comm != null:
+		left = maxf(left, hud.comm.right_edge() + 4.0)  # Beside a comm call, not under it.
 	box(Rect2(left, top - 2.0, width, 11.0), BACKING)
 	box(Rect2(left, top - 2.0, 2.0, 11.0), YELLOW)
 	text(Vector2(left + 6.0, top), _text, YELLOW, SMALL, 1.0, 0.15)

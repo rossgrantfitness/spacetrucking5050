@@ -11,6 +11,7 @@ description = "Ship Logistical Armored Barge. A brick with a bad attitude: point
 price = 11000
 pay_bonus = 1.25
 visual_scene = ExtResource("2_visual")
+load_rating = 2200000000.0
 max_speed = 56.0
 acceleration = 8.5
 retro_thrust = 7.0

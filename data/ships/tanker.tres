@@ -11,6 +11,7 @@ description = "Bulk LNG carrier. Quick on the straights, but the whole thing's f
 price = 18000
 pay_bonus = 1.3
 visual_scene = ExtResource("2_visual")
+load_rating = 3000000000.0
 max_speed = 72.0
 acceleration = 10.0
 retro_thrust = 6.0

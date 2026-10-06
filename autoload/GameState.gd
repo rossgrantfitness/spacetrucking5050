@@ -52,9 +52,7 @@ var job_seconds: float = 0.0
 ## The rig's state between flights: both tanks, the hull and the cargo
 ## (1 = full / perfect), and a snack from a truck stop (1 = had one this
 ## trip: steadier hands under boost).
-## "snug" is 1 when you loaded this trip's cargo yourself with the forklift
-## (a tidy load: the cargo takes less of a knock until you deliver it).
-var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "snug": 0.0}
+var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
 ## The rigs you own (ids from res://data/ships/ships.tres), the one you
 ## drive, and its paint job.
 var owned_ships: Array[String] = ["lazy_susan"]
@@ -99,12 +97,9 @@ var minute: float = 480.0
 ## When you took the job you're hauling (Economy.now_minutes), so the payout
 ## can say how long it was on the road.
 var job_started: float = 0.0
-## The loading dock (scenes/dock/LoadingDock.gd), not saved: how many
-## pallets, whether to go there once she's free, and where to come back to.
-var dock_pallets: int = 4
-var wants_dock: bool = false
-var return_scene: String = ""
-var return_position := Vector3.ZERO
+## The debug menu's jump (autoload/DebugMenu.gd), not saved: {"place",
+## "minutes"} for the flight to start that far out from that place.
+var debug_jump: Dictionary = {}
 ## Show the date card (the day, the month, the year) when the next room or
 ## the flight comes up: set when a game is started or loaded.
 var show_date_card: bool = false
@@ -249,7 +244,6 @@ func accept_job(job: JobData) -> bool:
 	job_seconds = 0.0
 	job_started = Economy.now_minutes()
 	rig["cargo"] = 1.0
-	rig["snug"] = 0.0  # (Loading it yourself sets it: HubServices.load_cargo.)
 	save_game()
 	return true
 
@@ -294,7 +288,6 @@ func deliver_at(place_id: String) -> bool:
 		finished_jobs.append(job.id)
 	active_job_id = ""
 	job_seconds = 0.0
-	rig["snug"] = 0.0
 	pending_payout = pay
 	save_game()
 	return true
@@ -482,7 +475,7 @@ func new_game() -> void:
 	flags = {}
 	active_job_id = ""
 	job_seconds = 0.0
-	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "snug": 0.0}
+	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
 	owned_upgrades = []
 	owned_ships = ["lazy_susan"]
 	active_ship = "lazy_susan"

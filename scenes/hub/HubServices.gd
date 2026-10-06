@@ -87,30 +87,8 @@ static func offer_job(tree: SceneTree, job: JobData) -> bool:
 		return false
 	var taken := GameState.accept_job(job)
 	if taken:
-		Sfx.play("job_accept")
-		await load_cargo(tree, job)
+		Sfx.play("job_accept")  # (The dock crew loads it.)
 	return taken
-
-
-## Who loads it: the dock crew (instant, the default), or you: off to the
-## loading dock to drive the forklift (scenes/dock/LoadingDock.gd; a tidy
-## load rides better). Only where there's a dock to walk to (not in flight).
-static func load_cargo(tree: SceneTree, job: JobData) -> void:
-	if not tree.current_scene is HubRoom or (tree.current_scene as HubRoom).aboard:
-		return
-	var gentler := roundi((1.0 - GameState.tuning.snug_load_care) * 100.0)
-	var choice := await MenuPanel.ask(tree, "WHO LOADS IT?", "%s is waiting on the dock." % job.cargo_name, [
-		{"text": "DOCK CREW, PLEASE", "description": "They'll have it aboard by the time you're in the seat."},
-		{"text": "I'LL DRIVE THE FORKLIFT", "description": "Out to the loading dock: drive the forklift, load the pallets into your rig's hold yourself. A tidy load rides better: your cargo takes %d%% less of a knock this trip." % gentler}])
-	if choice != 1:
-		return
-	GameState.dock_pallets = pallets_for(job)
-	GameState.wants_dock = true  # (The room takes her there once she's done talking.)
-
-
-## How many pallets a job is: a few, a couple more for big or careful loads.
-static func pallets_for(job: JobData) -> int:
-	return clampi(3 + (1 if job.base_pay >= 1000 else 0) + (1 if job.is_fragile() else 0), 3, 6)
 
 
 ## The job board at a place: every job you can take from here.
@@ -148,14 +126,29 @@ static func job_tags(job: JobData) -> String:
 	return " ".join(tags) + "   "
 
 
+## How the load will feel in the rig you're driving: "" (light), " (heavy
+## for the Thumper)" or " (OVERLOADED for the Thumper)".
+static func _heft_note(job: JobData) -> String:
+	var rig := GameState.active_ship_data()
+	if rig == null or rig.load_rating <= 0.0:
+		return ""
+	var share := job.weight / rig.load_rating
+	var rig_name := rig.display_name.split(" (")[0]
+	if share > 1.0:
+		return " (OVERLOADED for %s: slow to stop!)" % rig_name
+	if share >= 0.6:
+		return " (heavy for %s)" % rig_name
+	return ""
+
+
 ## A job in a few words: where to, pay, bonuses.
 static func job_summary(job: JobData) -> String:
 	var to := GameState.places.find(job.to_place)
 	var currency := GameState.names.currency_short
 	var minutes := Economy.job_trip_minutes(job)
 	var road := ", about %s on the road" % Economy.span_text(minutes).to_lower() if minutes > 0.0 else ""
-	var words := "%s wants it at %s%s. Pays %d %s." % [job.client_name, to.display_name if to != null else "?",
-			road, job.base_pay, currency]
+	var words := "%s wants it at %s%s. Pays %d %s. Weighs %s%s." % [job.client_name, to.display_name if to != null else "?",
+			road, job.base_pay, currency, HudWidget.tons_text(job.weight, true), _heft_note(job)]
 	if job.is_fragile():
 		var kind := {"perishable": "PERISHABLE: up to +%d %s if it arrives fresh.", "live": "LIVE CARGO: up to +%d %s if they arrive happy."}
 		words += " " + (kind.get(job.care_kind, "FRAGILE: up to +%d %s if it arrives without a scratch.") as String) % [job.care_bonus, currency]

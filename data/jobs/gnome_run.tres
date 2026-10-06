@@ -10,6 +10,7 @@ client_name = "Truck Stop Diner"
 description = "The diner's redoing the patio. Gnomes bruise easy, and they want them before the lunch rush."
 from_place = "base"
 to_place = "truck_stop"
+weight = 700000000.0
 base_pay = 400
 care_kind = "fragile"
 care_bonus = 150

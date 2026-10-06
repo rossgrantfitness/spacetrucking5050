@@ -171,6 +171,7 @@ func _physics_process(delta: float) -> void:
 			# Keep the lever where the autopilot is driving, so taking over
 			# is smooth.
 			controls.lever = clampf(flight.forward_speed() / ship_data.max_speed, 0.0, 1.0)
+	flight.load_share = load_share()
 	flight.update(delta, hands, ship_data, GameState.tuning)
 	global_basis = flight.orientation()
 	velocity = flight.velocity
@@ -187,10 +188,20 @@ func _physics_process(delta: float) -> void:
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
 	# never rolls, so the camera's horizon stays level.
-	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank + flight.shimmy_roll(GameState.tuning))
+	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank + flight.cargo_sway + flight.shimmy_roll(GameState.tuning))
 
 
 ## 0 when stopped, 1 at normal top speed, above 1 when boosted past it.
+## How heavy the load in the back is for this rig: the job's weight
+## against the rig's load_rating (0 = empty, 1 = a full load; capped at
+## max_load_share). See FlightModel.load_share.
+func load_share() -> float:
+	var job := GameState.active_job()
+	if job == null or ship_data == null or ship_data.load_rating <= 0.0:
+		return 0.0
+	return clampf(job.weight / ship_data.load_rating, 0.0, GameState.tuning.max_load_share)
+
+
 func speed_ratio() -> float:
 	return flight.speed() / ship_data.max_speed
 

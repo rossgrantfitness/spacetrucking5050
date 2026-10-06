@@ -10,6 +10,7 @@ description = "A hauler the size of an aircraft carrier. Its own weather. Its ow
 price = 250000
 special_order = true
 pay_bonus = 4.0
+load_rating = 8000000000.0
 max_speed = 50.0
 acceleration = 3.0
 turn_rate = 8.0

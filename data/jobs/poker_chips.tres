@@ -10,6 +10,7 @@ client_name = "Tidewater Cannery"
 description = "Gill's crew plays for chips now. Real chips, not the fish kind. Mostly."
 from_place = "high_roller"
 to_place = "tidewater"
+weight = 1800000000.0
 base_pay = 1800
 care_bonus = 0
 rush_seconds = 0.0

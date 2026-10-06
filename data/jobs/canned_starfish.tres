@@ -10,6 +10,7 @@ client_name = "Marge's Diner"
 description = "Tidewater's finest, in tins. Marge swears truckers like it."
 from_place = "tidewater"
 to_place = "truck_stop"
+weight = 1400000000.0
 base_pay = 1150
 care_bonus = 0
 rush_seconds = 1500.0

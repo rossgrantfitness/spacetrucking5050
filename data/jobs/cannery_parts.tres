@@ -10,6 +10,7 @@ client_name = "Gill, Tidewater Cannery"
 description = "The can-sealer is making a noise. Dusty sent spares. Gill would like them sometime this week."
 from_place = "truck_stop"
 to_place = "tidewater"
+weight = 2200000000.0
 base_pay = 1200
 care_bonus = 0
 rush_seconds = 900.0

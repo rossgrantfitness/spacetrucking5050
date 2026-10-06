@@ -140,9 +140,6 @@ func _ready() -> void:
 	_fade.cover()
 	# The rig you drive, with every upgrade you've bought, in its paint job.
 	_ship.ship_data = GameState.upgraded_ship(GameState.active_ship_data())
-	# Loaded it yourself with the forklift? A tidy load rides better.
-	if float(GameState.rig.get("snug", 0.0)) > 0.0:
-		_ship.ship_data.cargo_care *= GameState.tuning.snug_load_care
 	_ship.apply_look(GameState.paints.find(GameState.paint))
 	for node in $World/Places.get_children():
 		if GameState.places.find(node.name) != null:
@@ -192,6 +189,8 @@ func _ready() -> void:
 	if GameState.show_date_card:
 		GameState.show_date_card = false
 		DateCard.pop_up(get_tree())
+	if not GameState.debug_jump.is_empty():
+		debug_jump()
 
 
 ## The opening, once she's at the wheel for the first time: Raccoony calls
@@ -403,9 +402,11 @@ func engage_course(stops: PackedStringArray) -> void:
 	if _ship.cruise != null:
 		Sfx.play("course_set")
 		_hud.show_banner("AUTOPILOT > " + GameState.places.find(_course[_course.size() - 1]).display_name, 3.0)
+		if not _in_cabin:
+			_capture_mouse()  # Watch mode: the mouse is yours again.
 		get_tree().create_timer(3.5).timeout.connect(func() -> void:
 			if is_instance_valid(_ship) and _ship.cruise != null and not _in_cabin:
-				_hud.show_banner("F / X: GET UP AND STRETCH", 4.0))
+				_hud.show_banner("MOUSE IS FREE: SIT BACK AND WATCH · F / X: GET UP", 4.0))
 
 
 ## Sets the cruise autopilot on its way to the next stop on the course.
@@ -758,6 +759,39 @@ const NAP_WAKE_GRACE_MSEC: int = 600
 const SLEEP_WAKE_DISTANCE: float = 1500.0
 
 
+## The debug menu's jump (autoload/DebugMenu.gd): puts the rig the asked
+## number of minutes (at cruise speed) out from the asked place, on the
+## approach line, cruising, with the autopilot set for it. Costs no fuel
+## or time: it's for testing.
+func debug_jump() -> void:
+	var wish := GameState.debug_jump
+	GameState.debug_jump = {}
+	var id := str(wish.get("place", ""))
+	if not _places.has(id):
+		return
+	_close_cabin()
+	_end_cinema()
+	_docking_at = ""
+	_leaving = false
+	_chatter.skip_takeoff_call()  # (No "you're clear" from wherever we left.)
+	var points := approach_points(id, _ship.global_position)
+	if points.size() < 2:
+		return
+	var line_up := points[points.size() - 2]
+	var heading_in := (points[points.size() - 1] - line_up).normalized()
+	var out := float(wish.get("minutes", 3.0)) * 60.0 * _ship.ship_data.max_speed
+	_ship.teleport(Transform3D(Basis.looking_at(heading_in, Vector3.UP), line_up - heading_in * out))
+	_restore_rig()  # (Teleporting resets the tanks; put them back.)
+	_ship.controls.lever = 1.0
+	_ship.flight.velocity = heading_in * _ship.ship_data.max_speed
+	_chase_camera.snap_behind_target()
+	_blend_systems(true)
+	engage_course(PackedStringArray([id]))
+	_set_destination(id)
+	var place := GameState.places.find(id)
+	_hud.show_banner("DEBUG: %d MIN OUT FROM %s" % [roundi(float(wish.get("minutes", 3.0))), place.display_name if place != null else id], 3.0)
+
+
 ## Moves the rig along the course to just outside the next stop, nose in,
 ## still cruising, and charges the trip's fuel and time.
 func _skip_to_next_stop() -> void:
@@ -841,6 +875,8 @@ func _on_bills_paid(bill: Dictionary) -> void:
 func _on_cruise_released() -> void:
 	Sfx.play("autopilot_off")
 	_course.clear()
+	if not _in_cabin and _docking_at.is_empty():
+		_capture_mouse()  # Your wheel again (and your mouse steers).
 	_hud.show_banner("MANUAL CONTROL", 2.0)
 	if _docking_computer_on and _docking_at.is_empty():
 		# You took the wheel back: it won't grab it again on this approach.
@@ -964,8 +1000,7 @@ func _restore_rig() -> void:
 
 func _remember_rig() -> void:
 	GameState.rig = {"fuel": _ship.flight.fuel, "boost_fuel": _ship.flight.boost_fuel,
-			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0),
-			"snug": GameState.rig.get("snug", 0.0)}
+			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0),}
 
 
 # --- Docking ------------------------------------------------------------------------
@@ -1384,7 +1419,15 @@ func _end_cinema() -> void:
 
 
 ## Hides the mouse and locks it to the window, so moving it steers the ship.
+## Grabs the mouse for steering, except while the autopilot's driving:
+## WATCH MODE. Then the mouse stays free, so you can leave the game up on
+## screen and get on with other things on your computer while she trucks
+## along (the game keeps running when it's not the window in front). It
+## grabs the mouse again when you take the wheel back.
 func _capture_mouse() -> void:
+	if _ship.cruise != null or not get_window().has_focus():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 

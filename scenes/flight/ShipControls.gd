@@ -9,7 +9,8 @@ extends Node
 ##
 ## The throttle is a LEVER (see "Throttle" in tuning.tres): W / right
 ## trigger pushes it up, S / left trigger pulls it down, and it stays where
-## you leave it. The engines then speed the rig up or slow it down to the
+## you leave it. Pulling it down stops at idle; let go and pull again for
+## reverse (see move_lever). The engines then speed the rig up or slow it down to the
 ## lever's speed and hold it there. Boost spools up while held, and only
 ## lights at full throttle.
 
@@ -29,6 +30,10 @@ var max_speed: float = 55.0
 var forward_speed: float = 0.0
 
 var _controls := FlightControls.new()
+## Which side of idle the throttle press being held started on (1 ahead,
+## -1 reverse, 0 at idle or not pressing): see move_lever.
+var _press_side: int = 0
+var _pressing := false
 var _mouse_stick := Vector2.ZERO
 var _smoothed_steer := Vector2.ZERO
 
@@ -65,13 +70,33 @@ func read(delta: float) -> FlightControls:
 	# Move the lever while the throttle keys (or triggers) are held.
 	var push := Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
 	_controls.throttle_push = push
-	lever = clampf(lever + push * tuning.throttle_lever_speed * delta, -tuning.reverse_lever, 1.0)
+	if absf(push) < 0.1:
+		_press_side = 0  # Let go: the next press can cross idle.
+	elif _press_side == 0 and not _pressing:
+		_press_side = int(signf(lever)) if absf(lever) > 0.001 else 0
+	_pressing = absf(push) >= 0.1
+	lever = move_lever(lever, push * tuning.throttle_lever_speed * delta, _press_side, tuning.reverse_lever)
 	_controls.thrust = thrust_for(lever, forward_speed, max_speed, tuning)
 	var wants_boost := Input.is_action_pressed("boost")
 	boost_blocked = wants_boost and tuning.boost_needs_full_throttle and lever < 0.95
 	_controls.boost = wants_boost and not boost_blocked
 	_controls.touched = absf(push) > 0.1 or wants_boost or combined.length() > 0.3
 	return _controls
+
+
+## Moves the lever by `amount`, between full reverse (-`reverse_limit`) and
+## full ahead (1). The IDLE NOTCH: a press that started above idle stops
+## at idle (0), and so does one that started in reverse (`press_side` is
+## which side of idle the press started on: 1, -1, or 0 at idle). So
+## slowing down never slams you into reverse by accident: let go at idle
+## and press again to back up.
+static func move_lever(position: float, amount: float, press_side: int, reverse_limit: float) -> float:
+	var moved := clampf(position + amount, -reverse_limit, 1.0)
+	if press_side > 0 and moved < 0.0:
+		return 0.0
+	if press_side < 0 and moved > 0.0:
+		return 0.0
+	return moved
 
 
 ## The engine thrust (-1 to 1) that gets the rig to the lever's speed and

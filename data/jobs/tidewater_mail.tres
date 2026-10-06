@@ -10,6 +10,7 @@ client_name = "Interstellar Post"
 description = "Letters, parcels and one very insistent birthday card."
 from_place = "base"
 to_place = "tidewater"
+weight = 250000000.0
 base_pay = 1250
 care_bonus = 0
 rush_seconds = 0.0

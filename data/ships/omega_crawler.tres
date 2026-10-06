@@ -11,6 +11,7 @@ description = "The Guild's deluxe hauler. Big hold, big engines, and it actually
 price = 45000
 pay_bonus = 1.7
 visual_scene = ExtResource("2_visual")
+load_rating = 5500000000.0
 max_speed = 68.0
 acceleration = 10.0
 retro_thrust = 8.0

@@ -1,21 +1,24 @@
 # Progress
 
-**Current status:** **Round 24: the opening, objectives, fixes.** The
-bed works again in flight. A new game opens with Raccoony telling you to
-take the wheel, then a call sending you to Marge. A yellow objective
-line is always on screen, with markers on foot. Story calls dip the
-radio. Renames: the Thumper, Chang Ma, Raccoony. Built and validated,
-**waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 25: momentum and mass, the debug menu,
+watch mode.**
+- Heavy loads feel heavy, with weights in galactic tons on the HUD.
+- The throttle stops at idle before reverse.
+- F10 opens a debug menu (jump a few minutes out from any station).
+- The autopilot frees your mouse so you can leave it running.
+- The forklift is scrapped.
+
+Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
-**Waiting for your go:** `SYSTEMS_PLAN.md`: seven system cards, plus the
-forklift (scrap or rebuild) and the flight physics assessment. Nothing is
-built until you pick.
+**Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
+volatile cargo, contraband, multi-leg contracts, manual docking, the
+spacewalk). Nothing is built until you pick.
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 24)
+**Last updated:** 2026-10-06 (round 25)
 
 ---
 
@@ -112,7 +115,7 @@ systems, the husband's story).
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
   - [x] Round 16: your nine design-sheet rigs at Dusty's (Garbage Scow, Ice-Tug, SLAB, Catamaran, Cryo Tanker, Hab-Brick, Bulk-Ore, Ore-Crawler, Omega Ore Crawler), each with its own model, handling and pay
   - [x] Docking computer upgrade with its own (original) lounge waltz; it docks you from 4 km out
-  - [x] Cargo loading forklift minigame: round 21, a 3D loading dock (walk to the forklift, drive it, lift pallets into the hold; optional, a tidy load rides better)
+  - [ ] ~~Cargo loading forklift minigame~~: built in round 21, **scrapped in round 25** at your call (the dock crew loads everything; the code is in git history).
   - [x] Round 21 extra: vending machines with 12 galaxy brands and 22 snacks (the same brands as the radio ads)
   - [x] Round 20 extras: Dusty's shelves, ten new upgrades (cargo cradles, bumpers, racks, eco injectors, radar dish, air horn...), and upgrades you can see on the rig
   - [ ] Outfit slots, sockets and wardrobe (parked: her cap is already its own piece); decor placement; a bigger apartment

@@ -27,7 +27,7 @@ func _draw() -> void:
 		return
 	var right := size.x - MARGIN
 	# Under the cargo readout when that's up.
-	var top := MARGIN + (38.0 if GameState.active_job() != null else 0.0)
+	var top := MARGIN + (46.0 if GameState.active_job() != null else 0.0)
 	var width := maxf(text_width(_clock_text, BIG), text_width(_date_text)) + 6.0
 	box(Rect2(right - width, top - 2.0, width + 2.0, 20.0), BACKING)
 	text_right(Vector2(right, top), _clock_text, GREEN, BIG, 1.0, 0.15)

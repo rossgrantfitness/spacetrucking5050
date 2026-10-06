@@ -73,7 +73,7 @@ Instead, use:
 assets/characters/<name>/source.glb     (Jacki, crew, NPCs)
 assets/ships/<name>/source.glb          (rigs and traffic)
 assets/stations/<name>/source.glb
-assets/props/<name>/source.glb          (vending machine, forklift, snacks...)
+assets/props/<name>/source.glb          (vending machine, snacks...)
 assets/textures/<name>.png              (wall/floor tiles, posters, planets)
 assets/sounds/<name>.wav                (any recordings)
 assets/music/<station>/<track>.ogg      (radio)
@@ -103,7 +103,7 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 | Rig (player ship) | 1,500–3,000 | 256 px |
 | Traffic ship | 300–800 | 128 px |
 | Station exterior | 2,000–5,000 | 256 px, can reuse tiles |
-| Big prop (vending machine, forklift) | 300–800 | 128 px |
+| Big prop (vending machine) | 300–800 | 128 px |
 | Small prop (snack, toy) | 50–200 | 64 px |
 
 ### What Meshy is *not* good at (use something else)
@@ -256,15 +256,6 @@ Each is a big sale moment, so it should look like what it's called.
   shapes exist already. Label art (64 px) is all they need; a few special
   ones (the ramen cup, the pie slice, the starfish tin) could be models.
 
-### Loading dock
-- [ ] **Forklift** model:
-  - the forks and their carriage as a separate piece (they move up and
-    down);
-  - a seat she sits in.
-- [ ] **Pallet and crates:** 1 pallet and 3 or 4 crate styles.
-- [ ] **Dock textures:** floor with hazard lines, wall and hold-door
-  tiles.
-
 ### Station interiors
 - [ ] **Tidewater cannery canteen:** textures, plus tins and nets props.
 - [ ] **The High Roller lounge:** carpet, slot machine and card table
@@ -384,12 +375,11 @@ file next to each track. Format: `.ogg`. Details are in
   - cannery (water, machines);
   - casino (soft chimes, murmur).
 
-**Set pieces and the loading dock (Tier 2)**
+**Set pieces (Tier 2)**
 - [ ] Doppler whoosh and big-ship rumble.
 - [ ] Space-whale song.
 - [ ] Jellyfish chimes.
 - [ ] Comet whoosh.
-- [ ] Forklift motor hum and a gentle reversing beep.
 - [ ] Vending machine hum.
 
 **Little moments (Tier 3)**

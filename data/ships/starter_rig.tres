@@ -7,6 +7,7 @@ script = ExtResource("1_ship")
 id = "lazy_susan"
 display_name = "The Thumper"
 description = "Your husband's old rig. Heavy, lazy, stubborn. Gets there."
+load_rating = 1500000000.0
 max_speed = 55.0
 acceleration = 9.0
 retro_thrust = 7.0

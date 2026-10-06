@@ -10,6 +10,7 @@ client_name = "Sal Grinwell, The High Roller"
 description = "A casino out in the magenta Glimmer System wants cards. Lots of cards. The owner smiles a lot. Too much."
 from_place = "base"
 to_place = "high_roller"
+weight = 1200000000.0
 base_pay = 1400
 care_bonus = 0
 rush_seconds = 1080.0

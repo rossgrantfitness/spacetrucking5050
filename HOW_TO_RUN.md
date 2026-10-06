@@ -121,8 +121,9 @@ Y = △.)
 **The throttle is a lever.** Hold W to push it up and S to pull it down;
 it stays where you leave it, and the rig speeds up or slows down to match,
 then holds that speed (the yellow tick on the speed bar shows where it's
-set). Pull it all the way back and the rig brakes to a stop; keep pulling
-for a slow reverse. The rig is heavy: turns take a moment to start and
+set). Pull it back and it stops at **idle** (the rig brakes to a stop);
+it won't go into reverse while you're still holding. Let go and pull
+again for a slow reverse. The rig is heavy: turns take a moment to start and
 stop, carve, and slide at high speed. The tiny green **flight marker** (a
 dot with little wings) shows where your momentum is really carrying you,
 which isn't always where the nose points.
@@ -354,24 +355,44 @@ crate rack and gold solar sails.
 - **Air horn** (Cab extras): **B** / **L3** in flight. Truckers nearby
   sometimes honk back.
 
-### Loading cargo (the forklift)
+### Heavy loads
 
-When you take a job you can let the **dock crew** load it (the default),
-or pick **I'LL DRIVE THE FORKLIFT**. Once you're done talking, you're off
-to the **loading dock**, in 3D: your rig is backed up at the far end with
-its hold open.
+Every load has a weight, shown on the job board ("Weighs 450 million
+tons") and on the flight HUD under PAY (**LOAD 450M T**). Space trucking
+is big. What matters is how heavy it is **for your rig**:
+- green: light;
+- yellow: heavy;
+- red: overloaded.
 
-| What | Keyboard | Gamepad |
-|---|---|---|
-| Walk to the forklift, climb on | **W A S D**, then **E** | Left stick, then **A** |
-| Drive (it steers from the back wheels) | **W / S** forward and back, **A / D** steer | Left stick |
-| Forks: lift a pallet / set it down | **E** (slide the forks right under a pallet first) | **A** |
-| Climb off | **F** | **X** |
-| Let the crew finish | **Esc** | **B** / **Start** |
+A heavy load takes longer to get going, much longer to **stop** (start
+braking early before a ring), turns slower, swings wider, rocks a little
+after a turn, and burns a bit more fuel. It still always goes where the
+nose points: no drifting. Bigger rigs at Dusty's are rated for more.
+(Numbers: "Load weight" in tuning.tres.)
 
-Set each pallet down on a glowing spot in the hold (it locks in). Fill
-them all and it's a **snug load**: your cargo takes 20% less of a knock
-until you deliver it. Then you're back where you were. Bumps are just bumps.
+### Watch mode
+
+Set a course (**M**) and the autopilot drives. While it does, **the game
+lets go of your mouse**, so you can leave it up on your screen (zoom out
+with the mouse wheel first) and get on with other things on your
+computer: it keeps playing in the background, docks itself at the end,
+and never needs you. Grab the stick or keys to take the wheel back, and
+the mouse steers again.
+
+### The debug menu (F10)
+
+For testing without a full run. Press **F10** anywhere:
+- **Jump near a place** (Tidewater, the truck stop, the casino, the
+  Gas-N-Go). Pick **1, 3 or 5 minutes out**, and the rig appears that far
+  out, lined up, on autopilot. From on foot it takes off first.
+- **Give me a job:** any job in the game, yours right now (handy for
+  testing heavy loads).
+- **Skip the opening.**
+- **+5,000 credits.**
+- **Fill up and fix up.**
+
+To switch it off later (for a release build), untick **debug_menu** in
+tuning.tres. From a terminal: `godot --path . -- --jump=tidewater:3`.
 
 ### Vending machines
 

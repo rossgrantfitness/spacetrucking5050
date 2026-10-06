@@ -10,6 +10,7 @@ client_name = "Marge's Diner (from Sal)"
 description = "Sal's lounge act retired. Her jumpsuits are going to Marge's karaoke night. Don't snag the sequins."
 from_place = "high_roller"
 to_place = "truck_stop"
+weight = 200000000.0
 base_pay = 1300
 care_kind = "fragile"
 care_bonus = 500

@@ -10,6 +10,7 @@ client_name = "Moe, Gas-N-Go 47"
 description = "Ninety minutes of slow jams for Lily at the truck stop. It took Moe four years to make. Don't scratch it."
 from_place = "gas_n_go"
 to_place = "truck_stop"
+weight = 10000000.0
 base_pay = 450
 care_kind = "fragile"
 care_bonus = 200

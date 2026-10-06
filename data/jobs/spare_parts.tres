@@ -10,6 +10,7 @@ client_name = "Dusty's Garage"
 description = "The cannery's conveyor is out of gaskets again. They'd love them quick."
 from_place = "truck_stop"
 to_place = "tidewater"
+weight = 1100000000.0
 base_pay = 380
 care_bonus = 0
 rush_seconds = 230.0

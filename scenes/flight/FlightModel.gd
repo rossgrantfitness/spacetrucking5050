@@ -70,6 +70,15 @@ var shakiness := 1.0
 ## Purely for looks: neither changes where the ship goes.
 var bank := 0.0
 var nose_tilt := 0.0
+## How heavy the load is for this rig: 0 = empty, 1 = a full load (the
+## job's weight against the rig's load_rating; Ship sets it). See "Load
+## weight" in tuning.tres.
+var load_share := 0.0
+## The extra rock of a loaded rig after a turn starts or stops (radians of
+## roll: purely looks).
+var cargo_sway := 0.0
+var _sway_speed := 0.0
+var _last_wanted_bank := 0.0
 
 var _time := 0.0
 var _last_steer := Vector2.ZERO
@@ -144,6 +153,8 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	shimmy = 0.0
 	bank = 0.0
 	nose_tilt = 0.0
+	cargo_sway = 0.0
+	_sway_speed = 0.0
 
 
 func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
@@ -155,12 +166,13 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 
 	# 1. The engines push along the nose. The ship's own limiter stops the
 	#    main engines adding speed past top speed; only boost goes beyond.
+	#    A heavy load answers slower, both speeding up and braking.
 	var push := 0.0
 	var going := forward_speed()
 	if thrust > 0.0 and going < ship.max_speed:
-		push = thrust * ship.acceleration
+		push = thrust * ship.acceleration * heft(tuning.load_acceleration_drag)
 	elif thrust < 0.0 and going > -ship.max_speed * tuning.reverse_speed_fraction:
-		push = thrust * ship.retro_thrust
+		push = thrust * ship.retro_thrust * heft(tuning.load_braking_drag)
 	if boosting and going < boosted_top_speed(ship):
 		push += ship.boost_acceleration
 	velocity += forward * push * delta
@@ -169,7 +181,7 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 	#    Boosting and going over top speed both loosen the grip.
 	var current_speed := velocity.length()
 	if current_speed > 0.01:
-		var grip := ship.grip
+		var grip := ship.grip * heft(tuning.load_grip_drag)  # Heavy loads swing wide.
 		if boosting:
 			grip *= tuning.boost_grip
 		grip /= 1.0 + maxf(current_speed / ship.max_speed - 1.0, 0.0) * tuning.overspeed_slip
@@ -193,8 +205,9 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 
 	# 4. Space is nearly frictionless: just a whisper of drag while coasting,
 	#    so a ship left alone does eventually come to rest.
+	#    A heavy load carries its momentum further.
 	if is_zero_approx(thrust) and not boosting:
-		velocity *= exp(-tuning.coast_drag * delta)
+		velocity *= exp(-tuning.coast_drag * heft(tuning.load_coast_carry) * delta)
 
 
 ## Boost is a commitment: hold the button and it spools up, then lights;
@@ -227,7 +240,7 @@ func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -
 	var effort := 1.0 + speed_share * speed_share * tuning.fuel_speed_burn
 	if throttle > 0.0 and forward_speed() >= ship.max_speed - 0.5:
 		effort = tuning.cruise_burn  # On the limiter: just holding speed.
-	var burn := absf(throttle) * effort
+	var burn := absf(throttle) * effort * (1.0 + load_share * tuning.load_fuel_burn)  # Weight drinks fuel.
 	fuel_burn = burn / (1.0 + tuning.fuel_speed_burn)
 	if fuel <= 0.0:
 		return throttle * tuning.empty_tank_thrust
@@ -236,8 +249,9 @@ func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -
 
 
 func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
-	var max_turn := deg_to_rad(ship.turn_rate)
-	var max_pitch := deg_to_rad(ship.pitch_rate)
+	var load_turn := heft(tuning.load_turn_drag)  # Heavy loads turn slower.
+	var max_turn := deg_to_rad(ship.turn_rate) * load_turn
+	var max_pitch := deg_to_rad(ship.pitch_rate) * load_turn
 	# Turning right means clockwise seen from above, which Godot counts as a
 	# NEGATIVE change of heading.
 	# Under boost, steering gets twitchy (easy to over-correct).
@@ -249,7 +263,7 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 		wanted_pitch = clampf(-pitch * tuning.nose_auto_level, -max_pitch, max_pitch)
 
 	# Heavy ships (low turn_response) take a moment to start and stop turning.
-	var catch_up := 1.0 - exp(-ship.turn_response * delta)
+	var catch_up := 1.0 - exp(-ship.turn_response * load_turn * delta)
 	turn_speed = lerpf(turn_speed, wanted_turn, catch_up)
 	pitch_speed = lerpf(pitch_speed, wanted_pitch, catch_up)
 
@@ -302,11 +316,24 @@ func _pull(offset: float) -> float:
 	return clampf((sin(t * 0.21 + offset) + 0.3 * sin(t * 0.53)) * 1.4, -1.0, 1.0)
 
 
+## How much of something's strength is left under the load: 1 when empty,
+## 1 / (1 + share x drag) loaded (see "Load weight" in tuning.tres).
+func heft(drag: float) -> float:
+	return 1.0 / (1.0 + load_share * drag)
+
+
 func _update_lean(delta: float, ship: ShipData, tuning: Tuning) -> void:
 	# Lean into the turn like a plane: turning left (positive turn_speed) leans
 	# left, which is a positive roll in Godot.
-	var max_turn := deg_to_rad(ship.turn_rate)
+	var max_turn := deg_to_rad(ship.turn_rate) * heft(tuning.load_turn_drag)
 	var wanted_bank := turn_speed / max_turn * deg_to_rad(ship.max_bank)
+	# A loaded rig rocks a little when a turn starts or stops: a soft
+	# spring, kicked by the change in lean and settling on its own.
+	var omega := TAU * tuning.load_sway_hz
+	_sway_speed += (-cargo_sway * omega * omega - 2.0 * tuning.load_sway_settle * omega * _sway_speed) * delta
+	_sway_speed -= (wanted_bank - _last_wanted_bank) * load_share * tuning.load_sway * omega
+	_last_wanted_bank = wanted_bank
+	cargo_sway = clampf(cargo_sway + _sway_speed * delta, -0.25, 0.25)
 	var max_pitch := deg_to_rad(ship.pitch_rate)
 	var wanted_tilt := pitch_speed / max_pitch * deg_to_rad(tuning.nose_tilt_degrees)
 	var catch_up := 1.0 - exp(-tuning.bank_response * delta)

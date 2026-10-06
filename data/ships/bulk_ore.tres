@@ -11,6 +11,7 @@ description = "System Mining Guild hauler with an open ore bay. Hauls a mountain
 price = 26000
 pay_bonus = 1.5
 visual_scene = ExtResource("2_visual")
+load_rating = 4000000000.0
 max_speed = 58.0
 acceleration = 9.0
 retro_thrust = 7.0

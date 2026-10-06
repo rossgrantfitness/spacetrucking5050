@@ -10,6 +10,7 @@ client_name = "Marge's Diner"
 description = "Pressed on vinyl, out here. Marge wants them for the jukebox. Don't scratch them."
 from_place = "tidewater"
 to_place = "truck_stop"
+weight = 600000000.0
 base_pay = 1000
 care_kind = "fragile"
 care_bonus = 400

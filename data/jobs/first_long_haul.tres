@@ -10,6 +10,7 @@ client_name = "Gill, Tidewater Cannery"
 description = "Marge's cousin Gill runs the canteen out at Tidewater Cannery, way out in the teal. They haven't had a decent pie in a year."
 from_place = "truck_stop"
 to_place = "tidewater"
+weight = 450000000.0
 base_pay = 1300
 care_kind = "perishable"
 care_bonus = 500

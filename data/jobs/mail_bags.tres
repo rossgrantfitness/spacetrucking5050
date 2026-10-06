@@ -10,6 +10,7 @@ client_name = "Interstellar Post"
 description = "Postcards, bills and a suspicious number of catalogs. Nothing breakable."
 from_place = "base"
 to_place = "truck_stop"
+weight = 150000000.0
 base_pay = 350
 care_bonus = 0
 rush_seconds = 0.0

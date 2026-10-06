@@ -10,6 +10,7 @@ client_name = "The High Roller"
 description = "Big enough to sit on. Sal wants them hanging in the lobby."
 from_place = "truck_stop"
 to_place = "high_roller"
+weight = 300000000.0
 base_pay = 1250
 care_bonus = 0
 rush_seconds = 1020.0

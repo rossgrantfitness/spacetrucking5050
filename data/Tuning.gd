@@ -137,6 +137,34 @@ extends Resource
 @export_range(0.0, 20.0, 0.5, "suffix:°") var nose_tilt_degrees: float = 5.0
 
 
+@export_group("Load weight")
+## How heavy loads feel ("momentum and mass"). A job's weight (tons) against
+## the rig's load_rating gives the LOAD SHARE: 0 = empty, 1 = a full load
+## for this rig, more = overloaded (capped at max_load_share). Each number
+## below is how much a FULL load changes something: 0.8 means a full load
+## makes it 1 / (1 + 0.8) = about 55% as strong. The rig still always goes
+## where its nose points (no drifting); it's just slower to answer.
+@export_range(0.5, 3.0, 0.05) var max_load_share: float = 1.5
+## Speeding up: heavy loads take longer to get going.
+@export_range(0.0, 3.0, 0.05) var load_acceleration_drag: float = 0.8
+## Braking (retro thrust): heavy loads take longer to stop. Plan ahead!
+@export_range(0.0, 3.0, 0.05) var load_braking_drag: float = 0.9
+## Turning: heavy loads turn slower and take longer to start and stop turning.
+@export_range(0.0, 3.0, 0.05) var load_turn_drag: float = 0.45
+## Grip: heavy loads swing wide in turns (the motion catches up with the
+## nose more slowly).
+@export_range(0.0, 3.0, 0.05) var load_grip_drag: float = 0.6
+## Coasting: momentum carries a heavy rig further when you ease off.
+@export_range(0.0, 5.0, 0.05) var load_coast_carry: float = 1.0
+## Fuel: hauling weight burns a little more (0.25 = 25% more at a full load).
+@export_range(0.0, 2.0, 0.05) var load_fuel_burn: float = 0.25
+## The rig rocks a little after you start or stop a turn, more with a heavy
+## load (just looks): how hard, how fast (rocks per second) and how quickly
+## it settles (0 = rocks forever, 1 = no rocking).
+@export_range(0.0, 3.0, 0.05) var load_sway: float = 0.8
+@export_range(0.1, 3.0, 0.05, "suffix:Hz") var load_sway_hz: float = 0.6
+@export_range(0.0, 1.0, 0.05) var load_sway_settle: float = 0.25
+
 @export_group("Fuel")
 
 ## Flying faster burns more fuel: at top speed, thrusting burns this much
@@ -486,6 +514,11 @@ extends Resource
 @export_range(0.5, 20.0, 0.5) var speed_lines_response: float = 6.0
 
 
+@export_group("Testing")
+## The debug menu (F10): jump a few minutes out from any station, skip the
+## opening, free credits. Turn it off for a release build.
+@export var debug_menu: bool = true
+
 @export_group("HUD")
 
 ## How chunky the HUD's pixels are: it's drawn as if the screen had this
@@ -563,10 +596,7 @@ extends Resource
 @export_range(100.0, 5000.0, 50.0, "suffix:m") var horn_reply_range: float = 1500.0
 ## ...this often (0 to 1).
 @export_range(0.0, 1.0, 0.05) var horn_reply_chance: float = 0.75
-## Loading the cargo yourself with the forklift makes a tidy load: until
-## you deliver it, the cargo takes this much of the usual knock (0.8 = 20%
-## gentler).
-@export_range(0.1, 1.0, 0.05) var snug_load_care: float = 0.8
+
 
 
 @export_group("Route events")

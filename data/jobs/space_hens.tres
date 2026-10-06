@@ -10,6 +10,7 @@ client_name = "Marge's Diner"
 description = "Marge wants fresh eggs. The hens want a smooth ride. Everybody wants something."
 from_place = "tidewater"
 to_place = "truck_stop"
+weight = 500000000.0
 base_pay = 1150
 care_kind = "live"
 care_bonus = 400

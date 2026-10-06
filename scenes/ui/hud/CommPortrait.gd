@@ -226,6 +226,12 @@ func _card_letters() -> int:
 	return _card_text().length()
 
 
+## Where the call's box ends on the right (HUD pixels), or 0 when it's not
+## up (the objective line steps aside for it).
+func right_edge() -> float:
+	return MARGIN + _box_width() + 4.0 if is_showing() else 0.0
+
+
 func _box_width() -> float:
 	return minf(MAX_WIDTH, floorf(size.x * 0.5) - 72.0)
 

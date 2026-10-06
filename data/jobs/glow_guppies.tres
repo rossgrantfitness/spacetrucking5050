@@ -10,6 +10,7 @@ client_name = "The Tidewater Aquarium"
 description = "Three hundred little guppies that glow when they're happy. Keep them happy: easy on the turns."
 from_place = "truck_stop"
 to_place = "tidewater"
+weight = 900000000.0
 base_pay = 1250
 care_kind = "live"
 care_bonus = 450

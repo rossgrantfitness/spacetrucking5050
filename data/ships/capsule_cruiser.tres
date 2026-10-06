@@ -11,6 +11,7 @@ description = "A smooth, quick long-hauler with a comfy cab. A bit of everything
 price = 14000
 pay_bonus = 1.15
 visual_scene = ExtResource("2_visual")
+load_rating = 1600000000.0
 max_speed = 68.0
 acceleration = 11.0
 retro_thrust = 8.0

@@ -10,6 +10,7 @@ client_name = "Moe, Gas-N-Go 47"
 description = "A crate of Moe's famous jerky for the cannery canteen. Mysteriously chewy since forever."
 from_place = "gas_n_go"
 to_place = "tidewater"
+weight = 400000000.0
 base_pay = 550
 care_bonus = 0
 rush_seconds = 0.0

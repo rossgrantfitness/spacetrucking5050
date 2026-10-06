@@ -11,6 +11,7 @@ description = "A mobile refinery that eats asteroids. Biggest jaws in the galaxy
 price = 32000
 pay_bonus = 1.6
 visual_scene = ExtResource("2_visual")
+load_rating = 4500000000.0
 max_speed = 52.0
 acceleration = 6.5
 retro_thrust = 5.5

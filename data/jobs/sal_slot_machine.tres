@@ -10,6 +10,7 @@ client_name = "Gill, Tidewater Cannery (from Sal)"
 description = "Sal wants a slot machine in Gill's canteen. Gill has not been asked. It's a long way, so take it easy over the bumps."
 from_place = "high_roller"
 to_place = "tidewater"
+weight = 1600000000.0
 base_pay = 1900
 care_kind = "fragile"
 care_bonus = 600

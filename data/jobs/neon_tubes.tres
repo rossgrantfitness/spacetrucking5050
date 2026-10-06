@@ -10,6 +10,7 @@ client_name = "The High Roller"
 description = "Every sign in Glimmer burns out eventually. These are the spares. Easy over the bumps."
 from_place = "base"
 to_place = "high_roller"
+weight = 350000000.0
 base_pay = 1400
 care_kind = "fragile"
 care_bonus = 500

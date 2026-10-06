@@ -11,6 +11,7 @@ description = "A colony block somebody lost the colony for. Roomy, cozy, lit up 
 price = 22000
 pay_bonus = 1.45
 visual_scene = ExtResource("2_visual")
+load_rating = 2800000000.0
 max_speed = 50.0
 acceleration = 7.0
 retro_thrust = 6.0

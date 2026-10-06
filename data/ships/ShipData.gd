@@ -46,6 +46,12 @@ extends Resource
 @export_range(0.5, 100.0, 0.5, "suffix:m/s²") var retro_thrust: float = 7.0
 
 
+@export_group("Hauling")
+## How many tons this rig hauls before a load really weighs on it. A load
+## this heavy is a "full" load: noticeably slower to speed up, stop and
+## turn. Big haulers shrug off what the little ones feel.
+@export_range(1.0, 1e13, 1.0, "suffix:t") var load_rating: float = 1.5e9
+
 @export_group("Handling")
 
 ## The fastest it can turn left or right, in degrees per second.

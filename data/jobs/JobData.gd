@@ -25,6 +25,13 @@ extends Resource
 @export var from_place: String = "base"
 @export var to_place: String = "truck_stop"
 
+## How heavy the load is, in tons. Space trucking is BIG: a pie run is
+## hundreds of millions of tons. Heavy loads (against the rig's
+## load_rating) take longer to get going, longer to stop and swing wider
+## in turns (see "Load weight" in tuning.tres). The HUD shows it as
+## "450M T"; the job board says "450 million tons".
+@export_range(0.0, 1e13, 1.0, "suffix:t") var weight: float = 5e8
+
 ## Pay for showing up with the cargo, no matter what.
 @export_range(0, 100000, 10) var base_pay: int = 300
 

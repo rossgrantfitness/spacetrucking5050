@@ -11,6 +11,7 @@ description = "A box hauler with a hold like a cathedral. Turns like a cathedral
 price = 9000
 pay_bonus = 1.35
 visual_scene = ExtResource("2_visual")
+load_rating = 2500000000.0
 max_speed = 58.0
 acceleration = 7.5
 retro_thrust = 6.0
