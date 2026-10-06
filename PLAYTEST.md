@@ -1,3 +1,34 @@
+# Playtest: round 27, looking around (round 26's overdrive below)
+
+**What you asked for:** the mouse should swing the camera around the rig
+in every direction, with the rig in the middle; maybe right-click to pan;
+I J K L to fly the ship; gamepad first.
+
+**Time needed:** 5 minutes.
+
+## What to do
+
+1. Fly (manual, no autopilot). Move the mouse: the camera swings round
+   the rig. Look at it from the side, from the front, from underneath.
+2. Hold the **right mouse button** and drag to pan. Wheel to zoom.
+   **Middle-click** to snap back behind.
+3. Let go of the mouse for 4 seconds: the camera drifts back behind.
+4. Steer with **I J K L** (I/K nose, J/L turn; she leans into turns by
+   herself).
+5. On a gamepad: right stick looks around, left stick steers.
+6. Set a course (M) and, with the mouse free, **left-drag** to look
+   around while she drives.
+
+## Questions
+
+1. Is the mouse speed right? Too slow, too fast?
+2. Should the camera drift back behind after 4 seconds, later, or never?
+3. Mouse up = look up. Do you want that flipped?
+4. Is J/L turning enough, or do you want a real barrel roll on a key?
+5. Do you want the mouse to look around in the cockpit view too?
+
+---
+
 # Playtest: round 26, overdrive (round 25 below)
 
 **What you asked for:** boost keeps climbing past ~800 km/h, toward

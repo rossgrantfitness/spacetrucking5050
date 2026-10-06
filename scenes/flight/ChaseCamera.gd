@@ -10,6 +10,12 @@ extends Camera3D
 ##   get motion sick from a rolling camera, so it's off by default).
 ## - The mouse wheel zooms it in and out (it remembers the zoom until you
 ##   quit the game).
+## - LOOK AROUND: moving the mouse (or the right stick) swings it around the
+##   rig in any direction, the rig staying in the middle of the screen. Hold
+##   the right mouse button and drag to pan. When the mouse is free (watch
+##   mode, on autopilot), drag with the left button instead. Leave it alone
+##   for a few seconds and it eases back behind the rig; middle-click snaps
+##   it back. See "Chase camera" in tuning.tres.
 ##
 ## All the numbers live in res://data/tuning.tres, under "Chase camera" and
 ## "Field of view".
@@ -26,6 +32,15 @@ var _pullback := 0.0
 ## chase camera, so the zoom you picked is kept after docking.
 static var zoom_goal := 1.0
 var _zoom := 1.0
+## Looking around: how far the camera's swung round the rig (radians, on
+## top of its usual spot behind), and how far it's panned (meters, sideways
+## and up). Seconds since you last looked around.
+var orbit_yaw := 0.0
+var orbit_pitch := 0.0
+var pan := Vector2.ZERO
+var _idle := 0.0
+var _dragging := false
+var _panning := false
 
 
 ## The field of view for the ship's speed: normal until 70% of top speed (by
@@ -56,22 +71,67 @@ func snap_behind_target() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	var wheel := event as InputEventMouseButton
-	if not current or wheel == null or not wheel.pressed:
+	if not current:
 		return
 	var tuning := GameState.tuning
-	if wheel.button_index == MOUSE_BUTTON_WHEEL_UP:
-		zoom_goal = maxf(zoom_goal / tuning.chase_zoom_step, tuning.chase_zoom_min)
-	elif wheel.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-		zoom_goal = minf(zoom_goal * tuning.chase_zoom_step, tuning.chase_zoom_max)
-	else:
+	var motion := event as InputEventMouseMotion
+	if motion != null:
+		var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+		if _panning:
+			pan += Vector2(-motion.screen_relative.x, motion.screen_relative.y) * tuning.orbit_pan_meters
+			pan = pan.limit_length(tuning.orbit_pan_max)
+			_idle = 0.0
+		elif captured or _dragging:
+			# Mouse right swings the view right, mouse up looks up.
+			look_around(-motion.screen_relative.x * deg_to_rad(tuning.orbit_mouse_degrees),
+					motion.screen_relative.y * deg_to_rad(tuning.orbit_mouse_degrees))
 		return
+	var button := event as InputEventMouseButton
+	if button == null:
+		return
+	match button.button_index:
+		MOUSE_BUTTON_WHEEL_UP:
+			if button.pressed:
+				zoom_goal = maxf(zoom_goal / tuning.chase_zoom_step, tuning.chase_zoom_min)
+		MOUSE_BUTTON_WHEEL_DOWN:
+			if button.pressed:
+				zoom_goal = minf(zoom_goal * tuning.chase_zoom_step, tuning.chase_zoom_max)
+		MOUSE_BUTTON_RIGHT:
+			_panning = button.pressed
+		MOUSE_BUTTON_LEFT:
+			# (Only drags when the mouse is free; captured, it just looks.)
+			_dragging = button.pressed and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				return
+		MOUSE_BUTTON_MIDDLE:
+			if button.pressed:
+				reset_look()
+		_:
+			return
 	get_viewport().set_input_as_handled()
+
+
+## Swings the camera round the rig by `yaw` (left/right) and `pitch`
+## (up/down), in radians.
+func look_around(yaw: float, pitch: float) -> void:
+	var limit := deg_to_rad(GameState.tuning.orbit_pitch_limit)
+	orbit_yaw = wrapf(orbit_yaw + yaw, -PI, PI)
+	orbit_pitch = clampf(orbit_pitch + pitch, -limit, limit)
+	_idle = 0.0
+
+
+## Back behind the rig, no pan.
+func reset_look() -> void:
+	orbit_yaw = 0.0
+	orbit_pitch = 0.0
+	pan = Vector2.ZERO
+	_idle = 0.0
 
 
 func _process(delta: float) -> void:
 	var tuning := GameState.tuning
 	_zoom = lerpf(_zoom, zoom_goal, 1.0 - exp(-tuning.chase_zoom_response * delta))
+	_update_look(delta)
 	# get_global_transform_interpolated() = where the ship APPEARS this frame,
 	# smoothed between physics steps, so the camera never jitters.
 	var ship_transform := target.get_global_transform_interpolated()
@@ -96,12 +156,32 @@ func _process(delta: float) -> void:
 	fov = lerpf(fov, wanted_fov, 1.0 - exp(-tuning.fov_response * delta))
 
 
+## The right stick looks around too, and an untouched camera eases back.
+func _update_look(delta: float) -> void:
+	var tuning := GameState.tuning
+	var stick := Input.get_vector("look_left", "look_right", "look_up", "look_down", tuning.stick_deadzone)
+	if stick.length() > 0.0:
+		var turn := deg_to_rad(tuning.orbit_stick_degrees) * delta
+		look_around(-stick.x * turn, stick.y * turn)
+	_idle += delta
+	if tuning.orbit_return_seconds > 0.0 and _idle > tuning.orbit_return_seconds and not _panning and not _dragging:
+		var ease_back := 1.0 - exp(-tuning.orbit_return_speed * delta)
+		orbit_yaw = wrapf(lerp_angle(orbit_yaw, 0.0, ease_back), -PI, PI)
+		orbit_pitch = lerpf(orbit_pitch, 0.0, ease_back)
+		pan = pan.lerp(Vector2.ZERO, ease_back)
+
+
 func _place(ship_position: Vector3, roll: float) -> void:
 	var tuning := GameState.tuning
 	# A view direction made of only heading and pitch, never roll: that's what
-	# keeps the horizon level.
-	var view := Basis.from_euler(Vector3(_pitch, _heading, 0.0))
-	global_position = ship_position + view * Vector3(0.0, tuning.chase_height * _zoom, tuning.chase_distance * _zoom + _pullback)
-	look_at(ship_position + view * Vector3(0.0, 0.0, -tuning.chase_look_ahead), view.y)
+	# keeps the horizon level. Looking around swings it further round the rig.
+	var behind := Basis.from_euler(Vector3(_pitch, _heading, 0.0))
+	var view := behind * Basis.from_euler(Vector3(orbit_pitch, orbit_yaw, 0.0))
+	# Looking around, aim at the rig itself (not ahead of it), and pan.
+	var swung := clampf((absf(orbit_yaw) + absf(orbit_pitch)) / 0.6, 0.0, 1.0)
+	var aim := ship_position + behind * Vector3(0.0, 0.0, -tuning.chase_look_ahead * (1.0 - swung))
+	var shift := view.x * pan.x + view.y * pan.y
+	global_position = ship_position + shift + view * Vector3(0.0, tuning.chase_height * _zoom, tuning.chase_distance * _zoom + _pullback)
+	look_at(aim + shift, view.y)
 	if roll != 0.0:
 		rotate_object_local(Vector3.BACK, roll)

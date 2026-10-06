@@ -11,8 +11,9 @@ extends SceneTree
 ##     godot --headless --path . -s tools/setup_input_map.gd
 ##
 ## Why some things are missing on purpose:
-## - The mouse steers the ship, but mouse MOVEMENT can't be an Input Map
-##   action, so that's handled in code using Tuning's mouse settings.
+## - The mouse looks around (it swings the chase camera round the rig), but
+##   mouse MOVEMENT can't be an Input Map action, so that's handled in code
+##   (ChaseCamera.gd, "Chase camera" in tuning.tres).
 ## - Menus use Godot's built-in "ui_" actions (arrows/Enter/Esc, D-pad/A/B),
 ##   which already cover keyboard and gamepad.
 
@@ -26,10 +27,11 @@ const BUTTON: float = 0.5  # Godot's default; it doesn't matter for buttons.
 
 func _init() -> void:
 	# --- Flying ---------------------------------------------------------
-	_action("steer_left", STICK, [_key(KEY_A), _key(KEY_LEFT), _axis(JOY_AXIS_LEFT_X, -1.0)])
-	_action("steer_right", STICK, [_key(KEY_D), _key(KEY_RIGHT), _axis(JOY_AXIS_LEFT_X, 1.0)])
-	_action("steer_up", STICK, [_key(KEY_UP), _axis(JOY_AXIS_LEFT_Y, -1.0)])
-	_action("steer_down", STICK, [_key(KEY_DOWN), _axis(JOY_AXIS_LEFT_Y, 1.0)])
+	# (I J K L steer too: a second hand position for the keyboard.)
+	_action("steer_left", STICK, [_key(KEY_J), _key(KEY_A), _key(KEY_LEFT), _axis(JOY_AXIS_LEFT_X, -1.0)])
+	_action("steer_right", STICK, [_key(KEY_L), _key(KEY_D), _key(KEY_RIGHT), _axis(JOY_AXIS_LEFT_X, 1.0)])
+	_action("steer_up", STICK, [_key(KEY_I), _key(KEY_UP), _axis(JOY_AXIS_LEFT_Y, -1.0)])
+	_action("steer_down", STICK, [_key(KEY_K), _key(KEY_DOWN), _axis(JOY_AXIS_LEFT_Y, 1.0)])
 	_action("throttle_up", TRIGGER, [_key(KEY_W), _axis(JOY_AXIS_TRIGGER_RIGHT, 1.0)])
 	_action("throttle_down", TRIGGER, [_key(KEY_S), _axis(JOY_AXIS_TRIGGER_LEFT, 1.0)])
 	_action("boost", BUTTON, [_key(KEY_SPACE), _button(JOY_BUTTON_A)])
@@ -45,7 +47,7 @@ func _init() -> void:
 	# Talk back on the comms (then pick a reply with Q / R / E or the D-pad).
 	_action("reply", BUTTON, [_key(KEY_T), _button(JOY_BUTTON_RIGHT_SHOULDER)])
 	# The logbook of sights you've seen (also in the pause menu).
-	_action("logbook", BUTTON, [_key(KEY_L)])
+	_action("logbook", BUTTON, [_key(KEY_N)])  # (L steers now: N for "notebook".)
 	# The cinematic camera (on autopilot): watch the rig from outside.
 	_action("cinema_camera", BUTTON, [_key(KEY_V), _button(JOY_BUTTON_RIGHT_STICK)])
 	# The air horn (once you've bought one at Dusty's).

@@ -27,8 +27,9 @@ extends Resource
 ## (At 6, steering is about 2/3 of the way there after 0.17 seconds.)
 @export_range(1.0, 30.0, 0.5) var steer_response: float = 6.0
 
-## How far a mouse movement pushes the "virtual stick" when steering with the
-## mouse. Higher = smaller hand movements steer harder.
+## (The mouse no longer steers: it looks around. These two only drive the
+## mouse gauge on the title screen's input check.)
+## How far a mouse movement pushes the input check's mouse gauge.
 @export_range(0.001, 0.05, 0.001) var mouse_sensitivity: float = 0.008
 
 ## How quickly the mouse's virtual stick drifts back to center after you stop
@@ -392,6 +393,23 @@ extends Resource
 
 ## How quickly that boost pull-back eases in and out.
 @export_range(0.5, 10.0, 0.25) var chase_pullback_response: float = 2.0
+## LOOKING AROUND: the mouse (or the right stick) swings the camera around
+## the rig in any direction, the rig staying in the middle; hold the right
+## mouse button and drag to pan. How far one pixel of mouse turns it
+## (degrees), and how fast the right stick turns it (degrees a second).
+@export_range(0.02, 1.0, 0.01, "suffix:°/px") var orbit_mouse_degrees: float = 0.2
+@export_range(10.0, 360.0, 5.0, "suffix:°/s") var orbit_stick_degrees: float = 140.0
+## How far up or down the camera can swing (degrees).
+@export_range(10.0, 89.0, 1.0, "suffix:°") var orbit_pitch_limit: float = 80.0
+## After this many seconds of not looking around, the camera eases back to
+## its spot behind the rig (0 = it stays where you left it; middle-click
+## always snaps it back).
+@export_range(0.0, 30.0, 0.5, "suffix:s") var orbit_return_seconds: float = 4.0
+## How quickly it eases back.
+@export_range(0.2, 10.0, 0.1) var orbit_return_speed: float = 1.5
+## Panning: meters per pixel of right-drag, and how far it can pan.
+@export_range(0.01, 1.0, 0.01, "suffix:m/px") var orbit_pan_meters: float = 0.08
+@export_range(1.0, 100.0, 1.0, "suffix:m") var orbit_pan_max: float = 30.0
 
 ## Only used if the player switches on "camera roll": how much of the ship's
 ## lean the camera copies (1 = all of it).

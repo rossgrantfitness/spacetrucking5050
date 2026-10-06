@@ -1,15 +1,13 @@
 # Progress
 
-**Current status:** **Round 26: overdrive.**
-- Hold boost past its top speed and the rig keeps climbing, with ever
-  worse wobbles and cargo damage.
-- Hull strain past 1,800 km/h, with repeated warnings, an alarm and
-  worried calls, until she blows.
-- Wrecks now show the explosion and a "press any key to reload" prompt
-  (no WRECKED card).
+**Current status:** **Round 27: the mouse looks around.**
+- The mouse (or right stick) swings the camera around the rig in any
+  direction; right-drag pans.
+- Steer with I J K L (or A/D and the arrows, or the left stick).
+- The logbook moved to N.
 
-(Round 25: heavy loads, the debug menu, watch mode.) Built and validated,
-**waiting for your playtest** (see `PLAYTEST.md`).
+(Round 26: overdrive.) Built and validated, **waiting for your playtest**
+(see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
 **Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
@@ -19,7 +17,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 26)
+**Last updated:** 2026-10-06 (round 27)
 
 ---
 

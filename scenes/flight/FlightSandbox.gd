@@ -925,7 +925,7 @@ func _on_cruise_released() -> void:
 	Sfx.play("autopilot_off")
 	_course.clear()
 	if not _in_cabin and _docking_at.is_empty():
-		_capture_mouse()  # Your wheel again (and your mouse steers).
+		_capture_mouse()  # Your wheel again (and the mouse looks around).
 	_hud.show_banner("MANUAL CONTROL", 2.0)
 	if _docking_computer_on and _docking_at.is_empty():
 		# You took the wheel back: it won't grab it again on this approach.

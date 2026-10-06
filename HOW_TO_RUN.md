@@ -98,9 +98,11 @@ Y = △.)
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
-| Steer left / right | **A** / **D** (or **←** / **→**) | Left stick |
-| Nose up / down | **↑** / **↓** | Left stick |
-| Steer with the mouse | Move the mouse | — |
+| Steer left / right | **J** / **L**, or **A** / **D**, or **←** / **→** | Left stick |
+| Nose up / down | **I** / **K**, or **↑** / **↓** | Left stick |
+| Look around the rig (any direction) | Move the mouse | Right stick |
+| Pan the camera | Hold **right mouse button** and drag | — |
+| Camera back behind the rig | **Middle-click** (or wait a few seconds) | (wait a few seconds) |
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
@@ -113,7 +115,7 @@ Y = △.)
 | Chart a course (autopilot) | **M** | **Back** / **View** |
 | Get up and walk around inside the rig (on autopilot) | **F** | **X** |
 | Reply to a comm call, then pick one | **T**, then **Q** / **R** / **E** (or **1** / **2** / **3**) | **RB**, then D-pad **left** / **up** / **right** |
-| Logbook (sights you've seen) | **L** | (pause menu) |
+| Logbook (sights you've seen) | **N** | (pause menu) |
 | Air horn (once you've bought one at Dusty's) | **B** | **L3** (click the left stick) |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
@@ -236,7 +238,7 @@ works too. Parked, the bed starts a **new day**.
 **Talk back:** after a comm call, "T: REPLY" shows under it. Press T (RB),
 then pick one of three things Jacki says back. Just flavor; nothing changes.
 
-**The logbook (L, or the pause menu):** every sight you get close to
+**The logbook (N, or the pause menu):** every sight you get close to
 (whales, the donut, the derelict, a comet...) goes in it. Some are rare:
 you might drive fifty hauls before you see one.
 
@@ -283,9 +285,14 @@ glass and felt tones. To try your own, replace a file and keep its name
 (the busy ones also have `_2` and `_3` versions, picked in turn so they
 never repeat exactly).
 
-**The mouse while flying:** it's hidden and locked to the game window, and
-moving it steers the rig. Press **Esc** to get your mouse pointer back (that
-opens the pause menu); click the game window to pick the steering back up.
+**The mouse while flying looks around:** it's hidden and locked to the game
+window, and moving it swings the camera all the way around your rig, which
+stays in the middle of the screen. Hold the right button and drag to pan;
+the wheel zooms. Let go for a few seconds and the camera eases back behind
+the rig (middle-click snaps it back). The mouse never steers: steer with
+**I J K L** (or A / D and the arrows, or the left stick). On autopilot the
+pointer is free (watch mode): drag with the left button to look around.
+Press **Esc** to get your pointer back any time (that opens the pause menu).
 
 ### Walking around (your rig and the stations)
 
@@ -394,8 +401,9 @@ Set a course (**M**) and the autopilot drives. While it does, **the game
 lets go of your mouse**, so you can leave it up on your screen (zoom out
 with the mouse wheel first) and get on with other things on your
 computer: it keeps playing in the background, docks itself at the end,
-and never needs you. Grab the stick or keys to take the wheel back, and
-the mouse steers again.
+and never needs you. Drag with the left mouse button to look around the
+rig. Grab the stick or keys to take the wheel back (the mouse locks to
+the window again).
 
 ### The debug menu (F10)
 
@@ -547,8 +555,8 @@ at the bottom.
   which runs on nearly any computer from the last ten years.
 - **The project won't open or looks broken:** make sure you're on Godot
   **4.7.x** (shown in the Project Manager's corner and on the boot screen).
-- **My mouse pointer disappeared:** that's the flight steering. Press
-  **Esc** to get it back.
+- **My mouse pointer disappeared:** in flight the mouse looks around the
+  rig. Press **Esc** to get it back.
 - **Stuttery or slow:** tell me your computer and graphics card (shown at the
   bottom of the boot screen). Nothing here should be demanding.
 - When reporting a problem, the bottom lines of the boot screen (Godot
