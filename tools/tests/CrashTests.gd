@@ -76,11 +76,6 @@ func test_crashes_can_be_switched_off() -> void:
 	_done(ship)
 
 
-func test_jack_has_something_to_say() -> void:
-	var lines: LineList = load("res://data/dialogue/wreck_lines.tres")
-	check(lines.lines.size() >= 5, "Jacki has a few things to say on the WRECKED card")
-
-
 func test_crashes_knock_you_away_from_what_you_hit() -> void:
 	var tuning := GameState.tuning
 	# Hit something above the rig: it's knocked down.

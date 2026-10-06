@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="OverdriveCallList" format=3]
+
+[ext_resource type="Script" path="res://data/dialogue/OverdriveCallList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/dialogue/OverdriveCall.gd" id="2_call"]
+[ext_resource type="Resource" path="res://data/npcs/crew_digby.tres" id="npc_crew_digby"]
+[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="npc_dispatch_morning"]
+[ext_resource type="Resource" path="res://data/npcs/space_deputy.tres" id="npc_space_deputy"]
+
+[sub_resource type="Resource" id="Call_0"]
+script = ExtResource("2_call")
+at_kmh = 1000.0
+at_strain = 0.0
+speaker = ExtResource("npc_crew_digby")
+line = "Uh, boss? The engine's singing. Engines aren't supposed to sing."
+
+[sub_resource type="Resource" id="Call_1"]
+script = ExtResource("2_call")
+at_kmh = 1500.0
+at_strain = 0.0
+speaker = ExtResource("npc_dispatch_morning")
+line = "Hon, the tracker says you're doing fifteen hundred. That's not a number trucks do."
+
+[sub_resource type="Resource" id="Call_2"]
+script = ExtResource("2_call")
+at_kmh = 0.0
+at_strain = 0.15
+speaker = ExtResource("npc_crew_digby")
+line = "Hull's starting to groan! Let go of the boost before she shakes apart!"
+
+[sub_resource type="Resource" id="Call_3"]
+script = ExtResource("2_call")
+at_kmh = 2000.0
+at_strain = 0.0
+speaker = ExtResource("npc_space_deputy")
+line = "Space Patrol. I'd write you a ticket, but my radar just caught fire."
+
+[sub_resource type="Resource" id="Call_4"]
+script = ExtResource("2_call")
+at_kmh = 0.0
+at_strain = 0.5
+speaker = ExtResource("npc_dispatch_morning")
+line = "{bunny}. Whatever you're doing. STOP doing it."
+
+[sub_resource type="Resource" id="Call_5"]
+script = ExtResource("2_call")
+at_kmh = 2500.0
+at_strain = 0.0
+speaker = ExtResource("npc_crew_digby")
+line = "Twenty-five hundred?! The rivets are leaving! THE RIVETS ARE LEAVING!"
+
+[sub_resource type="Resource" id="Call_6"]
+script = ExtResource("2_call")
+at_kmh = 0.0
+at_strain = 0.75
+speaker = ExtResource("npc_crew_digby")
+line = "She's at her limit! LET GO OF THE BOOST! LET GO!"
+
+[sub_resource type="Resource" id="Call_7"]
+script = ExtResource("2_call")
+at_kmh = 0.0
+at_strain = 0.9
+speaker = ExtResource("npc_dispatch_morning")
+line = "...it was real nice working with you, hon."
+
+[resource]
+script = ExtResource("1_list")
+calls = Array[ExtResource("2_call")]([SubResource("Call_0"), SubResource("Call_1"), SubResource("Call_2"), SubResource("Call_3"), SubResource("Call_4"), SubResource("Call_5"), SubResource("Call_6"), SubResource("Call_7")])

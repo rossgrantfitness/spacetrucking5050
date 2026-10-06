@@ -146,6 +146,24 @@ on the highway: the longer you hold it, the harder the rig shakes, and it
 slowly pulls off course, so keep correcting. Jerky steering makes it shake
 worse; let go of boost and it settles.
 
+**Overdrive (going way too fast).** Keep holding boost once you hit
+boost's top speed (about 800 km/h in the Thumper) and the rig **keeps
+climbing**, about 30 km/h a second, with no ceiling. The faster you go:
+- the worse the wobbles and the drift;
+- the harder it is on the cargo;
+- the speed number flashes red and **OVERDRIVE** shows by the speed bar.
+
+Past about **1,800 km/h** the **HULL STRAIN** bar fills (above the
+speed), faster the faster you're going. You get plenty of warning:
+- banners repeat ("HULL STRAIN 40%: EASE OFF", then "HULL CRITICAL:
+  LET GO OF BOOST");
+- an alarm starts quietly and gets louder;
+- Chang Ma, Raccoony and even Deputy Biscuit call in (the radio dips).
+
+At full strain the rig can't take its own speed: she spins out and goes
+up in a fireball. Uh oh, went too fast. Let go of boost any time and it
+all calms down. (Numbers: "Overdrive" in tuning.tres.)
+
 **Rocks all the way round.** Stations sit inside a ball of rocks (or ice,
 or junk). Fly in down the clear **traffic lane** that leads to the approach
 ring, or pick your way through. The autopilot always uses the lane.
@@ -165,8 +183,8 @@ per job) and **paint jobs**.
 
 **Crashes:** bonks at cruise speed just knock the hull and cargo. But hit
 something at boost speed (or let the hull wear down to nothing) and the
-rig spins out of control and blows up. Then you're straight back at your
-last save, nothing lost. (Crashes can be switched off in tuning.tres,
+rig spins out of control and blows up. Press any key at the prompt and
+you're back at your last save, nothing lost. (Crashes can be switched off in tuning.tres,
 "Crashes".)
 
 **Docking:** fly through the big glowing **ring** in front of a station's

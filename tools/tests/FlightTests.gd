@@ -93,7 +93,7 @@ func test_boost_rockets_past_top_speed_then_bleeds_off() -> void:
 	_fly(model, controls, 2.0)
 	check(model.boosting, "holding boost with fuel in the tank should boost")
 	check(model.speed() > RIG.max_speed * 2.0, "boost should rocket far past top speed (got %.1f m/s)" % model.speed())
-	check(model.speed() <= FlightModel.boosted_top_speed(RIG) + 1.0, "boost has a top speed too")
+	check(model.speed() <= FlightModel.boosted_top_speed(RIG) + GameState.tuning.overdrive_acceleration * 2.0 + 1.0, "past boost's top speed it only creeps up (overdrive)")
 	check(model.boost_fuel < 1.0, "boosting burns boost fuel")
 	controls.boost = false
 	_fly(model, controls, 0.1)
@@ -294,3 +294,19 @@ func test_galactic_tons_read_nicely() -> void:
 	check(HudWidget.tons_text(450000000.0) == "450M T", "450 million tons is 450M T (got %s)" % HudWidget.tons_text(450000000.0))
 	check(HudWidget.tons_text(1800000000.0) == "1.8B T", "1.8 billion tons is 1.8B T")
 	check(HudWidget.tons_text(1800000000.0, true) == "1.8 billion tons", "and in words for the job board")
+
+
+func test_overdrive_keeps_climbing_and_gets_wilder() -> void:
+	var model := _cruising()
+	var controls := FlightControls.new()
+	controls.boost = true
+	controls.thrust = 1.0
+	_fly(model, controls, 5.0)
+	var at_cap := model.speed()
+	_fly(model, controls, 60.0)
+	check(model.speed() > at_cap + 300.0, "holding boost past its top speed keeps climbing (overdrive): %.0f km/h" % (model.speed() * 3.6))
+	check(model.overdrive > 1.0, "far past boost's top speed, the overdrive notches pile up")
+	check(model.wander_amount(GameState.tuning) > deg_to_rad(GameState.tuning.overdrive_wander_degrees), "and the nose pulls harder the faster it goes")
+	controls.boost = false
+	_fly(model, controls, 20.0)
+	check(model.speed() < at_cap, "letting go of boost, the speed bleeds back down")

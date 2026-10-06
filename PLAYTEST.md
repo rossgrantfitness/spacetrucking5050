@@ -1,3 +1,40 @@
+# Playtest: round 26, overdrive (round 25 below)
+
+**What you asked for:** boost keeps climbing past ~800 km/h, toward
+2,500 km/h and beyond. The wobbles and cargo damage get worse the faster
+you go, with repeated warnings and comm chatter, until the rig can't take
+its own speed and explodes. Then no WRECKED card: just the explosion and
+a prompt to reload.
+
+**Time needed:** about 10 minutes.
+
+## What to do
+
+1. Get flying with full boost (F10 → "FILL UP AND FIX UP" if you need
+   it). Set the throttle to full and hold **boost** (Space / A), and
+   keep holding past ~800 km/h.
+2. Watch the speed climb (about 30 km/h a second).
+   - **OVERDRIVE** shows by the speed bar.
+   - Past about 1,800 km/h the **HULL STRAIN** bar fills above the
+     speed.
+   - Listen for the alarm and the calls, and read the banners.
+3. Let go once at about 70% strain: it should calm right down.
+4. Then do it again and don't let go. Enjoy the fireball. Press a key at
+   the prompt.
+
+## Questions
+
+1. Is the climb past 800 too slow, too fast, or about right to build
+   tension? (About a minute to 2,500 km/h.)
+2. Are there enough warnings, or too many?
+3. How long can you hang on at 2,500 km/h before it blows? (About 20 s
+   now.) Too short, too long?
+4. Does it feel out of control at 2,000+, or still too steady?
+5. The reload prompt: good, or do you want it to restart by itself after
+   a few seconds?
+
+---
+
 # Playtest: round 25, heavy loads, watch mode, the debug menu (round 24 below)
 
 **What you asked for:**

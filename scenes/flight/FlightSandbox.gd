@@ -97,6 +97,11 @@ const CABIN_SPAWN: String = "FromShip"
 ## its camera sits on the rig (just past the nose, looking ahead).
 const WINDOW_PIXELS := Vector2i(320, 180)
 const WINDOW_CAMERA_SPOT := Vector3(0.0, 1.5, -16.0)
+## The worried calls while you push past boost's top speed (overdrive).
+const OVERDRIVE_CALLS: OverdriveCallList = preload("res://data/dialogue/overdrive_calls.tres")
+var _overdrive_called: Dictionary = {}
+var _overdrive_pending: OverdriveCall = null
+var _overdrive_banner_clock: float = 0.0
 ## A new game starts parked here, out past the company HQ (which sits at
 ## the origin), facing down the road toward the truck stop.
 const OPEN_SPACE_SPOT := Vector3(0.0, 60.0, -1700.0)
@@ -225,6 +230,7 @@ func _physics_process(delta: float) -> void:
 	if not GameState.active_job_id.is_empty() and _docking_at.is_empty():
 		GameState.job_seconds += delta
 	_feel_the_hazards(delta)
+	_watch_overdrive(delta)
 	# Storms weaken the radio; flying fast swells the ambient music.
 	Radio.signal_strength = 1.0 - _ship.storm * 0.8
 	Radio.listener_position = _ship.global_position
@@ -582,11 +588,54 @@ func _on_lost_control(reason: String) -> void:
 	_close_cabin()
 	if _in_cockpit:
 		_set_cockpit_view(false)
-	_hud.show_banner("!! HULL BREACH !!" if reason == "hull" else "!! LOST CONTROL !!", 0.0)
+	var banners := {"hull": "!! HULL BREACH !!", "overdrive": "!! TOO FAST: SHE'S COMING APART !!"}
+	_hud.show_banner(banners.get(reason, "!! LOST CONTROL !!"), 0.0)
 	Radio.interference(GameState.tuning.crash_spin_seconds + 2.0)
 
 
-## The rig blew up. A moment to take it in, then the WRECKED card, then back
+## OVERDRIVE warnings, as you push past boost's top speed: banners that
+## repeat (and get louder) as the hull strain builds, and worried comm calls
+## from the crew and friends (res://data/dialogue/overdrive_calls.tres).
+## Each call happens once per climb; ease off and they can come again.
+func _watch_overdrive(delta: float) -> void:
+	if _ship.out_of_control:
+		return
+	var kmh := _ship.flight.speed() * 3.6
+	var strain := _ship.overdrive_strain
+	var cap_kmh := FlightModel.boosted_top_speed(_ship.ship_data) * 3.6
+	if kmh < cap_kmh - 50.0 and strain <= 0.0:
+		_overdrive_called.clear()  # Calmed down: the next climb starts fresh.
+		_overdrive_pending = null
+		_overdrive_banner_clock = 0.0
+		return
+	var calls := OVERDRIVE_CALLS.calls
+	for i in calls.size():
+		var worry := calls[i]
+		if worry == null or _overdrive_called.has(i):
+			continue
+		if (worry.at_kmh > 0.0 and kmh >= worry.at_kmh) or (worry.at_strain > 0.0 and strain >= worry.at_strain):
+			_overdrive_called[i] = true
+			_overdrive_pending = worry  # (The newest, most urgent one wins.)
+	if _overdrive_pending != null and not _hud.comm.is_busy():
+		_hud.comm.call_in(_overdrive_pending.speaker, _overdrive_pending.line, ChatterSet.Situation.IDLE, false, PackedStringArray(), true)
+		_overdrive_pending = null
+	# The banner, again and again, more urgent as the strain builds.
+	_overdrive_banner_clock -= delta
+	if _overdrive_banner_clock > 0.0 or (_ship.flight.overdrive <= 0.0 and strain <= 0.0):
+		return
+	var percent := roundi(strain * 100.0)
+	if strain >= 0.75:
+		_hud.show_banner("!!! HULL CRITICAL %d%%: LET GO OF BOOST !!!" % percent, 0.6)
+		_overdrive_banner_clock = 0.5
+	elif strain > 0.0:
+		_hud.show_banner("!! HULL STRAIN %d%%: EASE OFF !!" % percent, 1.2)
+		_overdrive_banner_clock = 1.0
+	else:
+		_hud.show_banner("OVERDRIVE · %d KM/H AND CLIMBING" % roundi(kmh), 1.2)
+		_overdrive_banner_clock = 2.5
+
+
+## The rig blew up. A moment to take it in, then a prompt to reload, then back
 ## to the last save.
 func _on_exploded() -> void:
 	_hud.show_banner("", 0.1)

@@ -1,14 +1,15 @@
 # Progress
 
-**Current status:** **Round 25: momentum and mass, the debug menu,
-watch mode.**
-- Heavy loads feel heavy, with weights in galactic tons on the HUD.
-- The throttle stops at idle before reverse.
-- F10 opens a debug menu (jump a few minutes out from any station).
-- The autopilot frees your mouse so you can leave it running.
-- The forklift is scrapped.
+**Current status:** **Round 26: overdrive.**
+- Hold boost past its top speed and the rig keeps climbing, with ever
+  worse wobbles and cargo damage.
+- Hull strain past 1,800 km/h, with repeated warnings, an alarm and
+  worried calls, until she blows.
+- Wrecks now show the explosion and a "press any key to reload" prompt
+  (no WRECKED card).
 
-Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+(Round 25: heavy loads, the debug menu, watch mode.) Built and validated,
+**waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
 **Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
@@ -18,7 +19,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 25)
+**Last updated:** 2026-10-06 (round 26)
 
 ---
 

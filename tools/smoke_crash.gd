@@ -1,7 +1,7 @@
 extends SceneTree
 ## Used by tools/validate.sh: flies the rig into a wall at boost speed and
 ## checks the whole crash plays out: out of control, the explosion, the
-## WRECKED card, and back to the last save (here there's no save yet, so
+## reload prompt (it presses a key), and back to the last save (here there's no save yet, so
 ## it's back into the flight). It saves to a scratch file, never the
 ## player's real save.
 ##
@@ -62,15 +62,17 @@ func _process(_delta: float) -> bool:
 			var card := root.get_children().filter(func(n: Node) -> bool: return n.get_class() == "CanvasLayer" and n.get_script() != null and str(n.get_script().resource_path).ends_with("WreckScreen.gd"))
 			if not card.is_empty() and not _saw_card:
 				_saw_card = true
-				print("Smoke crash: the WRECKED card is up")
+				print("Smoke crash: the reload prompt is up")
+			if _saw_card and waited % 60 == 30:
+				_tap_any_key()  # "Press any key to reload."
 			if current_scene != null and current_scene != _first_flight and current_scene.name == "FlightSandbox":
 				_next(Step.BACK)
 			elif waited > 4000:
-				_fail("after the WRECKED card, the game should go back to the last save")
+				_fail("after pressing a key at the reload prompt, the game should go back to the last save")
 		Step.BACK:
 			if waited > 300:
 				if not _saw_card:
-					_fail("the WRECKED card should have shown")
+					_fail("the reload prompt should have shown")
 				if current_scene.get_node("World/Ship").get("out_of_control") == true:
 					_fail("after restarting, the rig should be in one piece")
 				_next(Step.DONE)
@@ -88,3 +90,11 @@ func _fail(why: String) -> void:
 	push_error("Smoke crash: " + why)
 	_step = Step.DONE
 	_game.call("quit_game")
+
+
+func _tap_any_key() -> void:
+	for pressed: bool in [true, false]:
+		var key := InputEventKey.new()
+		key.keycode = KEY_SPACE
+		key.pressed = pressed
+		Input.parse_input_event(key)

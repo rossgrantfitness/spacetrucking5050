@@ -99,6 +99,10 @@ var _jolt_left: float = 0.0
 ## Out of control after a catastrophic hit: no steering, tumbling, sparks
 ## and smoke. Then `destroyed` once it's blown up.
 var out_of_control: bool = false
+## OVERDRIVE hull strain, 0 to 1: builds while going faster than
+## overdrive_strain_kmh (faster = quicker), fades when you ease off. At 1
+## the rig can't take its own speed: it loses control and blows up.
+var overdrive_strain: float = 0.0
 var destroyed: bool = false
 var _spin := Vector3.ZERO
 var _wreck_clock: float = 0.0
@@ -184,6 +188,7 @@ func _physics_process(delta: float) -> void:
 	flight.velocity = velocity
 	_check_for_bonks(before, delta)
 	_shake_cargo(delta)
+	_strain_the_hull(delta)
 	odometer += flight.speed() * delta
 	_update_shake(delta)
 	# Lean the visible model into turns. Only the model leans: the ship itself
@@ -336,6 +341,7 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 	_wreck_clock = tuning.crash_spin_seconds
 	shake.add_trauma(1.0)
 	_spool_sound.stop()
+	_alarm_sound.volume_db = -6.0
 	_alarm_sound.play()
 	var spark_paint := EventKit.paint(Color(1.0, 0.8, 0.35), 2.6)
 	for i in SPARK_COUNT:
@@ -345,6 +351,27 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 	if Settings.rumble:
 		Input.start_joy_vibration(0, 1.0, 1.0, tuning.crash_spin_seconds)
 	lost_control.emit(reason)
+
+
+## OVERDRIVE: past overdrive_strain_kmh the hull strains, quicker the
+## faster you go (see "Overdrive" in tuning.tres). The alarm starts quietly
+## at half strain and gets louder. Full strain: she can't take it.
+func _strain_the_hull(delta: float) -> void:
+	var tuning := GameState.tuning
+	var past := (flight.speed() * 3.6 - tuning.overdrive_strain_kmh) / tuning.overdrive_strain_span_kmh
+	if past > 0.0:
+		overdrive_strain += past * past * tuning.overdrive_strain_rate * delta
+	else:
+		overdrive_strain -= tuning.overdrive_strain_recovery * delta
+	overdrive_strain = clampf(overdrive_strain, 0.0, 1.0)
+	if overdrive_strain > 0.5:
+		_alarm_sound.volume_db = lerpf(-24.0, -8.0, (overdrive_strain - 0.5) / 0.5)
+		if not _alarm_sound.playing:
+			_alarm_sound.play()
+	elif overdrive_strain < 0.4 and _alarm_sound.playing:
+		_alarm_sound.stop()
+	if overdrive_strain >= 1.0 and tuning.crashes_enabled:
+		lose_control("overdrive")  # Went too fast.
 
 
 ## The physics of a crash: bounces the rig off along `away` (the way out
@@ -458,7 +485,8 @@ func _shake_cargo(delta: float) -> void:
 		return
 	var g := rough_g_force(acceleration, flight.nose())
 	var rough := maxf(g - tuning.cargo_comfy_accel, 0.0) / tuning.cargo_comfy_accel
-	var vibration := overspeed_ratio()
+	# (Past boost's top speed, the vibration keeps getting worse: overdrive.)
+	var vibration := overspeed_ratio() * (1.0 + flight.overdrive * tuning.overdrive_cargo)
 	var rough_loss := rough * tuning.cargo_rough_rate * delta * ship_data.cargo_care
 	var shake_loss := vibration * tuning.cargo_boost_rate * delta * ship_data.cargo_care
 	cargo_condition = maxf(cargo_condition - rough_loss - shake_loss, 0.0)
@@ -535,6 +563,7 @@ func _update_shake(delta: float) -> void:
 	# speed otherwise.
 	var cruise_feel := tuning.cruise_rumble_shake * pow(clampf(speed_ratio(), 0.0, 1.0), 2.0)
 	shake.rumble = tuning.boost_rumble_shake + tuning.boost_shimmy_shake * flight.shimmy if flight.boosting else cruise_feel
+	shake.rumble += minf(flight.overdrive * 0.06 + overdrive_strain * 0.2, 0.45)  # Overdrive: everything rattles.
 	shake.update(delta, tuning.shake_decay)
 	# The boost spooling up: a rising whine while the button's held.
 	if flight.spool > 0.0 and not _spool_sound.playing:
@@ -627,6 +656,7 @@ func set_cockpit_view(in_cockpit: bool) -> void:
 
 ## Puts the ship somewhere new, parked, with no smoothing in between.
 func teleport(where: Transform3D) -> void:
+	overdrive_strain = 0.0
 	global_transform = where
 	var facing := where.basis.get_euler()
 	flight.reset(facing.y, facing.x)

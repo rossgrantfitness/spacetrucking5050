@@ -11,7 +11,8 @@
 # Tidewater with the debug menu (tools/smoke_debug_jump.gd),
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
 # in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
-# (tools/smoke_crash.gd) and tries the cabin,
+# (tools/smoke_crash.gd), going way too fast (tools/smoke_overdrive.gd)
+# and tries the cabin,
 # comm replies and radio (tools/smoke_cabin.gd).
 # It fails if Godot printed ANY error or warning.
 set -u
@@ -53,6 +54,7 @@ run -s tools/smoke_mission.gd
 run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd
 run -s tools/smoke_crash.gd
+run -s tools/smoke_overdrive.gd
 rm -f override.cfg
 
 if grep -E "ERROR|WARNING|Parse Error" "$LOG" >/dev/null; then

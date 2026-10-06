@@ -74,6 +74,9 @@ var nose_tilt := 0.0
 ## job's weight against the rig's load_rating; Ship sets it). See "Load
 ## weight" in tuning.tres.
 var load_share := 0.0
+## OVERDRIVE: how far past boost's top speed we are, in notches of
+## overdrive_shake_kmh (0 = not past it). The wobbles grow with it.
+var overdrive := 0.0
 ## The extra rock of a loaded rig after a turn starts or stops (radians of
 ## roll: purely looks).
 var cargo_sway := 0.0
@@ -155,6 +158,7 @@ func reset(new_heading: float, new_pitch: float) -> void:
 	nose_tilt = 0.0
 	cargo_sway = 0.0
 	_sway_speed = 0.0
+	overdrive = 0.0
 
 
 func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
@@ -175,6 +179,8 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 		push = thrust * ship.retro_thrust * heft(tuning.load_braking_drag)
 	if boosting and going < boosted_top_speed(ship):
 		push += ship.boost_acceleration
+	elif boosting and (going < tuning.overdrive_max_kmh / 3.6 or tuning.crashes_enabled):
+		push += tuning.overdrive_acceleration  # OVERDRIVE: past boost's top speed it keeps climbing.
 	velocity += forward * push * delta
 
 	# 2. Grip: swing our direction of travel toward the nose, keeping speed.
@@ -197,8 +203,10 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 	slip = (velocity - forward * velocity.dot(forward)).length()
 
 	# 3. Speed above the limit (left over from a boost) bleeds away slowly.
-	var limit := boosted_top_speed(ship) if boosting else ship.max_speed
+	#    (Not while boosting: that's overdrive, and it keeps climbing.)
+	var limit := INF if boosting else ship.max_speed
 	current_speed = velocity.length()
+	overdrive = maxf(current_speed - boosted_top_speed(ship), 0.0) * 3.6 / tuning.overdrive_shake_kmh
 	if current_speed > limit:
 		var bleed := (current_speed - limit) * (1.0 - exp(-tuning.overspeed_drag * delta))
 		velocity = velocity.normalized() * (current_speed - bleed)
@@ -271,7 +279,7 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	# worse the wobbles are), and shimmies quickly side to side.
 	var wander := wander_amount(tuning)
 	var omega := TAU * tuning.boost_shimmy_hz
-	var snap := deg_to_rad(tuning.boost_shimmy_degrees) * shimmy * omega
+	var snap := deg_to_rad(tuning.boost_shimmy_degrees) * shimmy * (1.0 + overdrive * 0.6) * omega
 	heading = wrapf(heading + (turn_speed + wander * _pull(0.0) + snap * cos(_time * omega)) * delta, -PI, PI)
 	pitch += (wander * 0.4 * _pull(10.0) + snap * 0.35 * cos(_time * omega * 1.3 + 1.0)) * delta
 	var pitch_limit := deg_to_rad(tuning.max_pitch_degrees)
@@ -283,15 +291,17 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 ## How hard the nose is being pushed off course right now, in radians per
 ## second: a little whenever you're boosting, a lot when you're shaky.
 func wander_amount(tuning: Tuning) -> float:
-	if not boosting:
+	if not boosting and overdrive <= 0.0:
 		return 0.0
-	return deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees)
+	var boost_wander := deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees) if boosting else 0.0
+	# Overdrive: the faster past boost's top speed, the harder it pulls.
+	return boost_wander * (1.0 + overdrive) + deg_to_rad(tuning.overdrive_wander_degrees) * overdrive
 
 
 ## How far the hull is rocking from the wobbles right now (radians, for the
 ## model's roll: purely looks).
 func shimmy_roll(tuning: Tuning) -> float:
-	return deg_to_rad(tuning.boost_shimmy_roll_degrees) * shimmy * sin(_time * TAU * tuning.boost_shimmy_hz * 0.97 + 0.6)
+	return deg_to_rad(tuning.boost_shimmy_roll_degrees) * shimmy * (1.0 + overdrive * 0.6) * sin(_time * TAU * tuning.boost_shimmy_hz * 0.97 + 0.6)
 
 
 ## Jerky steering under boost makes the rig shaky; holding steady calms it.

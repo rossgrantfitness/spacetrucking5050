@@ -38,9 +38,12 @@ func _draw() -> void:
 	var bar_top := boost_top - 9.0
 	var number_top := bar_top - 17.0
 
-	# The big number, yellow while boosting past top speed.
+	# The big number, yellow while boosting past top speed, red (and
+	# flickering) past boost's top speed: overdrive.
 	var overspeed := rig.overspeed_ratio()
 	var number_color := YELLOW if overspeed > 0.02 else GREEN
+	if flight.overdrive > 0.0:
+		number_color = RED if blink(maxf(0.6 - rig.overdrive_strain * 0.5, 0.1)) else YELLOW
 	var digits := str(_shown_speed)
 	text(Vector2(left, number_top), digits, number_color, BIG, 2.0, 0.2)
 	text(Vector2(left + text_width(digits, BIG, 2.0) + 5.0, number_top + 9.0), "KM/H", tint(0.85))
@@ -70,8 +73,18 @@ func _draw() -> void:
 		box(Rect2(tick_x, bar_top - 2.0, 1.0, 9.0), YELLOW if lever > 0.0 else tint())
 		if lever < 0.0:
 			text(Vector2(tick_x + 3.0, bar_top - 8.0), "REV", tint())
-	# Boost spooling up (or waiting for full throttle).
-	if flight.spool > 0.0:
+	# Hull strain (overdrive), over the big number.
+	if rig.overdrive_strain > 0.0 and not rig.destroyed:
+		var strain_top := number_top - 9.0
+		text(Vector2(left, strain_top), "HULL STRAIN", RED if blink(0.25) else YELLOW)
+		var strain_left := left + text_width("HULL STRAIN") + 4.0
+		for i in 10:
+			var on := rig.overdrive_strain > (i + 0.5) / 10.0
+			slanted(Rect2(strain_left + i * 4.0, strain_top + 1.0, 3.0, 4.0), 1.0, (RED if i >= 7 else YELLOW) if on else tint(0.15))
+	# Boost spooling up (or waiting for full throttle), or overdrive.
+	if flight.overdrive > 0.0 and not rig.destroyed:
+		text(Vector2(overflow_left, bar_top - 8.0), "OVERDRIVE", RED if blink(0.2) else YELLOW)
+	elif flight.spool > 0.0:
 		text(Vector2(overflow_left, bar_top - 8.0), "SPOOL", YELLOW if blink(0.15) else tint())
 	elif rig.controls.boost_blocked:
 		text(Vector2(overflow_left - 30.0, bar_top - 8.0), "FULL THROTTLE!", RED if blink(0.3) else tint())

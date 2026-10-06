@@ -137,6 +137,38 @@ extends Resource
 @export_range(0.0, 20.0, 0.5, "suffix:°") var nose_tilt_degrees: float = 5.0
 
 
+@export_group("Overdrive")
+## OVERDRIVE: keep holding boost past boost's top speed (about 800 km/h in
+## the Thumper) and the rig keeps climbing, slowly, with no ceiling. The
+## faster you go, the worse the wobbles and the harder on the cargo. Past
+## overdrive_strain_kmh the HULL STRAIN builds (warnings, alarms, worried
+## calls), and at full strain the rig can't take its own speed: it goes out
+## of control and blows up. Let go of boost and it all calms down.
+## How fast speed keeps climbing past boost's top speed (m/s each second;
+## 8 = about 29 km/h a second).
+@export_range(0.0, 100.0, 0.5, "suffix:m/s²") var overdrive_acceleration: float = 8.0
+## The wobbles and drift get one notch worse for every this many km/h past
+## boost's top speed.
+@export_range(100.0, 5000.0, 50.0, "suffix:km/h") var overdrive_shake_kmh: float = 800.0
+## How hard the nose drifts per notch (degrees a second).
+@export_range(0.0, 20.0, 0.25, "suffix:°/s") var overdrive_wander_degrees: float = 2.0
+## Cargo damage from the vibration grows by this much per notch (1 = twice
+## as bad one notch in, three times two notches in...).
+@export_range(0.0, 5.0, 0.05) var overdrive_cargo: float = 1.0
+## Hull strain starts building above this speed...
+@export_range(500.0, 10000.0, 50.0, "suffix:km/h") var overdrive_strain_kmh: float = 1800.0
+## ...faster the further past it you are: at this many km/h past it, the
+## strain builds at overdrive_strain_rate (twice as far = four times as fast).
+@export_range(50.0, 5000.0, 50.0, "suffix:km/h") var overdrive_strain_span_kmh: float = 700.0
+## Strain gained per second at overdrive_strain_kmh + span (0.05 = about 20
+## seconds at 2,500 km/h until she blows).
+@export_range(0.0, 1.0, 0.005) var overdrive_strain_rate: float = 0.05
+## Strain that fades away per second once you're back under the strain speed.
+@export_range(0.0, 1.0, 0.01) var overdrive_strain_recovery: float = 0.1
+## A hard speed limit, only used when crashes_enabled is off (so nothing
+## blows up and the number doesn't run away forever).
+@export_range(1000.0, 50000.0, 100.0, "suffix:km/h") var overdrive_max_kmh: float = 5000.0
+
 @export_group("Load weight")
 ## How heavy loads feel ("momentum and mass"). A job's weight (tons) against
 ## the rig's load_rating gives the LOAD SHARE: 0 = empty, 1 = a full load
@@ -435,9 +467,6 @@ extends Resource
 ## How hard a crash knocks the rig away from what it hit (1 = bounces off
 ## as fast as it hit; 0 = just slides along it).
 @export_range(0.0, 2.0, 0.05) var crash_bounce: float = 0.75
-## How long the WRECKED card stays up before you're back at your last save
-## (any key skips it).
-@export_range(0.5, 15.0, 0.5, "suffix:s") var wreck_card_seconds: float = 4.0
 
 
 @export_group("Screen shake")
