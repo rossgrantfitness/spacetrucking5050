@@ -21,6 +21,9 @@ size = Vector3(6.2, 3, 3.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
 size = Vector3(6.2, 3, 1.9)
 
+[sub_resource type="SphereShape3D" id="Sphere_tv"]
+radius = 0.8
+
 [sub_resource type="BoxShape3D" id="Box_computer"]
 size = Vector3(1.4, 1.6, 1.4)
 
@@ -111,6 +114,15 @@ menu = "computer"
 
 [node name="Shape" type="CollisionShape3D" parent="Things/Computer"]
 shape = SubResource("Box_computer")
+
+[node name="TV" type="Area3D" parent="Things"]
+position = Vector3(-2.3, 0.7, -1.7)
+script = ExtResource("8_service")
+prompt = "PLAY THE TATER-16"
+menu = "console"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/TV"]
+shape = SubResource("Sphere_tv")
 
 [node name="Bed" type="Area3D" parent="Things"]
 position = Vector3(-2.3, 0.6, 1.3)

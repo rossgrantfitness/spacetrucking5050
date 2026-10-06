@@ -1,19 +1,15 @@
 # Progress
 
-**Current status:** **Round 16: leaving conversations, sounds and
-voices, rocks all around, thrusters, speed wobbles, nine rigs.** Walk away
-or press Esc / B to end a conversation; new sounds (accepting jobs, the nav
-computer, money, doors, menus); every character talks in their own voice,
-key and scale; stations sit inside a 360-degree ball of rocks with a
-traffic lane in; new engine flames and plasma trails; mouse wheel zoom;
-boost gives speed wobbles instead of swerves; MML / MGS1 painted planets
-and rocks; and your design sheets are nine rigs to buy at Dusty's. Built and
-validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 17: gentler wobbles, doors, sleep, the
+TATER-16, physical crashes, station names.** Plus round 16 (leaving
+conversations, voices and sounds, rocks all around, thrusters, nine rigs)
+and solid-color ship panels. Built and validated, **waiting for your
+playtest** (see `PLAYTEST.md`).
 **Next session:** your feedback; then more of the main game (your call:
 the economy and time of M6, the next solar system, more clients and story,
 the docking computer), polish as you send notes, and the audit.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 16)
+**Last updated:** 2026-10-06 (round 17)
 
 ---
 
@@ -61,6 +57,7 @@ the docking computer), polish as you send notes, and the audit.
   - [x] Round 15: the crew (Dottie, Digby, Clem) from your models; galley, engine room and cargo bay; life aboard that changes every trip and day (activities, ship events, lost things, friendship); a job terminal in dispatch
   - [x] Round 15: the apartment window shows what's outside, live, in flight
   - [x] Round 16: walk away (or Esc / B) to leave a conversation; voices in their own pitch, key and scale
+  - [x] Round 17: doors under the camera take you through when you walk out of view toward them; the bed always works; the TATER-16 games console on her TV (three games)
   - [x] Round 14: her desktop PC (mail, invoices, Asteroid Alley); the bed sleeps to a new day (parked) or to the next stop (in flight)
   - [x] The chibi bunny on foot (walk, ear flop, blinks, blob shadow)
   - [x] Apartment, hallway and dispatch (from your sketch), connected by doors with fades
@@ -92,6 +89,7 @@ the docking computer), polish as you send notes, and the audit.
   - [x] Round 13: the autopilot forgives small nudges and steers back on course; a cinema camera on autopilot (V / R3: a director cutting between six shots, or a free orbit camera); a quieter engine and Music / Sound effects / Voices sliders
   - [x] Round 10: your route events list (1-167) in the data, 49 playable now (signs, passing ships with stories, processions, calls with reply choices, radio moments, gentle hazards like hull pings, gravity eddies and gravity tides); a director with zones (deep space, traffic lanes, station approach, orbit, weather), haul cooldowns, one hazard at a time, one rare per haul, story and night-only events
   - [x] Route map: the course chart (see M2)
+  - [x] Round 17: gentler speed wobbles; physical crashes (knocked away from what you hit, tumbling round the impact); no writing on stations, the green ID label names them
   - [x] Round 16: a 360-degree ball of rocks (or ice, junk, casino chips) round every station with a traffic lane in, and an autopilot that goes round it; engine flames, sparks and plasma trails; mouse wheel zoom; boost speed wobbles; MML / MGS1 painted planets and rocks; sounds for jobs, the nav computer, money, doors and menus
   - [ ] Gravity wells and slingshots
   - [ ] The rest of the route events: 118 of 167 need a new model or a small new system (the horn, hitchhikers, the convoy you can join, the rival, wipers...); 168-250 still to come

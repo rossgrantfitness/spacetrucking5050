@@ -70,7 +70,7 @@ func _draw_blips(center: Vector2, rig: Ship) -> void:
 		var on_globe := facing * offset / reach
 		if on_globe.length() > 1.0:
 			if contact["kind"] != FlightHUD.Kind.STATION:
-				continue
+				continue  # (Other stations only show once they're on the globe.)
 			on_globe = on_globe.normalized()  # Far away: pin it to the edge.
 		var spot := _project(center, on_globe)
 		match contact["kind"]:
@@ -80,6 +80,9 @@ func _draw_blips(center: Vector2, rig: Ship) -> void:
 			FlightHUD.Kind.SHIP:
 				line(spot, _project(center, Vector3(on_globe.x, 0.0, on_globe.z)), tint(0.6))
 				box(Rect2(spot - Vector2.ONE, Vector2(2, 2)), YELLOW)
+			FlightHUD.Kind.PLACE:
+				line(spot, _project(center, Vector3(on_globe.x, 0.0, on_globe.z)), Color(GREEN, 0.35))
+				pixels(spot - Vector2(1, 1), [".#.", "###", ".#."], Color(GREEN, 0.5))
 			FlightHUD.Kind.STATION:
 				line(spot, _project(center, Vector3(on_globe.x, 0.0, on_globe.z)), Color(GREEN, 0.6))
 				pixels(spot - Vector2(1, 1), [".#.", "###", ".#."], GREEN if blink(0.8) else Color(GREEN, 0.6))

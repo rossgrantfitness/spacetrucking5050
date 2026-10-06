@@ -42,6 +42,15 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 			if meters < nearest_meters and not hud.is_behind(contact["position"]):
 				nearest = contact
 				nearest_meters = meters
+	# No ship close by: name the nearest station or building instead.
+	if nearest.is_empty():
+		nearest_meters = tuning.station_label_range
+		for contact in hud.contacts:
+			if contact["kind"] == FlightHUD.Kind.PLACE:
+				var meters := rig.global_position.distance_to(contact["position"])
+				if meters < nearest_meters and not hud.is_behind(contact["position"]):
+					nearest = contact
+					nearest_meters = meters
 	var name_now: String = nearest.get("label", "")
 	if name_now != _target_name:
 		_target_name = name_now

@@ -44,6 +44,9 @@ const SET_LAYER: int = 2
 ## How long the camera can lose sight of the bunny before cutting to one
 ## that sees her (a short grace, so walking past a pillar doesn't flicker).
 const UNSEEN_GRACE: float = 0.25
+## How close to a doorway (meters) walking out of the camera's view takes
+## her through it (see _walk_out_of_frame).
+const DOOR_PULL: float = 2.2
 
 @export var default_spawn: String = ""
 ## Which place this room belongs to (a place id from res://data/places/,
@@ -67,6 +70,8 @@ var _shots: Array[RoomShot] = []
 var _active_shot: RoomShot
 ## How long the current camera has been unable to see the bunny.
 var _unseen_time: float = 0.0
+var _offscreen_time: float = 0.0
+var _pulled_through := false
 var _backdrop := ShaderMaterial.new()
 var _fade: ScreenFade
 var _ready_to_play := false
@@ -135,9 +140,41 @@ func _ready() -> void:
 		player.set_busy(false)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _ready_to_play:
+		if _walk_out_of_frame(delta):
+			return
 		_choose_shot(false)
+
+
+## Doors just out of the cameras' view (like dispatch's door to the
+## hallway, right under the camera): if she walks out of every camera's
+## frame within DOOR_PULL meters of a doorway, heading toward it, she's on
+## her way through it. No hunting for an invisible doorway off-screen.
+func _walk_out_of_frame(delta: float) -> bool:
+	if _pulled_through or player == null or player.is_busy() or _active_shot == null or not has_node("Exits"):
+		return false
+	for shot in _shots:
+		if sees(shot, player.global_position + Vector3.UP * 0.7, false):
+			_offscreen_time = 0.0
+			return false  # Some camera can still see her.
+	_offscreen_time += delta
+	if _offscreen_time < 0.08:
+		return false
+	var feet := player.global_position
+	for exit in $Exits.get_children():
+		var door := exit as RoomExit
+		if door == null or not door.enabled or door.needs_button:
+			continue
+		var apart := door.global_position - feet
+		var flat := Vector2(apart.x, apart.z)
+		var walking := Vector2(player.velocity.x, player.velocity.z)
+		# Close by, and walking toward it (not just passing).
+		if flat.length() < DOOR_PULL and walking.length() > 0.3 and walking.normalized().dot(flat.normalized()) > 0.3:
+			_pulled_through = true
+			door.walk_through()
+			return true
+	return false
 
 
 ## Fades out and goes to another room (or scene), arriving at `spawn`.

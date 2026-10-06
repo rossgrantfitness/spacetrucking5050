@@ -2178,24 +2178,6 @@ mesh = SubResource("BoxMesh_26nvw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 74, 132)
 mesh = SubResource("BoxMesh_qiw0k")
 
-[node name="NeonSignTop" type="Label3D" parent="." unique_id=1581096225]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 158, 136)
-pixel_size = 0.5
-modulate = Color(1, 0.45, 0.8, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "TRUCK STOP"
-font_size = 96
-outline_size = 16
-
-[node name="NeonSignBottom" type="Label3D" parent="." unique_id=54426011]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 108, 136)
-pixel_size = 0.25
-modulate = Color(0.45, 0.95, 1, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "OPEN 24/7 - FUEL - NAPS"
-font_size = 96
-outline_size = 16
-
 [node name="ParkingDeck" type="MeshInstance3D" parent="." unique_id=1893128926]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -115, 170)
 mesh = SubResource("BoxMesh_k0pcw")
@@ -2207,24 +2189,6 @@ mesh = SubResource("BoxMesh_d6hnp")
 [node name="DeckEdge" type="MeshInstance3D" parent="." unique_id=1472653238]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -112.5, 235)
 mesh = SubResource("BoxMesh_s4af4")
-
-[node name="ParkingSign" type="Label3D" parent="." unique_id=1521367646]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -76, 134)
-pixel_size = 0.12
-modulate = Color(1, 0.8, 0.3, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "TRUCK PARKING"
-font_size = 96
-outline_size = 16
-
-[node name="IdleSign" type="Label3D" parent="." unique_id=1741848163]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -84, 134)
-pixel_size = 0.05
-modulate = Color(0.45, 0.95, 1, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "NO IDLING  ·  NO SPACE-WHALE FEEDING"
-font_size = 96
-outline_size = 16
 
 [node name="BayLine" type="MeshInstance3D" parent="." unique_id=2144127896]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -104, -111.85, 178)

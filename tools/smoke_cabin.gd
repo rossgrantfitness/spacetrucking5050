@@ -15,7 +15,7 @@ extends SceneTree
 ## autoloads they use exist, so it pokes at them by name.)
 
 
-enum Step { FLY, CALL, REPLY, RADIO, CINEMA, CABIN, WALK, NAP, WAKE, DONE }
+enum Step { FLY, CALL, REPLY, RADIO, CINEMA, CABIN, WALK, NAP, WAKE, NO_COURSE_NAP, DONE }
 
 var _frame := 0
 var _step := Step.FLY
@@ -142,7 +142,27 @@ func _process(_delta: float) -> bool:
 					_fail("walking out of the cabin should put you back in the seat")
 				if current_scene.get_node("World/Ship").get("cruise") == null:
 					_fail("the autopilot should still be driving after a walk around the cabin")
+				# Now with the autopilot switched off: the bed should still work
+				# (it sets a course for the job's drop-off).
+				current_scene.call("_open_cabin")
+				_next(Step.NO_COURSE_NAP)
+		Step.NO_COURSE_NAP:
+			var room: Node = current_scene.get("_cabin_room")
+			if room != null and room.name != "Apartment" and room.get("_ready_to_play") == true:
+				current_scene.call("_walk_to_room", "res://scenes/hub/Apartment.tscn", "FromHallway")
+			if room != null and room.name == "Apartment" and room.get("_ready_to_play") == true and not current_scene.get("_napping"):
+				# The autopilot lets go while she's up (it got there, or was
+				# switched off): the bed should still work.
+				current_scene.set("_course", PackedStringArray())
+				current_scene.get_node("World/Ship").set("cruise", null)
+				current_scene.call("_nap")
+				if not current_scene.get("_napping"):
+					_fail("the bed should always work, even with the autopilot off")
+				if current_scene.get_node("World/Ship").get("cruise") == null:
+					_fail("sleeping with no course set should set one for the job's drop-off")
 				_finish()
+			elif waited > 3000:
+				_fail("couldn't get back to the bed with the autopilot off")
 	if _frame > 20000 and _step != Step.DONE:
 		_fail("got stuck at step %s" % Step.keys()[_step])
 	return false

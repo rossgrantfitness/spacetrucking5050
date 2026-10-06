@@ -967,33 +967,6 @@ mesh = SubResource("BoxMesh_nkwbe")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -70, -2)
 mesh = SubResource("BoxMesh_nkwbe")
 
-[node name="HangarSign" type="Label3D" parent="." unique_id=855658394]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 95, -3)
-pixel_size = 0.3
-modulate = Color(0.45, 0.95, 1, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "HANGAR 7 - WELCOME HOME"
-font_size = 96
-outline_size = 16
-
-[node name="NameSign" type="Label3D" parent="." unique_id=1854889313]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 160, 40)
-pixel_size = 0.8
-modulate = Color(1, 0.8, 0.35, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "[BASE_NAME]"
-font_size = 96
-outline_size = 16
-
-[node name="NameSignSide" type="Label3D" parent="." unique_id=1266710299]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -212, 40, 560)
-pixel_size = 1.4
-modulate = Color(1, 0.8, 0.35, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "[BASE_NAME]"
-font_size = 96
-outline_size = 16
-
 [node name="TrimBand" type="MeshInstance3D" parent="." unique_id=1514205264]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 240)
 mesh = SubResource("BoxMesh_ymnv0")

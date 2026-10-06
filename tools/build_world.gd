@@ -74,25 +74,7 @@ func _build_base() -> Node3D:
 	var hazard := _hazard(0.05)
 	_box(base, "HazardTop", Vector3(260.0, 14.0, 4.0), Vector3(0.0, 70.0, -2.0), hazard)
 	_box(base, "HazardBottom", Vector3(260.0, 14.0, 4.0), Vector3(0.0, -70.0, -2.0), hazard)
-	_sign(base, "HangarSign", "HANGAR 7 - WELCOME HOME", 0.3, Color(0.45, 0.95, 1.0), Vector3(0.0, 95.0, -3.0))
-	(base.get_node("HangarSign") as Node3D).rotation = Vector3(0.0, PI, 0.0)  # Signs read from their +Z side.
-	var name_sign := Label3D.new()
-	name_sign.name = "NameSign"
-	name_sign.text = "[BASE_NAME]"
-	name_sign.font_size = 96
-	name_sign.pixel_size = 0.8
-	name_sign.outline_size = 16
-	name_sign.modulate = Color(1.0, 0.8, 0.35)
-	name_sign.outline_modulate = Color(0.25, 0.05, 0.3)
-	name_sign.position = Vector3(0.0, 160.0, 40.0)
-	name_sign.rotation = Vector3(0.0, PI, 0.0)
-	base.add_child(name_sign, true)
-	var side_sign := name_sign.duplicate() as Label3D
-	side_sign.name = "NameSignSide"
-	side_sign.position = Vector3(-212.0, 40.0, 560.0)
-	side_sign.rotation = Vector3(0.0, -PI / 2.0, 0.0)
-	side_sign.pixel_size = 1.4
-	base.add_child(side_sign, true)
+	# (No names painted on the station: the HUD's green ID label names it.)
 
 	# Bands of trim and rows of windows along both sides: 250 neighbors.
 	for band_z: float in [240.0, 700.0, 1150.0]:
@@ -213,8 +195,7 @@ func _build_cannery() -> Node3D:
 	var tail_bottom := _box(fish, "TailBottom", Vector3(50.0, 14.0, 6.0), Vector3(-88.0, -16.0, 0.0), fish_glow)
 	tail_bottom.rotation = Vector3(0.0, 0.0, -0.6)
 	_box(fish, "Eye", Vector3(10.0, 10.0, 8.0), Vector3(48.0, 8.0, 0.0), _glow(Color(0.35, 1.0, 0.85), 2.4))
-	_sign(cannery, "CannerySign", "TIDEWATER CANNERY", 0.4, Color(0.4, 1.0, 0.85), Vector3(0.0, 205.0, 112.0))
-	_sign(cannery, "CannerySub", "FRESH FROM THE VOID SINCE WHENEVER", 0.18, Color(1.0, 0.8, 0.35), Vector3(0.0, 92.0, 112.0))
+	# (No names painted on the station: the HUD's green ID label names it.)
 	return cannery
 
 
@@ -255,8 +236,7 @@ func _build_gas_n_go() -> Node3D:
 	# The tall pole sign, readable from far away.
 	_add_collision(body, _box(stop, "SignPole", Vector3(8.0, 200.0, 8.0), Vector3(-130.0, 60.0, 0.0), white))
 	_box(stop, "SignBoard", Vector3(130.0, 60.0, 6.0), Vector3(-130.0, 180.0, 0.0), dark)
-	_sign(stop, "SignTop", "GAS-N-GO 47", 0.3, Color(1.0, 0.45, 0.4), Vector3(-130.0, 192.0, 4.0))
-	_sign(stop, "SignBottom", "FUEL · BOOST · JERKY", 0.14, Color(0.45, 1.0, 0.6), Vector3(-130.0, 166.0, 4.0))
+	# (No names painted on the station: the HUD's green ID label names it.)
 	var beacon := _box(stop, "Beacon", Vector3(10.0, 10.0, 10.0), Vector3(-130.0, 216.0, 0.0), _glow(Color(1.0, 0.3, 0.2), 2.0))
 	beacon.set_script(_blinker_script)
 	return stop

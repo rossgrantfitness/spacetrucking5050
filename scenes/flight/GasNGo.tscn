@@ -395,24 +395,6 @@ mesh = SubResource("BoxMesh_pu4vb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 180, 0)
 mesh = SubResource("BoxMesh_khmld")
 
-[node name="SignTop" type="Label3D" parent="." unique_id=1037725301]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 192, 4)
-pixel_size = 0.3
-modulate = Color(1, 0.45, 0.4, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "GAS-N-GO 47"
-font_size = 96
-outline_size = 16
-
-[node name="SignBottom" type="Label3D" parent="." unique_id=731096172]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 166, 4)
-pixel_size = 0.14
-modulate = Color(0.45, 1, 0.6, 1)
-outline_modulate = Color(0.25, 0.05, 0.3, 1)
-text = "FUEL · BOOST · JERKY"
-font_size = 96
-outline_size = 16
-
 [node name="Beacon" type="MeshInstance3D" parent="." unique_id=493543228]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 216, 0)
 mesh = SubResource("BoxMesh_dl2uk")

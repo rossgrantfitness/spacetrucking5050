@@ -9,12 +9,14 @@ class_name HubServices
 
 
 ## Opens a menu by name ("job_board", "fuel", "mechanic", "jukebox",
-## "vending", "slots", "computer", "bed") and waits until the player is done
+## "vending", "slots", "computer", "console", "bed") and waits until the player is done
 ## with it.
 static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 	match menu:
 		"computer":
 			await DesktopPC.open(tree)
+		"console":
+			await TVConsole.open(tree)
 		"bed":
 			await sleep(tree)
 		"job_board":

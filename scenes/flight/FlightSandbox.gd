@@ -143,6 +143,7 @@ func _ready() -> void:
 	_motes.ship = _ship
 	_speed_lines.ship = _ship
 	_hud.setup(_ship, null, "", Color.WHITE)
+	_hud.places = _places  # So the HUD can name stations as you get near.
 	_set_destination(_pick_destination())
 	_chatter.start(_ship, _hud.comm, _places)
 	_ship.autopilot_arrived.connect(_on_autopilot_arrived)
@@ -663,8 +664,15 @@ func _close_cabin() -> void:
 ## still cost their fuel, and the clock still runs for rush jobs; she just
 ## doesn't have to sit through them. Public so the tests can use it.
 func _nap() -> void:
-	if _napping or _ship.cruise == null or _course.is_empty():
+	if _napping or _cabin_room == null:
 		return
+	# No course set (the autopilot let go, or nobody set one)? Head for the
+	# job's drop-off; with no job, she just naps where she is.
+	if _ship.cruise == null or _course.is_empty():
+		var job := GameState.active_job()
+		if job != null and _places.has(job.to_place):
+			engage_course(PackedStringArray([job.to_place]))
+	_nap_in_place = _ship.cruise == null or _course.is_empty()
 	_napping = true
 	_cabin_room.player.set_busy(true)
 	_nap_screen = CanvasLayer.new()
@@ -677,14 +685,24 @@ func _nap() -> void:
 	await get_tree().create_timer(2.2).timeout
 	if not _napping:
 		return  # Something woke her (arriving, a crash).
+	if _nap_in_place:
+		# Nowhere to go: a quick nap, and she wakes up where she was.
+		await get_tree().create_timer(1.2).timeout
+		_wake_up()
+		_hud.show_banner("A QUICK NAP. NO COURSE SET, SO WE STAYED PUT (M CHARTS ONE).", 4.0)
+		return
 	_skip_to_next_stop()
 	await get_tree().create_timer(1.2).timeout
 	if not _napping:
 		return
 	_wake_up()
 	_close_cabin()
-	_hud.show_banner("SLEPT LIKE A ROCK. %s AHEAD." % GameState.places.find(_destination_id).display_name, 4.0)
+	var place := GameState.places.find(_destination_id)
+	_hud.show_banner("SLEPT LIKE A ROCK. %s AHEAD." % (place.display_name if place != null else "THE NEXT STOP"), 4.0)
 
+
+## On while she naps with no course set (she wakes up where she was).
+var _nap_in_place := false
 
 ## How far out from the next stop's approach she wakes up, in meters.
 const SLEEP_WAKE_DISTANCE: float = 1500.0
@@ -738,6 +756,9 @@ func _draw_nap(canvas: Control) -> void:
 	var left := dock.global_position.distance_to(_ship.global_position) / 1000.0 if dock != null else 0.0
 	var z := "Z".repeat(1 + int(Time.get_ticks_msec() / 600.0) % 3)
 	PixelFont.draw_centered(canvas, screen * 0.5 - Vector2(0.0, square * 14.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
+	if _nap_in_place:
+		PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "JUST RESTING HER EYES.", square, Color(0.8, 0.82, 0.9))
+		return
 	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "SLEEPING. THE AUTOPILOT'S GOT IT.", square, Color(0.8, 0.82, 0.9))
 	PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 16.0), "%.1f KM TO GO" % left, square, Color(1.0, 0.85, 0.3))
 

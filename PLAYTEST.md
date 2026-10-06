@@ -1,4 +1,33 @@
-# Playtest: round 16 (leaving conversations, sounds and voices, rocks all around, thrusters, speed wobbles, nine rigs)
+# Playtest: round 17 (on top of round 16 below)
+
+**What you asked for this time:**
+- speed wobbles about 50% gentler;
+- rooms switching sooner (no walking off-screen to find the hallway);
+- the bed working every time;
+- a console on Jacki's TV with small games;
+- physics-based crashes;
+- station names on the HUD instead of written on the stations.
+
+## Try these
+
+1. **Boost** for a few seconds: the wobbles should be half as wild.
+2. Climb down the cockpit stairs and **walk toward the hallway door** in dispatch. You should go through as soon as you leave the picture, without hunting off-screen.
+3. Set a course, get up, and **switch the autopilot off** (or wait until it arrives), then **sleep**. It should still work: it sets a course for your job and sleeps you there.
+4. Walk up to the **TV** in Jacki's room and press E: the **TATER-16**. Try Carrot Catch, Comet Tail and Paddle Pods (against Digby).
+5. **Crash on purpose:** boost into a big rock with its top edge above you, then with its edge to your left. You should be knocked down, then to the right, tumbling. (You'll go back to your last save, as before.)
+6. Fly toward a station: **no writing on it**. The green ID label names it once you're within 6 km, and traffic control calls before you reach the rocks.
+
+## Questions
+
+1. Are the wobbles right now, or still too much (or now too little)?
+2. Did any door still make you walk off-screen? Which room?
+3. Which TATER-16 game is your favorite? Want more (a racing one, a fishing one...)?
+4. Do the crashes feel physical now?
+5. Is the green label enough to know where you are, or do you want the station's name on the radar too?
+
+---
+
+# Round 16 (leaving conversations, sounds and voices, rocks all around, thrusters, speed wobbles, nine rigs)
 
 **What you asked for:**
 - walk away from (or cancel) conversations;

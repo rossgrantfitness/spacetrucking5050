@@ -292,14 +292,21 @@ func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
 	bonked.emit(strength, where)
 	if tuning.crashes_enabled:
 		if impact >= tuning.crash_speed:
-			lose_control("crash")
+			lose_control("crash", where, away, impact)
 		elif hull <= 0.0 and tuning.crash_on_empty_hull:
-			lose_control("hull")
+			lose_control("hull", where, away, impact)
 
 
 ## A catastrophic hit: the rig spins out of control (no steering, the
 ## alarm wailing, sparks and black smoke) and blows up a moment later.
-func lose_control(reason: String) -> void:
+##
+## It's physical: the hit knocks the rig away from what it hit (hit
+## something above you and you're sent down; clip something on your left
+## and you're sent right), and sets it tumbling around the point of impact,
+## harder the harder the hit. `where` is where it hit (world), `away` the
+## direction away from what it hit, `impact` how hard (m/s). Without them
+## (no hit, like the hull just giving out) it tumbles any old way.
+func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = Vector3.ZERO, impact: float = 0.0) -> void:
 	if out_of_control:
 		return
 	var tuning := GameState.tuning
@@ -307,7 +314,10 @@ func lose_control(reason: String) -> void:
 	cruise = null
 	autopilot_route.clear()
 	flight.boosting = false
-	_spin = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * tuning.crash_spin_speed
+	if where.is_finite() and not away.is_zero_approx():
+		_knock(where, away, impact)
+	else:
+		_spin = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * tuning.crash_spin_speed
 	_wreck_clock = tuning.crash_spin_seconds
 	shake.add_trauma(1.0)
 	_spool_sound.stop()
@@ -322,9 +332,28 @@ func lose_control(reason: String) -> void:
 	lost_control.emit(reason)
 
 
+## The physics of a crash: bounces the rig off along `away` (the way out
+## of what it hit) and spins it around the hit: like a push on one end of a
+## stick, the spin axis is (where it hit, from the middle) x (the push).
+func _knock(where: Vector3, away: Vector3, impact: float) -> void:
+	var tuning := GameState.tuning
+	var hard := clampf(impact / maxf(tuning.crash_speed, 1.0), 0.5, 2.0)
+	flight.velocity += away * impact * tuning.crash_bounce
+	var lever := where - global_position
+	var axis := lever.cross(away)
+	if axis.length() < 0.5:
+		# Hit dead on the nose: a little sideways wobble so it still tumbles.
+		axis = flight.nose().cross(away + Vector3(0.2, 0.1, 0.0))
+	# The tumble is shown by turning the model, so put the axis in the
+	# rig's own frame.
+	var local_axis := (global_basis.inverse() * axis).normalized()
+	_spin += local_axis * tuning.crash_spin_speed * hard
+	_spin = _spin.limit_length(tuning.crash_spin_speed * 2.0)
+
+
 ## Out of control: the rig tumbles (only the model, so the camera stays
 ## level), keeps drifting with what's left of its speed, throws sparks,
-## and then blows up.
+## and then blows up. It ricochets off anything else it hits on the way.
 func _tumble(delta: float) -> void:
 	shake.update(delta, GameState.tuning.shake_decay)
 	if destroyed:
@@ -332,9 +361,17 @@ func _tumble(delta: float) -> void:
 	_wreck_clock -= delta
 	_visual_pivot.rotate(_spin.normalized(), _spin.length() * delta)
 	flight.velocity *= exp(-0.5 * delta)
+	var before := flight.velocity
 	velocity = flight.velocity
 	move_and_slide()
 	flight.velocity = velocity
+	for i in get_slide_collision_count():
+		var contact := get_slide_collision(i)
+		var hit := -before.dot(contact.get_normal())
+		if hit > 3.0:
+			_knock(contact.get_position(), contact.get_normal(), hit)
+			shake.add_trauma(0.4)
+			before = flight.velocity
 	shake.rumble = 0.55
 	for spark in _sparks:
 		spark.visible = randf() < 0.45

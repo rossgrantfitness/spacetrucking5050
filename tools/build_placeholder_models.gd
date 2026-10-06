@@ -310,8 +310,7 @@ func _build_station() -> Node3D:
 	var board := _box(station, "SignBoard", Vector3(440.0, 120.0, 6.0), Vector3(0.0, 140.0, 132.0), dark)
 	_add_collision(body, board)
 	_box(station, "SignPost", Vector3(10.0, 14.0, 10.0), Vector3(0.0, 74.0, 132.0), dark)
-	_sign(station, "NeonSignTop", "TRUCK STOP", 0.5, Color(1.0, 0.45, 0.8), Vector3(0.0, 158.0, 136.0))
-	_sign(station, "NeonSignBottom", "OPEN 24/7 - FUEL - NAPS", 0.25, Color(0.45, 0.95, 1.0), Vector3(0.0, 108.0, 136.0))
+	# (No names painted on the station: the HUD's green ID label names it.)
 
 	_build_parking_deck(station, body)
 	return station
@@ -328,8 +327,6 @@ func _build_parking_deck(station: Node3D, body: StaticBody3D) -> void:
 	_add_collision(body, _box(station, "ParkingDeck", Vector3(bay_width * 8.0 + 30.0, 6.0, 130.0), Vector3(0.0, deck_y - 3.0, 170.0), deck_paint))
 	_add_collision(body, _box(station, "DeckPylon", Vector3(24.0, 48.0, 30.0), Vector3(0.0, deck_y + 20.0, 118.0), _paint(Color(0.42, 0.28, 0.62), HULL, Vector2(0.1, 0.1))))
 	_box(station, "DeckEdge", Vector3(bay_width * 8.0 + 30.0, 3.0, 2.0), Vector3(0.0, deck_y - 0.5, 235.0), _paint(Color.WHITE, CHEVRONS, Vector2(0.25, 0.25)))
-	_sign(station, "ParkingSign", "TRUCK PARKING", 0.12, Color(1.0, 0.8, 0.3), Vector3(0.0, deck_y + 36.0, 134.0))
-	_sign(station, "IdleSign", "NO IDLING  ·  NO SPACE-WHALE FEEDING", 0.05, Color(0.45, 0.95, 1.0), Vector3(0.0, deck_y + 28.0, 134.0))
 
 	# Eight parking bays (painted lines), six of them taken.
 	for i in 9:

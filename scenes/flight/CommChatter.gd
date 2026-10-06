@@ -21,7 +21,8 @@ const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH,
 		ChatterSet.Situation.DOCKING, ChatterSet.Situation.SPEEDING]
 
 ## A place's traffic control calls when you're this close to it.
-@export var approach_call_distance: float = 2500.0
+## (Far enough out that they call before you reach the rocks round it.)
+@export var approach_call_distance: float = 4000.0
 
 var _ship: Ship
 var _comm: CommPortrait

@@ -12,7 +12,7 @@ extends SceneTree
 ## Run it with:  godot --headless --path . -s tools/smoke_hub.gd
 
 
-enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, WALK_AWAY, TERMINAL, GALLEY, GALLEY_OUT, STAIRS, COCKPIT, FLYING, TOWED, DONE }
+enum Stage { PC, APARTMENT, HALLWAY, OUTSIDE, BACK_ABOARD, DISPATCH, TALKING, WALK_AWAY, TERMINAL, DOOR_PULL, GALLEY, GALLEY_OUT, STAIRS, COCKPIT, FLYING, TOWED, DONE }
 
 var _frame := 0
 var _stage := Stage.PC
@@ -135,6 +135,20 @@ func _process(_delta: float) -> bool:
 			if waited > 60 and not (_player() as Node).call("is_busy"):
 				if not _saw_menu:
 					push_error("Smoke test: the dispatch job terminal should open the job board")
+				_next(Stage.DOOR_PULL)
+		Stage.DOOR_PULL:
+			# The door to the hallway is under the camera: walking toward it,
+			# out of frame, takes her through (no hunting for it off-screen).
+			if waited == 10:
+				_player().global_position = Vector3(-2.8, 0.0, 1.5)
+				Input.action_press("move_back")
+			if _in("Hallway"):
+				Input.action_release("move_back")
+				_go("res://scenes/hub/Galley.tscn", "FromHallway")
+				_next(Stage.GALLEY)
+			elif waited > 400:
+				Input.action_release("move_back")
+				push_error("Smoke test: walking out of frame toward dispatch's hallway door should go through it")
 				_go("res://scenes/hub/Galley.tscn", "FromHallway")
 				_next(Stage.GALLEY)
 		Stage.GALLEY:

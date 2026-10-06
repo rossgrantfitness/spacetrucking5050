@@ -93,22 +93,22 @@ extends Resource
 ##
 ## The drift: this many degrees per second off course at full shakes (a
 ## slow, steady pull one way, not a sudden swerve).
-@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 2.0
+@export_range(0.0, 30.0, 0.5, "suffix:°/s") var boost_wander_degrees: float = 1.0
 
 ## Extra drift when the rig is shaky from jerky steering under boost.
-@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 3.0
+@export_range(0.0, 60.0, 0.5, "suffix:°/s") var boost_wobble_degrees: float = 1.5
 
 ## How many seconds of boosting until the shakes are at their worst.
 @export_range(0.5, 20.0, 0.5, "suffix:s") var boost_wobble_build_seconds: float = 3.5
 
 ## The shimmy: how far the nose snaps side to side at the worst (degrees),
 ## how fast (shakes per second), and how far the hull rocks (degrees).
-@export_range(0.0, 10.0, 0.1, "suffix:°") var boost_shimmy_degrees: float = 1.6
+@export_range(0.0, 10.0, 0.1, "suffix:°") var boost_shimmy_degrees: float = 0.8
 @export_range(1.0, 12.0, 0.5, "suffix:Hz") var boost_shimmy_hz: float = 5.5
-@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_shimmy_roll_degrees: float = 9.0
+@export_range(0.0, 30.0, 0.5, "suffix:°") var boost_shimmy_roll_degrees: float = 4.5
 
 ## Extra screen shake at the worst of the wobbles, on top of the boost rumble.
-@export_range(0.0, 1.0, 0.05) var boost_shimmy_shake: float = 0.3
+@export_range(0.0, 1.0, 0.05) var boost_shimmy_shake: float = 0.15
 
 ## Steering is this much twitchier under boost (1 = normal). Easy to
 ## over-correct.
@@ -359,6 +359,10 @@ extends Resource
 @export_range(0.5, 10.0, 0.1, "suffix:s") var crash_spin_seconds: float = 2.5
 ## How fast it tumbles, in turns per second... roughly (radians per second).
 @export_range(0.0, 30.0, 0.5, "suffix:rad/s") var crash_spin_speed: float = 7.0
+
+## How hard a crash knocks the rig away from what it hit (1 = bounces off
+## as fast as it hit; 0 = just slides along it).
+@export_range(0.0, 2.0, 0.05) var crash_bounce: float = 0.75
 ## How long the WRECKED card stays up before you're back at your last save
 ## (any key skips it).
 @export_range(0.5, 15.0, 0.5, "suffix:s") var wreck_card_seconds: float = 4.0
@@ -470,6 +474,9 @@ extends Resource
 
 ## Passing ships closer than this get a little ID label.
 @export_range(50.0, 3000.0, 10.0, "suffix:m") var target_label_range: float = 800.0
+## Stations and other big buildings get the green ID label (their name)
+## from this far away, when no ship is close enough to label.
+@export_range(500.0, 20000.0, 100.0, "suffix:m") var station_label_range: float = 6000.0
 
 ## Docking brackets appear around the bay when it's this close.
 @export_range(100.0, 5000.0, 50.0, "suffix:m") var docking_bracket_range: float = 1500.0

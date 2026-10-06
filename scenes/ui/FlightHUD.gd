@@ -23,13 +23,16 @@ extends CanvasLayer
 
 
 ## What a radar contact is.
-enum Kind { ROCK, SHIP, STATION }
+enum Kind { ROCK, SHIP, STATION, PLACE }
 
 ## The rig we're flying, and where we're headed (and its name). The job
 ## being hauled comes from GameState.
 var ship: Ship
 var destination: Node3D
 var destination_name: String = ""
+## Place id -> its station node (set by the flight scene), so the HUD can
+## name stations as you get near (green ID label, like ships).
+var places: Dictionary = {}
 ## The solar system's signature color, used for the HUD's frames.
 var tint := Color.WHITE
 ## Seconds since the flight started (for blinking).
@@ -126,7 +129,7 @@ func hud_size() -> Vector2:
 func nearest_obstacle() -> float:
 	var nearest := INF
 	for contact in contacts:
-		if contact["kind"] != Kind.STATION:
+		if contact["kind"] != Kind.STATION and contact["kind"] != Kind.PLACE:
 			nearest = minf(nearest, ship.global_position.distance_to(contact["position"]) - contact["radius"])
 	return maxf(nearest, 0.0)
 
@@ -177,6 +180,19 @@ func _gather_contacts() -> void:
 	if destination != null:
 		contacts.append({"position": destination.global_position, "radius": 0.0, "kind": Kind.STATION,
 				"label": destination_name})
+	# Stations and other named buildings nearby: their names go on the green
+	# ID label (nothing's painted on the buildings themselves).
+	var naming_range := GameState.tuning.station_label_range
+	for id: String in places:
+		var node := places[id] as Node3D
+		var place := GameState.places.find(id)
+		if node != null and place != null and here.distance_to(node.global_position) < naming_range:
+			contacts.append({"position": node.global_position, "radius": 260.0, "kind": Kind.PLACE,
+					"label": place.display_name.to_upper()})
+	for building: Node3D in get_tree().get_nodes_in_group("named_places"):
+		if here.distance_to(building.global_position) < naming_range:
+			contacts.append({"position": building.global_position, "radius": 400.0, "kind": Kind.PLACE,
+					"label": str(building.get_meta("label", ""))})
 
 
 ## Sizes the HUD picture to the window: as close to `hud_rows` rows as

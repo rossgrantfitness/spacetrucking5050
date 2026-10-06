@@ -140,6 +140,8 @@ worse; let go of boost and it settles.
 **Rocks all the way round.** Stations sit inside a ball of rocks (or ice,
 or junk). Fly in down the clear **traffic lane** that leads to the approach
 ring, or pick your way through. The autopilot always uses the lane.
+Stations have no names painted on them: the green ID label (the one that
+names passing ships) tells you which station you're looking at.
 
 **Mind the cargo.** Hard turns, slides, hard braking and boosting flat out
 rattle the load (the **RIDE** bar under the cargo readout, top right:
@@ -269,6 +271,10 @@ station, its airlock (**BOARD YOUR RIG**) brings you back into your
 hallway. Those need **E** / **A**. To get back from flying, dock at a
 station by flying through its ring, or pause → **Get towed to the truck
 stop**. Your money is in the top-right corner.
+
+**Her TV** has a games console, the TATER-16: walk up to it and press
+**E** / **A** to play Carrot Catch, Comet Tail or Paddle Pods (arrows or
+stick to move, Esc / B to go back or switch it off).
 
 **Your crew.** Dottie (dispatch), Digby (the engine room) and Clem (the
 cargo bay) live aboard, along with the **GALLEY**, **ENGINE** and **CARGO**

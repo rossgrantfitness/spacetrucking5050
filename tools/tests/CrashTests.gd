@@ -79,3 +79,19 @@ func test_crashes_can_be_switched_off() -> void:
 func test_jack_has_something_to_say() -> void:
 	var lines: LineList = load("res://data/dialogue/wreck_lines.tres")
 	check(lines.lines.size() >= 5, "Jacki has a few things to say on the WRECKED card")
+
+
+func test_crashes_knock_you_away_from_what_you_hit() -> void:
+	var tuning := GameState.tuning
+	# Hit something above the rig: it's knocked down.
+	var ship := _ship()
+	ship.bonk(tuning.crash_speed + 10.0, ship.global_position + Vector3(0.0, 3.0, 0.0), Vector3.DOWN)
+	check(ship.out_of_control and ship.flight.velocity.y < -20.0, "hitting the top of the rig sends it down")
+	_done(ship)
+	# Clip something on the left: knocked to the right, spinning about the hit.
+	ship = _ship()
+	ship.bonk(tuning.crash_speed + 10.0, ship.global_position + Vector3(-4.0, 0.0, -10.0), Vector3.RIGHT)
+	check(ship.flight.velocity.x > 20.0, "hitting the left side sends it right")
+	var spin: Vector3 = ship.get("_spin")
+	check(absf(spin.normalized().y) > 0.7, "a hit on the nose's side spins it round like a pushed stick (about the up axis)")
+	_done(ship)

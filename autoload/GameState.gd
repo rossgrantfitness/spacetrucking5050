@@ -86,6 +86,8 @@ const INVOICE_LIMIT: int = 20
 var day: int = 1
 ## The best score in Asteroid Alley, the game on her PC.
 var pc_high_score: int = 0
+## Best scores on the TV console's games (TVConsole.gd): game id -> score.
+var console_scores: Dictionary = {}
 ## What the crew remember (see scenes/hub/ShipLife.gd): days of friendship,
 ## small talk already said, lost things found and handed back.
 var crew_memory: Dictionary = {}
@@ -293,6 +295,7 @@ func to_save_data() -> Dictionary:
 		"invoices": invoices,
 		"day": day,
 		"pc_high_score": pc_high_score,
+		"console_scores": console_scores,
 		"crew_memory": crew_memory,
 	}
 
@@ -364,6 +367,11 @@ func apply_save_data(data: Dictionary) -> void:
 		day = maxi(int(data["day"]), 1)
 	if data.get("pc_high_score") is int or data.get("pc_high_score") is float:
 		pc_high_score = maxi(int(data["pc_high_score"]), 0)
+	if data.get("console_scores") is Dictionary:
+		for game: Variant in data["console_scores"]:
+			var best: Variant = data["console_scores"][game]
+			if best is int or best is float:
+				console_scores[str(game)] = maxi(int(best), 0)
 	if data.get("crew_memory") is Dictionary:
 		# Plain numbers in little lists; anything odd is dropped.
 		for list: Variant in data["crew_memory"]:
@@ -402,6 +410,7 @@ func new_game() -> void:
 	invoices = []
 	day = 1
 	pc_high_score = 0
+	console_scores = {}
 	crew_memory = {}
 	credits_changed.emit()
 

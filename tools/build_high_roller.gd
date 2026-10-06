@@ -88,8 +88,7 @@ func _build_casino() -> Node3D:
 
 	# The giant sign on the tower's front, with chasing bulbs.
 	_box(casino, "SignBoard", Vector3(360.0, 120.0, 10.0), Vector3(0.0, 470.0, -50.0), dark)
-	_sign(casino, "SignName", "THE HIGH ROLLER", 0.45, Color(1.0, 0.4, 0.85), Vector3(0.0, 485.0, -44.0))
-	_sign(casino, "SignSub", "CASINO · HOTEL · BUFFET · NO CLOCKS", 0.18, Color(1.0, 0.85, 0.4), Vector3(0.0, 445.0, -44.0))
+	# (No names painted on the station: the HUD's green ID label names it.)
 	for i in 16:
 		var bulb := _box(casino, "SignBulb", Vector3(10.0, 10.0, 6.0), Vector3(-170.0 + i * 22.7, 528.0, -44.0), _glow(Color(1.0, 0.95, 0.7), 2.4))
 		bulb.set_script(_blinker_script)

@@ -42,6 +42,13 @@ func _on_body_entered(body: Node3D) -> void:
 		_leave()
 
 
+## Goes through the door now (the room calls this when she walks out of the
+## camera's view right next to it; see HubRoom._walk_out_of_frame).
+func walk_through() -> void:
+	if enabled and not needs_button:
+		_leave()
+
+
 func _leave() -> void:
 	var room := HubRoom.find(self)
 	Sfx.play("door", -3.0)
