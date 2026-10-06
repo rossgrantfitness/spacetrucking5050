@@ -257,7 +257,7 @@ func _draw() -> void:
 	outline(Rect2(portrait - Vector2.ONE, Vector2(30, 30)), tint(0.8))
 	# Name plate and the words, typed out so far.
 	var words_left := corner.x + 33.0
-	var name_text := _speaker.comm_name if not _speaker.comm_name.is_empty() else _speaker.display_name
+	var name_text := GameState.names.fill_in(_speaker.comm_name if not _speaker.comm_name.is_empty() else _speaker.display_name).to_upper()
 	text(Vector2(words_left, corner.y + 1.0), name_text.to_upper(), YELLOW)
 	if crackling:
 		text(Vector2(words_left, corner.y + 10.0), "..." if blink(0.3) else "", tint(0.6), BIG)

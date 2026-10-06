@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" path="res://scenes/hub/WalrusVisual.tscn" id="v_Wendell"]
 [ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="d_Pip"]
 [ext_resource type="PackedScene" path="res://scenes/hub/HamsterVisual.tscn" id="v_Pip"]
-
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
 background_color = Color(0.02, 0.02, 0.05, 1)
@@ -37,6 +36,9 @@ radius = 1.2
 radius = 0.3
 height = 1.2
 
+[sub_resource type="BoxShape3D" id="Box_office_door"]
+size = Vector3(3, 2.4, 0.8)
+
 [sub_resource type="BoxShape3D" id="Box_airlock"]
 size = Vector3(1.4, 2, 2.2)
 
@@ -47,7 +49,10 @@ size = Vector3(5, 2, 1.8)
 size = Vector3(22, 6, 18)
 
 [sub_resource type="BoxShape3D" id="Box_zone1"]
-size = Vector3(10, 6, 18)
+size = Vector3(10, 6, 12.5)
+
+[sub_resource type="BoxShape3D" id="Box_zone_office"]
+size = Vector3(7, 6, 5)
 
 [sub_resource type="BoxShape3D" id="Box_zone2"]
 size = Vector3(12, 6, 12)
@@ -76,6 +81,22 @@ environment = SubResource("Environment_room")
 [node name="Set" parent="." instance=ExtResource("2_set")]
 
 [node name="Shots" type="Node3D" parent="."]
+
+[node name="Office" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+
+[node name="Camera" type="Camera3D" parent="Shots/Office"]
+position = Vector3(8.2, 2.7, 8.8)
+rotation = Vector3(-0.231, -2.5014, 0)
+fov = 60
+near = 0.1
+far = 200.0
+
+[node name="Zone" type="Area3D" parent="Shots/Office"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Office/Zone"]
+position = Vector3(12.5, 3, 12)
+shape = SubResource("Box_zone_office")
 
 [node name="Atrium" type="Node3D" parent="Shots"]
 script = ExtResource("3_shot")
@@ -106,7 +127,7 @@ far = 200.0
 [node name="Zone" type="Area3D" parent="Shots/Arrival"]
 
 [node name="Shape" type="CollisionShape3D" parent="Shots/Arrival/Zone"]
-position = Vector3(15, 3, 6)
+position = Vector3(15, 3, 3.25)
 shape = SubResource("Box_zone1")
 
 [node name="Window" type="Node3D" parent="Shots"]
@@ -195,6 +216,9 @@ shape = SubResource("Box_zone6")
 position = Vector3(17.5, 0, 9)
 rotation = Vector3(0, 1.5708, 0)
 
+
+[node name="FromOffice" type="Marker3D" parent="Spawns"]
+position = Vector3(12, 0, 12.4)
 [node name="Exits" type="Node3D" parent="."]
 
 [node name="Airlock" type="Area3D" parent="Exits"]
@@ -208,6 +232,16 @@ launch_from = "truck_stop"
 
 [node name="Shape" type="CollisionShape3D" parent="Exits/Airlock"]
 shape = SubResource("Box_airlock")
+
+[node name="OfficeDoor" type="Area3D" parent="Exits"]
+position = Vector3(12, 1.2, 14.3)
+script = ExtResource("4_exit")
+prompt = "ORBITALEX OFFICE"
+target_scene = "res://scenes/hub/OrbitalExOffice.tscn"
+target_spawn = "FromTruckStop"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/OfficeDoor"]
+shape = SubResource("Box_office_door")
 
 [node name="People" type="Node3D" parent="."]
 
@@ -369,15 +403,6 @@ prompt = "LOOK"
 lines = PackedStringArray("HOME & DECOR. Lamps, rugs, plants that are hard to kill. Opening soon.")
 
 [node name="Shape" type="CollisionShape3D" parent="Things/HomeDecor"]
-shape = SubResource("Sphere_use")
-
-[node name="Insurance" type="Area3D" parent="Things"]
-position = Vector3(12, 1, 13.9)
-script = ExtResource("9_examine")
-prompt = "LOOK"
-lines = PackedStringArray("SPACE MUTUAL INSURANCE. Coverage for rigs, cargo and \"acts of comet\". Opening soon.")
-
-[node name="Shape" type="CollisionShape3D" parent="Things/Insurance"]
 shape = SubResource("Sphere_use")
 
 [node name="Motel" type="Area3D" parent="Things"]

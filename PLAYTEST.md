@@ -1,3 +1,55 @@
+# Playtest: beta step 2, the trucking company (round 27 below)
+
+**What you asked for:**
+- Jacki works for a trucking company at the truck stop.
+- The boss is a jerk in a shirt and tie, and you take jobs from him.
+- Pay shows at 10×, then the company takes 90%.
+- You check in after every job.
+- The game opens on the way to collect a pitiful check.
+- You can buy the company for an absurd sum.
+- There's a completion %.
+- Mid-task you added: people tell you their problems, you tell them to call the company, and the boss has their job waiting when you check in.
+- And the office: "an entry way with a nice greeter, a lobby, and a desk with the boss man... dramatic camera angles, think FF8".
+
+**Time needed:** 20 to 30 minutes (start a **new game**: your old save
+loads fine, but you'd miss the opening).
+
+## What to do
+
+1. **New game.** You're already flying, cruising into the truck stop.
+   Raccoony calls: the boss has your check. Follow the yellow diamond,
+   fly slow through the ring.
+2. In the truck stop, the diamond points at the **ORBITALEX OFFICE**
+   glass doors on the front wall. Walk in. Say hi to **Bonnie**, then
+   walk the red carpet to **Dale Pembrook**. Watch the camera cut as you
+   go (three angles).
+3. Get your check: 3,000 contract, minus 2,700 in fees. Hear Jacki out,
+   then he sends you to Marge.
+4. Do Marge's pie run. At Tidewater, talk to **Gill** twice (once for
+   the pies; the second time she has a problem, with a "!" over her).
+   Jacki tells her to call OrbitalEx.
+5. Back at the truck stop, walk into the office: your pie check, then
+   the boss hands you Gill's order.
+6. Optional: F10 → +5,000 credits a few times, talk to the boss with
+   nothing waiting, and look at the BUY ORBITALEX price and your
+   completion %. (Buying takes 2,500,000: F10 can't get you there
+   quickly. Say if you want a debug button for it.)
+
+## Questions
+
+1. Does the opening land? Do you feel Jacki's "...three hundred?"
+2. The office cameras: do they feel FF8 enough? Which angle is best,
+   and which would you change?
+3. Checks pile up at the office instead of blocking new jobs. Happy
+   with that, or should you **have** to check in before the next job?
+4. "People tell you problems → call the company → the boss has the
+   job": is that how you pictured it? Want every client job to work
+   like this?
+5. Is 2,500,000 the right kind of "ridiculous" for buying the company?
+   (It gets balanced properly in step 5.)
+
+---
+
 # Playtest: round 27, looking around (round 26's overdrive below)
 
 **What you asked for:** the mouse should swing the camera around the rig

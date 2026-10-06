@@ -8,9 +8,14 @@ class_name HubServices
 ## are in res://data/jobs/ and res://data/upgrades/.
 
 
+## The company's words (fees, the first check, the buyout) and the boss.
+const COMPANY: CompanyLines = preload("res://data/company/company.tres")
+const BOSS: NPCData = preload("res://data/npcs/company_boss.tres")
+
+
 ## Opens a menu by name ("job_board", "fuel", "mechanic", "jukebox",
-## "vending", "slots", "computer", "console", "bed") and waits until the player is done
-## with it.
+## "vending", "slots", "computer", "console", "bed", "check_in",
+## "company_office") and waits until the player is done with it.
 static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 	match menu:
 		"computer":
@@ -29,6 +34,10 @@ static func open(menu: String, tree: SceneTree, place_id: String) -> void:
 				await fuel(tree, place.display_name + " PUMPS", "Safe travels.", place.fuel_price_factor)
 		"mechanic":
 			await mechanic(tree)
+		"check_in":
+			await check_in(tree)
+		"company_office":
+			await company_office(tree)
 		"jukebox":
 			await jukebox(tree)
 		"vending":
@@ -77,6 +86,10 @@ static func sleep(tree: SceneTree) -> void:
 
 ## "Take the job?" Returns whether the player took it.
 static func offer_job(tree: SceneTree, job: JobData) -> bool:
+	if GameState.tuning.checkin_before_new_job and not GameState.checks.is_empty() and not GameState.has_flag("owns_company"):
+		Sfx.play("nope")
+		await MenuPanel.ask(tree, "CHECK IN FIRST", GameState.names.fill_in("{boss} wants his paperwork. Check in at the {company} office at the truck stop before you take another load."), [{"text": "OKAY"}])
+		return false
 	if not GameState.active_job_id.is_empty():
 		await MenuPanel.ask(tree, "ALREADY HAULING", "You've already got a load in the back. Deliver it first.", [{"text": "OKAY"}])
 		return false
@@ -147,13 +160,14 @@ static func job_summary(job: JobData) -> String:
 	var currency := GameState.names.currency_short
 	var minutes := Economy.job_trip_minutes(job)
 	var road := ", about %s on the road" % Economy.span_text(minutes).to_lower() if minutes > 0.0 else ""
-	var words := "%s wants it at %s%s. Pays %d %s. Weighs %s%s." % [job.client_name, to.display_name if to != null else "?",
-			road, job.base_pay, currency, HudWidget.tons_text(job.weight, true), _heft_note(job)]
+	# (Quoted at the full contract value. The company's cut comes off at check-in.)
+	var words := "%s wants it at %s%s. Contract: %d %s. Weighs %s%s." % [job.client_name, to.display_name if to != null else "?",
+			road, Economy.contract_value(job.base_pay), currency, HudWidget.tons_text(job.weight, true), _heft_note(job)]
 	if job.is_fragile():
 		var kind := {"perishable": "PERISHABLE: up to +%d %s if it arrives fresh.", "live": "LIVE CARGO: up to +%d %s if they arrive happy."}
-		words += " " + (kind.get(job.care_kind, "FRAGILE: up to +%d %s if it arrives without a scratch.") as String) % [job.care_bonus, currency]
+		words += " " + (kind.get(job.care_kind, "FRAGILE: up to +%d %s if it arrives without a scratch.") as String) % [Economy.contract_value(job.care_bonus), currency]
 	if job.is_rush():
-		words += " RUSH: +%d %s if you make it in %s." % [job.rush_bonus, currency, HudWidget.clock(job.rush_seconds)]
+		words += " RUSH: +%d %s if you make it in %s." % [Economy.contract_value(job.rush_bonus), currency, HudWidget.clock(job.rush_seconds)]
 	if not job.description.is_empty():
 		words += "\n" + job.description
 	return words
@@ -457,15 +471,20 @@ static func show_payout(tree: SceneTree) -> void:
 	var lines := PackedStringArray()
 	lines.append("%s for %s, %d%% intact." % [pay["cargo_name"], pay["client_name"], roundi(float(pay["condition"]) * 100.0)])
 	lines.append("")
-	lines.append("Base pay:  %d %s" % [pay["base"], currency])
+	# Shown at the full contract value; the company's cut comes off at check-in.
+	lines.append("Contract:  %d %s" % [Economy.contract_value(int(pay["base"])), currency])
 	if int(pay["care"]) > 0:
-		lines.append("Care bonus:  +%d %s" % [pay["care"], currency])
+		lines.append("Care bonus:  +%d %s" % [Economy.contract_value(int(pay["care"])), currency])
 	if int(pay["rush"]) > 0:
-		lines.append("Rush bonus:  +%d %s" % [pay["rush"], currency])
+		lines.append("Rush bonus:  +%d %s" % [Economy.contract_value(int(pay["rush"])), currency])
 	if int(pay.get("hold", 0)) > 0:
-		lines.append("Big hold bonus:  +%d %s" % [pay["hold"], currency])
+		lines.append("Big hold bonus:  +%d %s" % [Economy.contract_value(int(pay["hold"])), currency])
 	lines.append("")
-	lines.append("TOTAL:  +%d %s" % [pay["total"], currency])
+	lines.append("CONTRACT TOTAL:  %d %s" % [Economy.contract_value(int(pay["total"])), currency])
+	if pay.has("paid_now"):
+		lines.append("Paid to you, all of it (you own the company):  +%d %s" % [pay["paid_now"], currency])
+	else:
+		lines.append(GameState.names.fill_in("Your check is waiting at the {company} office at the truck stop. Check in with {boss} to collect it."))
 	if int(pay.get("tab_paid", 0)) > 0:
 		lines.append("Paid off your tab:  -%d %s" % [pay["tab_paid"], currency])
 	lines.append("")
@@ -482,6 +501,169 @@ static func show_payout(tree: SceneTree) -> void:
 		Sfx.play("pickup")
 	await MenuPanel.ask(tree, "DELIVERED!", "\n".join(lines), [{"text": "NICE"}])
 	await show_bills(tree)
+
+
+## CHECK-IN at the company office: every check waiting for you, each with
+## the company's cut taken off (itemized, insultingly), and what you
+## actually take home. The very first one comes with a scene.
+static func check_in(tree: SceneTree) -> void:
+	if GameState.checks.is_empty():
+		await MenuPanel.ask(tree, "NO CHECKS", GameState.names.fill_in("Nothing waiting for you. {boss} looks almost disappointed."), [{"text": "OKAY"}])
+		return
+	var first := not GameState.has_flag("first_check")
+	var result := GameState.collect_checks()
+	var currency := GameState.names.currency_short
+	var cut := Economy.company_cut()
+	var lines := PackedStringArray()
+	for check: Dictionary in result["checks"]:
+		var net := int(check.get("total", 0))
+		var contract := Economy.contract_value(net)
+		lines.append("%s for %s" % [check.get("cargo_name", "A load"), check.get("client_name", "somebody")])
+		lines.append("Contract:  %d %s" % [contract, currency])
+		lines.append(GameState.names.fill_in("{company} fees (%d%%):  -%d %s" % [roundi(cut * 100.0), contract - net, currency]))
+		for fee in fee_breakdown(contract - net):
+			lines.append("      %s:  -%d" % [fee[0], fee[1]])
+		lines.append("YOUR CHECK:  %d %s" % [net, currency])
+		lines.append("")
+	if result["checks"].size() > 1:
+		lines.append("ALL TOGETHER:  +%d %s" % [result["total"], currency])
+	if int(result["tab_paid"]) > 0:
+		lines.append("Paid off your tab:  -%d %s" % [result["tab_paid"], currency])
+	lines.append("Wallet: %d %s" % [GameState.credits, currency])
+	await MenuPanel.ask(tree, GameState.names.fill_in("{company} · PAY TO THE ORDER OF {bunny}").to_upper(), "\n".join(lines), [{"text": "..." if first else "SIGH"}])
+	if first:
+		GameState.set_flag("first_check")
+		await Dialogue.say(GameState.names.bunny_name, COMPANY.first_check_reaction, Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
+		await Dialogue.say(GameState.names.fill_in("{boss}"), COMPANY.first_check_boss, BOSS.voice_pitch, BOSS)
+		GameState.set_flag("boss_sent_to_marge")
+	GameState.save_game()
+
+
+## The company's cut of `fees`, itemized (see fee_items in company.tres):
+## [[label, amount], ...] adding up to exactly `fees`.
+static func fee_breakdown(fees: int) -> Array:
+	var items: Array = []
+	var shares := 0.0
+	for item in COMPANY.fee_items:
+		shares += float(item.get_slice("|", 1))
+	var left := fees
+	for i in COMPANY.fee_items.size():
+		var item := COMPANY.fee_items[i]
+		var amount := left if i == COMPANY.fee_items.size() - 1 else roundi(fees * float(item.get_slice("|", 1)) / maxf(shares, 1.0))
+		left -= amount
+		items.append([GameState.names.fill_in(item.get_slice("|", 0)), amount])
+	return items
+
+
+## The boss's office. Checking in: your checks first, then any new orders
+## (jobs people called in). With nothing waiting, the office menu: check
+## the orders, or (one day) buy the company.
+static func company_office(tree: SceneTree) -> void:
+	var checked_in := false
+	if not GameState.checks.is_empty():
+		await check_in(tree)
+		checked_in = true
+	if not GameState.waiting_orders().is_empty() and GameState.active_job_id.is_empty():
+		await hand_out_orders(tree)
+		checked_in = true
+	if checked_in:
+		return
+	var currency := GameState.names.currency_short
+	while true:
+		var options: Array = []
+		var price := GameState.tuning.company_price
+		var owner := GameState.has_flag("owns_company")
+		if not GameState.checks.is_empty():
+			options.append({"text": "COLLECT YOUR CHECKS (%d)" % GameState.checks.size(), "description": "What you've delivered since you last checked in. Minus fees."})
+		var orders := GameState.waiting_orders()
+		if not orders.is_empty():
+			options.append({"text": "NEW ORDERS (%d)" % orders.size(), "description": "Jobs people called in. %s" % ("" if GameState.active_job_id.is_empty() else "Deliver the one you're hauling first.")})
+		if not owner:
+			var share := clampf(float(GameState.credits) / float(price), 0.0, 1.0)
+			var rng := RandomNumberGenerator.new()
+			rng.randomize()
+			var shrug := COMPANY.not_yet[rng.randi_range(0, COMPANY.not_yet.size() - 1)] if not COMPANY.not_yet.is_empty() else ""
+			options.append({"text": GameState.names.fill_in("BUY {company}").to_upper(), "detail": "%d %s" % [price, currency],
+					"description": ("The whole company, signs and all. You've got %d %s (%d%% of the way)." % [GameState.credits, currency, floori(share * 100.0)])
+						+ ("" if GameState.credits >= price else " " + GameState.names.fill_in(shrug)),
+					"disabled": GameState.credits < price})
+		options.append({"text": "LEAVE", "description": ""})
+		var title := GameState.names.fill_in("{company} · REGIONAL OFFICE").to_upper()
+		var body := "Completion: %d%%." % Completion.percent()
+		if owner:
+			body = GameState.names.fill_in("It's your company. {boss} files things. Completion: %d%%.") % Completion.percent()
+		var pick := await MenuPanel.ask(tree, title, body, options)
+		if pick < 0 or pick >= options.size() - 1:
+			return
+		var picked: String = options[pick]["text"]
+		if picked.begins_with("COLLECT"):
+			await check_in(tree)
+		elif picked.begins_with("NEW ORDERS"):
+			await hand_out_orders(tree)
+		elif picked.begins_with("BUY"):
+			await buy_company(tree)
+			return
+
+
+## The boss hands over the oldest new order (a job someone called in; see
+## Conversation.places_order), and you can take it or leave it for later.
+static func hand_out_orders(tree: SceneTree) -> void:
+	var orders := GameState.waiting_orders()
+	if orders.is_empty():
+		return
+	var job := orders[0]
+	var lines := COMPANY.owner_order_lines if GameState.has_flag("owns_company") else COMPANY.order_lines
+	await Dialogue.say(GameState.names.fill_in("{boss}"), _order_words(lines, job), BOSS.voice_pitch, BOSS)
+	if await offer_job(tree, job) and orders.size() > 1:
+		var more := PackedStringArray()
+		for line in COMPANY.more_orders:
+			more.append(line.replace("{count}", str(orders.size() - 1)))
+		await Dialogue.say(GameState.names.fill_in("{boss}"), more, BOSS.voice_pitch, BOSS)
+
+
+## Someone said they'll call the company: their job waits at the office as
+## a new order (GameState.orders).
+static func order_placed(tree: SceneTree, job: JobData) -> void:
+	if job.id in GameState.orders or job.id in GameState.finished_jobs or job.id == GameState.active_job_id:
+		return
+	GameState.place_order(job.id)
+	GameState.save_game()
+	Sfx.play("pickup")
+	var words := _order_words(PackedStringArray([COMPANY.order_placed]), job)
+	await MenuPanel.ask(tree, "NEW ORDER COMING", GameState.names.fill_in(words[0]), [{"text": "GOT IT"}])
+
+
+## `lines` with {client}, {cargo} and {to} filled in for `job`.
+static func _order_words(lines: PackedStringArray, job: JobData) -> PackedStringArray:
+	var to := GameState.places.find(job.to_place)
+	var filled := PackedStringArray()
+	for line in lines:
+		filled.append(line.replace("{client}", job.client_name).replace("{cargo}", job.cargo_name)
+				.replace("{to}", to.display_name if to != null else job.to_place))
+	return filled
+
+
+## Buying the company: the end of the story (and the start of keeping
+## every credit you earn).
+static func buy_company(tree: SceneTree) -> void:
+	var price := GameState.tuning.company_price
+	var currency := GameState.names.currency_short
+	var sure := await MenuPanel.ask(tree, GameState.names.fill_in("BUY {company}?").to_upper(),
+			"%d %s. All of it. Your wallet will be very empty, and the company will be very yours." % [price, currency],
+			[{"text": "BUY IT"}, {"text": "NOT YET"}])
+	if sure != 0 or not GameState.spend(price):
+		return
+	var jacki := PackedStringArray()
+	for line in COMPANY.buyout_jacki:
+		jacki.append(line.replace("{price}", "%d %s" % [price, currency]))
+	await Dialogue.say(GameState.names.bunny_name, jacki, Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
+	await Dialogue.say(GameState.names.fill_in("{boss}"), COMPANY.buyout_boss, BOSS.voice_pitch, BOSS)
+	GameState.set_flag("owns_company")
+	Sfx.play("job_accept")
+	await MenuPanel.ask(tree, GameState.names.fill_in("YOU OWN {company}").to_upper(),
+			GameState.names.fill_in("Every sign, every rig, every coffee machine, and one regional manager.\n\nFrom now on there's no cut: every job pays you the whole contract.\n\nCompletion: %d%%. There's still plenty out there.") % Completion.percent(),
+			[{"text": "NOT BAD FOR A BUNNY"}])
+	GameState.save_game()
 
 
 ## The weekly bills card, if bills came due (GameState.pending_bills).

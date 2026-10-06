@@ -3,7 +3,8 @@ extends SceneTree
 ## autopilot, to shake out errors in the new system:
 ##   with Sal's cards loaded, the cruise autopilot flies into The High
 ##   Roller's ring -> climb out in the casino: payout card -> talk to Sal
-##   (he introduces himself, then offers the jumpsuits; take them) -> pull
+##   (he introduces himself, then tells her his problem and calls the
+##   company: a new order for Marge's karaoke machine) -> pull
 ##   the slot machine a few times -> board the rig again.
 ## It checks the delivery paid and opened up Glimmer, Sal's story moved on,
 ## the slots took a pull, and the rig launches from the casino.
@@ -18,19 +19,17 @@ var _frame := 0
 var _step := Step.FLY
 var _step_started := 0
 var _game: Node
-var _credits_before := 0
 
 
 func _initialize() -> void:
 	root.get_node("SaveSystem").set("save_path", "user://smoke_test_save.json")
 	_game = root.get_node("GameState")
 	_game.call("new_game")
-	for flag in ["met_marge", "first_mission_done", "glimmer_heard"]:
+	for flag in ["met_boss", "met_marge", "first_mission_done", "glimmer_heard"]:
 		_game.call("set_flag", flag)
 	var jobs: Resource = _game.get("jobs")
 	_game.call("accept_job", jobs.call("find", "glimmer_cards"))
 	_game.set("launch_from", "truck_stop")
-	_credits_before = _game.get("credits")
 	change_scene_to_file("res://scenes/flight/FlightSandbox.tscn")
 
 
@@ -57,10 +56,10 @@ func _process(_delta: float) -> bool:
 				_player().global_position = Vector3(-7.0, 0.0, -3.3)
 				_next(Step.TALK_TO_SAL)
 		Step.TALK_TO_SAL:
-			# Keep pressing E: his hello, then his pitch, then "TAKE THE JOB".
+			# Keep pressing E: his hello, then his problem, then "GOT IT".
 			if waited % 8 == 0:
 				_tap("interact")
-			if _game.get("active_job_id") == "sal_jumpsuits" and not _busy():
+			if "sal_jumpsuits" in (_game.get("orders") as Array) and not _busy():
 				_player().global_position = Vector3(6.6, 0.0, 2.6)
 				_next(Step.PLAY_SLOTS)
 		Step.PLAY_SLOTS:
@@ -110,8 +109,9 @@ func _process(_delta: float) -> bool:
 func _check_delivery() -> void:
 	if not _game.call("has_flag", "glimmer_open"):
 		push_error("Smoke Glimmer: delivering Sal's cards should open up the Glimmer System")
-	if int(_game.get("credits")) <= _credits_before:
-		push_error("Smoke Glimmer: delivering the cards should pay")
+	var checks: Array = _game.get("checks")
+	if checks.is_empty() or str((checks.back() as Dictionary).get("job")) != "glimmer_cards":
+		push_error("Smoke Glimmer: delivering the cards should leave a check at the office")
 	if not (_game.get("pending_payout") as Dictionary).is_empty():
 		push_error("Smoke Glimmer: the payout card should have been shown")
 

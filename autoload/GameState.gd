@@ -124,6 +124,18 @@ var crew_memory: Dictionary = {}
 ## The pay breakdown from a delivery that just happened, shown when you walk
 ## inside ({} = nothing to show).
 var pending_payout: Dictionary = {}
+## Checks waiting at the OrbitalEx office (the truck stop): one per
+## delivery, until you check in (HubServices.check_in). Each is a delivery's
+## pay breakdown (see deliver_at), at the employee rate. Owning the company,
+## you're paid on the spot instead.
+var checks: Array[Dictionary] = []
+## The first check (a new game starts just after this delivery).
+const PROLOGUE_CHECK := {"job": "prologue", "cargo_name": "Bulk kitty litter", "client_name": "Fizzwick Pet Supply",
+		"base": 300, "care": 0, "rush": 0, "hold": 0, "total": 300, "condition": 1.0}
+## New orders waiting at the OrbitalEx office (job ids): people tell you
+## their problems, you tell them to call the company (see Conversation's
+## places_order), and next time you check in, the boss hands you the job.
+var orders: Array[String] = []
 ## The last weekly bills, waiting to be shown on the bills card (or {}).
 var pending_bills: Dictionary = {}
 
@@ -148,11 +160,11 @@ func _notification(what: int) -> void:
 
 # --- Story flags ------------------------------------------------------------------
 
-## Whether the opening is still going: talk to Raccoony, take the wheel,
-## pull into the truck stop. (Saves from before the opening existed count
-## as past it.)
+## Whether the opening is still going: pull into the truck stop and
+## collect your (tiny) check from the boss. (Saves from before the opening
+## existed count as past it.)
 func in_opening() -> bool:
-	return not has_flag("took_the_wheel") and not has_flag("met_marge")
+	return not has_flag("met_boss") and not has_flag("met_marge")
 
 
 func has_flag(flag: String) -> bool:
@@ -241,6 +253,7 @@ func accept_job(job: JobData) -> bool:
 	if job == null or not active_job_id.is_empty():
 		return false
 	active_job_id = job.id
+	orders.erase(job.id)
 	job_seconds = 0.0
 	job_started = Economy.now_minutes()
 	rig["cargo"] = 1.0
@@ -264,14 +277,20 @@ func deliver_at(place_id: String) -> bool:
 	pay["cargo_name"] = job.cargo_name
 	pay["client_name"] = job.client_name
 	pay["condition"] = rig.get("cargo", 1.0)
-	add_credits(pay["total"])
-	# How long it was on the road (the calendar ran the whole way), the rig
-	# earns experience, and any tab gets paid off.
+	# Working for OrbitalEx, the check waits at their office until you check
+	# in (minus their cut). Owning the company, it's all yours, right now.
+	if has_flag("owns_company"):
+		pay["paid_now"] = Economy.take_home(int(pay["total"]))
+		add_credits(int(pay["paid_now"]))
+	else:
+		checks.append(pay.duplicate())
+	# How long it was on the road (the calendar ran the whole way), and the
+	# rig earns experience.
 	pay["road_minutes"] = maxf(Economy.now_minutes() - job_started, 0.0)
 	pay["xp"] = Economy.xp_for(int(pay["total"]))
 	pay["levels"] = Economy.add_xp(int(pay["xp"]))
 	pay["level"] = Economy.level_of()
-	pay["tab_paid"] = Economy.settle_tab()
+	pay["tab_paid"] = Economy.settle_tab() if has_flag("owns_company") else 0
 	pay["arrived_day"] = day
 	var place := places.find(place_id)
 	invoices.append({"cargo": job.cargo_name, "client": job.client_name,
@@ -361,6 +380,8 @@ func to_save_data() -> Dictionary:
 		"console_scores": console_scores,
 		"tasted": tasted,
 		"crew_memory": crew_memory,
+		"checks": checks,
+		"orders": orders,
 	}
 
 
@@ -368,6 +389,15 @@ func to_save_data() -> Dictionary:
 ## new-game value, so old or hand-edited saves can't break anything.
 func apply_save_data(data: Dictionary) -> void:
 	new_game()
+	checks = []
+	if data.get("checks") is Array:
+		for check: Variant in data["checks"]:
+			if check is Dictionary and ((check as Dictionary).get("total") is int or (check as Dictionary).get("total") is float):
+				checks.append(check as Dictionary)
+	if data.get("orders") is Array:
+		for id: Variant in data["orders"]:
+			if jobs.find(str(id)) != null:
+				orders.append(str(id))
 	if data.get("credits") is float or data.get("credits") is int:
 		credits = int(data["credits"])
 	if data.get("flags") is Array:
@@ -469,6 +499,40 @@ func apply_save_data(data: Dictionary) -> void:
 	credits_changed.emit()
 
 
+## Someone called the company for a job (`job_id`): it waits at the office
+## as a new order, unless it's already waiting, being hauled or done.
+func place_order(job_id: String) -> void:
+	if job_id in orders or job_id == active_job_id or job_id in finished_jobs:
+		return
+	orders.append(job_id)
+
+
+## The orders waiting at the office that can be taken now, oldest first.
+func waiting_orders() -> Array[JobData]:
+	var found: Array[JobData] = []
+	for id in orders:
+		var job := jobs.find(id)
+		if job != null and job.id != active_job_id and job_available(job):
+			found.append(job)
+	return found
+
+
+## Cashes every check waiting at the office: adds what you take home and
+## pays off any tab. Returns {"checks": the checks, "total": what you got,
+## "tab_paid"}.
+func collect_checks() -> Dictionary:
+	var collected := checks.duplicate()
+	var total := 0
+	for check in collected:
+		total += int(check.get("total", 0))
+	checks.clear()
+	if total > 0:
+		add_credits(total)
+	var tab_paid := Economy.settle_tab()
+	save_game()
+	return {"checks": collected, "total": total, "tab_paid": tab_paid}
+
+
 ## Back to the very start: no money to speak of, no story yet.
 func new_game() -> void:
 	credits = STARTING_CREDITS
@@ -490,6 +554,8 @@ func new_game() -> void:
 	event_history = {}
 	pending_payout = {}
 	pending_bills = {}
+	checks = [PROLOGUE_CHECK.duplicate()]  # The game starts just after a delivery.
+	orders = []
 	invoices = []
 	day = 1
 	minute = tuning.start_hour * 60.0

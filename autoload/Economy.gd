@@ -170,6 +170,27 @@ func pay_bills(weeks: int) -> Dictionary:
 
 ## Pays the tab off from the wallet as far as it'll go (after a delivery).
 ## Returns how much was paid off.
+## OrbitalEx's cut of a job right now: tuning's company_cut while you work
+## for them, nothing once you own the company.
+func company_cut() -> float:
+	return 0.0 if GameState.has_flag("owns_company") else GameState.tuning.company_cut
+
+
+## A job's full CONTRACT value: what the client pays the company. Jobs are
+## quoted at this (the job board, the HUD, the delivery card), and you
+## keep `net_pay` of it after the company's cut (see "The company" in
+## tuning.tres). Always the employee-rate figure, owner or not.
+func contract_value(net_pay: int) -> int:
+	return roundi(net_pay / maxf(1.0 - GameState.tuning.company_cut, 0.01))
+
+
+## What you actually take home from a job worth `net_pay` at the employee
+## rate: the same, while you work for OrbitalEx; the whole contract once
+## it's yours.
+func take_home(net_pay: int) -> int:
+	return contract_value(net_pay) if GameState.has_flag("owns_company") else net_pay
+
+
 func settle_tab() -> int:
 	var paying := mini(GameState.tab, GameState.credits)
 	if paying <= 0:

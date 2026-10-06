@@ -3,8 +3,8 @@ extends HudWidget
 ## Top right, while you're hauling a job:
 ## - CARGO: how intact the load is. Bonks knock it down, and it ticks down
 ##   a percent at a time so you see it happen.
-## - PAY: what the job is on track to pay right now (base pay plus any
-##   bonuses still in reach). It ticks up and down as bonuses are earned or
+## - PAY: what the job's contract is on track to pay right now (base pay
+##   plus any bonuses still in reach), before the company's cut. It ticks up and down as bonuses are earned or
 ##   slip away.
 ## - LOAD: how much it weighs, galactic style ("450M T"). Green is light
 ##   for this rig, yellow heavy, red overloaded (more than the rig's rated
@@ -49,7 +49,7 @@ func hud_step(delta: float, numbers_due: bool) -> void:
 		_shown_cargo -= 1.0
 		_cargo_flash = 0.4
 	# Pay counts toward its new value in a few jumps.
-	var pay := job.pay_for(rig.cargo_condition, GameState.job_seconds)
+	var pay := Economy.contract_value(job.pay_for(rig.cargo_condition, GameState.job_seconds))  # (The contract: the company's cut comes off at check-in.)
 	if _shown_pay < 0:
 		_shown_pay = pay
 	elif pay != _shown_pay:

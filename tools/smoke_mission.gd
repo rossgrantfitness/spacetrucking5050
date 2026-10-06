@@ -23,7 +23,6 @@ var _frame := 0
 var _step := Step.ARRIVE
 var _step_started := 0
 var _game: Node
-var _credits_before := 0
 var _rolled_out := false
 
 
@@ -31,7 +30,7 @@ func _initialize() -> void:
 	root.get_node("SaveSystem").set("save_path", "user://smoke_test_save.json")
 	_game = root.get_node("GameState")
 	_game.call("new_game")
-	_credits_before = _game.get("credits")
+	_game.call("set_flag", "met_boss")  # (smoke_opening.gd plays the boss scene.)
 	_game.set("next_spawn", "FromShip")
 	change_scene_to_file("res://scenes/hub/TruckStop.tscn")
 
@@ -142,8 +141,10 @@ func _walk_to_cockpit(waited: int) -> void:
 func _check_results() -> void:
 	if not _game.call("has_flag", "first_mission_done"):
 		push_error("Smoke test: delivering the pies to Tidewater should finish the first mission")
-	if int(_game.get("credits")) <= _credits_before:
-		push_error("Smoke test: delivering the pies should pay")
+	# The check waits at the company office until she checks in.
+	var checks: Array = _game.get("checks")
+	if checks.is_empty() or str((checks.back() as Dictionary).get("job")) != "first_long_haul":
+		push_error("Smoke test: delivering the pies should leave a check at the office")
 	if not (_game.get("pending_payout") as Dictionary).is_empty():
 		push_error("Smoke test: the payout card should have been shown")
 	if _game.get("launch_from") != "tidewater":

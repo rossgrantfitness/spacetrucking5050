@@ -5,11 +5,11 @@
 [resource]
 script = ExtResource("1_job")
 id = "sal_jumpsuits"
-cargo_name = "Sequined jumpsuits (fragile)"
-client_name = "Marge's Diner (from Sal)"
-description = "Sal's lounge act retired. Her jumpsuits are going to Marge's karaoke night. Don't snag the sequins."
-from_place = "high_roller"
-to_place = "truck_stop"
+cargo_name = "Marge's karaoke machine (fragile)"
+client_name = "Sal Grinwell, The High Roller"
+description = "Sal's lounge act retired, so Marge is doing a guest night at the casino. Her karaoke machine is older than you. Be gentle."
+from_place = "truck_stop"
+to_place = "high_roller"
 weight = 200000000.0
 base_pay = 1300
 care_kind = "fragile"

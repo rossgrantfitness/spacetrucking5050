@@ -96,7 +96,7 @@ func test_glimmer_jobs_line_up() -> void:
 		if job == null:
 			continue
 		check(GameState.places.find(job.from_place) != null and GameState.places.find(job.to_place) != null, "%s goes between real places" % id)
-		check(job.from_place == "high_roller" or job.to_place == "high_roller", "%s comes from or goes to the casino" % id)
+		check(job.from_place == "high_roller" or job.to_place == "high_roller" or job.client_name.begins_with("Sal"), "%s comes from or goes to the casino (or Sal's paying)" % id)
 	var cards := GameState.jobs.find("glimmer_cards")
 	check(cards.completes_flag == "glimmer_open" and cards.from_place == "base", "the cards come from dispatch (aboard the rig) and open up Glimmer")
 	check(GameState.jobs.find("sal_jumpsuits").requires_flag == "glimmer_open", "Sal's first story job waits for the first delivery")
@@ -119,15 +119,20 @@ func test_sals_story_goes_in_order() -> void:
 	check(meet != null and "sal_met" in meet.sets_flags, "then Sal introduces himself")
 	GameState.set_flag("sal_met")
 	var pitch := sal.pick_conversation()
-	check(pitch != null and pitch.offers_job != null and pitch.offers_job.id == "sal_jumpsuits", "then he offers the jumpsuits")
-	GameState.accept_job(GameState.jobs.find("sal_jumpsuits"))
-	GameState.deliver_at("truck_stop")
+	check(pitch != null and pitch.places_order != null and pitch.places_order.id == "sal_jumpsuits", "then he tells her his problem, and calls the company for Marge's karaoke machine")
+	_hear(pitch)
+	check(GameState.waiting_orders().size() == 1 and GameState.waiting_orders()[0].id == "sal_jumpsuits", "...which waits at the office as a new order")
+	check(sal.pick_conversation().places_order == null, "once he's called, he doesn't tell it all again")
+	GameState.accept_job(GameState.waiting_orders()[0])
+	check(GameState.orders.is_empty(), "taking the order clears it from the office")
+	GameState.deliver_at("high_roller")
 	var marge: NPCData = load("res://data/npcs/truckstop_control.tres")
 	var sequins := marge.pick_conversation()
-	check(sequins != null and "marge_sequins" in sequins.sets_flags, "Marge loves the sequins")
+	check(sequins != null and "marge_sequins" in sequins.sets_flags, "Marge loves her guest night")
 	var next := sal.pick_conversation()
-	check(next != null and next.offers_job != null and next.offers_job.id == "sal_slot_machine", "then the slot machine for Gill")
-	GameState.accept_job(GameState.jobs.find("sal_slot_machine"))
+	check(next != null and next.places_order != null and next.places_order.id == "sal_slot_machine", "then the slot machine for Gill")
+	_hear(next)
+	GameState.accept_job(GameState.waiting_orders()[0])
 	GameState.deliver_at("tidewater")
 	var gill: NPCData = load("res://data/npcs/tidewater_gill.tres")
 	var why := gill.pick_conversation()
@@ -164,3 +169,41 @@ func test_the_slot_machine_pays_less_than_it_takes() -> void:
 	var back := float(paid) / float(spins * tuning.slots_price)
 	check(back < 1.0, "over time, the house wins (it gives back %.0f%%)" % (back * 100.0))
 	check(back > 0.75, "...but only a little (it gives back %.0f%%)" % (back * 100.0))
+
+
+## As if she heard `talk` all the way through (its flags and its order).
+func _hear(talk: Conversation) -> void:
+	for flag in talk.sets_flags:
+		GameState.set_flag(flag)
+	if talk.places_order != null:
+		GameState.place_order(talk.places_order.id)
+
+
+func test_people_with_problems_call_the_company() -> void:
+	var before := _fresh()
+	for flag in ["met_boss", "met_marge", "first_mission_done", "gill_thanked"]:
+		GameState.set_flag(flag)
+	var gill: NPCData = load("res://data/npcs/tidewater_gill.tres")
+	var problem := gill.pick_conversation()
+	check(problem != null and problem.places_order != null and problem.places_order.id == "gill_ice", "Gill tells her the ice machine broke")
+	check(problem.lines.size() > 0 and Array(problem.lines).any(func(line: String) -> bool: return line.begins_with("> ")), "...and Jacki answers back")
+	var turns := NPC.turns(problem.lines)
+	check(turns.size() >= 3 and turns[0][0] == false and turns[1][0] == true, "lines split into turns: Gill, then Jacki, then Gill")
+	for job in GameState.jobs.jobs:
+		var ordered := false
+		for npc_path in ["casino_sal", "tidewater_gill"]:
+			var npc: NPCData = load("res://data/npcs/%s.tres" % npc_path)
+			for talk in npc.conversations:
+				ordered = ordered or (talk.places_order != null and talk.places_order.id == job.id)
+		if ordered:
+			check(job.from_place == "truck_stop" and not job.on_job_board, "%s is ordered through the company: it starts at the depot, off the boards" % job.id)
+	_hear(problem)
+	GameState.place_order("gill_ice")
+	check(GameState.orders.size() == 1, "an order is only placed once")
+	GameState.save_game()
+	GameState.new_game()
+	GameState.load_game()
+	check(GameState.orders.size() == 1 and GameState.orders[0] == "gill_ice", "orders are saved")
+	GameState.checks.clear()  # (Checks come first on the objective line.)
+	check(str(Objective.current(false)["text"]).contains("NEW ORDER"), "the objective says there's a new order waiting")
+	_restore(before)

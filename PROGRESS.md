@@ -1,13 +1,13 @@
 # Progress
 
-**Current status:** **Round 27: the mouse looks around.**
-- The mouse (or right stick) swings the camera around the rig in any
-  direction; right-drag pans.
-- Steer with I J K L (or A/D and the arrows, or the left stick).
-- The logbook moved to N.
+**Current status:** **Beta step 2: the trucking company.**
+- You work for OrbitalEx: pay shows at 10×, minus their 90%.
+- Checks wait at the office (entry, lobby, the boss's desk; FF8 cameras) until you check in.
+- People at stations tell you their problems; you tell them to call the company, and the boss hands you the job.
+- Buy the company for 2,500,000; completion %.
+- The game opens in flight, on the way to collect a pitiful check.
 
-(Round 26: overdrive.) Built and validated, **waiting for your playtest**
-(see `PLAYTEST.md`).
+Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
 **Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
@@ -17,7 +17,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 27)
+**Last updated:** 2026-10-06 (beta step 2)
 
 ---
 
@@ -121,7 +121,13 @@ systems, the husband's story).
 - [ ] **M8: Story & clients** *(started early, at your request)*
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
   - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest; the husband's story
-- [ ] **M9: Endgame & completion**: buy the company, completion percentage
+  - [x] Beta step 2: people tell you their problems and call OrbitalEx; the boss hands you their order at check-in (Sal's two jobs converted; Gill's broken ice machine added); Jacki answers back in conversations
+- [ ] **M9: Endgame & completion** *(mostly built in beta step 2)*
+  - [x] The boss (Dale Pembrook, weasel, shirt and tie) and the OrbitalEx office (greeter, lobby, desk; FF8 cameras)
+  - [x] Pay at 10× minus a 90% company cut, itemized; checks wait at the office until you check in
+  - [x] Buy the company (2,500,000 credits): no more cut after that
+  - [x] Completion % (pause menu and the office)
+  - [ ] Post-buyout sandbox extras, and balancing the price (beta step 5)
 - [ ] **M10: Polish & ship**: menus, options, credits, controller glyphs, exports, performance. *Partial:* the window (round 22) and pleasant sound design (round 23) are done early, at your request.
 
 ---
@@ -131,7 +137,7 @@ systems, the husband's story).
 **The beta push**, in your order (details and the tech debt list in
 `AUDIT.md`). Each one ends with validation, a push to git and a check-in:
 1. ~~Audit~~ (`AUDIT.md`)
-2. The trucking company: the boss, the 90% cut, checking in, buying the company, completion %
+2. ~~The trucking company~~: the boss, the office, the 90% cut, checking in, new orders, buying the company, completion %
 3. The husband's story (comms, conversations, story deliveries)
 4. Three more systems with clients
 5. Balance

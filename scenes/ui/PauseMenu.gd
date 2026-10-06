@@ -136,6 +136,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func open() -> void:
 	visible = true
+	# The title says how far along you are (see Completion.gd).
+	var title := get_node_or_null("Center/Panel/Items/Title") as Label
+	if title != null:
+		title.text = "PAUSED · COMPLETION %d%%" % Completion.percent()
 	_fit_scroller()
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

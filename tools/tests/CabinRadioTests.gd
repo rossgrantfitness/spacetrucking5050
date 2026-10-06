@@ -160,6 +160,7 @@ func test_rigs_for_sale_feel_different_and_pay_differently() -> void:
 	GameState.accept_job(job)
 	var credits := GameState.credits
 	GameState.deliver_at("truck_stop")
+	GameState.collect_checks()
 	var hold := roundi(job.base_pay * (bertha.pay_bonus - 1.0))
 	check(int(GameState.pending_payout["hold"]) == hold and GameState.credits > credits + job.base_pay, "a big hold pays a bonus")
 	GameState.paint = "teal_tide"

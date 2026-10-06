@@ -70,7 +70,7 @@ First, a few seconds of **power-on intro** (a self test types itself out,
 then the logo and a chime; any key skips it). Then the **title screen**: the title and a lazily tumbling cargo
 crate. (A small "test your keys and gamepad" link opens an input check where
 every control lights up when you press it.) Press **Enter** (or **Start** on a gamepad, or click **PRESS START**) to
-start a new game in dispatch (inside your rig, the Thumper, parked out past the company HQ), where Raccoony starts talking, or to **continue** where you left off
+start a new game (you're already flying, cruising into the truck stop to collect your check from OrbitalEx), or to **continue** where you left off
 (the game saves itself whenever you walk into a room, take a job, get paid
 or buy something). The small buttons below jump straight into flying, or
 start a **new game** (that forgets your save). See `PLAYTEST.md` for what
@@ -362,6 +362,25 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
   in flight the waypoint is pink with "LOAD" under it.
 - **Which rig you're in:** every rig has the same rooms inside, but each
   has its own soft color cast, and its name shows under the calendar.
+
+### Working for OrbitalEx (the office at the truck stop)
+
+- **The office** is through the glass doors on the truck stop's front
+  wall (the yellow diamond points at them when you have business there).
+  Bonnie greets you; the boss, Dale Pembrook, is at the desk at the end
+  of the red carpet.
+- **Pay:** the job board and payout show the **contract**. OrbitalEx
+  keeps 90% of it in fees, so you take home a tenth.
+- **Checks** wait at the office until you **check in** (talk to the
+  boss). He pays out every check at once, minus the fees, itemized. You
+  can take new jobs without checking in; the checks just pile up.
+- **New orders:** people at other stations sometimes tell you their
+  problems (a "!" over them). Jacki tells them to call OrbitalEx. Next
+  time you check in, the boss hands you the job.
+- **Buying the company:** talk to the boss with nothing waiting and
+  pick **BUY ORBITALEX** (2,500,000 credits). After that, no more cut:
+  every job pays the whole contract, right away.
+- **Completion %** is in the pause menu (Esc) and the office.
 
 ### Upgrading your rig (Dusty's garage)
 

@@ -12,7 +12,7 @@ func _fresh() -> Dictionary:
 	SaveSystem.save_path = SCRATCH_SAVE
 	var before := GameState.to_save_data()
 	GameState.new_game()
-	GameState.set_flag("took_the_wheel")  # Past the opening (where Raccoony waits at his counter).
+	GameState.set_flag("met_boss")  # Past the opening.
 	ShipLife.in_flight = false
 	return before
 

@@ -460,3 +460,34 @@ be revisited; just say so.
 
 - **`AUDIT.md` written** (what works, what's stale, how the game differs from the brief, tech debt, the plan). Fixed the stale "Next up" in `PROGRESS.md`. Nothing else is broken that validation can see: 405 files, 148 tests, 9 play-throughs, all clear.
 - Noted for the next steps: split a few self-contained pieces out of the 1,500-line `FlightSandbox.gd` before adding to it; bump the save version when pay changes (task 2); new dialogue goes in data files; no Windows export preset yet (task 6).
+
+## 2026-10-06 (Beta push, step 2: the trucking company)
+
+- **The company and the boss** (your ask): Jacki works for **OrbitalEx**. The boss is **Dale Pembrook**, a long thin weasel in a short-sleeve white shirt and a red tie, with a mustache and slicked hair (`tools/build_boss.gd` → `WeaselVisual.tscn`). Name in `world_names.tres` (`boss_name`; lines use `{boss}`).
+- **The office** (your ask: "an entry way with a nice greeter, a lobby, and a desk with the boss man... dramatic camera angles, think FF8"). It is its own small room, `OrbitalExOffice.tscn` (built by `tools/build_office.gd`), through glass doors on the truck stop's front wall:
+  - an entryway with **Bonnie**, a cheerful sheep greeter (`company_greeter.tres`, `SheepVisual.tscn`);
+  - a lobby with pillars and a red carpet;
+  - the boss's desk at the far end, under a huge glowing ORBITALEX logo.
+  - Three fixed cameras: high in a corner over the entryway; down on the floor looking up the carpet at the boss and the logo; high over the boss's shoulder looking down at Jacki.
+  - A fourth new camera in the truck stop frames the office doors (the front wall was behind every other camera).
+- **Pay shows at 10×, minus 90%** (your idea): what a job really pays you is its "take-home". The job board and payout show the **contract** (take-home ÷ (1 − `company_cut`), so 10×). Your check itemizes OrbitalEx's 90% (dispatch, brand use, their insurance, paperwork, the coffee fund, the regional manager's parking, fees on the fees: `data/company/company.tres`). This doesn't change the balance at all: you earn exactly what you earned before.
+- **Checking in** (your ask): checks wait at the office until you talk to the boss, who pays out every check at once (and settles any tab). You **don't** have to check in before taking a new job: round trips are long, so checks just pile up. Strict mode is `checkin_before_new_job` in tuning.tres.
+- **The opening** (your ask): a new game starts **in flight**, cruising into the truck stop after the kitty-litter run. Raccoony calls: the boss has your check. You walk to the office, and Bonnie points you down the carpet. The boss hands over the check: **300 credits out of a 3,000 contract**. Jacki blows up ("That's not a cut. That's an amputation."). He sends her to Marge for the pie run. Until then, Marge tells you to go get your check first. The old on-foot opening in dispatch is gone.
+- **New orders** (your idea, mid-task): people at other stations tell you their problems. Jacki answers back in her own voice (a line starting with `> ` in a conversation is her) and tells them to call OrbitalEx. They do: a card says **NEW ORDER COMING**, and they get a "!" until then. Next time you check in, the boss hands you the order (after your checks). Data:
+  - `places_order` on a conversation, `GameState.orders` (saved);
+  - order jobs start at the company depot (the truck stop) and aren't on the boards.
+  - Converted Sal's two story jobs: Marge's karaoke machine goes to his casino for a guest night (instead of his jumpsuits going to her), and a slot machine goes to Gill.
+  - Added Gill's broken ice machine (new job `gill_ice`).
+- **Buying the company:** the office menu has **BUY ORBITALEX** for **2,500,000 credits** (`company_price`), with how far along you are and a jab from the boss. Buying it plays a scene, sets `owns_company`, and from then on there's **no cut**: deliveries pay the full contract on the spot. The boss stays on, filing things. The price gets balanced in step 5.
+- **Completion %** (Stardew-style), in the pause menu title and the office. It is weighted:
+  - buying the company 20;
+  - different loads delivered 15;
+  - story deliveries 10;
+  - sights in the logbook 15;
+  - upgrades 10;
+  - rigs 10;
+  - places visited 10;
+  - snacks tasted 10.
+  - It's counted from the data, so new content counts automatically (`scenes/ui/Completion.gd`).
+- **Save version 2:** checks and orders are saved. Old saves load fine (no checks waiting).
+- Cleanup: two leftover `.uid` files for scripts that no longer exist were removed.

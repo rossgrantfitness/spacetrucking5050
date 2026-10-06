@@ -325,16 +325,27 @@ func _arcade(room: Node3D, body: StaticBody3D, _dark: Material) -> void:
 	(room.get_node("RestroomSign") as Node3D).rotation = Vector3(0.0, PI / 2.0, 0.0)
 
 
-## Shuttered shopfronts along the front wall: places that open in later
-## updates (outfits, decor, insurance) plus the motel by the airlock.
+## Shopfronts along the front wall: places that open in later updates
+## (outfits, decor) behind shutters, the OrbitalEx office (open: the boss's
+## desk is in the room scene), plus the motel by the airlock.
 func _shopfronts(room: Node3D, _body: StaticBody3D, dark: Material) -> void:
-	var shops := [["OUTFITTERS", -3.0, Color(1.0, 0.45, 0.8)], ["HOME & DECOR", 4.5, Color(1.0, 0.8, 0.3)], ["INSURANCE", 12.0, Color(0.45, 0.95, 1.0)]]
+	var shops := [["OUTFITTERS", -3.0, Color(1.0, 0.45, 0.8), false], ["HOME & DECOR", 4.5, Color(1.0, 0.8, 0.3), false],
+			["ORBITALEX OFFICE", 12.0, Color(0.45, 0.95, 1.0), true]]
 	for shop: Array in shops:
 		var x: float = shop[1]
+		var open: bool = shop[3]
 		_box(room, "ShopFrame", Vector3(6.0, 4.4, 0.3), Vector3(x, 2.2, 14.85), dark)
-		_box(room, "Shutter", Vector3(5.2, 3.4, 0.05), Vector3(x, 1.7, 14.68), _set_paint(Color(0.7, 0.72, 0.78), WALL_PANELS, 0.6))
+		if not open:
+			_box(room, "Shutter", Vector3(5.2, 3.4, 0.05), Vector3(x, 1.7, 14.68), _set_paint(Color(0.7, 0.72, 0.78), WALL_PANELS, 0.6))
 		_sign(room, "ShopSign", shop[0], 0.006, shop[2], Vector3(x, 3.85, 14.6))
-		_sign(room, "ComingSoon", "COMING SOON", 0.0035, Color(1.0, 0.85, 0.25), Vector3(x, 1.9, 14.6))
+		if open:
+			# Glass doors in (see OrbitalExOffice.tscn), lit from inside.
+			_box(room, "ShopWindow", Vector3(5.2, 3.0, 0.05), Vector3(x, 1.6, 14.68), _set_paint(shop[2], null, 1.0, 0.5))
+			for side: float in [-1.0, 1.0]:
+				_box(room, "ShopDoor", Vector3(1.1, 2.4, 0.06), Vector3(x + 0.58 * side, 1.2, 14.64), _set_paint(Color(0.75, 0.95, 1.0), null, 1.0, 0.9))
+			_box(room, "ShopMat", Vector3(2.6, 0.02, 1.2), Vector3(x, 0.012, 13.9), _set_paint(Color(0.85, 0.15, 0.2), CARPET, 0.8))
+		if not open:
+			_sign(room, "ComingSoon", "COMING SOON", 0.0035, Color(1.0, 0.85, 0.25), Vector3(x, 1.9, 14.6))
 	for label in room.get_children():
 		if label is Label3D and (label.name.begins_with("ShopSign") or label.name.begins_with("ComingSoon")):
 			(label as Node3D).rotation = Vector3(0.0, PI, 0.0)

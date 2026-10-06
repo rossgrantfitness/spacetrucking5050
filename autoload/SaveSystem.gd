@@ -10,7 +10,7 @@ extends Node
 
 ## Bump this whenever the save file's layout changes, and add a step that
 ## upgrades older saves, so nobody ever loses progress after an update.
-const SAVE_VERSION: int = 1
+const SAVE_VERSION: int = 2  # 2: checks waiting at the OrbitalEx office.
 ## Where the game is saved. (The automated tests point this at a scratch
 ## file, so running them never touches your real save.)
 var save_path: String = "user://save.json"

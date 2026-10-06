@@ -52,7 +52,7 @@ func open() -> void:
 		options.append({"text": "JUMP NEAR " + (place.display_name if place != null else id.to_upper()),
 				"description": "Start a few minutes out from here, on autopilot, lined up for the approach."})
 	options.append({"text": "GIVE ME A JOB", "description": "Any job in the game, yours right now (drops the one you're hauling)."})
-	options.append({"text": "SKIP THE OPENING", "description": "As if you'd heard Raccoony out, taken the wheel and met Marge."})
+	options.append({"text": "SKIP THE OPENING", "description": "As if you'd collected your first check from the boss and met Marge."})
 	options.append({"text": "+5,000 CREDITS", "description": "Free money. Don't tell the tax droids."})
 	options.append({"text": "FILL UP AND FIX UP", "description": "Both tanks full, hull and cargo like new."})
 	options.append({"text": "CLOSE", "description": ""})
@@ -90,10 +90,11 @@ func jump(place_id: String, minutes: float) -> void:
 		LoadingScreen.go(get_tree(), FLIGHT_SCENE, "flight")
 
 
-## Past the opening: Raccoony heard, the wheel taken, Marge met.
+## Past the opening: the first check collected, Marge met.
 func skip_opening() -> void:
-	for flag in ["intro_heard", "took_the_wheel", "heard_about_marge", "met_marge"]:
+	for flag in ["opening_called", "met_boss", "first_check", "boss_sent_to_marge", "heard_about_marge", "met_marge"]:
 		GameState.set_flag(flag)
+	GameState.checks = GameState.checks.filter(func(check: Dictionary) -> bool: return check.get("job") != "prologue")
 	if GameState.launch_from == GameState.OPEN_SPACE:
 		GameState.launch_from = "truck_stop"
 

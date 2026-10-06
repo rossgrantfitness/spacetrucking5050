@@ -6,9 +6,9 @@
 script = ExtResource("1_job")
 id = "sal_slot_machine"
 cargo_name = "A lucky slot machine (fragile)"
-client_name = "Gill, Tidewater Cannery (from Sal)"
-description = "Sal wants a slot machine in Gill's canteen. Gill has not been asked. It's a long way, so take it easy over the bumps."
-from_place = "high_roller"
+client_name = "Sal Grinwell (a gift for Gill)"
+description = "Sal shipped a lucky slot machine to the depot, for Gill's canteen. Gill has not been asked. It's a long way, so take it easy over the bumps."
+from_place = "truck_stop"
 to_place = "tidewater"
 weight = 1600000000.0
 base_pay = 1900

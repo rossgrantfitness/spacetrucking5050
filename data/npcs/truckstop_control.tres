@@ -4,10 +4,15 @@
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
 [ext_resource type="Resource" path="res://data/jobs/first_long_haul.tres" id="job_first_long_haul"]
 
+[sub_resource type="Resource" id="Conversation_boss_first"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_boss", "met_marge")
+lines = PackedStringArray("Hey, sugar. {boss}'s been pacing that office since breakfast. Your check's in there.", "Go get it over with. Then come see me: I might have some pie work for you.")
+
 [sub_resource type="Resource" id="Conversation_0"]
 script = ExtResource("2_conv")
 blocked_by_flags = PackedStringArray("met_marge")
-lines = PackedStringArray("Well, look at you. You must be Raccoony's trucker. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My cousin Gill runs the canteen at Tidewater Cannery. Way out in the teal, past the border gate. Sixty clicks, give or take.", "Poor things haven't had a decent pie in a year. Thirty crates of nebula pie and a sack of real coffee. It's a long haul, sugar.", "About eighteen minutes at your rig's top speed. Four and a half if you burn a whole tank of boost, but boosting rattles the pies, and they bruise.", "Thirteen hundred {currency}, plus up to five hundred more if they get there pretty. Gas-N-Go's about halfway if you need fuel. What do you say?")
+lines = PackedStringArray("Well, look at you. {boss} sent you over? My condolences. I'm Marge. I run this place: the diner, the tower, the whole shebang.", "My cousin Gill runs the canteen at Tidewater Cannery. Way out in the teal, past the border gate. Sixty clicks, give or take.", "Poor things haven't had a decent pie in a year. Thirty crates of nebula pie and a sack of real coffee. It's a long haul, sugar.", "About eighteen minutes at your rig's top speed. Four and a half if you burn a whole tank of boost, but boosting rattles the pies, and they bruise.", "Thirteen hundred {currency}, plus up to five hundred more if they get there pretty. Gas-N-Go's about halfway if you need fuel. What do you say?")
 sets_flags = PackedStringArray("met_marge")
 offers_job = ExtResource("job_first_long_haul")
 
@@ -59,7 +64,7 @@ lines = PackedStringArray("Coffee's on. Pie's on. I'm on.", "Don't let Wendell t
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("sal_jumpsuits_done")
 blocked_by_flags = PackedStringArray("marge_sequins")
-lines = PackedStringArray("SEQUINS, hon. I have SEQUINS. Karaoke night is never going to be the same.", "Tell that crocodile thanks. Then tell him he still owes me for the pie he 'borrowed' in '43.")
+lines = PackedStringArray("Three nights at that crocodile's casino, hon. Three! They threw SEQUINS at me.", "Karaoke night here is never going to be the same.", "Tell Sal thanks. Then tell him he still owes me for the pie he 'borrowed' in '43.")
 sets_flags = PackedStringArray("marge_sequins")
 
 [resource]
@@ -74,4 +79,4 @@ lines = PackedStringArray("Coffee's on. Pie's on. I'm on.")
 comm_name = "MARGE · TRUCK STOP"
 fur_color = Color(0.72, 0.55, 0.38, 1)
 accent_color = Color(0.35, 0.95, 1, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_sequins"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_boss_first"), SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_sequins"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])

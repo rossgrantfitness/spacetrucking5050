@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_owner"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("owns_company")
+lines = PackedStringArray("Good morning, boss! I mean, Ms. Rabbit! I mean... boss!", "I took the fees off the coffee machine. It cries less now.")
+
+[sub_resource type="Resource" id="Conversation_first"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_boss", "met_bonnie")
+lines = PackedStringArray("Welcome to {company}! Where your cargo is our cargo! Legally!", "Oh! You must be the rabbit. Mr. Pembrook's expecting you.", "He's been expecting you since Tuesday. He says that a lot. Straight down the carpet, hon!")
+sets_flags = PackedStringArray("met_bonnie")
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_boss")
+lines = PackedStringArray("Welcome back to {company}! Mr. Pembrook's at his desk. He's always at his desk. I've never seen him leave.", "Can I get you a water? It's free! ...It's two credits.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Welcome to {company}! Mr. Pembrook's straight down the carpet, hon!")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Bonnie ({company})"
+species = "sheep"
+voice_pitch = 1.6
+voice_type = "chirp"
+voice_key = 5
+voice_scale = "major"
+lines = PackedStringArray("Welcome to {company}!")
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_owner"), SubResource("Conversation_first"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
+comm_name = "BONNIE · {company}"
+fur_color = Color(0.95, 0.93, 0.88, 1)
+accent_color = Color(0.2, 0.55, 0.85, 1)

@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_first"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_boss", "met_marge")
+lines = PackedStringArray("Rabbit. You're late.", "Fizzwick Pet Supply signed for the kitty litter. Congratulations. Here's your check.", "Don't spend it all in one place. You can't, anyway.")
+sets_flags = PackedStringArray("met_boss")
+opens_menu = "check_in"
+
+[sub_resource type="Resource" id="Conversation_owner"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("owns_company")
+lines = PackedStringArray("Boss! I mean... boss. Coffee? I made coffee. I make coffee now.")
+opens_menu = "company_office"
+
+[sub_resource type="Resource" id="Conversation_marge"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_boss")
+blocked_by_flags = PackedStringArray("met_marge")
+needs_no_job = true
+lines = PackedStringArray("Marge. Diner. Pie run. Tidewater. Which word didn't you understand?")
+opens_menu = "company_office"
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("What now, Rabbit? I've got a call at three. With myself. It's important.")
+opens_menu = "company_office"
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "{boss} ({company})"
+species = "weasel"
+voice_pitch = 1.2
+voice_type = "reed"
+voice_key = 1
+voice_scale = "minor"
+lines = PackedStringArray("What.")
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_owner"), SubResource("Conversation_first"), SubResource("Conversation_marge"), SubResource("Conversation_default")])
+comm_name = "{boss} · {company}"
+fur_color = Color(0.62, 0.45, 0.28, 1)
+accent_color = Color(0.9, 0.15, 0.2, 1)

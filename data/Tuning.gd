@@ -235,6 +235,20 @@ extends Resource
 @export_range(0, 10000, 5) var hull_repair_price: int = 220
 
 
+@export_group("The company")
+## Your cut of every job. Jobs are quoted at their full CONTRACT value
+## (what the client pays OrbitalEx), but the company keeps this share as
+## "fees": 0.9 = they keep 90%, you keep 10%. Your check waits at the
+## OrbitalEx office at the truck stop until you check in. Buy the company
+## and the cut is gone: you keep every credit.
+@export_range(0.0, 0.99, 0.01) var company_cut: float = 0.9
+## What it costs to buy OrbitalEx (the long-term goal).
+@export_range(0, 1000000000, 1000) var company_price: int = 2500000
+## On: no new company job until you've checked in and collected your
+## checks. Off (gentler): checks just pile up at the office until you swing
+## by.
+@export var checkin_before_new_job: bool = false
+
 @export_group("Time and bills")
 
 ## The calendar (365 days, 12 months: see res://data/calendar.tres) and the

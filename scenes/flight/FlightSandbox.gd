@@ -102,13 +102,13 @@ const OVERDRIVE_CALLS: OverdriveCallList = preload("res://data/dialogue/overdriv
 var _overdrive_called: Dictionary = {}
 var _overdrive_pending: OverdriveCall = null
 var _overdrive_banner_clock: float = 0.0
-## A new game starts parked here, out past the company HQ (which sits at
-## the origin), facing down the road toward the truck stop.
+## A new game starts here, out past the company HQ (which sits at the
+## origin), cruising down the road toward the truck stop.
 const OPEN_SPACE_SPOT := Vector3(0.0, 60.0, -1700.0)
 const OPEN_SPACE_FACING := Vector3(0.0, 0.0, -1.0)
 ## The opening's first comm call: who, what, and how long after taking the wheel.
 const OPENING_CALLER: String = "res://data/npcs/dispatch_morning.tres"
-const OPENING_CALL_LINE: String = "Okay, you're up. Pull into the truck stop, hon. Marge there has our next delivery order. Follow the yellow diamond, and fly slow through the glowing ring."
+const OPENING_CALL_LINE: String = "Drop's done, hon. Fizzwick signed for the kitty litter. Pull into the truck stop: {boss} has your check, and he hates waiting. Follow the yellow diamond, fly slow through the ring."
 const OPENING_CALL_DELAY: float = 2.5
 ## Prices at the Gas-N-Go counter.
 const JERKY_PRICE: int = 15
@@ -198,10 +198,12 @@ func _ready() -> void:
 		debug_jump()
 
 
-## The opening, once she's at the wheel for the first time: Raccoony calls
-## and sends her to the truck stop, where Marge has the first job.
+## The opening: a new game starts just after a delivery. Raccoony calls:
+## pull into the truck stop, the boss has your check. (Once.)
 func _opening_call() -> void:
-	GameState.set_flag("took_the_wheel")
+	if GameState.has_flag("opening_called"):
+		return
+	GameState.set_flag("opening_called")
 	_chatter.skip_takeoff_call()  # Raccoony's call is the takeoff call this time.
 	await get_tree().create_timer(OPENING_CALL_DELAY).timeout
 	if not is_inside_tree():
@@ -1026,8 +1028,12 @@ func _honk() -> void:
 ## Puts the rig at a place's launch point, nose out, engines idle.
 func _launch_from(id: String) -> void:
 	if id == GameState.OPEN_SPACE:
-		# A new game: parked out past the company HQ, nose toward the truck stop.
+		# A new game: out past the company HQ, just after a delivery, already
+		# cruising toward the truck stop to collect the check.
 		_ship.teleport(Transform3D(Basis.looking_at(OPEN_SPACE_FACING, Vector3.UP), OPEN_SPACE_SPOT))
+		if GameState.in_opening():
+			_ship.controls.lever = 1.0
+			_ship.flight.velocity = OPEN_SPACE_FACING * _ship.ship_data.max_speed
 		_chase_camera.snap_behind_target()
 		return
 	var place: Node3D = _places.get(id, _places.get("truck_stop"))

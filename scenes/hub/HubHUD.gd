@@ -113,6 +113,10 @@ func _is_target(thing: Interactable, target: String) -> bool:
 	match target:
 		"wheel":
 			return exit != null and exit.target_scene.ends_with("FlightSandbox.tscn")
+		"office":
+			return exit != null and exit.target_scene.ends_with("OrbitalExOffice.tscn")
+		"office_exit":
+			return exit != null and exit.target_scene.ends_with("TruckStop.tscn")
 		"airlock":
 			# The rig's airlock, or (in a station) the door back aboard the rig.
 			var room := HubRoom.find(thing)

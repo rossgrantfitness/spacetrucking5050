@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/gill_ice.tres" id="job_ice"]
 
 [sub_resource type="Resource" id="Conversation_perfect"]
 script = ExtResource("2_conv")
@@ -40,6 +41,27 @@ blocked_by_flags = PackedStringArray("gill_slot")
 lines = PackedStringArray("...Why is there a slot machine in my canteen.", "Mmh. The crew loves it. Nobody's working. I won six fish.", "Tell Sal... 'why.' Just 'why.' He'll know.")
 sets_flags = PackedStringArray("gill_slot")
 
+[sub_resource type="Resource" id="Conversation_ice"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_thanked")
+blocked_by_flags = PackedStringArray("gill_called_ice", "gill_ice_done")
+lines = PackedStringArray("Mmh. {bunny}. Can I tell you something? The ice machine broke.", "Three hundred million tons of fish, and nothing keeping them cold. They're getting... opinions.", "> Call {company} at the truck stop. They'll haul you some ice.", "Mmh. Okay. I'll call. ...Is it the weasel? It's always the weasel.")
+sets_flags = PackedStringArray("gill_called_ice")
+places_order = ExtResource("job_ice")
+
+[sub_resource type="Resource" id="Conversation_ice_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_called_ice")
+blocked_by_flags = PackedStringArray("gill_ice_done")
+lines = PackedStringArray("I called. The weasel put me on hold. The hold music was just him, humming.", "The fish say hurry. Politely. Mostly.")
+
+[sub_resource type="Resource" id="Conversation_iced"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_ice_done")
+blocked_by_flags = PackedStringArray("gill_iced")
+lines = PackedStringArray("Ice! Mmh. The fish are calm. I'm calm. This is my calm face.", "It looks like my other face. Trust me.")
+sets_flags = PackedStringArray("gill_iced")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Gill"
@@ -52,4 +74,4 @@ lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
 comm_name = "GILL · TIDEWATER"
 fur_color = Color(0.52, 0.38, 0.28, 1)
 accent_color = Color(0.95, 0.8, 0.3, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_iced"), SubResource("Conversation_ice_wait"), SubResource("Conversation_ice"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

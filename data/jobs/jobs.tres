@@ -15,6 +15,7 @@
 [ext_resource type="Resource" path="res://data/jobs/jerky_crate.tres" id="13_jerky_crate"]
 [ext_resource type="Resource" path="res://data/jobs/glimmer_cards.tres" id="20_glimmer_cards"]
 [ext_resource type="Resource" path="res://data/jobs/sal_jumpsuits.tres" id="21_sal_jumpsuits"]
+[ext_resource type="Resource" path="res://data/jobs/gill_ice.tres" id="j_gill_ice"]
 [ext_resource type="Resource" path="res://data/jobs/sal_slot_machine.tres" id="22_sal_slot_machine"]
 [ext_resource type="Resource" path="res://data/jobs/slot_parts.tres" id="23_slot_parts"]
 [ext_resource type="Resource" path="res://data/jobs/poker_chips.tres" id="24_poker_chips"]
@@ -27,4 +28,4 @@
 
 [resource]
 script = ExtResource("1_list")
-jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens")])
+jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens"), ExtResource("j_gill_ice")])

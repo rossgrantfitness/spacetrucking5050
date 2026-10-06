@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CompanyLines" format=3]
+
+[ext_resource type="Script" path="res://data/company/CompanyLines.gd" id="1_lines"]
+
+[resource]
+script = ExtResource("1_lines")
+fee_items = PackedStringArray("Dispatch|25", "{company} brand use|15", "Insurance (theirs, not yours)|15", "Paperwork processing|10", "Coffee fund|8", "Regional manager's parking|7", "Fees on the fees|10")
+first_check_reaction = PackedStringArray("...", "Three hundred.", "Three HUNDRED. Out of three THOUSAND?", "Ninety percent?! That's not a cut, {boss}. That's an amputation.", "A week of hauling kitty litter across the black, and I can't afford the kitty litter.")
+first_check_boss = PackedStringArray("Read your contract, Rabbit. Page forty. Fees.", "Dispatch, brand use, insurance, my parking spot. It adds up.", "Now. Marge at the diner has a pie run for Tidewater. It's yours.", "Don't make me regret it. ...More than usual.")
+buyout_jacki = PackedStringArray("{boss}. Remember page forty?", "I read it. All of it. Including the bit where the company's for sale.", "Here's {price}. Cash. Count it.", "...Ninety percent of it is fees.")
+buyout_boss = PackedStringArray("You... you can't just...", "That's... that IS the right number.", "...", "Okay. Okay okay okay. Who do I... report to now?", "...Boss.")
+not_yet = PackedStringArray("{boss} laughs so hard he has to sit down.", "{boss} doesn't even look up from his crossword.", "\"Sure, Rabbit. And I'll buy a moon.\"", "{boss} pats the brochure like it's a pet.")
+order_placed = "{client} is calling {company}.\n\n{cargo}, to {to}.\n\nThe job will be waiting at the {company} office at the truck stop. Check in to pick it up."
+order_lines = PackedStringArray("Rabbit. New orders. {client} called it in. Asked for you by name. No accounting for taste.", "{cargo}, out to {to}. It's at the depot. Don't scratch it, the deductible's yours.")
+owner_order_lines = PackedStringArray("Boss! An order came in. {client}. Asked for you personally.", "{cargo}, out to {to}. I had the depot load it. I, uh. I alphabetized the paperwork.")
+more_orders = PackedStringArray("And there's {count} more on my desk. One at a time. Even you can't haul two.")

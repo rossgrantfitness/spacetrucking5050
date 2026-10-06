@@ -55,6 +55,8 @@ func interact(player: Node3D) -> void:
 		hub_player.set_busy(true)
 		for flag in conversation.sets_flags:
 			GameState.set_flag(flag)
+		if conversation.places_order != null:
+			await HubServices.order_placed(get_tree(), conversation.places_order)
 		if conversation.offers_job != null:
 			await HubServices.offer_job(get_tree(), conversation.offers_job)
 		if not conversation.opens_menu.is_empty():
@@ -65,11 +67,15 @@ func interact(player: Node3D) -> void:
 	_talking = false
 
 
-## Whether they have a job for you (one they haven't given you yet): the
+## Whether they have a job for you (one they haven't given you yet), or a
+## problem the company could haul a fix for: the
 ## on-foot HUD hangs a "!" over them. (So does being who the objective
 ## points at; see HubHUD.)
 func has_news() -> bool:
 	var story := data.pick_conversation() if data != null else null
+	if story != null and story.places_order != null:
+		var order := story.places_order
+		return not order.id in GameState.orders and GameState.active_job_id != order.id and not order.id in GameState.finished_jobs
 	if story == null or story.offers_job == null:
 		return false
 	var job := story.offers_job
@@ -88,11 +94,38 @@ func _exit_tree() -> void:
 		Dialogue.cancel()  # Leaving the room mid-sentence (walked through a door).
 
 
-## Says `lines` while she's free to walk away (which ends it). Returns
-## whether she heard them all.
+## Says `lines` while she's free to walk away (which ends it). Lines
+## starting with "> " are Jacki answering back. Returns whether she heard
+## them all.
 func _talk(player: HubPlayer, lines: PackedStringArray) -> bool:
 	player.set_busy(false)
 	_listener = player
-	var heard := await Dialogue.say(data.display_name, lines, data.voice_pitch, data)
+	var heard := true
+	for turn in turns(lines):
+		var hers: bool = turn[0]
+		var said: PackedStringArray = turn[1]
+		if hers:
+			heard = await Dialogue.say(GameState.names.bunny_name, said, Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
+		else:
+			heard = await Dialogue.say(GameState.names.fill_in(data.display_name), said, data.voice_pitch, data)
+		if not heard:
+			break
 	_listener = null
 	return heard
+
+
+## `lines` split into turns: [[whether it's Jacki talking, the lines], ...].
+static func turns(lines: PackedStringArray) -> Array:
+	var found: Array = []
+	var run: Array[String] = []
+	var run_is_hers := false
+	for line in lines:
+		var hers := line.begins_with("> ")
+		if not run.is_empty() and hers != run_is_hers:
+			found.append([run_is_hers, PackedStringArray(run)])
+			run = []
+		run_is_hers = hers
+		run.append(line.trim_prefix("> "))
+	if not run.is_empty():
+		found.append([run_is_hers, PackedStringArray(run)])
+	return found

@@ -102,7 +102,7 @@ func test_short_on_money_it_goes_on_the_tab() -> void:
 	check(GameState.credits == 0 and GameState.tab == GameState.tuning.weekly_dispatch_fee - 400, "what you can't pay goes on the tab")
 	GameState.accept_job(GameState.jobs.find("first_long_haul"))
 	GameState.deliver_at("tidewater")
-	check(int(GameState.pending_payout["tab_paid"]) > 0, "the next delivery pays off the tab")
+	check(int(GameState.collect_checks()["tab_paid"]) > 0, "the next check pays off the tab")
 	check(GameState.tab == 0 or GameState.credits == 0, "the tab gets paid as far as the money goes")
 	GameState.pending_bills = {}
 	_restore(before)
@@ -154,3 +154,48 @@ func test_job_board_tags() -> void:
 	check("PERISHABLE" in HubServices.job_tags(GameState.jobs.find("kelp_caviar")), "caviar is tagged perishable")
 	check(not "PERISHABLE" in HubServices.job_tags(GameState.jobs.find("pie_run")), "no tag when the name already says perishable")
 	check("D " in HubServices.job_tags(GameState.jobs.find("first_long_haul")), "jobs say about how many days they take")
+
+
+func test_the_company_takes_ninety_percent() -> void:
+	var before := _fresh()
+	check(GameState.checks.size() == 1 and GameState.checks[0]["job"] == "prologue", "a new game starts with the opening's check waiting at the office")
+	check(Economy.contract_value(300) == 3000, "the contract shows ten times what you take home")
+	check(Economy.take_home(300) == 300, "working for the company, you take home the net")
+	var fees := Economy.contract_value(300) - 300
+	var sum := 0
+	for fee in HubServices.fee_breakdown(fees):
+		sum += int(fee[1])
+	check(sum == fees, "the itemized fees add up to exactly the company's cut")
+	var credits := GameState.credits
+	var got := GameState.collect_checks()
+	check(int(got["total"]) == 300 and GameState.credits == credits + 300 and GameState.checks.is_empty(), "checking in pays out the waiting checks")
+	_restore(before)
+
+
+func test_owning_the_company_pays_the_full_contract() -> void:
+	var before := _fresh()
+	GameState.set_flag("first_mission_done")
+	GameState.set_flag("owns_company")
+	GameState.checks.clear()
+	check(is_zero_approx(Economy.company_cut()), "the owner pays no cut")
+	var job := GameState.jobs.find("gnome_run")
+	GameState.accept_job(job)
+	var credits := GameState.credits
+	GameState.deliver_at(job.to_place)
+	var total := int(GameState.pending_payout["total"])
+	check(GameState.checks.is_empty(), "no checks to collect when it's your company")
+	check(GameState.credits == credits + Economy.contract_value(total), "the owner takes home the whole contract, right away")
+	_restore(before)
+
+
+func test_completion_counts_up() -> void:
+	var before := _fresh()
+	var start := Completion.percent()
+	check(start >= 0 and start < 20, "a new game is barely started")
+	var weights := 0.0
+	for part in Completion.PARTS:
+		weights += float(part[1])
+	check(is_equal_approx(weights, 100.0), "the completion parts add up to 100%")
+	GameState.set_flag("owns_company")
+	check(Completion.percent() >= start + 20, "buying the company is worth 20%")
+	_restore(before)

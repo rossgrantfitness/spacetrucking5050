@@ -16,7 +16,6 @@ const RENDERER_NAMES: Dictionary = {
 	"gl_compatibility": "Compatibility",
 }
 const FLIGHT_SCENE: String = "res://scenes/flight/FlightSandbox.tscn"
-const DISPATCH_SCENE: String = "res://scenes/hub/Dispatch.tscn"
 const CHIP_IDLE_COLOR := Color(1.0, 1.0, 1.0, 0.08)
 const CHIP_LIT_COLOR := Color(1.0, 0.62, 0.28, 0.95)
 
@@ -137,15 +136,14 @@ func _start_game() -> void:
 		_new_game()
 
 
-## Forgets the save and starts the opening: in dispatch, with Raccoony
-## about to say good morning.
+## Forgets the save and starts the opening: at the wheel, just after a
+## delivery, on the way to the truck stop to collect the check.
 func _new_game() -> void:
 	_starting = true
 	SaveSystem.delete_save()
 	GameState.new_game()
 	GameState.show_date_card = true
-	GameState.next_spawn = "FromHallway"
-	LoadingScreen.go(get_tree(), DISPATCH_SCENE, "start")
+	LoadingScreen.go(get_tree(), FLIGHT_SCENE, "flight")
 
 
 ## Shows or hides the input check (and the system info under it).
