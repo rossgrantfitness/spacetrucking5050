@@ -128,9 +128,14 @@ systems, the husband's story).
 
 ## Next up
 
-Your playtest of rounds 9 and 10, and events 168-250 of your list. Then
-the build order in `docs/DESIGN_NOTES.md` (economy rebalance first), and
-the audit your revised brief asks for, in the order you choose.
+**The beta push**, in your order (details and the tech debt list in
+`AUDIT.md`). Each one ends with validation, a push to git and a check-in:
+1. ~~Audit~~ (`AUDIT.md`)
+2. The trucking company: the boss, the 90% cut, checking in, buying the company, completion %
+3. The husband's story (comms, conversations, story deliveries)
+4. Three more systems with clients
+5. Balance
+6. Ship-ready basics and a Windows beta build
 
 ## M2 in short
 

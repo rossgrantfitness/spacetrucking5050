@@ -455,3 +455,8 @@ be revisited; just say so.
 - **Steering:** **I J K L** (I/K nose up/down, J/L turn; the rig banks into turns by itself, so J/L is your roll), as well as A/D, the arrows and the left stick. The old mouse "virtual stick" steering and its HUD diamond are gone. (Only the title screen's input check still shows mouse movement.)
 - **Logbook moved from L to N** ("notebook"), since L steers now. `tools/setup_input_map.gd` updated to match.
 - Cockpit view: the mouse doesn't look around in there yet. Say if you want head-look in the cockpit.
+
+## 2026-10-06 (Beta push, step 1: the audit)
+
+- **`AUDIT.md` written** (what works, what's stale, how the game differs from the brief, tech debt, the plan). Fixed the stale "Next up" in `PROGRESS.md`. Nothing else is broken that validation can see: 405 files, 148 tests, 9 play-throughs, all clear.
+- Noted for the next steps: split a few self-contained pieces out of the 1,500-line `FlightSandbox.gd` before adding to it; bump the save version when pay changes (task 2); new dialogue goes in data files; no Windows export preset yet (task 6).
