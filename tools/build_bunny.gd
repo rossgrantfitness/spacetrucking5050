@@ -125,7 +125,7 @@ func _which_part(box: AABB, center: Vector3, triangle: Vector3) -> String:
 		# The cap and both ears are one shell: the ears hang low at the sides.
 		if triangle.y < 0.083 and absf(triangle.x) > 0.009:
 			return "Ear" + side
-		return "Head"
+		return "Hat"  # Its own part, so other hats can replace it (outfits).
 	if center.y > 0.072:
 		return "Head"
 	return "Torso"
@@ -172,7 +172,7 @@ func _part_transform(part: String) -> Transform3D:
 	var leg_scale: Vector3 = CHIBI.leg_scale
 	var new_neck := HIP + (NECK - HIP) * torso_scale
 	var sign_x := 1.0 if part.ends_with("Left") else -1.0
-	if part == "Head" or part.begins_with("Ear"):
+	if part == "Head" or part == "Hat" or part.begins_with("Ear"):
 		return _scale_about(NECK, Vector3.ONE * float(CHIBI.head_scale), new_neck)
 	if part == "Torso" or part == "Tail":
 		return _scale_about(HIP, torso_scale, HIP)
@@ -257,7 +257,7 @@ func _assemble() -> Node3D:
 	# Which joint carries each cut part.
 	var carriers := {"LegLeft": "LegLeft", "BootLeft": "LegLeft", "LegRight": "LegRight", "BootRight": "LegRight",
 			"Torso": "Body", "Tail": "Body", "SleeveLeft": "ArmLeft", "HandLeft": "ArmLeft",
-			"SleeveRight": "ArmRight", "HandRight": "ArmRight", "Head": "Head", "EarLeft": "EarLeft", "EarRight": "EarRight"}
+			"SleeveRight": "ArmRight", "HandRight": "ArmRight", "Head": "Head", "Hat": "Head", "EarLeft": "EarLeft", "EarRight": "EarRight"}
 	for part: String in _parts:
 		var joint_name: String = carriers[part]
 		var joint_world := place * _pivot(joint_name)
@@ -295,7 +295,7 @@ func _head_height() -> float:
 	var to_pose := _part_transform("Head")
 	var low := INF
 	var high := -INF
-	for p in _parts["Head"][0] as PackedVector3Array:
+	for p in (_parts["Head"][0] as PackedVector3Array) + (_parts.get("Hat", [PackedVector3Array()])[0] as PackedVector3Array):
 		var q := to_pose * p
 		low = minf(low, q.y)
 		high = maxf(high, q.y)

@@ -5,7 +5,8 @@ extends SceneTree
 ##         (the engine hum's four loops, from scenes/flight/EngineSynth.gd)
 ##     bonk.wav, blip.wav, static.wav, big_engine.wav, whale_song.wav, whoosh.wav,
 ##     power_on.wav, post_beep.wav, thump.wav, rattle.wav, spool.wav,
-##     alarm.wav, explosion.wav
+##     alarm.wav, explosion.wav, cue_horn.wav (the air horn upgrade)
+##     docking_waltz.wav (the docking computer's music: scenes/common/MusicSynth.gd)
 ##     voice_square.wav, voice_reed.wav, voice_gruff.wav, voice_chirp.wav
 ##         (the other gibberish voices; "soft" is blip.wav)
 ##     cue_*.wav (menus, accepting a job, the nav computer, money, finding
@@ -50,6 +51,8 @@ func _initialize() -> void:
 		"spool": SfxSynth.make_spool(),
 		"alarm": SfxSynth.make_alarm(),
 		"explosion": SfxSynth.make_explosion(),
+		"cue_horn": SfxSynth.make_horn(),
+		"docking_waltz": MusicSynth.make_docking_waltz(),
 	}
 	for kind: String in ["square", "reed", "gruff", "chirp"]:
 		loops["voice_" + kind] = SfxSynth.make_voice(kind)

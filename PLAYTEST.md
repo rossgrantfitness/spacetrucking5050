@@ -1,4 +1,67 @@
-# Playtest: round 19 (on top of round 18 below)
+# Playtest: round 20, M7 ship upgrades (on top of rounds 18 and 19 below)
+
+**What you asked for:** M7, but "focus on ship upgrades and stuff" instead
+of outfits; and the date card smaller, in a corner, in fewer colors, with a
+quicker fade.
+
+**Time needed:** about 30 minutes. You'll want money to try the parts:
+play a few deliveries first, or keep your save.
+
+> Honest note: I checked all of this with automated tests (a robot even
+> loads the forklift) and screenshots. Whether the parts look good on each
+> rig, and whether the forklift is fun, are things only you can judge. The
+> bolt-on parts are placeholder shapes, like the rest of the art.
+
+## What's new
+
+- **The date card** is small, in the bottom-left corner, in gold and white,
+  and gone in about 3 seconds.
+- **Dusty's shelves:** ENGINE & HANDLING, HAULING, NAVIGATION, CAB EXTRAS.
+- **New parts:**
+  - Gel Cargo Cradles and Zero-G Suspension (gentler on cargo)
+  - Bumper Bars (less hull damage)
+  - Stacking Racks (+10% pay)
+  - Eco Injectors and Solar Sail Trim (less fuel)
+  - Long-Range Radar Dish
+  - Docking Computer
+  - Air Horn
+  - Roof Light Bar (just looks)
+- **You can see them on the rig:** bumper bars, a spinning radar dish,
+  chrome horns, a light bar, exhaust stacks, a crate rack and gold solar
+  sails, fitted to whichever rig you drive.
+- **Docking computer:** near your load's drop-off it takes the wheel and
+  docks you, to its own little waltz. Touch the stick to take over.
+- **Air horn:** **B** (or click the left stick). Somebody might honk back.
+- **The forklift:** when you take a job, pick **I'LL DRIVE THE FORKLIFT**.
+  Carry the pallets into your rig's hold (arrows to drive, E to lift and
+  set down). A full, tidy load is gentler on the cargo for that trip.
+
+## What to do
+
+1. Load your save (or play a few deliveries). Note the small date in the
+   corner.
+2. At Dusty's, look through the four shelves. Buy the Bumper Bars, the Air
+   Horn and the Light Bar (cheap), and the Docking Computer if you can.
+3. Take a job and **drive the forklift** to load it.
+4. Fly out. Look at your rig from the chase cam (and the cinema camera on
+   autopilot). Honk at passing traffic.
+5. Fly toward your drop-off and let the **docking computer** take you in.
+   Listen to the waltz.
+
+## Questions
+
+1. Which bolt-on parts look good, and which look silly (or don't sit right
+   on your rig)?
+2. Is the forklift fun for a minute, or a chore? Bigger hold, more
+   pallets, a timer for a bonus?
+3. The docking computer's waltz: charming, or should it be a different
+   style?
+4. Any upgrade you'd love that isn't there yet?
+5. Want outfits and decor next, or story (M8)?
+
+---
+
+# Round 19 (calendar and clock, pink drop-offs, signs on boards, rig tints)
 
 **What you asked for this time:**
 - a calendar and an in-lore clock on the HUD, with a 10-minute delivery

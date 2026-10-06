@@ -1,13 +1,10 @@
 extends Node3D
-## Turns slowly and forever around one of its own axes: a roulette wheel, a
-## sign, a fan. Set `axis` and `speed` in the inspector.
+## Turns round and round, slowly (a radar dish, a sign). Nothing else.
 
 
-## Which way it turns around (in its own space).
-@export var axis := Vector3.UP
-## How fast it turns, in radians per second.
-@export var speed: float = 0.1
+## Turns per second.
+@export var turns_per_second: float = 0.25
 
 
 func _process(delta: float) -> void:
-	rotate_object_local(axis.normalized(), speed * delta)
+	rotate_y(TAU * turns_per_second * delta)

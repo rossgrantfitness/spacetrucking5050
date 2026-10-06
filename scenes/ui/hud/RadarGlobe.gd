@@ -60,7 +60,7 @@ func _draw_curve(center: Vector2, steps: int, point_at: Callable, brightness: fl
 
 
 func _draw_blips(center: Vector2, rig: Ship) -> void:
-	var reach := GameState.tuning.radar_range
+	var reach := GameState.tuning.radar_range * (ship().ship_data.radar_reach if ship() != null and ship().ship_data != null else 1.0)
 	var close := GameState.tuning.proximity_range
 	# Turn the world so the rig's nose points "ahead" on the globe. Only its
 	# heading counts, so the globe's middle ring stays level with space.

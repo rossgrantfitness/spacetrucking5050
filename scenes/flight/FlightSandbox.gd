@@ -132,6 +132,9 @@ func _ready() -> void:
 	_fade.cover()
 	# The rig you drive, with every upgrade you've bought, in its paint job.
 	_ship.ship_data = GameState.upgraded_ship(GameState.active_ship_data())
+	# Loaded it yourself with the forklift? A tidy load rides better.
+	if float(GameState.rig.get("snug", 0.0)) > 0.0:
+		_ship.ship_data.cargo_care *= GameState.tuning.snug_load_care
 	_ship.apply_look(GameState.paints.find(GameState.paint))
 	for node in $World/Places.get_children():
 		if GameState.places.find(node.name) != null:
@@ -194,6 +197,7 @@ func _process(delta: float) -> void:
 
 func _exit_tree() -> void:
 	Engine.time_scale = 1.0  # Never leave the game stuck in a nap's fast-forward.
+	Radio.duck = 0.0  # Nor the radio turned down for the docking waltz.
 
 
 func _physics_process(delta: float) -> void:
@@ -206,6 +210,8 @@ func _physics_process(delta: float) -> void:
 	Radio.intensity = clampf(_ship.speed_ratio(), 0.0, 1.0)
 	_show_grab_hint()
 	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty():
+		if _docking_computer_on:
+			_stop_docking_computer()
 		_ship.cruise = null  # Got there without docking (it's the pilot's turn).
 		_hud.show_banner("AUTOPILOT OFF", 2.0)
 		Sfx.play("autopilot_off")
@@ -217,6 +223,8 @@ func _physics_process(delta: float) -> void:
 			_wake_up()
 		if _in_cabin:
 			_back_to_seat()
+	_run_docking_computer()
+	_horn_cooldown = maxf(_horn_cooldown - delta, 0.0)
 	if _docking_at.is_empty():
 		for id: String in _places:
 			for ring in _rings(id):
@@ -254,6 +262,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("chart_course"):
 		if _docking_at.is_empty():
 			_open_course_chart()
+	elif event.is_action_pressed("horn") and _ship.ship_data.air_horn:
+		_honk()
 	elif event.is_action_pressed("radio_next"):
 		Radio.next_station()
 	elif event.is_action_pressed("radio_previous"):
@@ -766,8 +776,8 @@ func _draw_nap(canvas: Control) -> void:
 	var left := dock.global_position.distance_to(_ship.global_position) / 1000.0 if dock != null else 0.0
 	var z := "Z".repeat(1 + int(Time.get_ticks_msec() / 600.0) % 3)
 	PixelFont.draw_centered(canvas, screen * 0.5 - Vector2(0.0, square * 14.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
-	# The date, under the Zs (it moves on while she sleeps).
-	DateCard.draw_date(canvas, screen * 0.5 + Vector2(0.0, square * 66.0), square, 1.0, false)
+	# The date, small in the corner (it moves on while she sleeps).
+	DateCard.draw_date(canvas, screen, 1.0)
 	if _nap_in_place:
 		PixelFont.draw_centered(canvas, screen * 0.5 + Vector2(0.0, square * 4.0), "JUST RESTING HER EYES.", square, Color(0.8, 0.82, 0.9))
 		return
@@ -800,6 +810,98 @@ func _on_cruise_released() -> void:
 	Sfx.play("autopilot_off")
 	_course.clear()
 	_hud.show_banner("MANUAL CONTROL", 2.0)
+	if _docking_computer_on and _docking_at.is_empty():
+		# You took the wheel back: it won't grab it again on this approach.
+		_docking_computer_declined[_destination_id] = true
+		_stop_docking_computer()
+		_hud.show_banner("DOCKING COMPUTER OFF. YOUR WHEEL.", 2.5)
+
+
+# --- The docking computer and the air horn (upgrades from Dusty's) -------------------
+
+## On while the docking computer is flying you in (and its waltz plays).
+var _docking_computer_on := false
+## Places where you took the wheel back from it (it waits until you've flown
+## away and come back before offering again).
+var _docking_computer_declined := {}
+var _waltz: AudioStreamPlayer
+var _horn_cooldown := 0.0
+
+const WALTZ := preload("res://audio/generated/docking_waltz.wav")
+
+
+## With a docking computer aboard: once you're close to your destination,
+## it takes the wheel, flies the lane through the rocks, threads the ring
+## and docks, to its own little waltz (the radio fades out for it).
+func _run_docking_computer() -> void:
+	if not _ship.ship_data.docking_computer or _destination_id.is_empty():
+		return
+	var dock := _dock_node(_destination_id)
+	if dock == null:
+		return
+	var distance := _ship.global_position.distance_to(dock.global_position)
+	var reach := GameState.tuning.docking_computer_range
+	if distance > reach * 1.5:
+		_docking_computer_declined.erase(_destination_id)
+	if _docking_computer_on or distance > reach or not _docking_at.is_empty() or _docking_computer_declined.has(_destination_id):
+		return
+	# Only where you mean to go: your load's drop-off, or a course you set
+	# (not every station you happen to fly past).
+	var job := GameState.active_job()
+	var on_course := _ship.cruise != null and not _course.is_empty() and _course[0] == _destination_id
+	if not on_course and (job == null or job.to_place != _destination_id):
+		return
+	if _ship.cruise == null or _course.is_empty() or _course[0] != _destination_id:
+		engage_course(PackedStringArray([_destination_id]))
+	if _ship.cruise == null:
+		return
+	_docking_computer_on = true
+	_hud.show_banner("DOCKING COMPUTER ENGAGED", 3.0)
+	if _waltz == null:
+		_waltz = AudioStreamPlayer.new()
+		_waltz.stream = WALTZ
+		_waltz.bus = Radio.RADIO_BUS  # (The radio volume slider sets it too.)
+		add_child(_waltz)
+	_waltz.volume_db = -30.0
+	_waltz.play()
+	create_tween().tween_property(_waltz, "volume_db", linear_to_db(maxf(Settings.radio_volume, 0.0001)) - 4.0, 2.5)
+	Radio.duck = 1.0
+
+
+## The docking computer's done (docked, or you took over): the waltz fades
+## and the radio comes back.
+func _stop_docking_computer() -> void:
+	_docking_computer_on = false
+	Radio.duck = 0.0
+	if _waltz != null and _waltz.playing:
+		var fade := create_tween()
+		fade.tween_property(_waltz, "volume_db", -40.0, 2.0)
+		fade.tween_callback(_waltz.stop)
+
+
+## BWAAAMP. A trucker nearby might honk back.
+func _honk() -> void:
+	if _horn_cooldown > 0.0:
+		return
+	_horn_cooldown = 1.2
+	Sfx.play("horn")
+	var tuning := GameState.tuning
+	var nearest: TrafficShip = null
+	var best := tuning.horn_reply_range
+	for other: Node in get_tree().get_nodes_in_group("traffic"):
+		if other is TrafficShip:
+			var distance := _ship.global_position.distance_to((other as TrafficShip).global_position)
+			if distance < best:
+				best = distance
+				nearest = other
+	if nearest == null or _rng.randf() > tuning.horn_reply_chance:
+		return
+	await get_tree().create_timer(_rng.randf_range(0.7, 1.4)).timeout
+	if not is_instance_valid(nearest):
+		return
+	# Farther off sounds quieter; every truck's horn is its own pitch.
+	Sfx.play("horn", -4.0 - best / 150.0, _rng.randf_range(0.7, 1.3))
+	_hud.show_banner("%s HONKS BACK" % nearest.id_label.to_upper() if not nearest.id_label.is_empty() else "SOMEBODY HONKS BACK", 2.5)
 
 
 # --- Launching ----------------------------------------------------------------------
@@ -825,7 +927,8 @@ func _restore_rig() -> void:
 
 func _remember_rig() -> void:
 	GameState.rig = {"fuel": _ship.flight.fuel, "boost_fuel": _ship.flight.boost_fuel,
-			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0)}
+			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0),
+			"snug": GameState.rig.get("snug", 0.0)}
 
 
 # --- Docking ------------------------------------------------------------------------
@@ -863,6 +966,8 @@ func _on_autopilot_arrived() -> void:
 ## Docked at a place. What happens depends on its kind.
 func _arrive(id: String) -> void:
 	var place := GameState.places.find(id)
+	if _docking_computer_on:
+		_stop_docking_computer()
 	if place == null:
 		return
 	_end_cinema()

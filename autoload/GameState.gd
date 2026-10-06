@@ -50,7 +50,9 @@ var job_seconds: float = 0.0
 ## The rig's state between flights: both tanks, the hull and the cargo
 ## (1 = full / perfect), and a snack from a truck stop (1 = had one this
 ## trip: steadier hands under boost).
-var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
+## "snug" is 1 when you loaded this trip's cargo yourself with the forklift
+## (a tidy load: the cargo takes less of a knock until you deliver it).
+var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "snug": 0.0}
 ## The rigs you own (ids from res://data/ships/ships.tres), the one you
 ## drive, and its paint job.
 var owned_ships: Array[String] = ["lazy_susan"]
@@ -225,6 +227,7 @@ func accept_job(job: JobData) -> bool:
 	job_seconds = 0.0
 	job_started = Economy.now_minutes()
 	rig["cargo"] = 1.0
+	rig["snug"] = 0.0  # (Loading it yourself sets it: HubServices.load_cargo.)
 	save_game()
 	return true
 
@@ -269,6 +272,7 @@ func deliver_at(place_id: String) -> bool:
 		finished_jobs.append(job.id)
 	active_job_id = ""
 	job_seconds = 0.0
+	rig["snug"] = 0.0
 	pending_payout = pay
 	save_game()
 	return true
@@ -292,6 +296,17 @@ func upgraded_ship(base: ShipData) -> ShipData:
 			upgrade.apply_to(ship)
 	Economy.apply_level(ship, Economy.level_of(base.id))
 	return ship
+
+
+## The bolt-on parts you can see on the rig, from the upgrades you own (see
+## RigAddOns.gd).
+func owned_add_ons() -> PackedStringArray:
+	var parts := PackedStringArray()
+	for id in owned_upgrades:
+		var upgrade := upgrades.find(id)
+		if upgrade != null and upgrade.add_on != "none":
+			parts.append(upgrade.add_on)
+	return parts
 
 
 func owns_upgrade(id: String) -> bool:
@@ -439,7 +454,7 @@ func new_game() -> void:
 	flags = {}
 	active_job_id = ""
 	job_seconds = 0.0
-	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
+	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "snug": 0.0}
 	owned_upgrades = []
 	owned_ships = ["lazy_susan"]
 	active_ship = "lazy_susan"

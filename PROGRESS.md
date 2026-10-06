@@ -1,19 +1,16 @@
 # Progress
 
-**Current status:** **Round 19: the calendar and clock, pink drop-offs,
-signs on boards, rig tints.** A 365-day, 12-month calendar (Kindling to
-Starsleep) and a galaxy clock (GST) that runs while you play: about 2 days
-per 10 minutes of flying. The clock and date are on both HUDs, and a date
-card shows on load and on waking. Your load's drop-off is hot pink on the
-course chart and in flight. Every sign sits on a board, in rooms and in
-space. Each rig's rooms have their own soft color. (Round 18, M6 money and
-time, is in too.) Built and validated, **waiting for your playtest** (see
-`PLAYTEST.md`).
-**Next session:** your feedback; then M7 (home and style: outfits,
-decor, docking computer, forklift) or M8 (more clients and systems, the
-husband's story), your call.
+**Current status:** **Round 20: M7, ship upgrades first** (outfits and
+decor parked, your call). Dusty's parts are on four shelves, with ten new
+upgrades and parts you can see on the rig. There's a docking computer that
+docks you to a waltz, an air horn, and a forklift minigame for loading
+cargo yourself. The date card is now small, in the bottom-left corner.
+Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Next session:** your feedback; then the rest of M7 when you want it
+(outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
+systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 19)
+**Last updated:** 2026-10-06 (round 20)
 
 ---
 
@@ -106,10 +103,13 @@ husband's story), your call.
   - [x] Rig XP and ten levels with felt stat boosts; level-gated upgrades (nine upgrades now)
   - [x] Everything saved; tests for all of it
   - [x] Round 19 extras: the job's drop-off in pink (chart and flight); every sign on a board; each rig's rooms tinted their own color
-- [ ] **M7: Home & style** *(started)*
+- [ ] **M7: Home & style** *(round 20: the rig side done; the home side parked)*
   - [x] New ships with their own handling (round 9: three rigs to buy, a special-order Megahauler to save for), a paint shop
   - [x] Round 16: your nine design-sheet rigs at Dusty's (Garbage Scow, Ice-Tug, SLAB, Catamaran, Cryo Tanker, Hab-Brick, Bulk-Ore, Ore-Crawler, Omega Ore Crawler), each with its own model, handling and pay
-  - [ ] Wardrobe, decor, a bigger apartment, docking computer, forklift minigame
+  - [x] Docking computer upgrade with its own (original) lounge waltz; it docks you from 4 km out
+  - [x] Cargo loading forklift minigame (optional; a tidy load rides better)
+  - [x] Round 20 extras: Dusty's shelves, ten new upgrades (cargo cradles, bumpers, racks, eco injectors, radar dish, air horn...), and upgrades you can see on the rig
+  - [ ] Outfit slots, sockets and wardrobe (parked: her cap is already its own piece); decor placement; a bigger apartment
 - [ ] **M8: Story & clients** *(started early, at your request)*
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
   - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest; the husband's story

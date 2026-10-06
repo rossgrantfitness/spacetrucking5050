@@ -56,15 +56,15 @@ static func sleep(tree: SceneTree) -> void:
 		var screen := dark.size
 		var square := maxf(2.0, floorf(screen.y / 200.0))
 		dark.draw_rect(Rect2(Vector2.ZERO, screen), Color(0.01, 0.01, 0.03, clampf(t / 0.6, 0.0, 1.0)))
-		if t > 0.7 and t < 1.6:
+		if t > 0.7:
 			var z := "Z".repeat(1 + int(t * 2.0) % 3)
 			PixelFont.draw_centered(dark, screen * 0.5 - Vector2(0.0, square * 12.0), z, square * 3.0, Color(0.7, 0.75, 1.0))
 		if t > 1.6:
-			DateCard.draw_date(dark, screen * 0.5, square, clampf((t - 1.6) / 0.4, 0.0, 1.0)))
+			DateCard.draw_date(dark, screen, clampf((t - 1.6) / 0.35, 0.0, 1.0)))
 	night.add_child(dark)
 	tree.root.add_child(night)
 	var clock := 0.0
-	while clock < 5.2:
+	while clock < 3.8:
 		await tree.process_frame
 		clock += tree.root.get_process_delta_time()
 		if clock > 1.4 and shown["time"] <= 1.4:
@@ -88,7 +88,31 @@ static func offer_job(tree: SceneTree, job: JobData) -> bool:
 	var taken := GameState.accept_job(job)
 	if taken:
 		Sfx.play("job_accept")
+		await load_cargo(tree, job)
 	return taken
+
+
+## Who loads it: the dock crew (instant, the default), or you, on the
+## forklift (a little minigame; a tidy load rides better).
+static func load_cargo(tree: SceneTree, job: JobData) -> void:
+	var gentler := roundi((1.0 - GameState.tuning.snug_load_care) * 100.0)
+	var choice := await MenuPanel.ask(tree, "WHO LOADS IT?", "%s is waiting on the dock." % job.cargo_name, [
+		{"text": "DOCK CREW, PLEASE", "description": "They'll have it aboard by the time you're in the seat."},
+		{"text": "I'LL DRIVE THE FORKLIFT", "description": "Load it yourself. A tidy load rides better: your cargo takes %d%% less of a knock this trip." % gentler}])
+	if choice != 1:
+		return
+	var result := await ForkliftGame.play(tree, pallets_for(job))
+	if result.get("done", false):
+		GameState.rig["snug"] = 1.0
+		var bumps := int(result.get("bumps", 0))
+		await MenuPanel.ask(tree, "SNUG LOAD", "Strapped down tight in %s%s. Your cargo takes %d%% less of a knock until you deliver it." % [
+				HudWidget.clock(float(result.get("seconds", 0.0))), (", %d bump%s" % [bumps, "" if bumps == 1 else "s"]) if bumps > 0 else ", not a single bump", gentler],
+				[{"text": "NICE"}])
+
+
+## How many pallets a job is: a few, a couple more for big or careful loads.
+static func pallets_for(job: JobData) -> int:
+	return clampi(3 + (1 if job.base_pay >= 1000 else 0) + (1 if job.is_fragile() else 0), 3, 6)
 
 
 ## The job board at a place: every job you can take from here.
@@ -185,22 +209,14 @@ static func mechanic(tree: SceneTree) -> void:
 				{"text": "INSURANCE", "detail": insurance_text,
 				"description": ("You're covered: repairs cost half. Pick this to cancel (no hard feelings)." if GameState.insured
 					else "Rig insurance: %d %s a week with your bills, and every repair costs half." % [GameState.tuning.weekly_insurance, currency])}]
-		var shop: Array[UpgradeData] = []
-		for upgrade in GameState.upgrades.upgrades:
-			if upgrade == null:
-				continue
-			var owned := GameState.owns_upgrade(upgrade.id)
-			var locked := not upgrade.requires_upgrade.is_empty() and not GameState.owns_upgrade(upgrade.requires_upgrade)
-			var too_green := level < upgrade.min_level
-			var detail := "INSTALLED" if owned else ("LOCKED" if locked else ("LEVEL %d" % upgrade.min_level if too_green else "%d %s" % [upgrade.price, currency]))
-			var why := ""
-			if locked:
-				why = "\n(Needs the %s first.)" % GameState.upgrades.find(upgrade.requires_upgrade).display_name
-			elif too_green and not owned:
-				why = "\n(Only fits a level %d rig. Yours is level %d: keep hauling.)" % [upgrade.min_level, level]
-			options.append({"text": upgrade.display_name.to_upper(), "detail": detail, "disabled": owned or locked or too_green,
-					"description": upgrade.description + why})
-			shop.append(upgrade)
+		var shelves := upgrade_shelves()
+		for shelf: String in shelves:
+			var ready_count := 0
+			for upgrade in GameState.upgrades.in_category(shelf):
+				if _can_buy_now(upgrade, level):
+					ready_count += 1
+			options.append({"text": shelves[shelf][0], "detail": "%d AVAILABLE" % ready_count if ready_count > 0 else "",
+					"description": shelves[shelf][1]})
 		options.append({"text": "LEAVE", "description": "\"Don't be a stranger.\""})
 		var rig := GameState.active_ship_data()
 		var xp_note := "%d XP to level %d" % [Economy.xp_to_next(), level + 1] if Economy.xp_to_next() > 0 else "top level"
@@ -218,15 +234,58 @@ static func mechanic(tree: SceneTree) -> void:
 			GameState.insured = not GameState.insured
 			await MenuPanel.ask(tree, "INSURANCE", "You're covered. Repairs cost half, and it's on your weekly bills." if GameState.insured
 					else "Cancelled. Dusty shrugs. \"Your rig, your call.\"", [{"text": "OKAY"}])
-		elif choice > 3 and choice <= shop.size() + 3:
-			var upgrade := shop[choice - 4]
-			if GameState.spend(upgrade.price):
-				GameState.owned_upgrades.append(upgrade.id)
-				await MenuPanel.ask(tree, "INSTALLED!", "%s is on your rig. You'll feel it next time you fly." % upgrade.display_name, [{"text": "NICE"}])
-			else:
-				await _too_poor(tree)
+		elif choice > 3 and choice <= shelves.size() + 3:
+			await upgrade_shelf(tree, shelves.keys()[choice - 4])
 		else:
 			return
+
+
+## Dusty's shelves of upgrades: category -> [name, what's on it].
+static func upgrade_shelves() -> Dictionary:
+	return {
+		"engine": ["ENGINE & HANDLING", "Go faster, turn sharper, burn less, carry more boost."],
+		"hauling": ["HAULING", "Kinder to your cargo and your hull, and room for more in the hold."],
+		"navigation": ["NAVIGATION", "See farther, and let the computer do the docking."],
+		"cab": ["CAB EXTRAS", "Fun stuff for the cab."]}
+
+
+## Whether `upgrade` could go on the rig right now (not owned, nothing
+## missing, the rig's level enough).
+static func _can_buy_now(upgrade: UpgradeData, level: int) -> bool:
+	return not GameState.owns_upgrade(upgrade.id) and level >= upgrade.min_level \
+			and (upgrade.requires_upgrade.is_empty() or GameState.owns_upgrade(upgrade.requires_upgrade))
+
+
+## One shelf of upgrades at Dusty's: buy them (they're felt next flight).
+static func upgrade_shelf(tree: SceneTree, category: String) -> void:
+	while true:
+		var currency := GameState.names.currency_short
+		var level := Economy.level_of()
+		var options: Array = []
+		var shop: Array[UpgradeData] = []
+		for upgrade in GameState.upgrades.in_category(category):
+			var owned := GameState.owns_upgrade(upgrade.id)
+			var locked := not upgrade.requires_upgrade.is_empty() and not GameState.owns_upgrade(upgrade.requires_upgrade)
+			var too_green := level < upgrade.min_level
+			var detail := "INSTALLED" if owned else ("LOCKED" if locked else ("LEVEL %d" % upgrade.min_level if too_green else "%d %s" % [upgrade.price, currency]))
+			var why := ""
+			if locked:
+				why = "\n(Needs the %s first.)" % GameState.upgrades.find(upgrade.requires_upgrade).display_name
+			elif too_green and not owned:
+				why = "\n(Only fits a level %d rig. Yours is level %d: keep hauling.)" % [upgrade.min_level, level]
+			options.append({"text": upgrade.display_name.to_upper(), "detail": detail, "disabled": owned or locked or too_green,
+					"description": upgrade.description + why})
+			shop.append(upgrade)
+		options.append({"text": "BACK", "description": "Back to the counter."})
+		var choice := await MenuPanel.ask(tree, upgrade_shelves()[category][0], "You've got %d %s." % [GameState.credits, currency], options)
+		if choice < 0 or choice >= shop.size():
+			return
+		var upgrade := shop[choice]
+		if GameState.spend(upgrade.price):
+			GameState.owned_upgrades.append(upgrade.id)
+			await MenuPanel.ask(tree, "INSTALLED!", "%s is on your rig. You'll feel it next time you fly." % upgrade.display_name, [{"text": "NICE"}])
+		else:
+			await _too_poor(tree)
 
 
 ## The rig dealer: buy a new rig, or switch to one you own. Every rig has

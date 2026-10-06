@@ -163,7 +163,7 @@ func _gather_contacts() -> void:
 	if ship == null:
 		return
 	var here := ship.global_position
-	var reach := GameState.tuning.radar_range
+	var reach := GameState.tuning.radar_range * (ship.ship_data.radar_reach if ship.ship_data != null else 1.0)
 	for field: AsteroidField in get_tree().get_nodes_in_group("asteroid_fields"):
 		for rock in field.rocks_within(here, reach):
 			contacts.append({"position": Vector3(rock.x, rock.y, rock.z), "radius": rock.w, "kind": Kind.ROCK, "label": ""})

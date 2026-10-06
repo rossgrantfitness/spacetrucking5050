@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "eco_injectors"
+display_name = "Eco Injectors"
+description = "Sip, don't gulp. The engines burn 15% less fuel, so the tank goes further."
+price = 1100
+category = "engine"
+fuel_burn = 0.85

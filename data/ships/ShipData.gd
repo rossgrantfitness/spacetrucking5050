@@ -102,6 +102,20 @@ extends Resource
 ## smaller.
 @export_range(0.3, 3.0, 0.05) var engine_pitch: float = 0.9
 
+@export_group("Toughness and gear (upgrades change these)")
+## How much of a knock reaches the cargo (0.6 = 40% gentler on it).
+@export_range(0.1, 1.0, 0.05) var cargo_care: float = 1.0
+## How much of a knock dents the hull (0.6 = 40% less damage).
+@export_range(0.1, 1.0, 0.05) var hull_care: float = 1.0
+## How far the radar globe sees, compared with usual (tuning: radar_range).
+@export_range(0.5, 3.0, 0.05) var radar_reach: float = 1.0
+## A docking computer: takes over from farther out, flies you in through
+## the rocks and the ring, and plays its waltz.
+@export var docking_computer: bool = false
+## An air horn (B / left stick click in flight). Truckers honk back.
+@export var air_horn: bool = false
+
+@export_group("Inside")
 ## Inside, every rig has the same rooms (so you never get lost), but each
 ## has its own color cast over them, so you can tell which rig you're in.
 ## White = none. Keep it soft: a little goes a long way.

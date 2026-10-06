@@ -13,7 +13,7 @@ extends Resource
 @export var month_names: PackedStringArray = PackedStringArray()
 ## How many days each month has (the same order; they should add up to 365).
 @export var month_days: PackedInt32Array = PackedInt32Array()
-## One line about each month, shown on the date card when you wake up.
+## One line about each month (flavor for the PC, radio and people to use).
 @export var month_notes: PackedStringArray = PackedStringArray()
 ## The year the game starts in.
 @export var start_year: int = 5050

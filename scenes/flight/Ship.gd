@@ -219,6 +219,9 @@ func apply_look(paint: PaintJob) -> void:
 		for flare in _visual_pivot.find_children("*", "EngineFlare", true, false):
 			(flare as EngineFlare).refresh_color()
 	_add_exhausts()
+	# The upgrades you can see (bumpers, a radar dish, horns...), after the
+	# paint so the chrome stays chrome.
+	RigAddOns.fit(_visual_pivot, GameState.owned_add_ons())
 
 
 ## Puts a flame (EngineExhaust) on every engine nozzle of the model, sized
@@ -281,8 +284,9 @@ func overspeed_ratio() -> float:
 func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
 	var tuning := GameState.tuning
 	var strength := bonk_strength(impact, tuning)
-	hull = maxf(hull - lerpf(tuning.bonk_damage_min, tuning.bonk_damage_max, strength), 0.0)
-	cargo_condition = maxf(cargo_condition - lerpf(tuning.cargo_damage_min, tuning.cargo_damage_max, strength), 0.0)
+	# (Bumper bars and cargo cradles soften it: see the upgrades.)
+	hull = maxf(hull - lerpf(tuning.bonk_damage_min, tuning.bonk_damage_max, strength) * ship_data.hull_care, 0.0)
+	cargo_condition = maxf(cargo_condition - lerpf(tuning.cargo_damage_min, tuning.cargo_damage_max, strength) * ship_data.cargo_care, 0.0)
 	last_bonk_local = global_basis.inverse() * (where - global_position)
 	shake.add_trauma(lerpf(0.25, tuning.bonk_max_shake, strength))
 	flight.velocity += away * impact * tuning.bonk_bounce
@@ -409,6 +413,8 @@ static func bonk_strength(impact: float, tuning: Tuning) -> float:
 ## patch): a little wear on the hull and cargo, a thump and a jolt, and a
 ## word under the RIDE bar saying why ("pings", "bumpy"). Never a bonk.
 func knock(hull_loss: float, cargo_loss: float, reason: String) -> void:
+	hull_loss *= ship_data.hull_care
+	cargo_loss *= ship_data.cargo_care
 	hull = maxf(hull - hull_loss, 0.0)
 	if not GameState.active_job_id.is_empty():
 		cargo_condition = maxf(cargo_condition - cargo_loss, 0.0)
@@ -442,8 +448,8 @@ func _shake_cargo(delta: float) -> void:
 	var g := rough_g_force(acceleration, flight.nose())
 	var rough := maxf(g - tuning.cargo_comfy_accel, 0.0) / tuning.cargo_comfy_accel
 	var vibration := overspeed_ratio()
-	var rough_loss := rough * tuning.cargo_rough_rate * delta
-	var shake_loss := vibration * tuning.cargo_boost_rate * delta
+	var rough_loss := rough * tuning.cargo_rough_rate * delta * ship_data.cargo_care
+	var shake_loss := vibration * tuning.cargo_boost_rate * delta * ship_data.cargo_care
 	cargo_condition = maxf(cargo_condition - rough_loss - shake_loss, 0.0)
 	var stress_now := clampf(g / (tuning.cargo_comfy_accel * 2.0) + vibration * 0.4, 0.0, 1.0)
 	cargo_stress = lerpf(cargo_stress, stress_now, 1.0 - exp(-4.0 * delta))

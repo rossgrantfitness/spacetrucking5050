@@ -13,3 +13,4 @@ max_speed = 1.25
 acceleration = 1.35
 turn_rate = 1.0
 fuel_tank = 1.0
+add_on = "stacks"

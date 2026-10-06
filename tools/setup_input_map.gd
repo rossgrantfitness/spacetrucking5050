@@ -48,6 +48,8 @@ func _init() -> void:
 	_action("logbook", BUTTON, [_key(KEY_L)])
 	# The cinematic camera (on autopilot): watch the rig from outside.
 	_action("cinema_camera", BUTTON, [_key(KEY_V), _button(JOY_BUTTON_RIGHT_STICK)])
+	# The air horn (once you've bought one at Dusty's).
+	_action("horn", BUTTON, [_key(KEY_B), _button(JOY_BUTTON_LEFT_STICK)])
 	# A developer helper: lights up every HUD warning so the look can be
 	# checked. Keyboard only.
 	_action("hud_demo", BUTTON, [_key(KEY_F9)])

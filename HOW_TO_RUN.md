@@ -107,6 +107,7 @@ Y = △.)
 | Get up and walk around inside the rig (on autopilot) | **F** | **X** |
 | Reply to a comm call, then pick one | **T**, then **Q** / **R** / **E** (or **1** / **2** / **3**) | **RB**, then D-pad **left** / **up** / **right** |
 | Logbook (sights you've seen) | **L** | (pause menu) |
+| Air horn (once you've bought one at Dusty's) | **B** | **L3** (click the left stick) |
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
 
@@ -321,6 +322,32 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
   in flight the waypoint is pink with "LOAD" under it.
 - **Which rig you're in:** every rig has the same rooms inside, but each
   has its own soft color cast, and its name shows under the calendar.
+
+### Upgrading your rig (Dusty's garage)
+
+Dusty's parts are on four shelves: **ENGINE & HANDLING**, **HAULING**,
+**NAVIGATION** and **CAB EXTRAS**. The number next to a shelf is how many
+parts you could fit right now. Some parts need a rig of a certain level, or
+another part first. Many show up on the outside of your rig: bumper bars,
+a spinning radar dish, chrome horns, a roof light bar, exhaust stacks, a
+crate rack and gold solar sails.
+
+- **Docking computer** (Navigation): within 4 km of your load's drop-off
+  (or a course you set) it takes the wheel, flies the lane through the
+  rocks and the ring and docks you, to its own little waltz while the radio
+  fades out. Touch the stick to take over (it won't grab the wheel again on
+  that approach).
+- **Air horn** (Cab extras): **B** / **L3** in flight. Truckers nearby
+  sometimes honk back.
+
+### Loading cargo (the forklift)
+
+When you take a job you can let the **dock crew** load it (the default),
+or **drive the forklift** yourself: a little top-down game. Arrows / stick
+drive, **E** / **A** lifts a pallet (point the forks at it) and sets it
+down in a marked spot in your rig's hold (it snaps in), and **Esc** / **B**
+lets the crew finish. Load it all and it's a **snug load**: your cargo
+takes 20% less of a knock until you deliver it. Bumps are only bumps.
 
 ### Menus
 

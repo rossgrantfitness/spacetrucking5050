@@ -444,6 +444,27 @@ static func make_explosion() -> AudioStreamWAV:
 	return to_wav(samples, false)
 
 
+## A big rig's two-tone air horn: two buzzy reeds a third apart, with a
+## little wobble as the air comes up to pressure. "BWAAAMP."
+static func make_horn() -> AudioStreamWAV:
+	var seconds := 0.95
+	var count := int(MIX_RATE * seconds)
+	var samples := PackedFloat32Array()
+	samples.resize(count)
+	var smooth := 0.0
+	for i in count:
+		var t := float(i) / MIX_RATE
+		var droop := 1.0 - 0.04 * exp(-t * 12.0)  # Flat for a moment, then up to pitch.
+		var wave := 0.0
+		for hz: float in [233.0, 294.0, 349.0]:
+			var phase := fposmod(hz * droop * t + 0.002 * sin(TAU * 6.0 * t), 1.0)
+			wave += (phase * 2.0 - 1.0) * 0.33  # A buzzy sawtooth reed.
+		smooth = lerpf(smooth, wave, 0.25)  # Take the fizz off the top.
+		var envelope := minf(t / 0.04, 1.0) * clampf((seconds - t) / 0.18, 0.0, 1.0)
+		samples[i] = tanh(smooth * 2.2) * envelope * 0.55
+	return to_wav(samples, false)
+
+
 ## Packs samples (-1 to 1) into a 16-bit audio stream.
 static func to_wav(samples: PackedFloat32Array, looping: bool) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

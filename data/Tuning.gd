@@ -556,6 +556,22 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var radio_ad_share: float = 0.4
 
 
+@export_group("Upgrades")
+
+## The docking computer (an upgrade) takes the wheel this close to your
+## destination, in meters (the rocks around stations start about 1.5 to 2.5
+## km out, so this is before them).
+@export_range(500.0, 20000.0, 100.0, "suffix:m") var docking_computer_range: float = 4000.0
+## The air horn (an upgrade): truckers within this many meters may honk back...
+@export_range(100.0, 5000.0, 50.0, "suffix:m") var horn_reply_range: float = 1500.0
+## ...this often (0 to 1).
+@export_range(0.0, 1.0, 0.05) var horn_reply_chance: float = 0.75
+## Loading the cargo yourself with the forklift makes a tidy load: until
+## you deliver it, the cargo takes this much of the usual knock (0.8 = 20%
+## gentler).
+@export_range(0.1, 1.0, 0.05) var snug_load_care: float = 0.8
+
+
 @export_group("Route events")
 
 ## How often something happens, by ZONE (a random time between the two, in
