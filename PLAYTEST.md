@@ -3,6 +3,7 @@
 **What's new:**
 - Your 12 rig-room paintings are the backgrounds.
 - The lion boss, your vending machine, your truck stop station and your billboard are in the game.
+- So are Olivia (aboard the rig), Marge, Bonnie the polar bear and Mort the weasel.
 
 **Time needed:** 10 minutes.
 
@@ -12,7 +13,8 @@
    - Watch Jacki walk **behind** things: the dispatch counter, the galley table, the bed, the crates, the engine. Does she hide where the painting says she should?
    - Does she ever look like she's floating, or standing inside furniture?
 2. Look at the signs in dispatch (DISPATCH and its motto) and the engine room (ENGINE ROOM): the game draws them on your blank boards. Right size and place?
-3. Visit the OrbitalEx office and meet the lion.
+3. Visit the OrbitalEx office: Bonnie at the door, the lion and Mort at the desk. Say hi to Marge on the way.
+   - Find Olivia aboard the rig. She wanders between the galley, the engine room and the cargo bay; sleep or fly a while if she's not around.
 4. F10 → jump near the truck stop: look at your station. Fly past a few billboards (they're random sights on the road; the Glimmer road has a row of them).
 5. At Tidewater or the casino, find the new vending machine.
 
@@ -23,6 +25,7 @@
 3. Is the lion the right size? Should he be bigger than everyone else?
 4. Is the vending machine the right size and shape (it's stretched a little taller)?
 5. Does the station read as a truck stop from far away?
+6. Mort is a placeholder name for the weasel. Keep it, or what's his name?
 
 ---
 

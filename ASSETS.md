@@ -137,7 +137,9 @@ You don't need Blender. If you ever want to learn one tool, **Blockbench**
 - [ ] **Chang Ma** (mole, engineer): face sheet, 64×64.
 - [ ] **Clem** (donkey, cargo hand): face sheet, 64×64.
 - [x] **The boss** (Dale Pembrook, lion): your model is in, in the OrbitalEx office.
-- [ ] **Olivia** (ostrich, ditzy crew mascot): waiting for the model file.
+- [x] **Olivia** (ostrich, ditzy crew mascot): your model is in, aboard the rig.
+- [x] **Marge** (owl, the truck stop diner): your model is in.
+- [x] **Bonnie** (polar bear, OrbitalEx receptionist) and **Mort** (weasel, the boss's coworker): your models are in.
 
 ### Your rig: The Thumper
 - [ ] **Exterior model.** The one you look at for hours. Gunmetal, amber

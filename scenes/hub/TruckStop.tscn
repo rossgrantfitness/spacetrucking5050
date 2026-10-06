@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="8_service"]
 [ext_resource type="Script" path="res://scenes/hub/Examine.gd" id="9_examine"]
 [ext_resource type="Resource" path="res://data/npcs/truckstop_control.tres" id="d_Marge"]
-[ext_resource type="PackedScene" path="res://scenes/hub/OwlVisual.tscn" id="v_Marge"]
+[ext_resource type="PackedScene" path="res://scenes/hub/MargeVisual.tscn" id="v_Marge"]
 [ext_resource type="Resource" path="res://data/npcs/truckstop_mechanic.tres" id="d_Dusty"]
 [ext_resource type="PackedScene" path="res://scenes/hub/BeaverVisual.tscn" id="v_Dusty"]
 [ext_resource type="Resource" path="res://data/npcs/truckstop_pumps.tres" id="d_Lily"]
@@ -252,7 +252,6 @@ data = ExtResource("d_Marge")
 
 [node name="Visual" parent="People/Marge" instance=ExtResource("v_Marge")]
 rotation = Vector3(0, 3.1416, 0)
-scale = Vector3(1.15, 1.15, 1.15)
 
 [node name="TalkReach" type="CollisionShape3D" parent="People/Marge"]
 position = Vector3(0, 0.6, 1.9)

@@ -11,7 +11,9 @@
 [ext_resource type="Resource" path="res://data/npcs/company_boss.tres" id="d_Boss"]
 [ext_resource type="PackedScene" path="res://scenes/hub/LionBossVisual.tscn" id="v_Boss"]
 [ext_resource type="Resource" path="res://data/npcs/company_greeter.tres" id="d_Bonnie"]
-[ext_resource type="PackedScene" path="res://scenes/hub/SheepVisual.tscn" id="v_Bonnie"]
+[ext_resource type="PackedScene" path="res://scenes/hub/ReceptionistVisual.tscn" id="v_Bonnie"]
+[ext_resource type="Resource" path="res://data/npcs/company_assistant.tres" id="d_Mort"]
+[ext_resource type="PackedScene" path="res://scenes/hub/WeaselCoworkerVisual.tscn" id="v_Mort"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -129,7 +131,6 @@ data = ExtResource("d_Bonnie")
 
 [node name="Visual" parent="People/Bonnie" instance=ExtResource("v_Bonnie")]
 rotation = Vector3(0, 1.5708, 0)
-scale = Vector3(1.05, 1.05, 1.05)
 
 [node name="TalkReach" type="CollisionShape3D" parent="People/Bonnie"]
 position = Vector3(-1.9, 0.3, 0)
@@ -156,6 +157,24 @@ shape = SubResource("Sphere_talk")
 [node name="Body" type="StaticBody3D" parent="People/Boss"]
 
 [node name="Shape" type="CollisionShape3D" parent="People/Boss/Body"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Capsule_npc")
+
+[node name="Mort" type="Area3D" parent="People"]
+position = Vector3(2.8, 0, -7.6)
+script = ExtResource("7_npc")
+data = ExtResource("d_Mort")
+
+[node name="Visual" parent="People/Mort" instance=ExtResource("v_Mort")]
+rotation = Vector3(0, 2.6, 0)
+
+[node name="TalkReach" type="CollisionShape3D" parent="People/Mort"]
+position = Vector3(0, 0.3, 1.3)
+shape = SubResource("Sphere_talk")
+
+[node name="Body" type="StaticBody3D" parent="People/Mort"]
+
+[node name="Shape" type="CollisionShape3D" parent="People/Mort/Body"]
 position = Vector3(0, 0.6, 0)
 shape = SubResource("Capsule_npc")
 

@@ -11,6 +11,10 @@ extends Node3D
 @export var breath: float = 0.012
 ## Seconds per breath.
 @export var breath_seconds: float = 3.4
+## What they're doing (set by CrewNPC from their activity): "dance" sways
+## and bobs, "sleep" breathes slow with the head drooped; anything else
+## just stands and breathes. (One-piece models can't move their limbs.)
+var pose: String = "stand"
 ## How far it sways side to side, in degrees.
 @export var sway_degrees: float = 1.5
 
@@ -25,6 +29,15 @@ func animate(delta: float, _walking: float) -> void:
 	if _model == null:
 		return
 	_time += delta
-	var breathe := sin(_time * TAU / breath_seconds)
-	var sway := deg_to_rad(sway_degrees) * sin(_time * TAU / (breath_seconds * 2.3))
-	_model.transform = Transform3D(Basis(Vector3.FORWARD, sway).scaled(Vector3(1.0, 1.0 + breath * breathe, 1.0)), Vector3.ZERO) * _rest
+	var seconds := breath_seconds * (1.8 if pose == "sleep" else 1.0)
+	var breathe := sin(_time * TAU / seconds)
+	var sway := deg_to_rad(sway_degrees) * sin(_time * TAU / (seconds * 2.3))
+	var lean := 0.0
+	var hop := 0.0
+	if pose == "dance":
+		sway = deg_to_rad(9.0) * sin(_time * TAU * 1.1)
+		hop = absf(sin(_time * TAU * 1.1)) * 0.06
+	elif pose == "sleep":
+		lean = deg_to_rad(8.0)  # Nodding off.
+	var tilt := Basis(Vector3.FORWARD, sway) * Basis(Vector3.RIGHT, -lean)
+	_model.transform = Transform3D(tilt.scaled(Vector3(1.0, 1.0 + breath * breathe, 1.0)), Vector3.UP * hop) * _rest

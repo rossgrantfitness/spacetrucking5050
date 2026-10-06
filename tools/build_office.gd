@@ -1,10 +1,10 @@
 extends "res://tools/build_truck_stop.gd"
 ## Builds the OrbitalEx regional office (through the glass doors on the
-## truck stop's front wall) and its greeter:
+## truck stop's front wall). (Bonnie the receptionist, the boss and his
+## coworker are the developer's models, in res://art/models/.)
 ##     res://scenes/hub/sets/OrbitalExOfficeSet.tscn - the room: an entryway
 ##         with the greeter's desk, a lobby down a red carpet, and the
 ##         boss's desk at the far end under a giant glowing logo
-##     res://scenes/hub/SheepVisual.tscn             - Bonnie, the greeter
 ##
 ## Run it from the project folder with:
 ##     godot --headless --path . -s tools/build_office.gd
@@ -17,25 +17,8 @@ extends "res://tools/build_truck_stop.gd"
 func _initialize() -> void:
 	_animator_script = load(ANIMATOR_PATH)
 	_blinker_script = load(BLINKER_SCRIPT_PATH)
-	_save(_sheep(), "res://scenes/hub/SheepVisual.tscn")
 	_save(_build_office(), "res://scenes/hub/sets/OrbitalExOfficeSet.tscn")
 	quit()
-
-
-## Bonnie: a sheep in an OrbitalEx blazer with a headset and a big smile.
-## Hook: a fluffy cloud of wool on her head.
-func _sheep() -> Node3D:
-	var critter := _build_critter("SheepVisual", _look(Color(0.95, 0.93, 0.88), Color(0.35, 0.3, 0.32), Color(0.2, 0.55, 0.85), Color(0.2, 0.22, 0.3), Color(0, 0, 0, 0), "round", "puff"))
-	var head := _head(critter)
-	var wool := _paint(Color(0.98, 0.97, 0.94), FUZZ, Vector2(8, 8))
-	for puff: Vector3 in [Vector3(0.0, 0.44, 0.0), Vector3(-0.12, 0.42, 0.06), Vector3(0.12, 0.42, 0.06), Vector3(0.0, 0.42, -0.1)]:
-		_box(head, "Wool", Vector3(0.2, 0.12, 0.2), puff, wool)
-	for ear in ["Body/Head/EarLeft", "Body/Head/EarRight"]:
-		var flop := critter.get_node(ear) as Node3D
-		flop.position.y = 0.28
-		flop.rotation.z *= 6.0  # Floppy, out to the sides.
-	_box(critter.get_node("Body") as Node3D, "Badge", Vector3(0.06, 0.03, 0.01), Vector3(0.1, 0.21, -0.118), _paint(Color(1.0, 0.82, 0.3), null))
-	return critter
 
 
 # --- The office -------------------------------------------------------------------

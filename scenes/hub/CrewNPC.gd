@@ -28,8 +28,8 @@ func setup(new_member: CrewMember, new_activity: CrewActivity) -> void:
 	visual.name = "Visual"
 	add_child(visual)
 	visual.set("pose", activity.pose)
-	if activity.pose == "sleep":
-		visual.position.y = 0.25
+	if activity.pose == "sleep" and not visual is ModelVisual:
+		visual.position.y = 0.25  # Lying on a cot or couch (one-piece models sleep standing).
 	_add_prop(visual, activity.prop)
 	var reach := CollisionShape3D.new()
 	reach.name = "TalkReach"

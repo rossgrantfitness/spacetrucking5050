@@ -2,7 +2,6 @@ extends "res://tools/build_hub.gd"
 ## Builds the truck stop's inside and the people who work and hang out there:
 ##     res://scenes/hub/sets/TruckStopSet.tscn   - the concourse: walls,
 ##                                                 counters, signs, lights
-##     res://scenes/hub/OwlVisual.tscn           - Marge, who runs the place
 ##     res://scenes/hub/BeaverVisual.tscn        - Dusty, the mechanic
 ##     res://scenes/hub/FrogVisual.tscn          - Lily, at the pumps
 ##     res://scenes/hub/WalrusVisual.tscn        - Big Wendell, a trucker
@@ -25,7 +24,6 @@ func _initialize() -> void:
 	_animator_script = load(ANIMATOR_PATH)
 	_blinker_script = load(BLINKER_SCRIPT_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/hub/sets"))
-	_save(_owl(), "res://scenes/hub/OwlVisual.tscn")
 	_save(_beaver(), "res://scenes/hub/BeaverVisual.tscn")
 	_save(_frog(), "res://scenes/hub/FrogVisual.tscn")
 	_save(_walrus(), "res://scenes/hub/WalrusVisual.tscn")
@@ -56,24 +54,6 @@ func _remove(critter: Node3D, paths: Array[String]) -> void:
 			node.free()
 
 
-## Marge: an owl in a diner apron and a headset. Hook: ear tufts and a beak.
-func _owl() -> Node3D:
-	var critter := _build_critter("OwlVisual", _look(Color(0.72, 0.55, 0.38), Color(0.95, 0.88, 0.75), Color(0.35, 0.8, 0.85), Color(0.3, 0.28, 0.35), Color(0, 0, 0, 0), "round", "puff"))
-	var head := _head(critter)
-	_remove(critter, ["Body/Head/Snout", "Body/Head/Nose"])
-	_box(head, "Beak", Vector3(0.07, 0.07, 0.08), Vector3(0.0, 0.13, -0.21), _paint(Color(1.0, 0.72, 0.2), null)).rotation = Vector3(0.6, 0.0, 0.0)
-	for side: float in [-1.0, 1.0]:
-		_box(head, "EyeRing", Vector3(0.12, 0.12, 0.015), Vector3(0.09 * side, 0.22, -0.175), _paint(Color(0.98, 0.92, 0.75), null))
-		var tuft := _box(head, "Tuft", Vector3(0.05, 0.18, 0.05), Vector3(0.15 * side, 0.46, 0.0), _paint(Color(0.5, 0.36, 0.24), FUZZ, Vector2(8, 8)))
-		tuft.rotation = Vector3(0.0, 0.0, -0.4 * side)
-	for ear in ["Body/Head/EarLeft", "Body/Head/EarRight"]:
-		(critter.get_node(ear) as Node3D).scale = Vector3(0.6, 0.5, 0.6)
-	_box(critter.get_node("Body") as Node3D, "Apron", Vector3(0.24, 0.22, 0.02), Vector3(0.0, 0.08, -0.12), _paint(Color(1.0, 0.98, 0.95), null))
-	return critter
-
-
-## Dusty: a beaver mechanic in orange overalls and a cap. Hook: a big flat
-## paddle tail (and buck teeth).
 func _beaver() -> Node3D:
 	var critter := _build_critter("BeaverVisual", _look(Color(0.58, 0.38, 0.24), Color(0.8, 0.62, 0.45), Color(1.0, 0.55, 0.15), Color(0.95, 0.5, 0.15), Color(0.3, 0.35, 0.45), "round", "puff"))
 	var head := _head(critter)

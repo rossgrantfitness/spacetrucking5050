@@ -46,6 +46,8 @@ static func paint(canvas: CanvasItem, corner: Vector2, who: NPCData, talking: bo
 			pass
 		"lion":
 			canvas.draw_circle(head, 11.5, fur.darkened(0.45))  # The mane.
+		"ostrich":
+			pass  # No ears; the beak comes below.
 		"otter":
 			canvas.draw_circle(o + Vector2(8, 8), 2.0, fur.darkened(0.2))
 			canvas.draw_circle(o + Vector2(20, 8), 2.0, fur.darkened(0.2))
@@ -59,6 +61,8 @@ static func paint(canvas: CanvasItem, corner: Vector2, who: NPCData, talking: bo
 	canvas.draw_circle(head, 8.0, fur)
 	# Their one signature feature.
 	match who.species:
+		"ostrich":
+			_rect(canvas, o + Vector2(10, 16), Vector2(8, 3), Color(1.0, 0.6, 0.35))  # A big flat beak.
 		"raccoon":
 			_rect(canvas, o + Vector2(7, 11), Vector2(14, 3), DARK)  # The mask.
 			_rect(canvas, o + Vector2(10, 15), Vector2(8, 4), light)

@@ -17,7 +17,7 @@ sets_flags = PackedStringArray("met_bonnie")
 [sub_resource type="Resource" id="Conversation_regular"]
 script = ExtResource("2_conv")
 needs_flags = PackedStringArray("met_boss")
-lines = PackedStringArray("Welcome back to {company}! Mr. Pembrook's at his desk. He's always at his desk. I've never seen him leave.", "Can I get you a water? It's free! ...It's two credits.")
+lines = PackedStringArray("Welcome back to {company}, sweetie! Mr. Pembrook's at his desk. He's always at his desk. I've never seen him leave.", "Can I get you a water? It's free! ...It's two credits. I'm so sorry, dear. Here, have a mint. The mint's free. I checked.")
 
 [sub_resource type="Resource" id="Conversation_default"]
 script = ExtResource("2_conv")
@@ -26,13 +26,13 @@ lines = PackedStringArray("Welcome to {company}! Mr. Pembrook's straight down th
 [resource]
 script = ExtResource("1_npc")
 display_name = "Bonnie ({company})"
-species = "sheep"
-voice_pitch = 1.6
-voice_type = "chirp"
+species = "bear"
+voice_pitch = 1.15
+voice_type = "soft"
 voice_key = 5
 voice_scale = "major"
 lines = PackedStringArray("Welcome to {company}!")
 conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_owner"), SubResource("Conversation_first"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
 comm_name = "BONNIE · {company}"
-fur_color = Color(0.95, 0.93, 0.88, 1)
-accent_color = Color(0.2, 0.55, 0.85, 1)
+fur_color = Color(0.96, 0.96, 0.98, 1)
+accent_color = Color(0.85, 0.12, 0.15, 1)

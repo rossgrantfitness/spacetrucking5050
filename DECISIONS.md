@@ -504,5 +504,11 @@ be revisited; just say so.
 - **Vending machine** (your model): `VendingMachine.tscn` is now hand-made around it, about 1.6 m wide and 1.45 m tall (your model is squat; stretched a little taller so it stands over Jacki without warping). The old box builder is gone.
 - **Truck stop station** (your model): replaces the placeholder hub and ring, 720 m across. The docking bay, sign board and parking deck stay on its front. You bonk off its exact shape (`tools/build_station_model.gd`).
 - **Space billboards** (your model): every billboard in flight uses it. The ad is printed on its white screen in the billboard's color, shrinking to fit long ads.
-- **Olivia the ostrich** (new crew mascot): waiting for her model file; it hadn't reached GitHub yet.
+- **Four more of your characters:**
+  - **Olivia**, the ditzy ostrich mascot (from the "Quirky Duck Mascot" file), joins the rig's crew (`tools/crew_data/make_crew.py`). Her spots are ones nobody else uses: the galley fridge and stove, the engine room gauges and drum, and the cargo crates. She has her own greetings and small talk ("Are we flying right now? Oh my gosh."), a high chirpy voice, and a beak on her comm portrait.
+  - **Marge** now uses your owl baker model.
+  - **Bonnie** the receptionist is now your polar bear grandma (lines warmed up a little: "sweetie", a free mint).
+  - **Mort Fenwick**, the boss's weasel coworker (the "Skink" file), stands beside the boss's desk. "Assistant TO the regional manager. It's on my mug." The name is a placeholder in `data/npcs/company_assistant.tres`; rename him there.
+  - One-piece models can't bend, so `ModelVisual` fakes poses: a dance sways and hops, a nap droops and breathes slowly (and they nap standing up; ostriches do).
+  - The old placeholder owl and sheep models are gone.
 - Size note for the Windows build: the paintings are stored at full quality (about 5 MB each in the game). Fine for now; can be compressed later if the download gets big.

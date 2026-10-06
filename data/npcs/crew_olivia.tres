@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Olivia"
+species = "ostrich"
+voice_pitch = 1.5
+voice_type = "chirp"
+voice_key = 4
+voice_scale = "major"
+lines = PackedStringArray("Hi! Hi! Hello! Hi!")
+comm_name = "OLIVIA · MASCOT"
+fur_color = Color(0.9, 0.84, 0.78, 1)
+accent_color = Color(1, 0.42, 0.1, 1)

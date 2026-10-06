@@ -106,6 +106,31 @@ CREW = [
         ("ANY", "", 2, "", ["Raccoony says you're the best driver he ever had. Except one. He don't say who. He gets quiet."]),
         ("ANY", "", 4, "", ["Boss? Thanks for keepin' me on. I know I'm slow. But I'm careful slow."]),
      ]},
+    {"id": "olivia", "npc": "res://data/npcs/crew_olivia.tres", "visual": "res://scenes/hub/crew/OliviaVisual.tscn",
+     "role": "Mascot",
+     "greetings": ["{bunny}! Hi! Hi! It's me, Olivia!", "Good morning! Or good night! I can never tell in space!",
+                   "Oh! I didn't see you there. I was looking at my feet. They're SO big.", "Boss lady! I made you a friendship bracelet! I lost it! It was beautiful!"],
+     "activities": [
+        A("fridge", "galley", "Fridge", "stand", "", "ANY", 2.0, "", ["I'm looking for the snack I put in here. I don't remember what it looks like.", "I'll know it when I see it!"]),
+        A("toast", "galley", "Stove", "work", "plate", "DAY", 1.0, "", ["I'm making toast! In the pot! Chang Ma says that's soup. Agree to disagree!"]),
+        A("gauges", "engine", "Gauges", "stand", "", "ANY", 1.5, "", ["This needle keeps pointing at the red bit! I think it likes the red bit.", "I like the red bit too."]),
+        A("mascot", "cargo", "Crates", "dance", "", "ANY", 1.5, "", ["Practicing my {company} mascot dance! For the parade! There's no parade. There MIGHT be!"]),
+        A("nap", "engine", "Drum", "sleep", "", "NIGHT", 2.0, "", ["Zzz... I'm a big bird... the BIGGEST bird... zzz..."]),
+        A("hiding", "cargo", "Crates", "stand", "", "NIGHT", 0.6, "", ["Shh! I'm hiding from my shadow. It's been following me all day!"]),
+     ],
+     "talk": [
+        ("ANY", "", 0, "", ["Did you know space is upside down? Or we are. One of us is."]),
+        ("ANY", "", 0, "", ["{company} hired me as the mascot! They gave me the cap and said 'don't talk to customers.'", "So I talk to YOU!"]),
+        ("ANY", "", 0, "", ["Ostriches can't fly. But I'm IN a flying thing. So, technically...", "...I can fly!"]),
+        ("ANY", "", 0, "", ["Chang Ma says I'm not allowed in the engine room. I'm allowed in the engine room. I asked the engine."]),
+        ("HAS_JOB", "", 0, "", ["Is the {cargo} alive? I said hi to it just in case. It didn't say hi back. Rude!"]),
+        ("NO_JOB", "", 0, "", ["The back is empty! I checked twice. And once more. Then I got stuck in there for a while."]),
+        ("IN_FLIGHT", "", 0, "", ["Are we flying right now? Oh my gosh. Are we flying RIGHT NOW?"]),
+        ("PARKED", "", 0, "", ["We're at {place}! I'm gonna wave at everybody! Hi, everybody!"]),
+        ("JUST_PAID", "", 0, "", ["Money! I'm gonna buy... a hat! For my other hat!"]),
+        ("NIGHT", "", 0, "", ["I can't sleep. My feathers are too loud."]),
+        ("ANY", "", 3, "", ["You're my favorite, {bunny}. Don't tell Clem.", "Actually, tell Clem. He'll be happy for me!"]),
+     ]},
 ]
 
 # (id, title, situation, weight, needs_flag, roles, find)
@@ -246,6 +271,8 @@ NPCS = [
      ["Mm. Engine's fine. You're fine. Everything's fine. Go away. Nicely."]),
     ("crew_clem.tres", "Clem", "donkey", 0.85, ("reed", 7, "major"), "CLEM · CARGO", "Color(0.5, 0.48, 0.5, 1)", "Color(1, 0.45, 0.1, 1)",
      ["Hiya, boss!"]),
+    ("crew_olivia.tres", "Olivia", "ostrich", 1.5, ("chirp", 4, "major"), "OLIVIA · MASCOT", "Color(0.9, 0.84, 0.78, 1)", "Color(1, 0.42, 0.1, 1)",
+     ["Hi! Hi! Hello! Hi!"]),
 ]
 
 

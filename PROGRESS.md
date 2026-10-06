@@ -3,6 +3,7 @@
 **Current status:** **Your art is in.**
 - FF7-style painted backgrounds in all the rig rooms (12 cameras).
 - The lion boss, the vending machine, the truck stop station and the space billboards are your models.
+- New crew mascot Olivia (ostrich); Marge, Bonnie (polar bear) and Mort (weasel) use your models.
 
 (Beta step 2, the trucking company, is just before this.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
