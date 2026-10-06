@@ -377,6 +377,22 @@ stop, canned starfish at Tidewater, Chip Chips at the casino.
 - All brands and snacks are in `tools/brand_data/make_brands.py`: edit the
   lists and run `python3 tools/brand_data/make_brands.py`.
 
+### The window
+
+- The game starts in a window the first time (1280 x 720). Drag its edges to
+  any size or shape you like: the game fills it, with no black bars (a wide
+  window shows more to the sides; a taller one shows more above and below).
+  It won't go smaller than 640 x 360.
+- **Fullscreen:** **F11** or **Alt+Enter**, any time (or the switch in the
+  pause menu, or the button on the title screen). It's borderless
+  fullscreen, so switching is instant.
+- **Menu and HUD size:** small, medium or large (pause menu or title
+  screen), for big screens or small windows. Long menus scroll if they
+  don't fit.
+- All of it is remembered: next time the game starts fullscreen or
+  windowed, at the same size and in the same spot, the way you left it.
+  (It's all in `user://settings.json`; delete that file to reset.)
+
 ### Menus
 
 | What | Keyboard & mouse | Gamepad |

@@ -81,14 +81,16 @@ func _ready() -> void:
 		var body := _label(_body, 20, Color(0.9, 0.92, 1.0))
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		column.add_child(body)
-	# Long lists (like the jukebox) scroll; the list follows the focus.
+	# Long lists (like the jukebox), or lists too tall for the screen (a
+	# small window, or big menus), scroll; the list follows the focus.
 	var list := VBoxContainer.new()
 	list.add_theme_constant_override("separation", 10)
-	if _options.size() > 8:
+	var room := maxf(get_viewport().get_visible_rect().size.y - 330.0, 140.0)
+	if _options.size() > 8 or _options.size() * 56.0 > room:
 		var scroller := ScrollContainer.new()
 		scroller.follow_focus = true
 		scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		scroller.custom_minimum_size = Vector2(0.0, 400.0)
+		scroller.custom_minimum_size = Vector2(0.0, minf(400.0, room))
 		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		scroller.add_child(list)
 		column.add_child(scroller)

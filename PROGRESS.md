@@ -1,17 +1,15 @@
 # Progress
 
-**Current status:** **Round 21: the 3D forklift and galaxy brands.**
-Loading your own cargo is now a 3D loading dock: walk to a forklift, climb
-on, drive it, lift pallets into your rig's hold. Vending machines sell 22
-snacks and drinks from 12 made-up brands; they're the same brands as on
-the radio and billboards. She holds what she bought, eats it, and reads
-the story off the packet. (Round 20, the M7 ship upgrades, is in too.)
-Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
+**Current status:** **Round 22: the window.** Drag it to any size with no
+black bars. F11 / Alt+Enter switches borderless fullscreen. Mode, size and
+spot are remembered, and there's a menu and HUD size setting. (Round 21,
+the 3D forklift and galaxy brands, is in too.) Built and validated,
+**waiting for your playtest** (see `PLAYTEST.md`).
 **Next session:** your feedback; then the rest of M7 when you want it
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-06 (round 21)
+**Last updated:** 2026-10-06 (round 22)
 
 ---
 

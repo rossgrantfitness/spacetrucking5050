@@ -63,6 +63,63 @@ func _ready() -> void:
 	_quit_to_title.pressed.connect(_on_quit_to_title)
 	_logbook.pressed.connect(_on_logbook)
 	_controls.pressed.connect(_on_controls)
+	_add_window_options()
+	_make_scrollable()
+
+
+var _fullscreen: CheckButton
+var _scroller: ScrollContainer
+
+
+## The menu is long: if it's taller than the screen (a small window, or the
+## big menu size), it scrolls, following whatever's highlighted.
+func _make_scrollable() -> void:
+	var items := $Center/Panel/Items as Control
+	var panel := items.get_parent()
+	_scroller = ScrollContainer.new()
+	_scroller.name = "Scroller"
+	_scroller.follow_focus = true
+	_scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.remove_child(items)
+	panel.add_child(_scroller)
+	_scroller.add_child(items)
+	items.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	get_viewport().size_changed.connect(_fit_scroller)
+	Events.settings_changed.connect(_fit_scroller)
+	_fit_scroller()
+
+
+func _fit_scroller() -> void:
+	if _scroller == null:
+		return
+	var items := _scroller.get_child(0) as Control
+	var tallest := get_viewport().get_visible_rect().size.y - 70.0
+	_scroller.custom_minimum_size = Vector2(items.get_combined_minimum_size().x, minf(items.get_combined_minimum_size().y, tallest))
+var _ui_size: Button
+
+
+## Fullscreen on/off and the UI size, under the gamepad rumble switch.
+func _add_window_options() -> void:
+	_fullscreen = _rumble.duplicate(0) as CheckButton
+	_fullscreen.name = "Fullscreen"
+	_fullscreen.unique_name_in_owner = false
+	_fullscreen.text = "Fullscreen (F11)"
+	_fullscreen.button_pressed = Settings.fullscreen
+	_rumble.add_sibling(_fullscreen)
+	_fullscreen.toggled.connect(Settings.set_fullscreen)
+	_ui_size = _controls.duplicate(0) as Button
+	_ui_size.name = "UiSize"
+	_ui_size.unique_name_in_owner = false
+	_fullscreen.add_sibling(_ui_size)
+	_ui_size.pressed.connect(func() -> void: Settings.set_ui_size((Settings.ui_size + 1) % Settings.UI_SCALES.size()))
+	_show_window_options()
+	Events.settings_changed.connect(_show_window_options)
+
+
+## Keeps the switches matching the settings (F11 can change them anytime).
+func _show_window_options() -> void:
+	_fullscreen.set_pressed_no_signal(Settings.fullscreen)
+	_ui_size.text = "Menu and HUD size: %s" % Settings.UI_SIZE_NAMES[Settings.ui_size]
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -79,6 +136,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func open() -> void:
 	visible = true
+	_fit_scroller()
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_resume.grab_focus()  # So a gamepad or keyboard can navigate right away.

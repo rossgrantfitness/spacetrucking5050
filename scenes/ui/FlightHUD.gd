@@ -70,6 +70,7 @@ func _ready() -> void:
 			_widgets.append(child)
 	get_viewport().size_changed.connect(_fit)
 	Events.settings_changed.connect(_refresh)
+	Events.settings_changed.connect(_fit)  # (The UI size setting.)
 	_fit()
 	_refresh()
 
@@ -202,7 +203,11 @@ func _gather_contacts() -> void:
 ## whole-pixel scaling allows, so every HUD pixel is a crisp square.
 func _fit() -> void:
 	var window := Vector2(get_window().size)
-	pixel_scale = maxf(1.0, roundf(window.y / GameState.tuning.hud_rows))
+	# Sized by the window's height (or its width, in a tall window, so the
+	# HUD never gets wider than the screen), times the player's UI size.
+	var rows := GameState.tuning.hud_rows
+	var fits := minf(window.y / rows, window.x / (rows * 16.0 / 9.0))
+	pixel_scale = maxf(1.0, roundf(fits * Settings.ui_scale()))
 	_pixels.size = Vector2i((window / pixel_scale).ceil())
 	_pixels.render_target_update_mode = SubViewport.UPDATE_ONCE
 

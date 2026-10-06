@@ -1,6 +1,7 @@
 extends Node
 ## The player's comfort options: invert Y, camera roll, HUD on/off, screen
-## shake, rumble, and later FOV, volume...
+## shake, rumble, volumes, and the window: fullscreen or windowed, the
+## window's size and place, and how big the menus and HUD are.
 ##
 ## These belong to the PLAYER, not to one save slot, so they live in their
 ## own little file, user://settings.json, and save themselves on every change.
@@ -41,6 +42,26 @@ var sfx_volume: float = 0.7
 ## How loud the characters' gibberish voices are, 0 to 1.
 var voice_volume: float = 0.9
 
+## The window. The game starts the way you left it (windowed the first
+## time). Windowed, you can drag the window to any size: the game fills it,
+## no black bars (wide windows show more to the sides). F11 or Alt+Enter
+## flips between windowed and fullscreen (borderless: quick to switch, and
+## friendly to other monitors).
+var fullscreen: bool = false
+## The window's size and place when windowed (remembered between sessions;
+## zero = not set yet, use the default 1280 x 720, centered).
+var window_size := Vector2i.ZERO
+var window_position := Vector2i.ZERO
+var has_window_position: bool = false
+## How big menus, text and the HUD are: 0 small, 1 medium, 2 large.
+var ui_size: int = 1
+
+## The smallest the window can be dragged.
+const MIN_WINDOW_SIZE := Vector2i(640, 360)
+## How much each UI size scales menus, text and the HUD.
+const UI_SCALES: Array[float] = [0.8, 1.0, 1.25]
+const UI_SIZE_NAMES: Array[String] = ["SMALL", "MEDIUM", "LARGE"]
+
 ## The mixer channels (buses) the sound effects and voices play through.
 ## Music has its own ("Radio" and "Ambient", made by the Radio).
 const SFX_BUS: String = "SFX"
@@ -52,6 +73,10 @@ func _ready() -> void:
 	_make_bus(VOICE_BUS)
 	load_settings()
 	_apply_volumes()
+	process_mode = Node.PROCESS_MODE_ALWAYS  # (F11 works in paused menus too.)
+	_apply_window.call_deferred()
+	get_tree().root.size_changed.connect(_on_window_resized)
+	get_tree().node_added.connect(_fit_camera)
 	# Every sound that isn't sent anywhere in particular is a sound effect:
 	# route it through the SFX channel, so the slider controls it.
 	get_tree().node_added.connect(_route_sound)
@@ -108,6 +133,136 @@ func set_voice_volume(volume: float) -> void:
 	_changed()
 
 
+## Fullscreen on or off (borderless fullscreen).
+func set_fullscreen(enabled: bool) -> void:
+	if not enabled and fullscreen:
+		fullscreen = false
+		_apply_window()
+	else:
+		_remember_window()
+		fullscreen = enabled
+		_apply_window()
+	_changed()
+
+
+func toggle_fullscreen() -> void:
+	set_fullscreen(not fullscreen)
+
+
+## How big menus, text and the HUD are (0 small, 1 medium, 2 large).
+func set_ui_size(size: int) -> void:
+	ui_size = clampi(size, 0, UI_SCALES.size() - 1)
+	_apply_ui_scale()
+	_changed()
+
+
+## The UI size as a number: how much bigger than usual (1 = medium).
+func ui_scale() -> float:
+	return UI_SCALES[clampi(ui_size, 0, UI_SCALES.size() - 1)]
+
+
+## F11, or Alt+Enter: fullscreen on / off, anywhere in the game.
+func _input(event: InputEvent) -> void:
+	var key := event as InputEventKey
+	if key == null or not key.pressed or key.echo:
+		return
+	if key.keycode == KEY_F11 or (key.alt_pressed and key.keycode in [KEY_ENTER, KEY_KP_ENTER]):
+		get_viewport().set_input_as_handled()
+		toggle_fullscreen()
+
+
+## Puts the window the way the settings say: fullscreen, or windowed at the
+## remembered size and place (kept on screen), never smaller than the minimum.
+func _apply_window() -> void:
+	_apply_ui_scale()
+	if DisplayServer.get_name() == "headless":
+		return  # (The automated tests have no window.)
+	var window := get_window()
+	window.min_size = MIN_WINDOW_SIZE
+	if fullscreen:
+		window.mode = Window.MODE_FULLSCREEN
+		return
+	window.mode = Window.MODE_WINDOWED
+	var screen := DisplayServer.window_get_current_screen()
+	var usable := DisplayServer.screen_get_usable_rect(screen)
+	if window_size.x >= MIN_WINDOW_SIZE.x and window_size.y >= MIN_WINDOW_SIZE.y:
+		window.size = Vector2i(mini(window_size.x, usable.size.x), mini(window_size.y, usable.size.y))
+	var spot_ok := false
+	if has_window_position:
+		for i in DisplayServer.get_screen_count():
+			if DisplayServer.screen_get_usable_rect(i).grow(-40).has_point(window_position + Vector2i(40, 40)):
+				spot_ok = true
+	if spot_ok:
+		window.position = window_position
+	else:
+		window.position = usable.position + Vector2i((Vector2(usable.size - window.size) * 0.5).round())
+
+
+func _apply_ui_scale() -> void:
+	get_tree().root.content_scale_factor = ui_scale()
+
+
+## Remembers the window's size and place (when windowed) for next time.
+func _remember_window() -> void:
+	if DisplayServer.get_name() == "headless" or fullscreen:
+		return
+	var window := get_window()
+	if window.mode != Window.MODE_WINDOWED:
+		return
+	window_size = window.size
+	window_position = window.position
+	has_window_position = true
+
+
+var _resize_save_timer: SceneTreeTimer
+
+
+func _on_window_resized() -> void:
+	# Tall windows: cameras keep their width (see _fit_camera).
+	for camera in get_tree().root.find_children("*", "Camera3D", true, false):
+		_fit_camera(camera)
+	# Remember the new size a moment after the dragging stops.
+	if _resize_save_timer == null or _resize_save_timer.time_left <= 0.0:
+		_resize_save_timer = get_tree().create_timer(1.0, true)
+		_resize_save_timer.timeout.connect(func() -> void:
+			_remember_window()
+			save_settings())
+
+
+## Cameras show the same width of the world whatever the window's shape...
+## in a wide window they keep their height (and show more to the sides);
+## in a tall one they keep their width (and show more above and below),
+## instead of shrinking to a slit.
+func _fit_camera(node: Node) -> void:
+	var camera := node as Camera3D
+	if camera == null or camera.get_viewport() != get_tree().root:
+		return
+	var size := get_tree().root.get_visible_rect().size
+	camera.keep_aspect = Camera3D.KEEP_WIDTH if size.y > size.x else Camera3D.KEEP_HEIGHT
+
+
+var _window_check: float = 0.0
+
+
+## Every couple of seconds: if the window's been moved or resized (windowed),
+## remember where it is now.
+func _process(delta: float) -> void:
+	_window_check += delta
+	if _window_check < 2.0 or DisplayServer.get_name() == "headless" or fullscreen:
+		return
+	_window_check = 0.0
+	var window := get_window()
+	if window.mode == Window.MODE_WINDOWED and (window.position != window_position or window.size != window_size):
+		_remember_window()
+		save_settings()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_remember_window()
+		save_settings()
+
+
 func _apply_volumes() -> void:
 	for bus: Array in [[SFX_BUS, sfx_volume], [VOICE_BUS, voice_volume]]:
 		var index := AudioServer.get_bus_index(bus[0])
@@ -141,6 +296,11 @@ func save_settings() -> void:
 		"radio_volume": radio_volume,
 		"sfx_volume": sfx_volume,
 		"voice_volume": voice_volume,
+		"fullscreen": fullscreen,
+		"window_size": [window_size.x, window_size.y],
+		"window_position": [window_position.x, window_position.y],
+		"has_window_position": has_window_position,
+		"ui_size": ui_size,
 	})
 
 
@@ -152,7 +312,7 @@ func load_settings() -> void:
 ## (like on the very first launch) or of the wrong type (say, from a
 ## hand-edited file) keeps its current value.
 func apply_saved_data(data: Dictionary) -> void:
-	for option: String in ["invert_y", "camera_roll", "show_hud", "screen_shake", "rumble"]:
+	for option: String in ["invert_y", "camera_roll", "show_hud", "screen_shake", "rumble", "fullscreen"]:
 		var saved: Variant = data.get(option)
 		if saved is bool:
 			set(option, saved)
@@ -160,6 +320,16 @@ func apply_saved_data(data: Dictionary) -> void:
 		var volume: Variant = data.get(option)
 		if volume is float or volume is int:
 			set(option, clampf(float(volume), 0.0, 1.0))
+	var size: Variant = data.get("window_size")
+	if size is Array and (size as Array).size() == 2:
+		window_size = Vector2i(int(size[0]), int(size[1]))
+	var spot: Variant = data.get("window_position")
+	if spot is Array and (spot as Array).size() == 2 and data.get("has_window_position") == true:
+		window_position = Vector2i(int(spot[0]), int(spot[1]))
+		has_window_position = true
+	var ui: Variant = data.get("ui_size")
+	if ui is int or ui is float:
+		ui_size = clampi(int(ui), 0, UI_SCALES.size() - 1)
 	_apply_volumes()
 
 

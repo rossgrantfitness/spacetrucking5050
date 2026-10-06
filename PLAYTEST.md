@@ -1,4 +1,14 @@
-# Playtest: round 21, the 3D forklift and vending brands (round 20 below)
+# Playtest: rounds 21 and 22 (round 20 below)
+
+**Round 22, the window (try it first, it's quick):** drag the window's
+edges to all sorts of shapes, press **F11** (or Alt+Enter) to go fullscreen
+and back, and try **Menu and HUD size** in the pause menu. Quit and start
+again: it should come back exactly the way you left it. Does anything look
+wrong at some window shape?
+
+---
+
+# Round 21: the 3D forklift and vending brands
 
 **What you asked for:** the forklift as a third-person 3D game where she
 climbs on and drives it to pick up 3D boxes (or scrap it), and vending

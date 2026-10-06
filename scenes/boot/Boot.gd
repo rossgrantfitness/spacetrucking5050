@@ -69,6 +69,7 @@ func _ready() -> void:
 		_start_button.text = "PRESS START TO CONTINUE  (Enter / gamepad Start / click here)"
 	_fly_button.pressed.connect(_start_flying)
 	_input_check_button.pressed.connect(_toggle_input_check)
+	_add_window_options()
 
 
 func _process(delta: float) -> void:
@@ -256,3 +257,28 @@ func _on_settings_changed() -> void:
 	_saved_note_tween = create_tween()
 	_saved_note_tween.tween_interval(1.2)
 	_saved_note_tween.tween_property(_saved_note, "modulate:a", 0.0, 0.8)
+
+
+var _fullscreen_button: Button
+var _ui_size_button: Button
+
+
+## Fullscreen on/off and the menu and HUD size, under the input check button.
+func _add_window_options() -> void:
+	_fullscreen_button = _input_check_button.duplicate(0) as Button
+	_fullscreen_button.name = "Fullscreen"
+	_fullscreen_button.unique_name_in_owner = false
+	_input_check_button.add_sibling(_fullscreen_button)
+	_fullscreen_button.pressed.connect(Settings.toggle_fullscreen)
+	_ui_size_button = _input_check_button.duplicate(0) as Button
+	_ui_size_button.name = "UiSize"
+	_ui_size_button.unique_name_in_owner = false
+	_fullscreen_button.add_sibling(_ui_size_button)
+	_ui_size_button.pressed.connect(func() -> void: Settings.set_ui_size((Settings.ui_size + 1) % Settings.UI_SCALES.size()))
+	_show_window_options()
+	Events.settings_changed.connect(_show_window_options)
+
+
+func _show_window_options() -> void:
+	_fullscreen_button.text = "FULLSCREEN: %s  (F11 / Alt+Enter, any time)" % ("ON" if Settings.fullscreen else "OFF")
+	_ui_size_button.text = "MENU AND HUD SIZE: %s" % Settings.UI_SIZE_NAMES[Settings.ui_size]
