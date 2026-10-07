@@ -39,7 +39,7 @@ func feel_hands(hands: FlightControls, delta: float) -> bool:
 	if hands.boost:
 		grab = 1.0
 		return true
-	var push := hands.steer.length()
+	var push := maxf(hands.steer.length(), maxf(absf(hands.roll), hands.strafe.length()))
 	var rate := 0.0
 	if push > tuning.autopilot_tolerance:
 		rate = 2.0 if push > 0.95 else 1.0
@@ -55,6 +55,8 @@ func feel_hands(hands: FlightControls, delta: float) -> bool:
 ## Mixes a small nudge from the pilot into the autopilot's steering.
 static func mix_in(auto: FlightControls, hands: FlightControls, tuning: Tuning) -> void:
 	auto.steer = (auto.steer + hands.steer * tuning.autopilot_nudge_share).limit_length(1.0)
+	auto.roll = clampf(auto.roll + hands.roll * tuning.autopilot_nudge_share, -1.0, 1.0)
+	auto.strafe = (auto.strafe + hands.strafe * tuning.autopilot_nudge_share).limit_length(1.0)
 
 
 ## Whether it has reached the end of its course.
@@ -70,6 +72,8 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 	_controls.boost = false
 	if waypoints.is_empty():
 		_controls.steer = Vector2.ZERO
+		_controls.roll = 0.0
+		_controls.strafe = Vector2.ZERO
 		_controls.thrust = 0.0
 		return _controls
 	var flight := ship.flight
@@ -87,12 +91,28 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 
 	# Turn toward `wanted`, gently: never so hard that the sideways push
 	# rattles the cargo (see Ship._shake_cargo).
+	var tuning := GameState.tuning
 	var speed := maxf(flight.speed(), 1.0)
-	var gentle := GameState.tuning.cargo_comfy_accel * 0.6 / speed
+	var gentle := tuning.cargo_comfy_accel * 0.6 / speed
 	var max_turn := deg_to_rad(ship.ship_data.turn_rate)
 	var max_pitch := deg_to_rad(ship.ship_data.pitch_rate)
 	var yaw_error := wrapf(atan2(-wanted.x, -wanted.z) - flight.heading, -PI, PI)
 	var pitch_error := asin(clampf(wanted.y, -0.95, 0.95)) - flight.pitch
+	_controls.roll = 0.0
+	_controls.strafe = Vector2.ZERO
+	if flight.newtonian:
+		# Newtonian: aim in the rig's own frame (it can be rolled), turn no
+		# harder than the side thrusters can keep the drift in check, and
+		# keep the wings level with the road like a careful trucker.
+		var local := flight.attitude.inverse() * wanted
+		yaw_error = atan2(-local.x, -local.z)
+		pitch_error = atan2(local.y, Vector2(local.x, local.z).length())
+		var side := ship.ship_data.acceleration * tuning.strafe_thrust
+		gentle = minf(gentle, side * 0.8 / speed)
+		var world_up := flight.attitude.inverse() * Vector3.UP
+		var tilt := atan2(world_up.x, world_up.y)
+		var max_roll := max_turn * tuning.roll_rate
+		_controls.roll = clampf(tilt * 1.2, -max_roll, max_roll) / max_roll
 	var turn_rate := clampf(yaw_error * 0.9, -minf(gentle, max_turn), minf(gentle, max_turn))
 	var pitch_rate := clampf(pitch_error * 0.9, -minf(gentle, max_pitch), minf(gentle, max_pitch))
 	# Turning left is a positive change of heading, but steering right is +x.
@@ -106,10 +126,21 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 	if arrival_speed > 0.0 and waypoints.size() == 1:
 		goal = minf(goal, arrival_speed + distance * 0.03)
 	var going := flight.forward_speed()
+	if flight.newtonian:
+		# Newtonian: momentum is free, so keep whatever speed she's built up
+		# (a boost to 2000 km/h stays 2000 km/h), and plan the braking burn
+		# so the retro thrusters slow her in time for the end of the course.
+		goal = maxf(goal, going)
+		var remaining := distance
+		for i in range(1, waypoints.size()):
+			remaining += waypoints[i - 1].distance_to(waypoints[i])
+		var brakes := ship.ship_data.retro_thrust * flight.heft(tuning.load_braking_drag) * 0.75
+		var end_speed := arrival_speed if arrival_speed > 0.0 else ship.ship_data.max_speed
+		goal = minf(goal, sqrt(end_speed * end_speed + 2.0 * brakes * maxf(remaining - 300.0, 0.0)))
 	if going < goal - 1.0:
 		_controls.thrust = 1.0
 	elif going > goal + 6.0:
-		_controls.thrust = -0.6
+		_controls.thrust = -1.0 if flight.newtonian else -0.6
 	else:
 		# At the limiter, holding the throttle just sips fuel; below it, coast.
 		_controls.thrust = 1.0 if goal >= ship.ship_data.max_speed - 0.5 else 0.0

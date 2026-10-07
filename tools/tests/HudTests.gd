@@ -45,6 +45,10 @@ func test_coasting_is_free_and_thrusting_burns_fuel() -> void:
 
 
 func test_faster_burns_more_fuel_but_cruising_sips() -> void:
+	# (The arcade rules. In Newtonian flight a push costs the same at any
+	# speed, and coasting is free: see NewtonianTests.gd.)
+	var arcade := GameState.tuning.duplicate() as Tuning
+	arcade.newtonian_flight = false
 	var slow := FlightModel.new()
 	var fast := FlightModel.new()
 	var cruising := FlightModel.new()
@@ -53,7 +57,7 @@ func test_faster_burns_more_fuel_but_cruising_sips() -> void:
 	var controls := FlightControls.new()
 	controls.thrust = 1.0
 	for model in [slow, fast, cruising]:
-		(model as FlightModel).update(STEP, controls, RIG, GameState.tuning)
+		(model as FlightModel).update(STEP, controls, RIG, arcade)
 	check(fast.fuel < slow.fuel, "speeding up at high speed should burn more fuel than at low speed")
 	check(cruising.fuel > slow.fuel, "holding top speed on the limiter should only sip fuel")
 	check(fast.economy_rating(GameState.tuning) >= 1, "flooring it at high speed shouldn't show the green arrow")
@@ -71,18 +75,26 @@ func test_a_full_tank_lasts_a_long_cruise() -> void:
 
 
 func test_empty_tank_kills_the_engines() -> void:
-	# No fuel, no thrust, no steering, no boost.
-	var model := FlightModel.new()
-	model.fuel = 0.0
-	var heading := model.heading
-	var controls := FlightControls.new()
-	controls.thrust = 1.0
-	controls.steer = Vector2(1.0, 0.5)
-	controls.boost = true
-	_fly(model, controls, 5.0)
-	check(model.speed() < 0.01, "an empty tank shouldn't move the rig (%.2f m/s)" % model.speed())
-	check(absf(model.heading - heading) < 0.001, "an empty tank shouldn't steer the rig")
-	check(not model.boosting, "boost shouldn't light without main fuel")
+	# Both flight models: no fuel, no thrust, no steering, no boost.
+	var arcade := GameState.tuning.duplicate() as Tuning
+	arcade.newtonian_flight = false
+	var newtonian := GameState.tuning.duplicate() as Tuning
+	newtonian.newtonian_flight = true
+	for tuning: Tuning in [arcade, newtonian]:
+		var label := "Newtonian" if tuning.newtonian_flight else "arcade"
+		var model := FlightModel.new()
+		model.update(STEP, FlightControls.new(), RIG, tuning)  # (Picks the flight model.)
+		model.fuel = 0.0
+		var heading := model.heading
+		var controls := FlightControls.new()
+		controls.thrust = 1.0
+		controls.steer = Vector2(1.0, 0.5)
+		controls.boost = true
+		for i in roundi(5.0 / STEP):
+			model.update(STEP, controls, RIG, tuning)
+		check(model.speed() < 0.01, "%s: an empty tank shouldn't move the rig (%.2f m/s)" % [label, model.speed()])
+		check(absf(model.heading - heading) < 0.001, "%s: an empty tank shouldn't steer the rig" % label)
+		check(not model.boosting, "%s: boost shouldn't light without main fuel" % label)
 
 
 func test_roadside_tanker_costs_more_than_the_pumps() -> void:

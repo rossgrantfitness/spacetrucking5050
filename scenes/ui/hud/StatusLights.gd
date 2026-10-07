@@ -7,6 +7,8 @@ extends HudWidget
 ## - STORM: a solar or ion storm around you.
 ## - COPS:  a speed trap nearby (the trucker's radar detector).
 ## - FUEL:  under 20% fuel.
+## - FA OFF: Newtonian flight with Flight Assist switched off (G): drift and
+##   spin are all yours.
 ## Gravity wells, storms and cops arrive with M5; until then those lights
 ## only come on in the HUD demo (F9).
 
@@ -17,6 +19,7 @@ const ICONS := {
 	"STORM": ["...##..", "..##...", ".##....", ".#####.", "...##..", "..##...", ".##...."],
 	"COPS": ["..###..", ".##.##.", ".#####.", ".#####.", "#######", "#######", "......."],
 	"FUEL": ["####...", "#..#.#.", "#..#..#", "####..#", "####..#", "####.##", "####..."],
+	"ASSIST": ["#.....#", ".#...#.", "..#.#..", "...#...", "..#.#..", ".#...#.", "#.....#"],
 }
 const ROW_SPACING: float = 11.0
 
@@ -68,4 +71,7 @@ func _light(light: String, rig: Ship, tuning: Tuning) -> Array:
 			var fuel := rig.flight.fuel
 			if fuel < tuning.low_fuel_warning or hud.demo:
 				return [true, RED if blink(0.25 if fuel <= 0.0 else 0.9) else tint(0.3), "FUEL"]
+		"ASSIST":
+			if (rig.flight.newtonian and not rig.flight.flight_assist) or hud.demo:
+				return [true, YELLOW, "FA OFF"]
 	return [false]

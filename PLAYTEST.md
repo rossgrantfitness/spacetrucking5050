@@ -6,10 +6,45 @@
 
 ---
 
+# Playtest: Newtonian fork, "nothing slows you but thrust" (branch `claude/newtonian-fork`)
+
+1. Boost up to 2,000 km/h (or as fast as you dare), then let go of everything. The speed should stay put, with no fuel used, for as long as you coast.
+2. Now stop. Pull the lever down (**S** / **LT**) to fire the retros and watch how long it takes. Then try the other way: turn the rig round (Flight Assist OFF with **G** helps) and burn with the main engines.
+3. Let the autopilot (**M**) take over while you're going very fast: it should keep the speed and start braking in time to dock.
+4. **Questions:** Is stopping too slow, too quick, or about right? (`retro_thrust` in the ship's data sets it.) Does carrying huge speed make the long hauls more fun, or does the braking feel like a chore?
+
+---
+
 # Playtest: your notes (camera stays put; fewer, calmer planets)
 
-1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** (or **B** on a gamepad) to swing it back.
+1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** to swing it back.
 2. Fly around home space, the casino and the far systems: are the planets calm enough now? Too small? Is there any you miss? (Each one's `saturation` and `true_radius` are on its node under World/SkyBodies in FlightSandbox.tscn.)
+
+---
+
+# Playtest: the Newtonian fork (branch `claude/newtonian-fork`)
+
+**What's new:** Newtonian flight, like Elite Dangerous or Evochron. The rig keeps moving and spinning until a thruster stops it. It can roll, strafe, loop and fly upside down, and the camera rides along with it. Everything else is the same as Beta 4.
+
+**To get it:** switch to the `claude/newtonian-fork` branch (in GitHub Desktop: Current Branch → `claude/newtonian-fork`), then open the project as usual. The main branch still has the original arcade flight, so you can compare.
+
+**Time needed:** 20 minutes.
+
+## What to do
+
+1. **Fly around the truck stop with Flight Assist ON** (the default). Turn hard at full speed and notice the rig swing wide before the thrusters catch up. Roll with **Z / X** (or **U / O**), and strafe by holding **Left Ctrl** while steering.
+2. **Loop:** hold the nose up and keep going over the top.
+3. **Press G for Flight Assist OFF** (the "FA OFF" light comes on). Push the throttle to half and let go: you keep speeding up. Turn the nose 90 degrees and watch the rig keep sliding the old way. Spin, let go, and keep spinning. Try to stop dead: turn round and burn.
+4. **Dock somewhere:** fly a delivery by hand, then let the autopilot do one (M). The autopilot turns Flight Assist back on and levels the wings.
+5. Try the **cockpit view (C)** during a roll and a loop.
+
+## Questions
+
+1. **The big one:** Newtonian or arcade for this game? Or both (a setting, or a buyable "Flight Assist off" upgrade)?
+2. With Flight Assist on, is the swing-wide in turns fun or annoying? (`strafe_thrust` in tuning.tres makes the side thrusters stronger.)
+3. Does the rolling camera bother you, especially in the cockpit, over a long haul?
+4. Gamepad: the buttons are all taken. Roll is on LB / B for now; strafing and Flight Assist have no buttons. Where would you want them?
+5. Does it still feel like trucking, or more like a fighter sim?
 
 ---
 

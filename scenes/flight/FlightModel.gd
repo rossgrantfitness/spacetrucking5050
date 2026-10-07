@@ -28,8 +28,36 @@ extends RefCounted
 ##     free. An empty tank kills the engines and thrusters: you drift
 ##     until a Gas-N-Go tanker comes out to you (RoadsideFuel.gd).
 ##
+## NEWTONIAN FLIGHT (the newtonian-fork branch; "Newtonian flight" in
+## tuning.tres switches between the two). The rig is a box with thrusters in
+## empty space, like Elite Dangerous or Evochron:
+##   - Nothing swings your momentum round to the nose. The main engines push
+##     along the nose, side and up/down thrusters push sideways, and that's
+##     all. Turn the nose and you keep sliding the old way until thrusters
+##     fix it.
+##   - The rig turns, pitches and ROLLS with thrusters too, so spinning
+##     takes a moment to start and a moment to stop. It can fly any way up:
+##     there's no "level" any more.
+##   - FLIGHT ASSIST ON (the default): the thrusters quietly work for you.
+##     The throttle sets a speed along the nose and the main engines hold
+##     it; the side thrusters kill any drift (or hold a strafe speed); the
+##     spin stops when you let go of the stick. You still swing wide in
+##     turns, because the side thrusters are weaker than the main engines.
+##   - FLIGHT ASSIST OFF: pure Newton. The throttle is raw thrust (half
+##     throttle = half push, forever), drift and spin last until you cancel
+##     them yourself, and there's no speed limit at all: burn long enough
+##     and you keep getting faster (fuel is the only limit).
+##   - NOTHING SLOWS YOU BUT THRUST. There's no air in space: boost up to
+##     2000 km/h and you'll still be doing 2000 km/h an hour later. The only
+##     way to slow down is to fire the engines the other way (the retro
+##     thrusters, or turn round and burn). With Flight Assist on and the
+##     throttle at full, it holds whatever speed you've got; pull the
+##     throttle back and it brakes (with thrust) to the lever's speed.
+##     And only thrust strains the hull and rattles the cargo: coasting at
+##     any speed is smooth and free.
+##
 ## Keeping these rules separate makes them easy to read and to test (see
-## tools/tests/FlightTests.gd).
+## tools/tests/FlightTests.gd and NewtonianTests.gd).
 
 
 ## Where the ship is going and how fast, in meters per second.
@@ -91,19 +119,48 @@ var _last_wanted_bank := 0.0
 var _time := 0.0
 var _last_steer := Vector2.ZERO
 
+## Newtonian flight (see the top of this file). On: the rules below; off:
+## the arcade rules. Copied from tuning.tres every step.
+var newtonian: bool = true
+## Newtonian: which way the rig faces, all of it (including roll). heading,
+## pitch and roll are worked out from it for everything else to read.
+var attitude := Basis.IDENTITY
+var roll := 0.0
+## Newtonian: how fast the rig is spinning, in its own axes, radians per
+## second: x = pitching (+ nose up), y = turning (+ left), z = rolling
+## (+ left).
+var spin := Vector3.ZERO
+## Newtonian: Flight Assist on or off (G in flight).
+var flight_assist: bool = true
+
+
+func _init() -> void:
+	newtonian = GameState.tuning.newtonian_flight
+	flight_assist = GameState.tuning.flight_assist_starts_on
+
 
 ## Advances the flight by one step of `delta` seconds.
 func update(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
 	_time += delta
+	if tuning.newtonian_flight != newtonian:
+		newtonian = tuning.newtonian_flight
+		attitude = Basis.from_euler(Vector3(pitch, heading, 0.0))
+		spin = Vector3.ZERO
+	if newtonian:
+		_update_newtonian(delta, controls, ship, tuning)
+		return
 	_update_wobble(delta, controls, tuning)
 	_update_turning(delta, controls, ship, tuning)
 	_update_motion(delta, controls, ship, tuning)
 	_update_lean(delta, ship, tuning)
 
 
-## Which way the nose points. It never contains any roll (the lean is only
-## visual), and that's what keeps the horizon level.
+## Which way the nose points. Arcade: it never contains any roll (the lean
+## is only visual), and that's what keeps the horizon level. Newtonian: the
+## rig's whole attitude, roll and all.
 func orientation() -> Basis:
+	if newtonian:
+		return attitude
 	return Basis.from_euler(Vector3(pitch, heading, 0.0))
 
 
@@ -143,9 +200,13 @@ func economy_rating(tuning: Tuning) -> int:
 
 
 ## Puts everything back to "parked": stopped, engines idle, both tanks full.
-func reset(new_heading: float, new_pitch: float) -> void:
+## (Newtonian: `new_roll` too.)
+func reset(new_heading: float, new_pitch: float, new_roll: float = 0.0) -> void:
 	heading = new_heading
 	pitch = new_pitch
+	roll = new_roll if newtonian else 0.0
+	attitude = Basis.from_euler(Vector3(pitch, heading, roll))
+	spin = Vector3.ZERO
 	velocity = Vector3.ZERO
 	turn_speed = 0.0
 	pitch_speed = 0.0
@@ -300,8 +361,8 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 ## How hard the nose is being pushed off course right now, in radians per
 ## second: a little whenever you're boosting, a lot when you're shaky.
 func wander_amount(tuning: Tuning) -> float:
-	if not boosting and overdrive <= 0.0:
-		return 0.0
+	if not boosting and (overdrive <= 0.0 or newtonian):
+		return 0.0  # (Newtonian: coasting fast is smooth; only the burn shakes.)
 	var boost_wander := deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees) if boosting else 0.0
 	# Overdrive: the faster past boost's top speed, the harder it pulls.
 	return boost_wander * (1.0 + overdrive) + deg_to_rad(tuning.overdrive_wander_degrees) * overdrive
@@ -364,3 +425,136 @@ func _update_lean(delta: float, ship: ShipData, tuning: Tuning) -> void:
 	var catch_up := 1.0 - exp(-tuning.bank_response * delta)
 	bank = lerpf(bank, wanted_bank, catch_up)
 	nose_tilt = lerpf(nose_tilt, wanted_tilt, catch_up)
+
+
+
+# --- Newtonian flight ---------------------------------------------------------------
+
+func _update_newtonian(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
+	_update_wobble(delta, controls, tuning)
+	_update_spin(delta, controls, ship, tuning)
+	_update_thrusters(delta, controls, ship, tuning)
+	# For everything that reads heading and pitch (the radar, the compass).
+	var angles := attitude.get_euler()
+	pitch = angles.x
+	heading = angles.y
+	roll = angles.z
+	turn_speed = spin.y
+	pitch_speed = spin.x
+	# The rig really turns and rolls now, so the model doesn't need to lean.
+	var settle := 1.0 - exp(-tuning.bank_response * delta)
+	bank = lerpf(bank, 0.0, settle)
+	nose_tilt = lerpf(nose_tilt, 0.0, settle)
+	cargo_sway = lerpf(cargo_sway, 0.0, settle)
+
+
+## The most each axis can spin (radians per second): pitch, turn, roll.
+## Heavy loads turn slower.
+func spin_limits(ship: ShipData, tuning: Tuning) -> Vector3:
+	var turn := deg_to_rad(ship.turn_rate)
+	return Vector3(deg_to_rad(ship.pitch_rate), turn, turn * tuning.roll_rate) * heft(tuning.load_turn_drag)
+
+
+## The rotation thrusters: the stick asks for a spin, the thrusters get
+## there over a moment (lazier rigs take longer). Flight Assist on: let go
+## and they stop the spin. Off: the spin keeps going until you cancel it.
+func _update_spin(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
+	var limits := spin_limits(ship, tuning)
+	var seconds := tuning.spin_up_seconds * 2.0 / maxf(ship.turn_response, 0.1)
+	# An empty tank means the rotation thrusters are dead too: a spin keeps going.
+	var push := limits / maxf(seconds, 0.01) * engine_power(tuning)
+	# Under boost, steering gets twitchy (easy to over-correct).
+	var twitch := tuning.boost_steer_gain if boosting else 1.0
+	var stick := Vector3(controls.steer.y, -controls.steer.x, -controls.roll) * twitch
+	if flight_assist:
+		var wanted := stick * limits
+		spin = Vector3(move_toward(spin.x, wanted.x, push.x * delta),
+				move_toward(spin.y, wanted.y, push.y * delta),
+				move_toward(spin.z, wanted.z, push.z * delta))
+	else:
+		spin += stick * push * delta
+		var most := limits * tuning.free_spin_limit
+		spin = spin.clamp(-most, most)
+	# Under boost the nose drifts slowly off course and shimmies (these
+	# don't build up: they're on top of the spin, not part of it).
+	var wander := wander_amount(tuning)
+	var omega := TAU * tuning.boost_shimmy_hz
+	var snap := deg_to_rad(tuning.boost_shimmy_degrees) * shimmy * (1.0 + overdrive * 0.6) * omega
+	var shake := Vector3(wander * 0.4 * _pull(10.0) + snap * 0.35 * cos(_time * omega * 1.3 + 1.0),
+			wander * _pull(0.0) + snap * cos(_time * omega), 0.0)
+	var turn := (spin + shake) * delta
+	if not turn.is_zero_approx():
+		attitude = (attitude * Basis.from_euler(turn)).orthonormalized()
+
+
+## The engines and thrusters. Everything is worked out in the rig's own
+## axes (x = right, y = up, -z = the nose), then turned back into space.
+func _update_thrusters(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
+	# An empty tank: the engines and thrusters die (or run weakly, if
+	# empty_tank_thrust is above 0). Whatever you were doing, you keep doing.
+	var power := engine_power(tuning)
+	thrust = clampf(controls.thrust, -1.0, 1.0) * power
+	_update_boost(delta, controls, tuning)
+	if boosting:
+		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
+	var local := attitude.inverse() * velocity
+	var main := ship.acceleration * heft(tuning.load_acceleration_drag)
+	var retro := ship.retro_thrust * heft(tuning.load_braking_drag)
+	var side := ship.acceleration * tuning.strafe_thrust * heft(tuning.load_acceleration_drag) * power
+	var push := Vector3.ZERO
+	var going := -local.z
+	var strafe := controls.strafe.limit_length(1.0)
+	if flight_assist:
+		# The main engines hold the throttle's speed (ShipControls already
+		# turns the lever into the right thrust); the limiter stops them
+		# adding speed past top speed.
+		if thrust > 0.0 and going < ship.max_speed:
+			push.z = -thrust * main
+		elif thrust < 0.0 and going > -ship.max_speed * tuning.reverse_speed_fraction:
+			push.z = -thrust * retro
+		# The side thrusters kill drift, or hold the strafe speed you ask for.
+		var goal := strafe * ship.max_speed * tuning.strafe_top_speed
+		push.x = clampf((goal.x - local.x) / maxf(delta, 0.0001), -side, side)
+		push.y = clampf((goal.y - local.y) / maxf(delta, 0.0001), -side, side)
+	else:
+		# Pure Newton: what you push is what you get, with no limiter.
+		push.z = -thrust * (main if thrust > 0.0 else retro)
+		push.x = strafe.x * side
+		push.y = strafe.y * side
+	if boosting and going < boosted_top_speed(ship):
+		push.z -= ship.boost_acceleration
+	elif boosting and (going < tuning.overdrive_max_kmh / 3.6 or tuning.crashes_enabled):
+		push.z -= tuning.overdrive_acceleration  # OVERDRIVE: past boost's top speed it keeps climbing.
+	velocity += attitude * push * delta
+	# Fuel burns for thrust actually given, and nothing else: a rig coasting
+	# at any speed uses none. (The side thrusters drink a little too.)
+	var main_effort := absf(push.z if not boosting else 0.0) / maxf(main, 0.01)
+	var side_effort := clampf((absf(push.x) + absf(push.y)) / maxf(main, 0.01), 0.0, 2.0)
+	var burn := (main_effort + side_effort * 0.35) * (1.0 + load_share * tuning.load_fuel_burn)
+	fuel_burn = clampf(burn / (1.0 + tuning.fuel_speed_burn), 0.0, 1.0)
+	if fuel > 0.0:
+		fuel = maxf(fuel - burn * delta / ship.fuel_tank_seconds, 0.0)
+
+	# No drag, no speed cap: whatever speed the thrust gave you, you keep.
+	overdrive = maxf(velocity.length() - boosted_top_speed(ship), 0.0) * 3.6 / tuning.overdrive_shake_kmh
+	var now_local := attitude.inverse() * velocity
+	slip = Vector2(now_local.x, now_local.y).length()
+
+
+## Newtonian: turns the nose smoothly toward `travel` (the docking
+## autopilot uses it), keeping the rig's roll roughly where it is.
+## Arcade: the same with heading and pitch.
+func glide_toward(travel: Vector3, delta: float) -> void:
+	var weight := 1.0 - exp(-2.5 * delta)
+	if newtonian:
+		var up := attitude.y if absf(attitude.y.dot(travel)) < 0.95 else attitude.z
+		var goal := Basis.looking_at(travel, up)
+		attitude = Basis(attitude.get_rotation_quaternion().slerp(goal.get_rotation_quaternion(), weight))
+		spin = Vector3.ZERO
+		var angles := attitude.get_euler()
+		pitch = angles.x
+		heading = angles.y
+		roll = angles.z
+	else:
+		heading = lerp_angle(heading, atan2(-travel.x, -travel.z), weight)
+		pitch = lerpf(pitch, asin(clampf(travel.y, -0.9, 0.9)), weight)

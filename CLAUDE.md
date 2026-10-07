@@ -50,7 +50,7 @@ You play a 35-year-old indifferent, stoner-burnout bunny space trucker — an ol
 
 1. **Cozy first.** Safety, abundance, softness. Nothing punishing. Failure is a bonk, not a death. Urgency is always opt-in.
 2. **Trucking game first and foremost.** The core joy is the drive: cruising, radio, gizmos, getting paid, upgrading. No combat. No weapons. Ever.
-3. **Arcade feel, not simulation.** "Airplane in space." The ship goes where it points. Never Newtonian drift.
+3. **Arcade feel, not simulation.** "Airplane in space." The ship goes where it points. Never Newtonian drift. *(Overridden 2026-10-07 by the developer: the game now uses Newtonian flight with Flight Assist, like Elite Dangerous / Evochron. See `DECISIONS.md`. Keep it approachable: Flight Assist on by default, autopilot always available.)*
 4. **Strict PSX look, warm not creepy.** Wobbly verts, affine textures, dithering, low-res — but bright, saturated, colorful. The PSX look is strongly associated with horror right now; we deliberately counter that.
 5. **Mundane + surreal.** Familiar trucker things (truck stops, billboards, traffic, dispatch, radio ads) make a fully surreal universe feel homey. The cockpit is a cozy pocket of home inside the void.
 6. **Economy-driven progression.** Money gates progression. Everything is buyable.
@@ -352,7 +352,7 @@ Work strictly in order. Don't build later-milestone features early. Each milesto
 ## 10. Hard "don'ts"
 
 - No combat, weapons, enemies, or death.
-- No Newtonian drift flight model.
+- ~~No Newtonian drift flight model.~~ (Overridden by the developer on 2026-10-07: Newtonian flight with Flight Assist is the game's flight model.)
 - No camera roll by default.
 - No Spotify or other streaming-service integration.
 - No real-world trademarks (brands, logos) and no copyrighted characters, music, or lyrics. All music must be original, royalty-free, or properly licensed by the developer.

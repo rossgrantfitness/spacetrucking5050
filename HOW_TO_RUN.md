@@ -96,6 +96,29 @@ Y = △.)
 
 ### Flying
 
+**This is the `claude/newtonian-fork` branch: Newtonian flight**, like Elite
+Dangerous or Evochron. The rig keeps moving and spinning until a thruster
+stops it, it can roll, strafe and loop, and the camera rides along with it.
+- **Flight Assist ON** (the default; the HUD's "FA OFF" light is dark): the
+  throttle is a speed to hold, the thrusters kill sideways drift and stop
+  the spin when you let go. You still swing wide in turns and overshoot.
+- **Flight Assist OFF** (**G**): pure Newton. The throttle lever is raw
+  thrust (leave it at half and you keep speeding up), and drift and spin
+  last until you cancel them. Turn the rig round and burn to stop.
+- **Nothing slows you down but thrust.** Boost up to 2,000 km/h and let go:
+  you keep doing 2,000 km/h for as long as you like, with either Flight
+  Assist setting, and coasting burns no fuel. The only way to slow down is
+  to fire the engines the other way: pull the lever down (**S** / **LT**)
+  for the retro thrusters, or turn the rig round and burn. With Flight
+  Assist ON, setting the lever below your speed fires the retros for you.
+  Plan ahead: a fast rig takes a while to stop.
+- Hull strain and the overdrive rattle come from the boost burn, not from
+  speed itself, so a fast coast is smooth and quiet.
+- The autopilot switches Flight Assist back on while it flies. It keeps
+  whatever speed you give it and works out when to start its braking burn.
+- To go back to the original arcade flight, untick **newtonian_flight** in
+  tuning.tres ("Newtonian flight"), or switch back to the main branch.
+
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Steer (nose follows the mouse) | Move the mouse | Left stick |
@@ -103,10 +126,13 @@ Y = △.)
 | Nose up / down | **I** / **K**, or **↑** / **↓** | Left stick |
 | Look around the rig (any direction) | Hold the **mouse wheel** down and move the mouse | Right stick |
 | Pan the camera | Hold **right mouse button** and drag | — |
-| Camera back behind the rig (it stays wherever you put it until you do this, so you can set up a cinematic angle and watch) | **P** | **B** |
+| Camera back behind the rig (it stays wherever you put it until you do this, so you can set up a cinematic angle and watch) | **P** | — |
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
+| **Newtonian flight** (this branch): roll left / right | **Z** / **X**, or **U** / **O** | **LB** / **B** |
+| **Newtonian:** strafe (slide sideways / up / down) | Hold **Left Ctrl** and steer (keys or mouse) | — |
+| **Newtonian:** Flight Assist on / off | **G** | — |
 | Switch camera (chase / cockpit) | **C** | **Y** |
 | Zoom the chase camera in / out | Mouse wheel | — |
 | Cinema camera (on autopilot): director, then free camera, then back | **V** | **R3** (click the right stick) |

@@ -166,6 +166,7 @@ func _ready() -> void:
 	_ship.lost_control.connect(_on_lost_control)
 	_ship.exploded.connect(_on_exploded)
 	_ship.cruise_released.connect(_on_cruise_released)
+	_ship.flight_assist_switched.connect(_on_flight_assist_switched)
 	GameState.start_haul()  # Every trip out on the road is a new haul.
 	if GameState.in_opening():
 		_opening_call()
@@ -947,6 +948,12 @@ func _on_bills_paid(bill: Dictionary) -> void:
 	if on_tab > 0:
 		words += " (%d ON THE TAB)" % on_tab
 	_hud.show_banner(words, 4.0)
+
+
+## Newtonian flight: G switched Flight Assist.
+func _on_flight_assist_switched(on: bool) -> void:
+	_hud.show_banner("FLIGHT ASSIST ON" if on else "FLIGHT ASSIST OFF · DRIFT AND SPIN ARE YOURS", 2.5)
+	Sfx.play("clunk" if not on else "ui_confirm")
 
 
 func _on_cruise_released() -> void:

@@ -636,6 +636,23 @@ be revisited; just say so.
 - **New:** comm chatter for each client (approach, docking, takeoff), 12 route events (billboards, storms, wrecks, jellyfish, comets, client calls), 6 emails, crew lines, and F10 → OPEN EVERY SYSTEM.
 - **Tests:** `FrontierTests.gd` checks each system's place, room, road, jobs and story, the order they open in, and that each is farther and steeper than the last and reachable on one tank. `smoke_frontier.gd` flies the last stretch up to the Frostline, docks, talks to Penny and takes off again.
 
+## 2026-10-07 (the Newtonian fork)
+
+- **Your call: a fork with Newtonian flight, like Elite Dangerous and Evochron.** It lives on its own branch, `claude/newtonian-fork`, split off from Beta 4. The main branch (`claude/serene-galileo-035l4z`) keeps the original arcade flight untouched, so you can play both and pick.
+- **This branch deliberately breaks one of the brief's rules** ("No Newtonian drift flight model", CLAUDE.md section 10), because you asked for it. If you keep this branch, we should update the brief.
+- **One switch, both models:** `newtonian_flight` in tuning.tres ("Newtonian flight"). On this branch it's on; untick it and the arcade rules come back (they're still in `FlightModel.gd`, and their tests still run).
+- **How it flies:**
+  - The rig is a box with thrusters. Main engines push along the nose, the side and up/down thrusters push sideways (40% as strong), and nothing swings your momentum round to the nose.
+  - Turning, pitching and **rolling** take thrusters too, so spins take a moment to start and stop (heavier rigs and loads are lazier). There's no pitch limit: it can loop and fly upside down.
+  - **Flight Assist ON** (default, like Elite): the throttle lever is a speed the main engines hold, the side thrusters kill drift (or hold a strafe speed), and letting go of the stick stops the spin. You still swing wide in hard turns, because the side thrusters can't keep up.
+  - **Flight Assist OFF** (G): pure Newton. The lever is raw thrust, and drift and spin last until you cancel them. (The hard speed cap this first version had was removed later the same day; see "nothing slows you but thrust" below.)
+- **New controls:** roll on Z / X or U / O (LB / B on a gamepad), strafe by holding Left Ctrl while steering, and Flight Assist on G. Gamepad strafing and Flight Assist don't have buttons yet (the pad's buttons are all taken); that's a question for the playtest.
+- **The camera rides with the rig, roll and all** (with a little lag). A "level horizon" doesn't mean anything once the rig can fly upside down. The camera-roll option only matters with arcade flight now.
+- **The autopilot works in the rig's own frame:** it levels the wings to the road, never turns harder than the side thrusters can keep up with, and switches Flight Assist on while it flies. Docking still uses the canned docking run, which now turns the whole rig smoothly to the bay.
+- **The HUD** has a new "FA OFF" warning light; switching Flight Assist shows a banner.
+- **Kept as they were:** boost (and its wobbles and overdrive), fuel (the side thrusters sip a little), cargo damage, bonks, crashes, docking, the autopilot's obstacle dodging.
+- **Tests:** the arcade tests now run with the switch off; the new `NewtonianTests.gd` checks coasting forever with Flight Assist off, turning the nose without turning the rig, Flight Assist killing drift and spin, rolling, strafing, looping, raw throttle, and switching back to arcade. Every flight smoke test (the casino run, the Frostline climb, crashes, the debug jump) passes with Newtonian flight on.
+
 ## 2026-10-07 (a 30-second trailer)
 
 - **Your call: a 30-second trailer with music and feature captions.** It's `trailer/space_truckin_5050_trailer.mp4`, filmed straight out of the game with Godot's Movie Maker (every frame rendered properly, no screen recording).
@@ -646,12 +663,22 @@ be revisited; just say so.
 
 ## 2026-10-07 (your notes: the camera stays put; fewer, calmer planets)
 
-- **The camera stays where you put it** (your note: setting up a cinematic angle to watch the rig on your desktop). Swinging it round with the mouse wheel button (or the right stick, or dragging in watch mode) no longer eases back after a few seconds. **RESET CAMERA** swings it back behind the rig and resets the zoom: **P** on the keyboard, **B** on a gamepad. `orbit_return_seconds` in tuning.tres is now 0 ("never"); set it above 0 to bring back the old automatic return.
+- **The camera stays where you put it** (your note: setting up a cinematic angle to watch the rig on your desktop). Swinging it round with the mouse wheel button (or the right stick, or dragging in watch mode) no longer eases back after a few seconds. **RESET CAMERA** swings it back behind the rig and resets the zoom: **P** on the keyboard (on this branch B on a gamepad is roll right, so the gamepad has no reset button yet). `orbit_return_seconds` in tuning.tres is now 0 ("never"); set it above 0 to bring back the old automatic return.
 - **Half the planets, smaller and calmer** (your note). Out of 12 planets and moons, 6 are gone: the giant gas planet under home space and all five moons. The five planets left (home, Glimmer, the Dustbowl, Greenhouse Reach, the Frostline) are 45% smaller and muted to 45% color, rings too. **Tidewater's Earth-like ocean planet is exactly as it was.** The suns are unchanged. A planet's color is a new `saturation` setting on each sky body, so you can turn any of them back up in the Inspector.
+
+## 2026-10-07 (your notes, Newtonian fork: nothing slows you but thrust)
+
+- **Your call: real momentum.** Boost to 2,000 km/h and you stay at 2,000 km/h until you fire thrust the other way. Only the Newtonian fork changed; the main branch's arcade flight is untouched.
+- **Gone:** Flight Assist's "overspeed bleed" (it used to quietly slow you back to the lever speed after a boost) and Flight Assist OFF's hard speed cap (the old `free_speed_limit` tuning value).
+- **Flight Assist ON now:** the lever is still the speed to hold, but the main engines only push you *up* to it. If you're going faster than the lever (after a boost, say), it fires the retro thrusters to bring you down, which takes time and fuel like any burn. Leave the lever at full and a boosted speed is kept.
+- **Coasting is free.** Fuel burns only while a thruster is actually firing, so a fast coast costs nothing; the retro burn to stop is what costs.
+- **The hull strain, overdrive rattle and wobble come from the boost burn, not the speedometer.** Coasting at 3,000 km/h is smooth; it's lighting the boost past its top speed that shakes her apart (and can still blow her up if crashes are on).
+- **The autopilot keeps your speed** instead of slowing to its cruise speed, and plans a braking burn so it arrives at the station (or the next waypoint) at a safe speed, starting 300 m early to leave margin. If you hand it the wheel at silly speed it starts braking straight away.
+- **Tests:** two new checks: 2,000 km/h holds for a whole minute with Flight Assist on and off, using no fuel, and only retro thrust slows the rig (by exactly what the thrusters can do). The overdrive smoke test now keeps the boost lit, since that's what strains the hull here.
 
 ## 2026-10-07 (your note: you could still fly with zero fuel)
 
-- **You were right:** an empty tank still gave 25% thrust ("on fumes"), and you could still steer. Fuel management is part of the game, so **an empty tank now kills the engines**: no main engines, no retros, no side or rotation thrusters, no boost (its burner needs the main engines running). You drift. The rig slowly coasts to a stop. (Same change on the Newtonian fork, where you keep drifting at whatever speed and spin you had.)
+- **You were right:** an empty tank still gave 25% thrust ("on fumes"), and on the Newtonian fork the steering and side thrusters ignored fuel completely. Fuel management is part of the game, so **an empty tank now kills the engines**: no main engines, no retros, no side or rotation thrusters, no boost (its burner needs the main engines running). You drift. On the Newtonian fork whatever you were doing (speed, spin) carries on; in arcade flight the rig slowly coasts to a stop.
 - **Never stranded (the cozy rule), but it costs:** a few seconds after the tank runs dry, Moe or Raccoony calls: a **Gas-N-Go roadside tanker** is on its way. It reaches you about 45 seconds later and puts in a quarter tank for 250 credits call-out plus the fuel at 3x pump price (318 credits in all, versus 23 at the pumps). Can't afford it? The rest goes on your tab. It's on the PC's invoice list too. Your design notes already allowed "a tow that costs money", so I built that.
 - **All in tuning.tres under "ROADSIDE FUEL"**: `empty_tank_thrust` (now 0; raise it to bring back limping on fumes), `roadside_call_seconds`, `roadside_wait_seconds`, `roadside_fuel`, `roadside_callout_fee`, `roadside_price_factor`. The lines are in `flight_chatter.tres` (two new situations, OUT_OF_FUEL and TANKER).
-- **Tests:** a new self-test checks an empty tank won't move, steer or boost the rig; a new smoke test (`tools/smoke_roadside.gd`) drains the tank in flight and checks the call, the tanker, the fuel and the bill.
+- **Tests:** a new self-test checks an empty tank won't move, steer or boost the rig in either flight model; a new smoke test (`tools/smoke_roadside.gd`) drains the tank in flight and checks the call, the tanker, the fuel and the bill.

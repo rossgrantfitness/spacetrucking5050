@@ -8,13 +8,16 @@ extends Camera3D
 ## - It keeps the horizon level, even while the rig leans into turns. Only if
 ##   the player switches on "camera roll" does it lean along (a lot of people
 ##   get motion sick from a rolling camera, so it's off by default).
+##   NEWTONIAN FLIGHT: the rig really rolls and can fly any way up, so the
+##   camera rides along with it (lagging a little), roll and all, like
+##   Elite Dangerous. "Level" doesn't mean anything in deep space.
 ## - The mouse wheel zooms it in and out (it remembers the zoom until you
 ##   quit the game).
 ## - LOOK AROUND: hold the middle mouse button (the wheel) and move the mouse
 ##   (or use the right stick) to swing it around the rig in any direction,
 ##   the rig staying in the middle of the screen. Let go and it STAYS there
 ##   (and the mouse steers again), so you can set up a cinematic angle and
-##   watch. Press RESET CAMERA (P, or B on a gamepad) to swing back behind. Hold the right mouse button
+##   watch. Press RESET CAMERA (P) to swing back behind. Hold the right mouse button
 ##   and drag to pan. When the mouse is free (watch mode, on autopilot), drag
 ##   with the left button instead. See "Chase camera" in tuning.tres.
 ##
@@ -28,6 +31,8 @@ extends Camera3D
 # The camera's own, lagging copy of the ship's heading and pitch.
 var _heading := 0.0
 var _pitch := 0.0
+## Newtonian flight: the camera's lagging copy of the rig's whole attitude.
+var _frame := Quaternion.IDENTITY
 var _pullback := 0.0
 ## How zoomed out the camera is (1 = the usual distance). Shared by every
 ## chase camera, so the zoom you picked is kept after docking.
@@ -67,6 +72,7 @@ func snap_behind_target() -> void:
 	var facing := ship_transform.basis.get_euler()
 	_pitch = facing.x
 	_heading = facing.y
+	_frame = ship_transform.basis.get_rotation_quaternion()
 	_pullback = 0.0
 	_zoom = zoom_goal
 	fov = GameState.tuning.base_fov
@@ -148,13 +154,14 @@ func _process(delta: float) -> void:
 	var follow := 1.0 - exp(-tuning.chase_turn_follow * delta)
 	_heading = lerp_angle(_heading, facing.y, follow)
 	_pitch = lerpf(_pitch, facing.x, follow)
+	_frame = _frame.slerp(ship_transform.basis.get_rotation_quaternion(), follow).normalized()
 
 	# Fall back while boosting, and stay back while still going boost-fast.
 	var boost_feel := maxf(target.overspeed_ratio(), 0.5 if target.flight.boosting else 0.0)
 	var pullback_goal := tuning.chase_boost_pullback * boost_feel
 	_pullback = lerpf(_pullback, pullback_goal, 1.0 - exp(-tuning.chase_pullback_response * delta))
 
-	var roll := target.flight.bank * tuning.camera_roll_amount if Settings.camera_roll else 0.0
+	var roll := target.flight.bank * tuning.camera_roll_amount if Settings.camera_roll and not target.flight.newtonian else 0.0
 	_place(ship_transform.origin, roll)
 	# Screen shake: a small nudge and tilt on top of the resting spot.
 	global_position += global_basis * target.shake.offset(tuning.shake_max_offset)
@@ -189,7 +196,7 @@ func _place(ship_position: Vector3, roll: float) -> void:
 	var tuning := GameState.tuning
 	# A view direction made of only heading and pitch, never roll: that's what
 	# keeps the horizon level. Looking around swings it further round the rig.
-	var behind := Basis.from_euler(Vector3(_pitch, _heading, 0.0))
+	var behind := Basis(_frame) if target.flight.newtonian else Basis.from_euler(Vector3(_pitch, _heading, 0.0))
 	var view := behind * Basis.from_euler(Vector3(orbit_pitch, orbit_yaw, 0.0))
 	# Looking around, aim at the rig itself (not ahead of it), and pan.
 	var swung := clampf((absf(orbit_yaw) + absf(orbit_pitch)) / 0.6, 0.0, 1.0)

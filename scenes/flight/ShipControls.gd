@@ -4,7 +4,9 @@ extends Node
 ## FlightControls for the ship.
 ##
 ## Steering is the mouse, the left stick, A / D and the arrow keys, or
-## I J K L. The mouse works like a "virtual thumbstick": moving it pushes the
+## I J K L. Newtonian flight adds rolling (Z / X or U / O, or LB / B on a
+## gamepad) and strafing: hold Left Ctrl and the steering keys (or mouse)
+## slide the rig sideways and up/down instead of turning it. The mouse works like a "virtual thumbstick": moving it pushes the
 ## stick, and it drifts back to center when you stop. While the middle mouse
 ## button (the wheel) is held, the mouse looks around the rig instead (see
 ## ChaseCamera). Mouse and stick add together, then get smoothed a little so
@@ -31,6 +33,10 @@ var hands_free: bool = false
 var max_speed: float = 55.0
 ## The rig's speed along its nose, for matching (set by Ship each step).
 var forward_speed: float = 0.0
+## Newtonian flight, and whether Flight Assist is on (set by Ship each step).
+## With it off, the lever is raw thrust instead of a speed to hold.
+var newtonian: bool = false
+var flight_assist: bool = true
 
 var _controls := FlightControls.new()
 ## Which side of idle the throttle press being held started on (1 ahead,
@@ -61,7 +67,9 @@ func read(delta: float) -> FlightControls:
 	var tuning := GameState.tuning
 	if hands_free:
 		_controls.steer = Vector2.ZERO
-		_controls.thrust = thrust_for(lever, forward_speed, max_speed, tuning)
+		_controls.roll = 0.0
+		_controls.strafe = Vector2.ZERO
+		_controls.thrust = _engine_thrust(tuning)
 		_controls.boost = false
 		_controls.touched = false
 		_controls.throttle_push = 0.0
@@ -73,6 +81,14 @@ func read(delta: float) -> FlightControls:
 	_smoothed_steer = _smoothed_steer.lerp(combined, 1.0 - exp(-tuning.steer_response * delta))
 
 	_controls.steer = Vector2(_smoothed_steer.x, Settings.pitch_from_vertical_input(_smoothed_steer.y))
+	_controls.roll = 0.0
+	_controls.strafe = Vector2.ZERO
+	if newtonian:
+		_controls.roll = Input.get_axis("roll_left", "roll_right")
+		if Input.is_action_pressed("strafe_mode"):
+			# Holding Ctrl: the same keys (and mouse) slide the rig instead.
+			_controls.strafe = Vector2(_smoothed_steer.x, -_smoothed_steer.y)
+			_controls.steer = Vector2.ZERO
 	# Move the lever while the throttle keys (or triggers) are held.
 	var push := Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
 	_controls.throttle_push = push
@@ -82,12 +98,20 @@ func read(delta: float) -> FlightControls:
 		_press_side = int(signf(lever)) if absf(lever) > 0.001 else 0
 	_pressing = absf(push) >= 0.1
 	lever = move_lever(lever, push * tuning.throttle_lever_speed * delta, _press_side, tuning.reverse_lever)
-	_controls.thrust = thrust_for(lever, forward_speed, max_speed, tuning)
+	_controls.thrust = _engine_thrust(tuning)
 	var wants_boost := Input.is_action_pressed("boost")
 	boost_blocked = wants_boost and tuning.boost_needs_full_throttle and lever < 0.95
 	_controls.boost = wants_boost and not boost_blocked
-	_controls.touched = absf(push) > 0.1 or wants_boost or combined.length() > 0.3
+	_controls.touched = absf(push) > 0.1 or wants_boost or combined.length() > 0.3 or absf(_controls.roll) > 0.3
 	return _controls
+
+
+## The thrust for the lever: a speed to reach and hold, or (Newtonian
+## flight with Flight Assist off) the raw push itself.
+func _engine_thrust(tuning: Tuning) -> float:
+	if newtonian and not flight_assist:
+		return lever
+	return thrust_for(lever, forward_speed, max_speed, tuning)
 
 
 ## Moves the lever by `amount`, between full reverse (-`reverse_limit`) and
