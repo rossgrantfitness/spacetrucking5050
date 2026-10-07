@@ -459,9 +459,10 @@ extends Resource
 ## How far up or down the camera can swing (degrees).
 @export_range(10.0, 89.0, 1.0, "suffix:°") var orbit_pitch_limit: float = 80.0
 ## After this many seconds of not looking around, the camera eases back to
-## its spot behind the rig (0 = it stays where you left it; middle-click
-## always snaps it back).
-@export_range(0.0, 30.0, 0.5, "suffix:s") var orbit_return_seconds: float = 4.0
+## its spot behind the rig. 0 (the default, your call) = never: it stays
+## exactly where you left it, so you can set up a cinematic angle and watch
+## the rig fly. Press RESET CAMERA (P) to bring it back.
+@export_range(0.0, 30.0, 0.5, "suffix:s") var orbit_return_seconds: float = 0.0
 ## How quickly it eases back.
 @export_range(0.2, 10.0, 0.1) var orbit_return_speed: float = 1.5
 ## Panning: meters per pixel of right-drag, and how far it can pan.

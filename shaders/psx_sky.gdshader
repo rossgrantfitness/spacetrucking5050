@@ -15,6 +15,8 @@ uniform vec2 uv_scale = vec2(1.0);
 uniform float drift_speed = 0.0;
 // Glow on the planet's night side, so it never goes fully black.
 uniform float night_glow = 0.12;
+// How colorful the surface is: 1 = as painted, 0 = gray.
+uniform float saturation = 1.0;
 
 void vertex() {
 	PSX_VERTEX(PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0), UV * uv_scale + vec2(TIME * drift_speed, 0.0));
@@ -22,6 +24,7 @@ void vertex() {
 
 void fragment() {
 	vec3 color = albedo.rgb * texture(albedo_texture, PSX_UV).rgb;
+	color = mix(vec3(dot(color, vec3(0.299, 0.587, 0.114))), color, saturation);
 	ALBEDO = color;
 	ROUGHNESS = 1.0;
 	EMISSION = color * night_glow;

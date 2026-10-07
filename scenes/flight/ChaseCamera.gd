@@ -15,8 +15,9 @@ extends Camera3D
 ##   quit the game).
 ## - LOOK AROUND: hold the middle mouse button (the wheel) and move the mouse
 ##   (or use the right stick) to swing it around the rig in any direction,
-##   the rig staying in the middle of the screen. Let go and it eases back
-##   behind the rig (and the mouse steers again). Hold the right mouse button
+##   the rig staying in the middle of the screen. Let go and it STAYS there
+##   (and the mouse steers again), so you can set up a cinematic angle and
+##   watch. Press RESET CAMERA (P) to swing back behind. Hold the right mouse button
 ##   and drag to pan. When the mouse is free (watch mode, on autopilot), drag
 ##   with the left button instead. See "Chase camera" in tuning.tres.
 ##
@@ -47,6 +48,7 @@ var _idle := 0.0
 var _dragging := false
 var _panning := false
 var _orbiting := false  # The wheel's held down: the mouse looks around.
+var _returning := false  # Easing back behind the rig (RESET CAMERA).
 
 
 ## The field of view for the ship's speed: normal until 70% of top speed (by
@@ -81,6 +83,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not current:
 		return
 	var tuning := GameState.tuning
+	if event.is_action_pressed("reset_camera"):
+		_returning = true
+		zoom_goal = 1.0
+		get_viewport().set_input_as_handled()
+		return
 	var motion := event as InputEventMouseMotion
 	if motion != null:
 		var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
@@ -111,9 +118,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				return
 		MOUSE_BUTTON_MIDDLE:
-			_orbiting = button.pressed
-			if not button.pressed:
-				_idle = GameState.tuning.orbit_return_seconds  # Let go: ease straight back.
+			_orbiting = button.pressed  # Let go: the view stays where you left it.
 		_:
 			return
 	get_viewport().set_input_as_handled()
@@ -126,6 +131,7 @@ func look_around(yaw: float, pitch: float) -> void:
 	orbit_yaw = wrapf(orbit_yaw + yaw, -PI, PI)
 	orbit_pitch = clampf(orbit_pitch + pitch, -limit, limit)
 	_idle = 0.0
+	_returning = false
 
 
 ## Back behind the rig, no pan.
@@ -165,7 +171,9 @@ func _process(delta: float) -> void:
 	fov = lerpf(fov, wanted_fov, 1.0 - exp(-tuning.fov_response * delta))
 
 
-## The right stick looks around too, and an untouched camera eases back.
+## The right stick looks around too. The camera eases back behind the rig
+## when you press RESET CAMERA (or, if orbit_return_seconds is above 0, when
+## it's been left alone that long).
 func _update_look(delta: float) -> void:
 	var tuning := GameState.tuning
 	var stick := Input.get_vector("look_left", "look_right", "look_up", "look_down", tuning.stick_deadzone)
@@ -173,11 +181,15 @@ func _update_look(delta: float) -> void:
 		var turn := deg_to_rad(tuning.orbit_stick_degrees) * delta
 		look_around(-stick.x * turn, stick.y * turn)
 	_idle += delta
-	if tuning.orbit_return_seconds > 0.0 and _idle > tuning.orbit_return_seconds and not _panning and not _dragging and not _orbiting:
-		var ease_back := 1.0 - exp(-tuning.orbit_return_speed * delta)
+	var timed_out := tuning.orbit_return_seconds > 0.0 and _idle > tuning.orbit_return_seconds
+	if (_returning or timed_out) and not _panning and not _dragging and not _orbiting:
+		var ease_back := 1.0 - exp(-tuning.orbit_return_speed * 2.0 * delta)
 		orbit_yaw = wrapf(lerp_angle(orbit_yaw, 0.0, ease_back), -PI, PI)
 		orbit_pitch = lerpf(orbit_pitch, 0.0, ease_back)
 		pan = pan.lerp(Vector2.ZERO, ease_back)
+		if absf(orbit_yaw) < 0.002 and absf(orbit_pitch) < 0.002 and pan.length() < 0.01:
+			reset_look()
+			_returning = false
 
 
 func _place(ship_position: Vector3, roll: float) -> void:

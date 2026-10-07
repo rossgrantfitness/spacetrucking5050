@@ -1,3 +1,10 @@
+# Playtest: your notes (camera stays put; fewer, calmer planets)
+
+1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** to swing it back.
+2. Fly around home space, the casino and the far systems: are the planets calm enough now? Too small? Is there any you miss? (Each one's `saturation` and `true_radius` are on its node under World/SkyBodies in FlightSandbox.tscn.)
+
+---
+
 # Playtest: the Newtonian fork (branch `claude/newtonian-fork`)
 
 **What's new:** Newtonian flight, like Elite Dangerous or Evochron. The rig keeps moving and spinning until a thruster stops it. It can roll, strafe, loop and fly upside down, and the camera rides along with it. Everything else is the same as Beta 4.

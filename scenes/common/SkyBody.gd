@@ -29,6 +29,8 @@ extends Node3D
 @export var texture: Texture2D
 ## Multiplies the picture's colors.
 @export var tint: Color = Color.WHITE
+## How colorful it is: 1 = as painted, lower = more muted (0 = gray).
+@export_range(0.0, 1.0, 0.05) var saturation: float = 1.0
 ## How many times the picture wraps around (x) and from pole to pole (y).
 @export var uv_scale := Vector2(2.0, 1.0)
 ## How fast the clouds drift around it (just for looks).
@@ -70,6 +72,7 @@ func _build_ball() -> void:
 	material.set_shader_parameter("uv_scale", uv_scale)
 	material.set_shader_parameter("drift_speed", drift_speed)
 	material.set_shader_parameter("night_glow", night_glow)
+	material.set_shader_parameter("saturation", saturation)
 	var sphere := SphereMesh.new()
 	sphere.radius = 1.0
 	sphere.height = 2.0
@@ -105,6 +108,7 @@ func _build_ball() -> void:
 		ring_material.shader = SKY_SHADER
 		ring_material.set_shader_parameter("albedo", ring_color)
 		ring_material.set_shader_parameter("night_glow", 0.3)
+		ring_material.set_shader_parameter("saturation", saturation)
 		var torus := TorusMesh.new()
 		torus.inner_radius = 1.3
 		torus.outer_radius = maxf(ring_size, 1.4)
