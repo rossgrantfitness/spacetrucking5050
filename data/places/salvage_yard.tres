@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_place")
+freight_flag = "dustbowl_open"
+freight_pay_factor = 1.35
 id = "salvage_yard"
 display_name = "HOOF & HULL SALVAGE"
 interior_scene = "res://scenes/hub/SalvageYard.tscn"

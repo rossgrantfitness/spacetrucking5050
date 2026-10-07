@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_place")
+freight_flag = "glimmer_open"
+freight_pay_factor = 1.1
 id = "high_roller"
 display_name = "THE HIGH ROLLER"
 interior_scene = "res://scenes/hub/HighRollerLounge.tscn"

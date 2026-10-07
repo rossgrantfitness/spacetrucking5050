@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_place")
+freight_flag = "first_mission_done"
 id = "tidewater"
 display_name = "TIDEWATER CANNERY"
 interior_scene = "res://scenes/hub/CanneryCanteen.tscn"

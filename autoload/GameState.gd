@@ -24,6 +24,8 @@ var names: WorldNames = preload("res://data/world_names.tres")
 var places: PlaceList = preload("res://data/places/places.tres")
 var systems: SystemList = preload("res://data/systems/systems.tres")
 var jobs: JobList = preload("res://data/jobs/jobs.tres")
+## The everyday loads around the story jobs (see FreightMarket.gd).
+var freight: FreightMarket = preload("res://data/freight/freight_market.tres")
 var upgrades: UpgradeList = preload("res://data/upgrades/upgrades.tres")
 var sights: Logbook = preload("res://data/logbook/sights.tres")
 var ships: ShipList = preload("res://data/ships/ships.tres")
@@ -47,6 +49,13 @@ var credits: int = STARTING_CREDITS
 var flags: Dictionary = {}
 ## The job you're hauling (its id), or "" for none.
 var active_job_id: String = ""
+## When it's a freight market load (FreightMarket.gd): the load itself
+## (made up on the board, so it's kept here, and saved as plain data).
+var active_freight: JobData = null
+## Freight loads already taken off this period's boards (their ids).
+var taken_freight: Array[String] = []
+## Makes this game's freight market its own (picked at new game).
+var market_seed: int = 0
 ## Seconds flown on the current job (for rush bonuses).
 var job_seconds: float = 0.0
 ## The rig's state between flights: both tanks, the hull and the cargo
@@ -74,8 +83,10 @@ var finished_jobs: Array[String] = []
 ## How many times you've docked at each place (place id -> count), so
 ## people can remember you (and Moe can finish his sentence).
 var visits: Dictionary = {}
-## How many deliveries you've made, ever.
+## How many deliveries you've made, ever (and how many were everyday
+## freight market loads).
 var deliveries: int = 0
+var freight_delivered: int = 0
 ## The logbook: every sight you've seen (its id -> how many times).
 var logbook: Dictionary = {}
 ## How many hauls (trips out on the road) you've started, ever. Route
@@ -226,7 +237,11 @@ func spend(amount: int) -> bool:
 
 ## The job being hauled, or null.
 func active_job() -> JobData:
-	return jobs.find(active_job_id) if not active_job_id.is_empty() else null
+	if active_job_id.is_empty():
+		return null
+	if FreightMarket.is_freight_id(active_job_id):
+		return active_freight if active_freight != null and active_freight.id == active_job_id else null
+	return jobs.find(active_job_id)
 
 
 ## Whether `job` can be offered right now (story flag reached, not a one-off
@@ -239,11 +254,25 @@ func job_available(job: JobData) -> bool:
 	return job.repeatable or not job.id in finished_jobs
 
 
-## The jobs on the board at `place_id`.
+## The jobs on the board at `place_id`: the hand-written ones first, then
+## the freight market's loads from there. ("base" is dispatch aboard the
+## rig: the freight from wherever she's parked.)
 func board_jobs(place_id: String) -> Array[JobData]:
 	var found: Array[JobData] = []
 	for job in jobs.jobs:
 		if job != null and job.on_job_board and job.from_place == place_id and job_available(job):
+			found.append(job)
+	found.append_array(freight_board(launch_from if place_id == "base" else place_id))
+	return found
+
+
+## The freight market's loads on the board at `place_id` today (minus the
+## ones already taken).
+func freight_board(place_id: String) -> Array[JobData]:
+	var period := freight.period_of(day)
+	var found: Array[JobData] = []
+	for job in freight.board(place_id, period, market_seed):
+		if not job.id in taken_freight:
 			found.append(job)
 	return found
 
@@ -253,6 +282,13 @@ func accept_job(job: JobData) -> bool:
 	if job == null or not active_job_id.is_empty():
 		return false
 	active_job_id = job.id
+	active_freight = null
+	if FreightMarket.is_freight_id(job.id):
+		active_freight = job
+		# Off the board. (Old periods' ids are forgotten: those boards are gone.)
+		var period := ":%d:" % freight.period_of(day)
+		taken_freight = taken_freight.filter(func(id: String) -> bool: return period in id)
+		taken_freight.append(job.id)
 	orders.erase(job.id)
 	job_seconds = 0.0
 	job_started = Economy.now_minutes()
@@ -300,12 +336,16 @@ func deliver_at(place_id: String) -> bool:
 	set_flag(job.completes_flag)
 	deliveries += 1
 	# So people can remember how it went: "<job>_arrived_perfect", "_bumpy"
-	# or "_rough".
+	# or "_rough". (Not for everyday freight: nobody's keeping score.)
 	var condition: float = rig.get("cargo", 1.0)
-	set_flag(job.id + ("_arrived_perfect" if condition >= 0.95 else ("_arrived_bumpy" if condition >= 0.7 else "_arrived_rough")))
+	if not FreightMarket.is_freight_id(job.id):
+		set_flag(job.id + ("_arrived_perfect" if condition >= 0.95 else ("_arrived_bumpy" if condition >= 0.7 else "_arrived_rough")))
+	else:
+		freight_delivered += 1
 	if not job.repeatable:
 		finished_jobs.append(job.id)
 	active_job_id = ""
+	active_freight = null
 	job_seconds = 0.0
 	pending_payout = pay
 	save_game()
@@ -355,6 +395,10 @@ func to_save_data() -> Dictionary:
 		"credits": credits,
 		"flags": flags.keys(),
 		"active_job": active_job_id,
+		"active_freight": FreightMarket.to_save(active_freight) if active_freight != null else {},
+		"taken_freight": taken_freight,
+		"market_seed": market_seed,
+		"freight_delivered": freight_delivered,
 		"job_seconds": job_seconds,
 		"rig": rig,
 		"upgrades": owned_upgrades,
@@ -405,6 +449,18 @@ func apply_save_data(data: Dictionary) -> void:
 			set_flag(str(flag))
 	if data.get("active_job") is String and jobs.find(data["active_job"]) != null:
 		active_job_id = data["active_job"]
+	if data.get("market_seed") is int or data.get("market_seed") is float:
+		market_seed = int(data["market_seed"])
+	if data.get("freight_delivered") is int or data.get("freight_delivered") is float:
+		freight_delivered = maxi(int(data["freight_delivered"]), 0)
+	if data.get("taken_freight") is Array:
+		for id: Variant in data["taken_freight"]:
+			if FreightMarket.is_freight_id(str(id)):
+				taken_freight.append(str(id))
+	if data.get("active_freight") is Dictionary and data.get("active_job") is String and data["active_job"] == (data["active_freight"] as Dictionary).get("id"):
+		active_freight = FreightMarket.from_save(data["active_freight"])
+		if active_freight != null:
+			active_job_id = active_freight.id
 	if data.get("job_seconds") is float or data.get("job_seconds") is int:
 		job_seconds = float(data["job_seconds"])
 	if data.get("rig") is Dictionary:
@@ -538,6 +594,10 @@ func new_game() -> void:
 	credits = STARTING_CREDITS
 	flags = {}
 	active_job_id = ""
+	active_freight = null
+	taken_freight = []
+	market_seed = randi()
+	freight_delivered = 0
 	job_seconds = 0.0
 	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
 	owned_upgrades = []

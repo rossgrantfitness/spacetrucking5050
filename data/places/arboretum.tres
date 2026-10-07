@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_place")
+freight_flag = "greenhouse_open"
+freight_pay_factor = 1.35
 id = "arboretum"
 display_name = "THE ORBITAL ARBORETUM"
 interior_scene = "res://scenes/hub/Arboretum.tscn"

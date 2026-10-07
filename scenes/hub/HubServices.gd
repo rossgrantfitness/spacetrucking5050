@@ -117,7 +117,11 @@ static func job_board(tree: SceneTree, place_id: String) -> void:
 		return
 	var options: Array = []
 	for job in jobs:
-		options.append({"text": job.cargo_name.to_upper(), "detail": "%s%d %s" % [job_tags(job), job.base_pay, GameState.names.currency_short],
+		var to_place := GameState.places.find(job.to_place)
+		var label := job.cargo_name.to_upper()
+		if FreightMarket.is_freight_id(job.id) and to_place != null:
+			label += " > " + to_place.display_name.to_upper()  # (Everyday freight: say where, the names repeat.)
+		options.append({"text": label, "detail": "%s%d %s" % [job_tags(job), job.base_pay, GameState.names.currency_short],
 				"description": job_summary(job)})
 	options.append({"text": "LEAVE", "description": "Maybe later."})
 	var choice := await MenuPanel.ask(tree, "JOB BOARD", "Pick a load. One at a time.", options)

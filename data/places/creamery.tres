@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1_place")
+freight_flag = "frostline_open"
+freight_pay_factor = 1.5
 id = "creamery"
 display_name = "FLURRY'S COMET CREAMERY"
 interior_scene = "res://scenes/hub/Creamery.tscn"

@@ -47,6 +47,14 @@ extends Resource
 @export_range(0.0, 3600.0, 5.0, "suffix:s") var rush_seconds: float = 0.0
 @export_range(0, 100000, 10) var rush_bonus: int = 0
 
+@export_group("Looks")
+## What the load looks like slung under the rig (see CargoPod.gd): auto
+## (picked from the cargo: live, perishable, heavy...), container, reefer,
+## tank, crates, livestock or machinery.
+@export_enum("auto", "container", "reefer", "tank", "crates", "livestock", "machinery") var cargo_look: String = "auto"
+## Its paint (fully clear = picked from the job's id).
+@export var cargo_color: Color = Color(0, 0, 0, 0)
+
 @export_group("Story")
 ## On: shows on the job board. Off: only a person offers it (story jobs).
 @export var on_job_board: bool = true
@@ -69,6 +77,28 @@ func pay_breakdown(condition: float, seconds: float) -> Dictionary:
 	var care := roundi(care_bonus * clampf(condition, 0.0, 1.0))
 	var rush := rush_bonus if is_rush() and seconds <= rush_seconds else 0
 	return {"base": base_pay, "care": care, "rush": rush, "total": base_pay + care + rush}
+
+
+## What the load looks like (see cargo_look), worked out if it's "auto".
+func look() -> String:
+	if cargo_look != "auto":
+		return cargo_look
+	if is_fragile() and care_kind == "live":
+		return "livestock"
+	if is_fragile() and care_kind == "perishable":
+		return "reefer"
+	if is_fragile():
+		return "crates"
+	return "container" if weight >= 1e9 else "crates"
+
+
+## The load's paint (see cargo_color), picked from a few trucker colors if
+## it doesn't say.
+func look_color() -> Color:
+	if cargo_color.a > 0.0:
+		return cargo_color
+	var colors := [Color(0.85, 0.3, 0.2), Color(0.2, 0.45, 0.8), Color(0.95, 0.7, 0.15), Color(0.25, 0.6, 0.35), Color(0.6, 0.35, 0.7)]
+	return colors[absi(hash(id)) % colors.size()]
 
 
 func is_rush() -> bool:

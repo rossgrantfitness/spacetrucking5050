@@ -55,6 +55,13 @@ enum Kind {
 ## job board uses it to say how long a trip takes.
 @export var map_position: Vector3 = Vector3.ZERO
 
+@export_group("Freight market")
+## The place joins the freight market (loads to and from it on every job
+## board) once this story flag is set. Empty = from the start.
+@export var freight_flag: String = ""
+## Loads to or from here pay this much more (the steep, faraway roads).
+@export_range(0.5, 3.0, 0.05) var freight_pay_factor: float = 1.0
+
 @export_group("Rocks all around")
 ## What surrounds the station on every side (see AsteroidField.gd's
 ## "shell"): nothing, rocks, ice, junk (scrap) or chips (casino chips). A
