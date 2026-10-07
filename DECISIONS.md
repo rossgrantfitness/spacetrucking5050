@@ -635,3 +635,20 @@ be revisited; just say so.
 - **Quiet echoes of White:** Penny remembers a trucker with a rig that coughed (only after his message), Mags has one line after his tapes, and a booth in Penny's parlor has a tiny "W" carved in it. Nothing more; the far systems are their own stories.
 - **New:** comm chatter for each client (approach, docking, takeoff), 12 route events (billboards, storms, wrecks, jellyfish, comets, client calls), 6 emails, crew lines, and F10 → OPEN EVERY SYSTEM.
 - **Tests:** `FrontierTests.gd` checks each system's place, room, road, jobs and story, the order they open in, and that each is farther and steeper than the last and reachable on one tank. `smoke_frontier.gd` flies the last stretch up to the Frostline, docks, talks to Penny and takes off again.
+
+## 2026-10-07 (the Newtonian fork)
+
+- **Your call: a fork with Newtonian flight, like Elite Dangerous and Evochron.** It lives on its own branch, `claude/newtonian-fork`, split off from Beta 4. The main branch (`claude/serene-galileo-035l4z`) keeps the original arcade flight untouched, so you can play both and pick.
+- **This branch deliberately breaks one of the brief's rules** ("No Newtonian drift flight model", CLAUDE.md section 10), because you asked for it. If you keep this branch, we should update the brief.
+- **One switch, both models:** `newtonian_flight` in tuning.tres ("Newtonian flight"). On this branch it's on; untick it and the arcade rules come back (they're still in `FlightModel.gd`, and their tests still run).
+- **How it flies:**
+  - The rig is a box with thrusters. Main engines push along the nose, the side and up/down thrusters push sideways (40% as strong), and nothing swings your momentum round to the nose.
+  - Turning, pitching and **rolling** take thrusters too, so spins take a moment to start and stop (heavier rigs and loads are lazier). There's no pitch limit: it can loop and fly upside down.
+  - **Flight Assist ON** (default, like Elite): the throttle lever is a speed the main engines hold, the side thrusters kill drift (or hold a strafe speed), and letting go of the stick stops the spin. You still swing wide in hard turns, because the side thrusters can't keep up.
+  - **Flight Assist OFF** (G): pure Newton. The lever is raw thrust, and drift and spin last until you cancel them. There's a hard speed cap (boost's top speed), like Elite, so crashes never happen at silly speeds.
+- **New controls:** roll on Z / X or U / O (LB / B on a gamepad), strafe by holding Left Ctrl while steering, and Flight Assist on G. Gamepad strafing and Flight Assist don't have buttons yet (the pad's buttons are all taken); that's a question for the playtest.
+- **The camera rides with the rig, roll and all** (with a little lag). A "level horizon" doesn't mean anything once the rig can fly upside down. The camera-roll option only matters with arcade flight now.
+- **The autopilot works in the rig's own frame:** it levels the wings to the road, never turns harder than the side thrusters can keep up with, and switches Flight Assist on while it flies. Docking still uses the canned docking run, which now turns the whole rig smoothly to the bay.
+- **The HUD** has a new "FA OFF" warning light; switching Flight Assist shows a banner.
+- **Kept as they were:** boost (and its wobbles and overdrive), fuel (the side thrusters sip a little), cargo damage, bonks, crashes, docking, the autopilot's obstacle dodging.
+- **Tests:** the arcade tests now run with the switch off; the new `NewtonianTests.gd` checks coasting forever with Flight Assist off, turning the nose without turning the rig, Flight Assist killing drift and spin, rolling, strafing, looping, raw throttle, and switching back to arcade. Every flight smoke test (the casino run, the Frostline climb, crashes, the debug jump) passes with Newtonian flight on.

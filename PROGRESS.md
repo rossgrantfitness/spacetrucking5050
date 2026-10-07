@@ -1,5 +1,9 @@
 # Progress
 
+**This branch: `claude/newtonian-fork`** (your fork). Newtonian flight
+like Elite Dangerous / Evochron, with Flight Assist on / off, roll and
+strafe. Everything else is Beta 4. The main branch keeps arcade flight.
+
 **Current status:** **Beta step 4, done: three more systems.**
 - **The Dustbowl** (amber, far below the lane): Mags the goat's salvage yard.
 - **Greenhouse Reach** (green, far above): Dr. Moss the tortoise's arboretum.

@@ -1,3 +1,29 @@
+# Playtest: the Newtonian fork (branch `claude/newtonian-fork`)
+
+**What's new:** Newtonian flight, like Elite Dangerous or Evochron. The rig keeps moving and spinning until a thruster stops it. It can roll, strafe, loop and fly upside down, and the camera rides along with it. Everything else is the same as Beta 4.
+
+**To get it:** switch to the `claude/newtonian-fork` branch (in GitHub Desktop: Current Branch → `claude/newtonian-fork`), then open the project as usual. The main branch still has the original arcade flight, so you can compare.
+
+**Time needed:** 20 minutes.
+
+## What to do
+
+1. **Fly around the truck stop with Flight Assist ON** (the default). Turn hard at full speed and notice the rig swing wide before the thrusters catch up. Roll with **Z / X** (or **U / O**), and strafe by holding **Left Ctrl** while steering.
+2. **Loop:** hold the nose up and keep going over the top.
+3. **Press G for Flight Assist OFF** (the "FA OFF" light comes on). Push the throttle to half and let go: you keep speeding up. Turn the nose 90 degrees and watch the rig keep sliding the old way. Spin, let go, and keep spinning. Try to stop dead: turn round and burn.
+4. **Dock somewhere:** fly a delivery by hand, then let the autopilot do one (M). The autopilot turns Flight Assist back on and levels the wings.
+5. Try the **cockpit view (C)** during a roll and a loop.
+
+## Questions
+
+1. **The big one:** Newtonian or arcade for this game? Or both (a setting, or a buyable "Flight Assist off" upgrade)?
+2. With Flight Assist on, is the swing-wide in turns fun or annoying? (`strafe_thrust` in tuning.tres makes the side thrusters stronger.)
+3. Does the rolling camera bother you, especially in the cockpit, over a long haul?
+4. Gamepad: the buttons are all taken. Roll is on LB / B for now; strafing and Flight Assist have no buttons. Where would you want them?
+5. Does it still feel like trucking, or more like a fighter sim?
+
+---
+
 # Playtest: beta step 4, three more systems (your notes round below)
 
 **What's new:** three more clients, each in their own system, each farther out, steeper and stormier than the last:

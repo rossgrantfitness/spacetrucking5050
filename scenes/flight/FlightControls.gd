@@ -18,6 +18,12 @@ var thrust := 0.0
 ## True while the boost button is held.
 var boost := false
 
+## Newtonian flight only (see "Newtonian flight" in tuning.tres):
+## Rolling: +1 = roll right (clockwise, seen from behind), -1 = roll left.
+var roll := 0.0
+## The side and up/down thrusters: x +1 = slide right, y +1 = slide up.
+var strafe := Vector2.ZERO
+
 ## How hard the throttle keys (or triggers) are pushed this step, -1 to 1
 ## (0 = not touching them).
 var throttle_push := 0.0
@@ -31,4 +37,4 @@ var touched := false
 ## Whether the pilot is actually doing something (not just resting a hand on
 ## the mouse). Grabbing the controls takes over from the cruise autopilot.
 func is_touched() -> bool:
-	return touched or steer.length() > 0.3 or boost
+	return touched or steer.length() > 0.3 or boost or absf(roll) > 0.3 or strafe.length() > 0.3

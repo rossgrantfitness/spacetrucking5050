@@ -138,6 +138,49 @@ extends Resource
 @export_range(0.0, 20.0, 0.5, "suffix:°") var nose_tilt_degrees: float = 5.0
 
 
+@export_group("Newtonian flight")
+## THE SWITCH. On: Newtonian flight, like Elite Dangerous or Evochron. The
+## rig is a box with thrusters in empty space: it keeps moving and spinning
+## until a thruster stops it, it can roll, strafe and fly any way up, and
+## nothing points it back to "level". Off: the original arcade flight
+## ("an airplane in space", where momentum swings round to the nose).
+@export var newtonian_flight: bool = true
+
+## Whether Flight Assist starts switched on (the G key toggles it in
+## flight). Flight Assist ON: the thrusters quietly fire to keep you going
+## where the nose points at the throttle's speed, kill sideways drift and
+## stop the spin when you let go of the stick. It's still Newtonian (you
+## swing wide and overshoot, because the thrusters take time), just tidied
+## up. Flight Assist OFF: pure Newton. The throttle is raw thrust, drift and
+## spin last until you cancel them yourself.
+@export var flight_assist_starts_on: bool = true
+
+## How strong the side and up/down thrusters are, compared with the main
+## engines (0.4 = 40% of the main engines' push). They kill drift (Flight
+## Assist) and strafe.
+@export_range(0.05, 1.5, 0.05) var strafe_thrust: float = 0.4
+
+## The fastest you can strafe sideways or up/down with Flight Assist on,
+## compared with top speed.
+@export_range(0.05, 1.0, 0.05) var strafe_top_speed: float = 0.35
+
+## How fast the rig can roll, compared with how fast it turns left/right
+## (1.6 = rolls 1.6 times faster than it turns).
+@export_range(0.2, 4.0, 0.1) var roll_rate: float = 1.6
+
+## How hard the rotation thrusters push, as "how many seconds to reach full
+## turning speed" (bigger = lazier, heavier rig). Scaled by each rig's own
+## turn_response.
+@export_range(0.1, 5.0, 0.05) var spin_up_seconds: float = 0.8
+
+## Flight Assist OFF: the fastest the rig can be spinning, compared with
+## its normal turn rate (so you can't spin up forever).
+@export_range(1.0, 6.0, 0.1) var free_spin_limit: float = 2.5
+
+## Flight Assist OFF: the hard speed limit, compared with boost's top speed
+## (like Elite, there's still a cap, so a crash is never at light speed).
+@export_range(0.5, 3.0, 0.05) var free_speed_limit: float = 1.0
+
 @export_group("Overdrive")
 ## OVERDRIVE: keep holding boost past boost's top speed (about 800 km/h in
 ## the Thumper) and the rig keeps climbing, slowly, with no ceiling. The

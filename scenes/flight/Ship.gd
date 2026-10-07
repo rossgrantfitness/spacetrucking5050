@@ -29,6 +29,8 @@ signal cargo_jostled(reason: String)
 signal lost_control(reason: String)
 ## Emitted when the out-of-control rig finally blows up.
 signal exploded
+## Newtonian flight: Flight Assist was switched on or off.
+signal flight_assist_switched(on: bool)
 
 ## The ship's personality: speed, handling, boost. See res://data/ships/.
 @export var ship_data: ShipData
@@ -132,7 +134,7 @@ var _bonk_cooldown := 0.0
 func _ready() -> void:
 	# Start facing whichever way the ship was placed in the editor.
 	var facing := global_basis.get_euler()
-	flight.reset(facing.y, facing.x)
+	flight.reset(facing.y, facing.x, facing.z)
 	_spool_sound = AudioStreamPlayer.new()
 	_spool_sound.stream = SPOOL_SOUND
 	_spool_sound.volume_db = -8.0
@@ -161,8 +163,18 @@ func _physics_process(delta: float) -> void:
 		_fly_autopilot(delta)
 		return
 	flight.shakiness = 0.5 if float(GameState.rig.get("snack", 0.0)) > 0.0 else 1.0
+	# Newtonian flight: G switches Flight Assist (the autopilot always flies
+	# with it on).
+	if flight.newtonian and not controls.hands_free and Input.is_action_just_pressed("flight_assist"):
+		flight.flight_assist = not flight.flight_assist
+		flight_assist_switched.emit(flight.flight_assist)
+	if flight.newtonian and cruise != null and not flight.flight_assist:
+		flight.flight_assist = true
+		flight_assist_switched.emit(true)
 	controls.max_speed = ship_data.max_speed
 	controls.forward_speed = flight.forward_speed()
+	controls.newtonian = flight.newtonian
+	controls.flight_assist = flight.flight_assist
 	var hands := controls.read(delta)
 	if cruise != null:
 		if cruise.feel_hands(hands, delta):
@@ -191,8 +203,9 @@ func _physics_process(delta: float) -> void:
 	_strain_the_hull(delta)
 	odometer += flight.speed() * delta
 	_update_shake(delta)
-	# Lean the visible model into turns. Only the model leans: the ship itself
-	# never rolls, so the camera's horizon stays level.
+	# Lean the visible model into turns. Arcade: only the model leans (the
+	# ship itself never rolls, so the camera's horizon stays level).
+	# Newtonian: the ship really rolls, so the lean settles to nothing.
 	_visual_pivot.rotation = Vector3(flight.nose_tilt, 0.0, flight.bank + flight.cargo_sway + flight.shimmy_roll(GameState.tuning))
 
 
@@ -667,8 +680,7 @@ func _fly_autopilot(delta: float) -> void:
 	flight.boosting = false
 	# Point the nose along the way we're going.
 	var travel := flight.velocity.normalized() if flight.velocity.length() > 0.5 else direction
-	flight.heading = lerp_angle(flight.heading, atan2(-travel.x, -travel.z), 1.0 - exp(-2.5 * delta))
-	flight.pitch = lerpf(flight.pitch, asin(clampf(travel.y, -0.9, 0.9)), 1.0 - exp(-2.5 * delta))
+	flight.glide_toward(travel, delta)
 	flight.bank = lerpf(flight.bank, 0.0, 1.0 - exp(-3.0 * delta))
 	flight.nose_tilt = lerpf(flight.nose_tilt, 0.0, 1.0 - exp(-3.0 * delta))
 	global_basis = flight.orientation()
@@ -692,7 +704,7 @@ func teleport(where: Transform3D) -> void:
 	overdrive_strain = 0.0
 	global_transform = where
 	var facing := where.basis.get_euler()
-	flight.reset(facing.y, facing.x)
+	flight.reset(facing.y, facing.x, facing.z)
 	controls.clear()
 	autopilot_route.clear()
 	velocity = Vector3.ZERO

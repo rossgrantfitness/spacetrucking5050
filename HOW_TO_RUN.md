@@ -96,6 +96,19 @@ Y = △.)
 
 ### Flying
 
+**This is the `claude/newtonian-fork` branch: Newtonian flight**, like Elite
+Dangerous or Evochron. The rig keeps moving and spinning until a thruster
+stops it, it can roll, strafe and loop, and the camera rides along with it.
+- **Flight Assist ON** (the default; the HUD's "FA OFF" light is dark): the
+  throttle is a speed to hold, the thrusters kill sideways drift and stop
+  the spin when you let go. You still swing wide in turns and overshoot.
+- **Flight Assist OFF** (**G**): pure Newton. The throttle lever is raw
+  thrust (leave it at half and you keep speeding up), and drift and spin
+  last until you cancel them. Turn the rig round and burn to stop.
+- The autopilot switches Flight Assist back on while it flies.
+- To go back to the original arcade flight, untick **newtonian_flight** in
+  tuning.tres ("Newtonian flight"), or switch back to the main branch.
+
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
 | Steer (nose follows the mouse) | Move the mouse | Left stick |
@@ -107,6 +120,9 @@ Y = △.)
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
+| **Newtonian flight** (this branch): roll left / right | **Z** / **X**, or **U** / **O** | **LB** / **B** |
+| **Newtonian:** strafe (slide sideways / up / down) | Hold **Left Ctrl** and steer (keys or mouse) | — |
+| **Newtonian:** Flight Assist on / off | **G** | — |
 | Switch camera (chase / cockpit) | **C** | **Y** |
 | Zoom the chase camera in / out | Mouse wheel | — |
 | Cinema camera (on autopilot): director, then free camera, then back | **V** | **R3** (click the right stick) |

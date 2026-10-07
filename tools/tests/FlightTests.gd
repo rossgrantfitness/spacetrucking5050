@@ -2,16 +2,27 @@ extends "res://tools/tests/TestSuite.gd"
 ## Checks for the flight rules (FlightModel) and the starter rig's data.
 ## These can't tell whether flying FEELS good (that's the playtest), only that
 ## the rules do what they promise.
+##
+## These are the ARCADE rules (still in the game: "Newtonian flight" off in
+## tuning.tres), so the model runs with a copy of the tuning that has it off.
+## The Newtonian rules are checked in NewtonianTests.gd.
 
 
 const RIG: ShipData = preload("res://data/ships/starter_rig.tres")
 const STEP: float = 1.0 / 60.0  # One physics step.
 
+var _arcade: Tuning
+
+
+func _init() -> void:
+	_arcade = GameState.tuning.duplicate() as Tuning
+	_arcade.newtonian_flight = false
+
 
 ## Runs the flight rules for a while with the same controls held.
 func _fly(model: FlightModel, controls: FlightControls, seconds: float) -> void:
 	for i in roundi(seconds / STEP):
-		model.update(STEP, controls, RIG, GameState.tuning)
+		model.update(STEP, controls, RIG, _arcade)
 
 
 func _cruising() -> FlightModel:
@@ -32,7 +43,7 @@ func test_thrust_reaches_top_speed_and_no_further() -> void:
 	controls.thrust = 1.0
 	var fastest := 0.0
 	for i in 60 * 30:
-		model.update(STEP, controls, RIG, GameState.tuning)
+		model.update(STEP, controls, RIG, _arcade)
 		fastest = maxf(fastest, model.speed())
 	check(absf(model.speed() - RIG.max_speed) < 1.0, "holding thrust should reach top speed (got %.2f m/s)" % model.speed())
 	check(fastest <= RIG.max_speed + 0.5, "the main engines alone must not go past top speed")
@@ -79,8 +90,8 @@ func test_low_grip_slides_more() -> void:
 	var loose_rig: ShipData = RIG.duplicate()
 	loose_rig.grip = RIG.grip * 0.25
 	for i in 60 * 3:
-		grippy.update(STEP, controls, RIG, GameState.tuning)
-		slidey.update(STEP, controls, loose_rig, GameState.tuning)
+		grippy.update(STEP, controls, RIG, _arcade)
+		slidey.update(STEP, controls, loose_rig, _arcade)
 	check(slidey.slip > grippy.slip * 1.3, "a ship with less grip should slide wider in the same turn")
 
 
@@ -132,11 +143,11 @@ func test_the_throttle_lever_holds_a_speed() -> void:
 	var controls := FlightControls.new()
 	for i in 60 * 30:
 		controls.thrust = ShipControls.thrust_for(0.5, model.forward_speed(), RIG.max_speed, GameState.tuning)
-		model.update(STEP, controls, RIG, GameState.tuning)
+		model.update(STEP, controls, RIG, _arcade)
 	check(absf(model.speed() - RIG.max_speed * 0.5) < 1.5, "half throttle settles at half speed (got %.1f m/s)" % model.speed())
 	for i in 60 * 30:
 		controls.thrust = ShipControls.thrust_for(0.0, model.forward_speed(), RIG.max_speed, GameState.tuning)
-		model.update(STEP, controls, RIG, GameState.tuning)
+		model.update(STEP, controls, RIG, _arcade)
 	check(model.speed() < 1.0, "idle throttle brings the rig to a stop")
 	check(is_equal_approx(ShipControls.thrust_for(1.0, RIG.max_speed, RIG.max_speed, GameState.tuning), 1.0), "full throttle leans on the limiter")
 
@@ -282,7 +293,7 @@ func test_heavy_loads_are_slower_to_start_stop_and_turn() -> void:
 			if model.forward_speed() < 1.0:
 				break
 			travelled += model.forward_speed() * STEP
-			model.update(STEP, brakes, RIG, GameState.tuning)
+			model.update(STEP, brakes, RIG, _arcade)
 		distances.append(travelled)
 	check(distances[1] > distances[0] * 1.4, "a full load should take noticeably longer to stop (%.0f m vs %.0f m)" % [distances[1], distances[0]])
 	# Turning: a full load turns slower, but still goes where the nose points.
