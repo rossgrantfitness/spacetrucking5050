@@ -55,7 +55,18 @@ enum Kind {
 ## job board uses it to say how long a trip takes.
 @export var map_position: Vector3 = Vector3.ZERO
 
+@export_group("Rest stop")
+## A REST STOP out on a long haul, built by the flight scene from this data
+## (RestStop.gd; no hand-made station needed): a diner, a fuel depot or a
+## weigh station. "none" for every other place.
+@export_enum("none", "diner", "fuel_depot", "weigh_station") var rest_stop: String = "none"
+## Which way its drive-through lane runs (usually along the road).
+@export var rest_stop_facing: Vector3 = Vector3.FORWARD
+
 @export_group("Freight market")
+## Whether loads go to and from here on the freight market (rest stops
+## don't take freight).
+@export var takes_freight: bool = true
 ## The place joins the freight market (loads to and from it on every job
 ## board) once this story flag is set. Empty = from the start.
 @export var freight_flag: String = ""

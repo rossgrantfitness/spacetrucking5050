@@ -54,7 +54,7 @@ func period_of(day: int) -> int:
 
 ## Whether a place is on the freight network right now.
 func place_open(place: PlaceData) -> bool:
-	if place == null or not place.on_the_map:
+	if place == null or not place.on_the_map or not place.takes_freight:
 		return false
 	return place.freight_flag.is_empty() or GameState.has_flag(place.freight_flag)
 

@@ -74,6 +74,15 @@ var _roadside: RoadsideFuel
 ## Pro docking (Settings.pro_docking): the bay you're parking in, and the
 ## ring you came in through (or null / none).
 var _pro_dock: ProDocking = null
+## Courses can include routes (toll lanes, shortcuts, scenic lanes) as
+## "route:<id>" stops.
+const ROUTE_PREFIX: String = "route:"
+## The toll lane you're on (already paid), and the scenic lanes you've
+## enjoyed this trip.
+var _on_toll: String = ""
+var _toll_heading := Vector3.FORWARD
+var _enjoyed: Dictionary = {}
+var _in_belt: String = ""
 var _pro_dock_ring: ApproachRing = null
 ## Walking around the cabin (out of the seat).
 var _in_cabin: bool = false
@@ -151,6 +160,8 @@ func _ready() -> void:
 	# The rig you drive, with every upgrade you've bought, in its paint job.
 	_ship.ship_data = GameState.upgraded_ship(GameState.active_ship_data())
 	_ship.apply_look(GameState.paints.find(GameState.paint))
+	_build_rest_stops()
+	_build_routes()
 	for node in $World/Places.get_children():
 		if GameState.places.find(node.name) != null:
 			_places[node.name] = node
@@ -245,6 +256,7 @@ func _physics_process(delta: float) -> void:
 	if not GameState.active_job_id.is_empty() and _docking_at.is_empty():
 		GameState.job_seconds += delta
 	_feel_the_hazards(delta)
+	_ride_routes(delta)
 	_watch_overdrive(delta)
 	_ship.flight.rest_pitch = _road_pitch()
 	# Storms weaken the radio; flying fast swells the ambient music.
@@ -252,6 +264,8 @@ func _physics_process(delta: float) -> void:
 	Radio.listener_position = _ship.global_position
 	Radio.intensity = clampf(_ship.speed_ratio(), 0.0, 1.0)
 	_show_grab_hint()
+	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty() and _caught_by_the_ring():
+		return
 	if _ship.cruise != null and _ship.cruise.is_done() and _docking_at.is_empty():
 		if _docking_computer_on:
 			_stop_docking_computer()
@@ -456,21 +470,41 @@ func engage_course(stops: PackedStringArray) -> void:
 				_hud.show_banner("MOUSE IS FREE: SIT BACK AND WATCH · F / X: GET UP", 4.0))
 
 
-## Sets the cruise autopilot on its way to the next stop on the course.
+## Sets the cruise autopilot on its way to the next stop on the course. A
+## route (a toll lane, a shortcut, a scenic lane) is flown on the way to the
+## stop after it, as one trip (so the autopilot doesn't brake in between).
 func _aim_cruise() -> void:
 	if _course.is_empty():
 		_ship.cruise = null
 		return
 	var pilot := CruisePilot.new()
-	pilot.waypoints = approach_points(_course[0], _ship.global_position)
+	var from := _ship.global_position
+	while not _course.is_empty() and _course[0].begins_with(ROUTE_PREFIX):
+		var lane := approach_points(_course[0], from)
+		pilot.waypoints.append_array(lane)
+		if not lane.is_empty():
+			from = lane[lane.size() - 1]
+		_course.remove_at(0)
+	if _course.is_empty():
+		_ship.cruise = null
+		return
+	pilot.waypoints.append_array(approach_points(_course[0], from))
 	_ship.cruise = pilot
 	_set_destination(_course[0])
 
 
 ## The spots to fly through to dock at place `id`, coming from `from`: a
 ## spot lined up outside the handiest approach ring, then through the ring
-## (which starts the docking autopilot).
+## (which starts the docking autopilot). Round any belt of rocks in the
+## way (the safe route). `id` can also be "route:<id>": that route's lane,
+## from the end nearest `from` to the other (see RouteData.gd).
 func approach_points(id: String, from: Vector3) -> Array[Vector3]:
+	if id.begins_with(ROUTE_PREFIX):
+		var route := GameState.routes.find(id.trim_prefix(ROUTE_PREFIX))
+		var lane: Array[Vector3] = []
+		if route != null:
+			lane.assign(Array(route.points_from(from)))
+		return lane
 	var best: ApproachRing = null
 	var best_distance := INF
 	for ring in _rings(id):
@@ -502,6 +536,11 @@ func approach_points(id: String, from: Vector3) -> Array[Vector3]:
 		target = mouth
 	else:
 		arriving = null  # Already in the lane (or inside the rocks): straight on in.
+	# Round any belt of rocks between here and there (the safe way).
+	var dodge := _dodge_belts(here, target)
+	if not dodge.is_empty():
+		points.append_array(dodge)
+		here = points[points.size() - 1]
 	# Round the rocks we just left if what's next is behind them...
 	if left != null:
 		points.append_array(_around(left.global_position, here, target, left.shell_radii.y + 800.0))
@@ -1100,7 +1139,8 @@ func _restore_rig() -> void:
 
 func _remember_rig() -> void:
 	GameState.rig = {"fuel": _ship.flight.fuel, "boost_fuel": _ship.flight.boost_fuel,
-			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0),}
+			"hull": _ship.hull, "cargo": _ship.cargo_condition, "snack": GameState.rig.get("snack", 0.0),
+			"weighed": GameState.rig.get("weighed", 0.0)}
 
 
 # --- Docking ------------------------------------------------------------------------
@@ -1116,11 +1156,233 @@ func _begin_docking(id: String, ring: ApproachRing) -> void:
 		_course.remove_at(0)
 	var dock := _dock_node(id)
 	var route: Array[Vector3] = [ring.global_position + ring.through_direction() * 40.0, dock.global_position]
+	if (_ship.global_position - ring.global_position).dot(ring.through_direction()) > 40.0:
+		route.remove_at(0)  # Already past the ring: straight on in.
 	_ship.fly_route(route, clampf(_ship.flight.speed(), 30.0, docking_speed))
 	_ship.set_meta("docking_ring", ring.global_position)
 	var place := GameState.places.find(id)
 	_hud.show_banner("PULLING IN" if place.kind == PlaceData.Kind.DRIVE_THROUGH else "AUTOPILOT DOCKING", 0.0)
 	_chatter.say(ChatterSet.Situation.DOCKING, id)
+
+
+## The autopilot finished its course right by the destination's ring but
+## missed the hole (a bit off to the side): the ring's tractor beam catches
+## the rig and docks it anyway, instead of letting it coast into the
+## station. Returns whether it did.
+func _caught_by_the_ring() -> bool:
+	if _destination_id.is_empty() or _course.is_empty() or _course[0] != _destination_id:
+		return false
+	for ring in _rings(_destination_id):
+		if _ship.global_position.distance_to(ring.global_position) < ring.radius * 6.0:
+			_ship.cruise = null
+			_course.clear()
+			if _wants_pro_docking(_destination_id):
+				_start_pro_docking(_destination_id, ring)
+			else:
+				_begin_docking(_destination_id, ring)
+			return true
+	return false
+
+
+# --- Routes and rest stops -------------------------------------------------------------
+
+## Builds every rest stop from its place data (RestStop.gd) under
+## World/Places, unless the scene already has one by that name.
+func _build_rest_stops() -> void:
+	var holder := $World/Places
+	for place in GameState.places.places:
+		if place != null and place.rest_stop != "none" and not holder.has_node(NodePath(place.id)):
+			holder.add_child(RestStop.build(place))
+
+
+## Builds the route choices out on the road (res://data/routes/): toll
+## turnpikes (gold beacons and gates), shortcuts (a belt of rocks across the
+## way) and scenic lanes (pink and teal beacons past a sherbet nebula).
+func _build_routes() -> void:
+	for route in GameState.routes.routes:
+		if route == null:
+			continue
+		var lane := PackedVector3Array([route.start, route.finish])
+		match route.kind:
+			"toll":
+				var beacons := Spaceway.new()
+				beacons.name = "Toll_" + route.id
+				beacons.points = lane
+				beacons.half_width = route.radius * 0.8
+				beacons.spacing = 300.0
+				beacons.left_color = Color(1.0, 0.8, 0.2)
+				beacons.right_color = Color(1.0, 0.8, 0.2)
+				$World.add_child(beacons)
+				_toll_gates(route)
+			"shortcut":
+				var belt := AsteroidField.new()
+				belt.name = "Belt_" + route.id
+				belt.layout = "egg"
+				belt.field_size = Vector3(route.belt_width, route.belt_width * 0.45, route.length())
+				belt.rock_count = route.rock_count
+				belt.rock_radius_range = Vector2(4.0, 45.0)
+				belt.landmark_count = 6
+				belt.keep_clear_spots = PackedVector3Array()
+				belt.field_seed = absi(hash(route.id)) % 100000
+				belt.draw_distance = route.belt_width + 9000.0
+				if not route.rock_colors.is_empty():
+					belt.rock_colors = route.rock_colors
+				var along := (route.finish - route.start).normalized()
+				belt.transform = Transform3D(Basis.looking_at(along, Vector3.UP if absf(along.y) < 0.95 else Vector3.RIGHT), route.middle())
+				$World.add_child(belt)
+			"scenic":
+				var beacons := Spaceway.new()
+				beacons.name = "Scenic_" + route.id
+				beacons.points = lane
+				beacons.half_width = route.radius * 0.8
+				beacons.spacing = 400.0
+				beacons.left_color = Color(1.0, 0.45, 0.75)
+				beacons.right_color = Color(0.35, 0.95, 0.9)
+				$World.add_child(beacons)
+				_sherbet_nebula(route)
+
+
+## Big glowing gates every few kilometers down a toll lane, and a booth at
+## each end.
+func _toll_gates(route: RouteData) -> void:
+	var along := (route.finish - route.start).normalized()
+	var basis := Basis.looking_at(along, Vector3.UP if absf(along.y) < 0.95 else Vector3.RIGHT)
+	var glow := ShaderMaterial.new()
+	glow.shader = preload("res://shaders/psx_surface.gdshader")
+	glow.set_shader_parameter("albedo", Color(1.0, 0.8, 0.2))
+	glow.set_shader_parameter("emission", Color(1.0, 0.8, 0.2))
+	glow.set_shader_parameter("emission_strength", 1.4)
+	var gate := TorusMesh.new()
+	gate.inner_radius = route.radius
+	gate.outer_radius = route.radius + 12.0
+	gate.rings = 24
+	gate.ring_segments = 4
+	gate.material = glow
+	var spacing := 3000.0
+	var count := int(route.length() / spacing)
+	for i in count + 1:
+		var ring := MeshInstance3D.new()
+		ring.mesh = gate
+		ring.transform = Transform3D(basis * Basis(Vector3.RIGHT, PI / 2.0), route.start + along * minf(i * spacing, route.length()))
+		$World.add_child(ring)
+	for end: Vector3 in [route.start, route.finish]:
+		var booth := MeshInstance3D.new()
+		var box := BoxMesh.new()
+		box.size = Vector3(60.0, 50.0, 60.0)
+		box.material = glow
+		booth.mesh = box
+		booth.position = end + basis.x * (route.radius + 80.0)
+		$World.add_child(booth)
+
+
+## A soft, sherbet-colored nebula beside a scenic lane: a few huge glowing
+## blobs.
+func _sherbet_nebula(route: RouteData) -> void:
+	var along := (route.finish - route.start).normalized()
+	var side := along.cross(Vector3.UP).normalized()
+	var colors := [Color(1.0, 0.55, 0.7), Color(1.0, 0.8, 0.45), Color(0.55, 0.9, 1.0), Color(0.85, 0.6, 1.0)]
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(route.id)
+	for i in 7:
+		var blob := MeshInstance3D.new()
+		var ball := SphereMesh.new()
+		ball.radius = rng.randf_range(1500.0, 3200.0)
+		ball.height = ball.radius * 2.0
+		ball.radial_segments = 12
+		ball.rings = 6
+		var color: Color = colors[i % colors.size()]
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.albedo_color = Color(color, 0.22)
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		ball.material = material
+		blob.mesh = ball
+		blob.position = route.middle() + along * rng.randf_range(-9000.0, 9000.0) + side * rng.randf_range(5000.0, 9000.0) + Vector3.UP * rng.randf_range(-3000.0, 3000.0)
+		blob.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		$World.add_child(blob)
+
+
+## Round the belts of rocks lying between `from` and `to` (the safe way),
+## unless one of them is inside a belt already (you're taking the shortcut).
+func _dodge_belts(from: Vector3, to: Vector3) -> Array[Vector3]:
+	var points: Array[Vector3] = []
+	for route in GameState.routes.routes:
+		if route == null or route.kind != "shortcut":
+			continue
+		var reach := maxf(route.belt_width, route.length()) * 0.5 + 1200.0
+		var center := route.middle()
+		if from.distance_to(center) < reach or to.distance_to(center) < reach:
+			continue
+		var nearest := Geometry3D.get_closest_point_to_segment(center, from, to)
+		if nearest.distance_to(center) < reach:
+			points.append_array(_around(center, from, to, reach))
+	return points
+
+
+## Out on the routes: toll lanes charge at the gate and their current
+## carries you along; scenic lanes calm you down; belts warn you.
+func _ride_routes(delta: float) -> void:
+	if _ship.out_of_control or not _docking_at.is_empty():
+		return
+	var spot := _ship.global_position
+	var on_toll := ""
+	var in_belt := ""
+	for route in GameState.routes.routes:
+		if route == null:
+			continue
+		var off := route.distance_to(spot)
+		match route.kind:
+			"toll":
+				if off < route.radius:
+					on_toll = route.id
+					if _on_toll != route.id:
+						_pay_toll(route)
+						# The current runs toward the far end from where you joined.
+						var ends := route.points_from(spot)
+						_toll_heading = (ends[1] - ends[0]).normalized()
+					var heading := _toll_heading
+					# You ride the current while your nose points down the lane
+					# and you're not braking; turn away or brake and it lets go
+					# (so you can always slow down and leave at the end).
+					var riding := _ship.flight.nose().dot(heading) > 0.7 and _ship.flight.thrust >= 0.0
+					var past_the_end := (spot - route.points_from(spot)[0]).dot(heading) <= 0.0 or (spot - (route.points_from(spot)[1])).dot(heading) >= 0.0
+					if riding and not past_the_end:
+						var velocity := _ship.flight.velocity
+						# The lane holds you like a tube: sideways drift fades and
+						# you're drawn gently to the middle line.
+						var middle_line := Geometry3D.get_closest_point_to_segment(spot, route.start, route.finish)
+						var sideways := velocity - heading * velocity.dot(heading)
+						velocity -= sideways * (1.0 - exp(-1.5 * delta))
+						velocity += (middle_line - spot) * 0.6 * delta
+						if velocity.dot(heading) < route.current_speed:
+							velocity += heading * route.current_push * delta
+						_ship.flight.velocity = velocity
+			"shortcut":
+				if spot.distance_to(route.middle()) < maxf(route.belt_width, route.length()) * 0.5:
+					in_belt = route.id
+					if _in_belt != route.id:
+						_hud.show_banner(route.display_name + ": ROCKS AHEAD. EASY DOES IT.", 3.0)
+			"scenic":
+				var middle_part := spot.distance_to(route.middle()) < route.length() * 0.25
+				if off < route.radius * 3.0 and middle_part and not _enjoyed.has(route.id):
+					_enjoyed[route.id] = true
+					GameState.rig["snack"] = 1.0  # The view settles her hands, like a snack would.
+					var first := GameState.log_sight(route.sight_id) if not route.sight_id.is_empty() else false
+					_hud.show_banner(route.display_name + ": WHAT A VIEW" + ("  (NEW IN THE LOGBOOK)" if first else ""), 4.0)
+	_on_toll = on_toll
+	_in_belt = in_belt
+
+
+## The gate takes its toll (anything you can't pay goes on the tab).
+func _pay_toll(route: RouteData) -> void:
+	var paid := mini(route.toll, GameState.credits)
+	if paid > 0:
+		GameState.spend(paid)
+	GameState.tab += route.toll - paid
+	var note := "-%d %s" % [route.toll, GameState.names.currency_short] if paid == route.toll else "%d %s ON THE TAB" % [route.toll - paid, GameState.names.currency_short]
+	_hud.show_banner("%s: TOLL %s  ENJOY THE CURRENT" % [route.display_name, note], 3.5)
+	Sfx.play("course_set")
 
 
 # --- Pro docking ----------------------------------------------------------------------
@@ -1313,6 +1575,43 @@ func _drive_through(id: String, place: PlaceData) -> void:
 	_ship.fly_route(route, 40.0, false)
 
 
+## The weigh station's counter, in a few words.
+func _weigh_in_note() -> String:
+	if GameState.active_job() == null:
+		return "Nothing in the back to weigh."
+	if float(GameState.rig.get("weighed", 0.0)) > 0.0:
+		return "This load's already weighed and certified."
+	return "Put the load on the scale. Legal weight: a weigh slip worth +%d%% on delivery. Overweight: a %d %s fine." % [
+			roundi(GameState.tuning.weigh_slip_bonus * 100.0), GameState.tuning.overweight_fine, GameState.names.currency_short]
+
+
+## Onto the scale: certified (a weigh slip bonus at delivery), or overweight
+## for this rig (a small fine; it goes on the tab if you're short).
+func _weigh_in(tree: SceneTree) -> void:
+	var job := GameState.active_job()
+	if job == null:
+		await MenuPanel.ask(tree, "WEIGH-IN", "\"Nothing on the scale but you, miss. Have a nice day. Slowly.\"", [{"text": "OKAY"}])
+		return
+	if float(GameState.rig.get("weighed", 0.0)) > 0.0:
+		await MenuPanel.ask(tree, "WEIGH-IN", "\"Already certified. I remember. I remember everything. Slowly.\"", [{"text": "OKAY"}])
+		return
+	var rating := _ship.ship_data.load_rating
+	var weight := "%s on a rig rated for %s." % [HudWidget.tons_text(job.weight, true), HudWidget.tons_text(rating, true)]
+	if rating > 0.0 and job.weight > rating:
+		var fine := GameState.tuning.overweight_fine
+		var paid := mini(fine, GameState.credits)
+		if paid > 0:
+			GameState.spend(paid)
+		GameState.tab += fine - paid
+		GameState.rig["weighed"] = 0.5  # (Weighed and fined: no slip, but no second fine either.)
+		await MenuPanel.ask(tree, "OVERWEIGHT", weight + "\n\"That's over, miss. %d %s fine. Drive gently, it'll stop like a planet.\"" % [fine, GameState.names.currency_short], [{"text": "...FAIR"}])
+		return
+	GameState.rig["weighed"] = 1.0
+	GameState.set_flag("weighed_a_load")
+	Sfx.play("course_set")
+	await MenuPanel.ask(tree, "CERTIFIED", weight + "\n\"All legal. Here's your weigh slip: the client pays a little extra for paperwork. Everybody loves paperwork.\"", [{"text": "STAMP IT"}])
+
+
 ## Delivers a load headed here, keeping the rig's numbers in sync.
 func _deliver_here(id: String) -> bool:
 	_remember_rig()
@@ -1348,6 +1647,13 @@ func _counter(id: String, place: PlaceData, delivered: bool) -> void:
 			options.append({"text": "MOE'S JERKY", "detail": "%d %s" % [JERKY_PRICE, GameState.names.currency_short],
 					"description": "Chewy. Calming. Steadier hands under boost for the rest of this trip."})
 			actions.append("snack")
+		if "meal" in place.services:
+			options.append({"text": "BLUE-PLATE SPECIAL", "detail": "%d %s" % [GameState.tuning.diner_meal_price, GameState.names.currency_short],
+					"description": "Meatloaf-ish, a slice of pie, bottomless coffee. Steadier hands for the rest of this trip."})
+			actions.append("meal")
+		if "weigh" in place.services:
+			options.append({"text": "WEIGH-IN", "description": _weigh_in_note()})
+			actions.append("weigh")
 		if "souvenir" in place.services:
 			options.append({"text": "SOUVENIR KEYCHAIN", "detail": "%d %s" % [KEYCHAIN_PRICE, GameState.names.currency_short],
 					"description": "For the logbook. A tiny sloth holding a tiny fuel nozzle."})
@@ -1372,6 +1678,16 @@ func _counter(id: String, place: PlaceData, delivered: bool) -> void:
 			else:
 				Sfx.play("nope")
 				await MenuPanel.ask(tree, "NOT ENOUGH", "Moe... understands... completely.", [{"text": "OKAY"}])
+		elif action == "meal":
+			if GameState.spend(GameState.tuning.diner_meal_price):
+				GameState.rig["snack"] = 1.0
+				GameState.set_flag("ate_at_the_diner")
+				await MenuPanel.ask(tree, "BLUE-PLATE SPECIAL", "It's warm. It's brown. It's perfect. The coffee keeps coming. Your hands feel steady.", [{"text": "THANKS, HON"}])
+			else:
+				Sfx.play("nope")
+				await MenuPanel.ask(tree, "NOT ENOUGH", "\"Coffee's on the house, sugar. The pie isn't.\"", [{"text": "OKAY"}])
+		elif action == "weigh":
+			await _weigh_in(tree)
 		elif action == "souvenir":
 			if GameState.spend(KEYCHAIN_PRICE):
 				var first := GameState.log_sight("gas_n_go_keychain")

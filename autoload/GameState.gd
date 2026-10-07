@@ -26,6 +26,8 @@ var systems: SystemList = preload("res://data/systems/systems.tres")
 var jobs: JobList = preload("res://data/jobs/jobs.tres")
 ## The everyday loads around the story jobs (see FreightMarket.gd).
 var freight: FreightMarket = preload("res://data/freight/freight_market.tres")
+## Route choices out on the road: toll turnpikes, shortcuts, scenic lanes.
+var routes: RouteList = preload("res://data/routes/routes.tres")
 var upgrades: UpgradeList = preload("res://data/upgrades/upgrades.tres")
 var sights: Logbook = preload("res://data/logbook/sights.tres")
 var ships: ShipList = preload("res://data/ships/ships.tres")
@@ -59,9 +61,11 @@ var market_seed: int = 0
 ## Seconds flown on the current job (for rush bonuses).
 var job_seconds: float = 0.0
 ## The rig's state between flights: both tanks, the hull and the cargo
-## (1 = full / perfect), and a snack from a truck stop (1 = had one this
-## trip: steadier hands under boost).
-var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
+## (1 = full / perfect), a snack from a truck stop (1 = had one this trip:
+## steadier hands under boost), and whether this load's been weighed at a
+## weigh station (1 = certified: a weigh slip bonus on delivery; 0.5 =
+## weighed but overweight: fined, no slip).
+var rig: Dictionary = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "weighed": 0.0}
 ## The rigs you own (ids from res://data/ships/ships.tres), the one you
 ## drive, and its paint job.
 var owned_ships: Array[String] = ["lazy_susan"]
@@ -293,6 +297,7 @@ func accept_job(job: JobData) -> bool:
 	job_seconds = 0.0
 	job_started = Economy.now_minutes()
 	rig["cargo"] = 1.0
+	rig["weighed"] = 0.0  # (A new load needs its own weigh-in.)
 	save_game()
 	return true
 
@@ -309,6 +314,11 @@ func deliver_at(place_id: String) -> bool:
 	var hold := roundi(job.base_pay * (active_ship_data().pay_bonus - 1.0))
 	pay["hold"] = hold
 	pay["total"] = int(pay["total"]) + hold
+	# Weighed and certified at a weigh station on the way: a weigh slip bonus.
+	var slip := roundi(job.base_pay * tuning.weigh_slip_bonus) if float(rig.get("weighed", 0.0)) >= 1.0 else 0
+	pay["weigh"] = slip
+	pay["total"] = int(pay["total"]) + slip
+	rig["weighed"] = 0.0
 	pay["job"] = job.id
 	pay["cargo_name"] = job.cargo_name
 	pay["client_name"] = job.client_name
@@ -599,7 +609,7 @@ func new_game() -> void:
 	market_seed = randi()
 	freight_delivered = 0
 	job_seconds = 0.0
-	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0}
+	rig = {"fuel": 1.0, "boost_fuel": 1.0, "hull": 1.0, "cargo": 1.0, "snack": 0.0, "weighed": 0.0}
 	owned_upgrades = []
 	owned_ships = ["lazy_susan"]
 	active_ship = "lazy_susan"

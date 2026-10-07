@@ -178,6 +178,16 @@ extends Resource
 @export_range(1.0, 6.0, 0.1) var free_spin_limit: float = 2.5
 
 
+@export_group("Rest stops")
+## The Comet Diner's blue-plate special (steadier hands for the trip).
+@export_range(0, 1000, 5) var diner_meal_price: int = 30
+## Weigh station: a legal, certified load earns this share of its base pay
+## extra on delivery (0.05 = 5%)...
+@export_range(0.0, 0.5, 0.01) var weigh_slip_bonus: float = 0.06
+## ...and an overweight one (heavier than the rig's load rating) gets this
+## small fine.
+@export_range(0, 1000, 5) var overweight_fine: int = 40
+
 @export_group("Pro docking")
 ## PRO DOCKING (a switch in the pause menu): fly through the ring, then
 ## park in the glowing loading bay yourself. The dock crew's tip for a

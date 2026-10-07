@@ -12,7 +12,7 @@
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
 # in the Glimmer System (tools/smoke_glimmer.gd), the climb to the Frostline
 # (tools/smoke_frontier.gd), a crash at boost speed
-# (tools/smoke_crash.gd), going way too fast (tools/smoke_overdrive.gd), running out of fuel (tools/smoke_roadside.gd), parking by hand (tools/smoke_pro_docking.gd)
+# (tools/smoke_crash.gd), going way too fast (tools/smoke_overdrive.gd), running out of fuel (tools/smoke_roadside.gd), parking by hand (tools/smoke_pro_docking.gd), route choices and rest stops (tools/smoke_routes.gd)
 # and tries the cabin,
 # comm replies and radio (tools/smoke_cabin.gd), and {husband}'s message
 # playing on the comms (tools/smoke_story.gd).
@@ -60,6 +60,7 @@ run -s tools/smoke_crash.gd
 run -s tools/smoke_overdrive.gd
 run -s tools/smoke_roadside.gd
 run -s tools/smoke_pro_docking.gd
+run -s tools/smoke_routes.gd
 run -s tools/smoke_story.gd
 rm -f override.cfg
 

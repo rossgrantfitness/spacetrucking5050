@@ -69,6 +69,11 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 	var here := ship.global_position
 	while not waypoints.is_empty() and here.distance_to(waypoints[0]) < reach:
 		waypoints.pop_front()
+	# Already past this one (carried on by a toll lane's current, say)?
+	# Don't turn back for it: on to the next.
+	while waypoints.size() >= 2 and (here - waypoints[0]).dot(waypoints[1] - waypoints[0]) > 0.0 \
+			and here.distance_to(Geometry3D.get_closest_point_to_segment(here, waypoints[0], waypoints[1])) < reach * 3.0:
+		waypoints.pop_front()
 	_controls.boost = false
 	if waypoints.is_empty():
 		_controls.steer = Vector2.ZERO
@@ -130,13 +135,22 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 		# Newtonian: momentum is free, so keep whatever speed she's built up
 		# (a boost to 2000 km/h stays 2000 km/h), and plan the braking burn
 		# so the retro thrusters slow her in time for the end of the course.
-		goal = maxf(goal, going)
+		# (But not while swinging round a sharp turn: slow for that.)
+		if absf(yaw_error) <= 0.5:
+			goal = maxf(goal, going)
 		var remaining := distance
 		for i in range(1, waypoints.size()):
 			remaining += waypoints[i - 1].distance_to(waypoints[i])
 		var brakes := ship.ship_data.retro_thrust * flight.heft(tuning.load_braking_drag) * 0.75
 		var end_speed := arrival_speed if arrival_speed > 0.0 else ship.ship_data.max_speed
 		goal = minf(goal, sqrt(end_speed * end_speed + 2.0 * brakes * maxf(remaining - 300.0, 0.0)))
+		# And brake in time for a sharp corner at the next waypoint, so the
+		# rig can actually make the turn (coming off a toll lane fast, say).
+		if waypoints.size() >= 2:
+			var corner := wanted.angle_to((waypoints[1] - waypoints[0]).normalized())
+			if corner > deg_to_rad(35.0):
+				var corner_speed := ship.ship_data.max_speed
+				goal = minf(goal, sqrt(corner_speed * corner_speed + 2.0 * brakes * maxf(distance - 300.0, 0.0)))
 	if going < goal - 1.0:
 		_controls.thrust = 1.0
 	elif going > goal + 6.0:

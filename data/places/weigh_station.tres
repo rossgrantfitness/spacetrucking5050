@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/weigh_officer.tres" id="2_host"]
+
+[resource]
+script = ExtResource("1_place")
+id = "weigh_station"
+display_name = "WEIGH STATION 9"
+kind = 2
+services = PackedStringArray("weigh", "fuel")
+host = ExtResource("2_host")
+host_lines = PackedStringArray("Weigh Station Nine. Ease onto the scale, please.", "Ah, the rabbit. Onto the scale. Take your time. I always do.", "Scale's calibrated. So am I. Mostly.")
+host_lines_in_order = true
+fuel_price_factor = 1.0
+map_position = Vector3(17641, -11769, -1952)
+rest_stop = "weigh_station"
+rest_stop_facing = Vector3(0.7865, -0.5143, 0.3418)
+takes_freight = false

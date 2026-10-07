@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/diner_dolores.tres" id="2_host"]
+
+[resource]
+script = ExtResource("1_place")
+id = "comet_diner"
+display_name = "COMET DINER"
+kind = 2
+services = PackedStringArray("fuel", "meal")
+host = ExtResource("2_host")
+host_lines = PackedStringArray("Welcome to the Comet, hon. Pie's fresh, coffee's fresher. Pull up.", "Back again? I saved you a booth. Well. A docking clamp.", "Long haul? Eat something. You look like a rabbit who forgot lunch.", "The special today is the special every day. It's good, though.")
+host_lines_in_order = true
+fuel_price_factor = 1.1
+map_position = Vector3(-19262, 13500, 1635)
+rest_stop = "diner"
+rest_stop_facing = Vector3(-0.7076, 0.5095, 0.4897)
+takes_freight = false

@@ -7,8 +7,12 @@ extends Control
 ## (CruisePilot.gd) drives you there and through the approach ring; grab
 ## the controls any time to take over.
 ##
-## Routes "via" a drive-through (like the Gas-N-Go) are offered when it's
-## roughly on the way.
+## Routes "via" a drive-through (a rest stop, the Gas-N-Go) are offered
+## when it's roughly on the way, and so are the ROUTE CHOICES out on the
+## road (res://data/routes/): a toll turnpike (fast, costs a toll, and a
+## braking burn at the end), a shortcut through a belt of rocks (shorter,
+## bonks likely; the plain route goes round) and the scenic way (a bit
+## longer, calms your hands, a logbook sight).
 ##
 ## Use it with:
 ##     var pick := await CourseChart.open(tree, ship, places, approach, job_to, engaged)
@@ -55,16 +59,27 @@ static func open(tree: SceneTree, ship: Ship, places: Dictionary, approach: Call
 		for id in stops:
 			for point: Vector3 in approach.call(id, route[route.size() - 1]):
 				route.append(point)
-		var numbers := estimate(route, ship.ship_data, GameState.tuning, ship.flight.boost_fuel)
+		var lane: RouteData = null
+		for stop in stops:
+			if stop.begins_with(ROUTE_PREFIX):
+				lane = GameState.routes.find(stop.trim_prefix(ROUTE_PREFIX))
+		var numbers := estimate(route, ship.ship_data, GameState.tuning, ship.flight.boost_fuel, lane)
 		var place: PlaceData = GameState.places.find(stops[stops.size() - 1])
 		var text: String = place.display_name
-		if stops.size() > 1:
+		if lane != null:
+			text += " VIA " + lane.display_name
+		elif stops.size() > 1:
 			text += " VIA " + GameState.places.find(stops[0]).display_name
 		if stops[stops.size() - 1] == job_to_place:
 			text = "> " + text  # (And it's pink.)
 		var is_job := stops[stops.size() - 1] == job_to_place
-		var option := {"text": text, "detail": "%d KM" % roundi(numbers["meters"] / 1000.0),
-				"description": describe(numbers, ship.flight, is_job)}
+		var detail := "%d KM" % roundi(numbers["meters"] / 1000.0)
+		if lane != null and lane.kind == "toll":
+			detail = "TOLL %d %s  " % [lane.toll, GameState.names.currency_short] + detail
+		elif lane != null:
+			detail = {"shortcut": "RISKY  ", "scenic": "SCENIC  "}.get(lane.kind, "") + detail
+		var option := {"text": text, "detail": detail,
+				"description": describe(numbers, ship.flight, is_job, lane)}
 		if is_job:
 			option["color"] = JOB_COLOR
 		options.append(option)
@@ -96,6 +111,13 @@ static func height_text(meters: float) -> String:
 	return "%d KM %s" % [roundi(absf(meters) / 1000.0), "UP" if meters > 0.0 else "DOWN"]
 
 
+## Courses can include a route (RouteData) as a "route:<id>" stop.
+const ROUTE_PREFIX: String = "route:"
+## A route's offered if going that way is at most this much longer than
+## going straight.
+const ROUTE_DETOUR: float = 1.35
+
+
 static func possible_courses(from: Vector3, place_spots: Dictionary, job_to_place: String) -> Array[PackedStringArray]:
 	var courses: Array[PackedStringArray] = []
 	var ids: Array = place_spots.keys()
@@ -116,16 +138,39 @@ static func possible_courses(from: Vector3, place_spots: Dictionary, job_to_plac
 			var detour := from.distance_to(middle) + middle.distance_to(there)
 			if detour < from.distance_to(there) * 1.25 and from.distance_to(middle) > 1500.0:
 				courses.append(PackedStringArray([stop, id]))
+		for lane in GameState.routes.routes:
+			if lane != null and _route_on_the_way(lane, from, there):
+				courses.append(PackedStringArray([ROUTE_PREFIX + lane.id, id]))
 	return courses
+
+
+## Whether going via `lane` from `from` to `to` is worth offering: not too
+## much of a detour, and a good part of the trip.
+static func _route_on_the_way(lane: RouteData, from: Vector3, to: Vector3) -> bool:
+	var ends := lane.points_from(from)
+	var straight := from.distance_to(to)
+	if straight < 1.0 or lane.distance_to(from) < lane.radius:
+		return false  # (Already on it.)
+	var via := from.distance_to(ends[0]) + lane.length() + ends[1].distance_to(to)
+	if lane.kind == "shortcut":
+		# Only when the belt really is in the way.
+		var reach := maxf(lane.belt_width, lane.length()) * 0.5
+		return Geometry3D.get_closest_point_to_segment(lane.middle(), from, to).distance_to(lane.middle()) < reach and via < straight * 1.1
+	return via < straight * ROUTE_DETOUR and lane.length() > straight * 0.3
 
 
 ## How far a route is, how long it takes (cruising, and boosting with the
 ## boost fuel you have) and how much of a full fuel tank cruising it uses.
-static func estimate(route: PackedVector3Array, ship: ShipData, tuning: Tuning, boost_left: float) -> Dictionary:
+static func estimate(route: PackedVector3Array, ship: ShipData, tuning: Tuning, boost_left: float, lane: RouteData = null) -> Dictionary:
 	var meters := 0.0
 	for i in range(1, route.size()):
 		meters += route[i - 1].distance_to(route[i])
 	var cruise_seconds := meters / ship.max_speed
+	var fast_speed := 0.0
+	if lane != null and lane.kind == "toll" and lane.current_speed > ship.max_speed:
+		# The current carries you down the lane far faster than cruising.
+		fast_speed = lane.current_speed
+		cruise_seconds -= lane.length() / ship.max_speed - lane.length() / lane.current_speed
 	var boost_speed := FlightModel.boosted_top_speed(ship)
 	var boost_seconds := meters / boost_speed
 	var boost_needed := boost_seconds / ship.boost_fuel_seconds
@@ -133,12 +178,33 @@ static func estimate(route: PackedVector3Array, ship: ShipData, tuning: Tuning, 
 	if boost_seconds > boost_time:
 		# The boost runs dry partway; cruise the rest.
 		boost_seconds = boost_time + (meters - boost_time * boost_speed) / ship.max_speed
-	return {"meters": meters, "cruise_seconds": cruise_seconds, "boost_seconds": boost_seconds,
-			"fuel": cruise_seconds * tuning.cruise_burn / ship.fuel_tank_seconds, "boost_needed": boost_needed}
+	return {"meters": meters, "cruise_seconds": cruise_seconds, "boost_seconds": minf(boost_seconds, cruise_seconds),
+			"fuel": fuel_for(route, ship, tuning, fast_speed), "boost_needed": boost_needed}
+
+
+## How much of a tank a route takes. Newtonian flight: coasting is free,
+## so it's the burns: up to cruising speed, every turn at a waypoint, and
+## braking at the end (from the toll lane's current, if you rode one).
+## Arcade flight: holding cruise on the limiter sips all the way.
+static func fuel_for(route: PackedVector3Array, ship: ShipData, tuning: Tuning, fast_speed: float = 0.0) -> float:
+	if not tuning.newtonian_flight:
+		var meters := 0.0
+		for i in range(1, route.size()):
+			meters += route[i - 1].distance_to(route[i])
+		return meters / ship.max_speed * tuning.cruise_burn / ship.fuel_tank_seconds
+	var speed := ship.max_speed
+	var push := ship.max_speed  # Getting up to speed.
+	for i in range(1, route.size() - 1):
+		var into := (route[i] - route[i - 1]).normalized()
+		var out := (route[i + 1] - route[i]).normalized()
+		push += 2.0 * speed * sin(into.angle_to(out) * 0.5)  # Swinging the momentum round a turn.
+	var brake := maxf(fast_speed, speed)
+	var seconds := push / maxf(ship.acceleration, 0.1) + brake / maxf(ship.retro_thrust, 0.1)
+	return seconds / ship.fuel_tank_seconds
 
 
 ## The words under a course: times, fuel, and a heads-up if you're short.
-static func describe(numbers: Dictionary, flight: FlightModel, is_job: bool) -> String:
+static func describe(numbers: Dictionary, flight: FlightModel, is_job: bool, lane: RouteData = null) -> String:
 	var words := "Cruising: %s     Full boost: %s     On the calendar: about %s\n" % [HudWidget.clock(numbers["cruise_seconds"]),
 			HudWidget.clock(numbers["boost_seconds"]), Economy.span_text(float(numbers["cruise_seconds"]) * GameState.tuning.flight_minutes_per_second).to_lower()]
 	words += "Fuel: about %d%% of a tank (you have %d%%). Boost all the way: %d%% (you have %d%%)." % [
@@ -146,6 +212,10 @@ static func describe(numbers: Dictionary, flight: FlightModel, is_job: bool) -> 
 			roundi(numbers["boost_needed"] * 100.0), roundi(flight.boost_fuel * 100.0)]
 	if numbers["fuel"] > flight.fuel:
 		words += "\nNOT ENOUGH FUEL to cruise there. Fill up on the way."
+	if lane != null:
+		words += "\n" + lane.display_name + ": " + lane.description
+		if lane.kind == "toll":
+			words += " Toll: %d %s." % [lane.toll, GameState.names.currency_short]
 	if is_job:
 		words += "\nYOUR LOAD GOES HERE (the pink one on the map)."
 	return words

@@ -494,6 +494,8 @@ static func show_payout(tree: SceneTree) -> void:
 		lines.append("Care bonus:  +%d %s" % [Economy.contract_value(int(pay["care"])), currency])
 	if int(pay["rush"]) > 0:
 		lines.append("Rush bonus:  +%d %s" % [Economy.contract_value(int(pay["rush"])), currency])
+	if int(pay.get("weigh", 0)) > 0:
+		lines.append("Weigh slip:  +%d %s" % [Economy.contract_value(int(pay["weigh"])), currency])
 	if int(pay.get("hold", 0)) > 0:
 		lines.append("Big hold bonus:  +%d %s" % [Economy.contract_value(int(pay["hold"])), currency])
 	lines.append("")

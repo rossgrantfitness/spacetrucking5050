@@ -11,6 +11,10 @@
 [ext_resource type="Resource" path="res://data/places/arboretum.tres" id="b4_arboretum"]
 [ext_resource type="Resource" path="res://data/places/creamery.tres" id="b4_creamery"]
 
+[ext_resource type="Resource" path="res://data/places/comet_diner.tres" id="20_comet_diner"]
+[ext_resource type="Resource" path="res://data/places/skyway_depot.tres" id="21_skyway_depot"]
+[ext_resource type="Resource" path="res://data/places/weigh_station.tres" id="22_weigh_station"]
+
 [resource]
 script = ExtResource("1_list")
-places = Array[ExtResource("2_place")]([ExtResource("3_base"), ExtResource("4_truck_stop"), ExtResource("5_gas_n_go"), ExtResource("6_tidewater"), ExtResource("7_high_roller"), ExtResource("b4_salvage_yard"), ExtResource("b4_arboretum"), ExtResource("b4_creamery")])
+places = Array[ExtResource("2_place")]([ExtResource("3_base"), ExtResource("4_truck_stop"), ExtResource("5_gas_n_go"), ExtResource("6_tidewater"), ExtResource("7_high_roller"), ExtResource("b4_salvage_yard"), ExtResource("b4_arboretum"), ExtResource("b4_creamery"), ExtResource("20_comet_diner"), ExtResource("21_skyway_depot"), ExtResource("22_weigh_station")])
