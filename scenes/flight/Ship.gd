@@ -113,6 +113,9 @@ var _alarm_sound: AudioStreamPlayer
 var _boom_sound: AudioStreamPlayer
 var _was_boosting := false
 var _paint_trail := Color(1, 1, 1, 0)
+## The job whose load is hanging under the rig (CargoPod), so it's only
+## refitted when the job changes.
+var _cargo_shown := "-"
 ## Cargo damage since the last thump in the hold.
 var _jostle := 0.0
 ## Why the cargo got knocked around most recently ("turn", "brake", "boost").
@@ -199,6 +202,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	flight.velocity = velocity
 	_check_for_bonks(before, delta)
+	show_cargo()
 	_shake_cargo(delta)
 	_strain_the_hull(delta)
 	odometer += flight.speed() * delta
@@ -251,6 +255,18 @@ func apply_look(paint: PaintJob) -> void:
 	# The upgrades you can see (bumpers, a radar dish, horns...), after the
 	# paint so the chrome stays chrome.
 	RigAddOns.fit(_visual_pivot, GameState.owned_add_ons())
+	_cargo_shown = "-"  # (Hang the load back on the new model.)
+	show_cargo()
+
+
+## Hangs the load you're hauling under the rig (CargoPod), if it's changed.
+func show_cargo() -> void:
+	var job := GameState.active_job()
+	var id := job.id if job != null else ""
+	if id == _cargo_shown or not is_inside_tree():
+		return
+	_cargo_shown = id
+	CargoPod.fit(_visual_pivot, job, load_share())
 
 
 ## Puts a flame (EngineExhaust) on every engine nozzle of the model, sized

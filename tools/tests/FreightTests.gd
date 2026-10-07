@@ -99,3 +99,29 @@ func test_taking_freight_takes_it_off_the_board_and_survives_a_save() -> void:
 func test_jobs_have_a_look() -> void:
 	for job in GameState.jobs.jobs:
 		check(job.look() in ["container", "reefer", "tank", "crates", "livestock", "machinery"], "%s should have a cargo look" % job.id)
+
+
+func test_the_load_hangs_under_the_rig() -> void:
+	var pivot := Node3D.new()
+	var hull := MeshInstance3D.new()
+	var shape := BoxMesh.new()
+	shape.size = Vector3(10.0, 6.0, 30.0)
+	hull.mesh = shape
+	pivot.add_child(hull)
+	for look in ["container", "reefer", "tank", "crates", "livestock", "machinery"]:
+		var job := JobData.new()
+		job.id = "freight:test:0:" + look
+		job.cargo_look = look
+		CargoPod.fit(pivot, job, 0.8)
+		var cargo := pivot.get_node_or_null("Cargo")
+		check(cargo != null and cargo.get_child_count() > 3, "a %s load should hang under the rig" % look)
+		if cargo != null:
+			var lowest := INF
+			for part in cargo.find_children("*", "MeshInstance3D", true, false):
+				lowest = minf(lowest, (part as MeshInstance3D).position.y)
+			check(lowest < -3.0, "the %s load hangs below the hull" % look)
+	var before_size := RigAddOns.hull_box(pivot).size
+	check(before_size.is_equal_approx(Vector3(10.0, 6.0, 30.0) * Vector3(0.92, 0.76, 1.0)) or before_size.z == 30.0, "the load doesn't count as part of the hull")
+	CargoPod.fit(pivot, null, 0.0)
+	check(pivot.get_node_or_null("Cargo") == null, "no job, nothing hanging")
+	pivot.free()

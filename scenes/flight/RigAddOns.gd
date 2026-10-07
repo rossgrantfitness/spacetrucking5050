@@ -118,7 +118,7 @@ static func _at(values: PackedFloat32Array, share: float) -> float:
 static func _skip(part: Node, pivot: Node3D) -> bool:
 	var walk: Node = part
 	while walk != null and walk != pivot:
-		if walk.is_queued_for_deletion() or walk.name == "AddOns":
+		if walk.is_queued_for_deletion() or walk.name == "AddOns" or walk.name == "Cargo":
 			return true
 		var script := walk.get_script() as Script
 		if script != null and script.get_global_name() in [&"EngineExhaust", &"EngineTrail", &"EngineFlare"]:
@@ -253,6 +253,20 @@ static func _stacks(holder: Node3D, parts: Dictionary) -> void:
 		var where := Vector3(cab.get_center().x + side * cab.size.x * 0.42, cab.end.y + height * 0.35, cab.end.z - cab.size.z * 0.1)
 		_cylinder(holder, radius, height, where, CHROME)
 		_cylinder(holder, radius * 1.2, height * 0.06, where + Vector3(0.0, height * 0.5, 0.0), DARK)
+
+
+## The rig's own PS1 surface look in a flat color (CargoPod.gd uses these
+## too).
+static func make_paint(color: Color, glowing: bool = false) -> ShaderMaterial:
+	return _paint(color, glowing)
+
+
+static func make_box(parent: Node3D, size: Vector3, where: Vector3, color: Color, glowing: bool = false) -> MeshInstance3D:
+	return _box(parent, size, where, color, glowing)
+
+
+static func make_cylinder(parent: Node3D, radius: float, height: float, where: Vector3, color: Color) -> MeshInstance3D:
+	return _cylinder(parent, radius, height, where, color)
 
 
 static func _paint(color: Color, glowing: bool = false) -> ShaderMaterial:
