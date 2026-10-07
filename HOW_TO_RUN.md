@@ -430,6 +430,16 @@ and never needs you. Drag with the left mouse button to look around the
 rig. Grab the stick or keys to take the wheel back (the mouse locks to
 the window again).
 
+### The trailer
+
+`trailer/space_truckin_5050_trailer.mp4` is a 30-second trailer cut from
+the real game, set to your track "Hoshi o Kakeru" (HOSHIZORA 83), with a
+caption for each feature. To make a fresh one after the game changes:
+`tools/trailer/make_trailer.sh` (needs ffmpeg and Python 3; it takes a few
+minutes). The shots and captions are in `tools/trailer/make_trailer.gd`; the
+edit (which shot goes where, cut to the song's 128 BPM beat) is in
+`tools/trailer/assemble.py`.
+
 ### The debug menu (F10)
 
 For testing without a full run. Press **F10** anywhere:

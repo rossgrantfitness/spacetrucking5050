@@ -635,3 +635,11 @@ be revisited; just say so.
 - **Quiet echoes of White:** Penny remembers a trucker with a rig that coughed (only after his message), Mags has one line after his tapes, and a booth in Penny's parlor has a tiny "W" carved in it. Nothing more; the far systems are their own stories.
 - **New:** comm chatter for each client (approach, docking, takeoff), 12 route events (billboards, storms, wrecks, jellyfish, comets, client calls), 6 emails, crew lines, and F10 → OPEN EVERY SYSTEM.
 - **Tests:** `FrontierTests.gd` checks each system's place, room, road, jobs and story, the order they open in, and that each is farther and steeper than the last and reachable on one tank. `smoke_frontier.gd` flies the last stretch up to the Frostline, docks, talks to Penny and takes off again.
+
+## 2026-10-07 (a 30-second trailer)
+
+- **Your call: a 30-second trailer with music and feature captions.** It's `trailer/space_truckin_5050_trailer.mp4`, filmed straight out of the game with Godot's Movie Maker (every frame rendered properly, no screen recording).
+- **The music is your own track**, "Hoshi o Kakeru" (from the HOSHIZORA 83 station), so there are no licensing worries. The trailer starts 9 seconds into it: the quiet intro covers the cabin and dispatch, "TAKE THE WHEEL." sits in the song's near-silent break, and the drop lands at 8 seconds on the first boost. Every shot after that is exactly one bar (128 BPM, 1.875 s), and the music fades out under the title card.
+- **The captions are in the game's own pixel font** with the hazard-yellow bar, so the trailer looks like the game. Some of the game's own banners ("NOW ENTERING GLIMMER SYSTEM", comm calls) stay in shot on purpose.
+- **Reproducible:** `tools/trailer/make_trailer.sh` films three parts (space, on foot, title cards) and `tools/trailer/assemble.py` cuts them to the beat with ffmpeg. Change a caption or a shot and run it again.
+- It shows the main branch's arcade flight, not the Newtonian fork.
