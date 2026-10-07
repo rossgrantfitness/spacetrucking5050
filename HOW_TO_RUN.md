@@ -105,7 +105,17 @@ stops it, it can roll, strafe and loop, and the camera rides along with it.
 - **Flight Assist OFF** (**G**): pure Newton. The throttle lever is raw
   thrust (leave it at half and you keep speeding up), and drift and spin
   last until you cancel them. Turn the rig round and burn to stop.
-- The autopilot switches Flight Assist back on while it flies.
+- **Nothing slows you down but thrust.** Boost up to 2,000 km/h and let go:
+  you keep doing 2,000 km/h for as long as you like, with either Flight
+  Assist setting, and coasting burns no fuel. The only way to slow down is
+  to fire the engines the other way: pull the lever down (**S** / **LT**)
+  for the retro thrusters, or turn the rig round and burn. With Flight
+  Assist ON, setting the lever below your speed fires the retros for you.
+  Plan ahead: a fast rig takes a while to stop.
+- Hull strain and the overdrive rattle come from the boost burn, not from
+  speed itself, so a fast coast is smooth and quiet.
+- The autopilot switches Flight Assist back on while it flies. It keeps
+  whatever speed you give it and works out when to start its braking burn.
 - To go back to the original arcade flight, untick **newtonian_flight** in
   tuning.tres ("Newtonian flight"), or switch back to the main branch.
 

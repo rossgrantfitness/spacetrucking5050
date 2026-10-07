@@ -45,6 +45,10 @@ func test_coasting_is_free_and_thrusting_burns_fuel() -> void:
 
 
 func test_faster_burns_more_fuel_but_cruising_sips() -> void:
+	# (The arcade rules. In Newtonian flight a push costs the same at any
+	# speed, and coasting is free: see NewtonianTests.gd.)
+	var arcade := GameState.tuning.duplicate() as Tuning
+	arcade.newtonian_flight = false
 	var slow := FlightModel.new()
 	var fast := FlightModel.new()
 	var cruising := FlightModel.new()
@@ -53,7 +57,7 @@ func test_faster_burns_more_fuel_but_cruising_sips() -> void:
 	var controls := FlightControls.new()
 	controls.thrust = 1.0
 	for model in [slow, fast, cruising]:
-		(model as FlightModel).update(STEP, controls, RIG, GameState.tuning)
+		(model as FlightModel).update(STEP, controls, RIG, arcade)
 	check(fast.fuel < slow.fuel, "speeding up at high speed should burn more fuel than at low speed")
 	check(cruising.fuel > slow.fuel, "holding top speed on the limiter should only sip fuel")
 	check(fast.economy_rating(GameState.tuning) >= 1, "flooring it at high speed shouldn't show the green arrow")

@@ -39,6 +39,7 @@ func _process(delta: float) -> bool:
 		# Floor it: boosting, way past boost's top speed.
 		model.set("velocity", (model.call("nose") as Vector3) * KMH / 3.6)
 		model.set("boosting", true)
+		model.set("burn_left", 1.0)  # Keep the burn lit: on the Newtonian fork only the burn strains the hull.
 		model.set("boost_fuel", 1.0)
 	var comm: Node = flight.get_node("FlightHUD").get("comm")
 	if comm.call("is_busy") and (comm.get("_speaker") as Resource) != null:

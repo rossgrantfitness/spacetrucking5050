@@ -111,7 +111,7 @@ func test_assist_off_throttle_is_raw_thrust() -> void:
 	controls.thrust = 0.5
 	_fly(model, controls, 40.0)
 	check(model.speed() > RIG.max_speed * 0.9, "Flight Assist off: half throttle keeps pushing, way past half speed (%.1f m/s)" % model.speed())
-	check(model.speed() <= FlightModel.boosted_top_speed(RIG) * _newton.free_speed_limit + 0.01, "but never past the hard cap")
+	check(model.speed() > RIG.max_speed * 1.5, "and with no limiter, past the rig's top speed (no speed cap in space)")
 	controls.thrust = 0.0
 	var before := model.speed()
 	_fly(model, controls, 10.0)
@@ -129,3 +129,31 @@ func test_switching_back_to_arcade_still_works() -> void:
 		model.update(STEP, controls, RIG, arcade)
 	check(not model.newtonian and model.speed() > RIG.max_speed * 0.5, "with the switch off, the arcade rules fly the rig")
 	check(absf(model.orientation().x.y) < 0.0001, "and the arcade rig never rolls")
+
+
+func test_what_a_boost_gives_you_keep() -> void:
+	for assist: bool in [true, false]:
+		var model := _model(assist)
+		model.velocity = model.nose() * (2000.0 / 3.6)  # Just boosted up to 2000 km/h.
+		var controls := FlightControls.new()
+		controls.thrust = 1.0 if assist else 0.0  # Throttle at full (assist) or engines off.
+		var fuel := model.fuel
+		_fly(model, controls, 60.0)
+		check(absf(model.speed() * 3.6 - 2000.0) < 0.5, "Flight Assist %s: a minute later she's still doing 2000 km/h (%.0f)" % ["on" if assist else "off", model.speed() * 3.6])
+		check(absf(model.fuel - fuel) < 0.0001, "and coasting at 2000 km/h costs no fuel")
+
+
+func test_only_thrust_slows_you_down() -> void:
+	var model := _model(false)
+	model.velocity = model.nose() * (2000.0 / 3.6)
+	var controls := FlightControls.new()
+	controls.thrust = -1.0  # The retro thrusters.
+	_fly(model, controls, 10.0)
+	var expected := 2000.0 / 3.6 - RIG.retro_thrust * 10.0
+	check(absf(model.speed() - expected) < 1.0, "the retro thrusters take off exactly their push (%.1f m/s, expected %.1f)" % [model.speed(), expected])
+	var assisted := _model(true)
+	assisted.velocity = assisted.nose() * (2000.0 / 3.6)
+	var lever := FlightControls.new()
+	lever.thrust = ShipControls.thrust_for(0.5, assisted.forward_speed(), RIG.max_speed, _newton)
+	assisted.update(STEP, lever, RIG, _newton)
+	check(assisted.thrust < 0.0, "Flight Assist on, throttle pulled back to half: it brakes with the retros")

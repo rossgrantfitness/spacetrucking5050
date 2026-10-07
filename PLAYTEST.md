@@ -1,3 +1,12 @@
+# Playtest: Newtonian fork, "nothing slows you but thrust" (branch `claude/newtonian-fork`)
+
+1. Boost up to 2,000 km/h (or as fast as you dare), then let go of everything. The speed should stay put, with no fuel used, for as long as you coast.
+2. Now stop. Pull the lever down (**S** / **LT**) to fire the retros and watch how long it takes. Then try the other way: turn the rig round (Flight Assist OFF with **G** helps) and burn with the main engines.
+3. Let the autopilot (**M**) take over while you're going very fast: it should keep the speed and start braking in time to dock.
+4. **Questions:** Is stopping too slow, too quick, or about right? (`retro_thrust` in the ship's data sets it.) Does carrying huge speed make the long hauls more fun, or does the braking feel like a chore?
+
+---
+
 # Playtest: your notes (camera stays put; fewer, calmer planets)
 
 1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** to swing it back.

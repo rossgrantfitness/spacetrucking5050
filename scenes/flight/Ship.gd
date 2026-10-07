@@ -375,6 +375,8 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 func _strain_the_hull(delta: float) -> void:
 	var tuning := GameState.tuning
 	var past := (flight.speed() * 3.6 - tuning.overdrive_strain_kmh) / tuning.overdrive_strain_span_kmh
+	if flight.newtonian and not flight.boosting:
+		past = -1.0  # Newtonian: only the burn strains the hull; coasting at any speed is smooth.
 	if past > 0.0:
 		overdrive_strain += past * past * tuning.overdrive_strain_rate * delta
 	else:
@@ -438,7 +440,8 @@ func _tumble(delta: float) -> void:
 		return
 	_wreck_clock -= delta
 	_visual_pivot.rotate(_spin.normalized(), _spin.length() * delta)
-	flight.velocity *= exp(-0.5 * delta)
+	if not flight.newtonian:
+		flight.velocity *= exp(-0.5 * delta)  # (Newtonian: nothing slows a wreck down.)
 	var before := flight.velocity
 	velocity = flight.velocity
 	move_and_slide()
@@ -533,6 +536,8 @@ func _shake_cargo(delta: float) -> void:
 	var rough := maxf(g - tuning.cargo_comfy_accel, 0.0) / tuning.cargo_comfy_accel
 	# (Past boost's top speed, the vibration keeps getting worse: overdrive.)
 	var vibration := overspeed_ratio() * (1.0 + flight.overdrive * tuning.overdrive_cargo)
+	if flight.newtonian and not flight.boosting:
+		vibration = 0.0  # Newtonian: no air, no road. Only the engines shake the cargo.
 	var rough_loss := rough * tuning.cargo_rough_rate * delta * ship_data.cargo_care
 	var shake_loss := vibration * tuning.cargo_boost_rate * delta * ship_data.cargo_care
 	cargo_condition = maxf(cargo_condition - rough_loss - shake_loss, 0.0)
@@ -608,8 +613,11 @@ func _update_shake(delta: float) -> void:
 	# A rumble while boosting; a faint road-feel vibration that grows with
 	# speed otherwise.
 	var cruise_feel := tuning.cruise_rumble_shake * pow(clampf(speed_ratio(), 0.0, 1.0), 2.0)
+	if flight.newtonian:
+		cruise_feel = tuning.cruise_rumble_shake * absf(flight.thrust) * flight.fuel_burn  # The engines, not the speed.
 	shake.rumble = tuning.boost_rumble_shake + tuning.boost_shimmy_shake * flight.shimmy if flight.boosting else cruise_feel
-	shake.rumble += minf(flight.overdrive * 0.06 + overdrive_strain * 0.2, 0.45)  # Overdrive: everything rattles.
+	if flight.boosting or not flight.newtonian:
+		shake.rumble += minf(flight.overdrive * 0.06 + overdrive_strain * 0.2, 0.45)  # Overdrive: everything rattles.
 	shake.update(delta, tuning.shake_decay)
 	# The boost spooling up: a rising whine while the button's held.
 	if flight.spool > 0.0 and not _spool_sound.playing:

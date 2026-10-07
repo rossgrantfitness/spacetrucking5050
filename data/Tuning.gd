@@ -177,9 +177,6 @@ extends Resource
 ## its normal turn rate (so you can't spin up forever).
 @export_range(1.0, 6.0, 0.1) var free_spin_limit: float = 2.5
 
-## Flight Assist OFF: the hard speed limit, compared with boost's top speed
-## (like Elite, there's still a cap, so a crash is never at light speed).
-@export_range(0.5, 3.0, 0.05) var free_speed_limit: float = 1.0
 
 @export_group("Overdrive")
 ## OVERDRIVE: keep holding boost past boost's top speed (about 800 km/h in

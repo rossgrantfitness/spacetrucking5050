@@ -45,7 +45,16 @@ extends RefCounted
 ##     turns, because the side thrusters are weaker than the main engines.
 ##   - FLIGHT ASSIST OFF: pure Newton. The throttle is raw thrust (half
 ##     throttle = half push, forever), drift and spin last until you cancel
-##     them yourself, and there's no speed limit except a hard cap.
+##     them yourself, and there's no speed limit at all: burn long enough
+##     and you keep getting faster (fuel is the only limit).
+##   - NOTHING SLOWS YOU BUT THRUST. There's no air in space: boost up to
+##     2000 km/h and you'll still be doing 2000 km/h an hour later. The only
+##     way to slow down is to fire the engines the other way (the retro
+##     thrusters, or turn round and burn). With Flight Assist on and the
+##     throttle at full, it holds whatever speed you've got; pull the
+##     throttle back and it brakes (with thrust) to the lever's speed.
+##     And only thrust strains the hull and rattles the cargo: coasting at
+##     any speed is smooth and free.
 ##
 ## Keeping these rules separate makes them easy to read and to test (see
 ## tools/tests/FlightTests.gd and NewtonianTests.gd).
@@ -349,8 +358,8 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 ## How hard the nose is being pushed off course right now, in radians per
 ## second: a little whenever you're boosting, a lot when you're shaky.
 func wander_amount(tuning: Tuning) -> float:
-	if not boosting and overdrive <= 0.0:
-		return 0.0
+	if not boosting and (overdrive <= 0.0 or newtonian):
+		return 0.0  # (Newtonian: coasting fast is smooth; only the burn shakes.)
 	var boost_wander := deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees) if boosting else 0.0
 	# Overdrive: the faster past boost's top speed, the harder it pulls.
 	return boost_wander * (1.0 + overdrive) + deg_to_rad(tuning.overdrive_wander_degrees) * overdrive
@@ -471,7 +480,9 @@ func _update_spin(delta: float, controls: FlightControls, ship: ShipData, tuning
 ## The engines and thrusters. Everything is worked out in the rig's own
 ## axes (x = right, y = up, -z = the nose), then turned back into space.
 func _update_thrusters(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
-	thrust = _burn_fuel(delta, clampf(controls.thrust, -1.0, 1.0), ship, tuning)
+	thrust = clampf(controls.thrust, -1.0, 1.0)
+	if fuel <= 0.0:
+		thrust *= tuning.empty_tank_thrust  # On fumes.
 	_update_boost(delta, controls, tuning)
 	if boosting:
 		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
@@ -495,7 +506,7 @@ func _update_thrusters(delta: float, controls: FlightControls, ship: ShipData, t
 		push.x = clampf((goal.x - local.x) / maxf(delta, 0.0001), -side, side)
 		push.y = clampf((goal.y - local.y) / maxf(delta, 0.0001), -side, side)
 	else:
-		# Pure Newton: what you push is what you get.
+		# Pure Newton: what you push is what you get, with no limiter.
 		push.z = -thrust * (main if thrust > 0.0 else retro)
 		push.x = strafe.x * side
 		push.y = strafe.y * side
@@ -504,22 +515,17 @@ func _update_thrusters(delta: float, controls: FlightControls, ship: ShipData, t
 	elif boosting and (going < tuning.overdrive_max_kmh / 3.6 or tuning.crashes_enabled):
 		push.z -= tuning.overdrive_acceleration  # OVERDRIVE: past boost's top speed it keeps climbing.
 	velocity += attitude * push * delta
-	# The side thrusters drink a little fuel too.
-	if fuel > 0.0 and side > 0.0:
-		var side_effort := clampf((absf(push.x) + absf(push.y)) / maxf(main, 0.01), 0.0, 2.0)
-		fuel = maxf(fuel - side_effort * 0.35 * delta / ship.fuel_tank_seconds, 0.0)
+	# Fuel burns for thrust actually given, and nothing else: a rig coasting
+	# at any speed uses none. (The side thrusters drink a little too.)
+	var main_effort := absf(push.z if not boosting else 0.0) / maxf(main, 0.01)
+	var side_effort := clampf((absf(push.x) + absf(push.y)) / maxf(main, 0.01), 0.0, 2.0)
+	var burn := (main_effort + side_effort * 0.35) * (1.0 + load_share * tuning.load_fuel_burn)
+	fuel_burn = clampf(burn / (1.0 + tuning.fuel_speed_burn), 0.0, 1.0)
+	if fuel > 0.0:
+		fuel = maxf(fuel - burn * delta / ship.fuel_tank_seconds, 0.0)
 
-	var current_speed := velocity.length()
-	overdrive = maxf(current_speed - boosted_top_speed(ship), 0.0) * 3.6 / tuning.overdrive_shake_kmh
-	if flight_assist:
-		# Speed past the limit (left over from a boost) bleeds away slowly.
-		if not boosting and current_speed > ship.max_speed:
-			var bleed := (current_speed - ship.max_speed) * (1.0 - exp(-tuning.overspeed_drag * delta))
-			velocity = velocity.normalized() * (current_speed - bleed)
-	elif not boosting:
-		var cap := boosted_top_speed(ship) * tuning.free_speed_limit
-		if current_speed > cap:
-			velocity = velocity.normalized() * cap
+	# No drag, no speed cap: whatever speed the thrust gave you, you keep.
+	overdrive = maxf(velocity.length() - boosted_top_speed(ship), 0.0) * 3.6 / tuning.overdrive_shake_kmh
 	var now_local := attitude.inverse() * velocity
 	slip = Vector2(now_local.x, now_local.y).length()
 

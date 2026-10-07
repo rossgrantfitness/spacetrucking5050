@@ -126,10 +126,21 @@ func steer(ship: Ship, delta: float) -> FlightControls:
 	if arrival_speed > 0.0 and waypoints.size() == 1:
 		goal = minf(goal, arrival_speed + distance * 0.03)
 	var going := flight.forward_speed()
+	if flight.newtonian:
+		# Newtonian: momentum is free, so keep whatever speed she's built up
+		# (a boost to 2000 km/h stays 2000 km/h), and plan the braking burn
+		# so the retro thrusters slow her in time for the end of the course.
+		goal = maxf(goal, going)
+		var remaining := distance
+		for i in range(1, waypoints.size()):
+			remaining += waypoints[i - 1].distance_to(waypoints[i])
+		var brakes := ship.ship_data.retro_thrust * flight.heft(tuning.load_braking_drag) * 0.75
+		var end_speed := arrival_speed if arrival_speed > 0.0 else ship.ship_data.max_speed
+		goal = minf(goal, sqrt(end_speed * end_speed + 2.0 * brakes * maxf(remaining - 300.0, 0.0)))
 	if going < goal - 1.0:
 		_controls.thrust = 1.0
 	elif going > goal + 6.0:
-		_controls.thrust = -0.6
+		_controls.thrust = -1.0 if flight.newtonian else -0.6
 	else:
 		# At the limiter, holding the throttle just sips fuel; below it, coast.
 		_controls.thrust = 1.0 if goal >= ship.ship_data.max_speed - 0.5 else 0.0
