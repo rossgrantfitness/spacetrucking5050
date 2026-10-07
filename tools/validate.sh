@@ -10,7 +10,8 @@
 # plays the opening of a new game (tools/smoke_opening.gd), jumps near
 # Tidewater with the debug menu (tools/smoke_debug_jump.gd),
 # plays the first mission (tools/smoke_mission.gd), the trip to the casino
-# in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
+# in the Glimmer System (tools/smoke_glimmer.gd), the climb to the Frostline
+# (tools/smoke_frontier.gd), a crash at boost speed
 # (tools/smoke_crash.gd), going way too fast (tools/smoke_overdrive.gd)
 # and tries the cabin,
 # comm replies and radio (tools/smoke_cabin.gd), and {husband}'s message
@@ -54,6 +55,7 @@ run -s tools/smoke_debug_jump.gd
 run -s tools/smoke_mission.gd
 run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd
+run -s tools/smoke_frontier.gd
 run -s tools/smoke_crash.gd
 run -s tools/smoke_overdrive.gd
 run -s tools/smoke_story.gd

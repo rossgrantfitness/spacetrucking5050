@@ -434,7 +434,8 @@ the window again).
 
 For testing without a full run. Press **F10** anywhere:
 - **Jump near a place** (Tidewater, the truck stop, the casino, the
-  Gas-N-Go). Pick **1, 3 or 5 minutes out**, and the rig appears that far
+  Gas-N-Go, Hoof & Hull Salvage, the Orbital Arboretum, Flurry's Comet
+  Creamery). Pick **1, 3 or 5 minutes out**, and the rig appears that far
   out, lined up, on autopilot. From on foot it takes off first.
 - **Give me a job:** any job in the game, yours right now (handy for
   testing heavy loads).
@@ -443,12 +444,41 @@ For testing without a full run. Press **F10** anywhere:
 - **Fill up and fix up.**
 - **Finish the boss's missions:** as if you'd done all seven (then the
   company's for sale at the office).
+- **Open every system:** as if you'd made the first delivery to every
+  client (the casino, the Dustbowl, Greenhouse Reach, the Frostline).
+  Their stories start from "nice to meet you".
 - **Story: skip to...:** jump to a point in White's story (see
   `docs/STORY.md`), then go do the next thing. Handy for testing one beat
   without 14 deliveries.
 
 To switch it off later (for a release build), untick **debug_menu** in
 tuning.tres. From a terminal: `godot --path . -- --jump=tidewater:3`.
+
+### The far systems (beta step 4)
+
+Three more clients, each farther out and steeper than the last. Raccoony
+passes on each call aboard the rig (he has a "!" when one's waiting):
+- **The Dustbowl** (amber, way DOWN below the lane), after the casino and
+  5 deliveries: **Mags Hoofmann**, a goat, runs Hoof & Hull Salvage in a
+  dead freighter. Dust storms on the lane, a junk spill, the Big Steer
+  skull and an old windmill.
+- **Greenhouse Reach** (green, way UP), after the Dustbowl and 8
+  deliveries: **Dr. Shelby Moss**, a tortoise, has grown one tree under a
+  glass dome for 91 years. Pollen clouds that sway the rig, jellyfish
+  blooms, a floating tree and a giant watering can.
+- **The Frostline** (lavender, the top of the map), after Greenhouse Reach
+  and 11 deliveries: **Penny Flurry**, a penguin, carves ice cream out of
+  comets. Comet-hail storms and ice fields, the Big Snowman and a giant
+  cone. It's the longest climb: **fill up first** (about 90% of the
+  starter rig's tank).
+
+Each client has a three-job story (one they order through the company,
+two they hand you in person; if you say no, those wait on their board),
+plus everyday loads on their board.
+
+**Steep roads:** when you let go of up/down, the nose now settles on the
+road's climb toward wherever you're headed (not on flat), so you don't have
+to hold the stick up the whole way to the Frostline.
 
 ### White's story
 

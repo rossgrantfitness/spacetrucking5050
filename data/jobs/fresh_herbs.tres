@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "fresh_herbs"
+cargo_name = "Fresh herbs (very fresh)"
+client_name = "Marge's Diner"
+description = "Marge wants real herbs for the soup. Fresh ones wilt if you take the scenic route."
+from_place = "arboretum"
+to_place = "truck_stop"
+weight = 300000000.0
+base_pay = 1900
+care_kind = "perishable"
+care_bonus = 500
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "greenhouse_open"
+completes_flag = ""

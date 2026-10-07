@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "penny_flavors"
+cargo_name = "New flavors (Comet Crunch, Nebula Swirl, Plain)"
+client_name = "Penny Flurry, Flurry's Comet Creamery"
+description = "Penny's new flavors, for Sal's buffet at The High Roller. A long way down. They melt a bit if you dawdle."
+from_place = "creamery"
+to_place = "high_roller"
+weight = 1200000000.0
+base_pay = 3200
+care_kind = "perishable"
+care_bonus = 700
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = false
+requires_flag = "penny_offered_flavors"
+completes_flag = "penny_flavors_done"

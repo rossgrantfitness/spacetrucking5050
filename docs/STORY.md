@@ -40,6 +40,15 @@ The player works it out from his last log, his message and the boss's
 | 8 | His tapes are a radio station: **WHITE NOISE 43.8** | Radio (`data/radio/white_noise.tres`) | `white_story_done` | |
 | — | After: the first tape plays; Wendell, Marge, the crew, two emails | Comms, people, PC mail | `white_story_done` | |
 
+Two quiet echoes in the far systems (beta step 4), never pushed:
+- **Penny** (the Frostline creamery), after her story and his message:
+  years ago one trucker climbed all the way up, in a big lazy rig that
+  started like a cough. He bought a plain cone and played a tape by the
+  window. "Plain's on the house. Always." (`data/npcs/frostline_penny.tres`)
+- **Mags** (the Dustbowl salvage yard), after her story and his tapes:
+  "Dust takes everything else. Hang on to the stuff it can't." And in
+  Penny's parlor, a booth with a tiny "W" carved in the table.
+
 People with a new story line show a "!" over them (`marked` in the
 conversation data), so the beats are easy to find. The objective line never
 pushes the story.

@@ -161,6 +161,14 @@ func test_nose_drifts_back_to_level_when_let_go() -> void:
 	check(absf(model.pitch) < 0.03, "with hands off, the nose should drift back to level (pitch %.3f)" % model.pitch)
 
 
+func test_on_a_steep_road_the_nose_settles_on_the_climb() -> void:
+	var model := _cruising()
+	var controls := FlightControls.new()
+	model.rest_pitch = deg_to_rad(35.0)  # The road to the Frostline climbs about this steeply.
+	_fly(model, controls, 25.0)
+	check(absf(model.pitch - model.rest_pitch) < 0.03, "hands off on a steep road, the nose settles on the road's climb (pitch %.1f deg)" % rad_to_deg(model.pitch))
+
+
 func test_the_ship_itself_never_rolls() -> void:
 	var model := FlightModel.new()
 	model.heading = 1.1

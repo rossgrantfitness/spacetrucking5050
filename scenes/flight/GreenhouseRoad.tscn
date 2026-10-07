@@ -1,0 +1,174 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_f8275"]
+[ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_2w4yx"]
+[ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_751cy"]
+[ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="4_n12bn"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_j1vqh"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_o3k5p"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="7_1h16c"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="8_k6q7g"]
+[ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_na7vc"]
+
+[node name="GreenhouseRoad" type="Node3D" unique_id=897323347]
+
+[node name="Sign3Km" type="Node3D" parent="." unique_id=447914221]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -1867.9597, 1666.075, -8906.063)
+script = ExtResource("1_f8275")
+front_text = "THE ARBORETUM  66 KM
+GREENHOUSE REACH · STEEP CLIMB"
+back_text = "TRUCK STOP  3 KM
+HOME SPACE"
+board_color = Color(0.1, 0.3, 0.12, 1)
+
+[node name="Sign18Km" type="Node3D" parent="." unique_id=2057480822]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -12481.823, 9308.057, -1561.2694)
+script = ExtResource("1_f8275")
+front_text = "THE ARBORETUM  51 KM
+JELLYFISH CROSSING AHEAD"
+back_text = "TRUCK STOP  18 KM
+ALMOST HOME"
+board_color = Color(0.1, 0.3, 0.12, 1)
+
+[node name="Sign32Km" type="Node3D" parent="." unique_id=1515913396]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -22388.098, 16440.572, 5293.871)
+script = ExtResource("1_f8275")
+front_text = "GREENHOUSE REACH  3 KM
+POLLEN COUNT: HIGH"
+back_text = "TRUCK STOP  32 KM
+DOWNHILL FROM HERE"
+board_color = Color(0.1, 0.3, 0.12, 1)
+
+[node name="Sign52Km" type="Node3D" parent="." unique_id=252306779]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -36539.914, 26629.88, 15086.931)
+script = ExtResource("1_f8275")
+front_text = "THE ARBORETUM  17 KM
+DRIFT SLOW THROUGH THE BLOOM"
+back_text = "TRUCK STOP  52 KM
+MIND THE JELLIES"
+board_color = Color(0.1, 0.3, 0.12, 1)
+
+[node name="Sign65Km" type="Node3D" parent="." unique_id=2103422955]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -45738.598, 33252.934, 21452.418)
+script = ExtResource("1_f8275")
+front_text = "THE ARBORETUM  4 KM
+NO RUSH · NEVER A RUSH"
+back_text = "LEAVING THE ARBORETUM
+TRUCK STOP  65 KM"
+board_color = Color(0.1, 0.3, 0.12, 1)
+
+[node name="BorderGate" type="Node3D" parent="." unique_id=2015150844]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -24765.682, 17831.291, 6537.8516)
+script = ExtResource("2_2w4yx")
+kind = 4
+label = "NOW ENTERING GREENHOUSE REACH"
+back_label = "NOW LEAVING GREENHOUSE REACH · HOME SPACE AHEAD"
+glow_color = Color(0.45, 1, 0.45, 1)
+log_id = "border_gate"
+
+[node name="FloatingTree" type="Node3D" parent="." unique_id=1180665607]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -17019.797, 13504.249, 3853.0881)
+script = ExtResource("2_2w4yx")
+kind = 10
+log_id = "floating_tree"
+
+[node name="WateringCan" type="Node3D" parent="." unique_id=962812218]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -35413.848, 24282.244, 10987.778)
+script = ExtResource("2_2w4yx")
+kind = 11
+log_id = "watering_can"
+
+[node name="Billboard380Km" type="Node3D" parent="." unique_id=2119931549]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -27134.084, 19462.947, 7544.4224)
+script = ExtResource("3_751cy")
+headline = "WELCOME TO GREENHOUSE REACH"
+tagline = "PLEASE DON'T PICK THE NEBULA"
+log_id = "billboard"
+
+[node name="Billboard430Km" type="Node3D" parent="." unique_id=1770517110]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -30080.236, 22010.275, 10847.889)
+script = ExtResource("3_751cy")
+headline = "TALK TO YOUR PLANTS"
+tagline = "THEY'RE LISTENING"
+log_id = "billboard"
+
+[node name="Billboard490Km" type="Node3D" parent="." unique_id=382349672]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -34917.582, 25067.068, 12930.604)
+script = ExtResource("3_751cy")
+headline = "U-PICK MOONBERRIES"
+tagline = "BRING YOUR OWN SPACESUIT"
+log_id = "billboard"
+
+[node name="Billboard550Km" type="Node3D" parent="." unique_id=907218789]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -38571.332, 28123.86, 16723.725)
+script = ExtResource("3_751cy")
+headline = "JELLYFISH CROSSING"
+tagline = "NEXT 20 KM · DRIFT SLOW"
+log_id = "billboard"
+
+[node name="Billboard610Km" type="Node3D" parent="." unique_id=1422318318]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -43408.67, 31180.652, 18806.44)
+script = ExtResource("3_751cy")
+headline = "COMPOST: IT'S THE GOOD STUFF"
+tagline = "DR. MOSS AGREES"
+log_id = "billboard"
+
+[node name="Billboard660Km" type="Node3D" parent="." unique_id=1574329417]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -46354.83, 33727.98, 22109.906)
+script = ExtResource("3_751cy")
+headline = "THE ORBITAL ARBORETUM"
+tagline = "91 YEARS · 1 TREE · WORTH IT"
+log_id = "billboard"
+
+[node name="Storm44Km" type="Node3D" parent="." unique_id=509157438]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -31134, 22416.48, 10944.729)
+script = ExtResource("4_n12bn")
+radius = 2200.0
+tint = Color(0.45, 1, 0.45, 1)
+log_id = "ion_storm"
+
+[node name="Storm60Km" type="Node3D" parent="." unique_id=636835156]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -42284.746, 30567.928, 19025.87)
+script = ExtResource("4_n12bn")
+radius = 2400.0
+tint = Color(0.45, 1, 0.45, 1)
+log_id = "ion_storm"
+
+[node name="MossyRocks" type="Node3D" parent="." unique_id=1449034835]
+transform = Transform3D(-0.56903887, 0.41893885, 0.707591, 0, 0.8604911, -0.50946546, -0.8223106, -0.28990564, -0.48965287, -38209.91, 27511.135, 15841.258)
+script = ExtResource("5_j1vqh")
+lane_starts = PackedVector3Array()
+lane_ends = PackedVector3Array()
+rock_count = 240
+field_size = Vector3(2000, 600, 2400)
+rock_radius_range = Vector2(4, 30)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 3401
+rock_colors = PackedColorArray(0.35, 0.55, 0.3, 1, 0.45, 0.65, 0.35, 1, 0.3, 0.45, 0.3, 1, 0.55, 0.6, 0.4, 1, 0.4, 0.5, 0.45, 1)
+
+[node name="SeedBarge" type="Node3D" parent="." unique_id=165811923]
+script = ExtResource("6_o3k5p")
+visual_scene = ExtResource("7_1h16c")
+waypoints = PackedVector3Array(-1160.2512, 841.6424, -10088.967, -17031.803, 12249.493, 835.7745, -33893.36, 24455.96, 12562.341, -47693.06, 34345.266, 22111.732, -47773.715, 34599.992, 22751.271, -33653.734, 24387.123, 12980.242, -16704.037, 12249.493, 1309.4253, -887.11255, 841.6424, -9694.258)
+speed = 60.0
+start_fraction = 0.25
+engine_trail_color = Color(0.5, 1, 0.5, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "SEED BARGE (SLOW)"
+
+[node name="FlowerVan" type="Node3D" parent="." unique_id=498666781]
+script = ExtResource("6_o3k5p")
+visual_scene = ExtResource("8_k6q7g")
+waypoints = PackedVector3Array(-931.38116, 703.9638, -9614.98, -16743.754, 12111.814, 1395.2813, -33664.484, 24318.283, 13036.327, -47464.184, 34207.586, 22585.719, -48136.645, 34462.313, 22370.055, -34016.664, 24249.443, 12599.025, -17126.148, 12111.814, 842.6884, -1250.043, 703.9638, -10075.475)
+speed = 80.0
+start_fraction = 0.65
+engine_trail_color = Color(1, 0.6, 0.85, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "FLOWER DELIVERY"
+
+[node name="SpacewayGreenhouse" type="MultiMeshInstance3D" parent="." unique_id=1319345722]
+script = ExtResource("9_na7vc")
+points = PackedVector3Array(-636.83185, 458.5189, -10159.3125, -48301.785, 34777.28, 22824.836)
+left_color = Color(0.45, 1, 0.45, 1)
+right_color = Color(1, 0.6, 0.85, 1)

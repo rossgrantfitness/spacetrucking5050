@@ -10,6 +10,9 @@
 [ext_resource type="Resource" path="res://data/npcs/gasngo_moe.tres" id="npc_moe"]
 [ext_resource type="Resource" path="res://data/npcs/space_deputy.tres" id="npc_deputy"]
 [ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="npc_sal"]
+[ext_resource type="Resource" path="res://data/npcs/dustbowl_mags.tres" id="npc_dustbowl_mags"]
+[ext_resource type="Resource" path="res://data/npcs/greenhouse_moss.tres" id="npc_greenhouse_moss"]
+[ext_resource type="Resource" path="res://data/npcs/frostline_penny.tres" id="npc_frostline_penny"]
 
 [sub_resource type="Resource" id="Set_0_dottie_takeoff"]
 script = ExtResource("2_set")
@@ -286,6 +289,93 @@ situation = 6
 lines = PackedStringArray("Valet bots have you. Don't let 'em sell you a timeshare.", "Easy... easy... perfect. Like a dealer laying down an ace.")
 place = "high_roller"
 
+[sub_resource type="Resource" id="Set_mags_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dustbowl_mags")
+situation = 0
+lines = PackedStringArray("Go on, Rabbit. Mind the storms. Mind the wrecks. Mind yourself.", "Bring back anything shiny.")
+place = "salvage_yard"
+
+[sub_resource type="Resource" id="Set_mags_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dustbowl_mags")
+situation = 2
+lines = PackedStringArray("Hoof and Hull. I see you, Rabbit. Ring's the amber one. The only clean thing in the yard.", "Through the ring. The bots park you. Don't let 'em sell you a hubcap.")
+place = "salvage_yard"
+
+[sub_resource type="Resource" id="Set_mags_approach_scrap"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dustbowl_mags")
+situation = 2
+lines = PackedStringArray("That my scrap? Through the amber ring. Don't drop it. Well. Drop it. It's scrap.")
+place = "salvage_yard"
+needs_active_job = "dustbowl_scrap"
+
+[sub_resource type="Resource" id="Set_mags_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dustbowl_mags")
+situation = 6
+lines = PackedStringArray("Easy. Easy. There. Parked better than half my wrecks.")
+place = "salvage_yard"
+
+[sub_resource type="Resource" id="Set_moss_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_greenhouse_moss")
+situation = 0
+lines = PackedStringArray("Safe travels, dear... no rush. There's never... a rush.")
+place = "arboretum"
+
+[sub_resource type="Resource" id="Set_moss_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_greenhouse_moss")
+situation = 2
+lines = PackedStringArray("I see you, dear... through the green ring... take your time. I am.", "Welcome to the Arboretum... the ring is the green one... everything's green.")
+place = "arboretum"
+
+[sub_resource type="Resource" id="Set_moss_approach_soil"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_greenhouse_moss")
+situation = 2
+lines = PackedStringArray("Is that... the soil? Lovely. Through the green ring, dear. Gently.")
+place = "arboretum"
+needs_active_job = "greenhouse_soil"
+
+[sub_resource type="Resource" id="Set_moss_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_greenhouse_moss")
+situation = 6
+lines = PackedStringArray("Docking clamps... closing. Slowly. They're tortoise-made.")
+place = "arboretum"
+
+[sub_resource type="Resource" id="Set_penny_takeoff"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_frostline_penny")
+situation = 0
+lines = PackedStringArray("Bye pal! Come back! Seriously! Nobody comes back!", "Downhill all the way home! Wheee!")
+place = "creamery"
+
+[sub_resource type="Resource" id="Set_penny_approach"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_frostline_penny")
+situation = 2
+lines = PackedStringArray("Is that a RIG?! Up HERE?! Through the purple ring, pal! I'll get the cones out!", "Flurry's Comet Creamery! Purple ring! Mind the ice! Everything's ice!")
+place = "creamery"
+
+[sub_resource type="Resource" id="Set_penny_approach_cones"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_frostline_penny")
+situation = 2
+lines = PackedStringArray("The CONES! You brought the cones! Through the ring, pal, slow, slow, they're fragile!")
+place = "creamery"
+needs_active_job = "frostline_cones"
+
+[sub_resource type="Resource" id="Set_penny_docking"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_frostline_penny")
+situation = 6
+lines = PackedStringArray("Clamps on! Welcome to the top of the map!")
+place = "creamery"
+
 [resource]
 script = ExtResource("1_chatter")
-sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding"), SubResource("Set_sal_takeoff"), SubResource("Set_sal_approach_cards"), SubResource("Set_sal_approach"), SubResource("Set_sal_docking")])
+sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding"), SubResource("Set_sal_takeoff"), SubResource("Set_sal_approach_cards"), SubResource("Set_sal_approach"), SubResource("Set_sal_docking"), SubResource("Set_mags_takeoff"), SubResource("Set_mags_approach"), SubResource("Set_mags_approach_scrap"), SubResource("Set_mags_docking"), SubResource("Set_moss_takeoff"), SubResource("Set_moss_approach"), SubResource("Set_moss_approach_soil"), SubResource("Set_moss_docking"), SubResource("Set_penny_takeoff"), SubResource("Set_penny_approach"), SubResource("Set_penny_approach_cones"), SubResource("Set_penny_docking")])

@@ -1,3 +1,32 @@
+# Playtest: beta step 4, three more systems (your notes round below)
+
+**What's new:** three more clients, each in their own system, each farther out, steeper and stormier than the last:
+- **The Dustbowl** (amber, way down): Mags the goat's salvage yard in a dead freighter.
+- **Greenhouse Reach** (green, way up): Dr. Moss the tortoise's glass-dome arboretum.
+- **The Frostline** (lavender, the top of the map): Penny the penguin's comet creamery.
+
+Each has a three-job story, everyday loads on their board, a road with its own weather and landmarks, and a room to walk around. **Every line is my draft:** change anything.
+
+**Time needed:** 30-45 minutes with the debug menu.
+
+## What to do
+
+1. **The quick way in:** F10 → OPEN EVERY SYSTEM. (Or play normally: after the casino and 5 deliveries, Raccoony has a "!" with Mags's call.)
+2. **The Dustbowl:** take a job there (or F10 → GIVE ME A JOB → "Pre-loved parts"). Fly the road down: two dust storms, a junk spill, the Big Steer, the windmill. Dock, walk in, talk to Mags.
+3. **Greenhouse Reach:** the road climbs steeply. **Let go of up/down** partway: the nose should settle on the climb, not flop back to flat. Look for the floating tree and the watering can, and the pollen clouds that sway the rig.
+4. **The Frostline:** fill up first. It's the longest, steepest climb, with three hail storms and two ice fields. The Big Snowman and the giant cone are on the way.
+5. Play a client's story through: each one orders one job through the boss and hands you two in person.
+
+## Questions
+
+1. **The difficulty curve:** farther, steeper and stormier each time. Is the Frostline a satisfying "top of the map" trip, or too much of a slog? Too easy?
+2. **Steep roads:** does the nose settling on the road's climb feel natural, or would you rather it went back to flat?
+3. **The clients:** do Mags (gruff, eats everything), Dr. Moss (slow) and Penny (bubbly, lonely) feel like different people? Any you'd change?
+4. **The gimmicks:** do the storms, jellyfish and hail make each system feel different, or do they blur together?
+5. **Placeholders:** the stations, rooms and the three clients are built from boxes, like the others. Which would you most want real art for first?
+
+---
+
 # Playtest: your notes (crashes, the office, the boss's missions, the mouse)
 
 ## What to do

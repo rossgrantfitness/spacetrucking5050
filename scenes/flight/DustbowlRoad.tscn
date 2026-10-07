@@ -1,0 +1,181 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_0qjdd"]
+[ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_n4ddo"]
+[ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_6lkkw"]
+[ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="4_kdv7q"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_o2pkm"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_23ynu"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="7_2xef8"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="8_nsuwp"]
+[ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_h4tbm"]
+
+[node name="DustbowlRoad" type="Node3D" unique_id=1609753207]
+
+[node name="Sign3Km" type="Node3D" parent="." unique_id=1068490264]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 2566.6448, -1405.6233, -9844.315)
+script = ExtResource("1_0qjdd")
+front_text = "HOOF & HULL SALVAGE  61 KM
+THE DUSTBOWL · STEEP DESCENT"
+back_text = "TRUCK STOP  3 KM
+HOME SPACE"
+board_color = Color(0.35, 0.2, 0.08, 1)
+
+[node name="Sign18Km" type="Node3D" parent="." unique_id=156408574]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 14364.8545, -9119.837, -4716.6333)
+script = ExtResource("1_0qjdd")
+front_text = "HOOF & HULL  46 KM
+CHECK YOUR AIR FILTER"
+back_text = "TRUCK STOP  18 KM
+ALMOST HOME"
+board_color = Color(0.35, 0.2, 0.08, 1)
+
+[node name="Sign30Km" type="Node3D" parent="." unique_id=1757436962]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 23803.42, -15291.208, -614.4859)
+script = ExtResource("1_0qjdd")
+front_text = "THE DUSTBOWL  3 KM
+STORMS LIKELY · ALWAYS"
+back_text = "TRUCK STOP  30 KM
+YOU MADE IT OUT"
+board_color = Color(0.35, 0.2, 0.08, 1)
+
+[node name="Sign50Km" type="Node3D" parent="." unique_id=996695783]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 39534.367, -25576.828, 6222.4263)
+script = ExtResource("1_0qjdd")
+front_text = "HOOF & HULL  14 KM
+SEE THE BIG STEER"
+back_text = "TRUCK STOP  50 KM
+KEEP CLIMBING"
+board_color = Color(0.35, 0.2, 0.08, 1)
+
+[node name="Sign61Km" type="Node3D" parent="." unique_id=737106303]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 48186.387, -31233.916, 9982.728)
+script = ExtResource("1_0qjdd")
+front_text = "HOOF & HULL  3 KM
+MIND THE CRANE"
+back_text = "LEAVING THE YARD
+TRUCK STOP  61 KM"
+board_color = Color(0.35, 0.2, 0.08, 1)
+
+[node name="BorderGate" type="Node3D" parent="." unique_id=1615119925]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 25956.06, -16971.27, 680.9043)
+script = ExtResource("2_n4ddo")
+kind = 4
+label = "NOW ENTERING THE DUSTBOWL"
+back_label = "NOW LEAVING THE DUSTBOWL · HOME SPACE AHEAD"
+glow_color = Color(1, 0.65, 0.25, 1)
+log_id = "border_gate"
+
+[node name="BigSteer" type="Node3D" parent="." unique_id=1137088306]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 17779.006, -12600.028, -256.10056)
+script = ExtResource("2_n4ddo")
+kind = 8
+log_id = "big_steer"
+
+[node name="OldWindmill" type="Node3D" parent="." unique_id=908783817]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 36206.438, -22971.117, 3173.222)
+script = ExtResource("2_n4ddo")
+kind = 9
+log_id = "old_windmill"
+
+[node name="DustyRose" type="Node3D" parent="." unique_id=876721007]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 42044.063, -27899.813, 8654.326)
+script = ExtResource("2_n4ddo")
+kind = 3
+label = "THE DUSTY ROSE"
+log_id = "derelict"
+
+[node name="Billboard360Km" type="Node3D" parent="." unique_id=596496317]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 28165.031, -18411.2, 2207.9448)
+script = ExtResource("3_6lkkw")
+headline = "WELCOME TO THE DUSTBOWL"
+tagline = "WIPE YOUR FEET · WIPE EVERYTHING"
+log_id = "billboard"
+
+[node name="Billboard410Km" type="Node3D" parent="." unique_id=1700018845]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 32512.31, -20982.604, 2963.3623)
+script = ExtResource("3_6lkkw")
+headline = "CACTUS JUICE"
+tagline = "IT'S MOSTLY WATER. MOSTLY."
+log_id = "billboard"
+
+[node name="Billboard470Km" type="Node3D" parent="." unique_id=1133210469]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 36817.05, -24068.29, 5968.247)
+script = ExtResource("3_6lkkw")
+headline = "LAST WATER FOR 40 KM"
+tagline = "(THERE IS NO WATER)"
+log_id = "billboard"
+
+[node name="Billboard520Km" type="Node3D" parent="." unique_id=2024870450]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 41164.33, -26639.693, 6723.664)
+script = ExtResource("3_6lkkw")
+headline = "USED RIGS · LIKE NEW"
+tagline = "IF NEW WAS A LONG TIME AGO"
+log_id = "billboard"
+
+[node name="Billboard570Km" type="Node3D" parent="." unique_id=1019699603]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 44682.523, -29211.098, 9386.701)
+script = ExtResource("3_6lkkw")
+headline = "HOOF & HULL SALVAGE"
+tagline = "WE BUY WRECKS · WE SELL WRECKS · WE ARE WRECKS"
+log_id = "billboard"
+
+[node name="Billboard620Km" type="Node3D" parent="." unique_id=292831778]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 49029.8, -31782.502, 10142.119)
+script = ExtResource("3_6lkkw")
+headline = "LOST: ONE FRIDGE"
+tagline = "ANSWERS TO NOTHING"
+log_id = "billboard"
+
+[node name="Storm40Km" type="Node3D" parent="." unique_id=1064777963]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 31461.89, -20571.236, 3073.8223)
+script = ExtResource("4_kdv7q")
+radius = 2200.0
+tint = Color(1, 0.65, 0.25, 1)
+log_id = "ion_storm"
+
+[node name="Storm56Km" type="Node3D" parent="." unique_id=81133120]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 43927.07, -28799.732, 8818.489)
+script = ExtResource("4_kdv7q")
+radius = 2000.0
+tint = Color(1, 0.65, 0.25, 1)
+log_id = "ion_storm"
+
+[node name="JunkSpill" type="Node3D" parent="." unique_id=2129786056]
+transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 22023.324, -14399.866, -1028.3242)
+script = ExtResource("5_o2pkm")
+junk = true
+lane_starts = PackedVector3Array()
+lane_ends = PackedVector3Array()
+rock_count = 260
+field_size = Vector3(1800, 500, 2600)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 3301
+rock_colors = PackedColorArray(0.56, 0.42, 0.52, 1, 0.56, 0.41, 0.31, 1, 0.4, 0.42, 0.53, 1, 0.7, 0.6, 0.46, 1, 0.62, 0.34, 0.26, 1)
+
+[node name="ScrapHauler" type="Node3D" parent="." unique_id=796106731]
+script = ExtResource("6_23ynu")
+visual_scene = ExtResource("7_2xef8")
+waypoints = PackedVector3Array(1126.6072, -694.2354, -9848.672, 17466.953, -11390.818, -2694.5679, 35044.254, -22824.518, 4892.4604, 49272.527, -32174.26, 11076.286, 49857.125, -32431.398, 10806.987, 35197.848, -22893.127, 4435.8403, 17696.547, -11390.818, -3222.8325, 1317.9338, -694.2354, -10288.893)
+speed = 60.0
+start_fraction = 0.25
+engine_trail_color = Color(1, 0.6, 0.25, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "SCRAP HAULER (FULL)"
+
+[node name="DustRunner" type="Node3D" parent="." unique_id=16480095]
+script = ExtResource("6_23ynu")
+visual_scene = ExtResource("8_nsuwp")
+waypoints = PackedVector3Array(1258.412, -831.4549, -10358.376, 17640.213, -11528.037, -3299.653, 35176.06, -22961.736, 4382.756, 49404.332, -32311.479, 10566.582, 49574.39, -32568.617, 11251.094, 34915.113, -23030.346, 4879.9478, 17372.357, -11528.037, -2683.3445, 1035.1976, -831.4549, -9844.786)
+speed = 80.0
+start_fraction = 0.65
+engine_trail_color = Color(1, 0.85, 0.5, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "DUST RUNNER"
+
+[node name="SpacewayDustbowl" type="MultiMeshInstance3D" parent="." unique_id=2018919149]
+script = ExtResource("9_h4tbm")
+points = PackedVector3Array(707.8925, -462.8528, -10292.339, 50112.285, -32765.725, 11179.572)
+left_color = Color(1, 0.65, 0.25, 1)
+right_color = Color(0.85, 0.4, 0.2, 1)

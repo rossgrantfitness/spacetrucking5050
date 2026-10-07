@@ -14,7 +14,8 @@ game's numbers, names and stuff never needs programming.
   paint shop's colors. Blueprints: `ShipData.gd`, `ShipList.gd`,
   `PaintJob.gd`, `PaintList.gd`.
 - **`systems/`**: one file per solar system (`home_system.tres`,
-  `tidewater.tres`, `glimmer.tres`), listed in `systems.tres`: its middle, its signature color (tints the space dust,
+  `tidewater.tres`, `glimmer.tres`, `dustbowl.tres`, `greenhouse.tres`,
+  `frostline.tres`), listed in `systems.tres`: its middle, its signature color (tints the space dust,
   the nebula and the HUD frames), haze color (the distance haze faraway
   things fade into), sunlight, fill light and nebula brightness. Flying
   between systems blends their colors. Its planets and sun are SkyBody
@@ -82,6 +83,17 @@ game's numbers, names and stuff never needs programming.
   Add as many as you like.
 - **The other folders are empty for now** and fill up as their milestones
   arrive: `clients/` (M5, M8), `outfits/` and `furniture/` (M7).
+
+**Adding a whole new system** (how the Dustbowl, Greenhouse Reach and the
+Frostline were made): a system file, a place file (`places/`), the client
+(`npcs/`), their jobs (`jobs/`, added to `jobs.tres`), a call from Raccoony
+that opens it (in `npcs/dispatch_morning.tres`), comm chatter
+(`dialogue/flight_chatter.tres`), route events and logbook entries. The 3D
+side is made by three tool scripts: `tools/build_frontier_stations.gd` (the
+station), `tools/build_frontier_roads.gd` (the road out: signs, gate,
+landmarks, storms, rocks, traffic) and `tools/build_frontier_interiors.gd`
+(the room and the client's model). Then the place goes under World/Places
+in the flight scene, and the planets under World/SkyBodies.
 
 The pattern for each folder: one small blueprint script (like `ShipData.gd`)
 that defines the fields, plus one `.tres` file per thing (like

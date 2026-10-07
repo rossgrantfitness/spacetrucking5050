@@ -125,6 +125,54 @@ subject = "Re: Claim #4381"
 body = "Storage fees on impounded cargo #4381 have been waived at the request of the regional manager.\n\nThis is not an admission of anything.\n\nThe regional manager asks us to add that he does not have feelings. - Claims"
 requires_flag = "white_story_done"
 
+[sub_resource type="Resource" id="Email_b4_mags_scrap"]
+script = ExtResource("2_email")
+id = "mags_scrap"
+from_name = "HOOF & HULL SALVAGE"
+subject = "re: scrap"
+body = "Need scrap. Yes, I know what I run. Raccoony has the details. Bring it in one piece or several, don't care. - M. Hoofmann"
+requires_flag = "dustbowl_heard"
+
+[sub_resource type="Resource" id="Email_b4_dustbowl_storms"]
+script = ExtResource("2_email")
+id = "dustbowl_storms"
+from_name = "DUSTBOWL WEATHER SERVICE"
+subject = "Storm advisory (always)"
+body = "Today: dust. Tonight: dust. Tomorrow: a chance of dust, followed by dust. Drive slow, close your vents, and do not lick the windshield."
+requires_flag = "dustbowl_open"
+
+[sub_resource type="Resource" id="Email_b4_moss_soil"]
+script = ExtResource("2_email")
+id = "moss_soil"
+from_name = "DR. SHELBY MOSS"
+subject = "soil (please)"
+body = "Dear driver, I would like some soil. Good soil. From a nice planet. Raccoony has the order. There's no rush. There's never a rush. Warmly, Dr. S. Moss (The Orbital Arboretum, Greenhouse Reach)"
+requires_flag = "greenhouse_heard"
+
+[sub_resource type="Resource" id="Email_b4_moss_bloom"]
+script = ExtResource("2_email")
+id = "moss_bloom"
+from_name = "DR. SHELBY MOSS"
+subject = "it's soon"
+body = "The big tree is going to bloom. You're invited. Bring a sweater. And a chair, if the chairs haven't come. - S."
+requires_flag = "moss_called_chairs"
+
+[sub_resource type="Resource" id="Email_b4_penny_cones"]
+script = ExtResource("2_email")
+id = "penny_cones"
+from_name = "PENNY FLURRY"
+subject = "CONES!!!"
+body = "Hi!!! Penny from Flurry's Comet Creamery!!! Top of the map!!! I need two billion waffle cones and Raccoony says you're the best driver!!! Please don't break them!!! - P"
+requires_flag = "frostline_heard"
+
+[sub_resource type="Resource" id="Email_b4_penny_flavor"]
+script = ExtResource("2_email")
+id = "penny_flavor"
+from_name = "FLURRY'S COMET CREAMERY"
+subject = "New flavor alert!"
+body = "Introducing JACKI'S LONG HAUL: vanilla, a bit of coffee, a crunchy bit you don't expect. Named after our favorite (only) returning trucker. Free scoop with every visit!"
+requires_flag = "penny_after"
+
 [resource]
 script = ExtResource("1_list")
-emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13"), SubResource("Email_white_pie"), SubResource("Email_white_claims")])
+emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13"), SubResource("Email_white_pie"), SubResource("Email_white_claims"), SubResource("Email_b4_mags_scrap"), SubResource("Email_b4_dustbowl_storms"), SubResource("Email_b4_moss_soil"), SubResource("Email_b4_moss_bloom"), SubResource("Email_b4_penny_cones"), SubResource("Email_b4_penny_flavor")])

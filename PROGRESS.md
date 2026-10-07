@@ -1,22 +1,23 @@
 # Progress
 
-**Current status:** **Your notes, done:**
-- Crashes depend on impact speed: over 900 km/h into something is instant.
-- The OrbitalEx lobby has a new camera.
-- The boss hands out 7 insulting missions; buying the company waits for all of them.
-- The mouse steers again (hold the wheel to look around).
+**Current status:** **Beta step 4, done: three more systems.**
+- **The Dustbowl** (amber, far below the lane): Mags the goat's salvage yard.
+- **Greenhouse Reach** (green, far above): Dr. Moss the tortoise's arboretum.
+- **The Frostline** (lavender, the top of the map): Penny the penguin's creamery.
+- Each has a client with a three-job story, a road with its own weather and
+  landmarks, and a walk-around room. Each one is farther, steeper and stormier.
 
-(Before that: beta step 3, White's story.)
+(Before that: your notes on crashes, the office, the boss's missions and the mouse.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
 **Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
 volatile cargo, contraband, multi-leg contracts, manual docking, the
 spacewalk). Nothing is built until you pick.
-**Next session:** your feedback on the story; then beta step 4, three more
-systems with clients and storylines.
+**Next session:** your feedback on the new systems; then beta step 5, the
+economy balance pass.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-07 (beta step 3: White's story)
+**Last updated:** 2026-10-07 (beta step 4: three more systems)
 
 ---
 
@@ -120,7 +121,8 @@ systems with clients and storylines.
 - [ ] **M8: Story & clients** *(started early, at your request)*
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
   - [x] The husband's story: told through people who knew him, his old logs on the PC, two story deliveries, a message chip, and his mixtapes on the radio (`docs/STORY.md`)
-  - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest
+  - [x] Beta step 4: three more client systems, each farther and steeper: the Dustbowl (Mags, goat, salvage yard), Greenhouse Reach (Dr. Moss, tortoise, arboretum), the Frostline (Penny, penguin, comet creamery). Six systems and five clients in all (the brief's 5-8)
+  - [ ] Supporting cast on the shared skeleton for the rest (the clients are on it; reduced face sheets still to do)
   - [x] Beta step 2: people tell you their problems and call OrbitalEx; the boss hands you their order at check-in (Sal's two jobs converted; Gill's broken ice machine added); Jacki answers back in conversations
 - [ ] **M9: Endgame & completion** *(mostly built in beta step 2)*
   - [x] The boss (Dale Pembrook, weasel, shirt and tie) and the OrbitalEx office (greeter, lobby, desk; FF8 cameras)
@@ -139,7 +141,7 @@ systems with clients and storylines.
 1. ~~Audit~~ (`AUDIT.md`)
 2. ~~The trucking company~~: the boss, the office, the 90% cut, checking in, new orders, buying the company, completion %
 3. ~~The husband's story~~: people who knew him, his old logs, two story deliveries, his message, his tapes on the radio (`docs/STORY.md`)
-4. Three more systems with clients
+4. ~~Three more systems with clients~~: the Dustbowl, Greenhouse Reach, the Frostline
 5. Balance
 6. Ship-ready basics and a Windows beta build
 

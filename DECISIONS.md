@@ -612,3 +612,26 @@ be revisited; just say so.
   - Let go and the camera eases back behind the rig.
   - Right-drag still pans, and rolling the wheel still zooms.
 - Debug: F10 → FINISH THE BOSS'S MISSIONS.
+
+## 2026-10-07 (Beta 4: three more systems)
+
+- **Three new systems, each with one color, one gimmick and one client** (per the brief), and a story of three jobs:
+  - **The Dustbowl** (amber; dust storms, wrecks): Mags Hoofmann, a goat, at Hoof & Hull Salvage. A crane magnet, a lighthouse lamp for Gill, a chapel bell for the Glimmer strip.
+  - **Greenhouse Reach** (green; jellyfish blooms, pollen clouds): Dr. Shelby Moss, a tortoise, at The Orbital Arboretum. Bees, a sapling for Marge's jukebox, folding chairs for the once-a-century bloom.
+  - **The Frostline** (lavender ice; comet hail, ice fields): Penny Flurry, a penguin, at Flurry's Comet Creamery. Freezer coils, new flavors for Sal's buffet, a giant neon cone sign.
+- **Each story mixes the two ways jobs reach you:** one job is an order the client places with OrbitalEx (you pick it up from the boss), two are handed to you in person. A job handed over in person also waits on that place's board, so saying "no" never loses it.
+- **The systems open one at a time.** Raccoony passes on each new client's call aboard the rig, with a "!": the Dustbowl after the casino is open and 5 deliveries; Greenhouse Reach after the Dustbowl and 8; the Frostline after Greenhouse Reach and 11. The first delivery to each opens its board.
+- **The difficulty curve is gentle** (your note: "more dramatic in the later systems"). Each new system is:
+  - farther (about 66, 71 and 81 km of road, against the casino's 58);
+  - steeper (30-38 degree climbs and dives, where the first systems sit within about 15 degrees of the lane);
+  - stormier (two storms on the Dustbowl and Greenhouse roads, three on the Frostline's, plus rock or ice fields to weave through);
+  - and its station is tilted harder.
+  Weather never breaks anything: storms crackle the radio, sway or ping the rig.
+- **I pulled the Frostline in from 94 km to 81 km.** At 94 km the starter rig couldn't make it on one tank (103%); now it's about 90%: "fill up first" is real advice, not a dead end.
+- **The nose now settles on the road's climb, not on flat.** When you let go of up/down, the nose used to drift back to level, so on a 38-degree climb you'd hold the stick up for ten minutes. Now it drifts toward the climb of the line to wherever you're headed (with no destination, it's level, as before). The ship still goes exactly where it points. `FlightModel.rest_pitch`, set by the flight scene.
+- **Six new roadside landmarks** (Landmark.gd): the Big Steer skull and an old windmill (Dustbowl), a floating tree and a giant watering can (Greenhouse Reach), the Big Snowman and a giant cone (Frostline). Each has a logbook entry.
+- **Three new planet textures**, painted the same way as the others: desert, garden, ice (with a ring).
+- **Generic builders, so a fourth system is cheap:** `tools/build_frontier_stations.gd`, `tools/build_frontier_roads.gd` (one config block per road), `tools/build_frontier_interiors.gd` (one shared floor plan, the casino's, so cameras and doors sit in the same spots in every far room). The room scenes themselves are ordinary scenes you can edit in Godot.
+- **Quiet echoes of White:** Penny remembers a trucker with a rig that coughed (only after his message), Mags has one line after his tapes, and a booth in Penny's parlor has a tiny "W" carved in it. Nothing more; the far systems are their own stories.
+- **New:** comm chatter for each client (approach, docking, takeoff), 12 route events (billboards, storms, wrecks, jellyfish, comets, client calls), 6 emails, crew lines, and F10 → OPEN EVERY SYSTEM.
+- **Tests:** `FrontierTests.gd` checks each system's place, room, road, jobs and story, the order they open in, and that each is farther and steeper than the last and reachable on one tank. `smoke_frontier.gd` flies the last stretch up to the Frostline, docks, talks to Penny and takes off again.

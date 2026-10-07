@@ -13,6 +13,9 @@
 [ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="npc_pip"]
 [ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="npc_sal"]
 [ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="npc_wendell"]
+[ext_resource type="Resource" path="res://data/npcs/dustbowl_mags.tres" id="npc_dustbowl_mags"]
+[ext_resource type="Resource" path="res://data/npcs/frostline_penny.tres" id="npc_frostline_penny"]
+[ext_resource type="Resource" path="res://data/npcs/greenhouse_moss.tres" id="npc_greenhouse_moss"]
 [ext_resource type="AudioStream" path="res://audio/generated/big_engine.wav" id="sound_thunder"]
 
 [sub_resource type="Resource" id="Event_0_waving_spacesuit"]
@@ -3003,6 +3006,267 @@ height_offset = Vector2(400.0, 2000.0)
 speaker = ExtResource("npc_pip")
 lines = PackedStringArray("COMET STORM!! Everybody make a wish! I'm wishing for seven sandwiches!")
 
+[sub_resource type="Resource" id="Event_b4_dustbowl_billboard"]
+script = ExtResource("2_event")
+id = "dustbowl_billboard"
+number = 0
+title = "Dustbowl billboard"
+summary = "Junkyard ads, sun-bleached and peeling, all over the Dustbowl."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("dustbowl")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("HOOF & HULL SALVAGE|WE BUY WRECKS · WE SELL WRECKS · WE ARE WRECKS", "CACTUS JUICE|IT'S MOSTLY WATER. MOSTLY.", "DUST? WHAT DUST?|AIR FILTERS · NEXT EXIT", "LAST WATER FOR 40 KM|(THERE IS NO WATER)", "USED RIGS · LIKE NEW|IF NEW WAS A LONG TIME AGO", "SEE THE BIG STEER|IT'S A SKULL · IT'S BIG", "LOST: ONE FRIDGE|LAST SEEN: CANYON · ANSWERS TO NOTHING")
+
+[sub_resource type="Resource" id="Event_b4_dust_storm_amber"]
+script = ExtResource("2_event")
+id = "dust_storm_amber"
+number = 0
+title = "Dust storm (Dustbowl)"
+summary = "A real Dustbowl dust storm: thick amber haze, sand hissing on the hull, the radio full of grit."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weight = 2.0
+systems = PackedStringArray("dustbowl")
+weather = "dust"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(1.0, 0.6, 0.2, 1)
+speaker = ExtResource("npc_dustbowl_mags")
+lines = PackedStringArray("Dust storm coming through, Rabbit. Close your vents. Radio's gonna sound like gravel.", "Storm on your lane. Keep the nose steady. Sand never killed anybody. Mostly.")
+effect = 6
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_b4_dustbowl_wrecks"]
+script = ExtResource("2_event")
+id = "dustbowl_wrecks"
+number = 0
+title = "Dustbowl wrecks"
+summary = "Old derelicts half-buried in drifting dust. The Dustbowl is a ship graveyard."
+type = 0
+tone = 2
+build = 1
+zone = 1
+rarity = 0
+weight = 2.0
+cooldown_hauls = 0
+systems = PackedStringArray("dustbowl")
+kind = 7
+log_id = "derelict"
+ahead = 5000.0
+side_offset = Vector2(400.0, 900.0)
+height_offset = Vector2(-250.0, 250.0)
+texts = PackedStringArray("THE DUSTY ROSE", "GOODNIGHT GERTRUDE", "PRIDE OF THE PRAIRIE", "SECOND MORTGAGE", "THE TUMBLEWEED", "MAGS'S NEXT PROJECT")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Wreck off your side, kid. Dustbowl's full of 'em. Mags'll have that one in pieces by Tuesday.")
+
+[sub_resource type="Resource" id="Event_b4_mags_calls"]
+script = ExtResource("2_event")
+id = "mags_calls"
+number = 0
+title = "Mags calls"
+summary = "Mags calls about something she found. Or ate."
+type = 1
+tone = 0
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("dustbowl")
+story_flag = "mags_met"
+kind = 10
+speaker = ExtResource("npc_dustbowl_mags")
+lines = PackedStringArray("Rabbit. Found a jukebox in the dunes. Plays one song. Backwards. I like it.", "Rabbit. If you see a fridge out there, it's mine. Don't tell it I said that.")
+replies = PackedStringArray("Noted.", "...Backwards?", "I'll keep an eye out.")
+
+[sub_resource type="Resource" id="Event_b4_greenhouse_billboard"]
+script = ExtResource("2_event")
+id = "greenhouse_billboard"
+number = 0
+title = "Greenhouse billboard"
+summary = "Mossy, overgrown billboards in Greenhouse Reach, vines and all."
+type = 0
+tone = 1
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("greenhouse")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("THE ORBITAL ARBORETUM|91 YEARS · 1 TREE · WORTH IT", "TALK TO YOUR PLANTS|THEY'RE LISTENING", "U-PICK MOONBERRIES|BRING YOUR OWN SPACESUIT", "JELLYFISH CROSSING|NEXT 20 KM · DRIFT SLOW", "POLLEN COUNT: HIGH|SNEEZE RESPONSIBLY", "COMPOST: IT'S THE GOOD STUFF|DR. MOSS AGREES")
+
+[sub_resource type="Resource" id="Event_b4_jelly_bloom"]
+script = ExtResource("2_event")
+id = "jelly_bloom"
+number = 0
+title = "Jellyfish bloom"
+summary = "Greenhouse Reach's gimmick: big, slow jellyfish migrations through the lane, glowing green."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 3.0
+cooldown_hauls = 0
+systems = PackedStringArray("greenhouse")
+kind = 3
+log_id = "jellyfish"
+size = 2.0
+ahead = 4500.0
+side_offset = Vector2(0.0, 200.0)
+height_offset = Vector2(-80.0, 80.0)
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Jellyfish, dear... drifting your way. Slow down... and say hello. They won't say it back. They're busy.", "The bloom's moving through... drift slowly... they're very old.")
+
+[sub_resource type="Resource" id="Event_b4_pollen_storm"]
+script = ExtResource("2_event")
+id = "pollen_storm"
+number = 0
+title = "Pollen storm"
+summary = "A glittering yellow-green pollen cloud. The rig sways like a boat in it."
+type = 2
+tone = 1
+build = 1
+zone = 5
+rarity = 0
+weight = 1.6
+systems = PackedStringArray("greenhouse")
+weather = "pollen"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(0.75, 1.0, 0.3, 1)
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Pollen cloud ahead, dear. It sways you a little. Like a hammock. Enjoy it.")
+effect = 5
+effect_seconds = 14.0
+
+[sub_resource type="Resource" id="Event_b4_moss_calls"]
+script = ExtResource("2_event")
+id = "moss_calls"
+number = 0
+title = "Dr. Moss calls"
+summary = "Dr. Moss calls with a plant update. It takes a while."
+type = 1
+tone = 1
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("greenhouse")
+story_flag = "moss_met"
+kind = 10
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Dear... the ferns grew a centimeter. I thought you'd want to know. I stayed up for it.", "Hello... it's Dr. Moss... I forgot why I called... it'll come to me... take your time.")
+replies = PackedStringArray("Congratulations?", "Take your time.", "I'll be by soon.")
+
+[sub_resource type="Resource" id="Event_b4_frostline_billboard"]
+script = ExtResource("2_event")
+id = "frostline_billboard"
+number = 0
+title = "Frostline billboard"
+summary = "Frosted-over signs at the top of the map, most of them about ice cream."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("frostline")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("FLURRY'S COMET CREAMERY|COLDEST CONES IN THE GALAXY", "ALMOST THERE|(NO YOU'RE NOT)", "CHAINS REQUIRED|FOR WHAT? NOBODY KNOWS", "HAVE YOU SEEN THE SNOWMAN?|WHO BUILT IT? WE NEED TO KNOW", "TRY: NEBULA SWIRL|OR PLAIN. PLAIN IS ALSO GOOD.", "BRAIN FREEZE?|KEEP DRIVING")
+
+[sub_resource type="Resource" id="Event_b4_frost_hail"]
+script = ExtResource("2_event")
+id = "frost_hail"
+number = 0
+title = "Comet hail"
+summary = "A hailstorm of comet ice: lavender glow, little pings off the hull, the radio crackling."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weight = 2.2
+systems = PackedStringArray("frostline")
+weather = "ice"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(0.75, 0.65, 1.0, 1)
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Hail on your lane, pal! Comet bits! They ping! Keep the cargo snug!", "Ice storm! It's pretty from in here! Less pretty from out there!")
+effect = 3
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_b4_frostline_comets"]
+script = ExtResource("2_event")
+id = "frostline_comets"
+number = 0
+title = "Comet parade"
+summary = "A string of small icy comets crossing the lane, tails sparkling."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 1.5
+systems = PackedStringArray("frostline")
+kind = 5
+log_id = "comet"
+copies = 3
+ahead = 6000.0
+side_offset = Vector2(600.0, 1400.0)
+height_offset = Vector2(-300.0, 300.0)
+tint = Color(0.8, 0.75, 1.0, 1)
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Comets! Fresh ones! That's tomorrow's ice cream, pal!")
+
+[sub_resource type="Resource" id="Event_b4_penny_calls"]
+script = ExtResource("2_event")
+id = "penny_calls"
+number = 0
+title = "Penny calls"
+summary = "Penny calls. She's just happy someone's out there."
+type = 1
+tone = 1
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("frostline")
+story_flag = "penny_met"
+kind = 10
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Pal! I see a dot on my scope and I said 'that's a trucker!' Is it you? Say it's you!", "Hi pal! No reason! It's quiet up here! Okay bye! Wait. Bye!")
+replies = PackedStringArray("It's me.", "Hi, Penny.", "Save me a cone.")
+
 [resource]
 script = ExtResource("1_list")
-events = Array[ExtResource("2_event")]([SubResource("Event_0_waving_spacesuit"), SubResource("Event_1_lone_vending_machine"), SubResource("Event_2_hitchhiker"), SubResource("Event_3_last_gas_sign"), SubResource("Event_4_dead_air"), SubResource("Event_5_message_in_a_bottle"), SubResource("Event_6_floating_living_room"), SubResource("Event_7_jingle_satellite"), SubResource("Event_8_rogue_planet"), SubResource("Event_9_micrometeoroid_sprinkle"), SubResource("Event_10_comet"), SubResource("Event_11_picnic_table"), SubResource("Event_12_the_eyeball"), SubResource("Event_13_space_jogger"), SubResource("Event_14_you_are_here"), SubResource("Event_15_echo_transponder"), SubResource("Event_16_self_playing_piano"), SubResource("Event_17_ancient_probe"), SubResource("Event_18_starfield_smile"), SubResource("Event_19_dust_bunnies"), SubResource("Event_20_fog_wall"), SubResource("Event_21_napping_trucker"), SubResource("Event_22_space_tumbleweed"), SubResource("Event_23_star_krill"), SubResource("Event_24_rest_area"), SubResource("Event_25_gravity_eddy"), SubResource("Event_26_birthday_balloons"), SubResource("Event_27_cosmic_string_twang"), SubResource("Event_28_star_fisherman"), SubResource("Event_29_long_nothing"), SubResource("Event_30_big_ship"), SubResource("Event_31_join_the_convoy"), SubResource("Event_32_slowpoke"), SubResource("Event_33_courier_cut_off"), SubResource("Event_34_tow_ship"), SubResource("Event_35_construction_zone"), SubResource("Event_36_wide_load"), SubResource("Event_37_ice_cream_ship"), SubResource("Event_38_wedding_procession"), SubResource("Event_39_funeral_procession"), SubResource("Event_40_student_driver"), SubResource("Event_41_gate_merge_jam"), SubResource("Event_42_robot_hitchhiker"), SubResource("Event_43_tourist_bus"), SubResource("Event_44_breakdown_on_the_shoulder"), SubResource("Event_45_fender_bender"), SubResource("Event_46_escaped_space_cows"), SubResource("Event_47_drag_race"), SubResource("Event_48_billboard_ship"), SubResource("Event_49_inflatable_hot_dog"), SubResource("Event_50_one_letter"), SubResource("Event_51_trucker_shuttle"), SubResource("Event_52_military_escort"), SubResource("Event_53_ambulance"), SubResource("Event_54_trap_warning"), SubResource("Event_55_roadside_tune_up"), SubResource("Event_56_lost_tourist"), SubResource("Event_57_car_carrier"), SubResource("Event_58_spilled_ball_bearings"), SubResource("Event_59_horn_salute"), SubResource("Event_60_lane_ends"), SubResource("Event_61_dancing_traffic_robot"), SubResource("Event_62_bell_hauler"), SubResource("Event_63_pizza_drone_flock"), SubResource("Event_64_the_rival"), SubResource("Event_65_holding_pattern"), SubResource("Event_66_docking_queue"), SubResource("Event_67_crate_catch"), SubResource("Event_68_window_washers"), SubResource("Event_69_light_show"), SubResource("Event_70_fireworks"), SubResource("Event_71_customs_scan"), SubResource("Event_72_space_pigeons"), SubResource("Event_73_stuck_hangar_door"), SubResource("Event_74_kids_at_the_window"), SubResource("Event_75_ad_blimp"), SubResource("Event_76_wrong_ring"), SubResource("Event_77_protest_flotilla"), SubResource("Event_78_garbage_barge"), SubResource("Event_79_lost_suitcase"), SubResource("Event_80_gravity_test"), SubResource("Event_81_broken_neon"), SubResource("Event_82_food_truck"), SubResource("Event_83_welcome_drone"), SubResource("Event_84_sleepy_controller"), SubResource("Event_85_space_elevator"), SubResource("Event_86_debris_belt"), SubResource("Event_87_weather_satellite"), SubResource("Event_88_face_moon"), SubResource("Event_89_aurora"), SubResource("Event_90_ring_gap"), SubResource("Event_91_slingshot_window"), SubResource("Event_92_orbital_farm"), SubResource("Event_93_rocket_launch"), SubResource("Event_94_meteor_shower_below"), SubResource("Event_95_orbital_hotel"), SubResource("Event_96_drive_in_moon"), SubResource("Event_97_city_light_ad"), SubResource("Event_98_terraformer"), SubResource("Event_99_moon_volcano"), SubResource("Event_100_one_house_moon"), SubResource("Event_101_local_station"), SubResource("Event_102_rope_bridge_moons"), SubResource("Event_103_planet_sneeze"), SubResource("Event_104_satellite_graveyard_orbit"), SubResource("Event_105_wedding_chapel"), SubResource("Event_106_planet_sized_sale"), SubResource("Event_107_whale_breach"), SubResource("Event_108_golden_hour"), SubResource("Event_109_laundry_day"), SubResource("Event_110_ion_storm"), SubResource("Event_111_solar_flare"), SubResource("Event_112_static_storm"), SubResource("Event_113_dust_storm"), SubResource("Event_114_magnetic_storm"), SubResource("Event_115_ice_hail"), SubResource("Event_116_plasma_rain"), SubResource("Event_117_calm_pocket"), SubResource("Event_118_rainbow_nebula"), SubResource("Event_119_gravity_tide"), SubResource("Event_120_rock_lightning"), SubResource("Event_121_sunspot_season"), SubResource("Event_122_spore_fog"), SubResource("Event_123_cosmic_wind"), SubResource("Event_124_snow_nebula"), SubResource("Event_125_space_thunder"), SubResource("Event_126_radiation_belt"), SubResource("Event_127_aurora_curtain"), SubResource("Event_128_skip_signal"), SubResource("Event_129_time_pocket"), SubResource("Event_130_whale_calf"), SubResource("Event_131_windshield_jelly"), SubResource("Event_132_space_gulls"), SubResource("Event_133_rock_hugging_squid"), SubResource("Event_134_crystal_moths"), SubResource("Event_135_asteroid_turtle"), SubResource("Event_136_manta_formation"), SubResource("Event_137_hull_kitten"), SubResource("Event_138_cloud_sheep"), SubResource("Event_139_windshield_starfish"), SubResource("Event_140_space_barnacles"), SubResource("Event_141_void_eel"), SubResource("Event_142_the_big_eye"), SubResource("Event_143_snail_trail"), SubResource("Event_144_firefly_words"), SubResource("Event_145_space_bees"), SubResource("Event_146_comet_pup"), SubResource("Event_147_water_bears"), SubResource("Event_148_space_geese"), SubResource("Event_149_satellite_octopus"), SubResource("Event_150_jelly_cube"), SubResource("Event_151_meteor_ladybugs"), SubResource("Event_152_moon_eater"), SubResource("Event_153_glowworm_asteroid"), SubResource("Event_154_pufferfish"), SubResource("Event_155_derelict"), SubResource("Event_156_junk"), SubResource("Event_157_household_junk_cloud"), SubResource("Event_158_lost_cargo_crate"), SubResource("Event_159_ghost_cruise_liner"), SubResource("Event_160_shipwreck_figurehead"), SubResource("Event_161_half_message_billboard"), SubResource("Event_162_empty_escape_pod"), SubResource("Event_163_the_twin_rig"), SubResource("Event_164_satellite_graveyard"), SubResource("Event_165_forgotten_statue"), SubResource("Event_166_clean_cut"), SubResource("Event_167_convoy"), SubResource("Event_168_billboard"), SubResource("Event_169_duck"), SubResource("Event_170_whales"), SubResource("Event_171_jellyfish"), SubResource("Event_172_ion_storm_violet"), SubResource("Event_173_ion_storm_amber"), SubResource("Event_174_glimmer_billboard"), SubResource("Event_175_limo_convoy"), SubResource("Event_176_channel19_winner"), SubResource("Event_177_sal_calls"), SubResource("Event_178_great_migration"), SubResource("Event_179_leviathan"), SubResource("Event_180_ghost_ship"), SubResource("Event_181_comet_storm")])
+events = Array[ExtResource("2_event")]([SubResource("Event_0_waving_spacesuit"), SubResource("Event_1_lone_vending_machine"), SubResource("Event_2_hitchhiker"), SubResource("Event_3_last_gas_sign"), SubResource("Event_4_dead_air"), SubResource("Event_5_message_in_a_bottle"), SubResource("Event_6_floating_living_room"), SubResource("Event_7_jingle_satellite"), SubResource("Event_8_rogue_planet"), SubResource("Event_9_micrometeoroid_sprinkle"), SubResource("Event_10_comet"), SubResource("Event_11_picnic_table"), SubResource("Event_12_the_eyeball"), SubResource("Event_13_space_jogger"), SubResource("Event_14_you_are_here"), SubResource("Event_15_echo_transponder"), SubResource("Event_16_self_playing_piano"), SubResource("Event_17_ancient_probe"), SubResource("Event_18_starfield_smile"), SubResource("Event_19_dust_bunnies"), SubResource("Event_20_fog_wall"), SubResource("Event_21_napping_trucker"), SubResource("Event_22_space_tumbleweed"), SubResource("Event_23_star_krill"), SubResource("Event_24_rest_area"), SubResource("Event_25_gravity_eddy"), SubResource("Event_26_birthday_balloons"), SubResource("Event_27_cosmic_string_twang"), SubResource("Event_28_star_fisherman"), SubResource("Event_29_long_nothing"), SubResource("Event_30_big_ship"), SubResource("Event_31_join_the_convoy"), SubResource("Event_32_slowpoke"), SubResource("Event_33_courier_cut_off"), SubResource("Event_34_tow_ship"), SubResource("Event_35_construction_zone"), SubResource("Event_36_wide_load"), SubResource("Event_37_ice_cream_ship"), SubResource("Event_38_wedding_procession"), SubResource("Event_39_funeral_procession"), SubResource("Event_40_student_driver"), SubResource("Event_41_gate_merge_jam"), SubResource("Event_42_robot_hitchhiker"), SubResource("Event_43_tourist_bus"), SubResource("Event_44_breakdown_on_the_shoulder"), SubResource("Event_45_fender_bender"), SubResource("Event_46_escaped_space_cows"), SubResource("Event_47_drag_race"), SubResource("Event_48_billboard_ship"), SubResource("Event_49_inflatable_hot_dog"), SubResource("Event_50_one_letter"), SubResource("Event_51_trucker_shuttle"), SubResource("Event_52_military_escort"), SubResource("Event_53_ambulance"), SubResource("Event_54_trap_warning"), SubResource("Event_55_roadside_tune_up"), SubResource("Event_56_lost_tourist"), SubResource("Event_57_car_carrier"), SubResource("Event_58_spilled_ball_bearings"), SubResource("Event_59_horn_salute"), SubResource("Event_60_lane_ends"), SubResource("Event_61_dancing_traffic_robot"), SubResource("Event_62_bell_hauler"), SubResource("Event_63_pizza_drone_flock"), SubResource("Event_64_the_rival"), SubResource("Event_65_holding_pattern"), SubResource("Event_66_docking_queue"), SubResource("Event_67_crate_catch"), SubResource("Event_68_window_washers"), SubResource("Event_69_light_show"), SubResource("Event_70_fireworks"), SubResource("Event_71_customs_scan"), SubResource("Event_72_space_pigeons"), SubResource("Event_73_stuck_hangar_door"), SubResource("Event_74_kids_at_the_window"), SubResource("Event_75_ad_blimp"), SubResource("Event_76_wrong_ring"), SubResource("Event_77_protest_flotilla"), SubResource("Event_78_garbage_barge"), SubResource("Event_79_lost_suitcase"), SubResource("Event_80_gravity_test"), SubResource("Event_81_broken_neon"), SubResource("Event_82_food_truck"), SubResource("Event_83_welcome_drone"), SubResource("Event_84_sleepy_controller"), SubResource("Event_85_space_elevator"), SubResource("Event_86_debris_belt"), SubResource("Event_87_weather_satellite"), SubResource("Event_88_face_moon"), SubResource("Event_89_aurora"), SubResource("Event_90_ring_gap"), SubResource("Event_91_slingshot_window"), SubResource("Event_92_orbital_farm"), SubResource("Event_93_rocket_launch"), SubResource("Event_94_meteor_shower_below"), SubResource("Event_95_orbital_hotel"), SubResource("Event_96_drive_in_moon"), SubResource("Event_97_city_light_ad"), SubResource("Event_98_terraformer"), SubResource("Event_99_moon_volcano"), SubResource("Event_100_one_house_moon"), SubResource("Event_101_local_station"), SubResource("Event_102_rope_bridge_moons"), SubResource("Event_103_planet_sneeze"), SubResource("Event_104_satellite_graveyard_orbit"), SubResource("Event_105_wedding_chapel"), SubResource("Event_106_planet_sized_sale"), SubResource("Event_107_whale_breach"), SubResource("Event_108_golden_hour"), SubResource("Event_109_laundry_day"), SubResource("Event_110_ion_storm"), SubResource("Event_111_solar_flare"), SubResource("Event_112_static_storm"), SubResource("Event_113_dust_storm"), SubResource("Event_114_magnetic_storm"), SubResource("Event_115_ice_hail"), SubResource("Event_116_plasma_rain"), SubResource("Event_117_calm_pocket"), SubResource("Event_118_rainbow_nebula"), SubResource("Event_119_gravity_tide"), SubResource("Event_120_rock_lightning"), SubResource("Event_121_sunspot_season"), SubResource("Event_122_spore_fog"), SubResource("Event_123_cosmic_wind"), SubResource("Event_124_snow_nebula"), SubResource("Event_125_space_thunder"), SubResource("Event_126_radiation_belt"), SubResource("Event_127_aurora_curtain"), SubResource("Event_128_skip_signal"), SubResource("Event_129_time_pocket"), SubResource("Event_130_whale_calf"), SubResource("Event_131_windshield_jelly"), SubResource("Event_132_space_gulls"), SubResource("Event_133_rock_hugging_squid"), SubResource("Event_134_crystal_moths"), SubResource("Event_135_asteroid_turtle"), SubResource("Event_136_manta_formation"), SubResource("Event_137_hull_kitten"), SubResource("Event_138_cloud_sheep"), SubResource("Event_139_windshield_starfish"), SubResource("Event_140_space_barnacles"), SubResource("Event_141_void_eel"), SubResource("Event_142_the_big_eye"), SubResource("Event_143_snail_trail"), SubResource("Event_144_firefly_words"), SubResource("Event_145_space_bees"), SubResource("Event_146_comet_pup"), SubResource("Event_147_water_bears"), SubResource("Event_148_space_geese"), SubResource("Event_149_satellite_octopus"), SubResource("Event_150_jelly_cube"), SubResource("Event_151_meteor_ladybugs"), SubResource("Event_152_moon_eater"), SubResource("Event_153_glowworm_asteroid"), SubResource("Event_154_pufferfish"), SubResource("Event_155_derelict"), SubResource("Event_156_junk"), SubResource("Event_157_household_junk_cloud"), SubResource("Event_158_lost_cargo_crate"), SubResource("Event_159_ghost_cruise_liner"), SubResource("Event_160_shipwreck_figurehead"), SubResource("Event_161_half_message_billboard"), SubResource("Event_162_empty_escape_pod"), SubResource("Event_163_the_twin_rig"), SubResource("Event_164_satellite_graveyard"), SubResource("Event_165_forgotten_statue"), SubResource("Event_166_clean_cut"), SubResource("Event_167_convoy"), SubResource("Event_168_billboard"), SubResource("Event_169_duck"), SubResource("Event_170_whales"), SubResource("Event_171_jellyfish"), SubResource("Event_172_ion_storm_violet"), SubResource("Event_173_ion_storm_amber"), SubResource("Event_174_glimmer_billboard"), SubResource("Event_175_limo_convoy"), SubResource("Event_176_channel19_winner"), SubResource("Event_177_sal_calls"), SubResource("Event_178_great_migration"), SubResource("Event_179_leviathan"), SubResource("Event_180_ghost_ship"), SubResource("Event_181_comet_storm"), SubResource("Event_b4_dustbowl_billboard"), SubResource("Event_b4_dust_storm_amber"), SubResource("Event_b4_dustbowl_wrecks"), SubResource("Event_b4_mags_calls"), SubResource("Event_b4_greenhouse_billboard"), SubResource("Event_b4_jelly_bloom"), SubResource("Event_b4_pollen_storm"), SubResource("Event_b4_moss_calls"), SubResource("Event_b4_frostline_billboard"), SubResource("Event_b4_frost_hail"), SubResource("Event_b4_frostline_comets"), SubResource("Event_b4_penny_calls")])

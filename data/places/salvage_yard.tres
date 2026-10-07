@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/dustbowl_mags.tres" id="2_host"]
+
+[resource]
+script = ExtResource("1_place")
+id = "salvage_yard"
+display_name = "HOOF & HULL SALVAGE"
+interior_scene = "res://scenes/hub/SalvageYard.tscn"
+arrival_spawn = "FromShip"
+host = ExtResource("2_host")
+host_lines = PackedStringArray("Rabbit. Dock wherever. Mind the crane. The crane doesn't mind you.", "You again. Good. Don't eat anything on the counter. That's my job.", "Storm's out. Or in. Come on through.")
+host_lines_in_order = true
+fuel_price_factor = 0.9
+surrounding_field = "junk"
+field_radii = Vector2(1500, 2600)
+field_rock_count = 2400
+map_position = Vector3(52000, -34000, 12000)

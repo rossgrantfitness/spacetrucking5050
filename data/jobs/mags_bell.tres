@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "mags_bell"
+cargo_name = "A brass wedding bell (do not ring)"
+client_name = "Mags Hoofmann, Hoof & Hull Salvage"
+description = "A chapel bell, dug out of the dust, going home to the Little Chapel of the Void in the Glimmer System. The long way round."
+from_place = "salvage_yard"
+to_place = "high_roller"
+weight = 1100000000.0
+base_pay = 3000
+care_kind = "fragile"
+care_bonus = 400
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = false
+requires_flag = "mags_offered_bell"
+completes_flag = "mags_bell_done"

@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/penny_freezer.tres" id="job_penny_freezer"]
+[ext_resource type="Resource" path="res://data/jobs/penny_flavors.tres" id="job_penny_flavors"]
+[ext_resource type="Resource" path="res://data/jobs/penny_sign.tres" id="job_penny_sign"]
+
+[sub_resource type="Resource" id="Conversation_meet"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("frostline_open")
+blocked_by_flags = PackedStringArray("penny_met")
+lines = PackedStringArray("The cones! Two billion cones and not ONE broken! Pal, you're a hero!", "Penny Flurry. I carve ice cream out of comets. Comets are basically ice cream. Nobody else noticed!", "Not a lot of truckers make it up this far. It's a climb. Most turn around at the snowman.")
+sets_flags = PackedStringArray("penny_met")
+
+[sub_resource type="Resource" id="Conversation_freezer"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_met")
+blocked_by_flags = PackedStringArray("penny_called_freezer", "penny_freezer_done")
+lines = PackedStringArray("Pal. Bad news. The freezer coils died. In SPACE. Where it's COLD. How??", "I've been keeping the cream cold by opening a window. Mostly works.", "> {company} can bring coils. For a fee.", "Fees! I love fees! No I don't. Calling!")
+sets_flags = PackedStringArray("penny_called_freezer")
+places_order = ExtResource("job_penny_freezer")
+
+[sub_resource type="Resource" id="Conversation_freezer_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_called_freezer")
+blocked_by_flags = PackedStringArray("penny_freezer_done")
+lines = PackedStringArray("Your boss called me 'the frozen dessert situation.' I'm putting that on a shirt!")
+
+[sub_resource type="Resource" id="Conversation_flavors"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_freezer_done")
+blocked_by_flags = PackedStringArray("penny_offered_flavors")
+lines = PackedStringArray("Coils are humming! Everything's frozen! Even me, a little!", "I made new flavors. Comet Crunch. Nebula Swirl. Plain. Sal at the High Roller wants 'em for his buffet!", "They'll melt if you dawdle, pal. Not a lot. A bit. Go go go!")
+sets_flags = PackedStringArray("penny_offered_flavors")
+offers_job = ExtResource("job_penny_flavors")
+
+[sub_resource type="Resource" id="Conversation_flavors_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_offered_flavors")
+blocked_by_flags = PackedStringArray("penny_flavors_done")
+lines = PackedStringArray("Flavors are on the board! Sal keeps calling about 'em. He calls a LOT.")
+
+[sub_resource type="Resource" id="Conversation_sign"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_flavors_done")
+blocked_by_flags = PackedStringArray("penny_called_sign", "penny_sign_done")
+lines = PackedStringArray("Sal LOVED them. He tried to buy the recipe. Then the shop. Then me. I said no thank you!", "Business is booming! I need a sign! A big neon cone people can see from the snowman!", "> Order it through the company.", "Already dialing! Make it big! Make it BLINK!")
+sets_flags = PackedStringArray("penny_called_sign")
+places_order = ExtResource("job_penny_sign")
+
+[sub_resource type="Resource" id="Conversation_sign_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_called_sign")
+blocked_by_flags = PackedStringArray("penny_sign_done")
+lines = PackedStringArray("The lion wants to put his company's name on my sign. Small. In the corner. I said tiny. TINY.")
+
+[sub_resource type="Resource" id="Conversation_after"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_sign_done")
+blocked_by_flags = PackedStringArray("penny_after")
+lines = PackedStringArray("Look at it, pal! It BLINKS! You can see it from home space! Practically!", "...You know, you're the first trucker who came back. Most come once. For the view.", "Thanks for coming back.")
+sets_flags = PackedStringArray("penny_after")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_white"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_after", "white_voicemail")
+blocked_by_flags = PackedStringArray("penny_white")
+lines = PackedStringArray("Hey, pal. Funny thing. Years back, one trucker came all the way up here. Big lazy rig. Started like a cough.", "Bought a cone. Plain. Sat by the window and played a tape real quiet. Left a big tip.", "Never got his name. Your rig coughs just like that.", "> ...Yeah. It does.", "Plain's on the house. Always.")
+sets_flags = PackedStringArray("penny_white")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("penny_met")
+lines = PackedStringArray("Board's by the freezer! Bring a sweater! I don't, I'm a penguin!", "Hail on the lane today, pal. Little ice pings. They tickle!")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Welcome to Flurry's Comet Creamery! Coldest cones in the galaxy! Also the only cones out here!")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Penny Flurry (Flurry's Comet Creamery)"
+species = "penguin"
+voice_pitch = 1.5
+voice_type = "chirp"
+voice_key = 9
+voice_scale = "major"
+lines = PackedStringArray("Welcome to Flurry's!")
+comm_name = "PENNY · CREAMERY"
+fur_color = Color(0.14, 0.15, 0.22, 1)
+accent_color = Color(0.8, 0.6, 1, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_meet"), SubResource("Conversation_freezer"), SubResource("Conversation_freezer_wait"), SubResource("Conversation_flavors"), SubResource("Conversation_flavors_wait"), SubResource("Conversation_sign"), SubResource("Conversation_sign_wait"), SubResource("Conversation_after"), SubResource("Conversation_white"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

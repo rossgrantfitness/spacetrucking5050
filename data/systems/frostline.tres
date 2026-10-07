@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SystemData" format=3]
+
+[ext_resource type="Script" path="res://data/systems/SystemData.gd" id="1_system"]
+
+[resource]
+script = ExtResource("1_system")
+id = "frostline"
+display_name = "The Frostline"
+center = Vector3(10000, 50000, -74000)
+signature_color = Color(0.8, 0.7, 1, 1)
+haze_color = Color(0.25, 0.2, 0.42, 1)
+sun_color = Color(0.85, 0.9, 1, 1)
+sun_energy = 1.25
+ambient_color = Color(0.5, 0.48, 0.68, 1)
+nebula_strength = 0.65

@@ -10,6 +10,15 @@
 [ext_resource type="PackedScene" path="res://scenes/flight/HighRollerStation.tscn" id="48_high_roller"]
 [ext_resource type="PackedScene" path="res://scenes/flight/GlimmerRoad.tscn" id="49_glimmer_road"]
 [ext_resource type="Texture2D" path="res://textures/generated/glimmer_planet.png" id="50_glimmer_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/SalvageYardStation.tscn" id="60_salvage"]
+[ext_resource type="PackedScene" path="res://scenes/flight/ArboretumStation.tscn" id="61_arboretum"]
+[ext_resource type="PackedScene" path="res://scenes/flight/CreameryStation.tscn" id="62_creamery"]
+[ext_resource type="PackedScene" path="res://scenes/flight/DustbowlRoad.tscn" id="63_dustbowl_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GreenhouseRoad.tscn" id="64_greenhouse_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/FrostlineRoad.tscn" id="65_frostline_road"]
+[ext_resource type="Texture2D" path="res://textures/generated/desert_planet.png" id="66_desert_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/jungle_planet.png" id="67_jungle_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/ice_planet.png" id="68_ice_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/BaseStation.tscn" id="26_base"]
 [ext_resource type="Script" path="res://scenes/flight/ApproachRing.gd" id="27_ring"]
 [ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
@@ -173,6 +182,54 @@ color = Color(1, 0.35, 0.8, 1)
 [node name="LaunchPoint" type="Marker3D" parent="World/Places/high_roller"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
 
+[node name="salvage_yard" type="Node3D" parent="World/Places"]
+transform = Transform3D(-0.19288573, 0.5866331, -0.7865473, 0.32127076, 0.795173, 0.51428086, 0.92713547, -0.1534972, -0.34184557, 52000, -34000, 12000)
+
+[node name="SalvageYardStation" parent="World/Places/salvage_yard" instance=ExtResource("60_salvage")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(1, 0.65, 0.25, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="arboretum" type="Node3D" parent="World/Places"]
+transform = Transform3D(-0.7022716, 0.078292176, 0.70759094, -0.43024555, 0.74520713, -0.50946546, -0.567189, -0.66222095, -0.48965293, -50000, 36000, 24000)
+
+[node name="ArboretumStation" parent="World/Places/arboretum" instance=ExtResource("61_arboretum")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/arboretum"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/arboretum"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(0.45, 1, 0.45, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/arboretum"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="creamery" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.7194394, -0.68359375, -0.1229095, 0.48568296, 0.6216458, -0.6145475, 0.496507, 0.38243467, 0.7792462, 10000, 50000, -74000)
+
+[node name="CreameryStation" parent="World/Places/creamery" instance=ExtResource("62_creamery")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/creamery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/creamery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(0.8, 0.65, 1, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/creamery"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
 [node name="SkyBodies" type="Node3D" parent="World"]
 
 [node name="HomePlanet" type="Node3D" parent="World/SkyBodies"]
@@ -271,9 +328,111 @@ uv_scale = Vector2(1, 1)
 drift_speed = 0.01
 night_glow = 1.0
 
+[node name="DustbowlPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(78000, -50000, 30000)
+true_radius = 17000.0
+system_id = "dustbowl"
+texture = ExtResource("66_desert_tex")
+drift_speed = 0.003
+night_glow = 0.25
+
+[node name="DustbowlMoon" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(60000, -26000, 26000)
+true_radius = 2200.0
+system_id = "dustbowl"
+texture = ExtResource("17_moon_tex")
+tint = Color(1, 0.75, 0.5, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.0
+
+[node name="DustbowlSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(160000, 10000, 120000)
+true_radius = 13000.0
+system_id = "dustbowl"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(1, 0.75, 0.4, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="GreenhousePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-76000, 52000, 46000)
+true_radius = 18000.0
+system_id = "greenhouse"
+texture = ExtResource("67_jungle_tex")
+drift_speed = 0.003
+night_glow = 0.2
+
+[node name="GreenhouseMoon" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-60000, 47000, 30000)
+true_radius = 2000.0
+system_id = "greenhouse"
+texture = ExtResource("17_moon_tex")
+tint = Color(0.75, 1, 0.75, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.0
+
+[node name="GreenhouseSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-170000, 120000, 140000)
+true_radius = 12000.0
+system_id = "greenhouse"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(0.9, 1, 0.75, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="FrostlinePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(18000, 74000, -100000)
+true_radius = 20000.0
+system_id = "frostline"
+texture = ExtResource("68_ice_tex")
+drift_speed = 0.002
+night_glow = 0.3
+ring_size = 1.7
+ring_color = Color(0.85, 0.8, 1, 1)
+ring_tilt = Vector3(-0.4, 0.0, 0.3)
+
+[node name="FrostlineMoon" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(0, 58000, -88000)
+true_radius = 2600.0
+system_id = "frostline"
+texture = ExtResource("17_moon_tex")
+tint = Color(0.85, 0.85, 1, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.0
+
+[node name="FrostlineSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(90000, 180000, -200000)
+true_radius = 11000.0
+system_id = "frostline"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(0.85, 0.85, 1, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
 [node name="Roadside" parent="World" instance=ExtResource("47_road")]
 
 [node name="GlimmerRoadside" parent="World" instance=ExtResource("49_glimmer_road")]
+
+[node name="DustbowlRoadside" parent="World" instance=ExtResource("63_dustbowl_road")]
+
+[node name="GreenhouseRoadside" parent="World" instance=ExtResource("64_greenhouse_road")]
+
+[node name="FrostlineRoadside" parent="World" instance=ExtResource("65_frostline_road")]
 
 [node name="Events" type="Node3D" parent="World"]
 

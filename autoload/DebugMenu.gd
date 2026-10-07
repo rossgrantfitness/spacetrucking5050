@@ -22,7 +22,7 @@ extends Node
 
 
 ## Places you can jump near, in menu order (place ids).
-const JUMP_PLACES: PackedStringArray = ["tidewater", "truck_stop", "high_roller", "gas_n_go"]
+const JUMP_PLACES: PackedStringArray = ["tidewater", "truck_stop", "high_roller", "gas_n_go", "salvage_yard", "arboretum", "creamery"]
 const JUMP_MINUTES: Array[int] = [1, 3, 5]
 const FLIGHT_SCENE: String = "res://scenes/flight/FlightSandbox.tscn"
 ## The story's beats, in order: [name, what happens next, flags set by
@@ -74,6 +74,7 @@ func open() -> void:
 	options.append({"text": "FILL UP AND FIX UP", "description": "Both tanks full, hull and cargo like new."})
 	options.append({"text": "STORY: SKIP TO...", "description": "Jump to a point in the story, to test one beat."})
 	options.append({"text": "FINISH THE BOSS'S MISSIONS", "description": "As if you'd done every mission he hands out (then the company's for sale)."})
+	options.append({"text": "OPEN EVERY SYSTEM", "description": "As if you'd made the first delivery to every client (their stories start fresh)."})
 	options.append({"text": "CLOSE", "description": ""})
 	var pick := await MenuPanel.ask(tree, "DEBUG MENU", "For testing. (F10 to open; turn off with debug_menu in tuning.tres.)", options)
 	if pick >= 0 and pick < JUMP_PLACES.size():
@@ -98,6 +99,8 @@ func open() -> void:
 			await _story_menu()
 		5:
 			finish_missions()
+		6:
+			open_systems()
 	_open = false
 	Input.mouse_mode = mouse
 
@@ -111,6 +114,18 @@ func jump(place_id: String, minutes: float) -> void:
 		scene.call("debug_jump")
 	else:
 		LoadingScreen.go(get_tree(), FLIGHT_SCENE, "flight")
+
+
+## Every system open: as if you'd made each client's first delivery. Their
+## stories start from "nice to meet you".
+func open_systems() -> void:
+	skip_opening()
+	GameState.set_flag("first_mission_done")
+	for system in ["glimmer", "dustbowl", "greenhouse", "frostline"]:
+		GameState.set_flag(system + "_heard")
+		GameState.set_flag(system + "_open")
+	GameState.deliveries = maxi(GameState.deliveries, 11)
+	GameState.save_game()
 
 
 ## Past the opening: the first check collected, Marge met.

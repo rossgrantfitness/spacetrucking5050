@@ -177,6 +177,42 @@ id = "void_chapel"
 display_name = "LITTLE CHAPEL OF THE VOID"
 description = "Weddings, vow renewals, no refunds. The neon heart buzzes in a way you can feel in your teeth."
 
+[sub_resource type="Resource" id="Entry_big_steer"]
+script = ExtResource("2_entry")
+id = "big_steer"
+display_name = "THE BIG STEER"
+description = "A cow skull the size of a moon, bleached by the Dustbowl's sun. Nobody knows where the rest of the cow went. Nobody asks."
+
+[sub_resource type="Resource" id="Entry_old_windmill"]
+script = ExtResource("2_entry")
+id = "old_windmill"
+display_name = "THE OLD WINDMILL"
+description = "A farm windmill, turning in the solar wind. It isn't pumping anything. It just likes turning."
+
+[sub_resource type="Resource" id="Entry_floating_tree"]
+script = ExtResource("2_entry")
+id = "floating_tree"
+display_name = "THE FLOATING TREE"
+description = "A whole tree, roots and all, drifting through Greenhouse Reach with little glowing fruit. Dr. Moss says it's 'free range.'"
+
+[sub_resource type="Resource" id="Entry_watering_can"]
+script = ExtResource("2_entry")
+id = "watering_can"
+display_name = "THE GIANT WATERING CAN"
+description = "A tin watering can the size of a station, pouring forever. Nobody's sure what it's watering. Space, probably."
+
+[sub_resource type="Resource" id="Entry_big_snowman"]
+script = ExtResource("2_entry")
+id = "big_snowman"
+display_name = "THE BIG SNOWMAN"
+description = "Three snowballs the size of hills, a carrot nose and a purple scarf. Somebody built it. Nobody has ever owned up."
+
+[sub_resource type="Resource" id="Entry_giant_cone"]
+script = ExtResource("2_entry")
+id = "giant_cone"
+display_name = "THE GIANT CONE"
+description = "An ice-cream cone frozen into a comet, three scoops and a cherry. Penny swears it was there before her shop."
+
 [resource]
 script = ExtResource("1_book")
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel")])
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel"), SubResource("Entry_big_steer"), SubResource("Entry_old_windmill"), SubResource("Entry_floating_tree"), SubResource("Entry_watering_can"), SubResource("Entry_big_snowman"), SubResource("Entry_giant_cone")])

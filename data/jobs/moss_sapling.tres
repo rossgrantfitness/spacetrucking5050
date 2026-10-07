@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "moss_sapling"
+cargo_name = "A sapling that likes music (live)"
+client_name = "Dr. Shelby Moss, The Orbital Arboretum"
+description = "It only grows when it hears music. Dr. Moss sings to it and it shrinks. Marge's jukebox should do the trick."
+from_place = "arboretum"
+to_place = "truck_stop"
+weight = 200000000.0
+base_pay = 2000
+care_kind = "live"
+care_bonus = 500
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = false
+requires_flag = "moss_offered_sapling"
+completes_flag = "moss_sapling_done"

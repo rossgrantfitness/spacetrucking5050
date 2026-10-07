@@ -37,6 +37,11 @@ var velocity := Vector3.ZERO
 ## Where the nose points, in radians: heading is left/right, pitch is up/down.
 var heading := 0.0
 var pitch := 0.0
+## Where the nose drifts back to when you let go of up/down, in radians:
+## level (0), or the climb of the road to wherever you're headed (the
+## flight scene sets it), so a steep road doesn't mean holding the stick up
+## the whole way.
+var rest_pitch := 0.0
 ## How fast the nose is turning right now, in radians per second.
 var turn_speed := 0.0
 var pitch_speed := 0.0
@@ -267,8 +272,9 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	var wanted_turn := -controls.steer.x * max_turn * twitch
 	var wanted_pitch := controls.steer.y * max_pitch * twitch
 	if absf(controls.steer.y) < 0.05:
-		# Hands off up/down: let the nose drift gently back toward level.
-		wanted_pitch = clampf(-pitch * tuning.nose_auto_level, -max_pitch, max_pitch)
+		# Hands off up/down: let the nose drift gently back toward level (or
+		# toward the road's climb, see rest_pitch).
+		wanted_pitch = clampf((rest_pitch - pitch) * tuning.nose_auto_level, -max_pitch, max_pitch)
 
 	# Heavy ships (low turn_response) take a moment to start and stop turning.
 	var catch_up := 1.0 - exp(-ship.turn_response * load_turn * delta)

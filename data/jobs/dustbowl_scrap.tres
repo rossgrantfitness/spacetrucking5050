@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "dustbowl_scrap"
+cargo_name = "Pre-loved parts (one big crate, rattles)"
+client_name = "Mags Hoofmann, Hoof & Hull Salvage"
+description = "A salvage yard in the amber Dustbowl wants scrap. Hauled TO a scrapyard. Raccoony asked. The goat hung up."
+from_place = "base"
+to_place = "salvage_yard"
+weight = 1500000000.0
+base_pay = 1800
+care_kind = "fragile"
+care_bonus = 0
+rush_seconds = 1300.0
+rush_bonus = 300
+on_job_board = true
+repeatable = false
+requires_flag = "dustbowl_heard"
+completes_flag = "dustbowl_open"

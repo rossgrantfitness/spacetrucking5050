@@ -235,6 +235,7 @@ func _physics_process(delta: float) -> void:
 		GameState.job_seconds += delta
 	_feel_the_hazards(delta)
 	_watch_overdrive(delta)
+	_ship.flight.rest_pitch = _road_pitch()
 	# Storms weaken the radio; flying fast swells the ambient music.
 	Radio.signal_strength = 1.0 - _ship.storm * 0.8
 	Radio.listener_position = _ship.global_position
@@ -344,6 +345,23 @@ func _set_destination(id: String) -> void:
 	_hud.destination_is_job = job != null and job.to_place == id
 	_ship.cockpit.destination = dock
 	_ship.cockpit.destination_name = place_name
+
+
+## How steeply the road climbs (or dives) toward where she's headed, in
+## radians: hands off the stick, the nose settles there instead of on level.
+## The far systems sit well above and below the lane (a 30-40 degree climb),
+## and holding the stick up for ten minutes isn't cozy. No destination: level.
+func _road_pitch() -> float:
+	if _destination_id.is_empty():
+		return 0.0
+	var dock := _dock_node(_destination_id)
+	if dock == null:
+		return 0.0
+	var to := dock.global_position - _ship.global_position
+	if to.length() < 1.0:
+		return 0.0
+	var limit := deg_to_rad(GameState.tuning.max_pitch_degrees) * 0.8
+	return clampf(asin(clampf(to.normalized().y, -1.0, 1.0)), -limit, limit)
 
 
 # --- The course chart and the cruise autopilot --------------------------------------

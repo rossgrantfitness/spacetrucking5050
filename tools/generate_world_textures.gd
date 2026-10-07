@@ -7,6 +7,12 @@ extends SceneTree
 ##     glimmer_planet.png - the Glimmer System's gas giant: bands of magenta
 ##                         and violet, swirly storms, glittering specks
 ##     moon_craters.png  - a pockmarked gray moon (tinted per moon)
+##     desert_planet.png - the Dustbowl's desert world: amber dunes in
+##                         wavy bands, dry canyons, a dust storm or two
+##     jungle_planet.png - Greenhouse Reach's garden world: deep greens,
+##                         blue lakes, flower-pink meadows, wispy clouds
+##     ice_planet.png    - the Frostline's frozen world: lavender and white
+##                         ice sheets, blue cracks, snowy swirls
 ## All painted MML / MGS style: a few flat tones per color, dithered where
 ## they meet, light painted in (see tools/texture_paint.gd).
 ##
@@ -25,6 +31,9 @@ func _init() -> void:
 		"sun_surface.png": Paint.paint_pass(_sun_surface(128, 64), 5, 1.0),
 		"glimmer_planet.png": Paint.paint_pass(_glimmer_planet(256, 128), 6),
 		"moon_craters.png": Paint.moon(256, 128, 77),
+		"desert_planet.png": Paint.paint_pass(_desert_planet(256, 128), 6),
+		"jungle_planet.png": Paint.paint_pass(_jungle_planet(256, 128), 6),
+		"ice_planet.png": Paint.paint_pass(_ice_planet(256, 128), 6),
 	}
 	var failed := false
 	for file_name: String in images:
@@ -77,6 +86,74 @@ func _glimmer_planet(width: int, height: int) -> Image:
 			var color: Color = colors[index].lerp(colors[(index + 1) % colors.size()], band - floor(band))
 			if sparkle.get_noise_3dv(p * 2.0) > 0.55:
 				color = color.lerp(Color("ffe08a"), 0.7)  # City lights? Casinos. Definitely casinos.
+			image.set_pixel(x, y, color)
+	return image
+
+
+func _desert_planet(width: int, height: int) -> Image:
+	var dunes := _noise(101, 0.8)
+	var canyons := _noise(102, 0.6)
+	var storm := _noise(103, 0.5)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	var sands: Array[Color] = [Color("8a4a1c"), Color("c8782a"), Color("f0a640"), Color("ffd27a"), Color("d98a3a")]
+	for y in height:
+		for x in width:
+			var angle := TAU * x / width
+			var p := Vector3(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.04)
+			# Wavy dune bands, like wind-combed sand seen from orbit.
+			var band := float(y) / height * 5.0 + dunes.get_noise_3dv(p) * 2.2
+			var index := posmod(int(floor(band)), sands.size())
+			var color: Color = sands[index].lerp(sands[(index + 1) % sands.size()], band - floor(band))
+			if absf(canyons.get_noise_3dv(p)) < 0.02:
+				color = Color("5a2a14")  # Dry canyons.
+			var dust := storm.get_noise_3dv(p * 0.8)
+			if dust > 0.25:
+				color = color.lerp(Color("ffe2b0"), clampf((dust - 0.25) * 2.5, 0.0, 0.7))  # Dust storms.
+			image.set_pixel(x, y, color)
+	return image
+
+
+func _jungle_planet(width: int, height: int) -> Image:
+	var land := _noise(111, 0.6)
+	var meadows := _noise(112, 1.0)
+	var clouds := _noise(113, 0.8)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	for y in height:
+		var latitude := absf(float(y) / height - 0.5) * 2.0
+		for x in width:
+			var angle := TAU * x / width
+			var p := Vector3(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.04)
+			var ground := land.get_noise_3dv(p)
+			var color := Color("1d6b3a").lerp(Color("7fd84a"), clampf(0.5 + ground * 1.4, 0.0, 1.0))
+			if ground < -0.25:
+				color = Color("2a8fd0")  # Lakes.
+			elif meadows.get_noise_3dv(p) > 0.32:
+				color = Color("ff8fc8")  # Flower meadows, visible from space.
+			if latitude > 0.8:
+				color = color.lerp(Color("b8f0a8"), 0.6)  # Pale moss at the poles.
+			var cloud := clouds.get_noise_3d(cos(angle) * 2.0, sin(angle) * 2.0, y * 0.07)
+			if cloud > 0.2:
+				color = color.lerp(Color(0.95, 1.0, 0.95), clampf((cloud - 0.2) * 3.0, 0.0, 0.75))
+			image.set_pixel(x, y, color)
+	return image
+
+
+func _ice_planet(width: int, height: int) -> Image:
+	var sheets := _noise(121, 0.7)
+	var cracks := _noise(122, 1.0)
+	var swirl := _noise(123, 0.6)
+	var image := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
+	for y in height:
+		for x in width:
+			var angle := TAU * x / width
+			var p := Vector3(cos(angle) * 1.6, sin(angle) * 1.6, y * 0.04)
+			var color := Color("8a78d0").lerp(Color("eae6ff"), 0.5 + 0.5 * sheets.get_noise_3dv(p))
+			if absf(cracks.get_noise_3dv(p)) < 0.022:
+				color = Color("5ac8ff")  # Blue cracks in the ice.
+			var twist := swirl.get_noise_3dv(p) * 2.0
+			var snow := swirl.get_noise_3d(cos(angle + twist) * 2.0, sin(angle + twist) * 2.0, y * 0.06)
+			if snow > 0.15:
+				color = color.lerp(Color(1.0, 1.0, 1.0), clampf((snow - 0.15) * 3.0, 0.0, 0.8))
 			image.set_pixel(x, y, color)
 	return image
 

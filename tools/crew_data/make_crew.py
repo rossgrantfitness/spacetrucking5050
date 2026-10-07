@@ -40,6 +40,9 @@ CREW = [
         A("novel", "dispatch", "Chairs", "read", "book", "DAY", 1.0, "", ["A romance novel. Space pirate, heart of gold. Don't look at me like that."]),
      ],
      "talk": [
+        ("ANY", "dustbowl_open", 0, "", ["Mags called. Asked if we had any old toasters. I said no. She said 'shame' and hung up. I think she was hungry."]),
+        ("ANY", "greenhouse_open", 0, "", ["Dr. Moss left a voicemail. It's nine minutes long. I'm on minute four. It's lovely so far."]),
+        ("ANY", "frostline_open", 0, "", ["That penguin sends a postcard every week. Every one says 'COME BACK SOON!!!' I put them on the fridge."]),
         ("ANY", "", 0, "", ["{company} sent another memo. 'Synergy.' I used it as a coaster."]),
         ("ANY", "", 0, "", ["Clem asked me what a manifest is. I said it's when you want something real bad.", "He's been staring at the cargo for an hour."]),
         ("ANY", "", 0, "", ["Chang Ma fixed the toaster. Now it's faster than the rig."]),
@@ -70,6 +73,8 @@ CREW = [
         A("forklift", "cargo", "ForkliftFix", "work", "wrench", "ANY", 0.6, "", ["Clem drove the forklift into the wall again. Wall's fine. Forklift's sulking."]),
      ],
      "talk": [
+        ("ANY", "dustbowl_open", 0, "", ["That Dustbowl sand gets in everything. Found some in the coolant. Found some in my tea. Found some in my ears."]),
+        ("ANY", "frostline_open", 0, "", ["Long climb up to the Frostline. Engine likes the cold, though. Runs smooth. Like it's thinking."]),
         ("ANY", "", 0, "", ["Ship's older than me and in better shape. Don't tell her I said that. She's vain."]),
         ("ANY", "", 0, "", ["Every rattle's a word, you know. That one means 'more grease.'", "They all mean 'more grease.'"]),
         ("ANY", "", 0, "", ["Goggles? Habit. Used to dig tunnels for a living. Engines are just tunnels for fire."]),
@@ -98,6 +103,8 @@ CREW = [
         A("plant", "apartment", "Window", "stand", "", "DAY", 0.5, "", ["Oh! Boss! I was just waterin' your plant. It looked thirsty. It's plastic? Huh."]),
      ],
      "talk": [
+        ("ANY", "greenhouse_open", 0, "", ["The tortoise lady gave me a fern! I named it Fern! It's a good name! For a fern!"]),
+        ("ANY", "frostline_open", 0, "", ["Can we go back to the ice-cream place? I had a cone. I think about it a lot. Daily."]),
         ("ANY", "", 0, "", ["{company} sent me a pin for five years of service. I been here two. I'm not tellin' 'em."]),
         ("ANY", "", 0, "", ["My mama says hi. She don't know you. She says hi to everybody."]),
         ("ANY", "", 0, "", ["Did you know cargo is just stuff that's goin' somewhere? Same as us, kinda."]),
@@ -123,6 +130,8 @@ CREW = [
         A("hiding", "cargo", "Crates", "stand", "", "NIGHT", 0.6, "", ["Shh! I'm hiding from my shadow. It's been following me all day!"]),
      ],
      "talk": [
+        ("ANY", "dustbowl_open", 0, "", ["Mags offered to buy the rig. For parts. I told her we're using the parts. She said 'for now.' Spooky goat."]),
+        ("ANY", "greenhouse_open", 0, "", ["The jellyfish lanes out by the Arboretum are my favorite view. Slow. Glowy. I press my face on the window the whole way."]),
         ("ANY", "", 0, "", ["Did you know space is upside down? Or we are. One of us is."]),
         ("ANY", "", 0, "", ["{company} hired me as the mascot! They gave me the cap and said 'don't talk to customers.'", "So I talk to YOU!"]),
         ("ANY", "", 0, "", ["Ostriches can't fly. But I'm IN a flying thing. So, technically...", "...I can fly!"]),

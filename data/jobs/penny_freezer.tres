@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "penny_freezer"
+cargo_name = "Freezer coils (the cold kind)"
+client_name = "Penny Flurry, Flurry's Comet Creamery"
+description = "The creamery's freezer died, in space, where it's cold. New coils wait at the company depot."
+from_place = "truck_stop"
+to_place = "creamery"
+weight = 2400000000.0
+base_pay = 2800
+care_kind = "fragile"
+care_bonus = 0
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = false
+repeatable = false
+requires_flag = "frostline_open"
+completes_flag = "penny_freezer_done"

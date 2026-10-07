@@ -91,85 +91,100 @@ situation = 4
 
 [sub_resource type="Resource" id="R_9"]
 script = ExtResource("s_line")
-lines = PackedStringArray("{company} sent another memo. 'Synergy.' I used it as a coaster.")
+lines = PackedStringArray("Mags called. Asked if we had any old toasters. I said no. She said 'shame' and hung up. I think she was hungry.")
+needs_flag = "dustbowl_open"
 
 [sub_resource type="Resource" id="R_10"]
 script = ExtResource("s_line")
-lines = PackedStringArray("Clem asked me what a manifest is. I said it's when you want something real bad.", "He's been staring at the cargo for an hour.")
+lines = PackedStringArray("Dr. Moss left a voicemail. It's nine minutes long. I'm on minute four. It's lovely so far.")
+needs_flag = "greenhouse_open"
 
 [sub_resource type="Resource" id="R_11"]
 script = ExtResource("s_line")
-lines = PackedStringArray("Chang Ma fixed the toaster. Now it's faster than the rig.")
+lines = PackedStringArray("That penguin sends a postcard every week. Every one says 'COME BACK SOON!!!' I put them on the fridge.")
+needs_flag = "frostline_open"
 
 [sub_resource type="Resource" id="R_12"]
+script = ExtResource("s_line")
+lines = PackedStringArray("{company} sent another memo. 'Synergy.' I used it as a coaster.")
+
+[sub_resource type="Resource" id="R_13"]
+script = ExtResource("s_line")
+lines = PackedStringArray("Clem asked me what a manifest is. I said it's when you want something real bad.", "He's been staring at the cargo for an hour.")
+
+[sub_resource type="Resource" id="R_14"]
+script = ExtResource("s_line")
+lines = PackedStringArray("Chang Ma fixed the toaster. Now it's faster than the rig.")
+
+[sub_resource type="Resource" id="R_15"]
 script = ExtResource("s_line")
 lines = PackedStringArray("That {cargo} in the back? Client says handle with care. Clients say that about everything.")
 situation = 5
 
-[sub_resource type="Resource" id="R_13"]
+[sub_resource type="Resource" id="R_16"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Board's got work if you want it, hon. Or don't. I'm not your mother. Eat something, though.")
 situation = 6
 
-[sub_resource type="Resource" id="R_14"]
+[sub_resource type="Resource" id="R_17"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Payment cleared! I did a little dance. Nobody saw. Clem saw.")
 situation = 7
 
-[sub_resource type="Resource" id="R_15"]
+[sub_resource type="Resource" id="R_18"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I like it when we're moving. The hum puts me right to sleep. Don't tell {company}.")
 situation = 1
 
-[sub_resource type="Resource" id="R_16"]
+[sub_resource type="Resource" id="R_19"]
 script = ExtResource("s_line")
 lines = PackedStringArray("We're parked at {place}. I'm not getting off. Last time I got off I bought a timeshare.")
 situation = 2
 
-[sub_resource type="Resource" id="R_17"]
+[sub_resource type="Resource" id="R_20"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Night shift's the best shift. Nobody calls. Except clients. And Sal.")
 situation = 3
 
-[sub_resource type="Resource" id="R_18"]
+[sub_resource type="Resource" id="R_21"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Sal called again. He calls me 'sweetheart.' I call him 'sir' in a voice that means something else.")
 needs_flag = "glimmer_open"
 
-[sub_resource type="Resource" id="R_19"]
+[sub_resource type="Resource" id="R_22"]
 script = ExtResource("s_line")
 lines = PackedStringArray("You know, {husband} used to bring me those little gas station donuts. Every haul.", "...Anyway. Coffee?")
 min_friendship = 3
 sets_flag = "dottie_mentioned_white"
 
-[sub_resource type="Resource" id="R_20"]
+[sub_resource type="Resource" id="R_23"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Thirty years on dispatch, hon. You're my favorite driver. Don't let it go to your head.")
 min_friendship = 5
 
-[sub_resource type="Resource" id="R_21"]
+[sub_resource type="Resource" id="R_24"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I keep his mug in my desk. Third drawer. With the good pens.", "Not renting it. I was kidding. Mostly.")
 needs_flag = "white_voicemail"
 
-[sub_resource type="Resource" id="R_22"]
+[sub_resource type="Resource" id="R_25"]
 script = ExtResource("s_line")
 lines = PackedStringArray("You're playing his tapes. I can hear 'em through the wall.", "...Turn it up a little.")
 needs_flag = "white_story_done"
 
-[sub_resource type="Resource" id="R_23"]
+[sub_resource type="Resource" id="R_26"]
 script = ExtResource("s_member")
 id = "dottie"
 npc = ExtResource("npc_0")
 visual = ExtResource("vis_0")
 role = "Dispatcher"
 activities = Array[ExtResource("s_activity")]([SubResource("R_1"), SubResource("R_2"), SubResource("R_3"), SubResource("R_4"), SubResource("R_5"), SubResource("R_6"), SubResource("R_7"), SubResource("R_8")])
-small_talk = Array[ExtResource("s_line")]([SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22")])
+small_talk = Array[ExtResource("s_line")]([SubResource("R_9"), SubResource("R_10"), SubResource("R_11"), SubResource("R_12"), SubResource("R_13"), SubResource("R_14"), SubResource("R_15"), SubResource("R_16"), SubResource("R_17"), SubResource("R_18"), SubResource("R_19"), SubResource("R_20"), SubResource("R_21"), SubResource("R_22"), SubResource("R_23"), SubResource("R_24"), SubResource("R_25")])
 greetings = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Hey hon. Coffee's fresh-ish.", "There she is. The pride of {company}.", "Hon. You eat today? Eat something.")
 menu = "job_board"
 post_activity = "counter"
 
-[sub_resource type="Resource" id="R_24"]
+[sub_resource type="Resource" id="R_27"]
 script = ExtResource("s_activity")
 id = "engine"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -179,7 +194,7 @@ prop = "wrench"
 lines = PackedStringArray("She's purring today. Hear that? No? Get closer. Closer.", "...That's close enough.")
 weight = 3.0
 
-[sub_resource type="Resource" id="R_25"]
+[sub_resource type="Resource" id="R_28"]
 script = ExtResource("s_activity")
 id = "bench"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -189,7 +204,7 @@ prop = "wrench"
 lines = PackedStringArray("Rebuilding a fuel injector. Or a toaster. Haven't decided.")
 weight = 2.0
 
-[sub_resource type="Resource" id="R_26"]
+[sub_resource type="Resource" id="R_29"]
 script = ExtResource("s_activity")
 id = "cot"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -199,7 +214,7 @@ lines = PackedStringArray("Zzz... torque... zzz...")
 situation = 3
 weight = 2.0
 
-[sub_resource type="Resource" id="R_27"]
+[sub_resource type="Resource" id="R_30"]
 script = ExtResource("s_activity")
 id = "catnap"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -208,7 +223,7 @@ pose = "sleep"
 lines = PackedStringArray("Mm? Not asleep. Resting my eyes. Engineers do that.")
 weight = 0.4
 
-[sub_resource type="Resource" id="R_28"]
+[sub_resource type="Resource" id="R_31"]
 script = ExtResource("s_activity")
 id = "lunch"
 room = "res://scenes/hub/Galley.tscn"
@@ -217,7 +232,7 @@ pose = "eat"
 prop = "plate"
 lines = PackedStringArray("Grub's on. Get it? Grub. I'm a mole.", "...I'll see myself out.")
 
-[sub_resource type="Resource" id="R_29"]
+[sub_resource type="Resource" id="R_32"]
 script = ExtResource("s_activity")
 id = "arcade"
 room = "res://scenes/hub/Galley.tscn"
@@ -226,7 +241,7 @@ pose = "work"
 lines = PackedStringArray("Asteroid Alley. High score's mine. Don't check that.")
 weight = 0.8
 
-[sub_resource type="Resource" id="R_30"]
+[sub_resource type="Resource" id="R_33"]
 script = ExtResource("s_activity")
 id = "pipes"
 room = "res://scenes/hub/Hallway.tscn"
@@ -236,7 +251,7 @@ prop = "wrench"
 lines = PackedStringArray("Pipe's knocking. Pipes don't knock unless they want something.")
 weight = 0.8
 
-[sub_resource type="Resource" id="R_31"]
+[sub_resource type="Resource" id="R_34"]
 script = ExtResource("s_activity")
 id = "forklift"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -246,70 +261,80 @@ prop = "wrench"
 lines = PackedStringArray("Clem drove the forklift into the wall again. Wall's fine. Forklift's sulking.")
 weight = 0.6
 
-[sub_resource type="Resource" id="R_32"]
+[sub_resource type="Resource" id="R_35"]
+script = ExtResource("s_line")
+lines = PackedStringArray("That Dustbowl sand gets in everything. Found some in the coolant. Found some in my tea. Found some in my ears.")
+needs_flag = "dustbowl_open"
+
+[sub_resource type="Resource" id="R_36"]
+script = ExtResource("s_line")
+lines = PackedStringArray("Long climb up to the Frostline. Engine likes the cold, though. Runs smooth. Like it's thinking.")
+needs_flag = "frostline_open"
+
+[sub_resource type="Resource" id="R_37"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Ship's older than me and in better shape. Don't tell her I said that. She's vain.")
 
-[sub_resource type="Resource" id="R_33"]
+[sub_resource type="Resource" id="R_38"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Every rattle's a word, you know. That one means 'more grease.'", "They all mean 'more grease.'")
 
-[sub_resource type="Resource" id="R_34"]
+[sub_resource type="Resource" id="R_39"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Goggles? Habit. Used to dig tunnels for a living. Engines are just tunnels for fire.")
 
-[sub_resource type="Resource" id="R_35"]
+[sub_resource type="Resource" id="R_40"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Engine's happiest out here. Like a dog with its head out the window. A two-ton dog.")
 situation = 1
 
-[sub_resource type="Resource" id="R_36"]
+[sub_resource type="Resource" id="R_41"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Parked. Good. Gives me time to tighten everything you loosened.")
 situation = 2
 
-[sub_resource type="Resource" id="R_37"]
+[sub_resource type="Resource" id="R_42"]
 script = ExtResource("s_line")
 lines = PackedStringArray("That {cargo}'s heavy. I can feel it in the bearings. I feel everything in the bearings.")
 situation = 5
 
-[sub_resource type="Resource" id="R_38"]
+[sub_resource type="Resource" id="R_43"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Paid? Buy oil. Good oil. The kind in the gold can.")
 situation = 7
 
-[sub_resource type="Resource" id="R_39"]
+[sub_resource type="Resource" id="R_44"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Can't sleep. Too quiet. I need the hum.")
 situation = 3
 
-[sub_resource type="Resource" id="R_40"]
+[sub_resource type="Resource" id="R_45"]
 script = ExtResource("s_line")
 lines = PackedStringArray("{husband} did the wiring on that dash himself. Messy. Works perfect.", "I never touch it.")
 min_friendship = 3
 sets_flag = "digby_mentioned_white"
 
-[sub_resource type="Resource" id="R_41"]
+[sub_resource type="Resource" id="R_46"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I don't say this to many people. But you drive her gentle. She notices.")
 min_friendship = 5
 
-[sub_resource type="Resource" id="R_42"]
+[sub_resource type="Resource" id="R_47"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Dusty found something behind the dash? Huh.", "Twelve years I never touched that panel. Should've known he'd hide something in there.")
 needs_flag = "white_chip"
 
-[sub_resource type="Resource" id="R_43"]
+[sub_resource type="Resource" id="R_48"]
 script = ExtResource("s_member")
 id = "digby"
 npc = ExtResource("npc_1")
 visual = ExtResource("vis_1")
 role = "Mechanic"
-activities = Array[ExtResource("s_activity")]([SubResource("R_24"), SubResource("R_25"), SubResource("R_26"), SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31")])
-small_talk = Array[ExtResource("s_line")]([SubResource("R_32"), SubResource("R_33"), SubResource("R_34"), SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42")])
+activities = Array[ExtResource("s_activity")]([SubResource("R_27"), SubResource("R_28"), SubResource("R_29"), SubResource("R_30"), SubResource("R_31"), SubResource("R_32"), SubResource("R_33"), SubResource("R_34")])
+small_talk = Array[ExtResource("s_line")]([SubResource("R_35"), SubResource("R_36"), SubResource("R_37"), SubResource("R_38"), SubResource("R_39"), SubResource("R_40"), SubResource("R_41"), SubResource("R_42"), SubResource("R_43"), SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47")])
 greetings = PackedStringArray("Mm. Captain.", "Oh. It's you. Good. The engine likes you.", "{bunny}. Watch your step, I've got parts everywhere.", "Mornin'. Or night. Down here it's always engine o'clock.")
 
-[sub_resource type="Resource" id="R_44"]
+[sub_resource type="Resource" id="R_49"]
 script = ExtResource("s_activity")
 id = "forklift"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -318,7 +343,7 @@ pose = "work"
 lines = PackedStringArray("Loadin' and unloadin'. Mostly loadin'. Sometimes I forget which.")
 weight = 2.5
 
-[sub_resource type="Resource" id="R_45"]
+[sub_resource type="Resource" id="R_50"]
 script = ExtResource("s_activity")
 id = "counting"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -329,7 +354,7 @@ lines = PackedStringArray("Countin' the {cargo}. I got to seven.", "Then I got t
 situation = 5
 weight = 2.0
 
-[sub_resource type="Resource" id="R_46"]
+[sub_resource type="Resource" id="R_51"]
 script = ExtResource("s_activity")
 id = "crate"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -339,7 +364,7 @@ lines = PackedStringArray("Empty back. Feels like a big hug with nobody in it.")
 situation = 6
 weight = 1.5
 
-[sub_resource type="Resource" id="R_47"]
+[sub_resource type="Resource" id="R_52"]
 script = ExtResource("s_activity")
 id = "sandwich"
 room = "res://scenes/hub/Galley.tscn"
@@ -349,7 +374,7 @@ prop = "plate"
 lines = PackedStringArray("Hay sandwich. Want half? It's mostly hay.")
 weight = 1.5
 
-[sub_resource type="Resource" id="R_48"]
+[sub_resource type="Resource" id="R_53"]
 script = ExtResource("s_activity")
 id = "sweeping"
 room = "res://scenes/hub/Hallway.tscn"
@@ -358,7 +383,7 @@ pose = "work"
 prop = "broom"
 lines = PackedStringArray("Sweepin'. Space gets in everywhere. Space dust. It's in my ears.")
 
-[sub_resource type="Resource" id="R_49"]
+[sub_resource type="Resource" id="R_54"]
 script = ExtResource("s_activity")
 id = "payday"
 room = "res://scenes/hub/Galley.tscn"
@@ -368,7 +393,7 @@ lines = PackedStringArray("Payday dance! Join in! Left hoof, right hoof, wiggle!
 situation = 7
 weight = 2.0
 
-[sub_resource type="Resource" id="R_50"]
+[sub_resource type="Resource" id="R_55"]
 script = ExtResource("s_activity")
 id = "couch"
 room = "res://scenes/hub/Galley.tscn"
@@ -378,7 +403,7 @@ lines = PackedStringArray("Hhhnnk... mama... the crates are singin'...")
 situation = 3
 weight = 1.5
 
-[sub_resource type="Resource" id="R_51"]
+[sub_resource type="Resource" id="R_56"]
 script = ExtResource("s_activity")
 id = "stars"
 room = "res://scenes/hub/Hallway.tscn"
@@ -387,7 +412,7 @@ pose = "stand"
 lines = PackedStringArray("Lookit all them stars. You think they got deliveries too?")
 situation = 1
 
-[sub_resource type="Resource" id="R_52"]
+[sub_resource type="Resource" id="R_57"]
 script = ExtResource("s_activity")
 id = "plant"
 room = "res://scenes/hub/Apartment.tscn"
@@ -397,69 +422,79 @@ lines = PackedStringArray("Oh! Boss! I was just waterin' your plant. It looked t
 situation = 4
 weight = 0.5
 
-[sub_resource type="Resource" id="R_53"]
+[sub_resource type="Resource" id="R_58"]
+script = ExtResource("s_line")
+lines = PackedStringArray("The tortoise lady gave me a fern! I named it Fern! It's a good name! For a fern!")
+needs_flag = "greenhouse_open"
+
+[sub_resource type="Resource" id="R_59"]
+script = ExtResource("s_line")
+lines = PackedStringArray("Can we go back to the ice-cream place? I had a cone. I think about it a lot. Daily.")
+needs_flag = "frostline_open"
+
+[sub_resource type="Resource" id="R_60"]
 script = ExtResource("s_line")
 lines = PackedStringArray("{company} sent me a pin for five years of service. I been here two. I'm not tellin' 'em.")
 
-[sub_resource type="Resource" id="R_54"]
+[sub_resource type="Resource" id="R_61"]
 script = ExtResource("s_line")
 lines = PackedStringArray("My mama says hi. She don't know you. She says hi to everybody.")
 
-[sub_resource type="Resource" id="R_55"]
+[sub_resource type="Resource" id="R_62"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Did you know cargo is just stuff that's goin' somewhere? Same as us, kinda.")
 
-[sub_resource type="Resource" id="R_56"]
+[sub_resource type="Resource" id="R_63"]
 script = ExtResource("s_line")
 lines = PackedStringArray("The {cargo} is real quiet today. I sang it a song just in case.")
 situation = 5
 
-[sub_resource type="Resource" id="R_57"]
+[sub_resource type="Resource" id="R_64"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Back's empty. I'm practicin' liftin' air. Gettin' real good at it.")
 situation = 6
 
-[sub_resource type="Resource" id="R_58"]
+[sub_resource type="Resource" id="R_65"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I love when we're flyin'. My ears go all floaty.")
 situation = 1
 
-[sub_resource type="Resource" id="R_59"]
+[sub_resource type="Resource" id="R_66"]
 script = ExtResource("s_line")
 lines = PackedStringArray("We're at {place}! Can I get a souvenir? Just a little one. A keychain. Two keychains.")
 situation = 2
 
-[sub_resource type="Resource" id="R_60"]
+[sub_resource type="Resource" id="R_67"]
 script = ExtResource("s_line")
 lines = PackedStringArray("We got paid! Does that mean I get paid? I get paid in sandwiches, right?")
 situation = 7
 
-[sub_resource type="Resource" id="R_61"]
+[sub_resource type="Resource" id="R_68"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Raccoony says you're the best driver he ever had. Except one. He don't say who. He gets quiet.")
 min_friendship = 2
 
-[sub_resource type="Resource" id="R_62"]
+[sub_resource type="Resource" id="R_69"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Boss? Thanks for keepin' me on. I know I'm slow. But I'm careful slow.")
 min_friendship = 4
 
-[sub_resource type="Resource" id="R_63"]
+[sub_resource type="Resource" id="R_70"]
 script = ExtResource("s_line")
 lines = PackedStringArray("The rig's got a dent by the door shaped like a hug.", "I don't know what that means. I just like it.")
 needs_flag = "marge_mentioned_white"
 
-[sub_resource type="Resource" id="R_64"]
+[sub_resource type="Resource" id="R_71"]
 script = ExtResource("s_member")
 id = "clem"
 npc = ExtResource("npc_2")
 visual = ExtResource("vis_2")
 role = "Cargo hand"
-activities = Array[ExtResource("s_activity")]([SubResource("R_44"), SubResource("R_45"), SubResource("R_46"), SubResource("R_47"), SubResource("R_48"), SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52")])
-small_talk = Array[ExtResource("s_line")]([SubResource("R_53"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57"), SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_63")])
+activities = Array[ExtResource("s_activity")]([SubResource("R_49"), SubResource("R_50"), SubResource("R_51"), SubResource("R_52"), SubResource("R_53"), SubResource("R_54"), SubResource("R_55"), SubResource("R_56"), SubResource("R_57")])
+small_talk = Array[ExtResource("s_line")]([SubResource("R_58"), SubResource("R_59"), SubResource("R_60"), SubResource("R_61"), SubResource("R_62"), SubResource("R_63"), SubResource("R_64"), SubResource("R_65"), SubResource("R_66"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_70")])
 greetings = PackedStringArray("Mornin', boss!", "Hiya, {bunny}! I polished your door handle!", "Boss! I learned a new knot! ...I forgot it.", "Hey hey! {company} forever!")
 
-[sub_resource type="Resource" id="R_65"]
+[sub_resource type="Resource" id="R_72"]
 script = ExtResource("s_activity")
 id = "fridge"
 room = "res://scenes/hub/Galley.tscn"
@@ -468,7 +503,7 @@ pose = "stand"
 lines = PackedStringArray("I'm looking for the snack I put in here. I don't remember what it looks like.", "I'll know it when I see it!")
 weight = 2.0
 
-[sub_resource type="Resource" id="R_66"]
+[sub_resource type="Resource" id="R_73"]
 script = ExtResource("s_activity")
 id = "toast"
 room = "res://scenes/hub/Galley.tscn"
@@ -478,7 +513,7 @@ prop = "plate"
 lines = PackedStringArray("I'm making toast! In the pot! Chang Ma says that's soup. Agree to disagree!")
 situation = 4
 
-[sub_resource type="Resource" id="R_67"]
+[sub_resource type="Resource" id="R_74"]
 script = ExtResource("s_activity")
 id = "gauges"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -487,7 +522,7 @@ pose = "stand"
 lines = PackedStringArray("This needle keeps pointing at the red bit! I think it likes the red bit.", "I like the red bit too.")
 weight = 1.5
 
-[sub_resource type="Resource" id="R_68"]
+[sub_resource type="Resource" id="R_75"]
 script = ExtResource("s_activity")
 id = "mascot"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -496,7 +531,7 @@ pose = "dance"
 lines = PackedStringArray("Practicing my {company} mascot dance! For the parade! There's no parade. There MIGHT be!")
 weight = 1.5
 
-[sub_resource type="Resource" id="R_69"]
+[sub_resource type="Resource" id="R_76"]
 script = ExtResource("s_activity")
 id = "nap"
 room = "res://scenes/hub/EngineRoom.tscn"
@@ -506,7 +541,7 @@ lines = PackedStringArray("Zzz... I'm a big bird... the BIGGEST bird... zzz...")
 situation = 3
 weight = 2.0
 
-[sub_resource type="Resource" id="R_70"]
+[sub_resource type="Resource" id="R_77"]
 script = ExtResource("s_activity")
 id = "hiding"
 room = "res://scenes/hub/CargoBay.tscn"
@@ -516,79 +551,89 @@ lines = PackedStringArray("Shh! I'm hiding from my shadow. It's been following m
 situation = 3
 weight = 0.6
 
-[sub_resource type="Resource" id="R_71"]
+[sub_resource type="Resource" id="R_78"]
+script = ExtResource("s_line")
+lines = PackedStringArray("Mags offered to buy the rig. For parts. I told her we're using the parts. She said 'for now.' Spooky goat.")
+needs_flag = "dustbowl_open"
+
+[sub_resource type="Resource" id="R_79"]
+script = ExtResource("s_line")
+lines = PackedStringArray("The jellyfish lanes out by the Arboretum are my favorite view. Slow. Glowy. I press my face on the window the whole way.")
+needs_flag = "greenhouse_open"
+
+[sub_resource type="Resource" id="R_80"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Did you know space is upside down? Or we are. One of us is.")
 
-[sub_resource type="Resource" id="R_72"]
+[sub_resource type="Resource" id="R_81"]
 script = ExtResource("s_line")
 lines = PackedStringArray("{company} hired me as the mascot! They gave me the cap and said 'don't talk to customers.'", "So I talk to YOU!")
 
-[sub_resource type="Resource" id="R_73"]
+[sub_resource type="Resource" id="R_82"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Ostriches can't fly. But I'm IN a flying thing. So, technically...", "...I can fly!")
 
-[sub_resource type="Resource" id="R_74"]
+[sub_resource type="Resource" id="R_83"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Chang Ma says I'm not allowed in the engine room. I'm allowed in the engine room. I asked the engine.")
 
-[sub_resource type="Resource" id="R_75"]
+[sub_resource type="Resource" id="R_84"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Is the {cargo} alive? I said hi to it just in case. It didn't say hi back. Rude!")
 situation = 5
 
-[sub_resource type="Resource" id="R_76"]
+[sub_resource type="Resource" id="R_85"]
 script = ExtResource("s_line")
 lines = PackedStringArray("The back is empty! I checked twice. And once more. Then I got stuck in there for a while.")
 situation = 6
 
-[sub_resource type="Resource" id="R_77"]
+[sub_resource type="Resource" id="R_86"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Are we flying right now? Oh my gosh. Are we flying RIGHT NOW?")
 situation = 1
 
-[sub_resource type="Resource" id="R_78"]
+[sub_resource type="Resource" id="R_87"]
 script = ExtResource("s_line")
 lines = PackedStringArray("We're at {place}! I'm gonna wave at everybody! Hi, everybody!")
 situation = 2
 
-[sub_resource type="Resource" id="R_79"]
+[sub_resource type="Resource" id="R_88"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Money! I'm gonna buy... a hat! For my other hat!")
 situation = 7
 
-[sub_resource type="Resource" id="R_80"]
+[sub_resource type="Resource" id="R_89"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I can't sleep. My feathers are too loud.")
 situation = 3
 
-[sub_resource type="Resource" id="R_81"]
+[sub_resource type="Resource" id="R_90"]
 script = ExtResource("s_line")
 lines = PackedStringArray("You're my favorite, {bunny}. Don't tell Clem.", "Actually, tell Clem. He'll be happy for me!")
 min_friendship = 3
 
-[sub_resource type="Resource" id="R_82"]
+[sub_resource type="Resource" id="R_91"]
 script = ExtResource("s_line")
 lines = PackedStringArray("Who's {husband}? Is that a color? It's a color.", "...Oh. Oh no. Sorry. I'm gonna go stand in the fridge for a minute.")
 needs_flag = "marge_mentioned_white"
 min_friendship = 1
 
-[sub_resource type="Resource" id="R_83"]
+[sub_resource type="Resource" id="R_92"]
 script = ExtResource("s_line")
 lines = PackedStringArray("I listened to the tapes with Clem! We danced! A slow one!", "Is that okay? It felt okay.")
 needs_flag = "white_story_done"
 
-[sub_resource type="Resource" id="R_84"]
+[sub_resource type="Resource" id="R_93"]
 script = ExtResource("s_member")
 id = "olivia"
 npc = ExtResource("npc_3")
 visual = ExtResource("vis_3")
 role = "Mascot"
-activities = Array[ExtResource("s_activity")]([SubResource("R_65"), SubResource("R_66"), SubResource("R_67"), SubResource("R_68"), SubResource("R_69"), SubResource("R_70")])
-small_talk = Array[ExtResource("s_line")]([SubResource("R_71"), SubResource("R_72"), SubResource("R_73"), SubResource("R_74"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77"), SubResource("R_78"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_82"), SubResource("R_83")])
+activities = Array[ExtResource("s_activity")]([SubResource("R_72"), SubResource("R_73"), SubResource("R_74"), SubResource("R_75"), SubResource("R_76"), SubResource("R_77")])
+small_talk = Array[ExtResource("s_line")]([SubResource("R_78"), SubResource("R_79"), SubResource("R_80"), SubResource("R_81"), SubResource("R_82"), SubResource("R_83"), SubResource("R_84"), SubResource("R_85"), SubResource("R_86"), SubResource("R_87"), SubResource("R_88"), SubResource("R_89"), SubResource("R_90"), SubResource("R_91"), SubResource("R_92")])
 greetings = PackedStringArray("{bunny}! Hi! Hi! It's me, Olivia!", "Good morning! Or good night! I can never tell in space!", "Oh! I didn't see you there. I was looking at my feet. They're SO big.", "Boss lady! I made you a friendship bracelet! I lost it! It was beautiful!")
 
-[sub_resource type="Resource" id="R_85"]
+[sub_resource type="Resource" id="R_94"]
 script = ExtResource("s_activity")
 id = "card_night"
 crew = "dottie"
@@ -598,7 +643,7 @@ pose = "sit"
 prop = "cards"
 lines = PackedStringArray("Read 'em and weep, boys.", "...What's a flush again?")
 
-[sub_resource type="Resource" id="R_86"]
+[sub_resource type="Resource" id="R_95"]
 script = ExtResource("s_activity")
 id = "card_night"
 crew = "digby"
@@ -608,7 +653,7 @@ pose = "sit"
 prop = "cards"
 lines = PackedStringArray("I'm bluffin'. Or am I. I am.")
 
-[sub_resource type="Resource" id="R_87"]
+[sub_resource type="Resource" id="R_96"]
 script = ExtResource("s_activity")
 id = "card_night"
 crew = "clem"
@@ -618,13 +663,13 @@ pose = "sit"
 prop = "cards"
 lines = PackedStringArray("Is it bad if all my cards are the same? ...Is it good?")
 
-[sub_resource type="Resource" id="R_88"]
+[sub_resource type="Resource" id="R_97"]
 script = ExtResource("s_event")
 id = "card_night"
 title = "CARD NIGHT IN THE GALLEY"
-roles = Array[ExtResource("s_activity")]([SubResource("R_85"), SubResource("R_86"), SubResource("R_87")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_94"), SubResource("R_95"), SubResource("R_96")])
 
-[sub_resource type="Resource" id="R_89"]
+[sub_resource type="Resource" id="R_98"]
 script = ExtResource("s_activity")
 id = "coffee_broke"
 crew = "digby"
@@ -634,7 +679,7 @@ pose = "work"
 prop = "wrench"
 lines = PackedStringArray("Coffee machine's dead. Somebody poured soup in it.", "...Clem.")
 
-[sub_resource type="Resource" id="R_90"]
+[sub_resource type="Resource" id="R_99"]
 script = ExtResource("s_activity")
 id = "coffee_broke"
 crew = "dottie"
@@ -643,7 +688,7 @@ spot = "TableNorth"
 pose = "sit"
 lines = PackedStringArray("No coffee. I'm running on spite now, hon.")
 
-[sub_resource type="Resource" id="R_91"]
+[sub_resource type="Resource" id="R_100"]
 script = ExtResource("s_activity")
 id = "coffee_broke"
 crew = "clem"
@@ -652,13 +697,13 @@ spot = "Middle"
 pose = "stand"
 lines = PackedStringArray("I thought it was a soup machine! It looked hungry!")
 
-[sub_resource type="Resource" id="R_92"]
+[sub_resource type="Resource" id="R_101"]
 script = ExtResource("s_event")
 id = "coffee_broke"
 title = "THE COFFEE MACHINE BROKE"
-roles = Array[ExtResource("s_activity")]([SubResource("R_89"), SubResource("R_90"), SubResource("R_91")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_98"), SubResource("R_99"), SubResource("R_100")])
 
-[sub_resource type="Resource" id="R_93"]
+[sub_resource type="Resource" id="R_102"]
 script = ExtResource("s_activity")
 id = "lost_wrench"
 crew = "digby"
@@ -667,11 +712,11 @@ spot = "Engine"
 pose = "stand"
 lines = PackedStringArray("My lucky wrench. Gone. Can't fix a thing without it.", "Well, I can. But I won't.")
 
-[sub_resource type="Resource" id="R_94"]
+[sub_resource type="Resource" id="R_103"]
 script = ExtResource("s_event")
 id = "lost_wrench"
 title = "CHANG MA LOST HIS LUCKY WRENCH"
-roles = Array[ExtResource("s_activity")]([SubResource("R_93")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_102")])
 find_item = "Chang Ma's lucky wrench"
 find_room = "res://scenes/hub/Hallway.tscn"
 find_spot = "LostWrench"
@@ -679,7 +724,7 @@ find_owner = "digby"
 find_reward = 60
 find_thanks = PackedStringArray("My wrench! Where was it? ...The hallway? I've never been to the hallway.", "Here. Gas money. Don't spend it on gas.")
 
-[sub_resource type="Resource" id="R_95"]
+[sub_resource type="Resource" id="R_104"]
 script = ExtResource("s_activity")
 id = "movie_night"
 crew = "dottie"
@@ -688,7 +733,7 @@ spot = "CouchLeft"
 pose = "sit"
 lines = PackedStringArray("Shh. This is the part where the freighter says 'I love you' in Morse code.")
 
-[sub_resource type="Resource" id="R_96"]
+[sub_resource type="Resource" id="R_105"]
 script = ExtResource("s_activity")
 id = "movie_night"
 crew = "clem"
@@ -697,7 +742,7 @@ spot = "CouchRight"
 pose = "sit"
 lines = PackedStringArray("I'm not cryin'. My eyes are just sweatin'.")
 
-[sub_resource type="Resource" id="R_97"]
+[sub_resource type="Resource" id="R_106"]
 script = ExtResource("s_activity")
 id = "movie_night"
 crew = "digby"
@@ -707,14 +752,14 @@ pose = "eat"
 prop = "plate"
 lines = PackedStringArray("Seen it. The engine dies at the end. Spoilers.")
 
-[sub_resource type="Resource" id="R_98"]
+[sub_resource type="Resource" id="R_107"]
 script = ExtResource("s_event")
 id = "movie_night"
 title = "MOVIE NIGHT IN THE GALLEY"
 situation = 1
-roles = Array[ExtResource("s_activity")]([SubResource("R_95"), SubResource("R_96"), SubResource("R_97")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_104"), SubResource("R_105"), SubResource("R_106")])
 
-[sub_resource type="Resource" id="R_99"]
+[sub_resource type="Resource" id="R_108"]
 script = ExtResource("s_activity")
 id = "clem_birthday"
 crew = "clem"
@@ -723,7 +768,7 @@ spot = "Middle"
 pose = "dance"
 lines = PackedStringArray("It's my birthday! I'm thirty-one! Or nineteen! Mama lost the papers!")
 
-[sub_resource type="Resource" id="R_100"]
+[sub_resource type="Resource" id="R_109"]
 script = ExtResource("s_activity")
 id = "clem_birthday"
 crew = "dottie"
@@ -732,7 +777,7 @@ spot = "TableNorth"
 pose = "sit"
 lines = PackedStringArray("Chang Ma baked a cake. In the engine. It's... warm.")
 
-[sub_resource type="Resource" id="R_101"]
+[sub_resource type="Resource" id="R_110"]
 script = ExtResource("s_activity")
 id = "clem_birthday"
 crew = "digby"
@@ -741,14 +786,14 @@ spot = "Stove"
 pose = "work"
 lines = PackedStringArray("Cake's done when the smoke detector says so.")
 
-[sub_resource type="Resource" id="R_102"]
+[sub_resource type="Resource" id="R_111"]
 script = ExtResource("s_event")
 id = "clem_birthday"
 title = "IT'S CLEM'S BIRTHDAY!"
 weight = 0.5
-roles = Array[ExtResource("s_activity")]([SubResource("R_99"), SubResource("R_100"), SubResource("R_101")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_108"), SubResource("R_109"), SubResource("R_110")])
 
-[sub_resource type="Resource" id="R_103"]
+[sub_resource type="Resource" id="R_112"]
 script = ExtResource("s_activity")
 id = "lost_clipboard"
 crew = "dottie"
@@ -757,11 +802,11 @@ spot = "Counter"
 pose = "stand"
 lines = PackedStringArray("Has anyone seen my clipboard? It has everything on it. EVERYTHING, hon.")
 
-[sub_resource type="Resource" id="R_104"]
+[sub_resource type="Resource" id="R_113"]
 script = ExtResource("s_event")
 id = "lost_clipboard"
 title = "RACCOONY CAN'T FIND HIS CLIPBOARD"
-roles = Array[ExtResource("s_activity")]([SubResource("R_103")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_112")])
 find_item = "Raccoony's clipboard"
 find_room = "res://scenes/hub/CargoBay.tscn"
 find_spot = "FindBetweenCrates"
@@ -769,7 +814,7 @@ find_owner = "dottie"
 find_reward = 40
 find_thanks = PackedStringArray("My clipboard! Bless you. I was about to start remembering things myself.")
 
-[sub_resource type="Resource" id="R_105"]
+[sub_resource type="Resource" id="R_114"]
 script = ExtResource("s_activity")
 id = "karaoke"
 crew = "clem"
@@ -778,7 +823,7 @@ spot = "Middle"
 pose = "dance"
 lines = PackedStringArray("This one's called 'Hauling My Heart Across the Stars.' I wrote it! It's mostly the word 'haul'!")
 
-[sub_resource type="Resource" id="R_106"]
+[sub_resource type="Resource" id="R_115"]
 script = ExtResource("s_activity")
 id = "karaoke"
 crew = "dottie"
@@ -787,7 +832,7 @@ spot = "CouchLeft"
 pose = "sit"
 lines = PackedStringArray("He's been practicing all week. Clap, hon. Clap for him.")
 
-[sub_resource type="Resource" id="R_107"]
+[sub_resource type="Resource" id="R_116"]
 script = ExtResource("s_activity")
 id = "karaoke"
 crew = "digby"
@@ -796,15 +841,15 @@ spot = "Arcade"
 pose = "stand"
 lines = PackedStringArray("I'm not singing. I'm guarding the arcade. From joy.")
 
-[sub_resource type="Resource" id="R_108"]
+[sub_resource type="Resource" id="R_117"]
 script = ExtResource("s_event")
 id = "karaoke"
 title = "KARAOKE IN THE GALLEY"
 weight = 0.8
 needs_flag = "glimmer_open"
-roles = Array[ExtResource("s_activity")]([SubResource("R_105"), SubResource("R_106"), SubResource("R_107")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_114"), SubResource("R_115"), SubResource("R_116")])
 
-[sub_resource type="Resource" id="R_109"]
+[sub_resource type="Resource" id="R_118"]
 script = ExtResource("s_activity")
 id = "engine_hiccup"
 crew = "digby"
@@ -814,7 +859,7 @@ pose = "work"
 prop = "wrench"
 lines = PackedStringArray("Hear that? Ka-chunk... ka-chunk. She's hungry. Or sad. Either way, more grease.")
 
-[sub_resource type="Resource" id="R_110"]
+[sub_resource type="Resource" id="R_119"]
 script = ExtResource("s_activity")
 id = "engine_hiccup"
 crew = "clem"
@@ -823,14 +868,14 @@ spot = "Drum"
 pose = "lean"
 lines = PackedStringArray("Is she gonna be okay? I brought her a blanket.")
 
-[sub_resource type="Resource" id="R_111"]
+[sub_resource type="Resource" id="R_120"]
 script = ExtResource("s_event")
 id = "engine_hiccup"
 title = "THE ENGINE'S MAKING A FUNNY NOISE"
 situation = 1
-roles = Array[ExtResource("s_activity")]([SubResource("R_109"), SubResource("R_110")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_118"), SubResource("R_119")])
 
-[sub_resource type="Resource" id="R_112"]
+[sub_resource type="Resource" id="R_121"]
 script = ExtResource("s_activity")
 id = "lost_cap"
 crew = "clem"
@@ -839,11 +884,11 @@ spot = "Crates"
 pose = "stand"
 lines = PackedStringArray("My cap! My {company} cap! I can't work without it, boss. It's the uniform!")
 
-[sub_resource type="Resource" id="R_113"]
+[sub_resource type="Resource" id="R_122"]
 script = ExtResource("s_event")
 id = "lost_cap"
 title = "CLEM LOST HIS {company} CAP"
-roles = Array[ExtResource("s_activity")]([SubResource("R_112")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_121")])
 find_item = "Clem's cap"
 find_room = "res://scenes/hub/Galley.tscn"
 find_spot = "FindUnderTable"
@@ -851,7 +896,7 @@ find_owner = "clem"
 find_reward = 30
 find_thanks = PackedStringArray("My cap! You found it! I'm gonna wear it so hard.")
 
-[sub_resource type="Resource" id="R_114"]
+[sub_resource type="Resource" id="R_123"]
 script = ExtResource("s_activity")
 id = "quiet_night"
 crew = "dottie"
@@ -860,7 +905,7 @@ spot = "ChairNap"
 pose = "sleep"
 lines = PackedStringArray("...zzz... dispatch... hold please... zzz...")
 
-[sub_resource type="Resource" id="R_115"]
+[sub_resource type="Resource" id="R_124"]
 script = ExtResource("s_activity")
 id = "quiet_night"
 crew = "digby"
@@ -869,7 +914,7 @@ spot = "Cot"
 pose = "sleep"
 lines = PackedStringArray("...zzz... the bearings... zzz...")
 
-[sub_resource type="Resource" id="R_116"]
+[sub_resource type="Resource" id="R_125"]
 script = ExtResource("s_activity")
 id = "quiet_night"
 crew = "clem"
@@ -878,15 +923,15 @@ spot = "CouchRight"
 pose = "sleep"
 lines = PackedStringArray("...zzz... crates... singin'...")
 
-[sub_resource type="Resource" id="R_117"]
+[sub_resource type="Resource" id="R_126"]
 script = ExtResource("s_event")
 id = "quiet_night"
 title = "EVERYONE'S ASLEEP"
 situation = 3
 weight = 1.5
-roles = Array[ExtResource("s_activity")]([SubResource("R_114"), SubResource("R_115"), SubResource("R_116")])
+roles = Array[ExtResource("s_activity")]([SubResource("R_123"), SubResource("R_124"), SubResource("R_125")])
 
 [resource]
 script = ExtResource("s_roster")
-crew = Array[ExtResource("s_member")]([SubResource("R_23"), SubResource("R_43"), SubResource("R_64"), SubResource("R_84")])
-events = Array[ExtResource("s_event")]([SubResource("R_88"), SubResource("R_92"), SubResource("R_94"), SubResource("R_98"), SubResource("R_102"), SubResource("R_104"), SubResource("R_108"), SubResource("R_111"), SubResource("R_113"), SubResource("R_117")])
+crew = Array[ExtResource("s_member")]([SubResource("R_26"), SubResource("R_48"), SubResource("R_71"), SubResource("R_93")])
+events = Array[ExtResource("s_event")]([SubResource("R_97"), SubResource("R_101"), SubResource("R_103"), SubResource("R_107"), SubResource("R_111"), SubResource("R_113"), SubResource("R_117"), SubResource("R_120"), SubResource("R_122"), SubResource("R_126")])
