@@ -213,6 +213,11 @@ func _during(shot: String, waited: int) -> void:
 			if waited == SETTLE_FRAMES - 20:
 				var ship := _ship()
 				ship.get("flight").set("velocity", -ship.global_basis.z * 330.0)
+			# It hits at a glancing angle (so it tumbles); blow it up right
+			# there, as a dead-on hit at this speed would.
+			var rig := _ship()
+			if rig.get("out_of_control") == true and rig.get("destroyed") != true:
+				rig.call("obliterate", rig.global_position, rig.global_basis.z, 330.0)
 		"cinema":
 			if waited == 10:
 				_press("cinema_camera")
