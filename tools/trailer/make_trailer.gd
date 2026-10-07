@@ -301,8 +301,8 @@ func _draw_overlay() -> void:
 		_overlay.draw_rect(Rect2(Vector2.ZERO, size), Color(0.02, 0.02, 0.05))
 		var k := clampf(float(_frame - _shot_started) / 8.0, 0.0, 1.0)
 		if not _card_title.is_empty():
-			var square := 9.0
-			_font.draw_centered(_overlay, size * 0.5 - Vector2(0.0, 30.0 if not _card_sub.is_empty() else 0.0), _card_title, square,
+			var title_square := 9.0
+			_font.draw_centered(_overlay, size * 0.5 - Vector2(0.0, 30.0 if not _card_sub.is_empty() else 0.0), _card_title, title_square,
 					Color(1.0, 0.85, 0.3, k), 0.15)
 		if not _card_sub.is_empty():
 			_font.draw_centered(_overlay, size * 0.5 + Vector2(0.0, 60.0), _card_sub, 3.0, Color(0.75, 0.8, 1.0, k))

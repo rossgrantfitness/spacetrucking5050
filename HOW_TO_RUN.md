@@ -103,7 +103,7 @@ Y = △.)
 | Nose up / down | **I** / **K**, or **↑** / **↓** | Left stick |
 | Look around the rig (any direction) | Hold the **mouse wheel** down and move the mouse | Right stick |
 | Pan the camera | Hold **right mouse button** and drag | — |
-| Camera back behind the rig | Let go of the wheel (or wait a few seconds) | (wait a few seconds) |
+| Camera back behind the rig (it stays wherever you put it until you do this, so you can set up a cinematic angle and watch) | **P** | **B** |
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |

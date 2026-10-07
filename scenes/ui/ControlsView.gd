@@ -35,6 +35,7 @@ const GROUPS: Array = [
 		["Cinema camera (on autopilot)", ["cinema_camera"]],
 		["Look around", ["look_left", "look_right", "look_up", "look_down"]],
 		["Look around with the mouse", ["Hold the wheel + move", ""]],
+		["Reset the camera (it stays put till then)", ["reset_camera"]],
 		["Hide the HUD", ["toggle_hud"]],
 	]],
 	["ON FOOT", [

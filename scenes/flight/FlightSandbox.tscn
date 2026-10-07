@@ -34,7 +34,6 @@
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="14_psx"]
 [ext_resource type="Script" path="res://scenes/common/SkyBackdrop.gd" id="15_sky"]
 [ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
-[ext_resource type="Texture2D" path="res://textures/generated/moon_craters.png" id="17_moon_tex"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
 [ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="23_courier"]
@@ -235,8 +234,9 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
 [node name="HomePlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(40000, 15000, 10000)
-true_radius = 15000.0
+true_radius = 8250.0
 texture = ExtResource("17_planet_tex")
+saturation = 0.45
 ring_size = 1.8
 ring_color = Color(0.95, 0.8, 0.9, 1)
 
@@ -251,18 +251,6 @@ uv_scale = Vector2(1, 1)
 drift_speed = 0.01
 night_glow = 1.0
 
-[node name="HomeGiantBelow" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(-30000, -42000, -20000)
-true_radius = 26000.0
-texture = ExtResource("50_glimmer_tex")
-tint = Color(0.55, 0.75, 1, 1)
-drift_speed = 0.002
-night_glow = 0.3
-ring_size = 1.6
-ring_color = Color(0.7, 0.85, 1, 1)
-ring_tilt = Vector3(0.3, 0.0, 0.4)
-
 [node name="TidewaterPlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(13998, 9000, -85436)
@@ -271,16 +259,6 @@ system_id = "tidewater"
 texture = ExtResource("43_ocean_tex")
 drift_speed = 0.003
 night_glow = 0.2
-
-[node name="TidewaterMoon" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(30000, 23622, -78000)
-true_radius = 2500.0
-system_id = "tidewater"
-texture = ExtResource("17_moon_tex")
-tint = Color(0.75, 0.85, 0.9, 1)
-uv_scale = Vector2(1, 1)
-drift_speed = 0.0
 
 [node name="TidewaterSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
@@ -297,24 +275,15 @@ night_glow = 1.0
 [node name="GlimmerPlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(-68790, -31000, -74194)
-true_radius = 16000.0
+true_radius = 8800.0
 system_id = "glimmer"
 texture = ExtResource("50_glimmer_tex")
+saturation = 0.45
 drift_speed = 0.004
 night_glow = 0.6
 ring_size = 2.0
 ring_color = Color(1, 0.8, 0.4, 1)
 ring_tilt = Vector3(0.5, 0.0, -0.2)
-
-[node name="GlimmerMoon" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(-50790, -6000, -58194)
-true_radius = 2000.0
-system_id = "glimmer"
-texture = ExtResource("17_moon_tex")
-tint = Color(1, 0.85, 0.45, 1)
-uv_scale = Vector2(1, 1)
-drift_speed = 0.0
 
 [node name="GlimmerSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
@@ -331,21 +300,12 @@ night_glow = 1.0
 [node name="DustbowlPlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(78000, -50000, 30000)
-true_radius = 17000.0
+true_radius = 9350.0
 system_id = "dustbowl"
 texture = ExtResource("66_desert_tex")
+saturation = 0.45
 drift_speed = 0.003
 night_glow = 0.25
-
-[node name="DustbowlMoon" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(60000, -26000, 26000)
-true_radius = 2200.0
-system_id = "dustbowl"
-texture = ExtResource("17_moon_tex")
-tint = Color(1, 0.75, 0.5, 1)
-uv_scale = Vector2(1, 1)
-drift_speed = 0.0
 
 [node name="DustbowlSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
@@ -362,21 +322,12 @@ night_glow = 1.0
 [node name="GreenhousePlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(-76000, 52000, 46000)
-true_radius = 18000.0
+true_radius = 9900.0
 system_id = "greenhouse"
 texture = ExtResource("67_jungle_tex")
+saturation = 0.45
 drift_speed = 0.003
 night_glow = 0.2
-
-[node name="GreenhouseMoon" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(-60000, 47000, 30000)
-true_radius = 2000.0
-system_id = "greenhouse"
-texture = ExtResource("17_moon_tex")
-tint = Color(0.75, 1, 0.75, 1)
-uv_scale = Vector2(1, 1)
-drift_speed = 0.0
 
 [node name="GreenhouseSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
@@ -393,24 +344,15 @@ night_glow = 1.0
 [node name="FrostlinePlanet" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")
 true_position = Vector3(18000, 74000, -100000)
-true_radius = 20000.0
+true_radius = 11000.0
 system_id = "frostline"
 texture = ExtResource("68_ice_tex")
+saturation = 0.45
 drift_speed = 0.002
 night_glow = 0.3
 ring_size = 1.7
 ring_color = Color(0.85, 0.8, 1, 1)
 ring_tilt = Vector3(-0.4, 0.0, 0.3)
-
-[node name="FrostlineMoon" type="Node3D" parent="World/SkyBodies"]
-script = ExtResource("42_sky_body")
-true_position = Vector3(0, 58000, -88000)
-true_radius = 2600.0
-system_id = "frostline"
-texture = ExtResource("17_moon_tex")
-tint = Color(0.85, 0.85, 1, 1)
-uv_scale = Vector2(1, 1)
-drift_speed = 0.0
 
 [node name="FrostlineSun" type="Node3D" parent="World/SkyBodies"]
 script = ExtResource("42_sky_body")

@@ -1,3 +1,10 @@
+# Playtest: your notes (camera stays put; fewer, calmer planets)
+
+1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** (or **B** on a gamepad) to swing it back.
+2. Fly around home space, the casino and the far systems: are the planets calm enough now? Too small? Is there any you miss? (Each one's `saturation` and `true_radius` are on its node under World/SkyBodies in FlightSandbox.tscn.)
+
+---
+
 # Playtest: beta step 4, three more systems (your notes round below)
 
 **What's new:** three more clients, each in their own system, each farther out, steeper and stormier than the last:

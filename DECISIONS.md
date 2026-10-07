@@ -643,3 +643,8 @@ be revisited; just say so.
 - **The captions are in the game's own pixel font** with the hazard-yellow bar, so the trailer looks like the game. Some of the game's own banners ("NOW ENTERING GLIMMER SYSTEM", comm calls) stay in shot on purpose.
 - **Reproducible:** `tools/trailer/make_trailer.sh` films three parts (space, on foot, title cards) and `tools/trailer/assemble.py` cuts them to the beat with ffmpeg. Change a caption or a shot and run it again.
 - It shows the main branch's arcade flight, not the Newtonian fork.
+
+## 2026-10-07 (your notes: the camera stays put; fewer, calmer planets)
+
+- **The camera stays where you put it** (your note: setting up a cinematic angle to watch the rig on your desktop). Swinging it round with the mouse wheel button (or the right stick, or dragging in watch mode) no longer eases back after a few seconds. **RESET CAMERA** swings it back behind the rig and resets the zoom: **P** on the keyboard, **B** on a gamepad. `orbit_return_seconds` in tuning.tres is now 0 ("never"); set it above 0 to bring back the old automatic return.
+- **Half the planets, smaller and calmer** (your note). Out of 12 planets and moons, 6 are gone: the giant gas planet under home space and all five moons. The five planets left (home, Glimmer, the Dustbowl, Greenhouse Reach, the Frostline) are 45% smaller and muted to 45% color, rings too. **Tidewater's Earth-like ocean planet is exactly as it was.** The suns are unchanged. A planet's color is a new `saturation` setting on each sky body, so you can turn any of them back up in the Inspector.
