@@ -1,3 +1,11 @@
+# Playtest: running out of fuel
+
+1. Fly with the throttle and boost until the fuel gauge hits zero (or set the rig's tank small in its ship file to get there faster). The engines should die: W, S, steering and boost do nothing, and you drift.
+2. A few seconds later Moe (or Raccoony) calls about a tanker. About 45 seconds after that it fills a quarter tank and bills you. Try it once with money in the bank and once broke (it goes on the tab).
+3. **Questions:** Is the wait about right, or too long or too short to sit through? Is ~320 credits a fair sting? Would you rather call the tanker yourself (a button), or is it fine that it comes on its own?
+
+---
+
 # Playtest: your notes (camera stays put; fewer, calmer planets)
 
 1. In flight, hold the **mouse wheel button** and swing the camera to a nice angle. Let go: it should stay there, through turns and boosts. Press **P** (or **B** on a gamepad) to swing it back.

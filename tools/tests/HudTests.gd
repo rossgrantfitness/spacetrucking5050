@@ -70,14 +70,26 @@ func test_a_full_tank_lasts_a_long_cruise() -> void:
 	check(model.fuel > 0.0, "a full tank should last an 18-minute cruise at top speed (%.2f left)" % model.fuel)
 
 
-func test_empty_tank_limps_instead_of_stranding() -> void:
+func test_empty_tank_kills_the_engines() -> void:
+	# No fuel, no thrust, no steering, no boost.
 	var model := FlightModel.new()
 	model.fuel = 0.0
+	var heading := model.heading
 	var controls := FlightControls.new()
 	controls.thrust = 1.0
-	_fly(model, controls, 2.0)
-	check(model.speed() > 0.5, "an empty tank should still crawl along on fumes")
-	check(absf(model.thrust - GameState.tuning.empty_tank_thrust) < 0.001, "on fumes, thrust should be the empty-tank fraction")
+	controls.steer = Vector2(1.0, 0.5)
+	controls.boost = true
+	_fly(model, controls, 5.0)
+	check(model.speed() < 0.01, "an empty tank shouldn't move the rig (%.2f m/s)" % model.speed())
+	check(absf(model.heading - heading) < 0.001, "an empty tank shouldn't steer the rig")
+	check(not model.boosting, "boost shouldn't light without main fuel")
+
+
+func test_roadside_tanker_costs_more_than_the_pumps() -> void:
+	var tuning := GameState.tuning
+	var at_the_pump := ceili(tuning.roadside_fuel * tuning.fuel_tank_price)
+	check(RoadsideFuel.price(tuning) > at_the_pump * 2, "the roadside tanker should cost well over pump price")
+	check(tuning.empty_tank_thrust == 0.0, "an empty tank should kill the engines by default")
 
 
 func test_boosting_shows_red_economy() -> void:

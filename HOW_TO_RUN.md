@@ -133,8 +133,12 @@ which isn't always where the nose points.
 
 **Fuel:** thrusting burns fuel, more at high speed; coasting is free. The
 little **ECO** arrow under the fuel gauge turns green, yellow or red to show
-how thriftily you're flying. An empty tank never strands you: the engines
-keep crawling along "on fumes".
+how thriftily you're flying. **Watch the gauge: an empty tank kills the
+engines.** No thrust, no brakes, no steering: you just drift. Gas-N-Go
+notices and sends a roadside tanker, which reaches you in about 45 seconds
+and puts in a quarter tank for about 320 credits (a call-out fee plus fuel
+at triple the pump price). Can't afford it? It goes on your tab. A quarter
+tank at the pumps costs about 23.
 
 Holding thrust at top speed only **sips** fuel: the engines' limiter just
 holds your speed (a full tank cruises about 27 minutes).

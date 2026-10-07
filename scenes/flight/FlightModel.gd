@@ -25,8 +25,8 @@ extends RefCounted
 ##     steering makes the shakes worse. Let off and it settles down.
 ##   - Thrusting burns main fuel: speeding up drinks it (more at high
 ##     speed), holding top speed on the limiter just sips it, coasting is
-##     free. An empty tank never strands you: the engines keep going "on
-##     fumes".
+##     free. An empty tank kills the engines and thrusters: you drift
+##     until a Gas-N-Go tanker comes out to you (RoadsideFuel.gd).
 ##
 ## Keeping these rules separate makes them easy to read and to test (see
 ## tools/tests/FlightTests.gd).
@@ -226,8 +226,8 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 ## Boost is a commitment: hold the button and it spools up, then lights;
 ## once lit it burns at least `boost_min_burn_seconds`, held or not.
 func _update_boost(delta: float, controls: FlightControls, tuning: Tuning) -> void:
-	if boost_fuel <= 0.0:
-		boosting = false
+	if boost_fuel <= 0.0 or fuel <= 0.0:
+		boosting = false  # (The boost burner needs the main engines running too.)
 		spool = 0.0
 		return
 	if boosting:
@@ -245,9 +245,10 @@ func _update_boost(delta: float, controls: FlightControls, tuning: Tuning) -> vo
 
 
 ## Burns main fuel for `throttle` (how hard the pilot is pushing) and
-## returns the thrust the engines actually give: all of it, or a little
-## "on fumes" when the tank is empty. Speeding up drinks fuel (faster =
-## thirstier); holding top speed on the limiter only sips it.
+## returns the thrust the engines actually give: all of it, or none when
+## the tank is empty (see empty_tank_thrust in tuning.tres). Speeding up
+## drinks fuel (faster = thirstier); holding top speed on the limiter only
+## sips it.
 func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -> float:
 	var speed_share := clampf(speed() / ship.max_speed, 0.0, 1.0)
 	var effort := 1.0 + speed_share * speed_share * tuning.fuel_speed_burn
@@ -269,9 +270,11 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	# NEGATIVE change of heading.
 	# Under boost, steering gets twitchy (easy to over-correct).
 	var twitch := tuning.boost_steer_gain if boosting else 1.0
-	var wanted_turn := -controls.steer.x * max_turn * twitch
-	var wanted_pitch := controls.steer.y * max_pitch * twitch
-	if absf(controls.steer.y) < 0.05:
+	# An empty tank means no thrusters to steer with either.
+	var power := engine_power(tuning)
+	var wanted_turn := -controls.steer.x * max_turn * twitch * power
+	var wanted_pitch := controls.steer.y * max_pitch * twitch * power
+	if absf(controls.steer.y) < 0.05 and power > 0.0:
 		# Hands off up/down: let the nose drift gently back toward level (or
 		# toward the road's climb, see rest_pitch).
 		wanted_pitch = clampf((rest_pitch - pitch) * tuning.nose_auto_level, -max_pitch, max_pitch)
@@ -330,6 +333,12 @@ func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> v
 func _pull(offset: float) -> float:
 	var t := _time + offset
 	return clampf((sin(t * 0.21 + offset) + 0.3 * sin(t * 0.53)) * 1.4, -1.0, 1.0)
+
+
+## How much power the engines and thrusters have: all of it with fuel in
+## the tank, empty_tank_thrust (0 = none) without.
+func engine_power(tuning: Tuning) -> float:
+	return 1.0 if fuel > 0.0 else tuning.empty_tank_thrust
 
 
 ## How much of something's strength is left under the load: 1 when empty,

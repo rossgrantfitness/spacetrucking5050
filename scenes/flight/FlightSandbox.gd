@@ -70,6 +70,7 @@ var _in_cockpit := false
 var _fade: ScreenFade
 var _current_system: String = ""
 var _route_events: RouteEvents
+var _roadside: RoadsideFuel
 ## Walking around the cabin (out of the seat).
 var _in_cabin: bool = false
 ## Whether the "hold to take the wheel" hint is showing for this push.
@@ -172,6 +173,11 @@ func _ready() -> void:
 	add_child(_route_events)
 	_route_events.start(_ship, _events_holder, _chatter, _places, current_system)
 	_route_events.banner_requested.connect(_hud.show_banner)
+	_roadside = RoadsideFuel.new()
+	add_child(_roadside)
+	_roadside.start(_ship, _chatter)
+	_roadside.allowed = func() -> bool: return _docking_at.is_empty() and not _ship.out_of_control
+	_roadside.banner_requested.connect(_hud.show_banner)
 	_setup_haze()
 	_blend_systems(true)
 	_pause_menu.resumed.connect(func() -> void:
