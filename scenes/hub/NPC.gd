@@ -73,6 +73,9 @@ func interact(player: Node3D) -> void:
 ## on-foot HUD hangs a "!" over them. (So does being who the objective
 ## points at; see HubHUD.)
 func has_news() -> bool:
+	if data != null and data.gives_company_missions and GameState.active_job_id.is_empty() \
+			and not GameState.has_flag("owns_company") and HubServices.COMPANY.next_mission() != null:
+		return true  # The boss has a mission for you.
 	var story := data.pick_conversation() if data != null else null
 	if story != null and story.places_order != null:
 		var order := story.places_order

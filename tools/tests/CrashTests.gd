@@ -90,3 +90,46 @@ func test_crashes_knock_you_away_from_what_you_hit() -> void:
 	var spin: Vector3 = ship.get("_spin")
 	check(absf(spin.normalized().y) > 0.7, "a hit on the nose's side spins it round like a pushed stick (about the up axis)")
 	_done(ship)
+
+
+func test_a_huge_hit_is_over_at_once() -> void:
+	var tuning := GameState.tuning
+	var ship := _ship()
+	var lost := []
+	var boom := []
+	ship.lost_control.connect(func(reason: String) -> void: lost.append(reason))
+	ship.exploded.connect(func() -> void: boom.append(true))
+	# 1500 km/h straight into a station wall in front of the rig.
+	var wall_point := ship.global_position + Vector3(0.0, 0.0, -10.0)
+	ship.bonk(1500.0 / 3.6, wall_point, Vector3.BACK)
+	check(ship.destroyed and boom.size() == 1, "1500 km/h into a wall: the rig goes up at once (no tumble)")
+	check(lost == ["impact"], "the crash says it was an impact")
+	var explosions := ship.get_parent().get_children().filter(func(n: Node) -> bool: return n is Explosion)
+	check(explosions.size() == 1, "one explosion")
+	if explosions.size() == 1:
+		var boom_node := explosions[0] as Explosion
+		check(boom_node.global_position.distance_to(wall_point) < 3.0, "it goes up where it hit, against the wall")
+		check(boom_node.surface_normal.is_equal_approx(Vector3.BACK), "the wreckage sprays back off the wall")
+		check(boom_node.power > 1.0, "a bigger hit, a bigger boom")
+		check(boom_node.get_node_or_null("Embers") != null, "the wall gets scorched")
+	_done(ship)
+	# Just short of that, it still tumbles first.
+	ship = _ship()
+	ship.bonk(tuning.crash_instant_speed - 5.0, ship.global_position, Vector3.BACK)
+	check(ship.out_of_control and not ship.destroyed, "just short of it, the rig tumbles first")
+	_done(ship)
+
+
+func test_harder_crashes_have_shorter_fuses() -> void:
+	var tuning := GameState.tuning
+	var ship := _ship()
+	ship.bonk(tuning.crash_speed + 1.0, ship.global_position, Vector3.BACK)
+	var gentle: float = ship.get("_wreck_clock")
+	_done(ship)
+	ship = _ship()
+	ship.bonk(tuning.crash_instant_speed - 1.0, ship.global_position, Vector3.BACK)
+	var hard: float = ship.get("_wreck_clock")
+	_done(ship)
+	check(gentle > hard + 1.0, "a harder crash blows up sooner (%.1f s vs %.1f s)" % [gentle, hard])
+	check(is_equal_approx(Ship.crash_severity(tuning.crash_speed, tuning), 0.0) and is_equal_approx(Ship.crash_severity(tuning.crash_instant_speed, tuning), 1.0),
+			"severity runs from 0 (just a crash) to 1 (instant)")

@@ -1,3 +1,24 @@
+# Playtest: your notes (crashes, the office, the boss's missions, the mouse)
+
+## What to do
+
+1. **Mouse:** fly with the mouse. It pushes the nose like a little thumbstick (a diamond shows how far). Hold the **mouse wheel button** and move the mouse to look around the rig; let go and the camera swings back.
+2. **Crashes:** boost into the side of a station at different speeds.
+   - A scrape bounces off.
+   - A hard hit tumbles briefly, then blows.
+   - Over about 900 km/h head-on, you're gone on the spot: the wreckage skids along the hull and leaves a scorch.
+3. **The office:** walk in from the truck stop and down the red carpet to the boss.
+4. **The boss's missions:** after Marge's first pie run, the boss has a "!". Take his missions (F10 → FINISH THE BOSS'S MISSIONS to skip ahead and see the company go up for sale).
+
+## Questions
+
+1. Does mouse steering feel right? Too sensitive or too sluggish? (`mouse_sensitivity` and `mouse_recenter_speed` in tuning.tres.)
+2. Is 900 km/h the right line for "instant"? Should scrapes be gentler or harsher?
+3. Is the boss mean enough? Too mean?
+4. Seven missions, one every couple of deliveries: is that the right length before the company's for sale?
+
+---
+
 # Playtest: beta step 3, White's story (the apartment round below)
 
 **What's new:** the story of White, Jacki's late husband, told quietly through people who knew him, his old logs, two story deliveries, a message and his mixtapes. All optional; it never gates anything. The whole map, and where every line lives, is in `docs/STORY.md`. **Every line is my draft**: change anything.

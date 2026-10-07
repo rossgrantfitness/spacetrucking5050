@@ -3,9 +3,12 @@ extends Node
 ## Reads the pilot's hands (keyboard, mouse and gamepad) and turns them into
 ## FlightControls for the ship.
 ##
-## Steering is the left stick, A / D and the arrow keys, or I J K L (the
-## mouse looks around instead: see ChaseCamera). It gets smoothed a little
-## so steering feels buttery.
+## Steering is the mouse, the left stick, A / D and the arrow keys, or
+## I J K L. The mouse works like a "virtual thumbstick": moving it pushes the
+## stick, and it drifts back to center when you stop. While the middle mouse
+## button (the wheel) is held, the mouse looks around the rig instead (see
+## ChaseCamera). Mouse and stick add together, then get smoothed a little so
+## steering feels buttery.
 ##
 ## The throttle is a LEVER (see "Throttle" in tuning.tres): W / right
 ## trigger pushes it up, S / left trigger pulls it down, and it stays where
@@ -35,6 +38,22 @@ var _controls := FlightControls.new()
 var _press_side: int = 0
 var _pressing := false
 var _smoothed_steer := Vector2.ZERO
+var _mouse_stick := Vector2.ZERO
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# The mouse only steers while it's captured (hidden and locked to the
+	# game window), so clicking around in menus never yanks the ship; and not
+	# while the wheel's held down (then it looks around).
+	if hands_free or not event is InputEventMouseMotion or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		return
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE) or get_viewport().get_camera_3d() is CinemaCamera:
+		return  # Looking around (or flying the cinema camera), not steering.
+	var motion := event as InputEventMouseMotion
+	# screen_relative = how far the mouse moved in real screen pixels,
+	# so the feel doesn't change when the window is resized.
+	_mouse_stick += motion.screen_relative * GameState.tuning.mouse_sensitivity
+	_mouse_stick = _mouse_stick.limit_length(1.0)
 
 
 ## Reads the controls for this physics step.
@@ -49,7 +68,8 @@ func read(delta: float) -> FlightControls:
 		boost_blocked = false
 		return _controls
 	var stick := Input.get_vector("steer_left", "steer_right", "steer_up", "steer_down", tuning.stick_deadzone)
-	var combined := stick
+	_mouse_stick = _mouse_stick.lerp(Vector2.ZERO, 1.0 - exp(-GameState.tuning.mouse_recenter_speed * delta))
+	var combined := (stick + _mouse_stick).limit_length(1.0)
 	_smoothed_steer = _smoothed_steer.lerp(combined, 1.0 - exp(-tuning.steer_response * delta))
 
 	_controls.steer = Vector2(_smoothed_steer.x, Settings.pitch_from_vertical_input(_smoothed_steer.y))
@@ -101,8 +121,15 @@ func current_steer() -> Vector2:
 	return _controls.steer
 
 
+## Where the mouse's virtual stick is right now (the HUD draws a little
+## diamond there).
+func mouse_stick() -> Vector2:
+	return _mouse_stick
+
+
 ## Lets go of everything, e.g. when the ship is reset to the start (the
 ## throttle lever goes back to idle).
 func clear() -> void:
+	_mouse_stick = Vector2.ZERO
 	_smoothed_steer = Vector2.ZERO
 	lever = 0.0

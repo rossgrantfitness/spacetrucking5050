@@ -8,6 +8,8 @@ extends Node
 ##   - GIVE ME A JOB: any job in the game, yours right now (handy for
 ##     testing heavy loads), whatever the story says.
 ##   - SKIP THE OPENING, +5,000 credits, and a free fill-up and repair.
+##   - FINISH THE BOSS'S MISSIONS: as if you'd done them all (the company's
+##     then for sale).
 ##   - STORY: SKIP TO...: jumps to a point in {husband}'s story (see
 ##     docs/STORY.md), so you can test one beat without 14 deliveries.
 ##
@@ -71,6 +73,7 @@ func open() -> void:
 	options.append({"text": "+5,000 CREDITS", "description": "Free money. Don't tell the tax droids."})
 	options.append({"text": "FILL UP AND FIX UP", "description": "Both tanks full, hull and cargo like new."})
 	options.append({"text": "STORY: SKIP TO...", "description": "Jump to a point in the story, to test one beat."})
+	options.append({"text": "FINISH THE BOSS'S MISSIONS", "description": "As if you'd done every mission he hands out (then the company's for sale)."})
 	options.append({"text": "CLOSE", "description": ""})
 	var pick := await MenuPanel.ask(tree, "DEBUG MENU", "For testing. (F10 to open; turn off with debug_menu in tuning.tres.)", options)
 	if pick >= 0 and pick < JUMP_PLACES.size():
@@ -93,6 +96,8 @@ func open() -> void:
 			_fill_up()
 		4:
 			await _story_menu()
+		5:
+			finish_missions()
 	_open = false
 	Input.mouse_mode = mouse
 
@@ -136,6 +141,19 @@ func _give_job() -> void:
 	var scene := get_tree().current_scene
 	if scene != null and scene.has_method("debug_jump"):
 		scene.call("_set_destination", scene.call("_pick_destination"))
+
+
+## Marks every one of the boss's missions delivered.
+func finish_missions() -> void:
+	skip_opening()
+	GameState.set_flag("first_mission_done")
+	for mission: CompanyMission in HubServices.COMPANY.missions:
+		GameState.set_flag(mission.job.completes_flag)
+		GameState.set_flag(mission.job.id + "_arrived_perfect")
+		if not mission.job.id in GameState.finished_jobs:
+			GameState.finished_jobs.append(mission.job.id)
+	GameState.deliveries = maxi(GameState.deliveries, 13)
+	GameState.save_game()
 
 
 func _story_menu() -> void:

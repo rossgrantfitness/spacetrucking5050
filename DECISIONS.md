@@ -589,3 +589,26 @@ be revisited; just say so.
 - **Story-locked radio stations** (`RadioStation.requires_flag`): skipped on the dial and in the jukebox until their flag is set.
 - **Debug:** F10 → STORY: SKIP TO... jumps to any beat. A new test (`StoryTests.gd`) checks every beat leads to the next and nothing jumps ahead. A new flight smoke test (`smoke_story.gd`) checks that the message really plays.
 - Small fix: Jacki's comm name said "JACK · YOU"; now "JACKI · YOU".
+
+## 2026-10-07 (your notes: crashes, the office, the boss's missions, the mouse)
+
+- **Crashes depend on how hard you hit** (your note: 1500 km/h into a station should be instant). Only the part of your speed going *into* the thing counts.
+  - Under 400 km/h: a bonk, as before.
+  - From 400 to 900 km/h: you tumble and blow up, with a shorter fuse the harder the hit (2.5 s down to 0.7 s). Bounces are much smaller now: a rig is heavy and crumples.
+  - Over 900 km/h (`crash_instant_speed`): instant. The rig goes up right where it hit.
+  - **The explosion reacts to what you hit:** the wreckage sprays back off the surface and skids along it with the rig's speed, the boom is bigger the harder the hit, and the surface is scorched.
+  - A tumbling wreck that slams into something hard goes up on the spot.
+  - All of it is in tuning.tres under "Crashes".
+- **The OrbitalEx lobby:** the camera stood low beside a pillar, so the pillar filled a third of the screen and Jacki walked right past the lens. It's now a symmetrical shot from the doors, straight down the red carpet to the glowing logo and the boss's desk.
+- **The boss gives missions** (your note).
+  - Seven of his own jobs, one at a time and in order, from the office, with an insult when he hands each over and another when you collect the check: his dry cleaning, HUSTLE posters, a golden statue of himself, Sal's books, Employee of the Month plaques, a gold-plated musical toilet for his yacht, and the quarterly report to the board.
+  - They're spread out (one every two deliveries or so).
+  - He has a "!" and the objective line points to him while one's waiting.
+  - Data: `missions` in `data/company/company.tres` (blueprint `CompanyMission.gd`).
+- **Buying the company only comes up after the last mission:** the board reads the report and puts the company up for sale. Until then the office shows "missions: x of 7".
+- **Drive-throughs take deliveries** (two missions go to the Gas-N-Go).
+- **The mouse steers again** (your note): it's the old virtual stick, with the small diamond on the HUD.
+  - Hold the middle mouse button (the wheel) and the mouse looks around the rig instead.
+  - Let go and the camera eases back behind the rig.
+  - Right-drag still pans, and rolling the wheel still zooms.
+- Debug: F10 → FINISH THE BOSS'S MISSIONS.

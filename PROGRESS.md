@@ -1,15 +1,12 @@
 # Progress
 
-**Current status:** **Beta step 3: White's story** (map in `docs/STORY.md`).
-- People remember him: Marge, Gill, Lily, Dusty, the boss, Big Wendell and the crew.
-- His old logs come back on the cabin PC.
-- Two story deliveries: his pie order for Gill, and his last load.
-- His message plays on the comms.
-- His mixtapes become a station: White Noise 43.8.
-- F10 → STORY: SKIP TO... tests any beat.
+**Current status:** **Your notes, done:**
+- Crashes depend on impact speed: over 900 km/h into something is instant.
+- The OrbitalEx lobby has a new camera.
+- The boss hands out 7 insulting missions; buying the company waits for all of them.
+- The mouse steers again (hold the wheel to look around).
 
-(Before that: the apartment's paintings refit, the vending model over the
-hallway art, and Jacki's bendy ears.)
+(Before that: beta step 3, White's story.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).

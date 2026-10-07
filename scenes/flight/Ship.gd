@@ -311,7 +311,9 @@ func bonk(impact: float, where: Vector3, away: Vector3 = Vector3.ZERO) -> void:
 		Input.start_joy_vibration(0, 0.3 + 0.5 * strength, 0.2 + 0.8 * strength, 0.15 + 0.25 * strength)
 	bonked.emit(strength, where)
 	if tuning.crashes_enabled:
-		if impact >= tuning.crash_speed:
+		if impact >= tuning.crash_instant_speed:
+			obliterate(where, away, impact)
+		elif impact >= tuning.crash_speed:
 			lose_control("crash", where, away, impact)
 		elif hull <= 0.0 and tuning.crash_on_empty_hull:
 			lose_control("hull", where, away, impact)
@@ -338,7 +340,8 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 		_knock(where, away, impact)
 	else:
 		_spin = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * tuning.crash_spin_speed
-	_wreck_clock = tuning.crash_spin_seconds
+	# The harder the hit, the shorter the fuse.
+	_wreck_clock = lerpf(tuning.crash_spin_seconds, tuning.crash_fuse_min_seconds, crash_severity(impact, tuning))
 	shake.add_trauma(1.0)
 	_spool_sound.stop()
 	_alarm_sound.volume_db = -6.0
@@ -374,13 +377,33 @@ func _strain_the_hull(delta: float) -> void:
 		lose_control("overdrive")  # Went too fast.
 
 
+## A hit far too hard to survive (see crash_instant_speed): the rig goes up
+## right there, against what it hit. No bounce, no tumble.
+func obliterate(where: Vector3, away: Vector3, impact: float) -> void:
+	if destroyed:
+		return
+	out_of_control = true
+	cruise = null
+	autopilot_route.clear()
+	flight.boosting = false
+	lost_control.emit("impact")
+	_explode(where, away, clampf(impact / maxf(GameState.tuning.crash_instant_speed, 1.0), 1.0, 2.5))
+
+
+## How bad a crash at `impact` m/s is: 0 (only just a crash) to 1 (only just
+## short of going up at once).
+static func crash_severity(impact: float, tuning: Tuning) -> float:
+	return clampf((impact - tuning.crash_speed) / maxf(tuning.crash_instant_speed - tuning.crash_speed, 1.0), 0.0, 1.0)
+
+
 ## The physics of a crash: bounces the rig off along `away` (the way out
 ## of what it hit) and spins it around the hit: like a push on one end of a
 ## stick, the spin axis is (where it hit, from the middle) x (the push).
 func _knock(where: Vector3, away: Vector3, impact: float) -> void:
 	var tuning := GameState.tuning
 	var hard := clampf(impact / maxf(tuning.crash_speed, 1.0), 0.5, 2.0)
-	flight.velocity += away * impact * tuning.crash_bounce
+	# Heavy, and it crumples: harder hits bounce back less.
+	flight.velocity += away * impact * tuning.crash_bounce * (1.0 - 0.5 * crash_severity(impact, tuning))
 	var lever := where - global_position
 	var axis := lever.cross(away)
 	if axis.length() < 0.5:
@@ -410,6 +433,10 @@ func _tumble(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var contact := get_slide_collision(i)
 		var hit := -before.dot(contact.get_normal())
+		if hit >= GameState.tuning.crash_instant_speed * 0.5:
+			# Tumbling into something hard: that's the end of it.
+			_explode(contact.get_position(), contact.get_normal(), 1.2)
+			return
 		if hit > 3.0:
 			_knock(contact.get_position(), contact.get_normal(), hit)
 			shake.add_trauma(0.4)
@@ -422,7 +449,10 @@ func _tumble(delta: float) -> void:
 		_explode()
 
 
-func _explode() -> void:
+## Blows the rig up: where it is (in open space), or at `at` against a
+## surface facing `away` (the wreckage sprays back off it and skids along
+## it, and it's scorched). `power` scales the boom.
+func _explode(at: Vector3 = Vector3.INF, away: Vector3 = Vector3.ZERO, power: float = 1.0) -> void:
 	destroyed = true
 	_visual_pivot.visible = false
 	for spark in _sparks:
@@ -433,8 +463,11 @@ func _explode() -> void:
 			player.stop()
 	_boom_sound.play()
 	var boom := Explosion.new()
+	boom.power = power
+	boom.carry = flight.velocity
+	boom.surface_normal = away
 	get_parent().add_child(boom)
-	boom.global_position = global_position
+	boom.global_position = (at + away * 1.5) if at.is_finite() else global_position
 	flight.velocity = Vector3.ZERO
 	velocity = Vector3.ZERO
 	shake.rumble = 0.0

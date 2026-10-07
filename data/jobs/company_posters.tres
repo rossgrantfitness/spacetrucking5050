@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "company_posters"
+cargo_name = "Motivational posters (4 million)"
+client_name = "Tidewater Cannery"
+description = "Four million gold-foil posters that say HUSTLE, for Gill's crew. Don't read them."
+from_place = "truck_stop"
+to_place = "tidewater"
+weight = 900000000.0
+base_pay = 900
+on_job_board = false
+repeatable = false
+requires_flag = "company_suits_done"
+completes_flag = "company_posters_done"

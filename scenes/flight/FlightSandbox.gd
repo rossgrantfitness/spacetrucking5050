@@ -1158,8 +1158,13 @@ func _drop_off(id: String, place: PlaceData) -> void:
 ## the autopilot rolls you out the far side and you carry on.
 func _drive_through(id: String, place: PlaceData) -> void:
 	_remember_rig()
+	# A load for here gets dropped at the counter (the boss sends things to
+	# the Gas-N-Go).
+	var delivered := _deliver_here(id)
+	if delivered:
+		Radio.dj_react("delivery", {"place": place.display_name})
 	await _greet(place, place.display_name)
-	await _counter(id, place, false)
+	await _counter(id, place, delivered)
 	GameState.save_game()
 	_ship.process_mode = Node.PROCESS_MODE_INHERIT
 	_restore_rig()

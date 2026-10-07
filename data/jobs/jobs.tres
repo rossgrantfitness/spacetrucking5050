@@ -27,7 +27,14 @@
 [ext_resource type="Resource" path="res://data/jobs/space_hens.tres" id="j_space_hens"]
 [ext_resource type="Resource" path="res://data/jobs/white_pie.tres" id="j_white_pie"]
 [ext_resource type="Resource" path="res://data/jobs/white_last_load.tres" id="j_white_last_load"]
+[ext_resource type="Resource" path="res://data/jobs/company_suits.tres" id="j_company_suits"]
+[ext_resource type="Resource" path="res://data/jobs/company_posters.tres" id="j_company_posters"]
+[ext_resource type="Resource" path="res://data/jobs/company_statue.tres" id="j_company_statue"]
+[ext_resource type="Resource" path="res://data/jobs/company_ledgers.tres" id="j_company_ledgers"]
+[ext_resource type="Resource" path="res://data/jobs/company_plaques.tres" id="j_company_plaques"]
+[ext_resource type="Resource" path="res://data/jobs/company_toilet.tres" id="j_company_toilet"]
+[ext_resource type="Resource" path="res://data/jobs/company_report.tres" id="j_company_report"]
 
 [resource]
 script = ExtResource("1_list")
-jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens"), ExtResource("j_gill_ice"), ExtResource("j_white_pie"), ExtResource("j_white_last_load")])
+jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens"), ExtResource("j_gill_ice"), ExtResource("j_white_pie"), ExtResource("j_white_last_load"), ExtResource("j_company_suits"), ExtResource("j_company_posters"), ExtResource("j_company_statue"), ExtResource("j_company_ledgers"), ExtResource("j_company_plaques"), ExtResource("j_company_toilet"), ExtResource("j_company_report")])

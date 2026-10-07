@@ -3,6 +3,12 @@ extends Node3D
 ## The rig blowing up: a white flash, a fireball that swells and fades, a
 ## shockwave ring racing outward, and chunks of hull tumbling away. Built
 ## from chunky shapes in code (EventKit), PS1 style. Cleans itself up.
+##
+## When it happens against something (slamming into a station), set
+## `surface_normal` (pointing out of what was hit) and `carry` (the rig's
+## speed along the surface) before adding it: the wreckage sprays back off
+## the surface and skids along it, and the surface gets a scorch mark.
+## `power` scales the whole thing (1 = an ordinary wreck).
 
 
 ## How long it lasts before it removes itself, in seconds.
@@ -18,24 +24,48 @@ var _debris_velocity: Array[Vector3] = []
 var _debris_spin: Array[Vector3] = []
 var _rng := RandomNumberGenerator.new()
 
+## Out of what was hit (zero = blew up in open space).
+var surface_normal := Vector3.ZERO
+## The rig's speed when it went, carried on by the wreckage (m/s).
+var carry := Vector3.ZERO
+## How big a boom (1 = ordinary).
+var power := 1.0
+
 
 func _ready() -> void:
 	_rng.randomize()
-	_flash = EventKit.glow(self, 45.0, Vector3.ZERO, Color(1.0, 0.97, 0.85))
+	_flash = EventKit.glow(self, 45.0 * power, Vector3.ZERO, Color(1.0, 0.97, 0.85))
 	var fire_colors: Array[Color] = [Color(1.0, 0.85, 0.3), Color(1.0, 0.5, 0.15), Color(1.0, 0.25, 0.1)]
 	for i in 3:
-		var ball := EventKit.ball(self, 3.0 - i * 0.6, Vector3(_rng.randf_range(-3, 3), _rng.randf_range(-3, 3), _rng.randf_range(-3, 3)),
+		var ball := EventKit.ball(self, (3.0 - i * 0.6) * power, Vector3(_rng.randf_range(-3, 3), _rng.randf_range(-3, 3), _rng.randf_range(-3, 3)),
 				EventKit.paint(fire_colors[i], 2.4))
 		_fireballs.append(ball)
-	_ring = EventKit.torus(self, 9.5, 10.0, Vector3.ZERO, EventKit.paint(Color(1.0, 0.6, 0.35), 1.4), Vector3(_rng.randf() * 0.6, 0.0, _rng.randf() * 0.6))
+	_ring = EventKit.torus(self, 9.5 * power, 10.0 * power, Vector3.ZERO, EventKit.paint(Color(1.0, 0.6, 0.35), 1.4), Vector3(_rng.randf() * 0.6, 0.0, _rng.randf() * 0.6))
 	var hull_colors: Array[Color] = [Color(0.55, 0.57, 0.62), Color(0.95, 0.75, 0.2), Color(0.2, 0.2, 0.24), Color(1.0, 0.5, 0.2)]
 	for i in DEBRIS_COUNT:
 		var size := Vector3(_rng.randf_range(0.6, 3.0), _rng.randf_range(0.3, 1.5), _rng.randf_range(0.6, 3.5))
 		var chunk := EventKit.box(self, size, Vector3.ZERO, EventKit.paint(hull_colors[i % hull_colors.size()], 0.4 if i % 4 == 3 else 0.0))
 		_debris.append(chunk)
 		var direction := Vector3(_rng.randf_range(-1, 1), _rng.randf_range(-1, 1), _rng.randf_range(-1, 1)).normalized()
-		_debris_velocity.append(direction * _rng.randf_range(15.0, 55.0))
+		var normal := surface_normal.normalized()
+		if not normal.is_zero_approx() and direction.dot(normal) < 0.0:
+			direction = direction.bounce(normal)  # Nothing flies into the wall: it sprays back off it.
+		# The wreckage keeps some of the rig's speed: skidding along a wall,
+		# or carrying on in open space.
+		var skid := carry - normal * carry.dot(normal)
+		_debris_velocity.append(direction * _rng.randf_range(15.0, 55.0) * sqrt(power) + skid * _rng.randf_range(0.25, 0.8))
 		_debris_spin.append(Vector3(_rng.randf_range(-6, 6), _rng.randf_range(-6, 6), _rng.randf_range(-6, 6)))
+	if not surface_normal.is_zero_approx():
+		_scorch(surface_normal.normalized())
+
+
+## A black scorch mark on whatever it hit, just behind the fireball.
+func _scorch(normal: Vector3) -> void:
+	var mark := EventKit.cylinder(self, 7.0 * power, 0.1, -normal * 1.4, EventKit.paint(Color(0.06, 0.05, 0.05)))
+	mark.basis = Basis(Quaternion(Vector3.UP, normal))
+	var glow := EventKit.cylinder(self, 3.0 * power, 0.12, -normal * 1.38, EventKit.paint(Color(1.0, 0.45, 0.15), 1.6))
+	glow.basis = mark.basis
+	glow.name = "Embers"
 
 
 func _process(delta: float) -> void:

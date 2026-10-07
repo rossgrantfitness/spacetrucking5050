@@ -549,6 +549,16 @@ static func check_in(tree: SceneTree) -> void:
 		await Dialogue.say(GameState.names.bunny_name, COMPANY.first_check_reaction, Dialogue.BUNNY_VOICE.voice_pitch, Dialogue.BUNNY_VOICE)
 		await Dialogue.say(GameState.names.fill_in("{boss}"), COMPANY.first_check_boss, BOSS.voice_pitch, BOSS)
 		GameState.set_flag("boss_sent_to_marge")
+	# His missions: he has something to say about each one (none of it nice).
+	for check: Dictionary in result["checks"]:
+		var mission := COMPANY.mission_for(str(check.get("job", "")))
+		if mission != null and not mission.done.is_empty():
+			await Dialogue.say(GameState.names.fill_in("{boss}"), _filled(mission.done), BOSS.voice_pitch, BOSS)
+	if COMPANY.all_missions_done() and not GameState.has_flag("company_for_sale"):
+		GameState.set_flag("company_for_sale")
+		await Dialogue.say(GameState.names.fill_in("{boss}"), _filled(COMPANY.missions_all_done), BOSS.voice_pitch, BOSS)
+		await MenuPanel.ask(tree, GameState.names.fill_in("{company} IS FOR SALE").to_upper(),
+				GameState.names.fill_in("The board wants out. {company} is for sale, to anyone with the money.\n\nBUY {company} is on the office menu now."), [{"text": "INTERESTING"}])
 	GameState.save_game()
 
 
@@ -578,8 +588,9 @@ static func company_office(tree: SceneTree) -> void:
 		checked_in = true
 	if not GameState.waiting_orders().is_empty() and GameState.active_job_id.is_empty():
 		await hand_out_orders(tree)
-		checked_in = true
-	if checked_in:
+		return
+	# He's got a mission for you (if he has one ready).
+	if await hand_out_mission(tree) or checked_in:
 		return
 	var currency := GameState.names.currency_short
 	while true:
@@ -591,7 +602,11 @@ static func company_office(tree: SceneTree) -> void:
 		var orders := GameState.waiting_orders()
 		if not orders.is_empty():
 			options.append({"text": "NEW ORDERS (%d)" % orders.size(), "description": "Jobs people called in. %s" % ("" if GameState.active_job_id.is_empty() else "Deliver the one you're hauling first.")})
-		if not owner:
+		var mission := COMPANY.next_mission() if not owner else null
+		if mission != null and GameState.active_job_id.is_empty():
+			options.append({"text": GameState.names.fill_in("{boss}'S MISSION").to_upper(), "detail": "%d OF %d" % [COMPANY.missions_done() + 1, COMPANY.missions.size()],
+					"description": mission.job.cargo_name})
+		if not owner and COMPANY.all_missions_done():
 			var share := clampf(float(GameState.credits) / float(price), 0.0, 1.0)
 			var rng := RandomNumberGenerator.new()
 			rng.randomize()
@@ -603,6 +618,8 @@ static func company_office(tree: SceneTree) -> void:
 		options.append({"text": "LEAVE", "description": ""})
 		var title := GameState.names.fill_in("{company} · REGIONAL OFFICE").to_upper()
 		var body := "Completion: %d%%." % Completion.percent()
+		if not owner and not COMPANY.all_missions_done():
+			body = GameState.names.fill_in("{boss}'s missions: %d of %d done. Completion: %d%%.") % [COMPANY.missions_done(), COMPANY.missions.size(), Completion.percent()]
 		if owner:
 			body = GameState.names.fill_in("It's your company. {boss} files things. Completion: %d%%.") % Completion.percent()
 		var pick := await MenuPanel.ask(tree, title, body, options)
@@ -613,9 +630,32 @@ static func company_office(tree: SceneTree) -> void:
 			await check_in(tree)
 		elif picked.begins_with("NEW ORDERS"):
 			await hand_out_orders(tree)
+		elif picked.ends_with("'S MISSION"):
+			await hand_out_mission(tree)
 		elif picked.begins_with("BUY"):
 			await buy_company(tree)
 			return
+
+
+## The boss hands over his next mission (see CompanyMission.gd), insulting
+## you the whole time. Returns whether he had one to give.
+static func hand_out_mission(tree: SceneTree) -> bool:
+	if GameState.has_flag("owns_company") or not GameState.active_job_id.is_empty():
+		return false
+	var mission := COMPANY.next_mission()
+	if mission == null:
+		return false
+	await Dialogue.say(GameState.names.fill_in("{boss}"), _filled(mission.pitch), BOSS.voice_pitch, BOSS)
+	if not await offer_job(tree, mission.job) and not mission.declined.is_empty():
+		await Dialogue.say(GameState.names.fill_in("{boss}"), _filled(mission.declined), BOSS.voice_pitch, BOSS)
+	return true
+
+
+static func _filled(lines: PackedStringArray) -> PackedStringArray:
+	var out := PackedStringArray()
+	for line in lines:
+		out.append(GameState.names.fill_in(line))
+	return out
 
 
 ## The boss hands over the oldest new order (a job someone called in; see
@@ -659,6 +699,8 @@ static func _order_words(lines: PackedStringArray, job: JobData) -> PackedString
 ## Buying the company: the end of the story (and the start of keeping
 ## every credit you earn).
 static func buy_company(tree: SceneTree) -> void:
+	if not COMPANY.all_missions_done():
+		return  # Not for sale until the boss's missions are done.
 	var price := GameState.tuning.company_price
 	var currency := GameState.names.currency_short
 	var sure := await MenuPanel.ask(tree, GameState.names.fill_in("BUY {company}?").to_upper(),

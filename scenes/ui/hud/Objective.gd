@@ -82,6 +82,11 @@ static func _current(flying: bool) -> Dictionary:
 		if in_station and at_truck_stop:
 			return _goal(GameState.names.fill_in("NEW ORDER%s AT THE {company} OFFICE").to_upper() % plural, boss)
 		return _goal("NEW ORDER%s WAITING AT THE TRUCK STOP" % plural, "airlock" if at_truck_stop else ("" if flying else "wheel"))
+	# The boss has a mission for you.
+	if not GameState.has_flag("owns_company") and HubServices.COMPANY.next_mission() != null:
+		if in_station and at_truck_stop:
+			return _goal(GameState.names.fill_in("{boss} HAS A MISSION FOR YOU: {company} OFFICE").to_upper(), boss)
+		return _goal(GameState.names.fill_in("{boss} HAS A MISSION: THE TRUCK STOP").to_upper(), "airlock" if at_truck_stop else ("" if flying else "wheel"))
 	# Free trucking.
 	if flying:
 		return _goal("NO LOAD: DOCK SOMEWHERE AND PICK A JOB", "")

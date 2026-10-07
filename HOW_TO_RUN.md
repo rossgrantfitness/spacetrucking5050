@@ -98,11 +98,12 @@ Y = △.)
 
 | What | Keyboard & mouse | Gamepad |
 |---|---|---|
+| Steer (nose follows the mouse) | Move the mouse | Left stick |
 | Steer left / right | **J** / **L**, or **A** / **D**, or **←** / **→** | Left stick |
 | Nose up / down | **I** / **K**, or **↑** / **↓** | Left stick |
-| Look around the rig (any direction) | Move the mouse | Right stick |
+| Look around the rig (any direction) | Hold the **mouse wheel** down and move the mouse | Right stick |
 | Pan the camera | Hold **right mouse button** and drag | — |
-| Camera back behind the rig | **Middle-click** (or wait a few seconds) | (wait a few seconds) |
+| Camera back behind the rig | Let go of the wheel (or wait a few seconds) | (wait a few seconds) |
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
@@ -285,13 +286,15 @@ glass and felt tones. To try your own, replace a file and keep its name
 (the busy ones also have `_2` and `_3` versions, picked in turn so they
 never repeat exactly).
 
-**The mouse while flying looks around:** it's hidden and locked to the game
-window, and moving it swings the camera all the way around your rig, which
-stays in the middle of the screen. Hold the right button and drag to pan;
-the wheel zooms. Let go for a few seconds and the camera eases back behind
-the rig (middle-click snaps it back). The mouse never steers: steer with
-**I J K L** (or A / D and the arrows, or the left stick). On autopilot the
-pointer is free (watch mode): drag with the left button to look around.
+**The mouse while flying steers:** it's hidden and locked to the game
+window, and moving it pushes the nose that way, like a little thumbstick
+that drifts back to the middle when you stop (a small diamond shows how far
+you're pushing). **Hold the mouse wheel down** and the mouse looks around
+instead: the camera swings all the way around your rig, which stays in the
+middle of the screen. Let go of the wheel and the camera eases back behind
+the rig, and the mouse steers again. Hold the right button and drag to pan;
+rolling the wheel zooms. On autopilot the pointer is free (watch mode):
+drag with the left button to look around.
 Press **Esc** to get your pointer back any time (that opens the pause menu).
 
 ### Walking around (your rig and the stations)
@@ -438,6 +441,8 @@ For testing without a full run. Press **F10** anywhere:
 - **Skip the opening.**
 - **+5,000 credits.**
 - **Fill up and fix up.**
+- **Finish the boss's missions:** as if you'd done all seven (then the
+  company's for sale at the office).
 - **Story: skip to...:** jump to a point in White's story (see
   `docs/STORY.md`), then go do the next thing. Handy for testing one beat
   without 14 deliveries.
@@ -592,8 +597,8 @@ at the bottom.
   which runs on nearly any computer from the last ten years.
 - **The project won't open or looks broken:** make sure you're on Godot
   **4.7.x** (shown in the Project Manager's corner and on the boot screen).
-- **My mouse pointer disappeared:** in flight the mouse looks around the
-  rig. Press **Esc** to get it back.
+- **My mouse pointer disappeared:** in flight the mouse steers the rig.
+  Press **Esc** to get it back.
 - **Stuttery or slow:** tell me your computer and graphics card (shown at the
   bottom of the boot screen). Nothing here should be demanding.
 - When reporting a problem, the bottom lines of the boot screen (Godot

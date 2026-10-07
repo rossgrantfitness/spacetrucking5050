@@ -28,6 +28,9 @@ extends Resource
 ## Things they say depending on the story so far (the first that fits wins).
 ## See Conversation.gd.
 @export var conversations: Array[Conversation] = []
+## The boss: he hands out the company's missions (see `missions` in
+## res://data/company/company.tres), and has a "!" while one's waiting.
+@export var gives_company_missions: bool = false
 
 
 ## The conversation to use right now, or null (then they say `lines`).

@@ -10,12 +10,12 @@ extends Camera3D
 ##   get motion sick from a rolling camera, so it's off by default).
 ## - The mouse wheel zooms it in and out (it remembers the zoom until you
 ##   quit the game).
-## - LOOK AROUND: moving the mouse (or the right stick) swings it around the
-##   rig in any direction, the rig staying in the middle of the screen. Hold
-##   the right mouse button and drag to pan. When the mouse is free (watch
-##   mode, on autopilot), drag with the left button instead. Leave it alone
-##   for a few seconds and it eases back behind the rig; middle-click snaps
-##   it back. See "Chase camera" in tuning.tres.
+## - LOOK AROUND: hold the middle mouse button (the wheel) and move the mouse
+##   (or use the right stick) to swing it around the rig in any direction,
+##   the rig staying in the middle of the screen. Let go and it eases back
+##   behind the rig (and the mouse steers again). Hold the right mouse button
+##   and drag to pan. When the mouse is free (watch mode, on autopilot), drag
+##   with the left button instead. See "Chase camera" in tuning.tres.
 ##
 ## All the numbers live in res://data/tuning.tres, under "Chase camera" and
 ## "Field of view".
@@ -41,6 +41,7 @@ var pan := Vector2.ZERO
 var _idle := 0.0
 var _dragging := false
 var _panning := false
+var _orbiting := false  # The wheel's held down: the mouse looks around.
 
 
 ## The field of view for the ship's speed: normal until 70% of top speed (by
@@ -81,7 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			pan += Vector2(-motion.screen_relative.x, motion.screen_relative.y) * tuning.orbit_pan_meters
 			pan = pan.limit_length(tuning.orbit_pan_max)
 			_idle = 0.0
-		elif captured or _dragging:
+		elif (captured and _orbiting) or _dragging:
 			# Mouse right swings the view right, mouse up looks up.
 			look_around(-motion.screen_relative.x * deg_to_rad(tuning.orbit_mouse_degrees),
 					motion.screen_relative.y * deg_to_rad(tuning.orbit_mouse_degrees))
@@ -104,8 +105,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				return
 		MOUSE_BUTTON_MIDDLE:
-			if button.pressed:
-				reset_look()
+			_orbiting = button.pressed
+			if not button.pressed:
+				_idle = GameState.tuning.orbit_return_seconds  # Let go: ease straight back.
 		_:
 			return
 	get_viewport().set_input_as_handled()
@@ -164,7 +166,7 @@ func _update_look(delta: float) -> void:
 		var turn := deg_to_rad(tuning.orbit_stick_degrees) * delta
 		look_around(-stick.x * turn, stick.y * turn)
 	_idle += delta
-	if tuning.orbit_return_seconds > 0.0 and _idle > tuning.orbit_return_seconds and not _panning and not _dragging:
+	if tuning.orbit_return_seconds > 0.0 and _idle > tuning.orbit_return_seconds and not _panning and not _dragging and not _orbiting:
 		var ease_back := 1.0 - exp(-tuning.orbit_return_speed * delta)
 		orbit_yaw = wrapf(lerp_angle(orbit_yaw, 0.0, ease_back), -PI, PI)
 		orbit_pitch = lerpf(orbit_pitch, 0.0, ease_back)

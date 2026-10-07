@@ -27,9 +27,9 @@ extends Resource
 ## (At 6, steering is about 2/3 of the way there after 0.17 seconds.)
 @export_range(1.0, 30.0, 0.5) var steer_response: float = 6.0
 
-## (The mouse no longer steers: it looks around. These two only drive the
-## mouse gauge on the title screen's input check.)
-## How far a mouse movement pushes the input check's mouse gauge.
+## How far a mouse movement pushes the "virtual stick" when steering with the
+## mouse. Higher = smaller hand movements steer harder. (Hold the middle
+## mouse button, the wheel, to look around instead.)
 @export_range(0.001, 0.05, 0.001) var mouse_sensitivity: float = 0.008
 
 ## How quickly the mouse's virtual stick drifts back to center after you stop
@@ -491,14 +491,25 @@ extends Resource
 @export_range(10.0, 500.0, 1.0, "suffix:m/s") var crash_speed: float = 110.0
 ## Also crash when bonks have worn the hull down to nothing.
 @export var crash_on_empty_hull: bool = true
-## How long the rig tumbles out of control before it blows up.
+## Hitting something THIS hard (or harder) is over at once: no bounce, no
+## tumble, the rig goes up where it hit. 250 m/s is 900 km/h. (Only the
+## part of your speed going INTO the thing counts: scraping along a wall
+## fast is a crash you tumble away from; flying straight into it is not.)
+@export_range(50.0, 1000.0, 5.0, "suffix:m/s") var crash_instant_speed: float = 250.0
+## How long the rig tumbles out of control before it blows up, after a hit
+## just hard enough to crash (or the hull giving out).
 @export_range(0.5, 10.0, 0.1, "suffix:s") var crash_spin_seconds: float = 2.5
+## ...and after a hit only just short of crash_instant_speed: the harder the
+## hit, the shorter the fuse.
+@export_range(0.1, 10.0, 0.1, "suffix:s") var crash_fuse_min_seconds: float = 0.7
 ## How fast it tumbles, in turns per second... roughly (radians per second).
 @export_range(0.0, 30.0, 0.5, "suffix:rad/s") var crash_spin_speed: float = 7.0
 
 ## How hard a crash knocks the rig away from what it hit (1 = bounces off
-## as fast as it hit; 0 = just slides along it).
-@export_range(0.0, 2.0, 0.05) var crash_bounce: float = 0.75
+## as fast as it hit; 0 = just slides along it). A rig is heavy and crumples:
+## the harder the hit, the less of it bounces (half as much near
+## crash_instant_speed).
+@export_range(0.0, 2.0, 0.05) var crash_bounce: float = 0.35
 
 
 @export_group("Screen shake")

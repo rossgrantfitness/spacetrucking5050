@@ -34,6 +34,7 @@ const GROUPS: Array = [
 		["Zoom the chase camera", ["Mouse wheel", ""]],
 		["Cinema camera (on autopilot)", ["cinema_camera"]],
 		["Look around", ["look_left", "look_right", "look_up", "look_down"]],
+		["Look around with the mouse", ["Hold the wheel + move", ""]],
 		["Hide the HUD", ["toggle_hud"]],
 	]],
 	["ON FOOT", [

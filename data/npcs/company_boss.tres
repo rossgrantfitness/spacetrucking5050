@@ -58,6 +58,7 @@ voice_key = 1
 voice_scale = "minor"
 lines = PackedStringArray("What.")
 conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_white_owner"), SubResource("Conversation_white_last"), SubResource("Conversation_owner"), SubResource("Conversation_first"), SubResource("Conversation_marge"), SubResource("Conversation_default")])
+gives_company_missions = true
 comm_name = "{boss} · {company}"
 fur_color = Color(0.86, 0.64, 0.32, 1)
 accent_color = Color(0.95, 0.95, 0.97, 1)

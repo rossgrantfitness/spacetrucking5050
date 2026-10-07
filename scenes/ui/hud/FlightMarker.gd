@@ -5,10 +5,16 @@ extends HudWidget
 ##   is really carrying you. After a hard turn or a boost it slides away
 ##   from where the rig points, then drifts back as grip catches up. It's
 ##   not a gun sight; there's nothing to shoot.
+## - A small diamond showing where the mouse's "virtual stick" is pushing
+##   (it fades when the mouse settles back to the middle).
 
 
 ## How far ahead along our path the marker is placed, in meters.
 const LOOK_AHEAD: float = 400.0
+## How far from the middle the mouse diamond goes at a full push, as a share
+## of the screen's height.
+const MOUSE_REACH: float = 0.22
+
 
 func _draw() -> void:
 	var rig := ship()
@@ -21,3 +27,8 @@ func _draw() -> void:
 			pixels(spot - Vector2.ONE, ["###", "#.#", "###"], Color(GREEN, 0.9))
 			box(Rect2(spot + Vector2(-7, 0), Vector2(4, 1)), Color(GREEN, 0.9))
 			box(Rect2(spot + Vector2(4, 0), Vector2(4, 1)), Color(GREEN, 0.9))
+	var push := rig.controls.mouse_stick()
+	var strength := clampf(push.length() * 3.0, 0.0, 0.8)
+	if strength > 0.05:
+		var ring := (size * 0.5 + push * size.y * MOUSE_REACH).round()
+		pixels(ring - Vector2(2, 2), ["..#..", ".#.#.", "#...#", ".#.#.", "..#.."], tint(strength))
