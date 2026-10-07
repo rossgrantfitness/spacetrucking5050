@@ -21,6 +21,7 @@ SONG = "audio/radio/hoshizora_83/music/Hoshi_o_Kakeru.mp3"
 SONG_START = 9.0       # Seconds into the song where the trailer starts.
 LENGTH = 30.0          # Seconds.
 BAR = 1.875            # One bar at 128 BPM.
+SETTLE = 40            # Frames before a shot that may be borrowed (the camera settling; make_trailer.gd films 45).
 DROP = 8.0             # Where the drop lands in the trailer.
 
 # The edit: (shot, seconds). The shot names are the ones make_trailer.gd prints.
@@ -58,16 +59,25 @@ def main() -> None:
     for k, (name, start, end) in enumerate(plan):
         part, first, last = shots[name]
         frames = round(end * FPS) - round(start * FPS)
+        hold = ""
         if first + frames - 1 > last:
-            sys.exit("Not enough footage for %s (%d frames wanted, %d filmed)" % (name, frames, last - first + 1))
-        filters.append("[%d:v]trim=start_frame=%d:end_frame=%d,setpts=PTS-STARTPTS,fps=%d,format=yuv420p[v%d]"
-                       % (inputs.index(part), first, first + frames, FPS, k))
+            short = first + frames - 1 - last
+            if part == "cards":
+                # A title card: hold its last frame for the rest.
+                hold = ",tpad=stop_mode=clone:stop=%d" % short
+                frames -= short
+            elif short <= SETTLE:
+                first -= short  # Start a moment earlier, while the camera settles.
+            else:
+                sys.exit("Not enough footage for %s (%d frames wanted, %d filmed)" % (name, frames, last - first + 1))
+        filters.append("[%d:v]trim=start_frame=%d:end_frame=%d,setpts=PTS-STARTPTS%s,fps=%d,format=yuv420p[v%d]"
+                       % (inputs.index(part), first, first + frames, hold, FPS, k))
         labels.append("[v%d]" % k)
     filters.append("%sconcat=n=%d:v=1:a=0,fade=t=in:st=0:d=0.6[video]" % ("".join(labels), len(labels)))
     filters.append("[%d:a]atrim=start=%.3f:duration=%.3f,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.4,"
                    "afade=t=out:st=%.3f:d=2.8,volume=0.9[audio]" % (len(inputs), SONG_START, LENGTH, LENGTH - 2.8))
     args += ["-filter_complex", ";".join(filters), "-map", "[video]", "-map", "[audio]",
-             "-c:v", "libx264", "-crf", "18", "-preset", "slow", "-pix_fmt", "yuv420p",
+             "-c:v", "libx264", "-crf", "21", "-preset", "slow", "-pix_fmt", "yuv420p",
              "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-t", str(LENGTH), output]
     for name, start, end in plan:
         print("%-14s %5.2f - %5.2f" % (name, start, end))

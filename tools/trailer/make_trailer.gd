@@ -67,7 +67,7 @@ func _initialize() -> void:
 	layer.add_child(_overlay)
 	match _part:
 		"flight":
-			_shots = ["boost", "billboards", "slot_machine", "cockpit_radio", "drive_through", "dust_storm", "crash", "cinema"]
+			_shots = ["boost", "billboards", "slot_machine", "cockpit_radio", "drive_through", "dust_storm", "cinema", "crash"]
 			change_scene_to_file("res://scenes/flight/FlightSandbox.tscn")
 		"rooms":
 			_shots = ["cabin", "dispatch", "casino", "creamery", "office"]
@@ -162,9 +162,9 @@ func _begin(shot: String) -> void:
 		"crash":
 			# Straight into the side of The High Roller, far too fast.
 			var station := _node("World/Places/high_roller/HighRollerStation")
-			var target := station.global_transform * Vector3(0.0, 0.0, -120.0)
+			var target := station.global_transform * Vector3(0.0, 0.0, -120.0)  # The middle of the drum.
 			var side := station.global_transform.basis.x
-			var start := target + side * 700.0
+			var start := target + side * 720.0  # The drum's hull is 260 m out.
 			_place_ship(start, (target - start).normalized(), 30.0)
 			_lever(1.0)
 			_caption = "JUST DON'T HIT THE CASINO AT 900 KM/H"
@@ -210,17 +210,12 @@ func _during(shot: String, waited: int) -> void:
 			if waited == SETTLE_FRAMES + 8:
 				_press("radio_next")
 		"crash":
-			if waited == SETTLE_FRAMES - 25:
+			if waited == SETTLE_FRAMES - 20:
 				var ship := _ship()
-				ship.get("flight").set("velocity", -ship.global_basis.z * 275.0)
+				ship.get("flight").set("velocity", -ship.global_basis.z * 330.0)
 		"cinema":
 			if waited == 10:
 				_press("cinema_camera")
-		"cabin":
-			if waited == SETTLE_FRAMES:
-				Input.action_press("move_left")
-			if waited == SETTLE_FRAMES + 50:
-				Input.action_release("move_left")
 		"dispatch":
 			if waited == SETTLE_FRAMES:
 				_say("dispatch_morning", "Morning, hon. You look like you slept in your jacket again.")
@@ -285,7 +280,8 @@ func _room(scene: String, spawn: String) -> void:
 func _say(npc_file: String, line: String) -> void:
 	var npc: Resource = load("res://data/npcs/%s.tres" % npc_file)
 	var dialogue := root.get_node("Dialogue")
-	dialogue.call("say", str(npc.get("display_name")).split(" (")[0], PackedStringArray([line]), float(npc.get("voice_pitch")), npc)
+	var speaker: String = _game.get("names").call("fill_in", str(npc.get("display_name")))
+	dialogue.call("say", speaker.split(" (")[0], PackedStringArray([line]), float(npc.get("voice_pitch")), npc)
 
 
 func _hide_room_hud() -> void:
