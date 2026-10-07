@@ -27,6 +27,11 @@ var camera_roll: bool = false
 ## Whether the corner gauges and the station marker are shown while flying.
 var show_hud: bool = true
 
+## PRO DOCKING. false (default): fly through a station's ring and the
+## autopilot docks you. true: you park in the loading bay yourself, for a
+## tip from the dock crew (bigger if you back in, like a real trucker).
+var pro_docking: bool = false
+
 ## Whether the camera shakes (boost kicks and bonks).
 var screen_shake: bool = true
 
@@ -103,6 +108,11 @@ func set_camera_roll(enabled: bool) -> void:
 
 func set_show_hud(enabled: bool) -> void:
 	show_hud = enabled
+	_changed()
+
+
+func set_pro_docking(enabled: bool) -> void:
+	pro_docking = enabled
 	_changed()
 
 
@@ -285,12 +295,20 @@ func _route_sound(node: Node) -> void:
 			node.set("bus", SFX_BUS)
 
 
+## Off: settings changes aren't written to disk (smoke tests flip switches
+## without touching the player's own choices).
+var keep_changes: bool = true
+
+
 func save_settings() -> void:
+	if not keep_changes:
+		return
 	SaveSystem.write_json(SETTINGS_PATH, {
 		"version": SETTINGS_VERSION,
 		"invert_y": invert_y,
 		"camera_roll": camera_roll,
 		"show_hud": show_hud,
+		"pro_docking": pro_docking,
 		"screen_shake": screen_shake,
 		"rumble": rumble,
 		"radio_volume": radio_volume,
@@ -312,7 +330,7 @@ func load_settings() -> void:
 ## (like on the very first launch) or of the wrong type (say, from a
 ## hand-edited file) keeps its current value.
 func apply_saved_data(data: Dictionary) -> void:
-	for option: String in ["invert_y", "camera_roll", "show_hud", "screen_shake", "rumble", "fullscreen"]:
+	for option: String in ["invert_y", "camera_roll", "show_hud", "pro_docking", "screen_shake", "rumble", "fullscreen"]:
 		var saved: Variant = data.get(option)
 		if saved is bool:
 			set(option, saved)

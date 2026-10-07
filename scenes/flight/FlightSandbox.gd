@@ -71,6 +71,10 @@ var _fade: ScreenFade
 var _current_system: String = ""
 var _route_events: RouteEvents
 var _roadside: RoadsideFuel
+## Pro docking (Settings.pro_docking): the bay you're parking in, and the
+## ring you came in through (or null / none).
+var _pro_dock: ProDocking = null
+var _pro_dock_ring: ApproachRing = null
 ## Walking around the cabin (out of the seat).
 var _in_cabin: bool = false
 ## Whether the "hold to take the wheel" hint is showing for this push.
@@ -264,10 +268,16 @@ func _physics_process(delta: float) -> void:
 			_back_to_seat()
 	_run_docking_computer()
 	_horn_cooldown = maxf(_horn_cooldown - delta, 0.0)
+	if _pro_dock != null:
+		_watch_pro_docking()
 	if _docking_at.is_empty():
 		for id: String in _places:
 			for ring in _rings(id):
 				if ring.is_inside(_ship.global_position) and _ship.flight.velocity.dot(ring.through_direction()) > 1.0:
+					if _wants_pro_docking(id):
+						if _pro_dock == null or _pro_dock.place_id != id:
+							_start_pro_docking(id, ring)
+						continue
 					_begin_docking(id, ring)
 					return
 
@@ -301,7 +311,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("cinema_camera"):
 		_next_cinema_mode()
 	elif event.is_action_pressed("chart_course"):
-		if _docking_at.is_empty():
+		if _pro_dock != null and _docking_at.is_empty():
+			_pro_dock_to_autopilot()  # Pro docking: M hands the bay to the autopilot.
+		elif _docking_at.is_empty():
 			_open_course_chart()
 	elif event.is_action_pressed("horn") and _ship.ship_data.air_horn:
 		_honk()
@@ -986,8 +998,8 @@ const WALTZ := preload("res://audio/generated/docking_waltz.wav")
 ## it takes the wheel, flies the lane through the rocks, threads the ring
 ## and docks, to its own little waltz (the radio fades out for it).
 func _run_docking_computer() -> void:
-	if not _ship.ship_data.docking_computer or _destination_id.is_empty():
-		return
+	if not _ship.ship_data.docking_computer or _destination_id.is_empty() or Settings.pro_docking:
+		return  # (With pro docking on, you'd rather park it yourself.)
 	var dock := _dock_node(_destination_id)
 	if dock == null:
 		return
@@ -1109,6 +1121,96 @@ func _begin_docking(id: String, ring: ApproachRing) -> void:
 	var place := GameState.places.find(id)
 	_hud.show_banner("PULLING IN" if place.kind == PlaceData.Kind.DRIVE_THROUGH else "AUTOPILOT DOCKING", 0.0)
 	_chatter.say(ChatterSet.Situation.DOCKING, id)
+
+
+# --- Pro docking ----------------------------------------------------------------------
+
+## Whether to park in the bay by hand here (pro docking's on, it's a
+## station with a loading bay, and the docking computer isn't flying).
+func _wants_pro_docking(id: String) -> bool:
+	var place := GameState.places.find(id)
+	return Settings.pro_docking and place != null and place.kind != PlaceData.Kind.DRIVE_THROUGH and not _docking_computer_on
+
+
+## Through the ring with pro docking on: the bay lights up and it's your wheel.
+func _start_pro_docking(id: String, ring: ApproachRing) -> void:
+	_end_pro_docking()
+	if _napping:
+		_wake_up()
+	if _in_cabin:
+		_close_cabin()
+	_end_cinema()
+	_ship.cruise = null  # Your wheel now.
+	if not _course.is_empty() and _course[0] == id:
+		_course.remove_at(0)
+	_pro_dock = ProDocking.new()
+	_pro_dock.name = "ProDockingBay"
+	$World.add_child(_pro_dock)
+	_pro_dock.start(_ship, id, _dock_node(id).global_position, ring.through_direction())
+	_pro_dock.parked.connect(_on_pro_docked)
+	_pro_dock_ring = ring
+	_hud.show_banner("PRO DOCKING: PARK IN THE BAY (BACK IN FOR A BIGGER TIP)  M = AUTOPILOT", 4.0)
+	_chatter.say(ChatterSet.Situation.DOCKING, id)
+
+
+## While parking: guidance on the HUD; wander off and it gives up.
+func _watch_pro_docking() -> void:
+	if not _docking_at.is_empty():
+		return
+	if _pro_dock.abandoned():
+		_end_pro_docking()
+		_hud.show_banner("PRO DOCKING CANCELLED: FLY BACK THROUGH THE RING", 3.0)
+		return
+	if _hud_banner_clock():
+		_hud.show_banner(_pro_dock.guidance(), 0.0)
+
+
+var _guidance_clock := 0.0
+
+
+## True every few frames (so the guidance banner isn't rebuilt every frame).
+func _hud_banner_clock() -> bool:
+	_guidance_clock += get_physics_process_delta_time()
+	if _guidance_clock < 0.1:
+		return false
+	_guidance_clock = 0.0
+	return true
+
+
+## Parked! The dock crew tips you, and in you go.
+func _on_pro_docked(result: Dictionary) -> void:
+	var id := str(result["place"])
+	var ring_spot := _pro_dock_ring.global_position if _pro_dock_ring != null else _ship.global_position
+	_end_pro_docking()
+	var tip := int(result["tip"])
+	GameState.add_credits(tip)
+	GameState.set_flag("pro_docked")
+	Sfx.play("cash")
+	_docking_at = id
+	_ship.set_meta("docking_ring", ring_spot)
+	_ship.flight.velocity = Vector3.ZERO
+	_ship.controls.clear()
+	_ship.process_mode = Node.PROCESS_MODE_DISABLED  # Parked: hands off.
+	var how := "BACKED IN" if result["backed_in"] else "PARKED"
+	_hud.show_banner("%s %s!  DOCK CREW TIP +%d %s" % [result["grade"], how, tip, GameState.names.currency_short], 3.0)
+	await get_tree().create_timer(1.5).timeout
+	_arrive(id)
+
+
+## Gave up on parking by hand: the autopilot takes it from here.
+func _pro_dock_to_autopilot() -> void:
+	var id := _pro_dock.place_id
+	var ring := _pro_dock_ring
+	_end_pro_docking()
+	if ring != null:
+		_begin_docking(id, ring)
+
+
+func _end_pro_docking() -> void:
+	if _pro_dock != null:
+		_pro_dock.queue_free()
+	_pro_dock = null
+	_pro_dock_ring = null
 
 
 func _on_autopilot_arrived() -> void:

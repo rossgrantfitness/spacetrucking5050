@@ -18,13 +18,18 @@ var _docked_at := 0
 
 
 func _initialize() -> void:
-	# Never touch the player's real save.
+	# Never touch the player's real save (or settings: this test wants the
+	# autopilot to dock, whatever the player's pro docking switch says).
 	root.get_node("SaveSystem").set("save_path", "user://smoke_test_save.json")
 	change_scene_to_file(SCENE)
 
 
 func _process(_delta: float) -> bool:
 	_frame += 1
+	if _frame == 1:
+		# (On the first frame: the settings file has been read by now.)
+		root.get_node("Settings").set("keep_changes", false)
+		root.get_node("Settings").set("pro_docking", false)
 	match _frame:
 		10:
 			Input.action_press("throttle_up")  # Burn forward.

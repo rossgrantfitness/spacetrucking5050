@@ -63,8 +63,22 @@ func _ready() -> void:
 	_quit_to_title.pressed.connect(_on_quit_to_title)
 	_logbook.pressed.connect(_on_logbook)
 	_controls.pressed.connect(_on_controls)
+	_add_pro_docking()
 	_add_window_options()
 	_make_scrollable()
+
+
+var _pro_docking: CheckButton
+
+
+## The pro docking switch (flying only), just after camera roll.
+func _add_pro_docking() -> void:
+	_pro_docking = CheckButton.new()
+	_pro_docking.text = "Pro docking (park in the bay yourself, for a tip)"
+	_pro_docking.button_pressed = Settings.pro_docking
+	_pro_docking.toggled.connect(Settings.set_pro_docking)
+	_pro_docking.visible = flying
+	_camera_roll.add_sibling(_pro_docking)
 
 
 var _fullscreen: CheckButton

@@ -178,6 +178,29 @@ extends Resource
 @export_range(1.0, 6.0, 0.1) var free_spin_limit: float = 2.5
 
 
+@export_group("Pro docking")
+## PRO DOCKING (a switch in the pause menu): fly through the ring, then
+## park in the glowing loading bay yourself. The dock crew's tip for a
+## clean park (paid on the spot), scaled by how neat it was...
+@export_range(0, 10000, 5) var pro_dock_tip: int = 120
+## ...times this if you backed in, like a real trucker.
+@export_range(1.0, 5.0, 0.05) var pro_dock_backed_in: float = 1.5
+## Parked means: slower than this (m/s)...
+@export_range(0.5, 20.0, 0.5) var pro_dock_max_speed: float = 4.0
+## ...lined up with the bay within this many degrees (nose in or tail in)...
+@export_range(2.0, 60.0, 1.0) var pro_dock_max_degrees: float = 20.0
+## ...and held there this many seconds.
+@export_range(0.0, 10.0, 0.1) var pro_dock_hold_seconds: float = 1.5
+## How big the bay is: its half-width (m) and its depth (m).
+@export_range(5.0, 200.0, 1.0) var pro_dock_bay_radius: float = 30.0
+@export_range(10.0, 400.0, 1.0) var pro_dock_bay_depth: float = 60.0
+## The bay sits about this far out in front of the station's dock (m),
+## further if something's in the way.
+@export_range(20.0, 2000.0, 10.0) var pro_dock_bay_distance: float = 140.0
+## Wander this far from the bay and pro docking gives up (m): fly back
+## through the ring to try again.
+@export_range(200.0, 20000.0, 50.0) var pro_dock_give_up_distance: float = 2500.0
+
 @export_group("Overdrive")
 ## OVERDRIVE: keep holding boost past boost's top speed (about 800 km/h in
 ## the Thumper) and the rig keeps climbing, slowly, with no ceiling. The
