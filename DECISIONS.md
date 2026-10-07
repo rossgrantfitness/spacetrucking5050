@@ -543,3 +543,27 @@ be revisited; just say so.
   - Walking trails them back a little.
   - Angles are kept gentle: big bends stretch like taffy.
 - **Tuning:** under "Bendy ears" on BunnyVisual's root node in the editor: stiffness, damping, tip stiffness and damping, how hard movement throws them (`ear_inertia`), and the walking trail.
+
+## 2026-10-07 (the apartment's paintings; the vending machine over the art)
+
+- **Every painting checked against its room** (your ask, "double check all the prerenders"). I drew each room's hidden 3D layout over its painting:
+  - 10 of 12 line up 1:1: the hallway, dispatch, galley, cargo bay and engine room.
+  - The two apartment paintings don't. The artist moved the camera, the bed, the desk, the TV and the door. That's why Jacki stood on the bed, floated near the door and got cut off by furniture that wasn't in the picture.
+- **Apartment, window-side shot ("Wide"):** I measured the painting (window corners, back corner, floor lines, the rug) and solved for the camera that painted it. It fits within a few pixels. The camera is 2.2 m up, sees 49°, and stands right at the room's front corner.
+  - The room's furniture now stands where the painting has it: bed head, TV on crates, milk crate, heater, desk, PC tower, box, rug.
+- **Apartment, door-side shot ("TowardDoor"):** this painting's lines disagree with each other. No camera in a 6 × 5 m room matches all of it: a perfect fit would need a 12 m-long room.
+  - So its camera fits the half of the room it's used in: the door wall, the door and the corner. It stands just behind the window wall (hidden for that shot) with a longer lens (36°).
+  - The door, the exit and the hallway spawn moved to where the door is painted, by the plant.
+  - **Your call:** for a perfect fit, repaint this one from a clean export. Until then it's close where it matters.
+- **Shots can hide parts of the room** (`RoomShot.hide_from_view`, wildcards allowed), so one camera never hides Jacki behind something that's only in the other picture. Collision is unaffected.
+  - The bed as the window picture has it is "OnlyWide".
+  - The desk chair and the desk as the door picture has them are "OnlyTowardDoor".
+  - A camera standing outside the room hides the walls it stands behind.
+  - `RoomShot.see_from` starts its "can I see her?" check past those walls.
+- **The bed's collision is only its head end.** Past the middle of the room the door camera takes over, and its picture has floor there. The bed's "SLEEP" spot moved to the head end too.
+- **A far "Surround" box** carries the picture wherever a camera sees past the room's walls (art painted from outside the room shows more than the box).
+- **The "!" over things** (bed, TV, computer, doors) now sits just above them, 0.5 m up. It used to be 1.9 m up, which is right for a person's head but put a bed's "!" up at the ceiling.
+- **The vending machine is your model, drawn live over the hallway painting** (`Things/VendingModel` in `Hallway.tscn`).
+  - It's stretched to cover the painted machine (1 m wide, 1.9 m tall).
+  - The set's box is now collision only (`_bump_box`).
+  - The truck stop's, canteen's and casino's machines were already your model.

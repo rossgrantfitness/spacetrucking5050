@@ -186,6 +186,13 @@ func _piece(parent: Node3D, body: StaticBody3D, node_name: String, size: Vector3
 	return part
 
 
+## Something to bump into with nothing to see (the picture has it).
+func _bump_box(parent: Node3D, body: StaticBody3D, node_name: String, size: Vector3, where: Vector3) -> void:
+	var part := _box(parent, node_name, size, where, _set_paint(Color.BLACK))
+	_add_collision(body, part)
+	part.free()
+
+
 ## A lamp: a glowing bulb plus a real light (with shadows, for the painting).
 func _lamp(parent: Node3D, node_name: String, where: Vector3, color: Color, energy: float, reach: float, shadows: bool = true) -> void:
 	var light := OmniLight3D.new()
@@ -234,6 +241,15 @@ func _door_panel(parent: Node3D, node_name: String, where: Vector3, facing_y: fl
 # 6 x 5 m, 2.8 m tall. From the developer's sketch: a big window onto space
 # with a heater under it, an unmade bed, a desk with an old computer, socks
 # all over the floor, a framed photo, a rug, a plant and a hanging lamp.
+#
+# The furniture stands where the developer's hand-made backgrounds
+# (res://art/backgrounds/apartment/) painted it, measured off the pictures
+# (see DECISIONS.md, "the apartment's paintings"). The two pictures don't
+# quite agree with each other, so some pieces are only for one camera:
+# "OnlyWide" (the bed as the window-side picture has it) and "OnlyTowardDoor"
+# (the desk chair, which only the door-side picture has). Each shot hides
+# the other's (RoomShot.hide_from_view). They're just for hiding the bunny
+# behind; what she bumps into is the collision (the same for both).
 
 func _build_apartment() -> Node3D:
 	var parts := _new_set("ApartmentSet")
@@ -241,60 +257,81 @@ func _build_apartment() -> Node3D:
 	var body: StaticBody3D = parts[1]
 	var wall := _set_paint(Color(0.5, 0.55, 0.75), WALL_PANELS, 2.0)
 	_room_shell(room, body, Vector3(6.0, 2.8, 5.0), _set_paint(Color(0.75, 0.55, 0.45), CARPET, 1.5), wall, _set_paint(Color(0.3, 0.3, 0.4)))
+	var only_wide := Node3D.new()
+	only_wide.name = "OnlyWide"
+	room.add_child(only_wide)
+	var only_door_side := Node3D.new()
+	only_door_side.name = "OnlyTowardDoor"
+	room.add_child(only_door_side)
 
-	# The big window, with deep space (and a planet) outside.
-	_box(room, "SpaceView", Vector3(3.6, 2.0, 0.05), Vector3(-1.0, 1.6, -2.62), _set_paint(Color.WHITE, SPACE_VIEW, 3.6, 0.9))
+	# The big window (two panes), with deep space (and a planet) outside:
+	# x -2.2 to 0.4, from 0.75 m up to 2.15 m.
+	_box(room, "SpaceView", Vector3(2.6, 1.4, 0.05), Vector3(-0.9, 1.45, -2.62), _set_paint(Color.WHITE, SPACE_VIEW, 2.6, 0.9))
 	var frame := _set_paint(Color(0.2, 0.2, 0.26))
-	_box(room, "WindowSill", Vector3(3.2, 0.12, 0.3), Vector3(-1.0, 0.86, -2.42), frame)
-	_box(room, "WindowTop", Vector3(3.2, 0.12, 0.2), Vector3(-1.0, 2.32, -2.45), frame)
-	for x: float in [-2.6, -1.0, 0.6]:
-		_box(room, "WindowBar", Vector3(0.1, 1.5, 0.15), Vector3(x, 1.6, -2.45), frame)
+	_box(room, "WindowSill", Vector3(2.8, 0.1, 0.25), Vector3(-0.9, 0.72, -2.45), frame)
+	_box(room, "WindowTop", Vector3(2.8, 0.1, 0.2), Vector3(-0.9, 2.18, -2.47), frame)
+	for x: float in [-2.2, -0.9, 0.4]:
+		_box(room, "WindowBar", Vector3(0.1, 1.4, 0.15), Vector3(x, 1.45, -2.47), frame)
 	# Cut the window out of the back wall: rebuild the wall around it.
 	room.get_node("WallBack").free()
 	body.get_node("WallBackShape").free()
-	_piece(room, body, "WallBackLow", Vector3(6.0, 0.8, 0.2), Vector3(0.0, 0.4, -2.6), wall)
-	_piece(room, body, "WallBackHigh", Vector3(6.0, 0.45, 0.2), Vector3(0.0, 2.58, -2.6), wall)
-	_piece(room, body, "WallBackLeft", Vector3(0.4, 1.6, 0.2), Vector3(-2.8, 1.6, -2.6), wall)
-	_piece(room, body, "WallBackRight", Vector3(2.4, 1.6, 0.2), Vector3(1.8, 1.6, -2.6), wall)
+	_piece(room, body, "WallBackLow", Vector3(6.0, 0.75, 0.2), Vector3(0.0, 0.375, -2.6), wall)
+	_piece(room, body, "WallBackHigh", Vector3(6.0, 0.65, 0.2), Vector3(0.0, 2.475, -2.6), wall)
+	_piece(room, body, "WallBackLeft", Vector3(0.8, 1.4, 0.2), Vector3(-2.6, 1.45, -2.6), wall)
+	_piece(room, body, "WallBackRight", Vector3(2.6, 1.4, 0.2), Vector3(1.7, 1.45, -2.6), wall)
 	# The heater under the window, ribbed.
-	for i in 8:
-		_box(room, "HeaterRib", Vector3(0.12, 0.55, 0.12), Vector3(-1.8 + i * 0.22, 0.35, -2.38), _set_paint(Color(0.85, 0.82, 0.78)))
-	_add_collision(body, _box(room, "HeaterBox", Vector3(1.8, 0.55, 0.2), Vector3(-1.03, 0.35, -2.4), _set_paint(Color(0.85, 0.82, 0.78), VENTS, 0.3)))
+	for i in 6:
+		_box(room, "HeaterRib", Vector3(0.12, 0.5, 0.12), Vector3(-1.5 + i * 0.22, 0.3, -2.3), _set_paint(Color(0.85, 0.82, 0.78)))
+	_add_collision(body, _box(room, "HeaterBox", Vector3(1.3, 0.55, 0.25), Vector3(-0.95, 0.3, -2.37), _set_paint(Color(0.85, 0.82, 0.78), VENTS, 0.3)))
 
-	# The unmade bed along the left wall.
-	_piece(room, body, "BedFrame", Vector3(1.1, 0.35, 2.1), Vector3(-2.4, 0.18, 1.3), _set_paint(Color(1, 1, 1), WOOD, 1.0))
-	_box(room, "Mattress", Vector3(1.0, 0.2, 2.0), Vector3(-2.4, 0.45, 1.3), _set_paint(Color(0.92, 0.9, 0.86)))
-	var blanket := _box(room, "Blanket", Vector3(1.05, 0.12, 1.3), Vector3(-2.35, 0.6, 1.6), _set_paint(Color.WHITE, BLANKET, 0.8))
+	# The unmade bed along the left wall, its pillow toward the window. She
+	# bumps into the head end only: from the door-side camera, where she
+	# goes once she's past the middle of the room, the foot end isn't there.
+	_box(only_wide, "BedFrame", Vector3(1.4, 0.35, 2.1), Vector3(-2.3, 0.18, 0.95), _set_paint(Color(1, 1, 1), WOOD, 1.0))
+	_box(only_wide, "Mattress", Vector3(1.3, 0.2, 2.0), Vector3(-2.3, 0.45, 0.95), _set_paint(Color(0.92, 0.9, 0.86)))
+	var blanket := _box(only_wide, "Blanket", Vector3(1.35, 0.12, 1.3), Vector3(-2.25, 0.6, 1.3), _set_paint(Color.WHITE, BLANKET, 0.8))
 	blanket.rotation = Vector3(0.05, 0.12, -0.04)
-	_box(room, "Pillow", Vector3(0.7, 0.14, 0.4), Vector3(-2.45, 0.62, 0.45), _set_paint(Color(0.95, 0.85, 0.9)))
+	_box(only_wide, "Pillow", Vector3(0.8, 0.14, 0.4), Vector3(-2.35, 0.62, 0.15), _set_paint(Color(0.95, 0.85, 0.9)))
+	_box(only_wide, "BedHead", Vector3(1.4, 0.9, 0.08), Vector3(-2.3, 0.45, -0.1), frame)
+	_bump_box(room, body, "BedHeadEnd", Vector3(1.4, 0.6, 0.8), Vector3(-2.3, 0.3, 0.3))
 
-	# The desk in the back-right corner: an old CRT computer and a lava lamp.
-	_piece(room, body, "Desk", Vector3(1.5, 0.08, 0.75), Vector3(2.15, 0.76, -1.95), _set_paint(Color(1, 1, 1), WOOD, 1.0))
-	for leg: Vector3 in [Vector3(1.48, 0.36, -1.65), Vector3(2.82, 0.36, -1.65), Vector3(1.48, 0.36, -2.25), Vector3(2.82, 0.36, -2.25)]:
+	# The desk against the back wall on the right: an old CRT computer and a
+	# lava lamp. The computer's tower stands on the floor in front of it.
+	_piece(room, body, "Desk", Vector3(1.8, 0.08, 1.4), Vector3(2.1, 0.76, -1.8), _set_paint(Color(1, 1, 1), WOOD, 1.0))
+	for leg: Vector3 in [Vector3(1.25, 0.36, -1.15), Vector3(2.95, 0.36, -1.15), Vector3(1.25, 0.36, -2.45), Vector3(2.95, 0.36, -2.45)]:
 		_box(room, "DeskLeg", Vector3(0.06, 0.72, 0.06), leg, frame)
-	_box(room, "Monitor", Vector3(0.5, 0.42, 0.45), Vector3(2.1, 1.02, -2.05), _set_paint(Color(0.85, 0.82, 0.74)))
-	_box(room, "MonitorScreen", Vector3(0.4, 0.3, 0.02), Vector3(2.1, 1.03, -1.82), _set_paint(Color.WHITE, TERMINAL, 0.4, 1.4))
-	_box(room, "Keyboard", Vector3(0.45, 0.03, 0.16), Vector3(2.05, 0.81, -1.7), _set_paint(Color(0.8, 0.78, 0.72)))
-	_cylinder(room, "LavaLamp", 0.07, 0.4, Vector3(2.65, 1.0, -2.1), _set_paint(Color(0.85, 0.35, 1.0), null, 1.0, 1.5), Vector3.ZERO, 8)
-	_piece(room, body, "Chair", Vector3(0.45, 0.45, 0.45), Vector3(1.95, 0.23, -1.2), _set_paint(Color(0.3, 0.3, 0.38)))
-	_box(room, "ChairBack", Vector3(0.45, 0.5, 0.08), Vector3(1.95, 0.7, -0.98), _set_paint(Color(0.3, 0.3, 0.38)))
+	_bump_box(room, body, "DeskUnder", Vector3(1.8, 0.7, 1.4), Vector3(2.1, 0.35, -1.8))  # Legs, but not to walk through.
+	_box(room, "Monitor", Vector3(0.5, 0.42, 0.45), Vector3(2.3, 1.02, -1.95), _set_paint(Color(0.85, 0.82, 0.74)))
+	_box(room, "MonitorScreen", Vector3(0.4, 0.3, 0.02), Vector3(2.3, 1.03, -1.72), _set_paint(Color.WHITE, TERMINAL, 0.4, 1.4))
+	_box(room, "Keyboard", Vector3(0.45, 0.03, 0.16), Vector3(2.2, 0.81, -1.4), _set_paint(Color(0.8, 0.78, 0.72)))
+	_cylinder(room, "LavaLamp", 0.07, 0.4, Vector3(2.8, 1.0, -1.9), _set_paint(Color(0.85, 0.35, 1.0), null, 1.0, 1.5), Vector3.ZERO, 8)
+	_piece(room, body, "Tower", Vector3(0.55, 0.75, 0.45), Vector3(2.15, 0.375, -0.85), _set_paint(Color(0.3, 0.3, 0.38)))
+	# The desk chair: only the door-side picture has one. And that picture
+	# has the desk further out into the room, so she can go behind it.
+	_box(only_door_side, "Chair", Vector3(0.5, 0.45, 0.5), Vector3(-0.17, 0.23, -0.8), _set_paint(Color(0.3, 0.3, 0.38)))
+	_box(only_door_side, "ChairBack", Vector3(0.5, 0.55, 0.08), Vector3(-0.17, 0.72, -0.55), _set_paint(Color(0.3, 0.3, 0.38)))
+	_box(only_door_side, "DeskAsSeenFromTheDoor", Vector3(1.7, 0.8, 2.2), Vector3(1.2, 0.4, -0.7), _set_paint(Color(1, 1, 1), WOOD, 1.0))
+	_box(only_door_side, "ComputerAsSeenFromTheDoor", Vector3(1.0, 0.55, 1.2), Vector3(1.5, 1.05, -1.2), _set_paint(Color(0.85, 0.82, 0.74)))
 
-	# An old TV on a crate in the back-left corner.
-	_piece(room, body, "TVCrate", Vector3(0.6, 0.5, 0.5), Vector3(-2.55, 0.25, -1.7), _set_paint(Color(1, 1, 1), CRATE, 0.6))
-	_box(room, "TV", Vector3(0.55, 0.45, 0.45), Vector3(-2.55, 0.73, -1.7), _set_paint(Color(0.25, 0.22, 0.28)))
-	_box(room, "TVScreen", Vector3(0.02, 0.32, 0.36), Vector3(-2.27, 0.74, -1.7), _set_paint(Color(0.35, 0.55, 0.9), null, 1.0, 1.2))
+	# An old TV on two crates in the back-left corner, and a milk crate.
+	_piece(room, body, "TVCrate", Vector3(0.7, 0.6, 0.65), Vector3(-2.55, 0.3, -2.17), _set_paint(Color(1, 1, 1), CRATE, 0.6))
+	_box(room, "TV", Vector3(0.55, 0.45, 0.45), Vector3(-2.55, 0.83, -2.17), _set_paint(Color(0.25, 0.22, 0.28)))
+	_box(room, "TVScreen", Vector3(0.02, 0.32, 0.36), Vector3(-2.27, 0.84, -2.17), _set_paint(Color(0.35, 0.55, 0.9), null, 1.0, 1.2))
+	_piece(room, body, "MilkCrate", Vector3(0.6, 0.35, 0.5), Vector3(-2.6, 0.18, -1.2), _set_paint(Color(1, 1, 1), CRATE, 0.6))
+	_piece(room, body, "Box", Vector3(0.45, 0.3, 0.35), Vector3(0.5, 0.15, -2.3), _set_paint(Color(0.75, 0.6, 0.4)))
 
 	# The photo on the wall (someone she misses), and a band poster.
-	_box(room, "PhotoFrame", Vector3(0.5, 0.6, 0.04), Vector3(0.9, 1.65, -2.48), _set_paint(Color(1, 1, 1), WOOD, 0.5))
-	_box(room, "Photo", Vector3(0.4, 0.5, 0.02), Vector3(0.9, 1.65, -2.45), _set_paint(Color.WHITE, PHOTO, 0.5, 0.15))
+	_box(room, "PhotoFrame", Vector3(0.5, 0.6, 0.04), Vector3(1.1, 1.65, -2.48), _set_paint(Color(1, 1, 1), WOOD, 0.5))
+	_box(room, "Photo", Vector3(0.4, 0.5, 0.02), Vector3(1.1, 1.65, -2.45), _set_paint(Color.WHITE, PHOTO, 0.5, 0.15))
 	_box(room, "PosterBacking", Vector3(0.02, 1.0, 0.75), Vector3(2.98, 1.7, 0.6), _set_paint(Color(0.2, 0.08, 0.25)))
 	_sign(room, "Poster", "SPACE DUST\nWORLD TOUR\n'49", 0.0018, Color(1.0, 0.5, 0.75), Vector3(2.96, 1.7, 0.6))
 	room.get_node("Poster").rotation = Vector3(0.0, -PI / 2.0, 0.0)
 
-	# The rug and the socks. So many socks.
-	_box(room, "Rug", Vector3(2.2, 0.02, 1.4), Vector3(0.1, 0.01, 0.4), _set_paint(Color.WHITE, BLANKET, 1.0))
+	# The rug, a framed picture on the floor, and the socks. So many socks.
+	_box(room, "Rug", Vector3(2.15, 0.02, 1.25), Vector3(0.2, 0.01, 0.3), _set_paint(Color.WHITE, BLANKET, 1.0))
+	_box(room, "FloorPicture", Vector3(0.45, 0.04, 0.45), Vector3(-0.8, 0.02, -0.65), _set_paint(Color(1, 1, 1), WOOD, 0.5))
 	var sock_colors: Array[Color] = [Color(0.95, 0.95, 0.95), Color(0.9, 0.4, 0.5), Color(0.4, 0.7, 0.9), Color(0.95, 0.85, 0.3)]
-	var socks: Array[Vector3] = [Vector3(-0.6, 0.0, 1.2), Vector3(0.8, 0.0, -0.6), Vector3(1.3, 0.0, 1.5), Vector3(-1.2, 0.0, -0.9), Vector3(0.2, 0.0, 1.9)]
+	var socks: Array[Vector3] = [Vector3(-1.2, 0.0, 1.4), Vector3(0.8, 0.0, -0.7), Vector3(1.3, 0.0, 1.5), Vector3(-0.9, 0.0, 2.0), Vector3(0.2, 0.0, 1.9)]
 	for i in socks.size():
 		var sock := Node3D.new()
 		sock.name = "Sock"
@@ -303,26 +340,34 @@ func _build_apartment() -> Node3D:
 		room.add_child(sock, true)
 		_box(sock, "Leg", Vector3(0.08, 0.04, 0.22), Vector3.ZERO, _set_paint(sock_colors[i % sock_colors.size()]))
 		_box(sock, "Foot", Vector3(0.14, 0.04, 0.08), Vector3(0.03, 0.0, 0.13), _set_paint(sock_colors[i % sock_colors.size()]))
-	_box(room, "PizzaBox", Vector3(0.45, 0.06, 0.45), Vector3(-0.9, 0.03, -0.3), _set_paint(Color(0.85, 0.72, 0.5)))
 
 	# A plant in the corner by the door, doing its best.
-	_piece(room, body, "PlantPot", Vector3(0.35, 0.4, 0.35), Vector3(2.6, 0.2, 2.1), _set_paint(Color(0.75, 0.4, 0.3)))
+	_piece(room, body, "PlantPot", Vector3(0.3, 0.35, 0.3), Vector3(-2.82, 0.18, 2.3), _set_paint(Color(0.75, 0.4, 0.3)))
 	for i in 5:
-		var leaf := _box(room, "Leaf", Vector3(0.08, 0.5, 0.2), Vector3(2.6, 0.65, 2.1), _set_paint(Color(0.35, 0.7, 0.35)))
+		var leaf := _box(room, "Leaf", Vector3(0.08, 0.5, 0.2), Vector3(-2.82, 0.6, 2.3), _set_paint(Color(0.35, 0.7, 0.35)))
 		leaf.rotation = Vector3(0.4, i * 1.25, 0.0)
 
-	# The door to the hallway (front wall).
-	_door_panel(room, "Door", Vector3(1.5, 1.1, 2.47), PI)
+	# The door to the hallway (front wall, near the plant).
+	_door_panel(room, "Door", Vector3(-2.15, 1.1, 2.47), PI)
 
 	# Light: a hanging lamp (warm), the TV and computer (cool), a pink neon
 	# strip, and blue starlight through the window.
-	_box(room, "LampCord", Vector3(0.02, 0.6, 0.02), Vector3(0.2, 2.5, 0.2), frame)
-	_cylinder(room, "LampShade", 0.25, 0.25, Vector3(0.2, 2.1, 0.2), _set_paint(Color(1.0, 0.75, 0.45), null, 1.0, 1.0), Vector3.ZERO, 10)
-	_lamp(room, "LampLight", Vector3(0.2, 1.9, 0.2), Color(1.0, 0.72, 0.45), 2.2, 6.0)
+	_box(room, "LampCord", Vector3(0.02, 0.6, 0.02), Vector3(-1.0, 2.5, -1.2), frame)
+	_cylinder(room, "LampShade", 0.25, 0.25, Vector3(-1.0, 2.1, -1.2), _set_paint(Color(1.0, 0.75, 0.45), null, 1.0, 1.0), Vector3.ZERO, 10)
+	_lamp(room, "LampLight", Vector3(-0.6, 1.9, -0.6), Color(1.0, 0.72, 0.45), 2.2, 6.0)
 	_box(room, "NeonStrip", Vector3(0.05, 0.05, 4.6), Vector3(2.93, 2.65, 0.0), _set_paint(Color(1.0, 0.35, 0.75), null, 1.0, 1.6))
 	_lamp(room, "NeonLight", Vector3(2.6, 2.3, 0.0), Color(1.0, 0.4, 0.75), 1.0, 4.5, false)
-	_lamp(room, "WindowLight", Vector3(-1.0, 1.6, -2.0), Color(0.5, 0.6, 1.0), 1.0, 4.0, false)
-	_lamp(room, "ScreenGlow", Vector3(2.1, 1.1, -1.5), Color(0.4, 1.0, 0.6), 0.5, 2.0, false)
+	_lamp(room, "WindowLight", Vector3(-0.9, 1.5, -2.0), Color(0.5, 0.6, 1.0), 1.0, 4.0, false)
+	_lamp(room, "ScreenGlow", Vector3(2.2, 1.1, -1.3), Color(0.4, 1.0, 0.6), 0.5, 2.0, false)
+
+	# Far all around (no collision): the hand-made pictures show more than
+	# the room's box from where their cameras stand, so something has to be
+	# there to carry the picture at the edges.
+	var surround := BoxMesh.new()
+	surround.size = Vector3(60.0, 60.0, 60.0)
+	surround.flip_faces = true
+	surround.material = _set_paint(Color(0.02, 0.02, 0.05))
+	_mesh(room, "Surround", surround, Vector3(0.0, 1.4, 0.0))
 	return room
 
 
@@ -379,9 +424,10 @@ func _build_hallway() -> Node3D:
 		_box(hall, "CeilingLight", Vector3(1.0, 0.05, 0.5), Vector3(0.0, 3.17, z), _set_paint(Color(0.85, 0.95, 1.0), null, 1.0, 1.1))
 		_lamp(hall, "Light", Vector3(0.0, 2.8, z), Color(0.8, 0.9, 1.0), 1.4, 5.0, i % 2 == 0)
 	_lamp(hall, "DispatchGlow", Vector3(0.0, 2.2, -length + 1.0), Color(1.0, 0.8, 0.4), 1.0, 4.0, false)
-	# A bit of life: a trash bag, a vending machine, a plant.
-	_piece(hall, body, "VendingMachine", Vector3(0.9, 1.9, 0.7), Vector3(1.0, 0.95, -18.0), _set_paint(Color(0.85, 0.25, 0.3)))
-	_box(hall, "VendingFront", Vector3(0.6, 1.2, 0.02), Vector3(0.95, 1.15, -17.64), _set_paint(Color(0.6, 0.9, 1.0), null, 1.0, 1.2))
+	# A bit of life: a trash bag, a vending machine, a plant. (The vending
+	# machine is the developer's model, drawn live in Hallway.tscn; here
+	# it's just something to bump into.)
+	_bump_box(hall, body, "VendingMachine", Vector3(0.9, 1.9, 0.7), Vector3(1.0, 0.95, -18.0))
 	_piece(hall, body, "TrashBag", Vector3(0.5, 0.5, 0.5), Vector3(-1.1, 0.25, -7.5), _set_paint(Color(0.15, 0.15, 0.18)))
 	_piece(hall, body, "PlantPot", Vector3(0.4, 0.45, 0.4), Vector3(1.15, 0.22, -0.8), _set_paint(Color(0.75, 0.4, 0.3)))
 	for i in 5:

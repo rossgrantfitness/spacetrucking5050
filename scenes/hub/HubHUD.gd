@@ -57,8 +57,9 @@ func _draw_prompt() -> void:
 	var camera := get_viewport().get_camera_3d()
 	if target == null or camera == null:
 		return
-	# A bouncing "!" over the thing.
-	var above := target.global_position + Vector3.UP * 1.9
+	# A bouncing "!" over the thing: over a person's head, or just above a
+	# thing (a bed or a TV sits low: 1.9 m up, its "!" floated at the ceiling).
+	var above := target.global_position + Vector3.UP * (1.9 if target is NPC else 0.5)
 	if not camera.is_position_behind(above):
 		var spot := camera.unproject_position(above) + Vector2(0.0, sin(_time * 5.0) * 4.0)
 		_canvas.draw_rect(Rect2(spot - Vector2(14, 20), Vector2(28, 36)), Color(0.05, 0.06, 0.2, 0.9))

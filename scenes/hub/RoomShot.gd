@@ -19,6 +19,19 @@ extends Node3D
 ## game's own painted backgrounds, every sign is painted in.)
 @export var live_signs: PackedStringArray = PackedStringArray()
 
+## Parts of the room's Set (node names; * works as a wildcard) that this
+## camera doesn't see: walls it stands behind, or furniture that's only in
+## the other shots' pictures. Hidden while this shot is on screen, so they
+## never cut the bunny off. (Their collision stays: she still bumps into
+## them.) Hand-made art is often drawn from just outside the room, like a
+## doll's house with a wall taken off.
+@export var hide_from_view: PackedStringArray = PackedStringArray()
+
+## For a camera standing outside the room (behind a wall it hides): how far
+## from the camera to start looking for the bunny, so the wall behind it
+## doesn't count as blocking the view. In meters.
+@export var see_from := 0.0
+
 ## The painted background for this shot. Filled in by HubRoom when the room
 ## loads: hand-made art if there is some (see HubRoom.ART_FOLDER), or a
 ## picture the game paints itself.

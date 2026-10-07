@@ -86,6 +86,8 @@ var _fade: ScreenFade
 var _ready_to_play := false
 var _leaving := false
 var _resize_timer: Timer
+## Parts of the Set hidden for the shot on screen (see RoomShot.hide_from_view).
+var _hidden_for_shot: Array[Node3D] = []
 
 @onready var _set: Node3D = $Set
 
@@ -331,10 +333,10 @@ func _set_up_cabin() -> void:
 	bed.prompt = "SLEEP TILL WE GET THERE"
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = Vector3(1.6, 1.2, 2.6)
+	box.size = Vector3(2.4, 1.2, 1.4)
 	shape.shape = box
 	bed.add_child(shape)
-	bed.position = Vector3(-2.3, 0.6, 1.3)
+	bed.position = Vector3(-2.3, 0.6, 0.0)
 	bed.interacted.connect(func(_who: Node3D) -> void: nap_requested.emit())
 	add_child(bed)
 
@@ -381,6 +383,7 @@ func paint_backgrounds() -> void:
 		brush.far = camera.far
 		brush.keep_aspect = camera.keep_aspect
 		brush.current = true
+		_hide_for_shot(shot)
 		painter.render_target_update_mode = SubViewport.UPDATE_ONCE
 		await RenderingServer.frame_post_draw
 		shot.background = ImageTexture.create_from_image(painter.get_texture().get_image())
@@ -409,14 +412,32 @@ func _show_backdrop(shot: RoomShot) -> void:
 	if shot.has_art and shot.background != null:
 		aspect = float(shot.background.get_width()) / float(shot.background.get_height())
 	_backdrop.set_shader_parameter("background_aspect", aspect)
+	_hide_for_shot(null)
 	if shot.has_art or shot.background != null:
 		for node in _set.find_children("*", "Label3D", true, false):
 			(node as Label3D).visible = shot.has_art and node.name in shot.live_signs
+	_hide_for_shot(shot)
 	# The live view out of the window lines up with the painted window, not
 	# with hand-made art (which has its own view out).
 	var live_window := get_node_or_null("LiveWindow") as Node3D
 	if live_window != null:
 		live_window.visible = not shot.has_art
+
+
+## Brings back what the last shot hid, then hides what `shot` doesn't see
+## (null: just bring everything back).
+func _hide_for_shot(shot: RoomShot) -> void:
+	for node in _hidden_for_shot:
+		if is_instance_valid(node):
+			node.visible = true
+	_hidden_for_shot.clear()
+	if shot == null:
+		return
+	for pattern in shot.hide_from_view:
+		for node in _set.find_children(pattern, "Node3D", true, false):
+			if (node as Node3D).visible:
+				(node as Node3D).visible = false
+				_hidden_for_shot.append(node as Node3D)
 
 
 ## Switches the Set between its real look (for painting) and the painted
@@ -494,7 +515,11 @@ func sees(shot: RoomShot, point: Vector3, check_walls: bool) -> bool:
 		return false
 	if not check_walls:
 		return true
-	var query := PhysicsRayQueryParameters3D.create(cam.global_position, point)
+	# A camera outside the room starts looking from past the wall it hides.
+	var from := cam.global_position
+	if shot.see_from > 0.0:
+		from += from.direction_to(point) * minf(shot.see_from, from.distance_to(point) * 0.9)
+	var query := PhysicsRayQueryParameters3D.create(from, point)
 	if player != null:
 		query.exclude = [player.get_rid()]
 	var hit := cam.get_world_3d().direct_space_state.intersect_ray(query)

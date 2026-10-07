@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
 [ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="9_service"]
+[ext_resource type="PackedScene" path="res://art/models/vending_machine.glb" id="10_vending"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -185,6 +186,9 @@ script = ExtResource("5_psx")
 flying = false
 
 [node name="Things" type="Node3D" parent="."]
+
+[node name="VendingModel" parent="Things" instance=ExtResource("10_vending")]
+transform = Transform3D(1, 0, 0, 0, 2.8, 0, 0, 0, 1.6, 1, 0.97, -18)
 
 [node name="Vending" type="Area3D" parent="Things"]
 position = Vector3(1, 1, -17.2)

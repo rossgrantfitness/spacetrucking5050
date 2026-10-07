@@ -124,7 +124,7 @@ func _process(_delta: float) -> bool:
 				# Walk up to the bed (well, appear next to it) and press E for
 				# real, the way a player does (the button has to get through
 				# the cabin's little viewport, and not wake her straight back up).
-				(here.get("player") as Node3D).global_position = Vector3(-2.3, 0.1, 2.9)
+				(here.get("player") as Node3D).global_position = Vector3(-1.3, 0.1, 0.0)
 				_next(Step.NAP)
 			elif waited > 4000:
 				_fail("walking between the rig's rooms in flight got stuck")

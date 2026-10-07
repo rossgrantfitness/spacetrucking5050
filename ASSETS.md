@@ -81,6 +81,13 @@ the game's own painting for that camera. Nothing else is needed; a missing
 one just falls back to the game's own. Any 16:9-ish size works: the
 picture's full height fills the screen.
 
+**Keep the camera and layout:** paint over the clean export without
+moving the camera or the furniture (low "strength" in image-to-image).
+The game hides Jacki behind the room's hidden 3D furniture, so if the
+painting moves the bed or the door, she ends up standing on the bed or
+cut off by nothing. The apartment's two paintings did this. I refit the
+room to them, but a matching repaint is always better.
+
 **Blank signs:** if your painting leaves a sign board blank, I can have
 the game draw that sign's words live on top (per camera; the dispatch
 and engine room signs work like this now).

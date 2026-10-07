@@ -263,10 +263,6 @@ shader_parameter/meters = 1.5
 shader_parameter/emission = null
 shader_parameter/emission_strength = null
 
-[sub_resource type="BoxMesh" id="BoxMesh_lh6f3"]
-material = SubResource("ShaderMaterial_r1f57")
-size = Vector3(0.9, 1.9, 0.7)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t6dhb"]
 render_priority = 0
 shader = ExtResource("1_qd4pl")
@@ -281,10 +277,6 @@ shader_parameter/albedo = Color(0.09, 0.135, 0.15, 0.15)
 shader_parameter/meters = 1.0
 shader_parameter/emission = Color(0.6, 0.9, 1, 1)
 shader_parameter/emission_strength = 1.2
-
-[sub_resource type="BoxMesh" id="BoxMesh_t1d0l"]
-material = SubResource("ShaderMaterial_t6dhb")
-size = Vector3(0.6, 1.2, 0.02)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ocl4"]
 render_priority = 0
@@ -586,14 +578,6 @@ light_color = Color(1, 0.8, 0.4, 1)
 omni_range = 4.0
 omni_attenuation = 1.2
 metadata/paint_shadows = false
-
-[node name="VendingMachine" type="MeshInstance3D" parent="." unique_id=1306083821]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.95, -18)
-mesh = SubResource("BoxMesh_lh6f3")
-
-[node name="VendingFront" type="MeshInstance3D" parent="." unique_id=1281610616]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.15, -17.64)
-mesh = SubResource("BoxMesh_t1d0l")
 
 [node name="TrashBag" type="MeshInstance3D" parent="." unique_id=345387842]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.25, -7.5)

@@ -1,3 +1,33 @@
+# Playtest: the apartment's paintings, the vending machine (up-and-down round below)
+
+**What's new:**
+- The apartment's two paintings now line up with the room. Jacki stands on the painted floor, behind the painted bed, desk and chair, and walks out through the painted door.
+- The "!" over the bed, TV and computer sits just above them, not up at the ceiling.
+- The hallway's vending machine is your 3D model, drawn over the painting.
+- I checked all 12 rig paintings: the other 10 already lined up.
+
+**Time needed:** 10 minutes.
+
+## What to do
+
+1. Wake up in the apartment.
+   - Walk everywhere: around the rug, beside the bed, to the TV, to the desk, and up to the door.
+   - Watch her feet: do they stay on the painted floor?
+   - Does she ever get cut off by something that isn't in the picture, or stand "inside" furniture?
+2. Walk past the middle of the room so the camera cuts to the door view.
+   - Walk behind the desk chair and behind the desk (by the poster).
+   - Then go out the door.
+3. Use the bed, the TV and the computer: is each "!" sitting on its thing?
+4. In the hallway, walk down to the vending machine at the dispatch end and buy something.
+
+## Questions
+
+1. Does the apartment look right now from both cameras?
+2. The door-side painting can't match a real room exactly (its lines disagree with each other). Is it good enough, or do you want to repaint it? I can export a clean picture from the exact camera to paint over.
+3. The vending machine model is stretched tall to cover the painted one. Does it look OK, or should it sit at its own shape (with a bit of the painted one showing)?
+
+---
+
 # Playtest: up and down, new Jacki (your art round below)
 
 **What's new:**

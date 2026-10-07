@@ -1,11 +1,11 @@
 # Progress
 
-**Current status:** **Space has an up and a down.**
-- Tidewater is 17 km up, the casino 15 km down, and the stations are tilted.
-- The roads follow the slopes, and the course map shows heights.
-- New Jacki and Lily models.
+**Current status:** **The apartment's paintings line up; the hallway vending machine is the 3D model.**
+- All 12 rig paintings checked; the apartment's two refit (camera, furniture, door).
+- "!" markers sit on things, not at the ceiling.
+- Jacki's ears bend with overlapping animation.
 
-(Before that: your art went in, crew models.)
+(Before that: space got an up and a down; new Jacki and Lily; your art went in.)
 (Beta step 2, the trucking company, is just before this.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
@@ -17,7 +17,7 @@ spacewalk). Nothing is built until you pick.
 (outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
 systems, the husband's story).
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-07 (an up and a down)
+**Last updated:** 2026-10-07 (apartment paintings, vending model over the art)
 
 ---
 
