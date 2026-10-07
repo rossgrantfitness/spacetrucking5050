@@ -96,7 +96,7 @@ Y = △.)
 
 ### Flying
 
-**This is the `claude/newtonian-fork` branch: Newtonian flight**, like Elite
+**Newtonian flight** (your call: this is how the game flies now), like Elite
 Dangerous or Evochron. The rig keeps moving and spinning until a thruster
 stops it, it can roll, strafe and loop, and the camera rides along with it.
 - **Flight Assist ON** (the default; the HUD's "FA OFF" light is dark): the
@@ -130,7 +130,7 @@ stops it, it can roll, strafe and loop, and the camera rides along with it.
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
 | Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
-| **Newtonian flight** (this branch): roll left / right | **Z** / **X**, or **U** / **O** | **LB** / **B** |
+| **Newtonian flight:** roll left / right | **Z** / **X**, or **U** / **O** | **LB** / **B** |
 | **Newtonian:** strafe (slide sideways / up / down) | Hold **Left Ctrl** and steer (keys or mouse) | — |
 | **Newtonian:** Flight Assist on / off | **G** | — |
 | Switch camera (chase / cockpit) | **C** | **Y** |
@@ -398,6 +398,48 @@ project folder (it rewrites `data/crew/crew.tres`). Lines can use
   in flight the waypoint is pink with "LOAD" under it.
 - **Which rig you're in:** every rig has the same rooms inside, but each
   has its own soft color cast, and its name shows under the calendar.
+
+### Trucking: freight, cargo, docking, routes and rest stops
+
+- **The freight market:** every job board (and the terminal at dispatch,
+  aboard) now posts everyday loads around the story jobs: mail, frozen
+  food, glassware, tanks of goo, space chickens, mining drills and more,
+  between any two places you've opened up. They pay by distance, weight
+  and urgency (steep frontier roads pay more), and the boards change every
+  day. Freight shows where it's going: **MAIL SACKS > TIDEWATER**.
+- **Cargo you can see:** your load hangs under the rig in clamps:
+  shipping containers, a white reefer, round tanks, a crate stack under a
+  net, a livestock pod with lit windows, or machinery under a tarp. Heavier
+  loads are bigger (and the rig handles heavier, as before).
+- **Pro docking** (pause menu: **Pro docking**, off by default): fly
+  through a station's ring and a glowing bay lights up in front of the
+  dock. Park in it yourself: lined up (nose in or **backed in**), slower
+  than 4 m/s, and hold it there. Cyan = keep going, yellow = lined up,
+  green = parked. The dock crew tips you for a neat park, half again for
+  backing in. Press **M** any time to let the autopilot take it.
+- **Route choices** on the course chart (**M**):
+  - **Toll turnpikes** (gold gates): the Starlight Turnpike (truck stop to
+    Tidewater) and the Frostline Skyway. Pay at the gate (45 / 60 credits),
+    keep the throttle up and a current carries you at about 1,400 km/h.
+    Pull the throttle down to brake out of it. Fast, but braking from that
+    speed burns fuel.
+  - **Shortcuts** through belts of rock: the Rubble Run (Glimmer to
+    Greenhouse Reach) and the Rust Belt (the Dustbowl to Tidewater). The
+    plain course goes round (a few minutes longer); the shortcut goes
+    straight through. Bonks likely: think twice with fragile loads.
+  - **The scenic way:** Nebula Overlook Way, up to Greenhouse Reach past a
+    sherbet-colored nebula. A bit longer; the view steadies your hands
+    (like a snack) and it goes in the logbook.
+- **Rest stops** on the long hauls (drive-throughs, like the Gas-N-Go):
+  - **Comet Diner** (on the way to Greenhouse Reach): fuel, and the
+    blue-plate special (30 credits: steadier hands for the trip).
+  - **Skyway Fuel Depot** (on the way to the Frostline): the cheapest fuel
+    around. That's it. That's the whole place.
+  - **Weigh Station 9** (on the way to the Dustbowl): put your load on the
+    scale. A legal load gets a **weigh slip** (+6% on delivery); an
+    overweight one (heavier than your rig's rating) a small fine.
+- **Fuel:** remember, coasting is free but every burn costs: speeding up,
+  turning, and braking. The chart's fuel estimate counts those.
 
 ### Working for OrbitalEx (the office at the truck stop)
 

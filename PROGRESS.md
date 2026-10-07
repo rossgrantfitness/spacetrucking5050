@@ -1,10 +1,16 @@
 # Progress
 
-**This branch: `claude/newtonian-fork`** (your fork). Newtonian flight
-like Elite Dangerous / Evochron, with Flight Assist on / off, roll and
-strafe. Everything else is Beta 4. The main branch keeps arcade flight.
+**Flight:** Newtonian (your call, 2026-10-07): Elite / Evochron-style with
+Flight Assist on / off, roll and strafe. The old Newtonian fork is merged
+into the main branch; arcade flight is still a switch in tuning.tres.
 
-**Current status:** **Beta step 4, done: three more systems.**
+**Latest:** **the trucking push (2026-10-07):** a living freight market,
+cargo you can see, pro docking, route choices (toll turnpikes, rock-belt
+shortcuts, a scenic lane) and three rest stops (a diner, a fuel depot, a
+weigh station). Also: an empty tank kills the engines (a Gas-N-Go tanker
+comes out, for a price). Waiting for your playtest (`PLAYTEST.md`).
+
+**Before that:** **Beta step 4, done: three more systems.**
 - **The Dustbowl** (amber, far below the lane): Mags the goat's salvage yard.
 - **Greenhouse Reach** (green, far above): Dr. Moss the tortoise's arboretum.
 - **The Frostline** (lavender, the top of the map): Penny the penguin's creamery.
@@ -21,9 +27,18 @@ spacewalk). Nothing is built until you pick.
 **Next session:** your feedback on the new systems; then beta step 5, the
 economy balance pass.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-07 (beta step 4: three more systems)
+**Last updated:** 2026-10-07 (the trucking push)
 
 ---
+
+## The trucking push (2026-10-07, your list)
+
+- [x] **A living freight market:** 18 kinds of everyday freight posted on every board, paid by distance, weight, urgency and road; boards change daily (`data/freight/`).
+- [x] **Cargo you can see:** the load hangs under the rig (containers, reefer, tanks, crates, livestock pod, machinery), bigger when heavier (`CargoPod.gd`).
+- [x] **Pro docking:** optional; park in a glowing bay yourself for a tip, more for backing in (`ProDocking.gd`).
+- [x] **Route choices:** two toll turnpikes, two rock-belt shortcuts (the plain course goes round), one scenic lane (`data/routes/`).
+- [x] **Rest stops:** Comet Diner, Skyway Fuel Depot, Weigh Station 9, built from their data (`RestStop.gd`).
+- [ ] Your playtest of all five.
 
 ## Milestones
 

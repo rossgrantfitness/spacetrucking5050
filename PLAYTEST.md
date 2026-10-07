@@ -1,3 +1,27 @@
+# Playtest: the trucking push (Newtonian flight is the game now)
+
+**What's new:** a living freight market, cargo you can see, pro docking, route choices and rest stops. And the Newtonian fork is now the main branch, so switch back to `claude/serene-galileo-035l4z` in GitHub Desktop.
+
+**Time needed:** 45 minutes (or a few sessions).
+
+## What to do
+
+1. **Freight:** at the truck stop's job board, notice the new loads after the story jobs ("MAIL SACKS > TIDEWATER"). Take one. Sleep a night and look again: the board changes.
+2. **Your cargo:** launch and swing the camera round (hold the mouse wheel): your load is hanging under the rig. Take a few different jobs (frozen food, livestock, a tank of goo) and see them change.
+3. **Pro docking:** pause (Esc), switch on **Pro docking**, and fly through a station's ring. Park in the glowing bay. Try backing in. Press **M** if you get tired of it.
+4. **Routes:** open the chart (**M**) at the truck stop with a Tidewater load. Pick the **Starlight Turnpike**: pay the toll, keep the throttle up, ride the current, and watch the fuel when it brakes. Later, between the Glimmer System and Greenhouse Reach, try the **Rubble Run** shortcut, and the **Nebula Overlook Way** up to Greenhouse Reach.
+5. **Rest stops:** pull in at the **Comet Diner** (Greenhouse road), the **Skyway Fuel Depot** (Frostline road) and **Weigh Station 9** (Dustbowl road). Have the special; weigh a load.
+
+## Questions
+
+1. **The freight market:** does "one more haul" kick in? Is the pay right next to the story jobs (a little lower on purpose)?
+2. **Cargo under the rig:** does it read clearly from the chase camera? Would you rather see it on top, or towed behind?
+3. **Pro docking:** fun skill, or fiddly? Is the tip worth it? Is backing in too hard with Newtonian controls?
+4. **Routes:** is the turnpike worth its toll and fuel? Is the shortcut tempting? Is the scenic way pretty enough to take on purpose?
+5. **Rest stops:** do they make the long hauls feel like a road trip? What else would you want at a truck stop out there?
+
+---
+
 # Playtest: running out of fuel
 
 1. Fly with the throttle and boost until the fuel gauge hits zero (or set the rig's tank small in its ship file to get there faster). The engines should die: W, S, steering and boost do nothing, and you drift.
