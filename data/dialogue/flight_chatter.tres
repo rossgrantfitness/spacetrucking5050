@@ -235,6 +235,24 @@ speaker = ExtResource("npc_moe")
 situation = 5
 lines = PackedStringArray("Low... fuel...? Gas-N-Go... is... here... for... you...")
 
+[sub_resource type="Resource" id="Set_moe_out_of_fuel"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 9
+lines = PackedStringArray("Running... on... nothing...? Gas-N-Go... roadside... tanker's... coming. It ain't... cheap.", "Saw you... go dark... on the board. Tanker's... on the way. Sit... tight.", "Dry...? Happens... Tanker's... rolling. Meter's... running.")
+
+[sub_resource type="Resource" id="Set_dottie_out_of_fuel"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_dottie")
+situation = 9
+lines = PackedStringArray("Your engines just went dark on my board, hon. Calling Gas-N-Go roadside for you.", "Tank's dry, {bunny}. I've called you a tanker. Try not to drift into anything.")
+
+[sub_resource type="Resource" id="Set_moe_tanker"]
+script = ExtResource("2_set")
+speaker = ExtResource("npc_moe")
+situation = 10
+lines = PackedStringArray("Fuel's... in. Bill's... in. Drive... safe.", "Quarter tank... Get to a pump... Please.", "Topped you... a little. Next time... look at... the gauge.")
+
 [sub_resource type="Resource" id="Set_33_marge_rough"]
 script = ExtResource("2_set")
 speaker = ExtResource("npc_marge")
@@ -378,4 +396,4 @@ place = "creamery"
 
 [resource]
 script = ExtResource("1_chatter")
-sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding"), SubResource("Set_sal_takeoff"), SubResource("Set_sal_approach_cards"), SubResource("Set_sal_approach"), SubResource("Set_sal_docking"), SubResource("Set_mags_takeoff"), SubResource("Set_mags_approach"), SubResource("Set_mags_approach_scrap"), SubResource("Set_mags_docking"), SubResource("Set_moss_takeoff"), SubResource("Set_moss_approach"), SubResource("Set_moss_approach_soil"), SubResource("Set_moss_docking"), SubResource("Set_penny_takeoff"), SubResource("Set_penny_approach"), SubResource("Set_penny_approach_cones"), SubResource("Set_penny_docking")])
+sets = Array[ExtResource("2_set")]([SubResource("Set_0_dottie_takeoff"), SubResource("Set_1_dottie_takeoff"), SubResource("Set_2_dottie_takeoff"), SubResource("Set_3_dottie_takeoff"), SubResource("Set_4_marge_takeoff"), SubResource("Set_5_marge_takeoff"), SubResource("Set_6_gill_takeoff"), SubResource("Set_7_moe_takeoff"), SubResource("Set_8_dottie_idle"), SubResource("Set_9_wendell_idle"), SubResource("Set_10_wendell_idle"), SubResource("Set_11_pip_idle"), SubResource("Set_12_marge_idle"), SubResource("Set_13_gill_idle"), SubResource("Set_14_marge_approach"), SubResource("Set_15_marge_approach"), SubResource("Set_16_dottie_approach"), SubResource("Set_17_gill_approach"), SubResource("Set_18_gill_approach"), SubResource("Set_19_moe_approach"), SubResource("Set_20_marge_docking"), SubResource("Set_21_dottie_docking"), SubResource("Set_22_gill_docking"), SubResource("Set_23_moe_docking"), SubResource("Set_24_wendell_bonk"), SubResource("Set_25_pip_bonk"), SubResource("Set_26_dottie_bonk"), SubResource("Set_27_marge_bonk"), SubResource("Set_28_pip_boost"), SubResource("Set_29_wendell_boost"), SubResource("Set_30_dottie_low_fuel"), SubResource("Set_31_marge_low_fuel"), SubResource("Set_32_moe_low_fuel"), SubResource("Set_moe_out_of_fuel"), SubResource("Set_dottie_out_of_fuel"), SubResource("Set_moe_tanker"), SubResource("Set_33_marge_rough"), SubResource("Set_34_wendell_rough"), SubResource("Set_35_dottie_rough"), SubResource("Set_36_deputy_speeding"), SubResource("Set_sal_takeoff"), SubResource("Set_sal_approach_cards"), SubResource("Set_sal_approach"), SubResource("Set_sal_docking"), SubResource("Set_mags_takeoff"), SubResource("Set_mags_approach"), SubResource("Set_mags_approach_scrap"), SubResource("Set_mags_docking"), SubResource("Set_moss_takeoff"), SubResource("Set_moss_approach"), SubResource("Set_moss_approach_soil"), SubResource("Set_moss_docking"), SubResource("Set_penny_takeoff"), SubResource("Set_penny_approach"), SubResource("Set_penny_approach_cones"), SubResource("Set_penny_docking")])

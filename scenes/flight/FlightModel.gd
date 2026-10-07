@@ -25,8 +25,8 @@ extends RefCounted
 ##     steering makes the shakes worse. Let off and it settles down.
 ##   - Thrusting burns main fuel: speeding up drinks it (more at high
 ##     speed), holding top speed on the limiter just sips it, coasting is
-##     free. An empty tank never strands you: the engines keep going "on
-##     fumes".
+##     free. An empty tank kills the engines and thrusters: you drift
+##     until a Gas-N-Go tanker comes out to you (RoadsideFuel.gd).
 ##
 ## NEWTONIAN FLIGHT (the newtonian-fork branch; "Newtonian flight" in
 ## tuning.tres switches between the two). The rig is a box with thrusters in
@@ -287,8 +287,8 @@ func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuni
 ## Boost is a commitment: hold the button and it spools up, then lights;
 ## once lit it burns at least `boost_min_burn_seconds`, held or not.
 func _update_boost(delta: float, controls: FlightControls, tuning: Tuning) -> void:
-	if boost_fuel <= 0.0:
-		boosting = false
+	if boost_fuel <= 0.0 or fuel <= 0.0:
+		boosting = false  # (The boost burner needs the main engines running too.)
 		spool = 0.0
 		return
 	if boosting:
@@ -306,9 +306,10 @@ func _update_boost(delta: float, controls: FlightControls, tuning: Tuning) -> vo
 
 
 ## Burns main fuel for `throttle` (how hard the pilot is pushing) and
-## returns the thrust the engines actually give: all of it, or a little
-## "on fumes" when the tank is empty. Speeding up drinks fuel (faster =
-## thirstier); holding top speed on the limiter only sips it.
+## returns the thrust the engines actually give: all of it, or none when
+## the tank is empty (see empty_tank_thrust in tuning.tres). Speeding up
+## drinks fuel (faster = thirstier); holding top speed on the limiter only
+## sips it.
 func _burn_fuel(delta: float, throttle: float, ship: ShipData, tuning: Tuning) -> float:
 	var speed_share := clampf(speed() / ship.max_speed, 0.0, 1.0)
 	var effort := 1.0 + speed_share * speed_share * tuning.fuel_speed_burn
@@ -330,9 +331,11 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 	# NEGATIVE change of heading.
 	# Under boost, steering gets twitchy (easy to over-correct).
 	var twitch := tuning.boost_steer_gain if boosting else 1.0
-	var wanted_turn := -controls.steer.x * max_turn * twitch
-	var wanted_pitch := controls.steer.y * max_pitch * twitch
-	if absf(controls.steer.y) < 0.05:
+	# An empty tank means no thrusters to steer with either.
+	var power := engine_power(tuning)
+	var wanted_turn := -controls.steer.x * max_turn * twitch * power
+	var wanted_pitch := controls.steer.y * max_pitch * twitch * power
+	if absf(controls.steer.y) < 0.05 and power > 0.0:
 		# Hands off up/down: let the nose drift gently back toward level (or
 		# toward the road's climb, see rest_pitch).
 		wanted_pitch = clampf((rest_pitch - pitch) * tuning.nose_auto_level, -max_pitch, max_pitch)
@@ -391,6 +394,12 @@ func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> v
 func _pull(offset: float) -> float:
 	var t := _time + offset
 	return clampf((sin(t * 0.21 + offset) + 0.3 * sin(t * 0.53)) * 1.4, -1.0, 1.0)
+
+
+## How much power the engines and thrusters have: all of it with fuel in
+## the tank, empty_tank_thrust (0 = none) without.
+func engine_power(tuning: Tuning) -> float:
+	return 1.0 if fuel > 0.0 else tuning.empty_tank_thrust
 
 
 ## How much of something's strength is left under the load: 1 when empty,
@@ -452,7 +461,8 @@ func spin_limits(ship: ShipData, tuning: Tuning) -> Vector3:
 func _update_spin(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
 	var limits := spin_limits(ship, tuning)
 	var seconds := tuning.spin_up_seconds * 2.0 / maxf(ship.turn_response, 0.1)
-	var push := limits / maxf(seconds, 0.01)
+	# An empty tank means the rotation thrusters are dead too: a spin keeps going.
+	var push := limits / maxf(seconds, 0.01) * engine_power(tuning)
 	# Under boost, steering gets twitchy (easy to over-correct).
 	var twitch := tuning.boost_steer_gain if boosting else 1.0
 	var stick := Vector3(controls.steer.y, -controls.steer.x, -controls.roll) * twitch
@@ -480,16 +490,17 @@ func _update_spin(delta: float, controls: FlightControls, ship: ShipData, tuning
 ## The engines and thrusters. Everything is worked out in the rig's own
 ## axes (x = right, y = up, -z = the nose), then turned back into space.
 func _update_thrusters(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
-	thrust = clampf(controls.thrust, -1.0, 1.0)
-	if fuel <= 0.0:
-		thrust *= tuning.empty_tank_thrust  # On fumes.
+	# An empty tank: the engines and thrusters die (or run weakly, if
+	# empty_tank_thrust is above 0). Whatever you were doing, you keep doing.
+	var power := engine_power(tuning)
+	thrust = clampf(controls.thrust, -1.0, 1.0) * power
 	_update_boost(delta, controls, tuning)
 	if boosting:
 		boost_fuel = maxf(boost_fuel - delta / ship.boost_fuel_seconds, 0.0)
 	var local := attitude.inverse() * velocity
 	var main := ship.acceleration * heft(tuning.load_acceleration_drag)
 	var retro := ship.retro_thrust * heft(tuning.load_braking_drag)
-	var side := ship.acceleration * tuning.strafe_thrust * heft(tuning.load_acceleration_drag)
+	var side := ship.acceleration * tuning.strafe_thrust * heft(tuning.load_acceleration_drag) * power
 	var push := Vector3.ZERO
 	var going := -local.z
 	var strafe := controls.strafe.limit_length(1.0)

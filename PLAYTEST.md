@@ -1,3 +1,11 @@
+# Playtest: running out of fuel
+
+1. Fly with the throttle and boost until the fuel gauge hits zero (or set the rig's tank small in its ship file to get there faster). The engines should die: W, S, steering and boost do nothing, and you drift.
+2. A few seconds later Moe (or Raccoony) calls about a tanker. About 45 seconds after that it fills a quarter tank and bills you. Try it once with money in the bank and once broke (it goes on the tab).
+3. **Questions:** Is the wait about right, or too long or too short to sit through? Is ~320 credits a fair sting? Would you rather call the tanker yourself (a button), or is it fine that it comes on its own?
+
+---
+
 # Playtest: Newtonian fork, "nothing slows you but thrust" (branch `claude/newtonian-fork`)
 
 1. Boost up to 2,000 km/h (or as fast as you dare), then let go of everything. The speed should stay put, with no fuel used, for as long as you coast.

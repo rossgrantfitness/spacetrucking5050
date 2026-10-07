@@ -22,6 +22,8 @@ enum Situation {
 	DOCKING,  ## The docking autopilot just took over at a place.
 	ROUGH,  ## The cargo's rattling: hard turns, slides, wild boosting.
 	SPEEDING,  ## A speed trap clocked you.
+	OUT_OF_FUEL,  ## The tank ran dry: Gas-N-Go's sending a tanker.
+	TANKER,  ## The roadside tanker just filled you up (and billed you).
 }
 
 ## Who's talking (their name, voice and portrait come from this file).

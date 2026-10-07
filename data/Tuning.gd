@@ -249,9 +249,23 @@ extends Resource
 ## normal burn (0.2 = a fifth). It's speeding up that drinks fuel.
 @export_range(0.0, 1.0, 0.01) var cruise_burn: float = 0.18
 
-## With an empty tank, the engines run "on fumes" at this fraction of their
-## thrust, so you can always limp to a pump. Nobody gets stranded.
-@export_range(0.05, 1.0, 0.05) var empty_tank_thrust: float = 0.25
+## With an empty tank, the engines and thrusters give this fraction of
+## their thrust. 0 = they die: no thrust, no steering, you just drift
+## (fuel management matters). Raise it to limp along "on fumes" instead.
+@export_range(0.0, 1.0, 0.05) var empty_tank_thrust: float = 0.0
+
+## ROADSIDE FUEL: run dry and Gas-N-Go sends a tanker out to you. Never
+## stranded, but it costs time and money. Seconds dry before they call:
+@export_range(0.0, 60.0, 0.5) var roadside_call_seconds: float = 3.0
+## How long the tanker takes to reach you (seconds of flight time).
+@export_range(0.0, 600.0, 5.0) var roadside_wait_seconds: float = 45.0
+## How much fuel the tanker puts in (0.25 = a quarter tank): enough to get
+## to a pump, if you're careful.
+@export_range(0.05, 1.0, 0.05) var roadside_fuel: float = 0.25
+## The call-out fee, on top of the fuel.
+@export_range(0, 10000, 5) var roadside_callout_fee: int = 250
+## The tanker's fuel costs this many times the pump price.
+@export_range(1.0, 10.0, 0.5) var roadside_price_factor: float = 3.0
 
 ## The LOW FUEL light comes on below this much fuel (0.2 = 20%).
 @export_range(0.0, 0.5, 0.01) var low_fuel_warning: float = 0.2

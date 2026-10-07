@@ -74,14 +74,34 @@ func test_a_full_tank_lasts_a_long_cruise() -> void:
 	check(model.fuel > 0.0, "a full tank should last an 18-minute cruise at top speed (%.2f left)" % model.fuel)
 
 
-func test_empty_tank_limps_instead_of_stranding() -> void:
-	var model := FlightModel.new()
-	model.fuel = 0.0
-	var controls := FlightControls.new()
-	controls.thrust = 1.0
-	_fly(model, controls, 2.0)
-	check(model.speed() > 0.5, "an empty tank should still crawl along on fumes")
-	check(absf(model.thrust - GameState.tuning.empty_tank_thrust) < 0.001, "on fumes, thrust should be the empty-tank fraction")
+func test_empty_tank_kills_the_engines() -> void:
+	# Both flight models: no fuel, no thrust, no steering, no boost.
+	var arcade := GameState.tuning.duplicate() as Tuning
+	arcade.newtonian_flight = false
+	var newtonian := GameState.tuning.duplicate() as Tuning
+	newtonian.newtonian_flight = true
+	for tuning: Tuning in [arcade, newtonian]:
+		var label := "Newtonian" if tuning.newtonian_flight else "arcade"
+		var model := FlightModel.new()
+		model.update(STEP, FlightControls.new(), RIG, tuning)  # (Picks the flight model.)
+		model.fuel = 0.0
+		var heading := model.heading
+		var controls := FlightControls.new()
+		controls.thrust = 1.0
+		controls.steer = Vector2(1.0, 0.5)
+		controls.boost = true
+		for i in roundi(5.0 / STEP):
+			model.update(STEP, controls, RIG, tuning)
+		check(model.speed() < 0.01, "%s: an empty tank shouldn't move the rig (%.2f m/s)" % [label, model.speed()])
+		check(absf(model.heading - heading) < 0.001, "%s: an empty tank shouldn't steer the rig" % label)
+		check(not model.boosting, "%s: boost shouldn't light without main fuel" % label)
+
+
+func test_roadside_tanker_costs_more_than_the_pumps() -> void:
+	var tuning := GameState.tuning
+	var at_the_pump := ceili(tuning.roadside_fuel * tuning.fuel_tank_price)
+	check(RoadsideFuel.price(tuning) > at_the_pump * 2, "the roadside tanker should cost well over pump price")
+	check(tuning.empty_tank_thrust == 0.0, "an empty tank should kill the engines by default")
 
 
 func test_boosting_shows_red_economy() -> void:

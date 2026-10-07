@@ -14,4 +14,5 @@ boost = PackedStringArray("Wheee. I guess.", "Gotta go fast. Apparently.", "Don'
 low_fuel = PackedStringArray("I know.", "Running on fumes and vibes.", "The light's just a suggestion.", "Yep. Saw it.")
 docking = PackedStringArray("Thanks.", "Park it nice, robot.", "Wake me when we're in.", "Smooth. Like butter. Space butter.")
 rough = PackedStringArray("Pies are tough. They'll live.", "My bad.", "Sorry, sorry.", "That was the road. Not me.", "Character-building cargo.")
+out_of_fuel = PackedStringArray("Yeah. I know.", "Saw that coming. Didn't do anything about it.", "Put it on the tab.", "Thanks, Moe.", "...Worth it.")
 speeding = PackedStringArray("Was I speeding? Huh.", "Put it on my tab.", "Worth it.", "Officer, I was vibing.", "...Fair.")

@@ -20,6 +20,7 @@ extends Resource
 @export var docking: PackedStringArray = PackedStringArray()
 @export var rough: PackedStringArray = PackedStringArray()
 @export var speeding: PackedStringArray = PackedStringArray()
+@export var out_of_fuel: PackedStringArray = PackedStringArray()
 
 
 ## Up to `count` different replies for a kind of call (small talk if that
@@ -35,6 +36,7 @@ func pick(situation: ChatterSet.Situation, count: int, rng: RandomNumberGenerato
 		ChatterSet.Situation.DOCKING: pool = docking
 		ChatterSet.Situation.ROUGH: pool = rough
 		ChatterSet.Situation.SPEEDING: pool = speeding
+		ChatterSet.Situation.OUT_OF_FUEL, ChatterSet.Situation.TANKER: pool = out_of_fuel
 	if pool.is_empty():
 		pool = idle
 	var left := Array(pool)

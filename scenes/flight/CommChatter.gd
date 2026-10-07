@@ -23,7 +23,8 @@ const CHATTER: FlightChatter = preload("res://data/dialogue/flight_chatter.tres"
 const STORY: StoryCallList = preload("res://data/dialogue/story_calls.tres")
 ## These always get said, even if they have to wait for the comms to free up.
 const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL,
-		ChatterSet.Situation.DOCKING, ChatterSet.Situation.SPEEDING]
+		ChatterSet.Situation.DOCKING, ChatterSet.Situation.SPEEDING, ChatterSet.Situation.OUT_OF_FUEL,
+		ChatterSet.Situation.TANKER]
 
 ## A place's traffic control calls when you're this close to it.
 ## (Far enough out that they call before you reach the rocks round it.)
