@@ -159,6 +159,8 @@ func _ready() -> void:
 	_hud.places = _places  # So the HUD can name stations as you get near.
 	_set_destination(_pick_destination())
 	_chatter.start(_ship, _hud.comm, _places)
+	_chatter.story_allowed = func() -> bool: return _docking_at.is_empty() and not _napping
+	_chatter.story_banner.connect(func(text: String) -> void: _hud.show_banner(text, 3.0))
 	_ship.autopilot_arrived.connect(_on_autopilot_arrived)
 	_ship.lost_control.connect(_on_lost_control)
 	_ship.exploded.connect(_on_exploded)

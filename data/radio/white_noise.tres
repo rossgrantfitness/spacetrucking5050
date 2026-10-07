@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/late_night_electro.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "WHITE NOISE"
+frequency = "43.8"
+genre = "His mixtapes. Whatever he liked."
+dj_name = "White (on tape)"
+tagline = "For the long hauls."
+music_folder = "res://audio/radio/white_noise/music"
+tracks_per_ad = 20
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("THE HOLLOW MOONS - SLOW LANE", "MARGARET AND THE PIES - CHERRY, LATTICE TOP", "DEEP SPACE LOUNGE BAND - BUOY", "STATIC SAINTS - TWO HEARTS, ONE RIG", "THE LONG HAULERS - PINE", "KITCHEN RADIO - THE HALLWAY SMELLS LIKE HOME", "SIDE B - THE ONE SHE PRETENDS NOT TO LIKE")
+dj_lines = PackedStringArray("This one's for the Tidewater lane. Long and boring. Like me.", "J, if you're listening: water the plant.", "(tape hiss)", "That was a good one. This next one's better. Trust me.", "Side B coming up. You're welcome.", "Raccoony, if you're listening, the donuts are in the glovebox.", "...okay, I'll stop talking. Here's a song.")
+dj_on_storm = PackedStringArray("(the tape wobbles. it always did in storms.)")
+dj_on_delivery = PackedStringArray("(tape hiss)")
+dj_on_ticket = PackedStringArray("(tape hiss)")
+dj_on_new_system = PackedStringArray("(tape hiss)")
+requires_flag = "white_story_done"

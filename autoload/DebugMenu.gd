@@ -8,6 +8,8 @@ extends Node
 ##   - GIVE ME A JOB: any job in the game, yours right now (handy for
 ##     testing heavy loads), whatever the story says.
 ##   - SKIP THE OPENING, +5,000 credits, and a free fill-up and repair.
+##   - STORY: SKIP TO...: jumps to a point in {husband}'s story (see
+##     docs/STORY.md), so you can test one beat without 14 deliveries.
 ##
 ## Also from the command line (handy for automated tests):
 ##     godot --path . -- --jump=tidewater:3
@@ -21,6 +23,19 @@ extends Node
 const JUMP_PLACES: PackedStringArray = ["tidewater", "truck_stop", "high_roller", "gas_n_go"]
 const JUMP_MINUTES: Array[int] = [1, 3, 5]
 const FLIGHT_SCENE: String = "res://scenes/flight/FlightSandbox.tscn"
+## The story's beats, in order: [name, what happens next, flags set by
+## then, deliveries made by then, story jobs delivered by then]. Each beat
+## includes everything before it.
+const STORY_BEATS: Array = [
+	["MARGE KNOWS THE RIG", "Talk to Marge at the truck stop.", ["first_mission_done"], 2, []],
+	["MARGE'S PIE", "Marge offers his standing order: a pie for Gill.", ["marge_mentioned_white"], 4, []],
+	["GILL AND THE PIE", "Talk to Gill at Tidewater.", ["white_pie_done"], 5, ["white_pie"]],
+	["DUSTY'S CHIP", "Talk to Dusty at the truck stop.", ["gill_talked_white"], 6, []],
+	["THE MESSAGE", "Fly anywhere: it plays about 45 s after takeoff.", ["white_chip"], 6, []],
+	["THE LAST LOAD", "Talk to the boss at the office.", ["white_voicemail", "story_call_white_message"], 6, []],
+	["THE TAPES", "Talk to Gill at Tidewater.", ["white_last_load_done"], 7, ["white_last_load"]],
+	["AFTER", "White Noise is on the dial; people remember.", ["white_story_done"], 7, []],
+]
 
 var _open := false
 
@@ -55,6 +70,7 @@ func open() -> void:
 	options.append({"text": "SKIP THE OPENING", "description": "As if you'd collected your first check from the boss and met Marge."})
 	options.append({"text": "+5,000 CREDITS", "description": "Free money. Don't tell the tax droids."})
 	options.append({"text": "FILL UP AND FIX UP", "description": "Both tanks full, hull and cargo like new."})
+	options.append({"text": "STORY: SKIP TO...", "description": "Jump to a point in the story, to test one beat."})
 	options.append({"text": "CLOSE", "description": ""})
 	var pick := await MenuPanel.ask(tree, "DEBUG MENU", "For testing. (F10 to open; turn off with debug_menu in tuning.tres.)", options)
 	if pick >= 0 and pick < JUMP_PLACES.size():
@@ -75,6 +91,8 @@ func open() -> void:
 			GameState.add_credits(5000)
 		3:
 			_fill_up()
+		4:
+			await _story_menu()
 	_open = false
 	Input.mouse_mode = mouse
 
@@ -118,6 +136,30 @@ func _give_job() -> void:
 	var scene := get_tree().current_scene
 	if scene != null and scene.has_method("debug_jump"):
 		scene.call("_set_destination", scene.call("_pick_destination"))
+
+
+func _story_menu() -> void:
+	var options: Array = []
+	for beat: Array in STORY_BEATS:
+		options.append({"text": beat[0], "description": beat[1]})
+	var pick := await MenuPanel.ask(get_tree(), "STORY: SKIP TO...", "Sets the story up as if you'd played to here. Then go do the next thing.", options)
+	if pick >= 0 and pick < STORY_BEATS.size():
+		story_jump(pick)
+
+
+## Sets the story up as if you'd played up to beat `index` (STORY_BEATS).
+func story_jump(index: int) -> void:
+	skip_opening()
+	for i in index + 1:
+		var beat: Array = STORY_BEATS[i]
+		for flag: String in beat[2]:
+			GameState.set_flag(flag)
+		GameState.deliveries = maxi(GameState.deliveries, int(beat[3]))
+		for job_id: String in beat[4]:
+			GameState.set_flag(job_id + "_arrived_perfect")
+			if not job_id in GameState.finished_jobs:
+				GameState.finished_jobs.append(job_id)
+	GameState.save_game()
 
 
 func _fill_up() -> void:

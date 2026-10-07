@@ -6,6 +6,9 @@ extends CanvasLayer
 ## On the desktop:
 ## - MAIL: her inbox (res://data/pc/emails.tres). New mail arrives as the
 ##   story moves along; unread ones have a dot.
+## - OLD LOGS: {husband}'s notes from the Thumper's old trip computer
+##   (res://data/pc/trip_logs.tres). It's slow: it recovers about one more
+##   each delivery.
 ## - INVOICES: every delivery she's been paid for, newest first.
 ## - ASTEROID ALLEY: a little lane-hopping game (AsteroidAlley.gd), with a
 ##   high score that's saved.
@@ -23,12 +26,13 @@ extends CanvasLayer
 
 signal closed
 
-enum App { BOOT, DESKTOP, MAIL, READ, INVOICES, GAME, SHUTDOWN }
+enum App { BOOT, DESKTOP, MAIL, READ, LOGS, LOG, INVOICES, GAME, SHUTDOWN }
 
 ## The PC screen's size in its own pixels.
 const SCREEN := Vector2(320.0, 240.0)
 ## The desktop icons: [label, which app].
-const ICONS: Array = [["MAIL", App.MAIL], ["INVOICES", App.INVOICES], ["ASTEROID ALLEY", App.GAME], ["SHUT DOWN", App.SHUTDOWN]]
+const ICONS: Array = [["MAIL", App.MAIL], ["OLD LOGS", App.LOGS], ["INVOICES", App.INVOICES], ["ASTEROID ALLEY", App.GAME], ["SHUT DOWN", App.SHUTDOWN]]
+const TRIP_LOGS: TripLogList = preload("res://data/pc/trip_logs.tres")
 ## The window everything opens in (in screen pixels).
 const WINDOW := Rect2(34.0, 14.0, 272.0, 202.0)
 const TEAL := Color("2b7a78")
@@ -42,6 +46,8 @@ var _app: App = App.BOOT
 var _icon: int = 0
 var _mail_index: int = 0
 var _inbox: Array[EmailData] = []
+var _logs: Array[TripLog] = []
+var _log_index: int = 0
 var _canvas: Control
 var _time: float = 0.0
 ## How long the current boot or shutdown animation has been running.
@@ -119,6 +125,18 @@ func _input(event: InputEvent) -> void:
 		App.READ:
 			if back or go:
 				_app = App.MAIL
+		App.LOGS:
+			if up:
+				_log_index = maxi(_log_index - 1, 0)
+			elif down:
+				_log_index = mini(_log_index + 1, maxi(_logs.size() - 1, 0))
+			elif go and not _logs.is_empty():
+				_read_log(_log_index)
+			elif back:
+				_app = App.DESKTOP
+		App.LOG:
+			if back or go:
+				_app = App.LOGS
 		App.INVOICES:
 			if back or go:
 				_app = App.DESKTOP
@@ -155,8 +173,15 @@ func _on_click(event: InputEvent) -> void:
 					_launch(ICONS[i][1])  # Second click opens it.
 				_icon = i
 		return
-	if _app in [App.MAIL, App.READ, App.INVOICES, App.GAME] and _close_box().has_point(spot):
-		_app = App.MAIL if _app == App.READ else App.DESKTOP
+	if _app in [App.MAIL, App.READ, App.LOGS, App.LOG, App.INVOICES, App.GAME] and _close_box().has_point(spot):
+		_app = App.MAIL if _app == App.READ else (App.LOGS if _app == App.LOG else App.DESKTOP)
+		return
+	if _app == App.LOGS:
+		for i in _logs.size():
+			if _mail_row(i).has_point(spot):
+				if _log_index == i:
+					_read_log(i)
+				_log_index = i
 		return
 	if _app == App.MAIL:
 		for i in _inbox.size():
@@ -172,6 +197,14 @@ func _launch(app: App) -> void:
 	if app == App.MAIL:
 		_inbox = GameState.emails.inbox(GameState.flags)
 		_mail_index = clampi(_mail_index, 0, maxi(_inbox.size() - 1, 0))
+	elif app == App.LOGS:
+		_logs = TRIP_LOGS.recovered()
+		# Start at the first one she hasn't read.
+		_log_index = maxi(_logs.size() - 1, 0)
+		for i in _logs.size():
+			if not GameState.has_flag("log_read_" + _logs[i].id):
+				_log_index = i
+				break
 	elif app == App.GAME:
 		_game.state = AsteroidAlley.State.TITLE
 
@@ -180,6 +213,20 @@ func _read(index: int) -> void:
 	_mail_index = index
 	GameState.set_flag("email_read_" + _inbox[index].id)
 	_app = App.READ
+
+
+func _read_log(index: int) -> void:
+	_log_index = index
+	GameState.set_flag("log_read_" + _logs[index].id)
+	_app = App.LOG
+
+
+func _unread_logs() -> int:
+	var count := 0
+	for log_entry in TRIP_LOGS.recovered():
+		if not GameState.has_flag("log_read_" + log_entry.id):
+			count += 1
+	return count
 
 
 func _close() -> void:
@@ -231,6 +278,10 @@ func _draw_pc() -> void:
 					_draw_mail()
 				App.READ:
 					_draw_letter()
+				App.LOGS:
+					_draw_logs()
+				App.LOG:
+					_draw_log()
 				App.INVOICES:
 					_draw_invoices()
 				App.GAME:
@@ -283,7 +334,7 @@ func _draw_desktop() -> void:
 
 
 func _icon_rect(index: int) -> Rect2:
-	return Rect2(4.0, 6.0 + index * 52.0, 48.0, 46.0)
+	return Rect2(4.0, 4.0 + index * 44.0, 48.0, 42.0)
 
 
 func _draw_icon(index: int) -> void:
@@ -299,6 +350,17 @@ func _draw_icon(index: int) -> void:
 			if unread > 0:
 				_canvas.draw_circle(center + Vector2(11.0, -8.0), 5.0, Color(0.9, 0.2, 0.25))
 				PixelFont.draw_centered(_canvas, center + Vector2(11.0, -8.0), str(unread), 1.0, Color.WHITE, 0.0, Color(0, 0, 0, 0), SMALL)
+		App.LOGS:
+			# A chunky old data cassette.
+			_canvas.draw_rect(Rect2(center - Vector2(12.0, 8.0), Vector2(24.0, 16.0)), Color("3a3640"))
+			_canvas.draw_rect(Rect2(center - Vector2(9.0, 6.0), Vector2(18.0, 6.0)), PAPER)
+			_canvas.draw_circle(center + Vector2(-5.0, 3.0), 2.5, GRAY)
+			_canvas.draw_circle(center + Vector2(5.0, 3.0), 2.5, GRAY)
+			_canvas.draw_rect(Rect2(center - Vector2(12.0, 8.0), Vector2(24.0, 16.0)), INK, false)
+			var unread_logs := _unread_logs()
+			if unread_logs > 0:
+				_canvas.draw_circle(center + Vector2(11.0, -8.0), 5.0, Color(0.9, 0.2, 0.25))
+				PixelFont.draw_centered(_canvas, center + Vector2(11.0, -8.0), str(unread_logs), 1.0, Color.WHITE, 0.0, Color(0, 0, 0, 0), SMALL)
 		App.INVOICES:
 			_canvas.draw_rect(Rect2(center - Vector2(8.0, 11.0), Vector2(16.0, 21.0)), PAPER)
 			_canvas.draw_rect(Rect2(center - Vector2(8.0, 11.0), Vector2(16.0, 21.0)), INK, false)
@@ -385,10 +447,56 @@ func _draw_letter() -> void:
 	_text(inside.position + Vector2(4.0, 4.0), "FROM:    " + email.from_name)
 	_text(inside.position + Vector2(4.0, 13.0), "SUBJECT: " + _fit(GameState.names.fill_in(email.subject), inside.size.x - 50.0))
 	_canvas.draw_rect(Rect2(inside.position + Vector2(4.0, 22.0), Vector2(inside.size.x - 8.0, 1.0)), Color(0.6, 0.6, 0.65))
-	var lines := PixelFont.wrap(GameState.names.fill_in(email.body), inside.size.x - 12.0, 1.0, SMALL)
-	for i in lines.size():
-		_text(inside.position + Vector2(6.0, 28.0 + i * 8.0), lines[i])
+	var y := 28.0
+	for paragraph in GameState.names.fill_in(email.body).split("\n"):
+		for line in PixelFont.wrap(paragraph, inside.size.x - 12.0, 1.0, SMALL):
+			_text(inside.position + Vector2(6.0, y), line)
+			y += 8.0
+		if paragraph.is_empty():
+			y += 6.0  # A blank line between paragraphs.
 	_text(Vector2(inside.position.x + 4.0, inside.end.y - 8.0), "ESC: BACK TO THE INBOX", Color(0.4, 0.4, 0.45))
+
+
+func _draw_logs() -> void:
+	var inside := _draw_window("OLD LOGS - THE THUMPER'S TRIP COMPUTER")
+	_canvas.draw_rect(inside, Color("10221a"))
+	var green := Color(0.45, 1.0, 0.55)
+	var dim := Color(0.25, 0.6, 0.32)
+	_text(inside.position + Vector2(4.0, 3.0), "RECOVERED %d OF %d" % [_logs.size(), TRIP_LOGS.logs.size()], dim)
+	if _logs.is_empty():
+		_text(inside.position + Vector2(4.0, 20.0), "RECOVERING. IT'S AN OLD MACHINE.", green)
+		_text(inside.position + Vector2(4.0, 29.0), "ABOUT ONE A DELIVERY.", green)
+	for i in _logs.size():
+		var row := _mail_row(i)
+		if row.end.y > inside.end.y - 10.0:
+			break
+		var log_entry := _logs[i]
+		var ink := green
+		if i == _log_index:
+			_canvas.draw_rect(row, green.darkened(0.45))
+			ink = Color.WHITE
+		if not GameState.has_flag("log_read_" + log_entry.id):
+			_canvas.draw_rect(Rect2(row.position + Vector2(1.0, 4.0), Vector2(3.0, 3.0)), Color(1.0, 0.8, 0.3))
+		_text(row.position + Vector2(6.0, 3.0), log_entry.day, ink)
+		var first := GameState.names.fill_in(log_entry.body).split("\n")[0]
+		_text(row.position + Vector2(60.0, 3.0), _fit(first, row.size.x - 62.0), ink)
+	var hint := "E: READ   ESC: BACK" + ("   STILL RECOVERING..." if _logs.size() < TRIP_LOGS.logs.size() else "")
+	_text(Vector2(inside.position.x + 4.0, inside.end.y - 8.0), hint, dim)
+
+
+func _draw_log() -> void:
+	var log_entry := _logs[_log_index]
+	var inside := _draw_window("OLD LOGS - " + log_entry.day)
+	_canvas.draw_rect(inside, Color("10221a"))
+	var green := Color(0.45, 1.0, 0.55)
+	var y := 6.0
+	for paragraph in GameState.names.fill_in(log_entry.body).to_upper().split("\n"):
+		for line in PixelFont.wrap(paragraph, inside.size.x - 12.0, 1.0, SMALL):
+			_text(inside.position + Vector2(6.0, y), line, green)
+			y += 8.0
+		if paragraph.is_empty():
+			y += 6.0  # A blank line between paragraphs.
+	_text(Vector2(inside.position.x + 4.0, inside.end.y - 8.0), "ESC: BACK TO THE LOGS", Color(0.25, 0.6, 0.32))
 
 
 func _draw_invoices() -> void:

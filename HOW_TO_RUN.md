@@ -438,9 +438,24 @@ For testing without a full run. Press **F10** anywhere:
 - **Skip the opening.**
 - **+5,000 credits.**
 - **Fill up and fix up.**
+- **Story: skip to...:** jump to a point in White's story (see
+  `docs/STORY.md`), then go do the next thing. Handy for testing one beat
+  without 14 deliveries.
 
 To switch it off later (for a release build), untick **debug_menu** in
 tuning.tres. From a terminal: `godot --path . -- --jump=tidewater:3`.
+
+### White's story
+
+Optional, and slow on purpose. As you deliver, people start to remember the
+man who drove your rig before you:
+- **His old logs** come back on the cabin PC (**OLD LOGS**), about one per
+  delivery.
+- **People with something to tell you** have a "!" over them: Marge first,
+  a couple of deliveries in.
+- **Story jobs** are offered in person, never on the board.
+- **One message** plays on the comms while you fly. Nothing to press; just
+  listen.
 
 ### Vending machines
 

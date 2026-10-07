@@ -58,6 +58,13 @@ game's numbers, names and stuff never needs programming.
 - **`logbook/sights.tres`**: every sight that can go in the logbook (its
   name, what Jacki wrote about it, whether it's rare). Blueprints:
   `LogbookEntry.gd`, `Logbook.gd`.
+- **`dialogue/story_calls.tres`**: calls that matter, made once each when the
+  story's ready (like White's message on the chip Dusty finds). Who, what
+  (one card per line), a banner, and when. Blueprints: `StoryCall.gd`,
+  `StoryCallList.gd`. The whole story is mapped out in `docs/STORY.md`.
+- **`pc/trip_logs.tres`**: White's old notes from the Thumper's trip
+  computer, read on the cabin PC (OLD LOGS). About one more comes back each
+  delivery. Blueprints: `TripLog.gd`, `TripLogList.gd`.
 - **`dialogue/bunny_replies.tres`**: the one-liners Jacki can say back to
   comm calls, grouped by kind of call. Blueprint: `BunnyReplies.gd`.
 - **`events/route_events.tres`**: everything that can happen on the road:

@@ -91,10 +91,13 @@ func call_in(speaker: NPCData, words: String, situation: ChatterSet.Situation = 
 	_allow_reply = repliable
 	_picking = false
 	var text_width_available := _box_width() - 36.0
-	var lines := PixelFont.wrap(GameState.names.fill_in(words).to_upper(), text_width_available, 1.0)
 	_cards.clear()
-	for start in range(0, lines.size(), LINES_PER_CARD):
-		_cards.append(lines.slice(start, start + LINES_PER_CARD))
+	# A line break in `words` always starts a new card (story calls say one
+	# thing per card).
+	for paragraph in GameState.names.fill_in(words).to_upper().split("\n", false):
+		var lines := PixelFont.wrap(paragraph, text_width_available, 1.0)
+		for start in range(0, lines.size(), LINES_PER_CARD):
+			_cards.append(lines.slice(start, start + LINES_PER_CARD))
 	_card = 0
 	_letters = 0.0
 	_set_state(State.STATIC_IN)
@@ -167,7 +170,8 @@ func hud_step(delta: float, _numbers_due: bool) -> void:
 				_mouth_open = false
 				_set_state(State.HOLDING)
 		State.HOLDING:
-			var hold := tuning.comm_hold_seconds if _card == _cards.size() - 1 else tuning.comm_hold_seconds * 0.6
+			# Story calls give every card time to sink in.
+			var hold := tuning.comm_hold_seconds if _card == _cards.size() - 1 or _story else tuning.comm_hold_seconds * 0.6
 			if _picking:
 				hold = PICK_SECONDS
 			if _clock >= hold:

@@ -170,7 +170,7 @@ static func job_summary(job: JobData) -> String:
 		words += " RUSH: +%d %s if you make it in %s." % [Economy.contract_value(job.rush_bonus), currency, HudWidget.clock(job.rush_seconds)]
 	if not job.description.is_empty():
 		words += "\n" + job.description
-	return words
+	return GameState.names.fill_in(words)
 
 
 ## The pumps: fill the fuel and boost tanks. (Lily's, at the truck stop,
@@ -181,8 +181,14 @@ static func fuel(tree: SceneTree, title: String = "LILY'S PUMPS", goodbye: Strin
 		var fuel_cost := ceili((1.0 - GameState.rig["fuel"]) * tuning.fuel_tank_price * price_factor)
 		var boost_cost := ceili((1.0 - GameState.rig["boost_fuel"]) * tuning.boost_tank_price * price_factor)
 		var currency := GameState.names.currency_short
+		# White paid for the next trucker's fuel, every time. Lily keeps his
+		# tab going: one fill-up on him (see her lines in truckstop_pumps.tres).
+		var on_his_tab := title == "LILY'S PUMPS" and GameState.has_flag("whites_tab") and not GameState.has_flag("whites_tab_used")
+		if on_his_tab:
+			fuel_cost = 0
 		var options: Array = [
-			{"text": "FILL FUEL", "detail": "%d %s" % [fuel_cost, currency], "disabled": fuel_cost <= 0,
+			{"text": "FILL FUEL", "detail": "ON WHITE'S TAB" if on_his_tab else "%d %s" % [fuel_cost, currency],
+				"disabled": GameState.rig["fuel"] >= 1.0,
 				"description": "Main tank is at %d%%." % roundi(GameState.rig["fuel"] * 100.0)},
 			{"text": "FILL BOOST", "detail": "%d %s" % [boost_cost, currency], "disabled": boost_cost <= 0,
 				"description": "Boost tank is at %d%%." % roundi(GameState.rig["boost_fuel"] * 100.0)},
@@ -190,6 +196,8 @@ static func fuel(tree: SceneTree, title: String = "LILY'S PUMPS", goodbye: Strin
 		var choice := await MenuPanel.ask(tree, title, "You've got %d %s." % [GameState.credits, currency], options)
 		if choice == 0 and GameState.spend(fuel_cost):
 			GameState.rig["fuel"] = 1.0
+			if on_his_tab:
+				GameState.set_flag("whites_tab_used")
 		elif choice == 1 and GameState.spend(boost_cost):
 			GameState.rig["boost_fuel"] = 1.0
 		elif choice in [0, 1]:
@@ -366,16 +374,21 @@ static func paint_shop(tree: SceneTree) -> void:
 ## The jukebox plays the radio through the room's speakers.
 static func jukebox(tree: SceneTree) -> void:
 	var options: Array = []
-	for station in Radio.lineup.stations:
+	var dial: Array[int] = []  # Which station each option is (only the ones on the dial yet).
+	for i in Radio.lineup.stations.size():
+		var station := Radio.lineup.stations[i]
+		if not station.on_the_dial():
+			continue
+		dial.append(i)
 		options.append({"text": "%s  %s" % [station.frequency, station.display_name], "detail": station.genre,
 				"description": station.tagline + ("" if station.dj_name.is_empty() else "  (DJ: %s)" % station.dj_name)})
 	options.append({"text": "SILENCE", "description": "Turn the radio off."})
 	var choice := await MenuPanel.ask(tree, "JUKEBOX", "Now playing: %s" % Radio.now_playing(), options)
-	if choice >= 0 and choice < Radio.lineup.stations.size():
+	if choice >= 0 and choice < dial.size():
 		if not Radio.powered:
 			Radio.toggle_power()
-		Radio.tune_to(choice)
-	elif choice == Radio.lineup.stations.size() and Radio.powered:
+		Radio.tune_to(dial[choice])
+	elif choice == dial.size() and Radio.powered:
 		Radio.toggle_power()
 
 

@@ -4,13 +4,13 @@
 
 [resource]
 script = ExtResource("1_npc")
-display_name = "Jacki Rabbit"
+display_name = "{husband}"
 species = "bunny"
-voice_pitch = 0.85
+voice_pitch = 0.7
 voice_type = "soft"
-voice_key = 2
-voice_scale = "blues"
+voice_key = 7
+voice_scale = "dreamy"
 lines = PackedStringArray("...")
-comm_name = "JACKI · YOU"
-fur_color = Color(0.86, 0.8, 0.74, 1)
-accent_color = Color(0.85, 0.2, 0.22, 1)
+comm_name = "{husband} · MESSAGE CHIP"
+fur_color = Color(0.95, 0.94, 0.9, 1)
+accent_color = Color(0.25, 0.55, 0.85, 1)

@@ -52,6 +52,8 @@ CREW = [
         ("ANY", "glimmer_open", 0, "", ["Sal called again. He calls me 'sweetheart.' I call him 'sir' in a voice that means something else."]),
         ("ANY", "", 3, "dottie_mentioned_white", ["You know, {husband} used to bring me those little gas station donuts. Every haul.", "...Anyway. Coffee?"]),
         ("ANY", "", 5, "", ["Thirty years on dispatch, hon. You're my favorite driver. Don't let it go to your head."]),
+        ("ANY", "white_voicemail", 0, "", ["I keep his mug in my desk. Third drawer. With the good pens.", "Not renting it. I was kidding. Mostly."]),
+        ("ANY", "white_story_done", 0, "", ["You're playing his tapes. I can hear 'em through the wall.", "...Turn it up a little."]),
      ]},
     {"id": "digby", "npc": "res://data/npcs/crew_digby.tres", "visual": "res://scenes/hub/crew/MoleVisual.tscn",
      "role": "Mechanic",
@@ -78,6 +80,7 @@ CREW = [
         ("NIGHT", "", 0, "", ["Can't sleep. Too quiet. I need the hum."]),
         ("ANY", "", 3, "digby_mentioned_white", ["{husband} did the wiring on that dash himself. Messy. Works perfect.", "I never touch it."]),
         ("ANY", "", 5, "", ["I don't say this to many people. But you drive her gentle. She notices."]),
+        ("ANY", "white_chip", 0, "", ["Dusty found something behind the dash? Huh.", "Twelve years I never touched that panel. Should've known he'd hide something in there."]),
      ]},
     {"id": "clem", "npc": "res://data/npcs/crew_clem.tres", "visual": "res://scenes/hub/crew/DonkeyVisual.tscn",
      "role": "Cargo hand",
@@ -105,6 +108,7 @@ CREW = [
         ("JUST_PAID", "", 0, "", ["We got paid! Does that mean I get paid? I get paid in sandwiches, right?"]),
         ("ANY", "", 2, "", ["Raccoony says you're the best driver he ever had. Except one. He don't say who. He gets quiet."]),
         ("ANY", "", 4, "", ["Boss? Thanks for keepin' me on. I know I'm slow. But I'm careful slow."]),
+        ("ANY", "marge_mentioned_white", 0, "", ["The rig's got a dent by the door shaped like a hug.", "I don't know what that means. I just like it."]),
      ]},
     {"id": "olivia", "npc": "res://data/npcs/crew_olivia.tres", "visual": "res://scenes/hub/crew/OliviaVisual.tscn",
      "role": "Mascot",
@@ -130,6 +134,8 @@ CREW = [
         ("JUST_PAID", "", 0, "", ["Money! I'm gonna buy... a hat! For my other hat!"]),
         ("NIGHT", "", 0, "", ["I can't sleep. My feathers are too loud."]),
         ("ANY", "", 3, "", ["You're my favorite, {bunny}. Don't tell Clem.", "Actually, tell Clem. He'll be happy for me!"]),
+        ("ANY", "marge_mentioned_white", 1, "", ["Who's {husband}? Is that a color? It's a color.", "...Oh. Oh no. Sorry. I'm gonna go stand in the fridge for a minute."]),
+        ("ANY", "white_story_done", 0, "", ["I listened to the tapes with Clem! We danced! A slow one!", "Is that okay? It felt okay."]),
      ]},
 ]
 

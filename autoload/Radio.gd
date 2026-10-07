@@ -153,17 +153,24 @@ func set_context(context: Context) -> void:
 
 
 func next_station() -> void:
-	tune_to(station_index + 1)
+	tune_to(station_index + 1, 1)
 
 
 func previous_station() -> void:
-	tune_to(station_index - 1)
+	tune_to(station_index - 1, -1)
 
 
-## Tunes to a station by its place on the dial.
-func tune_to(index: int) -> void:
+## Tunes to a station by its place on the dial. Stations the story hasn't
+## put on the dial yet are skipped (going `step` along the dial).
+func tune_to(index: int, step: int = 1) -> void:
 	_leave_station()
-	station_index = posmod(index, lineup.stations.size())
+	var count := lineup.stations.size()
+	index = posmod(index, count)
+	for _i in count:
+		if lineup.stations[index].on_the_dial():
+			break
+		index = posmod(index + step, count)
+	station_index = index
 	_text_ad_left = 0.0
 	if _context != Context.OFF_AIR:
 		_tune.pitch_scale = _rng.randf_range(0.9, 1.15)

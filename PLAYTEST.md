@@ -1,3 +1,31 @@
+# Playtest: beta step 3, White's story (the apartment round below)
+
+**What's new:** the story of White, Jacki's late husband, told quietly through people who knew him, his old logs, two story deliveries, a message and his mixtapes. All optional; it never gates anything. The whole map, and where every line lives, is in `docs/STORY.md`. **Every line is my draft**: change anything.
+
+**Time needed:** 20-30 minutes with the debug menu (or let it unfold over a few evenings of normal play).
+
+## What to do
+
+You can play normally and let it come to you: Marge has something to say a couple of deliveries in, and anyone with a story line has a "!" over them. Or test it beat by beat with **F10 → STORY: SKIP TO...**:
+
+1. **Marge knows the rig:** talk to Marge at the truck stop. Then visit Lily at the pumps (your next fill-up is on him).
+2. **Marge's pie:** Marge offers his standing order. Take the cherry pie to Gill at Tidewater, and talk to Gill when you get there.
+3. **Dusty's chip:** talk to Dusty at the truck stop.
+4. **The message:** take off and fly anywhere. About 45 seconds out, it plays on the comms. Just listen.
+5. **The last load:** talk to the boss at the office. Take the crate to Tidewater, and talk to Gill.
+6. **After:** take off again. Listen for the first tape, then find WHITE NOISE 43.8 on the radio.
+7. Any time: open the cabin PC → **OLD LOGS**. Read his notes, including the last one after the message.
+
+## Questions
+
+1. Is the tone right: quiet and gentle, not melodramatic? Is any line too much, or too little?
+2. White's last run (the storm, the company deadline, "not going around") is never said outright. Is it clear enough, or too clear?
+3. The boss docked his pay for being late. Does that give "buy the company" more weight, or does it make the boss too dark for a cozy game?
+4. Does the pace feel right? The first beat comes 2 deliveries in, the message about 6 in, and all the logs by 14.
+5. Anything about White you want to change: his name, how long he drove, the pie, the tapes, the whale buoy?
+
+---
+
 # Playtest: the apartment's paintings, the vending machine (up-and-down round below)
 
 **What's new:**

@@ -67,8 +67,9 @@ func interact(player: Node3D) -> void:
 	_talking = false
 
 
-## Whether they have a job for you (one they haven't given you yet), or a
-## problem the company could haul a fix for: the
+## Whether they have a job for you (one they haven't given you yet), a
+## problem the company could haul a fix for, or something to tell you
+## (a conversation marked for it, like the story's): the
 ## on-foot HUD hangs a "!" over them. (So does being who the objective
 ## points at; see HubHUD.)
 func has_news() -> bool:
@@ -76,6 +77,8 @@ func has_news() -> bool:
 	if story != null and story.places_order != null:
 		var order := story.places_order
 		return not order.id in GameState.orders and GameState.active_job_id != order.id and not order.id in GameState.finished_jobs
+	if story != null and story.marked and _has_new_flags(story):
+		return true  # Something they haven't told you yet.
 	if story == null or story.offers_job == null:
 		return false
 	var job := story.offers_job

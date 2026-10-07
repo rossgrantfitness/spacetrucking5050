@@ -13,7 +13,8 @@
 # in the Glimmer System (tools/smoke_glimmer.gd), a crash at boost speed
 # (tools/smoke_crash.gd), going way too fast (tools/smoke_overdrive.gd)
 # and tries the cabin,
-# comm replies and radio (tools/smoke_cabin.gd).
+# comm replies and radio (tools/smoke_cabin.gd), and {husband}'s message
+# playing on the comms (tools/smoke_story.gd).
 # It fails if Godot printed ANY error or warning.
 set -u
 cd "$(dirname "$0")/.."
@@ -55,6 +56,7 @@ run -s tools/smoke_cabin.gd
 run -s tools/smoke_glimmer.gd
 run -s tools/smoke_crash.gd
 run -s tools/smoke_overdrive.gd
+run -s tools/smoke_story.gd
 rm -f override.cfg
 
 if grep -E "ERROR|WARNING|Parse Error" "$LOG" >/dev/null; then

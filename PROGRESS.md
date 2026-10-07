@@ -1,23 +1,25 @@
 # Progress
 
-**Current status:** **The apartment's paintings line up; the hallway vending machine is the 3D model.**
-- All 12 rig paintings checked; the apartment's two refit (camera, furniture, door).
-- "!" markers sit on things, not at the ceiling.
-- Jacki's ears bend with overlapping animation.
+**Current status:** **Beta step 3: White's story** (map in `docs/STORY.md`).
+- People remember him: Marge, Gill, Lily, Dusty, the boss, Big Wendell and the crew.
+- His old logs come back on the cabin PC.
+- Two story deliveries: his pie order for Gill, and his last load.
+- His message plays on the comms.
+- His mixtapes become a station: White Noise 43.8.
+- F10 → STORY: SKIP TO... tests any beat.
 
-(Before that: space got an up and a down; new Jacki and Lily; your art went in.)
-(Beta step 2, the trucking company, is just before this.)
+(Before that: the apartment's paintings refit, the vending model over the
+hallway art, and Jacki's bendy ears.)
 Built and validated, **waiting for your playtest** (see `PLAYTEST.md`).
 **Art and sound to make for beta:** see `ASSETS.md` (a tiered checklist
 plus tips for your sketch → AI → Meshy pipeline).
 **Waiting for your go:** the remaining cards in `SYSTEMS_PLAN.md` (maintenance,
 volatile cargo, contraband, multi-leg contracts, manual docking, the
 spacewalk). Nothing is built until you pick.
-**Next session:** your feedback; then the rest of M7 when you want it
-(outfits, wardrobe, decor, bigger cabin), or M8 (more clients and
-systems, the husband's story).
+**Next session:** your feedback on the story; then beta step 4, three more
+systems with clients and storylines.
 **Engine:** Godot 4.7.2 (GDScript), Compatibility renderer.
-**Last updated:** 2026-10-07 (apartment paintings, vending model over the art)
+**Last updated:** 2026-10-07 (beta step 3: White's story)
 
 ---
 
@@ -120,7 +122,8 @@ systems, the husband's story).
   - [ ] Outfit slots, sockets and wardrobe (parked: her cap is already its own piece); decor placement; a bigger apartment
 - [ ] **M8: Story & clients** *(started early, at your request)*
   - [x] Round 11: a second client system: the Glimmer System (magenta, neon billboards everywhere), The High Roller casino, Sal Grinwell (crocodile), a three-job storyline (cards, sequined jumpsuits for Marge, a slot machine for Gill) with Marge and Gill reacting, a first quiet hint about the husband (Sal knew someone who drove a rig like hers)
-  - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest; the husband's story
+  - [x] The husband's story: told through people who knew him, his old logs on the PC, two story deliveries, a message chip, and his mixtapes on the radio (`docs/STORY.md`)
+  - [ ] More clients and systems (the brief suggests 5-8; next could be the amber desert system); supporting cast on the shared skeleton for the rest
   - [x] Beta step 2: people tell you their problems and call OrbitalEx; the boss hands you their order at check-in (Sal's two jobs converted; Gill's broken ice machine added); Jacki answers back in conversations
 - [ ] **M9: Endgame & completion** *(mostly built in beta step 2)*
   - [x] The boss (Dale Pembrook, weasel, shirt and tie) and the OrbitalEx office (greeter, lobby, desk; FF8 cameras)
@@ -138,7 +141,7 @@ systems, the husband's story).
 `AUDIT.md`). Each one ends with validation, a push to git and a check-in:
 1. ~~Audit~~ (`AUDIT.md`)
 2. ~~The trucking company~~: the boss, the office, the 90% cut, checking in, new orders, buying the company, completion %
-3. The husband's story (comms, conversations, story deliveries)
+3. ~~The husband's story~~: people who knew him, his old logs, two story deliveries, his message, his tapes on the radio (`docs/STORY.md`)
 4. Three more systems with clients
 5. Balance
 6. Ship-ready basics and a Windows beta build

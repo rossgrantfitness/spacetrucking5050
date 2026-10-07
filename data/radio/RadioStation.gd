@@ -73,6 +73,13 @@ extends Resource
 ## Hidden: it isn't announced on the dial (the ticker shows no name), for
 ## mysteries.
 @export var hidden: bool = false
+## Only on the dial once this story flag is set (empty = always there).
+@export var requires_flag: String = ""
+
+
+## Whether you can tune to it yet (see `requires_flag`).
+func on_the_dial() -> bool:
+	return requires_flag.is_empty() or GameState.has_flag(requires_flag)
 
 
 ## A made-up song name for the `turn`th time through the placeholder.

@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
 [ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
 [ext_resource type="Resource" path="res://data/jobs/first_long_haul.tres" id="job_first_long_haul"]
+[ext_resource type="Resource" path="res://data/jobs/white_pie.tres" id="job_white_pie"]
 
 [sub_resource type="Resource" id="Conversation_boss_first"]
 script = ExtResource("2_conv")
@@ -67,6 +68,46 @@ blocked_by_flags = PackedStringArray("marge_sequins")
 lines = PackedStringArray("Three nights at that crocodile's casino, hon. Three! They threw SEQUINS at me.", "Karaoke night here is never going to be the same.", "Tell Sal thanks. Then tell him he still owes me for the pie he 'borrowed' in '43.")
 sets_flags = PackedStringArray("marge_sequins")
 
+[sub_resource type="Resource" id="Conversation_white_pie_haul"]
+script = ExtResource("2_conv")
+needs_active_job = "white_pie"
+lines = PackedStringArray("Cherry, lattice top. Still warm.", "Don't you dare peek, sugar.")
+
+[sub_resource type="Resource" id="Conversation_white_pie_after"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_pie_done")
+blocked_by_flags = PackedStringArray("marge_heard_white_pie")
+lines = PackedStringArray("Gill called. Gill doesn't call. He called.", "Said \"still warm.\" Then he hung up. That's a speech, for Gill.", "Thank you, hon.")
+sets_flags = PackedStringArray("marge_heard_white_pie")
+
+[sub_resource type="Resource" id="Conversation_white_tapes"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_story_done")
+blocked_by_flags = PackedStringArray("marge_heard_tapes")
+lines = PackedStringArray("Gill told me. About the crate. And the tapes.", "You bring one in sometime. We'll put it on the jukebox.", "> Side B.", "Side B, sugar. Obviously.")
+sets_flags = PackedStringArray("marge_heard_tapes")
+
+[sub_resource type="Resource" id="Conversation_white_offer"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("marge_mentioned_white")
+blocked_by_flags = PackedStringArray("white_pie_done")
+needs_no_job = true
+min_deliveries = 4
+lines = PackedStringArray("He left a standing order, you know. A cherry pie a month, for Gill. Paid a year ahead.", "There's months left on it. I kept baking them. Habit.", "Would you take this one out? It's paid for. He'd want it to get there warm.")
+offers_job = ExtResource("job_white_pie")
+
+[sub_resource type="Resource" id="Conversation_white_mention"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("first_mission_done")
+blocked_by_flags = PackedStringArray("marge_mentioned_white")
+needs_no_job = true
+min_deliveries = 2
+lines = PackedStringArray("Sugar, can I tell you something? That rig of yours. I'd know that cough anywhere.", "{husband} drove her. Brought my pies out to Gill every week for nine years. Never once late.", "...Well. Once.", "> Yeah.", "Coffee's on me today. Don't argue. I'm older than you.")
+sets_flags = PackedStringArray("marge_mentioned_white")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Marge (truck stop)"
@@ -79,4 +120,4 @@ lines = PackedStringArray("Coffee's on. Pie's on. I'm on.")
 comm_name = "MARGE · TRUCK STOP"
 fur_color = Color(0.72, 0.55, 0.38, 1)
 accent_color = Color(0.35, 0.95, 1, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_boss_first"), SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_sequins"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_3"), SubResource("Conversation_4")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_boss_first"), SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_2"), SubResource("Conversation_sequins"), SubResource("Conversation_3a"), SubResource("Conversation_3b"), SubResource("Conversation_3c"), SubResource("Conversation_white_pie_haul"), SubResource("Conversation_white_pie_after"), SubResource("Conversation_white_tapes"), SubResource("Conversation_white_offer"), SubResource("Conversation_white_mention"), SubResource("Conversation_3"), SubResource("Conversation_4")])

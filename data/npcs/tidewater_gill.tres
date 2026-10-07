@@ -62,6 +62,27 @@ blocked_by_flags = PackedStringArray("gill_iced")
 lines = PackedStringArray("Ice! Mmh. The fish are calm. I'm calm. This is my calm face.", "It looks like my other face. Trust me.")
 sets_flags = PackedStringArray("gill_iced")
 
+[sub_resource type="Resource" id="Conversation_white_last"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_last_load_done")
+blocked_by_flags = PackedStringArray("white_story_done")
+lines = PackedStringArray("Mmh? These are... can-sealer parts. Old ones. We fixed that line years ago.", "Oh. Oh, this was his load. The last one.", "There's a box in here that isn't ours. Tapes. \"FOR THE LONG HAULS\" on the side. In marker.", "> He labeled them. He never labeled anything.", "Mmh. Take them home, {bunny}. Play side B first.")
+sets_flags = PackedStringArray("white_story_done")
+
+[sub_resource type="Resource" id="Conversation_white_pie"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_pie_done")
+blocked_by_flags = PackedStringArray("gill_talked_white")
+lines = PackedStringArray("Mmh. Cherry. Lattice top.", "He always brought cherry. Said it was the only pie that survives the lane.", "We used to sit out past the whale buoy. Engines off. He never said much. Best company I ever had.", "> He said the same about you.", "...Mmh. Tell Marge thanks. Tell her it's still warm.")
+sets_flags = PackedStringArray("gill_talked_white")
+
+[sub_resource type="Resource" id="Conversation_white_after"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("white_story_done")
+lines = PackedStringArray("Oh, hey. You. Coffee's in the... somewhere.", "If you're ever out past the whale buoy at night, kill the engine for a minute. He did. Mmh.")
+
 [resource]
 script = ExtResource("1_npc")
 display_name = "Gill"
@@ -74,4 +95,4 @@ lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
 comm_name = "GILL · TIDEWATER"
 fur_color = Color(0.52, 0.38, 0.28, 1)
 accent_color = Color(0.95, 0.8, 0.3, 1)
-conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_iced"), SubResource("Conversation_ice_wait"), SubResource("Conversation_ice"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_white_last"), SubResource("Conversation_white_pie"), SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_iced"), SubResource("Conversation_ice_wait"), SubResource("Conversation_ice"), SubResource("Conversation_white_after"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

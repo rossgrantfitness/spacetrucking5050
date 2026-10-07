@@ -76,7 +76,9 @@ func test_moe_finishes_his_sentence_next_visit() -> void:
 
 func test_the_radio_dial() -> void:
 	var stations := Radio.lineup.stations
-	check(stations.size() == 22, "21 stations plus MY TUNES (got %d)" % stations.size())
+	var story_stations := stations.filter(func(radio_station: RadioStation) -> bool: return not radio_station.requires_flag.is_empty())
+	check(stations.size() - story_stations.size() == 22, "21 stations plus MY TUNES (got %d)" % (stations.size() - story_stations.size()))
+	check(story_stations.size() == 1, "plus one the story puts on the dial ({husband}'s tapes)")
 	var names := {}
 	for radio_station in stations:
 		check(not names.has(radio_station.display_name), "station names are unique (%s)" % radio_station.display_name)

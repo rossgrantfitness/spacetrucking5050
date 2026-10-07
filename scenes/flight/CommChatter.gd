@@ -12,10 +12,15 @@ extends Node
 ## - Rattling the cargo around (rough flying with a load) gets ONE comment
 ##   per trip. After that, nobody nags.
 ## - Low fuel and speeding tickets always get a call (they wait their turn).
+## - Story calls (res://data/dialogue/story_calls.tres) play once each, when
+##   the story's ready for them: at most one per trip, never mid-docking.
 ## Every timing is in tuning.tres under "Comms chatter".
 
 
+signal story_banner(text: String)
+
 const CHATTER: FlightChatter = preload("res://data/dialogue/flight_chatter.tres")
+const STORY: StoryCallList = preload("res://data/dialogue/story_calls.tres")
 ## These always get said, even if they have to wait for the comms to free up.
 const IMPORTANT := [ChatterSet.Situation.TAKEOFF, ChatterSet.Situation.APPROACH, ChatterSet.Situation.LOW_FUEL,
 		ChatterSet.Situation.DOCKING, ChatterSet.Situation.SPEEDING]
@@ -44,6 +49,12 @@ var _was_low_fuel: bool = false
 var _was_boosting: bool = false
 var _last_line: String = ""
 var _rng := RandomNumberGenerator.new()
+## Seconds since takeoff, and whether this trip has had its story call.
+var _trip_time: float = 0.0
+var _story_told: bool = false
+## Set by the flight scene: whether a story call may play right now (not
+## while docking or napping).
+var story_allowed: Callable = func() -> bool: return true
 
 
 func start(ship: Ship, comm: CommPortrait, places: Dictionary) -> void:
@@ -63,6 +74,8 @@ func restart() -> void:
 	_approach_called = {GameState.launch_from: true}
 	_was_low_fuel = false
 	_rough_said = false
+	_trip_time = 0.0
+	_story_told = false
 	_reset_idle_timer()
 
 
@@ -87,6 +100,7 @@ func _process(delta: float) -> void:
 		return
 	var tuning := GameState.tuning
 	_quiet += delta
+	_trip_time += delta
 	_idle_timer -= delta
 	_boost_cooldown -= delta
 	_bonk_cooldown -= delta
@@ -101,6 +115,8 @@ func _process(delta: float) -> void:
 	if not _waiting.is_empty():
 		var next: Array = _waiting.pop_front()
 		_play(next[0], next[1])
+	elif not _story_told and _tell_story():
+		pass
 	elif _idle_timer <= 0.0:
 		_play(ChatterSet.Situation.IDLE)
 
@@ -155,6 +171,23 @@ func say_line(speaker: NPCData, line: String, replies: PackedStringArray = Packe
 	_last_line = line
 	_reset_idle_timer()
 	_comm.call_in(speaker, line, ChatterSet.Situation.IDLE, true, replies)
+	return true
+
+
+## Plays the story call that's ready, if there is one. Returns whether it did.
+func _tell_story() -> bool:
+	var story_call := STORY.next_call()
+	if story_call == null or _trip_time < story_call.delay_seconds or not story_allowed.call():
+		return false
+	_story_told = true
+	GameState.set_flag(story_call.played_flag())
+	for flag in story_call.sets_flags:
+		GameState.set_flag(flag)
+	if not story_call.banner.is_empty():
+		story_banner.emit(GameState.names.fill_in(story_call.banner).to_upper())
+	# Give it room: no small talk for a good while after.
+	_idle_timer = maxf(_idle_timer, GameState.tuning.comm_idle_max_seconds)
+	_comm.call_in(story_call.speaker, story_call.words(), ChatterSet.Situation.IDLE, story_call.repliable, story_call.replies, true)
 	return true
 
 

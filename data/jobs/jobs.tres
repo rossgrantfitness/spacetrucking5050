@@ -25,7 +25,9 @@
 [ext_resource type="Resource" path="res://data/jobs/kelp_caviar.tres" id="28_kelp_caviar"]
 [ext_resource type="Resource" path="res://data/jobs/glow_guppies.tres" id="j_glow_guppies"]
 [ext_resource type="Resource" path="res://data/jobs/space_hens.tres" id="j_space_hens"]
+[ext_resource type="Resource" path="res://data/jobs/white_pie.tres" id="j_white_pie"]
+[ext_resource type="Resource" path="res://data/jobs/white_last_load.tres" id="j_white_last_load"]
 
 [resource]
 script = ExtResource("1_list")
-jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens"), ExtResource("j_gill_ice")])
+jobs = Array[ExtResource("2_job")]([ExtResource("3_first_long_haul"), ExtResource("4_gnome_run"), ExtResource("5_pie_run"), ExtResource("6_mail_bags"), ExtResource("7_spare_parts"), ExtResource("8_canned_starfish"), ExtResource("9_whale_song_records"), ExtResource("10_tidewater_mail"), ExtResource("11_cannery_parts"), ExtResource("12_moes_mixtape"), ExtResource("13_jerky_crate"), ExtResource("20_glimmer_cards"), ExtResource("21_sal_jumpsuits"), ExtResource("22_sal_slot_machine"), ExtResource("23_slot_parts"), ExtResource("24_poker_chips"), ExtResource("25_buffet_leftovers"), ExtResource("26_neon_tubes"), ExtResource("27_fuzzy_dice"), ExtResource("28_kelp_caviar"), ExtResource("j_glow_guppies"), ExtResource("j_space_hens"), ExtResource("j_gill_ice"), ExtResource("j_white_pie"), ExtResource("j_white_last_load")])

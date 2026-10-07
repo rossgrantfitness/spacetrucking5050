@@ -109,6 +109,22 @@ subject = "your rig's coming along"
 body = "Noticed your rig's got some miles on her now. Rigs settle in, you know. Engines loosen up, she starts listening to you. I've got parts that only fit a rig that knows what it's doing. Come by. - Dusty"
 requires_flag = "rig_level_3"
 
+[sub_resource type="Resource" id="Email_white_pie"]
+script = ExtResource("2_email")
+id = "white_order"
+from_name = "MARGE (TRUCK STOP)"
+subject = "his order"
+body = "Five months left on his order. They'll keep going out, one a month. I'm not asking you to drive them, hon. Anybody can.\n\nBut it got there warm. Thought you should know. -M"
+requires_flag = "white_pie_done"
+
+[sub_resource type="Resource" id="Email_white_claims"]
+script = ExtResource("2_email")
+id = "orbitalex_claims"
+from_name = "ORBITALEX CLAIMS"
+subject = "Re: Claim #4381"
+body = "Storage fees on impounded cargo #4381 have been waived at the request of the regional manager.\n\nThis is not an admission of anything.\n\nThe regional manager asks us to add that he does not have feelings. - Claims"
+requires_flag = "white_story_done"
+
 [resource]
 script = ExtResource("1_list")
-emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13")])
+emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13"), SubResource("Email_white_pie"), SubResource("Email_white_claims")])

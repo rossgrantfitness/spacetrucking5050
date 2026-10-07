@@ -567,3 +567,25 @@ be revisited; just say so.
   - It's stretched to cover the painted machine (1 m wide, 1.9 m tall).
   - The set's box is now collision only (`_bump_box`).
   - The truck stop's, canteen's and casino's machines were already your model.
+
+## 2026-10-07 (Beta 3: White's story)
+
+- **The story, told quietly** (beta step 3; full map in `docs/STORY.md`). White drove the Thumper for twelve years. On his last run, with a storm on the Tidewater lane and OrbitalEx wanting the load by morning, he didn't go around. Nobody says it outright: you piece it together from his last log, his message and the boss's "Policy."
+  - Optional, gates nothing, and no choice changes anything (your answers 16 and 18).
+  - **All of it is my draft.** It's in data files; rewrite anything.
+- **How it's told:**
+  - **People remember him:** Marge, Gill, Lily, Dusty, the boss, Big Wendell and the crew.
+  - **His old logs:** a new OLD LOGS app on the cabin PC. The Thumper's ancient trip computer recovers about one more each delivery, so the past comes back slowly.
+  - **Two story deliveries:**
+    - his standing order, a cherry pie for Gill;
+    - his last load, still in OrbitalEx's impound.
+  - **One message** on a chip Dusty finds behind the dash. It plays on the comms in flight, with no reply.
+  - **His mixtapes** become a radio station at the end: WHITE NOISE 43.8 (43.8 for day 4,381, the day of his last log).
+- **Story calls** (`data/dialogue/story_calls.tres`): one-time comm calls with conditions and a banner, at most one per trip, never mid-docking or mid-nap.
+  - A line break in a comm call now always starts a new card.
+  - Story cards stay up a little longer.
+- **Conversations can wait for deliveries** (`min_deliveries`), and can hang a "!" over someone until heard (`marked`), so story moments are easy to find without the objective line pushing them.
+- **Lily's tab:** White paid for the next trucker's fuel. Lily gives Jacki one free fill-up "on him". A small gift; nothing else costs or pays differently.
+- **Story-locked radio stations** (`RadioStation.requires_flag`): skipped on the dial and in the jukebox until their flag is set.
+- **Debug:** F10 → STORY: SKIP TO... jumps to any beat. A new test (`StoryTests.gd`) checks every beat leads to the next and nothing jumps ahead. A new flight smoke test (`smoke_story.gd`) checks that the message really plays.
+- Small fix: Jacki's comm name said "JACK · YOU"; now "JACKI · YOU".

@@ -18,6 +18,8 @@ extends Resource
 @export var needs_active_job: String = ""
 ## Only when you're NOT hauling anything.
 @export var needs_no_job: bool = false
+## Only after this many deliveries, ever (so a story can unfold slowly).
+@export_range(0, 1000) var min_deliveries: int = 0
 
 ## What they say, one box per line. Can use {bunny}, {husband}, {base},
 ## {currency}, {company}, {boss}.
@@ -34,6 +36,9 @@ extends Resource
 ## next time you check in. (Jobs like this start at the company depot, the
 ## truck stop, and are off the job boards.)
 @export var places_order: JobData
+## Hangs a "!" over them until you've heard it (it needs `sets_flags` to
+## know). For story moments you'd hate to miss.
+@export var marked: bool = false
 ## A menu to open at the end: "job_board", "fuel", "mechanic", "jukebox",
 ## "vending" (empty = none).
 @export var opens_menu: String = ""
@@ -50,5 +55,7 @@ func matches() -> bool:
 	if not needs_active_job.is_empty() and GameState.active_job_id != needs_active_job:
 		return false
 	if needs_no_job and not GameState.active_job_id.is_empty():
+		return false
+	if GameState.deliveries < min_deliveries:
 		return false
 	return true
