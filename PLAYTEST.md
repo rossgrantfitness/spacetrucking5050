@@ -1,3 +1,31 @@
+# Playtest: your models everywhere, Jacki's new room and moves, and speed has a price
+
+**What's new:**
+- **Jacki** is your redesign, with a real skeleton and free animations: she idles, walks, runs and sits.
+- **Her cabin** is your Orbital Hideaway diorama, seen from a fixed isometric camera like your picture. The steps on the two open sides lead out to the hallway.
+- **One rig, the Thumper.** No rigs for sale. Its look changes with the load: an empty deck, then bigger and bigger piles, up to the overloaded heap.
+- **Out in space:**
+  - The whales are your Cosmic Leviathan.
+  - The planets are small and far away; the Cinder Moon and Stormbound Orb replaced the ringed ones.
+  - The approach rings are your Docking Portals, each at its own angle and slowly turning.
+  - Gas-N-Go 47 is your Fuel Stop in the Sky, with clean signs over the garbled letters.
+  - Junk fields tumble your cargo and junk pieces.
+  - No giant signs or donuts anywhere.
+- **Speed has a price.** Above 1,000 km/h the rig keeps shaking and drifting off course even after you let go of boost, and the hull slowly wears. Past 2,000 km/h it wears fast, and it ends in disaster if you don't slow down.
+
+1. Start a game (or load one) and walk Jacki around her cabin: the bed, the computer, the TV, both sets of steps.
+2. Take a job, then look at the rig from outside in flight (orbit the camera with the middle mouse button): is the load on the deck the right size?
+3. Boost up to 2,000+ km/h, let go and just coast. Watch the hull gauge and how hard it is to hold a line.
+4. Fly through a docking portal, stop at Gas-N-Go 47, and look for whales on the way to Tidewater.
+
+**Questions:**
+1. Jacki's walk: do her feet slide or does she moonwalk? (I can speed up or slow down her walk and run in `JackiAnimator.gd`.) Do the borrowed animations suit her, or do you want different ones?
+2. The cabin: is the iso camera framed how you like it? Too dark, or moody in a good way?
+3. Overspeed: is 1,000 km/h the right point for the trouble to start, and is losing control fun-scary or just annoying? (Every number is in `tuning.tres` under "Overspeed".)
+4. The Thumper's load models: should the piles change at different load sizes?
+
+---
+
 # Playtest: your interior textures, the Nebula Jackpot, and your traffic ships
 
 **What's new:**

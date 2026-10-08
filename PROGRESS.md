@@ -4,11 +4,14 @@
 Flight Assist on / off, roll and strafe. The old Newtonian fork is merged
 into the main branch; arcade flight is still a switch in tuning.tres.
 
-**Latest (2026-10-08):** the rooms are built from your interior texture sheet
-(`textures/interior/`). The High Roller is now your Nebula Jackpot model, and your four
-cruiser models fly as traffic.
-The menus and dialogue look like in-world terminals. `art/to_paint/` lists
-the 26 room views still waiting for hand-painted art.
+**Latest (2026-10-08):**
+- Jacki is your redesign, rigged with free CC0 animations.
+- Her cabin is your Orbital Hideaway diorama, seen from a fixed isometric camera.
+- The Thumper is the only rig, with five load models.
+- Your models replaced the whales, the ringed planets, the approach rings, Gas-N-Go, the casino, the traffic and the space junk.
+- The giant signs are gone.
+- Coasting far too fast now costs control and hull.
+- The rooms use your interior texture sheet.
 
 **Before that:** **the trucking push (2026-10-07):** a living freight market,
 cargo you can see, pro docking, route choices (toll turnpikes, rock-belt
