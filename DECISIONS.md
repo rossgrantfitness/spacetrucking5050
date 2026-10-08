@@ -763,4 +763,9 @@ be revisited; just say so.
   - It stands beside the lane, 300 m long, its front facing you as you pull in. The tool slides it sideways until nothing pokes into the lane.
   - The garbled AI lettering ("DRIV... FUEL", "RU", "SERHERE") is covered by clean boards: "GAS-N-GO 47 / DRIVE-THRU FUEL" and "PAY HERE". The back of the model still has its own garbled sign.
 - **Your cargo and junk sheet is in the junk fields.** `tools/split_junk_kit.gd` cuts `art/models/space_junk_pile.glb` (one mesh with about forty items laid side by side) into 33 separate pieces in `art/models/junk_kit.res`. Every junk field and junk cloud now tumbles those pieces in their own paint, instead of plain boxes and barrels.
+- **Jacki's room is your Orbital Hideaway diorama, seen isometrically.**
+  - It's drawn live, not pre-painted: `HubRoom.live_set` is on for the apartment, with one fixed orthographic camera from the front-left corner, like your picture.
+  - `tools/build_jacki_room.gd` builds the set (`scenes/hub/sets/JackiRoomSet.tscn`): the model about 6 m across with the floor at 0; collision from the model's own triangles above knee height, so floor clutter doesn't snag her; the open edges blocked except at the two sets of steps (both lead to the hallway); a window spot for the live view of space in flight; and lights (the lantern, the pink desk lamp, starlight, a soft fill).
+  - The bed, computer and TV moved to where they are in the model.
+  - The old apartment paintings went to `art/alternates/old_apartment_paintings/`.
 

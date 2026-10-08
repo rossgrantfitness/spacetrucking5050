@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
-[ext_resource type="PackedScene" path="res://scenes/hub/sets/ApartmentSet.tscn" id="2_set"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/JackiRoomSet.tscn" id="2_set"]
 [ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
 [ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
 [ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
@@ -13,13 +13,10 @@ background_mode = 1
 background_color = Color(0.02, 0.02, 0.05, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.35, 0.35, 0.5, 1)
-ambient_light_energy = 0.6
+ambient_light_energy = 1.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_zone0"]
-size = Vector3(6.2, 3, 3.3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
-size = Vector3(6.2, 3, 1.9)
+size = Vector3(8, 4, 8)
 
 [sub_resource type="SphereShape3D" id="Sphere_tv"]
 radius = 0.8
@@ -36,6 +33,7 @@ size = Vector3(1.1, 2, 0.5)
 [node name="Apartment" type="Node3D"]
 script = ExtResource("1_room")
 default_spawn = "Bed"
+live_set = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_room")
@@ -44,56 +42,38 @@ environment = SubResource("Environment_room")
 
 [node name="Shots" type="Node3D" parent="."]
 
-[node name="Wide" type="Node3D" parent="Shots"]
+[node name="Iso" type="Node3D" parent="Shots"]
 script = ExtResource("3_shot")
-hide_from_view = PackedStringArray("WallRight", "WallFront", "Door*", "NeonStrip", "PosterBacking", "OnlyTowardDoor")
-see_from = 0.8
+see_from = 30.0
 
-[node name="Camera" type="Camera3D" parent="Shots/Wide"]
-position = Vector3(3.3666, 2.1762, 2.6902)
-rotation = Vector3(-0.2902, 0.8342, 0)
-fov = 49.37
-near = 0.1
+[node name="Camera" type="Camera3D" parent="Shots/Iso"]
+position = Vector3(-24.47, 20.56, 24.47)
+rotation = Vector3(-0.5375, -0.7854, 0)
+projection = 1
+size = 7.4
+near = 1.0
 far = 100.0
 
-[node name="Zone" type="Area3D" parent="Shots/Wide"]
+[node name="Zone" type="Area3D" parent="Shots/Iso"]
 
-[node name="Shape" type="CollisionShape3D" parent="Shots/Wide/Zone"]
-position = Vector3(0, 1.4, -0.95)
+[node name="Shape" type="CollisionShape3D" parent="Shots/Iso/Zone"]
+position = Vector3(0, 1.5, 0)
 shape = SubResource("BoxShape3D_zone0")
-
-[node name="TowardDoor" type="Node3D" parent="Shots"]
-script = ExtResource("3_shot")
-hide_from_view = PackedStringArray("WallBack*", "SpaceView", "WindowSill", "WindowTop", "WindowBar*", "Photo*", "OnlyWide")
-see_from = 4.6
-
-[node name="Camera" type="Camera3D" parent="Shots/TowardDoor"]
-position = Vector3(0.8179, 2.1077, -6.2607)
-rotation = Vector3(-0.1836, 2.7517, 0)
-fov = 35.93
-near = 0.1
-far = 100.0
-
-[node name="Zone" type="Area3D" parent="Shots/TowardDoor"]
-
-[node name="Shape" type="CollisionShape3D" parent="Shots/TowardDoor/Zone"]
-position = Vector3(0, 1.4, 1.65)
-shape = SubResource("BoxShape3D_zone1")
 
 [node name="Spawns" type="Node3D" parent="."]
 
 [node name="Bed" type="Marker3D" parent="Spawns"]
-position = Vector3(-1.3, 0, 0.35)
-rotation = Vector3(0, -1.2793, 0)
+position = Vector3(-0.9, 0, -0.9)
+rotation = Vector3(0, 2.6, 0)
 
 [node name="FromHallway" type="Marker3D" parent="Spawns"]
-position = Vector3(-2.15, 0, 1.9)
+position = Vector3(0, 0, 1.6)
 rotation = Vector3(0, 0.0000, 0)
 
 [node name="Exits" type="Node3D" parent="."]
 
 [node name="HallwayDoor" type="Area3D" parent="Exits"]
-position = Vector3(-2.15, 1, 2.45)
+position = Vector3(0, 1, 2.2)
 script = ExtResource("4_exit")
 target_scene = "res://scenes/hub/Hallway.tscn"
 target_spawn = "FromApartment"
@@ -101,17 +81,27 @@ target_spawn = "FromApartment"
 [node name="Shape" type="CollisionShape3D" parent="Exits/HallwayDoor"]
 shape = SubResource("BoxShape3D_exit0")
 
+[node name="SideSteps" type="Area3D" parent="Exits"]
+position = Vector3(-2.2, 1, 0)
+rotation = Vector3(0, 1.5708, 0)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Hallway.tscn"
+target_spawn = "FromApartment"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/SideSteps"]
+shape = SubResource("BoxShape3D_exit0")
+
 [node name="People" type="Node3D" parent="."]
 
 [node name="CrewSpots" type="Node3D" parent="."]
 
 [node name="Window" type="Marker3D" parent="CrewSpots"]
-position = Vector3(-1, 0, -1.7)
+position = Vector3(1.45, 0, -0.75)
 
 [node name="Things" type="Node3D" parent="."]
 
 [node name="Computer" type="Area3D" parent="Things"]
-position = Vector3(1.6, 0.8, -1.2)
+position = Vector3(1.75, 0.8, 0.9)
 script = ExtResource("8_service")
 prompt = "USE COMPUTER"
 menu = "computer"
@@ -120,7 +110,7 @@ menu = "computer"
 shape = SubResource("Box_computer")
 
 [node name="TV" type="Area3D" parent="Things"]
-position = Vector3(-2.3, 0.7, -1.75)
+position = Vector3(1.15, 0.7, -1.75)
 script = ExtResource("8_service")
 prompt = "PLAY THE TATER-16"
 menu = "console"
@@ -129,7 +119,7 @@ menu = "console"
 shape = SubResource("Sphere_tv")
 
 [node name="Bed" type="Area3D" parent="Things"]
-position = Vector3(-2.3, 0.6, 0)
+position = Vector3(-0.95, 0.6, -1.7)
 script = ExtResource("8_service")
 prompt = "SLEEP"
 menu = "bed"

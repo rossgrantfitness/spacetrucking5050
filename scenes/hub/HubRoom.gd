@@ -63,6 +63,10 @@ const DOOR_PULL: float = 2.2
 @export var place_id: String = "base"
 ## Whether the radio plays through this room's speakers (the jukebox).
 @export var radio_speakers: bool = false
+## Draw the Set live, with its own materials and lights, instead of painting
+## it into backgrounds: for rooms made from one finished model, seen from a
+## fixed isometric camera like a diorama (Jacki's cabin).
+@export var live_set: bool = false
 
 ## On when this room is the rig's cabin, shown inside the flight scene while
 ## the autopilot drives (see FlightSandbox.gd). Then the door leads back to
@@ -336,7 +340,7 @@ func _set_up_cabin() -> void:
 	box.size = Vector3(2.4, 1.2, 1.4)
 	shape.shape = box
 	bed.add_child(shape)
-	bed.position = Vector3(-2.3, 0.6, 0.0)
+	bed.position = parked_bed.position if parked_bed != null else Vector3(-2.3, 0.6, 0.0)
 	bed.interacted.connect(func(_who: Node3D) -> void: nap_requested.emit())
 	add_child(bed)
 
@@ -348,6 +352,13 @@ func active_shot() -> RoomShot:
 
 ## Paints every shot's background picture (see the notes at the top).
 func paint_backgrounds() -> void:
+	if live_set:
+		for shot in _shots:
+			shot.has_art = false
+			shot.background = null
+		_show_set_for_painting(true)  # (Its real look, live.)
+		_hide_for_shot(_active_shot)
+		return
 	var to_paint: Array[RoomShot] = []
 	for shot in _shots:
 		var art := art_for(shot)
@@ -406,6 +417,9 @@ func art_for(shot: RoomShot) -> Texture2D:
 ## draws the signs its art left blank.
 func _show_backdrop(shot: RoomShot) -> void:
 	if shot == null:
+		return
+	if live_set:
+		_hide_for_shot(shot)
 		return
 	_backdrop.set_shader_parameter("background", shot.background)
 	var aspect := 0.0

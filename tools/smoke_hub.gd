@@ -40,7 +40,8 @@ func _process(_delta: float) -> bool:
 		Stage.PC:
 			# Sit at the desk, boot up, then shut it down (Esc).
 			if _ready_room() and waited == 20:
-				_player().global_position = Vector3(2.1, 0.0, -1.0)
+				var desk := (current_scene.get_node("Things/Computer") as Node3D).global_position
+				_player().global_position = Vector3(desk.x - 0.6, 0.0, desk.z)
 			if waited == 30:
 				_tap("interact")
 			var pc := _pc()
