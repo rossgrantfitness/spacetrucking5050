@@ -1,3 +1,20 @@
+# Playtest: the old console RPG menu look
+
+**What's new:** menus and conversations now look like the reference you sent: beveled blue windows, white pixel text with a black drop shadow, and the white glove pointer. The flight HUD hasn't changed.
+
+1. Talk to someone (Lily at the pumps, Marge): the dialogue box, with the name in its own little window.
+2. Open a job board and a shop (Dusty's), and move up and down with the arrow keys or D-pad: watch the glove.
+3. Press **Esc** for the pause menu and open **Controls**.
+4. In flight, open the course chart (**M**) and dock somewhere to see a counter menu.
+
+**Questions:**
+1. Does it feel like the reference? Too blue, too dark, too light? The colors are at the top of `scenes/ui/RetroWindowStyle.gd`.
+2. Is the text size right in conversations (bigger) and menus (smaller)?
+3. Is the glove the right size, and does its little tap feel right or fussy?
+4. Should the comm calls in flight get this look too, or stay part of the HUD?
+
+---
+
 # Playtest: the trucking push (Newtonian flight is the game now)
 
 **What's new:** a living freight market, cargo you can see, pro docking, route choices and rest stops. And the Newtonian fork is now the main branch, so switch back to `claude/serene-galileo-035l4z` in GitHub Desktop.

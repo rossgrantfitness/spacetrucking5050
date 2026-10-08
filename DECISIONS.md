@@ -700,3 +700,15 @@ be revisited; just say so.
   - It brakes in time for sharp corners (Newtonian).
   - If it finishes its course right by the destination's ring but misses the 60 m hole, the ring's "tractor beam" catches the rig and docks it (or starts pro docking), instead of letting it coast into the station.
 - **Smoke tests can flip settings without saving them** (`Settings.keep_changes`), so a test never changes your own choices.
+
+## 2026-10-08 (your reference: an old console RPG menu)
+
+- **Every menu and conversation now has the old console RPG menu look** you showed: the job boards, shops, counters, the course chart list, the logbook, the payout and bills cards, the pause menu, the controls screen and every character's dialogue box. It's one shared kit (`scenes/ui/RetroUI.gd`), so anything new gets it for free.
+  - **Windows** (`RetroWindowStyle.gd`): a blue gradient (lighter at the top) with a fine woven texture, inside a beveled frame (bright along the top and left, shaded along the bottom and right) with rounded corners and a thin dark outline. Drawn in code, so any size works.
+  - **Lettering** (`MenuFont.gd` → `fonts/menu_font.tres`): a new, rounder pixel font with real lowercase and descenders (the old font was capitals only). Drawn white with a black drop shadow at crisp 2x / 3x steps. Names and titles are soft gold.
+  - **The glove** (`GlovePointer.gd`): a white-gloved hand drawn as pixel art. It points at whichever option has the focus and gives a little tap now and then. Options are plain words, not boxes, like the reference.
+  - **Dialogue:** the speaker's name sits in its own small window on the top edge of the text box; the words are bigger (3x).
+  - **Menus:** a second small "help" window under each menu describes the option you're on.
+  - On / off switches and volume sliders got matching pixel art.
+- **Kept as it was, on purpose:** the flight HUD (your call), including the comm calls in flight, which are part of the HUD's pixel display. Also the boot / input-check screen, which gets its proper title-screen treatment in M10. Say if you'd like the comm calls in the new look too.
+- **Fixed on the way:** the pause menu's title was meant to show your completion percentage but never did (the menu had been moved into a scroll box, so the code couldn't find the title).

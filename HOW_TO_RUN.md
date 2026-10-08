@@ -616,6 +616,14 @@ stop, canned starfish at Tidewater, Chip Chips at the casino.
 | Choose | **E** or **Enter**, or click | **A** |
 | Back | **Esc** | **B** |
 
+**The look:** menus and conversations use an old console RPG style:
+beveled blue windows, white pixel letters with a black drop shadow, and a
+white glove pointing at the option you're on. (The flight HUD keeps its
+own racing-game look.) To change the window colors, open
+`scenes/ui/RetroWindowStyle.gd`; to change a letter, edit
+`scenes/ui/MenuFont.gd` and run
+`godot --headless --path . -s tools/generate_menu_font.gd`.
+
 **Invert Y:** by default, pushing up points the ship's nose up. If you prefer
 "pilot style" (push up = nose down), flip *Invert Y* in the pause menu (or on
 the boot screen). The pause menu also has *Camera roll*, *Show HUD*, *Screen shake*,
