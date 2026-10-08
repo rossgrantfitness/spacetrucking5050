@@ -55,8 +55,8 @@ func _initialize() -> void:
 	# 2. Each group's footprint (seen from above: the sheet lies flat).
 	var boxes := {}
 	for i in verts.size():
-		var root := _find(i)
-		boxes[root] = AABB(verts[i], Vector3.ZERO) if not boxes.has(root) else (boxes[root] as AABB).expand(verts[i])
+		var group := _find(i)
+		boxes[group] = AABB(verts[i], Vector3.ZERO) if not boxes.has(group) else (boxes[group] as AABB).expand(verts[i])
 	var roots := boxes.keys()
 	for a in roots.size():
 		for b in range(a + 1, roots.size()):
@@ -67,16 +67,16 @@ func _initialize() -> void:
 	# 3. Triangles by piece.
 	var pieces := {}
 	for t in range(0, indices.size(), 3):
-		var root := _find(indices[t])
+		var group := _find(indices[t])
 		# (Packed arrays are copied when read, so add to it and put it back.)
-		var tris: PackedInt32Array = pieces.get(root, PackedInt32Array())
+		var tris: PackedInt32Array = pieces.get(group, PackedInt32Array())
 		tris.append_array([indices[t], indices[t + 1], indices[t + 2]])
-		pieces[root] = tris
+		pieces[group] = tris
 	var library := MeshLibrary.new()
 	var count := 0
-	for root: int in pieces:
-		var tris: PackedInt32Array = pieces[root]
-		if tris.size() / 3 < MIN_TRIANGLES:
+	for group: int in pieces:
+		var tris: PackedInt32Array = pieces[group]
+		if tris.size() < MIN_TRIANGLES * 3:
 			continue
 		var box := AABB(verts[tris[0]], Vector3.ZERO)
 		for index in tris:
