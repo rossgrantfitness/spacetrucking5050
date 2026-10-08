@@ -21,19 +21,25 @@ extends "res://tools/build_placeholder_models.gd"
 
 
 const ANIMATOR_PATH := "res://scenes/hub/BunnyAnimator.gd"
-const FLOOR_TILES := preload("res://textures/generated/floor_tiles.png")
-const WALL_PANELS := preload("res://textures/generated/wall_panels.png")
+const FLOOR_TILES := preload("res://textures/interior/floor_tiles.png")
+const WALL_PANELS := preload("res://textures/interior/wall_panels.png")
 const CARPET := preload("res://textures/generated/carpet.png")
 const WOOD := preload("res://textures/generated/wood.png")
 const BLANKET := preload("res://textures/generated/blanket.png")
 const SPACE_VIEW := preload("res://textures/generated/space_view.png")
 const JOB_BOARD := preload("res://textures/generated/job_board.png")
-const DOOR := preload("res://textures/generated/door.png")
-const TERMINAL := preload("res://textures/generated/terminal.png")
-const MACHINERY := preload("res://textures/generated/machinery.png")
-const CRATE := preload("res://textures/generated/crate.png")
-const GRATE := preload("res://textures/generated/grate.png")
-const PIPES := preload("res://textures/generated/pipes.png")
+const DOOR := preload("res://textures/interior/door.png")
+const TERMINAL := preload("res://textures/interior/terminal.png")
+const MACHINERY := preload("res://textures/interior/machinery.png")
+const CRATE := preload("res://textures/interior/crate.png")
+const GRATE := preload("res://textures/interior/grate.png")
+const PIPES := preload("res://textures/interior/pipes.png")
+## The rooms' own vents, crates and hazard tape, cut from the developer's
+## interior sheet (tools/cut_interior_textures.gd). Ships and stations out in
+## space keep the generated ones (VENTS, CONTAINER, HAZARD).
+const SET_VENTS := preload("res://textures/interior/vents.png")
+const SET_CONTAINER := preload("res://textures/interior/container.png")
+const SET_HAZARD := preload("res://textures/interior/hazard_stripes.png")
 
 const RACCOON_LOOK := {
 	"fur": Color(0.55, 0.55, 0.6), "belly": Color(0.85, 0.85, 0.86), "inner_ear": Color(0.35, 0.33, 0.38),
@@ -178,6 +184,11 @@ func _set_paint(color: Color, texture: Texture2D = null, meters: float = 1.0, gl
 	return _set_materials[key]
 
 
+## Hazard tape in the rooms: the interior sheet's dusty stripes.
+func _hazard(stripes_per_meter: float) -> ShaderMaterial:
+	return _paint(Color.WHITE, SET_HAZARD, Vector2.ONE * stripes_per_meter * 0.25)
+
+
 ## A box in a set, optionally solid (with a matching collision box).
 func _piece(parent: Node3D, body: StaticBody3D, node_name: String, size: Vector3, where: Vector3, material: Material) -> MeshInstance3D:
 	var part := _box(parent, node_name, size, where, material)
@@ -282,7 +293,7 @@ func _build_apartment() -> Node3D:
 	# The heater under the window, ribbed.
 	for i in 6:
 		_box(room, "HeaterRib", Vector3(0.12, 0.5, 0.12), Vector3(-1.5 + i * 0.22, 0.3, -2.3), _set_paint(Color(0.85, 0.82, 0.78)))
-	_add_collision(body, _box(room, "HeaterBox", Vector3(1.3, 0.55, 0.25), Vector3(-0.95, 0.3, -2.37), _set_paint(Color(0.85, 0.82, 0.78), VENTS, 0.3)))
+	_add_collision(body, _box(room, "HeaterBox", Vector3(1.3, 0.55, 0.25), Vector3(-0.95, 0.3, -2.37), _set_paint(Color(0.85, 0.82, 0.78), SET_VENTS, 0.3)))
 
 	# The unmade bed along the left wall, its pillow toward the window. She
 	# bumps into the head end only: from the door-side camera, where she

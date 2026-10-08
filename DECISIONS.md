@@ -725,3 +725,16 @@ be revisited; just say so.
   - Menus and the dialogue box **switch on like an old CRT**: a bright line opens into the picture.
   - In conversations, **the speaker's name is on a strip of yellow label-maker tape** stuck a bit crooked on the frame.
   - Help boxes use a smaller, plainer screen.
+
+## 2026-10-08 (your interior texture sheet, and the Nebula Jackpot model)
+- **The rooms use your texture sheet** (`reference/interior_texture_sheet.webp`). `tools/cut_interior_textures.gd` cuts it into `textures/interior/`: rusty riveted wall panels, tread-plate floor, the porthole bulkhead door, the switch-and-gauge machinery panel, pipes, vents, a stamped deck plate (for grates), the "Interstellar Cargo" crate, "Sealed Container #42", the green CRT and hazard tape. Every room set points at them. Ships and stations out in space keep their old textures.
+  - Each tile is brightened (a gamma curve) to about the brightness of the placeholder it replaces, with a little color taken out. The rooms tint every texture with their own paint color, and the raw sheet is dark enough that the rooms went murky.
+  - The hazard tape is redrawn in the sheet's dusty yellow and soot black, scuffed with its rust. The sheet's own stripes don't line up at the edges, so they showed seams when tiled.
+  - The rooms you've already painted (apartment, hallway, dispatch, galley, cargo bay, engine room) look the same: your paintings cover the sets.
+- **`art/to_paint/`** has the 26 camera views that still have no hand-made painting (truck stop, OrbitalEx office, cannery canteen, casino lounge, arboretum, salvage yard, creamery), rendered with the new textures, plus a contact sheet and a list of where to save each painting. `tools/export_paint_list.gd` remakes it. It has a `.gdignore` so Godot doesn't import it.
+- **The High Roller is now your Nebula Jackpot model** (`art/models/nebula_jackpot_casino.glb`). `tools/build_casino_model.gd` swaps it in, following the same recipe as the truck stop model:
+  - It takes out the placeholder drum, roulette wheel, tower, cards, dice and marquee. The model has its own sign.
+  - It keeps the docking bay poking out of the saucer's front rim, with the sign facing the way you fly in.
+  - It scales the model to about 860 m across and gives it collision from its own triangles.
+  - The dock, ring and launch points didn't move.
+

@@ -1,10 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Shader" path="res://shaders/set_surface.gdshader" id="1_1agvv"]
-[ext_resource type="Texture2D" path="res://textures/generated/floor_tiles.png" id="2_tajgv"]
+[ext_resource type="Texture2D" path="res://textures/interior/floor_tiles.png" id="2_tajgv"]
 [ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_wr652"]
-[ext_resource type="Texture2D" path="res://textures/generated/wall_panels.png" id="4_booe8"]
-[ext_resource type="Texture2D" path="res://textures/generated/door.png" id="5_anuul"]
+[ext_resource type="Texture2D" path="res://textures/interior/wall_panels.png" id="4_booe8"]
+[ext_resource type="Texture2D" path="res://textures/interior/door.png" id="5_anuul"]
 [ext_resource type="Texture2D" path="res://textures/generated/wood.png" id="6_0xbc6"]
 [ext_resource type="Texture2D" path="res://textures/generated/job_board.png" id="7_a7gsf"]
 [ext_resource type="Texture2D" path="res://textures/generated/space_view.png" id="8_bxijp"]

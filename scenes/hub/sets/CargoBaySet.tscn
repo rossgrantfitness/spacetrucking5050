@@ -1,15 +1,15 @@
 [gd_scene format=3]
 
 [ext_resource type="Shader" path="res://shaders/set_surface.gdshader" id="1_vtcr3"]
-[ext_resource type="Texture2D" path="res://textures/generated/floor_tiles.png" id="2_1q2rh"]
+[ext_resource type="Texture2D" path="res://textures/interior/floor_tiles.png" id="2_1q2rh"]
 [ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_eqv5o"]
-[ext_resource type="Texture2D" path="res://textures/generated/wall_panels.png" id="4_rm7cg"]
-[ext_resource type="Texture2D" path="res://textures/generated/door.png" id="5_8uwk7"]
-[ext_resource type="Texture2D" path="res://textures/generated/container.png" id="6_5yo1u"]
-[ext_resource type="Texture2D" path="res://textures/generated/crate.png" id="7_lkgih"]
+[ext_resource type="Texture2D" path="res://textures/interior/wall_panels.png" id="4_rm7cg"]
+[ext_resource type="Texture2D" path="res://textures/interior/door.png" id="5_8uwk7"]
+[ext_resource type="Texture2D" path="res://textures/interior/container.png" id="6_5yo1u"]
+[ext_resource type="Texture2D" path="res://textures/interior/crate.png" id="7_lkgih"]
 [ext_resource type="Texture2D" path="res://textures/generated/wood.png" id="8_ml5fj"]
 [ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="9_0l5kw"]
-[ext_resource type="Texture2D" path="res://textures/generated/hazard_stripes.png" id="10_odnhn"]
+[ext_resource type="Texture2D" path="res://textures/interior/hazard_stripes.png" id="10_odnhn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ytk3f"]
 size = Vector3(10, 0.2, 8)

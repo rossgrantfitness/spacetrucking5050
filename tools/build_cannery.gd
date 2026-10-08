@@ -134,7 +134,7 @@ func _cannery_floor(room: Node3D, body: StaticBody3D, dark: Material, metal: Mat
 	var can_colors: Array[Color] = [Color(0.85, 0.3, 0.3), Color(0.3, 0.75, 0.85), Color(0.95, 0.8, 0.3)]
 	for belt_z: float in [-6.0, -2.5]:
 		_piece(room, body, "Conveyor", Vector3(8.0, 0.9, 1.0), Vector3(5.5, 0.45, belt_z), dark)
-		_box(room, "ConveyorBelt", Vector3(8.0, 0.04, 0.9), Vector3(5.5, 0.92, belt_z), _set_paint(Color(0.2, 0.2, 0.22), VENTS, 0.5))
+		_box(room, "ConveyorBelt", Vector3(8.0, 0.04, 0.9), Vector3(5.5, 0.92, belt_z), _set_paint(Color(0.2, 0.2, 0.22), SET_VENTS, 0.5))
 		for i in 12:
 			_cylinder(room, "Can", 0.12, 0.26, Vector3(2.0 + i * 0.62, 1.07, belt_z), _set_paint(can_colors[i % 3]), Vector3.ZERO, 8)
 	_box(room, "CannerySignBack", Vector3(6.0, 1.0, 0.1), Vector3(5.0, 4.6, -7.9), dark)

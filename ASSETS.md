@@ -75,8 +75,11 @@ art/alternates/                     spare versions not used yet (hidden from God
 
 **Background names:** `<room>` is the room's scene name and `<shot>` is
 the camera's name, both in lower_case_with_underscores, e.g.
-`art/backgrounds/engine_room/toward_door.jpg`. The 29 screenshots I sent
-(and `cameras.txt`) list every room and camera. A picture there replaces
+`art/backgrounds/engine_room/toward_door.jpg`. **`art/to_paint/`** holds
+the clean export of every camera that still has no painting (with
+`contact_sheet.jpg` and a `README.md` saying where each one goes). To
+refresh it after adding paintings, run
+`RES=1920x1080 tools/capture.sh 100000 /tmp/ignore -s res://tools/export_paint_list.gd`. A picture there replaces
 the game's own painting for that camera. Nothing else is needed; a missing
 one just falls back to the game's own. Any 16:9-ish size works: the
 picture's full height fills the screen.

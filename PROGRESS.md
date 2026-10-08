@@ -4,7 +4,12 @@
 Flight Assist on / off, roll and strafe. The old Newtonian fork is merged
 into the main branch; arcade flight is still a switch in tuning.tres.
 
-**Latest:** **the trucking push (2026-10-07):** a living freight market,
+**Latest (2026-10-08):** the rooms are built from your interior texture sheet
+(`textures/interior/`). The High Roller is now your Nebula Jackpot model.
+The menus and dialogue look like in-world terminals. `art/to_paint/` lists
+the 26 room views still waiting for hand-painted art.
+
+**Before that:** **the trucking push (2026-10-07):** a living freight market,
 cargo you can see, pro docking, route choices (toll turnpikes, rock-belt
 shortcuts, a scenic lane) and three rest stops (a diner, a fuel depot, a
 weigh station). Also: an empty tank kills the engines (a Gas-N-Go tanker

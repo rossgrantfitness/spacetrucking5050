@@ -3,14 +3,14 @@
 [ext_resource type="Shader" path="res://shaders/set_surface.gdshader" id="1_c7k1h"]
 [ext_resource type="Texture2D" path="res://textures/generated/carpet.png" id="2_vap68"]
 [ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_okoam"]
-[ext_resource type="Texture2D" path="res://textures/generated/wall_panels.png" id="4_t1hl3"]
+[ext_resource type="Texture2D" path="res://textures/interior/wall_panels.png" id="4_t1hl3"]
 [ext_resource type="Texture2D" path="res://textures/generated/glimmer_planet.png" id="5_dcdg6"]
 [ext_resource type="Texture2D" path="res://textures/generated/wood.png" id="6_t4mt1"]
 [ext_resource type="Texture2D" path="res://textures/generated/job_board.png" id="7_4nrt8"]
 [ext_resource type="Texture2D" path="res://textures/generated/blanket.png" id="8_gnm2d"]
-[ext_resource type="Texture2D" path="res://textures/generated/door.png" id="9_arak7"]
+[ext_resource type="Texture2D" path="res://textures/interior/door.png" id="9_arak7"]
 [ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="10_y8iou"]
-[ext_resource type="Texture2D" path="res://textures/generated/hazard_stripes.png" id="11_xyvmu"]
+[ext_resource type="Texture2D" path="res://textures/interior/hazard_stripes.png" id="11_xyvmu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qbhej"]
 size = Vector3(22, 0.2, 18)

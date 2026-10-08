@@ -296,8 +296,8 @@ func _build_cargo_bay() -> Node3D:
 	var colors: Array[Color] = [Color(0.8, 0.38, 0.22), Color(0.22, 0.56, 0.6), Color(0.9, 0.7, 0.22), Color(0.52, 0.32, 0.64)]
 	# Containers stacked along the left wall.
 	for i in 3:
-		_piece(room, body, "Container", Vector3(2.4, 2.4, 2.4), Vector3(-3.7, 1.2, -2.6 + i * 2.5), _set_paint(colors[i], CONTAINER, 2.4))
-	_box(room, "ContainerTop", Vector3(2.4, 2.4, 2.4), Vector3(-3.7, 3.6, -1.35), _set_paint(colors[3], CONTAINER, 2.4))
+		_piece(room, body, "Container", Vector3(2.4, 2.4, 2.4), Vector3(-3.7, 1.2, -2.6 + i * 2.5), _set_paint(colors[i], SET_CONTAINER, 2.4))
+	_box(room, "ContainerTop", Vector3(2.4, 2.4, 2.4), Vector3(-3.7, 3.6, -1.35), _set_paint(colors[3], SET_CONTAINER, 2.4))
 	# Crates: a little stack to sit on, and some loose ones.
 	_piece(room, body, "CrateA", Vector3(1.0, 1.0, 1.0), Vector3(-1.4, 0.5, 3.0), _set_paint(Color.WHITE, CRATE, 1.0))
 	_piece(room, body, "CrateB", Vector3(1.0, 1.0, 1.0), Vector3(-2.5, 0.5, 2.0), _set_paint(Color.WHITE, CRATE, 1.0))

@@ -1,3 +1,22 @@
+# Playtest: your interior textures, and the Nebula Jackpot
+
+**What's new:**
+- The rooms are built from your texture sheet: rusty riveted walls, tread-plate floors, porthole bulkhead doors, gauge panels, stencilled cargo crates and dusty hazard tape.
+- The High Roller casino out in space is now your Nebula Jackpot model.
+- `art/to_paint/` has the 26 room views that still need hand-painted art. Start with `contact_sheet.jpg`; `README.md` there says where each finished painting goes.
+
+1. Fly to (or debug-jump to) the **Truck Stop** and walk around: arrival, atrium, diner, garage, arcade.
+2. Visit a frontier interior (the **Creamery**, the **Salvage Yard** or the **Arboretum**) and the **cannery canteen** at Tidewater.
+3. Fly to **the High Roller** in the Glimmer system, look the saucer over, then dock.
+
+**Questions:**
+1. Do the rusty walls fit each room's own color, or do some rooms (the pink creamery, the green arboretum) look muddy now? I can keep the rust for working rooms (garage, salvage yard, cargo areas) and use a cleaner panel from the sheet for the fancy ones.
+2. Is the texture scale right? Panels, crates and doors were sized to match the old placeholders.
+3. Is the Nebula Jackpot the right size, about 860 m across? Does the docking bay sticking out of its rim look right, or should the bay sit flush?
+4. The model is quite dark in flight. Do you want its neon pinks to glow brighter?
+
+---
+
 # Playtest: the old console RPG menu look, as in-world terminals
 
 **What's new:** menus and conversations look like the reference you sent (white pixel text with a black drop shadow, the white glove pointer), on in-world trucker terminals: CRT screens in metal bezels with screws, hazard tape, a power LED and a maker's plate. They switch on like an old CRT. Speakers' names are on yellow label tape. The flight HUD hasn't changed.
