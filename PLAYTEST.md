@@ -8,7 +8,7 @@
 4. In flight, open the course chart (**M**) and dock somewhere to see a counter menu.
 
 **Questions:**
-1. Does it feel like the reference? Too blue, too dark, too light? The colors are at the top of `scenes/ui/RetroWindowStyle.gd`.
+1. The new cyberpunk PS1 glass (darker, see-through, scanlines and circuit traces): right amount of grit? Too dark or too see-through? The colors are at the top of `scenes/ui/RetroWindowStyle.gd`.
 2. Is the text size right in conversations (bigger) and menus (smaller)?
 3. Is the glove the right size, and does its little tap feel right or fussy?
 4. Should the comm calls in flight get this look too, or stay part of the HUD?

@@ -712,3 +712,9 @@ be revisited; just say so.
   - On / off switches and volume sliders got matching pixel art.
 - **Kept as it was, on purpose:** the flight HUD (your call), including the comm calls in flight, which are part of the HUD's pixel display. Also the boot / input-check screen, which gets its proper title-screen treatment in M10. Say if you'd like the comm calls in the new look too.
 - **Fixed on the way:** the pause menu's title was meant to show your completion percentage but never did (the menu had been moved into a scroll box, so the code couldn't find the title).
+- **Your note: a little too bright. Now cyberpunk PS1 glass:**
+  - The windows are a dark indigo, slightly see-through, textured with dither speckle, scanlines on every other row and faint cyan circuit traces.
+  - A thin neon line runs along the top edge.
+  - The bevel is a muted steel instead of bright white.
+  - The text, gold titles and glove are unchanged.
+  - Every color and the texture strength are at the top of `scenes/ui/RetroWindowStyle.gd` (the fill's alpha is how see-through it is).
