@@ -14,6 +14,9 @@ uniform sampler2D rock_texture : source_color, filter_nearest_mipmap, repeat_ena
 // How many times the texture repeats across a rock (rocks are built about
 // 1 meter across and scaled up, so the texture grows with the rock).
 uniform float uv_scale = 1.5;
+// On: use the model's own texture layout (the developer's junk pieces)
+// instead of wrapping the rock texture around it like a box.
+uniform bool mesh_uv = false;
 
 // A rotation of `angle` radians around `axis` (Rodrigues' rotation formula).
 mat3 axis_rotation(vec3 axis, float angle) {
@@ -28,7 +31,7 @@ mat3 axis_rotation(vec3 axis, float angle) {
 
 void vertex() {
 	// The texture is pinned to the rock before it spins, so it turns with it.
-	vec2 uv = psx_box_uv(VERTEX, NORMAL) * uv_scale;
+	vec2 uv = mesh_uv ? UV : psx_box_uv(VERTEX, NORMAL) * uv_scale;
 	// Custom data stores the axis squeezed into 0..1, so unsqueeze it to -1..1.
 	vec3 axis = normalize(INSTANCE_CUSTOM.rgb * 2.0 - 1.0);
 	float angle = TIME * INSTANCE_CUSTOM.a * spin_scale + float(INSTANCE_ID) * 1.7;

@@ -10,9 +10,9 @@ extends Node3D
 ## are kept clear: the traffic lanes in to the approach rings. FlightSandbox
 ## puts one round each station whose place data asks for it.
 ##
-## Switch on `junk` and it's a debris field instead: tumbling hull panels,
-## barrels, girders and crates in scrap-metal colors (a spilled cargo, an
-## old scrapyard). Same bonks.
+## Switch on `junk` and it's a debris field instead: the developer's cargo
+## and junk pieces (crates, containers, barrels, terminals, cable tangles)
+## tumbling about (a spilled cargo, an old scrapyard). Same bonks.
 ##
 ## Everything is generated when the scene starts, from a seed: the same seed
 ## always makes the same field. All the knobs are in the Inspector when you
@@ -22,6 +22,10 @@ extends Node3D
 const ROCK_SHADER := preload("res://shaders/tumbling_rock.gdshader")
 const ROCK_TEXTURE := preload("res://textures/generated/rock.png")
 const JUNK_TEXTURE := preload("res://textures/generated/hull_panels.png")
+## The developer's cargo and junk pieces (crates, containers, barrels,
+## terminals...), cut from one sheet by tools/split_junk_kit.gd. Junk fields
+## tumble these, in their own paint.
+const JUNK_KIT := preload("res://art/models/junk_kit.res")
 ## Scrap colors for junk fields: rusty orange, faded teal, hazard yellow,
 ## dull white, old red.
 const JUNK_COLORS := [Color(0.7, 0.42, 0.28), Color(0.35, 0.62, 0.62), Color(0.9, 0.75, 0.25), Color(0.8, 0.8, 0.78), Color(0.7, 0.28, 0.28)]
@@ -144,22 +148,32 @@ func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 	var material := ShaderMaterial.new()
 	material.shader = ROCK_SHADER
 	material.set_shader_parameter("rock_texture", JUNK_TEXTURE if junk else ROCK_TEXTURE)
-	for shape in shape_count:
+	var kit := JUNK_KIT.get_item_list() if junk else PackedInt32Array()
+	if not kit.is_empty():
+		material.set_shader_parameter("rock_texture", _kit_texture())
+		material.set_shader_parameter("mesh_uv", true)
+	var shapes := kit.size() if not kit.is_empty() else shape_count
+	for shape in shapes:
 		var mine: Array[int] = []
 		for i in spots.size():
-			if i % shape_count == shape:
+			if i % shapes == shape:
 				mine.append(i)
 		var rocks := MultiMesh.new()
 		rocks.transform_format = MultiMesh.TRANSFORM_3D
 		rocks.use_colors = true  # These two must be switched on before
 		rocks.use_custom_data = true  # instance_count is set.
 		rocks.instance_count = mine.size()
-		rocks.mesh = junk_mesh(shape) if junk else RockMesh.build(field_seed + shape * 101)
+		if not kit.is_empty():
+			rocks.mesh = JUNK_KIT.get_item_mesh(kit[shape])
+		else:
+			rocks.mesh = junk_mesh(shape) if junk else RockMesh.build(field_seed + shape * 101)
 		for slot in mine.size():
 			var i := mine[slot]
 			var turn := Basis.from_euler(Vector3(_rng.randf(), _rng.randf(), _rng.randf()) * TAU)
 			rocks.set_instance_transform(slot, Transform3D(turn.scaled(Vector3.ONE * radii[i]), spots[i]))
 			var color: Color = JUNK_COLORS[_rng.randi_range(0, JUNK_COLORS.size() - 1)] if junk else rock_colors[_rng.randi_range(0, rock_colors.size() - 1)]
+			if not kit.is_empty():
+				color = Color.WHITE  # (The pieces have their own paint.)
 			rocks.set_instance_color(slot, color * _rng.randf_range(0.85, 1.1))
 			# Spin axis squeezed into 0..1 (the shader unsqueezes it), and spin
 			# speed in the 4th slot. Big rocks tumble slower, like big things do.
@@ -172,6 +186,13 @@ func _build_rocks(spots: PackedVector3Array, radii: PackedFloat32Array) -> void:
 		drawer.material_override = material
 		drawer.visibility_range_end = draw_distance
 		add_child(drawer)
+
+
+## The picture the junk pieces are painted with.
+func _kit_texture() -> Texture2D:
+	var mesh := JUNK_KIT.get_item_mesh(JUNK_KIT.get_item_list()[0])
+	var paint := mesh.surface_get_material(0) as BaseMaterial3D
+	return paint.albedo_texture if paint != null else JUNK_TEXTURE
 
 
 ## A piece of space junk (about 1 m across, scaled up per piece): a hull

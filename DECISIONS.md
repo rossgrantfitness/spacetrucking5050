@@ -762,4 +762,5 @@ be revisited; just say so.
 - **Gas-N-Go 47 is your Fuel Stop in the Sky** (`tools/build_gas_n_go.gd`).
   - It stands beside the lane, 300 m long, its front facing you as you pull in. The tool slides it sideways until nothing pokes into the lane.
   - The garbled AI lettering ("DRIV... FUEL", "RU", "SERHERE") is covered by clean boards: "GAS-N-GO 47 / DRIVE-THRU FUEL" and "PAY HERE". The back of the model still has its own garbled sign.
+- **Your cargo and junk sheet is in the junk fields.** `tools/split_junk_kit.gd` cuts `art/models/space_junk_pile.glb` (one mesh with about forty items laid side by side) into 33 separate pieces in `art/models/junk_kit.res`. Every junk field and junk cloud now tumbles those pieces in their own paint, instead of plain boxes and barrels.
 
