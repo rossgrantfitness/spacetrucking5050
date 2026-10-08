@@ -405,11 +405,13 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 ## at half strain and gets louder. Full strain: she can't take it.
 func _strain_the_hull(delta: float) -> void:
 	var tuning := GameState.tuning
-	var past := (flight.speed() * 3.6 - tuning.overdrive_strain_kmh) / tuning.overdrive_strain_span_kmh
-	if flight.newtonian and not flight.boosting:
-		past = -1.0  # Newtonian: only the burn strains the hull; coasting at any speed is smooth.
+	var kmh := flight.speed() * 3.6
+	var past := (kmh - tuning.overdrive_strain_kmh) / tuning.overdrive_strain_span_kmh
 	if past > 0.0:
-		overdrive_strain += past * past * tuning.overdrive_strain_rate * delta
+		# Coasting still strains her (a bit less than the burn): you can't
+		# boost up to a crazy speed, let go and cruise there for free.
+		var share := 1.0 if flight.boosting or not flight.newtonian else tuning.overdrive_coast_strain
+		overdrive_strain += past * past * tuning.overdrive_strain_rate * share * delta
 	else:
 		overdrive_strain -= tuning.overdrive_strain_recovery * delta
 	overdrive_strain = clampf(overdrive_strain, 0.0, 1.0)
@@ -421,6 +423,15 @@ func _strain_the_hull(delta: float) -> void:
 		_alarm_sound.stop()
 	if overdrive_strain >= 1.0 and tuning.crashes_enabled:
 		lose_control("overdrive")  # Went too fast.
+	# OVERSPEED: going far too fast wears the hull, boost or no boost:
+	# slowly above overspeed_wobble_kmh, seriously above overspeed_danger_kmh.
+	if kmh > tuning.overspeed_wobble_kmh and not out_of_control:
+		var wear := tuning.overspeed_hull_rate * clampf((kmh - tuning.overspeed_wobble_kmh) / maxf(tuning.overspeed_danger_kmh - tuning.overspeed_wobble_kmh, 1.0), 0.0, 1.0)
+		var danger := maxf(kmh - tuning.overspeed_danger_kmh, 0.0) / 1000.0
+		wear += tuning.overspeed_danger_rate * (danger + danger * danger)
+		hull = maxf(hull - wear * ship_data.hull_care * delta, 0.0)
+		if hull <= 0.0 and tuning.crashes_enabled and tuning.crash_on_empty_hull:
+			lose_control("hull")  # Shook herself apart.
 
 
 ## A hit far too hard to survive (see crash_instant_speed): the rig goes up

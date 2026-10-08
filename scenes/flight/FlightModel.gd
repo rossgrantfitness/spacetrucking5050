@@ -110,6 +110,13 @@ var load_share := 0.0
 ## OVERDRIVE: how far past boost's top speed we are, in notches of
 ## overdrive_shake_kmh (0 = not past it). The wobbles grow with it.
 var overdrive := 0.0
+## OVERSPEED: how out of control the rig is from sheer speed, even coasting
+## (0 = fine; 1 per overspeed_wobble_span_kmh past overspeed_wobble_kmh,
+## more if you're boost-drunk). See "Overspeed" in tuning.tres.
+var instability := 0.0
+## How long you've been boosting, 0 to 1 (1 = boost_fatigue_seconds or
+## more); wears off slowly after.
+var boost_fatigue := 0.0
 ## The extra rock of a loaded rig after a turn starts or stops (radians of
 ## roll: purely looks).
 var cargo_sway := 0.0
@@ -225,6 +232,8 @@ func reset(new_heading: float, new_pitch: float, new_roll: float = 0.0) -> void:
 	cargo_sway = 0.0
 	_sway_speed = 0.0
 	overdrive = 0.0
+	instability = 0.0
+	boost_fatigue = 0.0
 
 
 func _update_motion(delta: float, controls: FlightControls, ship: ShipData, tuning: Tuning) -> void:
@@ -361,11 +370,13 @@ func _update_turning(delta: float, controls: FlightControls, ship: ShipData, tun
 ## How hard the nose is being pushed off course right now, in radians per
 ## second: a little whenever you're boosting, a lot when you're shaky.
 func wander_amount(tuning: Tuning) -> float:
+	# Overspeed: coasting far too fast, the nose keeps getting pushed around.
+	var overspeed := deg_to_rad(tuning.overspeed_wander_degrees) * instability
 	if not boosting and (overdrive <= 0.0 or newtonian):
-		return 0.0  # (Newtonian: coasting fast is smooth; only the burn shakes.)
+		return overspeed
 	var boost_wander := deg_to_rad(tuning.boost_wander_degrees * shimmy + wobble * tuning.boost_wobble_degrees) if boosting else 0.0
 	# Overdrive: the faster past boost's top speed, the harder it pulls.
-	return boost_wander * (1.0 + overdrive) + deg_to_rad(tuning.overdrive_wander_degrees) * overdrive
+	return boost_wander * (1.0 + overdrive) + deg_to_rad(tuning.overdrive_wander_degrees) * overdrive + overspeed
 
 
 ## How far the hull is rocking from the wobbles right now (radians, for the
@@ -381,11 +392,19 @@ func _update_wobble(delta: float, controls: FlightControls, tuning: Tuning) -> v
 	if boosting:
 		wobble += jerk * tuning.boost_jerk_shake * shakiness * delta
 	wobble = clampf(wobble * exp(-tuning.boost_steady_recovery * delta), 0.0, 1.0)
-	# The speed wobbles build while boosting and settle quickly after.
+	# The longer the burn, the more boost-drunk the rig gets (it wears off).
+	if boosting:
+		boost_fatigue = minf(boost_fatigue + delta / tuning.boost_fatigue_seconds, 1.0)
+	else:
+		boost_fatigue = maxf(boost_fatigue - tuning.boost_fatigue_recovery * delta, 0.0)
+	var past := (speed() * 3.6 - tuning.overspeed_wobble_kmh) / tuning.overspeed_wobble_span_kmh
+	instability = maxf(past, 0.0) * (1.0 + boost_fatigue)
+	# The speed wobbles build while boosting and settle quickly after...
+	# unless you're still going far too fast: then they never settle.
 	if boosting:
 		shimmy = minf(shimmy + delta / tuning.boost_wobble_build_seconds * shakiness, 1.0)
 	else:
-		shimmy = maxf(shimmy - delta * 1.5, 0.0)
+		shimmy = maxf(shimmy - delta * 1.5, minf(instability, 1.0))
 	shimmy = maxf(shimmy, minf(wobble, 1.0) if boosting else 0.0)
 
 

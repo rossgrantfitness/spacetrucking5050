@@ -768,4 +768,11 @@ be revisited; just say so.
   - `tools/build_jacki_room.gd` builds the set (`scenes/hub/sets/JackiRoomSet.tscn`): the model about 6 m across with the floor at 0; collision from the model's own triangles above knee height, so floor clutter doesn't snag her; the open edges blocked except at the two sets of steps (both lead to the hallway); a window spot for the live view of space in flight; and lights (the lantern, the pink desk lamp, starlight, a soft fill).
   - The bed, computer and TV moved to where they are in the model.
   - The old apartment paintings went to `art/alternates/old_apartment_paintings/`.
+- **Your note: boosting to a crazy speed and letting go was a free ride.** Now speed itself has consequences, boost or not (all numbers in `tuning.tres` → "Overspeed (coasting fast)"):
+  - **Loss of control above 1,000 km/h:** the speed wobbles never settle and the nose keeps getting pulled off course, 3°/s for every 700 km/h past 1,000. With Flight Assist on, your course follows the nose.
+  - **It's worse the longer you boosted:** a 20-second burn makes the rig "boost-drunk", up to twice the wobble at the same speed. That wears off over about half a minute.
+  - **Hull wear:** slow from 1,000 km/h (about 9% a minute at 2,000), then serious past 2,000 km/h (about half the hull a minute at 2,500, all of it at 3,000). An empty hull is the usual hull-breach disaster.
+  - **Overdrive strain** now keeps building while you coast past 1,800 km/h, at 60% of the boosting rate.
+  - Slow down (pull the throttle back: the retros brake) and it all settles. Under 1,000 km/h, nothing slows you or shakes you but your own thrust, as before.
+  - New smoke test `tools/smoke_overspeed.gd`. The Newtonian "keep your speed" self-tests now run at 900 km/h.
 

@@ -243,6 +243,36 @@ extends Resource
 ## blows up and the number doesn't run away forever).
 @export_range(1000.0, 50000.0, 100.0, "suffix:km/h") var overdrive_max_kmh: float = 5000.0
 
+@export_group("Overspeed (coasting fast)")
+## Letting go of boost doesn't make a crazy speed safe. Above
+## overspeed_wobble_kmh the rig keeps shaking and drifting off course even
+## while coasting, worse the faster you go and the longer you boosted to get
+## there; the hull slowly wears; well past overspeed_danger_kmh it wears fast
+## and the overdrive strain keeps building, until something gives. Slow
+## down (reverse thrust) and it all settles.
+## Coasting above this, the rig starts losing control...
+@export_range(200.0, 10000.0, 50.0, "suffix:km/h") var overspeed_wobble_kmh: float = 1000.0
+## ...one notch worse for every this many km/h above it.
+@export_range(100.0, 5000.0, 50.0, "suffix:km/h") var overspeed_wobble_span_kmh: float = 700.0
+## How hard the nose drifts per notch while coasting (degrees a second).
+@export_range(0.0, 30.0, 0.25, "suffix:°/s") var overspeed_wander_degrees: float = 3.0
+## How long a boost burn it takes to get fully "boost-drunk": up to twice
+## the wobble at the same speed. It wears off this fast afterward (per
+## second; 0.03 = about half a minute).
+@export_range(1.0, 120.0, 1.0, "suffix:s") var boost_fatigue_seconds: float = 20.0
+@export_range(0.0, 1.0, 0.005) var boost_fatigue_recovery: float = 0.03
+## Hull wear: starts above overspeed_wobble_kmh, slowly, rising to this
+## much a second at overspeed_danger_kmh (0.0015 = about 9% a minute)...
+@export_range(0.0, 0.05, 0.0005) var overspeed_hull_rate: float = 0.0015
+## ...and above this it gets serious, fast...
+@export_range(500.0, 20000.0, 50.0, "suffix:km/h") var overspeed_danger_kmh: float = 2000.0
+## ...this much more a second for every 1,000 km/h past it (and growing:
+## 2,500 km/h is about half the hull a minute; 3,000 km/h, all of it).
+@export_range(0.0, 0.2, 0.001) var overspeed_danger_rate: float = 0.01
+## Coasting past overdrive_strain_kmh still strains the hull, at this share
+## of the boosting rate (so you can't boost up and then coast forever).
+@export_range(0.0, 2.0, 0.05) var overdrive_coast_strain: float = 0.6
+
 @export_group("Load weight")
 ## How heavy loads feel ("momentum and mass"). A job's weight (tons) against
 ## the rig's load_rating gives the LOAD SHARE: 0 = empty, 1 = a full load

@@ -134,22 +134,39 @@ func test_switching_back_to_arcade_still_works() -> void:
 func test_what_a_boost_gives_you_keep() -> void:
 	for assist: bool in [true, false]:
 		var model := _model(assist)
-		model.velocity = model.nose() * (2000.0 / 3.6)  # Just boosted up to 2000 km/h.
+		model.velocity = model.nose() * (900.0 / 3.6)  # Just boosted up to 900 km/h (under the overspeed shakes).
 		var controls := FlightControls.new()
 		controls.thrust = 1.0 if assist else 0.0  # Throttle at full (assist) or engines off.
 		var fuel := model.fuel
 		_fly(model, controls, 60.0)
-		check(absf(model.speed() * 3.6 - 2000.0) < 0.5, "Flight Assist %s: a minute later she's still doing 2000 km/h (%.0f)" % ["on" if assist else "off", model.speed() * 3.6])
-		check(absf(model.fuel - fuel) < 0.0001, "and coasting at 2000 km/h costs no fuel")
+		check(absf(model.speed() * 3.6 - 900.0) < 0.5, "Flight Assist %s: a minute later she's still doing 900 km/h (%.0f)" % ["on" if assist else "off", model.speed() * 3.6])
+		check(absf(model.fuel - fuel) < 0.0001, "and coasting at 900 km/h costs no fuel")
+
+
+func test_coasting_far_too_fast_is_no_free_ride() -> void:
+	var model := _model(true)
+	model.velocity = model.nose() * (2400.0 / 3.6)  # Boosted up to 2400 km/h, then let go.
+	var start := model.nose()
+	var controls := FlightControls.new()
+	controls.thrust = 1.0
+	_fly(model, controls, 5.0)
+	check(model.instability > 0.0 and model.wander_amount(_newton) > 0.0, "coasting at 2400 km/h the rig keeps losing control")
+	check(rad_to_deg(start.angle_to(model.nose())) > 1.0, "and the nose gets pulled off course")
+	model.boost_fatigue = 1.0
+	_fly(model, controls, STEP)
+	var drunk := model.instability
+	model.boost_fatigue = 0.0
+	_fly(model, controls, STEP)
+	check(drunk > model.instability, "a long boost burn makes it worse")
 
 
 func test_only_thrust_slows_you_down() -> void:
 	var model := _model(false)
-	model.velocity = model.nose() * (2000.0 / 3.6)
+	model.velocity = model.nose() * (900.0 / 3.6)
 	var controls := FlightControls.new()
 	controls.thrust = -1.0  # The retro thrusters.
 	_fly(model, controls, 10.0)
-	var expected := 2000.0 / 3.6 - RIG.retro_thrust * 10.0
+	var expected := 900.0 / 3.6 - RIG.retro_thrust * 10.0
 	check(absf(model.speed() - expected) < 1.0, "the retro thrusters take off exactly their push (%.1f m/s, expected %.1f)" % [model.speed(), expected])
 	var assisted := _model(true)
 	assisted.velocity = assisted.nose() * (2000.0 / 3.6)
