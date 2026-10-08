@@ -65,7 +65,30 @@ func _ready() -> void:
 	_controls.pressed.connect(_on_controls)
 	_add_pro_docking()
 	_add_window_options()
+	_dress()
 	_make_scrollable()
+
+
+## The old console RPG menu look (RetroUI.gd): a beveled blue window, white
+## words with drop shadows, and the white glove.
+func _dress() -> void:
+	var panel := $Center/Panel as PanelContainer
+	var frame := RetroUI.window()
+	frame.content_margin_left = 28.0
+	frame.content_margin_right = 28.0
+	frame.content_margin_top = 22.0
+	frame.content_margin_bottom = 22.0
+	panel.add_theme_stylebox_override("panel", frame)
+	var title := $Center/Panel/Items/Title as Label
+	for override: String in ["font_outline_color"]:
+		title.remove_theme_color_override(override)
+	title.remove_theme_constant_override("outline_size")
+	title.add_theme_color_override("font_color", RetroUI.GOLD)
+	title.add_theme_font_size_override("font_size", RetroUI.BIG_SIZE)
+	var hint := $Center/Panel/Items/Hint as Label
+	hint.add_theme_color_override("font_color", RetroUI.GREY)
+	hint.add_theme_font_size_override("font_size", RetroUI.TEXT_SIZE)
+	RetroUI.dress($Center as Control)
 
 
 var _pro_docking: CheckButton
@@ -151,7 +174,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func open() -> void:
 	visible = true
 	# The title says how far along you are (see Completion.gd).
-	var title := get_node_or_null("Center/Panel/Items/Title") as Label
+	var title := find_child("Title", true, false) as Label  # (Inside the scroller.)
 	if title != null:
 		title.text = "PAUSED · COMPLETION %d%%" % Completion.percent()
 	_fit_scroller()

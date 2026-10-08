@@ -1,7 +1,8 @@
 class_name DialogueBox
 extends CanvasLayer
-## The RPG text box: the speaker's name in chunky pixel letters, then their
-## words typed out letter by letter with Animal Crossing-style gibberish
+## The RPG text box (in the old console RPG menu look, RetroUI.gd): the
+## speaker's name in a little window on top, then their words typed out
+## letter by letter with Animal Crossing-style gibberish
 ## blips. Press Interact (E / A) or Enter to finish the line or go on;
 ## Cancel (Esc / B) closes it early (so does walking away from whoever's
 ## talking: see NPC.gd).
@@ -16,7 +17,7 @@ var cancelled := false
 
 ## Letters typed per second.
 const TYPE_SPEED: float = 42.0
-const NAME_COLOR := Color(1.0, 0.85, 0.25)
+const NAME_COLOR := RetroUI.GOLD
 
 var _lines := PackedStringArray()
 var _line := 0
@@ -26,6 +27,7 @@ var _voice: NPCData
 var _speaker := ""
 var _label: Label
 var _nameplate: Control
+var _name_label: Label
 var _next_arrow: Label
 var _blip: AudioStreamPlayer
 var _letters_since_blip := 0
@@ -35,6 +37,14 @@ var _hint: Label
 func _ready() -> void:
 	layer = 30
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# The look of an old console RPG: a beveled blue window along the bottom,
+	# white words with a drop shadow, and the speaker's name in its own
+	# little window sitting on the top edge (see RetroUI.gd).
+	var holder := Control.new()
+	holder.set_anchors_preset(Control.PRESET_FULL_RECT)
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	holder.theme = RetroUI.theme()
+	add_child(holder)
 	var box := PanelContainer.new()
 	box.anchor_left = 0.0
 	box.anchor_right = 1.0
@@ -44,55 +54,52 @@ func _ready() -> void:
 	box.offset_right = -60.0
 	box.offset_top = -200.0
 	box.offset_bottom = -36.0
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.05, 0.06, 0.2, 0.92)
-	style.border_color = Color(0.85, 0.88, 1.0)
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(6)
-	style.content_margin_left = 28.0
-	style.content_margin_right = 28.0
-	style.content_margin_top = 40.0
+	var style := RetroUI.window()
+	style.content_margin_left = 30.0
+	style.content_margin_right = 30.0
+	style.content_margin_top = 30.0
 	style.content_margin_bottom = 18.0
 	box.add_theme_stylebox_override("panel", style)
-	add_child(box)
-	_label = Label.new()
+	holder.add_child(box)
+	_label = RetroUI.label("", RetroUI.BIG_SIZE)
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_label.add_theme_font_size_override("font_size", 26)
-	_label.add_theme_color_override("font_color", Color(0.97, 0.97, 1.0))
-	_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.1))
-	_label.add_theme_constant_override("outline_size", 4)
 	box.add_child(_label)
-	# The nameplate sits on the box's top edge (not inside it, so the box's
-	# layout doesn't move it).
-	_nameplate = Control.new()
-	_nameplate.anchor_top = 1.0
-	_nameplate.anchor_bottom = 1.0
-	_nameplate.offset_left = 100.0
-	_nameplate.offset_top = -200.0
-	_nameplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_nameplate.draw.connect(_draw_nameplate)
-	add_child(_nameplate)
-	_next_arrow = Label.new()
-	_next_arrow.text = "▼"
-	_next_arrow.add_theme_color_override("font_color", NAME_COLOR)
+	# The nameplate: a small window on the box's top edge (not inside it, so
+	# the box's layout doesn't move it).
+	var plate := PanelContainer.new()
+	var plate_style := RetroUI.window()
+	plate_style.corner_radius = 7.0
+	plate_style.content_margin_left = 16.0
+	plate_style.content_margin_right = 16.0
+	plate_style.content_margin_top = 6.0
+	plate_style.content_margin_bottom = 6.0
+	plate.add_theme_stylebox_override("panel", plate_style)
+	plate.anchor_top = 1.0
+	plate.anchor_bottom = 1.0
+	plate.offset_left = 90.0
+	plate.offset_top = -224.0
+	plate.offset_bottom = -224.0  # (It grows down to fit the name.)
+	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	holder.add_child(plate)
+	_name_label = RetroUI.label("", RetroUI.TEXT_SIZE, NAME_COLOR)
+	plate.add_child(_name_label)
+	_nameplate = plate
+	_next_arrow = RetroUI.label("▼", RetroUI.TEXT_SIZE, RetroUI.WHITE)
 	_next_arrow.anchor_left = 1.0
 	_next_arrow.anchor_right = 1.0
 	_next_arrow.anchor_top = 1.0
 	_next_arrow.anchor_bottom = 1.0
-	_next_arrow.offset_left = -96.0
-	_next_arrow.offset_top = -72.0
-	add_child(_next_arrow)
+	_next_arrow.offset_left = -100.0
+	_next_arrow.offset_top = -68.0
+	holder.add_child(_next_arrow)
 	# How to leave, small, in the box's bottom-left corner.
-	_hint = Label.new()
-	_hint.text = "ESC / B: BYE"
-	_hint.add_theme_font_size_override("font_size", 14)
-	_hint.add_theme_color_override("font_color", Color(0.6, 0.65, 0.9))
+	_hint = RetroUI.label("Esc / B: bye", RetroUI.TEXT_SIZE, RetroUI.GREY)
 	_hint.anchor_top = 1.0
 	_hint.anchor_bottom = 1.0
 	_hint.offset_left = 92.0
-	_hint.offset_top = -62.0
-	add_child(_hint)
+	_hint.offset_top = -66.0
+	holder.add_child(_hint)
 	_blip = AudioStreamPlayer.new()
 	_blip.stream = VoiceBlips.stream("soft")
 	_blip.max_polyphony = 3
@@ -157,7 +164,8 @@ func _start_line() -> void:
 	_label.text = _lines[_line]
 	_shown = 0.0
 	_label.visible_characters = 0
-	_nameplate.queue_redraw()
+	_name_label.text = _speaker
+	_nameplate.visible = not _speaker.is_empty()
 
 
 ## A blip for every other letter, on the note that letter plays in the
@@ -174,11 +182,3 @@ func _maybe_blip(text: String, index: int) -> void:
 	else:
 		_blip.pitch_scale = VoiceBlips.pitch_scale(_pitch, 9, "major", text, index)
 	_blip.play()
-
-
-func _draw_nameplate() -> void:
-	var square := 3.0
-	var width := PixelFont.width(_speaker, square)
-	_nameplate.draw_rect(Rect2(-12.0, -14.0, width + 24.0, 34.0), Color(0.05, 0.06, 0.2))
-	_nameplate.draw_rect(Rect2(-12.0, -14.0, width + 24.0, 34.0), Color(0.85, 0.88, 1.0), false, 3.0)
-	PixelFont.draw(_nameplate, Vector2(0.0, -7.0), _speaker, square, NAME_COLOR, 0.15)

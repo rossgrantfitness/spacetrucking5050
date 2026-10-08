@@ -18,8 +18,7 @@ signal chosen(index: int)
 ## The player moved to option number `index` (for a side panel to follow).
 signal focused(index: int)
 
-const TITLE_COLOR := Color(1.0, 0.85, 0.25)
-const BOX_COLOR := Color(0.05, 0.06, 0.2, 0.95)
+const TITLE_COLOR := RetroUI.GOLD
 
 var _title: String = ""
 var _body: String = ""
@@ -50,43 +49,48 @@ func _ready() -> void:
 	layer = 35
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var shade := ColorRect.new()
-	shade.color = Color(0.0, 0.0, 0.05, 0.45)
+	shade.color = Color(0.0, 0.0, 0.05, 0.4)
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.theme = RetroUI.theme()
 	add_child(center)
+	# Two windows, stacked: the menu itself, and a little help window under it
+	# that describes the option you're on (like an old RPG menu).
+	var windows := VBoxContainer.new()
+	windows.add_theme_constant_override("separation", 6)
 	var box := PanelContainer.new()
 	box.custom_minimum_size = Vector2(700.0, 0.0)
-	var style := StyleBoxFlat.new()
-	style.bg_color = BOX_COLOR
-	style.border_color = Color(0.85, 0.88, 1.0)
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(6)
-	style.set_content_margin_all(24.0)
-	box.add_theme_stylebox_override("panel", style)
+	var frame := RetroUI.window()
+	frame.content_margin_left = 26.0
+	frame.content_margin_right = 26.0
+	frame.content_margin_top = 18.0
+	frame.content_margin_bottom = 18.0
+	box.add_theme_stylebox_override("panel", frame)
+	windows.add_child(box)
 	if _side != null:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 16)
 		center.add_child(row)
 		row.add_child(_side)
-		row.add_child(box)
+		row.add_child(windows)
 	else:
-		center.add_child(box)
+		center.add_child(windows)
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 10)
+	column.add_theme_constant_override("separation", 8)
 	box.add_child(column)
-	column.add_child(_label(_title, 30, TITLE_COLOR))
+	column.add_child(_label(_title, RetroUI.BIG_SIZE, TITLE_COLOR))
 	if not _body.is_empty():
-		var body := _label(_body, 20, Color(0.9, 0.92, 1.0))
+		var body := _label(_body, RetroUI.TEXT_SIZE, RetroUI.WHITE)
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		column.add_child(body)
 	# Long lists (like the jukebox), or lists too tall for the screen (a
 	# small window, or big menus), scroll; the list follows the focus.
 	var list := VBoxContainer.new()
-	list.add_theme_constant_override("separation", 10)
+	list.add_theme_constant_override("separation", 2)
 	var room := maxf(get_viewport().get_visible_rect().size.y - 330.0, 140.0)
-	if _options.size() > 8 or _options.size() * 56.0 > room:
+	if _options.size() > 8 or _options.size() * 40.0 > room:
 		var scroller := ScrollContainer.new()
 		scroller.follow_focus = true
 		scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -98,32 +102,65 @@ func _ready() -> void:
 		column.add_child(list)
 	for i in _options.size():
 		var option: Dictionary = _options[i]
-		var button := Button.new()
-		var detail: String = option.get("detail", "")
-		button.text = option.get("text", "?") + ("    " + detail if not detail.is_empty() else "")
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		var color: Color = option.get("color", RetroUI.WHITE)
+		var button := option_row(str(option.get("text", "?")), str(option.get("detail", "")), color)
 		button.disabled = option.get("disabled", false)
-		button.add_theme_font_size_override("font_size", 22)
-		_style_button(button)
-		if option.has("color"):
-			# A highlighted option (like your job's drop-off on the course chart).
-			var color: Color = option["color"]
-			button.add_theme_color_override("font_color", color)
-			button.add_theme_color_override("font_focus_color", color.lightened(0.35))
-			button.add_theme_color_override("font_hover_color", color.lightened(0.35))
+		if button.disabled:
+			for words in button.get_children():
+				(words as Label).add_theme_color_override("font_color", RetroUI.GREY)
 		button.pressed.connect(_pick.bind(i))
 		button.focus_entered.connect(_describe.bind(i))
 		button.mouse_entered.connect(button.grab_focus)
 		list.add_child(button)
 		_buttons.append(button)
-	_description = _label("", 18, Color(0.6, 0.95, 1.0))
+	RetroUI.add_pointer(box)
+	var help := PanelContainer.new()
+	var help_frame := RetroUI.window()
+	help_frame.content_margin_top = 10.0
+	help_frame.content_margin_bottom = 10.0
+	help.add_theme_stylebox_override("panel", help_frame)
+	help.custom_minimum_size = Vector2(700.0, 0.0)
+	windows.add_child(help)
+	var help_column := VBoxContainer.new()
+	help_column.add_theme_constant_override("separation", 4)
+	help.add_child(help_column)
+	_description = _label("", RetroUI.TEXT_SIZE, RetroUI.WHITE)
 	_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_description.custom_minimum_size = Vector2(0.0, 48.0)
-	column.add_child(_description)
-	column.add_child(_label("Arrows / D-pad: choose   ·   E / A: pick   ·   Esc / B: back", 16, Color(0.7, 0.72, 0.85)))
+	_description.custom_minimum_size = Vector2(0.0, 44.0)
+	help_column.add_child(_description)
+	help_column.add_child(_label("Arrows / D-pad: choose   E / A: pick   Esc / B: back", RetroUI.TEXT_SIZE, RetroUI.GREY))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_focus_first()
 	_shown = true  # (From now on, moving between buttons ticks.)
+
+
+## One option in the menu look: its words on the left (white with a drop
+## shadow), an optional detail on the right (a price, a distance), and room
+## on the left for the glove. Public so other menus can use it.
+static func option_row(words: String, detail: String = "", color: Color = RetroUI.WHITE) -> Button:
+	var button := Button.new()
+	button.focus_mode = Control.FOCUS_ALL
+	button.theme = RetroUI.theme()
+	var text := RetroUI.label(words, RetroUI.TEXT_SIZE, color)
+	text.set_anchors_preset(Control.PRESET_FULL_RECT)
+	text.offset_left = 40.0
+	text.offset_right = -8.0
+	text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(text)
+	var width := 40.0 + text.get_combined_minimum_size().x + 16.0
+	if not detail.is_empty():
+		var extra := RetroUI.label(detail, RetroUI.TEXT_SIZE, color)
+		extra.set_anchors_preset(Control.PRESET_FULL_RECT)
+		extra.offset_left = 40.0
+		extra.offset_right = -8.0
+		extra.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		extra.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		extra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(extra)
+		width += extra.get_combined_minimum_size().x + 40.0
+	button.custom_minimum_size = Vector2(width, text.get_combined_minimum_size().y + 10.0)
+	return button
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -162,28 +199,4 @@ func _focus_first() -> void:
 
 
 func _label(words: String, font_size: int, color: Color) -> Label:
-	var label := Label.new()
-	label.text = words
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
-	return label
-
-
-func _style_button(button: Button) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0.1, 0.12, 0.3, 0.9)
-	normal.set_content_margin_all(10.0)
-	normal.set_corner_radius_all(4)
-	var focus := normal.duplicate() as StyleBoxFlat
-	focus.bg_color = Color(0.2, 0.22, 0.5, 1.0)
-	focus.border_color = TITLE_COLOR
-	focus.set_border_width_all(2)
-	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", focus)
-	button.add_theme_stylebox_override("focus", focus)
-	button.add_theme_stylebox_override("pressed", focus)
-	button.add_theme_stylebox_override("disabled", normal)
-	button.add_theme_color_override("font_color", Color(0.95, 0.96, 1.0))
-	button.add_theme_color_override("font_focus_color", TITLE_COLOR)
-	button.add_theme_color_override("font_hover_color", TITLE_COLOR)
-	button.add_theme_color_override("font_disabled_color", Color(0.5, 0.52, 0.65))
+	return RetroUI.label(words, font_size, color)

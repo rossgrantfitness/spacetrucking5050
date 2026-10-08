@@ -12,7 +12,7 @@ extends CanvasLayer
 
 signal closed
 
-const TITLE_COLOR := Color(1.0, 0.85, 0.25)
+const TITLE_COLOR := RetroUI.GOLD
 const GROUP_COLOR := Color(1.0, 0.62, 0.82)
 const KEY_COLOR := Color(0.62, 0.95, 1.0)
 
@@ -96,13 +96,10 @@ func _ready() -> void:
 	add_child(shade)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.theme = RetroUI.theme()
 	add_child(center)
 	var box := PanelContainer.new()
-	var style := StyleBoxFlat.new()
-	style.bg_color = MenuPanel.BOX_COLOR
-	style.border_color = Color(0.85, 0.88, 1.0)
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(6)
+	var style := RetroUI.window()
 	style.set_content_margin_all(24.0)
 	box.add_theme_stylebox_override("panel", style)
 	center.add_child(box)
@@ -134,11 +131,10 @@ func _ready() -> void:
 				var keys := _label(keys_for(line[1], gamepad), 16, KEY_COLOR)
 				keys.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				grid.add_child(keys)
-	var back := Button.new()
-	back.text = "BACK"
-	back.add_theme_font_size_override("font_size", 22)
+	var back := MenuPanel.option_row("Back")
 	back.pressed.connect(_close)
 	column.add_child(back)
+	RetroUI.add_pointer(box)
 	column.add_child(_label("Esc / B / E / A: back", 16, Color(0.7, 0.72, 0.85)))
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	back.grab_focus()
@@ -160,9 +156,6 @@ func _close() -> void:
 	closed.emit()
 
 
+## A label in the menu look (sizes snap to the menu font's crisp steps).
 func _label(words: String, font_size: int, color: Color) -> Label:
-	var label := Label.new()
-	label.text = words
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
-	return label
+	return RetroUI.label(words, RetroUI.BIG_SIZE if font_size >= 30 else RetroUI.TEXT_SIZE, color)
