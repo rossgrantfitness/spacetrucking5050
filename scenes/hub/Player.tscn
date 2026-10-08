@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/hub/HubPlayer.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/hub/BunnyVisual.tscn" id="2_visual"]
+[ext_resource type="PackedScene" path="res://scenes/hub/JackiVisual.tscn" id="2_visual"]
 [ext_resource type="Texture2D" path="res://textures/generated/puff.png" id="3_puff"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]

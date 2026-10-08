@@ -775,4 +775,11 @@ be revisited; just say so.
   - **Overdrive strain** now keeps building while you coast past 1,800 km/h, at 60% of the boosting rate.
   - Slow down (pull the throttle back: the retros brake) and it all settles. Under 1,000 km/h, nothing slows you or shakes you but your own thrust, as before.
   - New smoke test `tools/smoke_overspeed.gd`. The Newtonian "keep your speed" self-tests now run at 900 km/h.
+- **Jacki has a skeleton and real animations now.**
+  - Your Rocket Cap Rabbit model had no skeleton, so `tools/rig_jacki.py` (Blender's Python module) fits a free rig to her. The rig and its 17 animations come from Quaternius's *Ultimate Animated Character Pack* (CC0, public domain; see `CREDITS.md`), a chibi character with a similar build.
+  - The tool moves each bone to her joints, swings the arm bones from the pack's T-pose down to her A-pose (and corrects every animation's arm keys to match), binds her mesh with Blender's automatic weights, and locks her head and lop ears to the head bone.
+  - In the game, `scenes/hub/JackiVisual.tscn` (`JackiAnimator.gd`) plays Idle, Walk and Run as she moves. Her poses use the pack's clips: sitting down, Pick Up for work, Victory for waving.
+  - Snacks go in her right hand through a bone attachment.
+  - The old hand-animated bunny (`BunnyVisual.tscn`) stays in the project, unused.
+- **I couldn't get Quaternius's newer *Universal Animation Library* (itch.io).** Its download needs an itch.io account, and the older pack, also CC0 and posted on OpenGameArt, downloads directly. If you'd like the bigger library (130+ animations), download it from itch.io and drop it in `art/source/`, and I'll wire it up.
 

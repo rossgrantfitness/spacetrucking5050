@@ -8,8 +8,9 @@ extends CharacterBody3D
 ## directions) until you let go or change direction, so a cut never suddenly
 ## flips your controls. That's how the old fixed-camera games got it right.
 ##
-## The look is a separate scene inside "Visual" (BunnyVisual.tscn), so the
-## placeholder can be swapped for a real model without touching this.
+## The look is a separate scene inside "Visual" (JackiVisual.tscn: the
+## developer's rigged model and its animations), so it can be swapped
+## without touching this.
 
 
 ## Things she can use right now (people, doors), nearest first.

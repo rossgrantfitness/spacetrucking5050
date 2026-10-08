@@ -23,6 +23,11 @@ project on a machine without a screen.
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per genre (`audio/radio/placeholders/`, shared by stations of a kind: drum & bass, dubstep, synthwave, metal, rock, hip hop, talk radio, a numbers station...), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
 | `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
 | `route_events/import_route_events.py` | The route events list (`data/events/route_events.tres`) from your design list (`docs/ROUTE_EVENTS_LIST.md`) plus what each playable event does (written in the script). Python, not Godot: `python3 tools/route_events/import_route_events.py`. **Re-running overwrites the list**, so make inspector edits in the script too. |
+| `rig_jacki.py` | **Python + Blender** (`pip install bpy==4.2.0`, Python 3.11): gives Jacki's model (`art/models/jacki_rocket_cap.glb`) a skeleton and animations from Quaternius's free CC0 pack (`art/source/`) → `art/models/jacki_rigged.glb`. Run `python tools/rig_jacki.py`. Her joint positions are at the top of the file. |
+| `build_jacki_room.gd` | Jacki's cabin from the Orbital Hideaway diorama (`art/models/jacki_room.glb` → `scenes/hub/sets/JackiRoomSet.tscn`): scale, floor, collision, steps, window spot, lights. |
+| `build_gas_n_go.gd` | Gas-N-Go 47 from the Fuel Stop in the Sky model, beside the lane, with clean sign boards over its garbled letters. |
+| `build_casino_model.gd` | The High Roller from the Nebula Jackpot model. |
+| `split_junk_kit.gd` | Cuts the cargo and junk sheet into 33 pieces for the junk fields (`art/models/junk_kit.res`). |
 | `build_player_rig.gd` | The Thumper, your one rig, from the five load models in `art/models/rig_load_0..4.glb` (`scenes/flight/RigLoadVisual.tscn`: empty deck up to piled high, one shown by how heavy the job is). Places the 4 engine "Nozzle" markers. **Re-running overwrites it.** |
 | `build_traffic_models.gd` | Your traffic ships from `art/models/traffic_*.glb` (`scenes/flight/traffic/*Visual.tscn`). |
 | `texture_paint.gd` | Not run by itself: the MML / MGS painter used by the two texture generators (flat dithered tones for planets, faceted rock, cratered moons). |

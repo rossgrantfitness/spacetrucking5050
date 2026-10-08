@@ -26,21 +26,31 @@ static func enjoy(tree: SceneTree, product: ProductData) -> void:
 	var room := HubRoom.find(tree.current_scene) if tree.current_scene != null else null
 	if room == null:
 		room = _room_in(tree)
-	var animator: BunnyAnimator = null
+	var animator: Node3D = null
 	var held: Node3D = null
-	if room != null and room.player != null and room.player.visual.get_child_count() > 0:
-		animator = room.player.visual.get_child(0) as BunnyAnimator
-		var arm := animator.get_node_or_null("Body/ArmRight") as Node3D if animator != null else null
+	if room != null and room.player != null:
+		animator = room.player.visual
+		# Her right hand: the rigged Jacki has one (JackiAnimator.hand());
+		# the hand-animated bunny has an arm pivot.
+		var arm: Node3D = null
+		if animator.has_method("hand"):
+			arm = animator.call("hand") as Node3D
+		elif animator.get_child_count() > 0:
+			arm = animator.get_child(0).get_node_or_null("Body/ArmRight") as Node3D
 		if arm != null:
 			held = build(product, brand)
 			held.position = HAND_SPOT
 			held.scale = Vector3.ONE * HELD_SCALE
 			arm.add_child(held)
-	if animator != null:
-		animator.pose = "eat"
+			if animator.has_method("hand"):
+				# Right in the rigged hand, the same size in the world.
+				held.position = Vector3.ZERO
+				held.scale = Vector3.ONE * HELD_SCALE / maxf(arm.global_basis.get_scale().x, 0.001)
+	if animator != null and "pose" in animator:
+		animator.set("pose", "eat")
 	await tree.create_timer(ENJOY_SECONDS).timeout
-	if animator != null and is_instance_valid(animator):
-		animator.pose = "stand"
+	if animator != null and is_instance_valid(animator) and "pose" in animator:
+		animator.set("pose", "stand")
 	if held != null and is_instance_valid(held):
 		held.queue_free()
 	var lines := product.taste_lines

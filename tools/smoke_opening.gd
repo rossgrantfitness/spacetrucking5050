@@ -150,6 +150,9 @@ func _process(delta: float) -> bool:
 				push_error("Smoke test (opening): the boss should hand over Gill's order")
 				quit(1)
 		"quit":
+			# Keep it quiet until the end: a voice blip still typing out
+			# would be left playing at exit (and count as a leak).
+			_game.call("_silence_everything")
 			if _stage_time > 0.3:
 				quit()
 	return false
