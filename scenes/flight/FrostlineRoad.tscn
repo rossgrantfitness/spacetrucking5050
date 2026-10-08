@@ -1,6 +1,5 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_6f1yw"]
 [ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_c6g7y"]
 [ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_xv3pc"]
 [ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="4_r2dc6"]
@@ -11,60 +10,6 @@
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_c3mga"]
 
 [node name="FrostlineRoad" type="Node3D" unique_id=23688370]
-
-[node name="Sign3Km" type="Node3D" parent="." unique_id=2000413139]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 27.438671, 1969.8633, -12892.026)
-script = ExtResource("1_6f1yw")
-front_text = "FLURRY'S COMET CREAMERY  76 KM
-THE FROSTLINE · LONG CLIMB"
-back_text = "TRUCK STOP  3 KM
-HOME SPACE"
-board_color = Color(0.22, 0.16, 0.38, 1)
-
-[node name="Sign18Km" type="Node3D" parent="." unique_id=480152519]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 1871.081, 11188.076, -24580.719)
-script = ExtResource("1_6f1yw")
-front_text = "FLURRY'S  61 KM
-FILL UP NOW · LAST PUMPS"
-back_text = "TRUCK STOP  18 KM
-ALMOST HOME"
-board_color = Color(0.22, 0.16, 0.38, 1)
-
-[node name="Sign38Km" type="Node3D" parent="." unique_id=697282154]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 4329.271, 23479.025, -40165.65)
-script = ExtResource("1_6f1yw")
-front_text = "THE FROSTLINE  3 KM
-CHAINS REQUIRED (FOR WHAT?)"
-back_text = "TRUCK STOP  38 KM
-DOWNHILL ALL THE WAY"
-board_color = Color(0.22, 0.16, 0.38, 1)
-
-[node name="Sign55Km" type="Node3D" parent="." unique_id=1529109445]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 6418.732, 33926.336, -53412.832)
-script = ExtResource("1_6f1yw")
-front_text = "FLURRY'S  24 KM
-HAIL LIKELY · KEEP IT STEADY"
-back_text = "TRUCK STOP  55 KM
-WARMER THAT WAY"
-board_color = Color(0.22, 0.16, 0.38, 1)
-
-[node name="Sign76Km" type="Node3D" parent="." unique_id=106759799]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 8999.833, 46831.832, -69777.01)
-script = ExtResource("1_6f1yw")
-front_text = "FLURRY'S  3 KM
-ALMOST THERE (REALLY)"
-back_text = "LEAVING THE TOP OF THE MAP
-TRUCK STOP  76 KM"
-board_color = Color(0.22, 0.16, 0.38, 1)
-
-[node name="BorderGate" type="Node3D" parent="." unique_id=539317086]
-transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 5039.2896, 25196.447, -42549.094)
-script = ExtResource("2_c6g7y")
-kind = 4
-label = "NOW ENTERING THE FROSTLINE"
-back_label = "NOW LEAVING THE FROSTLINE · HOME SPACE AHEAD"
-glow_color = Color(0.8, 0.65, 1, 1)
-log_id = "border_gate"
 
 [node name="BigSnowman" type="Node3D" parent="." unique_id=1159621266]
 transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 6255.534, 18436.424, -33572.3)

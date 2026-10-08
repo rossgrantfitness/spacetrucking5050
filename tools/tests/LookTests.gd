@@ -1,16 +1,10 @@
 extends "res://tools/tests/TestSuite.gd"
-## Checks for how you find your way around: each rig's rooms have their own
-## color cast, and your job's drop-off stands out on the course chart.
+## Checks for how you find your way around: the rig's rooms can take a color
+## cast, and your job's drop-off stands out on the course chart.
 
 
-func test_each_rig_has_its_own_soft_interior_tint() -> void:
-	var seen := {}
-	for ship in GameState.ships.ships:
-		var tint := ship.interior_tint
-		check(tint.r >= 0.6 and tint.g >= 0.6 and tint.b >= 0.6, "%s's tint is soft (not a dark or garish cast)" % ship.id)
-		check(not seen.has(tint.to_html()), "%s's tint is its own" % ship.id)
-		seen[tint.to_html()] = true
-	check(GameState.ships.find("lazy_susan").interior_tint == Color.WHITE, "the Lazy Susan (your first rig) looks as it always has")
+func test_the_rig_interior_can_take_a_tint() -> void:
+	check(GameState.ships.find("lazy_susan").interior_tint == Color.WHITE, "the Thumper (your rig) looks as it always has")
 	check("uniform vec3 tint" in (load("res://shaders/prerendered_backdrop.gdshader") as Shader).code, "the painted rooms can take a tint")
 
 

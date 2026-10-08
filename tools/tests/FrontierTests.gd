@@ -114,11 +114,12 @@ func test_the_roads_out_get_stormier() -> void:
 					gate = true
 				else:
 					landmarks += 1
+			check(not node is RouteSign, "no giant highway signs on the way to %s" % row[1])
 			if node is HazardZone:
 				storms += 1
 			if node is Billboard:
 				billboards += 1
-		check(gate, "a border gate into the %s" % row[0])
+		check(not gate, "no giant border gate on the way to the %s (the developer found them corny)" % row[0])
 		check(landmarks >= 2, "roadside attractions on the way to %s" % row[1])
 		check(billboards >= 6, "billboards on the way to %s" % row[1])
 		check(storms >= 2 and storms >= last_storms, "weather on the lane to %s, no less than before (%d storms)" % [row[1], storms])

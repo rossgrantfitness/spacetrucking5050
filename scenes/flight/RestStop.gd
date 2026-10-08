@@ -2,8 +2,8 @@ class_name RestStop
 extends Node3D
 ## A REST STOP out on a long haul, built from its place data (PlaceData's
 ## "Rest stop" group), so adding one is just adding a data file:
-##   diner          the Comet Diner: a neon canopy, a giant donut and a
-##                  coffee cup on the roof. A hot meal at the counter.
+##   diner          the Comet Diner: a neon canopy and a coffee cup on
+##                  the roof. A hot meal at the counter.
 ##   fuel_depot     big round tanks and pipes. Cheap fuel, nothing else.
 ##   weigh_station  a scale platform under the lane, traffic lights and a
 ##                  booth. Weigh your load (a small bonus if it's legal).
@@ -71,19 +71,7 @@ func _canopy(model: Node3D, accent: Color) -> void:
 
 
 func _diner(model: Node3D, accent: Color) -> void:
-	# A giant donut standing on the roof...
-	var donut := MeshInstance3D.new()
-	var torus := TorusMesh.new()
-	torus.inner_radius = 22.0
-	torus.outer_radius = 40.0
-	torus.rings = 16
-	torus.ring_segments = 8
-	torus.material = _paint(Color(0.95, 0.55, 0.75), true)
-	donut.mesh = torus
-	donut.position = Vector3(200.0, 75.0, -40.0)
-	donut.rotation = Vector3(0.0, 0.0, PI / 2.0)
-	model.add_child(donut)
-	# ...and a steaming coffee cup.
+	# A steaming coffee cup on the roof.
 	var cup := _cylinder(model, 22.0, 40.0, Vector3(200.0, 55.0, 55.0), Color(0.95, 0.95, 0.92))
 	cup.mesh.set("bottom_radius", 16.0)
 	_cylinder(model, 19.0, 2.0, Vector3(200.0, 75.5, 55.0), Color(0.35, 0.2, 0.12))

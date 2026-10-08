@@ -63,12 +63,6 @@ id = "ion_storm"
 display_name = "ION STORM"
 description = "Green lightning and a crackly radio. Pretty, from a distance."
 
-[sub_resource type="Resource" id="Entry_donut"]
-script = ExtResource("2_entry")
-id = "donut"
-display_name = "THE WORLD'S BIGGEST DONUT"
-description = "Pink frosting. Sprinkles the size of cargo pods. Not edible. I checked."
-
 [sub_resource type="Resource" id="Entry_lighthouse"]
 script = ExtResource("2_entry")
 id = "lighthouse"
@@ -80,12 +74,6 @@ script = ExtResource("2_entry")
 id = "dorothy_mae"
 display_name = "THE DOROTHY MAE"
 description = "An old hauler, drifting off the lane. One light still blinking. Somebody loved this rig once."
-
-[sub_resource type="Resource" id="Entry_border_gate"]
-script = ExtResource("2_entry")
-id = "border_gate"
-display_name = "TIDEWATER BORDER GATE"
-description = "Where home ends and the teal begins."
 
 [sub_resource type="Resource" id="Entry_speed_trap"]
 script = ExtResource("2_entry")
@@ -221,4 +209,4 @@ description = "Took the scenic way up to Greenhouse Reach. A nebula the color of
 
 [resource]
 script = ExtResource("1_book")
-entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_donut"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_border_gate"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel"), SubResource("Entry_big_steer"), SubResource("Entry_old_windmill"), SubResource("Entry_floating_tree"), SubResource("Entry_watering_can"), SubResource("Entry_big_snowman"), SubResource("Entry_giant_cone"), SubResource("Entry_nebula_overlook")])
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel"), SubResource("Entry_big_steer"), SubResource("Entry_old_windmill"), SubResource("Entry_floating_tree"), SubResource("Entry_watering_can"), SubResource("Entry_big_snowman"), SubResource("Entry_giant_cone"), SubResource("Entry_nebula_overlook")])

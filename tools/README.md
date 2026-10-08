@@ -23,7 +23,8 @@ project on a machine without a screen.
 | `generate_radio_placeholders.gd` | The radio's placeholder music: a short loop per genre (`audio/radio/placeholders/`, shared by stations of a kind: drum & bass, dubstep, synthwave, metal, rock, hip hop, talk radio, a numbers station...), the ambient music for when the radio's off, and the weak-signal hiss. Made from math. |
 | `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
 | `route_events/import_route_events.py` | The route events list (`data/events/route_events.tres`) from your design list (`docs/ROUTE_EVENTS_LIST.md`) plus what each playable event does (written in the script). Python, not Godot: `python3 tools/route_events/import_route_events.py`. **Re-running overwrites the list**, so make inspector edits in the script too. |
-| `build_rigs.gd` | The nine rigs from the design sheets, for sale at Dusty's (`scenes/flight/rigs/*Visual.tscn`). Each has "Nozzle" markers on its engines (the flames and trails hang there). **Re-running overwrites them.** Their handling is in `data/ships/*.tres`. |
+| `build_player_rig.gd` | The Thumper, your one rig, from the five load models in `art/models/rig_load_0..4.glb` (`scenes/flight/RigLoadVisual.tscn`: empty deck up to piled high, one shown by how heavy the job is). Places the 4 engine "Nozzle" markers. **Re-running overwrites it.** |
+| `build_traffic_models.gd` | Your traffic ships from `art/models/traffic_*.glb` (`scenes/flight/traffic/*Visual.tscn`). |
 | `texture_paint.gd` | Not run by itself: the MML / MGS painter used by the two texture generators (flat dithered tones for planets, faceted rock, cratered moons). |
 | `build_crew.gd` | The crew's models (`scenes/hub/crew/DottieVisual.tscn`, `MoleVisual.tscn`, `DonkeyVisual.tscn`) from your Meshy models in `assets/characters/crew_*/source.glb`: cut into parts the walk animation swings, arms dropped from the T-pose, stood on the floor. Add a character with a new entry in its CREW list. **Re-running overwrites those.** |
 | `build_rig_rooms.gd` | The rig's galley, engine room and cargo bay: their sets (`scenes/hub/sets/GalleySet.tscn`, ...) every time, and their room scenes (`scenes/hub/Galley.tscn`, ...) **only if they don't exist yet**, so cameras and crew spots you move in the editor are kept. |
@@ -56,7 +57,7 @@ godot --headless --path . -s tools/setup_input_map.gd                           
 godot --headless --path . -s tools/paint_textures.gd      # repaint the hand-painted textures
 godot --headless --path . -s tools/build_bunny.gd         # rebuild the bunny from her 3D model
 godot --headless --path . -s tools/build_crew.gd          # rebuild the crew from their 3D models
-godot --headless --path . -s tools/build_rigs.gd          # rebuild the nine rigs at Dusty's
+godot --headless --path . -s tools/build_player_rig.gd     # rebuild the Thumper from its five load models
 godot --headless --path . -s tools/generate_sounds.gd     # remake the sounds (engine, voices, menu and game cues)
 godot --headless --path . -s tools/build_rig_rooms.gd     # rebuild the galley, engine room and cargo bay
 python3 tools/crew_data/make_crew.py                      # rewrite the crew's lines and ship events

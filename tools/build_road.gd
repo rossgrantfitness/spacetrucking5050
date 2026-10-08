@@ -2,8 +2,7 @@ extends SceneTree
 ## Builds res://scenes/flight/TidewaterRoad.tscn: everything fixed along the
 ## long haul from the truck stop to Tidewater Cannery (about 59 km), plus
 ## the spaceway beacons along the lanes (from home, too):
-## highway signs, the border gate between the systems, roadside attractions
-## (a lighthouse, the world's biggest donut, an old derelict), a junk field,
+## roadside attractions (a lighthouse, an old derelict), a junk field,
 ## an icy rock field, a speed trap, an ion storm, a pod of whales, and a
 ## couple of long-haul truckers going back and forth.
 ##
@@ -25,7 +24,6 @@ const FACING_YAW: float = -0.835
 
 ## The scripts, loaded by path when the tool runs (a tool script can't
 ## preload game scripts that use the autoloads).
-const ROUTE_SIGN := "res://scenes/flight/events/RouteSign.gd"
 const LANDMARK := "res://scenes/flight/events/Landmark.gd"
 const HAZARD := "res://scenes/flight/events/HazardZone.gd"
 const WHALES := "res://scenes/flight/events/WhalePod.gd"
@@ -38,27 +36,13 @@ func _initialize() -> void:
 	var road := Node3D.new()
 	road.name = "TidewaterRoad"
 
-	# Highway signs: front for the trip out, back for the trip home.
-	_sign(road, 3.0, "TIDEWATER  56 KM\nGAS-N-GO 47  27 KM", "TRUCK STOP  3 KM\nORBITALEX HQ  13 KM")
-	_sign(road, 13.0, "GAS-N-GO 47  17 KM\nTIDEWATER  46 KM", "TRUCK STOP  13 KM\nORBITALEX HQ  23 KM")
-	_sign(road, 25.0, "GAS-N-GO 47  NEXT RIGHT\nWORLD'S BIGGEST DONUT!", "TRUCK STOP  25 KM\nORBITALEX HQ  35 KM")
-	_sign(road, 36.0, "WELCOME TO TIDEWATER\nPLEASE DON'T FEED THE WHALES", "GAS-N-GO 47  6 KM\nTRUCK STOP  36 KM")
-	_sign(road, 47.0, "TIDEWATER CANNERY  12 KM\nION STORMS POSSIBLE", "GAS-N-GO 47  17 KM\nDRIVE SAFE")
-	_sign(road, 56.0, "TIDEWATER CANNERY  3 KM\nWE CAN, THEREFORE WE ARE", "LEAVING TIDEWATER\nORBITALEX HQ  67 KM")
-
-	# Where the home system ends and Tidewater begins.
-	var gate := _thing(road, LANDMARK, "BorderGate", 31.0, 0.0, 0.0)
-	gate.set("kind", 4)  # Landmark.Kind.BORDER_GATE
-	gate.set("label", "NOW ENTERING TIDEWATER SYSTEM")
-	gate.set("log_id", "border_gate")
+	# (No highway signs or border gate: the developer found the giant signs
+	# corny. The HUD still says when you enter a system.)
 
 	# Roadside attractions.
 	var lighthouse := _thing(road, LANDMARK, "Lighthouse", 33.5, -2000.0, -100.0)
 	lighthouse.set("kind", 0)
 	lighthouse.set("log_id", "lighthouse")
-	var donut := _thing(road, LANDMARK, "BiggestDonut", 28.0, 3400.0, 400.0)
-	donut.set("kind", 1)
-	donut.set("log_id", "donut")
 	var derelict := _thing(road, LANDMARK, "Derelict", 40.0, -900.0, 150.0)
 	derelict.set("kind", 3)
 	derelict.set("label", "THE DOROTHY MAE (ABANDONED)")
@@ -123,11 +107,6 @@ func _thing(road: Node3D, script_path: String, thing_name: String, km: float, si
 	road.add_child(thing)
 	return thing
 
-
-func _sign(road: Node3D, km: float, front: String, back: String) -> void:
-	var board := _thing(road, ROUTE_SIGN, "Sign%dKm" % roundi(km), km, -330.0, 160.0)
-	board.set("front_text", front)
-	board.set("back_text", back)
 
 
 func _field(road: Node3D, field_name: String, km: float, side: float, size: Vector3, count: int, junk: bool, seed_number: int) -> Node3D:

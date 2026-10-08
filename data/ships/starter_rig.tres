@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="ShipData" format=3]
 
 [ext_resource type="Script" path="res://data/ships/ShipData.gd" id="1_ship"]
+[ext_resource type="PackedScene" path="res://scenes/flight/RigLoadVisual.tscn" id="2_visual"]
 
 [resource]
 script = ExtResource("1_ship")
@@ -22,3 +23,4 @@ boost_fuel_seconds = 360.0
 fuel_tank_seconds = 300.0
 trail_color = Color(1, 0.55, 0.3, 1)
 engine_pitch = 0.9
+visual_scene = ExtResource("2_visual")

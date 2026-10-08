@@ -3,20 +3,7 @@
 [ext_resource type="Script" path="res://data/ships/ShipList.gd" id="1_list"]
 [ext_resource type="Script" path="res://data/ships/ShipData.gd" id="2_ship"]
 [ext_resource type="Resource" path="res://data/ships/starter_rig.tres" id="s0"]
-[ext_resource type="Resource" path="res://data/ships/zippy_courier.tres" id="s2"]
-[ext_resource type="Resource" path="res://data/ships/garbage_scow.tres" id="s1"]
-[ext_resource type="Resource" path="res://data/ships/ice_tug.tres" id="s3"]
-[ext_resource type="Resource" path="res://data/ships/big_bertha.tres" id="s4"]
-[ext_resource type="Resource" path="res://data/ships/stack_ship.tres" id="s5"]
-[ext_resource type="Resource" path="res://data/ships/capsule_cruiser.tres" id="s6"]
-[ext_resource type="Resource" path="res://data/ships/catamaran.tres" id="s7"]
-[ext_resource type="Resource" path="res://data/ships/tanker.tres" id="s8"]
-[ext_resource type="Resource" path="res://data/ships/hab_brick.tres" id="s9"]
-[ext_resource type="Resource" path="res://data/ships/bulk_ore.tres" id="s10"]
-[ext_resource type="Resource" path="res://data/ships/ore_crawler.tres" id="s11"]
-[ext_resource type="Resource" path="res://data/ships/omega_crawler.tres" id="s12"]
-[ext_resource type="Resource" path="res://data/ships/megahauler.tres" id="s13"]
 
 [resource]
 script = ExtResource("1_list")
-ships = Array[ExtResource("2_ship")]([ExtResource("s0"), ExtResource("s1"), ExtResource("s2"), ExtResource("s3"), ExtResource("s4"), ExtResource("s5"), ExtResource("s6"), ExtResource("s7"), ExtResource("s8"), ExtResource("s9"), ExtResource("s10"), ExtResource("s11"), ExtResource("s12"), ExtResource("s13")])
+ships = Array[ExtResource("2_ship")]([ExtResource("s0")])

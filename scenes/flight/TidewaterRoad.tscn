@@ -1,6 +1,5 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_kiyqa"]
 [ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_pdn8s"]
 [ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="3_rty6y"]
 [ext_resource type="Script" path="res://scenes/flight/events/WhalePod.gd" id="4_7jwth"]
@@ -13,71 +12,10 @@
 
 [node name="TidewaterRoad" type="Node3D" unique_id=411275324]
 
-[node name="Sign3Km" type="Node3D" parent="." unique_id=1662136303]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 1916.3105, 986.2, -12780.227)
-script = ExtResource("1_kiyqa")
-front_text = "TIDEWATER  56 KM
-GAS-N-GO 47  27 KM"
-back_text = "TRUCK STOP  3 KM
-ORBITALEX HQ  13 KM"
-
-[node name="Sign13Km" type="Node3D" parent="." unique_id=843654387]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 9042.311, 3740.2002, -19232.227)
-script = ExtResource("1_kiyqa")
-front_text = "GAS-N-GO 47  17 KM
-TIDEWATER  46 KM"
-back_text = "TRUCK STOP  13 KM
-ORBITALEX HQ  23 KM"
-
-[node name="Sign25Km" type="Node3D" parent="." unique_id=1677202639]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 17593.51, 7045, -26974.627)
-script = ExtResource("1_kiyqa")
-front_text = "GAS-N-GO 47  NEXT RIGHT
-WORLD'S BIGGEST DONUT!"
-back_text = "TRUCK STOP  25 KM
-ORBITALEX HQ  35 KM"
-
-[node name="Sign36Km" type="Node3D" parent="." unique_id=191872788]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 25432.11, 10074.4, -34071.83)
-script = ExtResource("1_kiyqa")
-front_text = "WELCOME TO TIDEWATER
-PLEASE DON'T FEED THE WHALES"
-back_text = "GAS-N-GO 47  6 KM
-TRUCK STOP  36 KM"
-
-[node name="Sign47Km" type="Node3D" parent="." unique_id=546945857]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 33270.71, 13103.801, -41169.027)
-script = ExtResource("1_kiyqa")
-front_text = "TIDEWATER CANNERY  12 KM
-ION STORMS POSSIBLE"
-back_text = "GAS-N-GO 47  17 KM
-DRIVE SAFE"
-
-[node name="Sign56Km" type="Node3D" parent="." unique_id=1609914539]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 39684.113, 15582.4, -46975.832)
-script = ExtResource("1_kiyqa")
-front_text = "TIDEWATER CANNERY  3 KM
-WE CAN, THEREFORE WE ARE"
-back_text = "LEAVING TIDEWATER
-ORBITALEX HQ  67 KM"
-
-[node name="BorderGate" type="Node3D" parent="." unique_id=34636810]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 22090.6, 8537.4, -30601.2)
-script = ExtResource("2_pdn8s")
-kind = 4
-label = "NOW ENTERING TIDEWATER SYSTEM"
-log_id = "border_gate"
-
 [node name="Lighthouse" type="Node3D" parent="." unique_id=595300595]
 transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 22529.738, 9125.9, -33696.79)
 script = ExtResource("2_pdn8s")
 log_id = "lighthouse"
-
-[node name="BiggestDonut" type="Node3D" parent="." unique_id=1415085038]
-transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 22234.814, 8111.2, -26145.201)
-script = ExtResource("2_pdn8s")
-kind = 1
-log_id = "donut"
 
 [node name="Derelict" type="Node3D" parent="." unique_id=199344229]
 transform = Transform3D(0.6711777, -0.20415308, -0.71263033, 0, 0.9613297, -0.27540004, 0.74129647, 0.18484236, 0.645223, 27899.938, 11166.001, -37075.164)

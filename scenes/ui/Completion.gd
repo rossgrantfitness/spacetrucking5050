@@ -64,7 +64,6 @@ static func _counts() -> Dictionary:
 		"Story deliveries": Vector2i(story_done, story_total),
 		"Sights in the logbook": Vector2i(GameState.logbook.size(), GameState.sights.entries.size()),
 		"Upgrades": Vector2i(GameState.owned_upgrades.size(), GameState.upgrades.upgrades.size()),
-		"Rigs": Vector2i(GameState.owned_ships.size(), GameState.ships.ships.size()),
 		"Places visited": Vector2i(places_seen, places_total),
 		"Snacks tasted": Vector2i(Snack.tried_count(), GameState.brands.products.size()),
 	}

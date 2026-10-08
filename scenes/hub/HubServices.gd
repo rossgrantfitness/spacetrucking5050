@@ -220,8 +220,6 @@ static func mechanic(tree: SceneTree) -> void:
 		var insurance_text := "INSURED" if GameState.insured else "%d %s/WEEK" % [GameState.tuning.weekly_insurance, currency]
 		var options: Array = [{"text": "PATCH THE HULL", "detail": "%d %s" % [repair_cost, currency], "disabled": repair_cost <= 0,
 				"description": "Hull is at %d%%. Dusty bangs the dents out.%s" % [roundi(GameState.rig["hull"] * 100.0), " (Insurance pays half.)" if GameState.insured else ""]},
-				{"text": "RIGS FOR SALE", "detail": "%d OWNED" % GameState.owned_ships.size(),
-				"description": "New rigs, each with its own handling. Bigger holds pay more per job."},
 				{"text": "PAINT SHOP", "detail": GameState.paints.find(GameState.paint).display_name,
 				"description": "A fresh coat for the hull, and a matching engine trail."},
 				{"text": "INSURANCE", "detail": insurance_text,
@@ -245,15 +243,13 @@ static func mechanic(tree: SceneTree) -> void:
 			else:
 				await _too_poor(tree)
 		elif choice == 1:
-			await rig_dealer(tree)
-		elif choice == 2:
 			await paint_shop(tree)
-		elif choice == 3:
+		elif choice == 2:
 			GameState.insured = not GameState.insured
 			await MenuPanel.ask(tree, "INSURANCE", "You're covered. Repairs cost half, and it's on your weekly bills." if GameState.insured
 					else "Cancelled. Dusty shrugs. \"Your rig, your call.\"", [{"text": "OKAY"}])
-		elif choice > 3 and choice <= shelves.size() + 3:
-			await upgrade_shelf(tree, shelves.keys()[choice - 4])
+		elif choice > 2 and choice <= shelves.size() + 2:
+			await upgrade_shelf(tree, shelves.keys()[choice - 3])
 		else:
 			return
 
@@ -304,51 +300,6 @@ static func upgrade_shelf(tree: SceneTree, category: String) -> void:
 			await MenuPanel.ask(tree, "INSTALLED!", "%s is on your rig. You'll feel it next time you fly." % upgrade.display_name, [{"text": "NICE"}])
 		else:
 			await _too_poor(tree)
-
-
-## The rig dealer: buy a new rig, or switch to one you own. Every rig has
-## its own handling; bigger holds pay more per delivery.
-static func rig_dealer(tree: SceneTree) -> void:
-	while true:
-		var currency := GameState.names.currency_short
-		var options: Array = []
-		var rigs: Array[ShipData] = []
-		for rig in GameState.ships.ships:
-			if rig == null:
-				continue
-			var owned := rig.id in GameState.owned_ships
-			var driving := rig.id == GameState.active_ship
-			var detail := "DRIVING" if driving else ("OWNED" if owned else ("SPECIAL ORDER" if rig.special_order else "%d %s" % [rig.price, currency]))
-			options.append({"text": rig.display_name.to_upper(), "detail": detail, "disabled": driving,
-					"description": rig_summary(rig) + ("\nSpecial order only: %d %s. Start saving!" % [rig.price, currency] if rig.special_order else "")})
-			rigs.append(rig)
-		options.append({"text": "LEAVE", "description": "\"Take your time. They're not going anywhere. Neither am I.\""})
-		var choice := await MenuPanel.ask(tree, "RIGS FOR SALE", "You've got %d %s. You're driving %s." % [GameState.credits, currency, GameState.active_ship_data().display_name], options)
-		if choice < 0 or choice >= rigs.size():
-			return
-		var picked := rigs[choice]
-		if picked.special_order:
-			await MenuPanel.ask(tree, "SPECIAL ORDER", "Dusty laughs for a full minute. \"Come back with %d %s and a really big parking spot.\"" % [picked.price, currency], [{"text": "SOMEDAY"}])
-		elif picked.id in GameState.owned_ships:
-			GameState.active_ship = picked.id
-			await MenuPanel.ask(tree, "SWITCHED RIGS", "You'll fly %s next time you board." % picked.display_name, [{"text": "OKAY"}])
-		elif GameState.spend(picked.price):
-			GameState.owned_ships.append(picked.id)
-			GameState.active_ship = picked.id
-			GameState.save_game()
-			await MenuPanel.ask(tree, "SOLD!", "%s is yours. Dusty hands you the keys and a free air freshener. (You can switch back to any rig you own here.)" % picked.display_name, [{"text": "NICE"}])
-		else:
-			await _too_poor(tree)
-
-
-## A rig in a few words: speed, handling, hold.
-static func rig_summary(rig: ShipData) -> String:
-	var handling := "turns like a bus" if rig.turn_rate < 25.0 else ("steady" if rig.turn_rate < 35.0 else "nimble")
-	var feel := " Slides around." if rig.grip < 1.2 else (" Corners on rails." if rig.grip > 2.2 else "")
-	var words := "%s Top speed %d km/h, %s.%s" % [rig.description, roundi(rig.max_speed * 3.6), handling, feel]
-	if rig.pay_bonus > 1.0:
-		words += " Pays +%d%% per job." % roundi((rig.pay_bonus - 1.0) * 100.0)
-	return words
 
 
 ## The paint shop: a tint for the hull and a matching engine trail.

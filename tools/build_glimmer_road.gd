@@ -1,8 +1,7 @@
 extends SceneTree
 ## Builds res://scenes/flight/GlimmerRoad.tscn: everything fixed along the
 ## road from the truck stop to The High Roller, Sal's casino in the magenta
-## Glimmer System (about 56 km): highway signs, the border gate, the
-## Glimmer System's gimmick (neon billboards, more and more of them as you
+## Glimmer System (about 56 km): the Glimmer System's gimmick (neon billboards, more and more of them as you
 ## get closer), roadside attractions (the world's biggest slot machine, the
 ## giant dice, the Little Chapel of the Void), a spill of casino chips, a
 ## speed trap by the casino, limos and haulers going back and forth, and
@@ -22,7 +21,6 @@ const ALONG := Vector3(-0.7727, -0.2588, -0.5796)
 ## Turns things so their front (+Z) faces travelers coming from the truck stop.
 const FACING_YAW: float = 0.927
 
-const ROUTE_SIGN := "res://scenes/flight/events/RouteSign.gd"
 const LANDMARK := "res://scenes/flight/events/Landmark.gd"
 const BILLBOARD := "res://scenes/flight/events/Billboard.gd"
 const HAZARD := "res://scenes/flight/events/HazardZone.gd"
@@ -53,20 +51,8 @@ func _initialize() -> void:
 	var road := Node3D.new()
 	road.name = "GlimmerRoad"
 
-	# Highway signs: front for the trip out, back for the trip home.
-	_sign(road, 3.0, "THE HIGH ROLLER  53 KM\nGLIMMER SYSTEM", "TRUCK STOP  3 KM\nORBITALEX HQ  13 KM")
-	_sign(road, 15.0, "THE HIGH ROLLER  41 KM\nLOOSEST SLOTS IN THE SECTOR*", "TRUCK STOP  15 KM\n*PROBABLY")
-	_sign(road, 27.0, "GLIMMER SYSTEM  3 KM\nPLEASE GAMBLE RESPONSIBLY", "TRUCK STOP  27 KM\nORBITALEX HQ  37 KM")
-	_sign(road, 40.0, "THE HIGH ROLLER  16 KM\nLITTLE CHAPEL OF THE VOID  5 KM", "LEAVING THE STRIP\nTRUCK STOP  40 KM")
-	_sign(road, 52.0, "THE HIGH ROLLER  4 KM\nVALET PARKING (SOMETIMES)", "YOU'LL BE BACK\nTRUCK STOP  52 KM")
-
-	# Where home space ends and the Glimmer System begins.
-	var gate := _thing(road, LANDMARK, "BorderGate", 30.0, 0.0, 0.0)
-	gate.set("kind", 4)  # Landmark.Kind.BORDER_GATE
-	gate.set("label", "NOW ENTERING GLIMMER SYSTEM")
-	gate.set("back_label", "NOW LEAVING GLIMMER · YOU'LL BE BACK")
-	gate.set("glow_color", MAGENTA)
-	gate.set("log_id", "border_gate")
+	# (No highway signs or border gate: the developer found the giant signs
+	# corny. The HUD still says when you enter a system.)
 
 	# Roadside attractions.
 	var slots := _thing(road, LANDMARK, "BiggestSlotMachine", 22.0, 2600.0, 300.0)
@@ -128,12 +114,6 @@ func _thing(road: Node3D, script_path: String, thing_name: String, km: float, si
 	road.add_child(thing)
 	return thing
 
-
-func _sign(road: Node3D, km: float, front: String, back: String) -> void:
-	var board := _thing(road, ROUTE_SIGN, "Sign%dKm" % roundi(km), km, -330.0, 160.0)
-	board.set("front_text", front)
-	board.set("back_text", back)
-	board.set("board_color", Color(0.4, 0.1, 0.35))
 
 
 func _field(road: Node3D, field_name: String, km: float, side: float, size: Vector3, count: int, seed_number: int) -> Node3D:

@@ -76,7 +76,8 @@ func test_the_road_to_glimmer() -> void:
 			kinds[(node as Landmark).kind] = true
 		if node is Billboard:
 			billboards += 1
-	check(kinds.has(Landmark.Kind.BORDER_GATE), "a border gate into Glimmer")
+		check(not node is RouteSign, "no giant highway signs on the Glimmer road")
+	check(not kinds.has(Landmark.Kind.BORDER_GATE), "no giant border gate into Glimmer (the developer found them corny)")
 	check(kinds.has(Landmark.Kind.SLOT_MACHINE) and kinds.has(Landmark.Kind.DICE) and kinds.has(Landmark.Kind.CHAPEL), "the slot machine, the dice and the chapel")
 	check(billboards >= 10, "neon billboards everywhere (the Glimmer gimmick)")
 	road.free()

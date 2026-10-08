@@ -5,8 +5,7 @@ extends SceneTree
 ##     res://scenes/flight/GreenhouseRoad.tscn - up to The Orbital Arboretum
 ##     res://scenes/flight/FrostlineRoad.tscn  - the long climb to Flurry's
 ##
-## Each road gets highway signs, the border gate, its system's roadside
-## attractions and billboards, and its gimmick on the lane itself: dust
+## Each road gets its system's roadside attractions and billboards, and its gimmick on the lane itself: dust
 ## storms and a junk spill (Dustbowl), pollen clouds and a mossy rock field
 ## (Greenhouse Reach), comet-hail storms and ice fields (the Frostline). The
 ## farther out the road, the more of the lane is weather: a gentle
@@ -22,7 +21,6 @@ extends SceneTree
 ## Where every road starts: the truck stop. Must match FlightSandbox.tscn.
 const START := Vector3(0.0, 0.0, -10600.0)
 
-const ROUTE_SIGN := "res://scenes/flight/events/RouteSign.gd"
 const LANDMARK := "res://scenes/flight/events/Landmark.gd"
 const BILLBOARD := "res://scenes/flight/events/Billboard.gd"
 const HAZARD := "res://scenes/flight/events/HazardZone.gd"
@@ -35,7 +33,6 @@ const COURIER := "res://scenes/flight/traffic/CourierVisual.tscn"
 
 ## Landmark.Kind numbers (see scenes/flight/events/Landmark.gd).
 const DERELICT := 3
-const BORDER_GATE := 4
 const SKULL := 8
 const WINDMILL := 9
 const TREE := 10
@@ -119,18 +116,8 @@ func _build_road(road_data: Dictionary) -> void:
 	var road := Node3D.new()
 	road.name = road_data["name"]
 
-	for sign_data: Array in road_data["signs"]:
-		var board := _thing(road, ROUTE_SIGN, "Sign%dKm" % roundi(sign_data[0]), sign_data[0], -330.0, 160.0)
-		board.set("front_text", sign_data[1])
-		board.set("back_text", sign_data[2])
-		board.set("board_color", road_data["board_color"])
-
-	var gate := _thing(road, LANDMARK, "BorderGate", road_data["gate_km"], 0.0, 0.0)
-	gate.set("kind", BORDER_GATE)
-	gate.set("label", "NOW ENTERING %s" % road_data["system"])
-	gate.set("back_label", "NOW LEAVING %s · HOME SPACE AHEAD" % road_data["system"])
-	gate.set("glow_color", color)
-	gate.set("log_id", "border_gate")
+	# (No highway signs or border gate: the developer found the giant signs
+	# corny. The HUD still says when you enter a system.)
 
 	for mark: Array in road_data["landmarks"]:
 		var landmark := _thing(road, LANDMARK, mark[1], mark[2], mark[3], mark[4])

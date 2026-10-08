@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/flight/Ship.gd" id="1_ship"]
 [ext_resource type="Resource" path="res://data/ships/starter_rig.tres" id="2_rig"]
-[ext_resource type="PackedScene" path="res://scenes/flight/ShipVisual.tscn" id="3_visual"]
+[ext_resource type="PackedScene" path="res://scenes/flight/RigLoadVisual.tscn" id="3_visual"]
 [ext_resource type="Script" path="res://scenes/flight/CockpitCamera.gd" id="4_cockpit"]
 [ext_resource type="Script" path="res://scenes/flight/ShipControls.gd" id="5_controls"]
 [ext_resource type="Script" path="res://scenes/flight/EngineHum.gd" id="6_hum"]
@@ -36,7 +36,7 @@ shape = SubResource("CapsuleShape3D_pod")
 
 [node name="VisualPivot" type="Node3D" parent="."]
 
-[node name="ShipVisual" parent="VisualPivot" instance=ExtResource("3_visual")]
+[node name="RigLoadVisual" parent="VisualPivot" instance=ExtResource("3_visual")]
 
 [node name="Cockpit" parent="." instance=ExtResource("8_cockpit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -14.5)

@@ -37,6 +37,10 @@ extends Node3D
 @export var drift_speed: float = 0.002
 ## Glow on its dark side (suns glow all over).
 @export_range(0.0, 2.0, 0.01) var night_glow: float = 0.15
+## A model to use instead of the painted ball (like the developer's Cinder
+## Moon): any size, it's centered and scaled to the radius, and drawn with
+## the sky shader using the model's own picture (tinted by `tint`).
+@export var model: PackedScene
 ## Planets: a flat ring around it, reaching out this many times its radius
 ## (0 = no ring).
 @export var ring_size: float = 0.0
@@ -59,7 +63,9 @@ func _ready() -> void:
 	add_to_group("sky_bodies")
 	# We move every frame ourselves; Godot's motion smoothing would lag.
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-	if texture != null:
+	if model != null:
+		_build_model()
+	elif texture != null:
 		_build_ball()
 
 
@@ -122,6 +128,45 @@ func _build_ball() -> void:
 		ring.scale = Vector3(1.0, 0.02, 1.0)
 		ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(ring)
+
+
+## The model, centered and scaled to radius 1, its pictures moved onto the
+## sky shader (so the distance haze doesn't wash it out).
+func _build_model() -> void:
+	var look := model.instantiate() as Node3D
+	look.name = "Model"
+	var meshes := look.find_children("*", "MeshInstance3D", true, false)
+	var box := AABB()
+	for i in meshes.size():
+		var part := meshes[i] as MeshInstance3D
+		var piece := _local_to(look, part) * part.get_aabb()
+		box = piece if i == 0 else box.merge(piece)
+		part.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		for surface in part.mesh.get_surface_count():
+			var source := part.get_active_material(surface) as BaseMaterial3D
+			var material := ShaderMaterial.new()
+			material.shader = SKY_SHADER
+			material.set_shader_parameter("albedo", tint)
+			if source != null and source.albedo_texture != null:
+				material.set_shader_parameter("albedo_texture", source.albedo_texture)
+			material.set_shader_parameter("night_glow", night_glow)
+			material.set_shader_parameter("saturation", saturation)
+			part.set_surface_override_material(surface, material)
+	var size := maxf(box.size[box.size.max_axis_index()], 0.001)
+	look.scale = Vector3.ONE * 2.0 / size
+	look.position = -box.get_center() * look.scale
+	add_child(look)
+
+
+## `node`'s transform relative to `top` (works before they're in the tree).
+static func _local_to(top: Node3D, node: Node3D) -> Transform3D:
+	var result := Transform3D.IDENTITY
+	var walker: Node = node
+	while walker != null and walker != top:
+		if walker is Node3D:
+			result = (walker as Node3D).transform * result
+		walker = walker.get_parent()
+	return result
 
 
 func _process(delta: float) -> void:

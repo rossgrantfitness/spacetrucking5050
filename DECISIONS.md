@@ -743,3 +743,23 @@ be revisited; just say so.
   - Each visual remembers its own size, so its bump box fits (`TrafficShip.hull_for()`). The old hand-built ships keep their boxes.
 - **Where they fly:** passing ships pick from all seven models, and convoys from the five big haulers (no little couriers). Each road also swaps one of its looping traffic ships for one of yours: the turnpike lanes near the truck stop, Tidewater, the Glimmer road, the Dustbowl, Greenhouse Reach and the Frostline.
 
+## 2026-10-08 (your models: the one rig, the whale, planets, portals, the fuel stop; no giant signs)
+- **One rig: the Thumper.** No rigs for sale: Dusty's garage no longer has "Rigs for sale", the 13 other rigs and their models are gone, and the "Rigs" line is off the completion list. An old save that owned or drove another rig just drives the Thumper.
+- **The Thumper is your five models** (`art/models/rig_load_0..4.glb`, built into `scenes/flight/RigLoadVisual.tscn` by `tools/build_player_rig.gd`):
+  - No job: the empty deck. Otherwise the load share picks the model: under 0.35 a light load, 0.35 to 0.7 more, 0.7 to 1.05 piled up, above that the overloaded heap. The thresholds are in `RigLoadVisual.gd`.
+  - Because the cargo is part of each model, the slung cargo pod is off for this rig.
+  - Paint jobs now only change the engine trail: the new model has its own paint.
+  - It's 36 m long, like the old rig, so the collision still fits. It has four engine nozzles on its 2 x 2 engine block.
+- **The space whales are your Cosmic Leviathan** (about 260 m). The model has no moving tail, so each whale sways and rolls gently as it swims.
+- **No giant signs.**
+  - Gone: the "NOW ENTERING" border gates, all the big green highway signs on the five roads, the four random sign events (switched off in the data), the World's Biggest Donut and the donut on the Comet Diner's roof.
+  - The "donut" and "border gate" logbook sights are gone too, so the logbook can still be finished.
+  - The HUD still tells you when you enter a system, and your billboard model stays.
+- **Planets: small and unreachable.**
+  - The three ringed planets are your models: Home and the Frostline get the Stormbound Orb, Glimmer gets the Cinder Moon. `SkyBody` can now take a model instead of a painted ball.
+  - Every planet is now 4 times farther out and half the size it used to look (your models a little smaller still), so they barely change as you fly: always far away.
+- **Approach rings are your Docking Portal model.** Each portal is scaled so its narrow clear side matches the old 60 m docking hole. Each gets its own angle and its own slow turn, seeded by its place in the scene, so the same portal always looks the same.
+- **Gas-N-Go 47 is your Fuel Stop in the Sky** (`tools/build_gas_n_go.gd`).
+  - It stands beside the lane, 300 m long, its front facing you as you pull in. The tool slides it sideways until nothing pokes into the lane.
+  - The garbled AI lettering ("DRIV... FUEL", "RU", "SERHERE") is covered by clean boards: "GAS-N-GO 47 / DRIVE-THRU FUEL" and "PAY HERE". The back of the model still has its own garbled sign.
+

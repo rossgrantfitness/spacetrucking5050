@@ -108,13 +108,13 @@ func test_regional_pirate_night_and_mystery_stations() -> void:
 func test_logbook() -> void:
 	var before := _fresh()
 	check(not GameState.log_sight("not_a_real_sight"), "made-up sights don't go in the logbook")
-	check(GameState.log_sight("donut"), "the first look at the donut is new")
-	check(not GameState.log_sight("donut"), "the second look isn't")
-	check(int(GameState.logbook["donut"]) == 2, "the logbook counts how many times")
+	check(GameState.log_sight("lighthouse"), "the first look at the lighthouse is new")
+	check(not GameState.log_sight("lighthouse"), "the second look isn't")
+	check(int(GameState.logbook["lighthouse"]) == 2, "the logbook counts how many times")
 	GameState.save_game()
 	GameState.new_game()
 	GameState.load_game()
-	check(GameState.logbook.has("donut"), "the logbook is saved")
+	check(GameState.logbook.has("lighthouse"), "the logbook is saved")
 	_restore(before)
 
 
@@ -142,34 +142,16 @@ func test_loading_screen_has_lines() -> void:
 		check((LoadingScreen.LINES[kind] as Array).size() >= 3, "the %s loading screen has a few lines to pick from" % kind)
 
 
-func test_rigs_for_sale_feel_different_and_pay_differently() -> void:
-	var ids := {}
-	for rig in GameState.ships.ships:
-		check(rig != null and not ids.has(rig.id), "rig ids are unique")
-		ids[rig.id] = true
-	check(GameState.ships.ships[0].id == "lazy_susan" and GameState.ships.ships[0].price == 0, "the inherited rig comes first, and it's free")
-	var zippy := GameState.ships.find("zippy_courier")
-	var bertha := GameState.ships.find("big_bertha")
-	check(zippy.turn_rate > GameState.ships.ships[0].turn_rate and zippy.max_speed > GameState.ships.ships[0].max_speed, "the courier is quicker and nimbler than the old rig")
-	check(bertha.turn_rate < GameState.ships.ships[0].turn_rate and bertha.pay_bonus > 1.0, "Big Bertha is heavier but pays more")
-	check(GameState.ships.find("megahauler").special_order, "the megahauler is a special order to save up for")
+func test_old_saves_with_other_rigs_drive_the_thumper() -> void:
 	var before := _fresh()
 	GameState.owned_ships.append("big_bertha")
 	GameState.active_ship = "big_bertha"
-	check(is_equal_approx(GameState.upgraded_ship(GameState.active_ship_data()).turn_rate, bertha.turn_rate), "flying uses the rig you picked")
-	var job := GameState.jobs.find("gnome_run")
-	GameState.set_flag("first_mission_done")
-	GameState.accept_job(job)
-	var credits := GameState.credits
-	GameState.deliver_at("truck_stop")
-	GameState.collect_checks()
-	var hold := roundi(job.base_pay * (bertha.pay_bonus - 1.0))
-	check(int(GameState.pending_payout["hold"]) == hold and GameState.credits > credits + job.base_pay, "a big hold pays a bonus")
+	check(GameState.active_ship_data().id == "lazy_susan", "a rig that's no longer in the game falls back to the Thumper")
 	GameState.paint = "teal_tide"
 	GameState.save_game()
 	GameState.new_game()
 	GameState.load_game()
-	check(GameState.active_ship == "big_bertha" and "big_bertha" in GameState.owned_ships and GameState.paint == "teal_tide", "rigs and paint are saved")
+	check(GameState.active_ship == "lazy_susan" and GameState.owned_ships == ["lazy_susan"] and GameState.paint == "teal_tide", "loading keeps only the Thumper (and the paint)")
 	_restore(before)
 	for paint in GameState.paints.paints:
 		check(paint != null and not paint.id.is_empty(), "every paint job has an id")

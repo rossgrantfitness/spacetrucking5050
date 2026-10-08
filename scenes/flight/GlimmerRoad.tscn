@@ -1,6 +1,5 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_mf01i"]
 [ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_87abc"]
 [ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_6d4y0"]
 [ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="4_p3ofn"]
@@ -12,60 +11,6 @@
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="10_ip1qw"]
 
 [node name="GlimmerRoad" type="Node3D" unique_id=723416667]
-
-[node name="Sign3Km" type="Node3D" parent="." unique_id=1758054847]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -2516.1165, -616.39996, -12074.8125)
-script = ExtResource("1_mf01i")
-front_text = "THE HIGH ROLLER  53 KM
-GLIMMER SYSTEM"
-back_text = "TRUCK STOP  3 KM
-ORBITALEX HQ  13 KM"
-board_color = Color(0.4, 0.1, 0.35, 1)
-
-[node name="Sign15Km" type="Node3D" parent="." unique_id=412768751]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -11788.517, -3722, -19030.012)
-script = ExtResource("1_mf01i")
-front_text = "THE HIGH ROLLER  41 KM
-LOOSEST SLOTS IN THE SECTOR*"
-back_text = "TRUCK STOP  15 KM
-*PROBABLY"
-board_color = Color(0.4, 0.1, 0.35, 1)
-
-[node name="Sign27Km" type="Node3D" parent="." unique_id=1522601722]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -21060.916, -6827.5996, -25985.21)
-script = ExtResource("1_mf01i")
-front_text = "GLIMMER SYSTEM  3 KM
-PLEASE GAMBLE RESPONSIBLY"
-back_text = "TRUCK STOP  27 KM
-ORBITALEX HQ  37 KM"
-board_color = Color(0.4, 0.1, 0.35, 1)
-
-[node name="Sign40Km" type="Node3D" parent="." unique_id=1763850034]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -31106.016, -10192, -33520.01)
-script = ExtResource("1_mf01i")
-front_text = "THE HIGH ROLLER  16 KM
-LITTLE CHAPEL OF THE VOID  5 KM"
-back_text = "LEAVING THE STRIP
-TRUCK STOP  40 KM"
-board_color = Color(0.4, 0.1, 0.35, 1)
-
-[node name="Sign52Km" type="Node3D" parent="." unique_id=1367269114]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -40378.418, -13297.6, -40475.21)
-script = ExtResource("1_mf01i")
-front_text = "THE HIGH ROLLER  4 KM
-VALET PARKING (SOMETIMES)"
-back_text = "YOU'LL BE BACK
-TRUCK STOP  52 KM"
-board_color = Color(0.4, 0.1, 0.35, 1)
-
-[node name="BorderGate" type="Node3D" parent="." unique_id=1076306067]
-transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -23181, -7764, -27987.998)
-script = ExtResource("2_87abc")
-kind = 4
-label = "NOW ENTERING GLIMMER SYSTEM"
-back_label = "NOW LEAVING GLIMMER · YOU'LL BE BACK"
-glow_color = Color(1, 0.35, 0.8, 1)
-log_id = "border_gate"
 
 [node name="BiggestSlotMachine" type="Node3D" parent="." unique_id=277034059]
 transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -15439.271, -5393.6, -25431.102)

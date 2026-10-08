@@ -45,7 +45,7 @@ func test_every_visible_part_has_a_builder() -> void:
 
 func test_rig_add_ons_fit_a_rig() -> void:
 	var pivot := Node3D.new()
-	pivot.add_child((load("res://scenes/flight/ShipVisual.tscn") as PackedScene).instantiate())
+	pivot.add_child((load("res://scenes/flight/RigLoadVisual.tscn") as PackedScene).instantiate())
 	RigAddOns.fit(pivot, PackedStringArray(["bumpers", "radar_dish", "horns", "light_bar", "racks", "solar_fins", "stacks"]))
 	var holder := pivot.get_node_or_null("AddOns")
 	check(holder != null and holder.get_child_count() > 20, "all the bolt-on parts are fitted")

@@ -20,7 +20,7 @@ extends Resource
 
 @export_group("For sale")
 
-## What it costs at the rig dealer (Dusty's garage at the truck stop).
+## What it would cost (there's no rig dealer for now: you only get the Thumper).
 @export_range(0, 10000000, 100) var price: int = 0
 ## Special order: shown at the dealer as something to save up for, but it
 ## can't be bought yet.

@@ -120,6 +120,8 @@ static func _skip(part: Node, pivot: Node3D) -> bool:
 	while walk != null and walk != pivot:
 		if walk.is_queued_for_deletion() or walk.name == "AddOns" or walk.name == "Cargo":
 			return true
+		if walk is Node3D and not (walk as Node3D).visible:
+			return true  # (A load model that isn't showing; see RigLoadVisual.)
 		var script := walk.get_script() as Script
 		if script != null and script.get_global_name() in [&"EngineExhaust", &"EngineTrail", &"EngineFlare"]:
 			return true

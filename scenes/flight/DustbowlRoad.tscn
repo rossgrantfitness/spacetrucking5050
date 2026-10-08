@@ -1,6 +1,5 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/flight/events/RouteSign.gd" id="1_0qjdd"]
 [ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_n4ddo"]
 [ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_6lkkw"]
 [ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="4_kdv7q"]
@@ -11,60 +10,6 @@
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_h4tbm"]
 
 [node name="DustbowlRoad" type="Node3D" unique_id=1609753207]
-
-[node name="Sign3Km" type="Node3D" parent="." unique_id=1068490264]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 2566.6448, -1405.6233, -9844.315)
-script = ExtResource("1_0qjdd")
-front_text = "HOOF & HULL SALVAGE  61 KM
-THE DUSTBOWL · STEEP DESCENT"
-back_text = "TRUCK STOP  3 KM
-HOME SPACE"
-board_color = Color(0.35, 0.2, 0.08, 1)
-
-[node name="Sign18Km" type="Node3D" parent="." unique_id=156408574]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 14364.8545, -9119.837, -4716.6333)
-script = ExtResource("1_0qjdd")
-front_text = "HOOF & HULL  46 KM
-CHECK YOUR AIR FILTER"
-back_text = "TRUCK STOP  18 KM
-ALMOST HOME"
-board_color = Color(0.35, 0.2, 0.08, 1)
-
-[node name="Sign30Km" type="Node3D" parent="." unique_id=1757436962]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 23803.42, -15291.208, -614.4859)
-script = ExtResource("1_0qjdd")
-front_text = "THE DUSTBOWL  3 KM
-STORMS LIKELY · ALWAYS"
-back_text = "TRUCK STOP  30 KM
-YOU MADE IT OUT"
-board_color = Color(0.35, 0.2, 0.08, 1)
-
-[node name="Sign50Km" type="Node3D" parent="." unique_id=996695783]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 39534.367, -25576.828, 6222.4263)
-script = ExtResource("1_0qjdd")
-front_text = "HOOF & HULL  14 KM
-SEE THE BIG STEER"
-back_text = "TRUCK STOP  50 KM
-KEEP CLIMBING"
-board_color = Color(0.35, 0.2, 0.08, 1)
-
-[node name="Sign61Km" type="Node3D" parent="." unique_id=737106303]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 48186.387, -31233.916, 9982.728)
-script = ExtResource("1_0qjdd")
-front_text = "HOOF & HULL  3 KM
-MIND THE CRANE"
-back_text = "LEAVING THE YARD
-TRUCK STOP  61 KM"
-board_color = Color(0.35, 0.2, 0.08, 1)
-
-[node name="BorderGate" type="Node3D" parent="." unique_id=1615119925]
-transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 25956.06, -16971.27, 680.9043)
-script = ExtResource("2_n4ddo")
-kind = 4
-label = "NOW ENTERING THE DUSTBOWL"
-back_label = "NOW LEAVING THE DUSTBOWL · HOME SPACE AHEAD"
-glow_color = Color(1, 0.65, 0.25, 1)
-log_id = "border_gate"
 
 [node name="BigSteer" type="Node3D" parent="." unique_id=1137088306]
 transform = Transform3D(-0.3985971, 0.47166047, -0.78654736, 0, 0.8576218, 0.5142809, 0.9171261, 0.20499088, -0.34184554, 17779.006, -12600.028, -256.10056)

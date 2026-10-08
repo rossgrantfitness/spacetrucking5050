@@ -1,35 +1,38 @@
 extends "res://tools/tests/TestSuite.gd"
-## Checks for the rigs at Dusty's (data/ships/ and scenes/flight/rigs/,
-## built by tools/build_rigs.gd): every rig has a model with engines to
-## hang flames on, and its own feel.
+## Checks for the one rig you drive, the Thumper (data/ships/starter_rig.tres
+## and its look, scenes/flight/RigLoadVisual.tscn, built by
+## tools/build_player_rig.gd): it's the only rig, it has engines to hang
+## flames on, and its load shows: empty deck, then bigger and bigger piles.
 
 
-func test_every_rig_has_a_model_with_engines() -> void:
-	var ids := {}
-	for rig in GameState.ships.ships:
-		check(not ids.has(rig.id), "rig ids should be unique (%s)" % rig.id)
-		ids[rig.id] = true
-		if rig.visual_scene == null:
-			continue  # The Lazy Susan uses the default model.
-		var model := rig.visual_scene.instantiate() as Node3D
-		var nozzles := model.find_children("Nozzle*", "Marker3D", true, false)
-		check(not nozzles.is_empty(), "%s needs engine nozzles (for its flames and trails)" % rig.id)
-		for nozzle: Node3D in nozzles:
-			check(nozzle.position.z > 5.0, "%s's nozzles should be at the back (+Z)" % rig.id)
-		model.free()
+func test_the_thumper_is_the_only_rig() -> void:
+	check(GameState.ships.ships.size() == 1, "there's only one rig for now")
+	var rig := GameState.ships.ships[0]
+	check(rig.id == "lazy_susan" and rig.price == 0, "it's the rig she inherited")
+	check(rig.visual_scene != null and rig.visual_scene.resource_path.ends_with("RigLoadVisual.tscn"), "it uses the developer's models")
 
 
-func test_the_design_sheet_rigs_are_for_sale() -> void:
-	for id in ["stack_ship", "bulk_ore", "tanker", "catamaran", "omega_crawler", "ore_crawler", "ice_tug", "hab_brick", "garbage_scow"]:
-		var rig := GameState.ships.find(id)
-		check(rig != null, "%s should be at the dealer" % id)
-		if rig != null:
-			check(rig.price > 0 and not rig.special_order, "%s should have a price you can pay" % id)
-			check(rig.pay_bonus >= 1.0, "%s never pays less than the base rate" % id)
+func test_the_rig_has_engines_at_the_back() -> void:
+	var look := (load("res://scenes/flight/RigLoadVisual.tscn") as PackedScene).instantiate() as Node3D
+	var nozzles := look.find_children("Nozzle*", "Marker3D", true, false)
+	check(nozzles.size() == 4, "four engine nozzles (for its flames and trails)")
+	for nozzle: Node3D in nozzles:
+		check(nozzle.position.z > 10.0, "the nozzles are at the back (+Z)")
+	look.free()
 
 
-func test_rigs_feel_different() -> void:
-	var feels := {}
-	for rig in GameState.ships.ships:
-		feels["%s %s %s %s" % [rig.max_speed, rig.turn_rate, rig.grip, rig.acceleration]] = rig.id
-	check(feels.size() == GameState.ships.ships.size(), "no two rigs should handle exactly the same")
+func test_the_load_shows_on_the_rig() -> void:
+	var look := (load("res://scenes/flight/RigLoadVisual.tscn") as PackedScene).instantiate() as RigLoadVisual
+	for i in 5:
+		check(look.get_node_or_null("Load%d" % i) != null, "load model %d is there" % i)
+	look.show_load(false, 0.0)
+	check(look.stage == 0 and look.get_node("Load0").visible and not look.get_node("Load4").visible, "no job: the empty deck")
+	look.show_load(true, 0.1)
+	check(look.stage == 1, "a light load: a few crates")
+	look.show_load(true, 0.5)
+	check(look.stage == 2, "half a load: more")
+	look.show_load(true, 0.9)
+	check(look.stage == 3, "a full load: piled up")
+	look.show_load(true, 1.5)
+	check(look.stage == 4 and look.get_node("Load4").visible and not look.get_node("Load0").visible, "overloaded: the big heap, alone")
+	look.free()

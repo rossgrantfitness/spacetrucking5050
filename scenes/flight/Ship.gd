@@ -6,9 +6,9 @@ extends CharacterBody3D
 ## the world, leans the visible model into turns, and shares the ship's state
 ## with the camera, HUD, trails and engine sound.
 ##
-## The look of the ship lives in its own scene (ShipVisual.tscn) inside the
-## VisualPivot node, so the placeholder art can be swapped for a real model
-## later without touching this code.
+## The look of the ship lives in its own scene inside the VisualPivot node
+## (the Thumper's is RigLoadVisual.tscn: the developer's models, one per load
+## size), so the art can be swapped without touching this code.
 
 
 ## Emitted after the ship jumps somewhere new (e.g. "back to the start"), so
@@ -266,7 +266,22 @@ func show_cargo() -> void:
 	if id == _cargo_shown or not is_inside_tree():
 		return
 	_cargo_shown = id
-	CargoPod.fit(_visual_pivot, job, load_share())
+	# The Thumper carries its load in its own models (one per load size);
+	# other models get the load slung underneath.
+	var look := _rig_look()
+	if look != null:
+		look.show_load(job != null, load_share())
+		CargoPod.fit(_visual_pivot, null, 0.0)
+	else:
+		CargoPod.fit(_visual_pivot, job, load_share())
+
+
+## The rig model that shows its own load (RigLoadVisual), if that's what's on.
+func _rig_look() -> RigLoadVisual:
+	for child in _visual_pivot.get_children():
+		if child is RigLoadVisual and not child.is_queued_for_deletion():
+			return child as RigLoadVisual
+	return null
 
 
 ## Puts a flame (EngineExhaust) on every engine nozzle of the model, sized
