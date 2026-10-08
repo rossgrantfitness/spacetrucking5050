@@ -46,6 +46,7 @@ func _ready() -> void:
 	if visual_scene != null:
 		_visual = visual_scene.instantiate() as Node3D
 		add_child(_visual)
+		hull_size = hull_for(_visual, hull_size)
 	_add_hull()
 	_place(0.0)
 	reset_physics_interpolation()  # Don't smooth from the scene's origin.
@@ -63,6 +64,13 @@ func speed_ratio() -> float:
 ## The color of its engine trails (used by EngineTrail).
 func trail_color() -> Color:
 	return engine_trail_color
+
+
+## The bump-box size for a ship model: the size it was built with (the
+## developer's models remember theirs; see tools/build_traffic_models.gd),
+## or `fallback` for the hand-built ones.
+static func hull_for(visual: Node, fallback: Vector3) -> Vector3:
+	return visual.get_meta("hull_size", fallback) if visual != null else fallback
 
 
 ## Turns a list of spots into a smooth closed loop: each spot gets curve

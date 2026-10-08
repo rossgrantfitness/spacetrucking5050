@@ -7,7 +7,9 @@ extends RoadsideThing
 
 
 const VISUALS := [preload("res://scenes/flight/traffic/CapsuleHaulerVisual.tscn"),
-	preload("res://scenes/flight/traffic/BoxHaulerVisual.tscn"), preload("res://scenes/flight/traffic/CourierVisual.tscn")]
+	preload("res://scenes/flight/traffic/BoxHaulerVisual.tscn"), preload("res://scenes/flight/traffic/CourierVisual.tscn"),
+	preload("res://scenes/flight/traffic/RustboundSkyfreighterVisual.tscn"), preload("res://scenes/flight/traffic/RustboundStarforgeVisual.tscn"),
+	preload("res://scenes/flight/traffic/IndustrialStarfreighterVisual.tscn"), preload("res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn")]
 const NAMES: TrafficNames = preload("res://data/traffic_names.tres")
 
 ## How fast it drives, in m/s.
@@ -31,8 +33,9 @@ func _ready() -> void:
 	_velocity = (travel if same_direction else -travel) * drive_speed
 	_body = Node3D.new()
 	add_child(_body)
-	_body.add_child((VISUALS[rng.randi_range(0, VISUALS.size() - 1)] as PackedScene).instantiate())
-	EventKit.solid(_body, Vector3(12.0, 8.0, 30.0))
+	var visual := (VISUALS[rng.randi_range(0, VISUALS.size() - 1)] as PackedScene).instantiate()
+	_body.add_child(visual)
+	EventKit.solid(_body, TrafficShip.hull_for(visual, Vector3(12.0, 8.0, 30.0)))
 	var label: String = NAMES.names[rng.randi_range(0, NAMES.names.size() - 1)]
 	if not names.is_empty():
 		label = names[rng.randi_range(0, names.size() - 1)]

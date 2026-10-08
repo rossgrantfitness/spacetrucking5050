@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_j1vqh"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_o3k5p"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="7_1h16c"]
-[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="8_k6q7g"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/IndustrialStarfreighterVisual.tscn" id="8_k6q7g"]
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_na7vc"]
 
 [node name="GreenhouseRoad" type="Node3D" unique_id=897323347]

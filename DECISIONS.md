@@ -737,4 +737,9 @@ be revisited; just say so.
   - It keeps the docking bay poking out of the saucer's front rim, with the sign facing the way you fly in.
   - It scales the model to about 860 m across and gives it collision from its own triangles.
   - The dock, ring and launch points didn't move.
+- **Your four traffic ships are in the game** (`art/models/traffic_*.glb`). `tools/build_traffic_models.gd` turns each into a ship visual in `scenes/flight/traffic/`:
+  - The red tug (`RustboundSkyfreighterVisual`, 30 m), the teal crane ship (`RustboundStarforgeVisual`, 34 m), the yellow outrigger hauler (`IndustrialStarfreighterVisual`, 38 m) and the long container freighter (`LongHaulStarfreighterVisual`, 42 m).
+  - Each is turned nose-first and given two engine nozzles with trails and flares. The nozzle spots are a best guess at the tail, so you can drag them onto the real engines in the editor.
+  - Each visual remembers its own size, so its bump box fits (`TrafficShip.hull_for()`). The old hand-built ships keep their boxes.
+- **Where they fly:** passing ships pick from all seven models, and convoys from the five big haulers (no little couriers). Each road also swaps one of its looping traffic ships for one of yours: the turnpike lanes near the truck stop, Tidewater, the Glimmer road, the Dustbowl, Greenhouse Reach and the Frostline.
 

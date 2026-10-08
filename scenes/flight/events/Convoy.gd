@@ -4,7 +4,9 @@ extends RoadsideThing
 ## trails and a funny ID label. Close passing traffic sells your speed.
 
 
-const VISUALS := [preload("res://scenes/flight/traffic/CapsuleHaulerVisual.tscn"), preload("res://scenes/flight/traffic/BoxHaulerVisual.tscn")]
+const VISUALS := [preload("res://scenes/flight/traffic/CapsuleHaulerVisual.tscn"), preload("res://scenes/flight/traffic/BoxHaulerVisual.tscn"),
+	preload("res://scenes/flight/traffic/RustboundSkyfreighterVisual.tscn"), preload("res://scenes/flight/traffic/RustboundStarforgeVisual.tscn"),
+	preload("res://scenes/flight/traffic/IndustrialStarfreighterVisual.tscn"), preload("res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn")]
 const NAMES: TrafficNames = preload("res://data/traffic_names.tres")
 const TRAIL_COLORS := [Color(1.0, 0.75, 0.35), Color(0.6, 1.0, 0.5), Color(1.0, 0.45, 0.8), Color(0.45, 0.85, 1.0)]
 
@@ -31,8 +33,9 @@ func _ready() -> void:
 		if not names.is_empty():
 			label = names[i % names.size()]
 		rig.show_on_radar(label, 20.0)
-		rig.add_child((VISUALS[rng.randi_range(0, VISUALS.size() - 1)] as PackedScene).instantiate())
-		EventKit.solid(rig, Vector3(12.0, 8.0, 30.0))
+		var visual := (VISUALS[rng.randi_range(0, VISUALS.size() - 1)] as PackedScene).instantiate()
+		rig.add_child(visual)
+		EventKit.solid(rig, TrafficShip.hull_for(visual, Vector3(12.0, 8.0, 30.0)))
 		add_child(rig)
 	look_at(global_position + _velocity, Vector3.UP)
 

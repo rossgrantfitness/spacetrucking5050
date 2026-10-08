@@ -5,7 +5,8 @@ Flight Assist on / off, roll and strafe. The old Newtonian fork is merged
 into the main branch; arcade flight is still a switch in tuning.tres.
 
 **Latest (2026-10-08):** the rooms are built from your interior texture sheet
-(`textures/interior/`). The High Roller is now your Nebula Jackpot model.
+(`textures/interior/`). The High Roller is now your Nebula Jackpot model, and your four
+cruiser models fly as traffic.
 The menus and dialogue look like in-world terminals. `art/to_paint/` lists
 the 26 room views still waiting for hand-painted art.
 

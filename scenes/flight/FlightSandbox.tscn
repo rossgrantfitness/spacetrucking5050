@@ -36,10 +36,10 @@
 [ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
 [ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
-[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="23_courier"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn" id="23_courier"]
 [ext_resource type="Texture2D" path="res://textures/generated/nebula.png" id="22_nebula_tex"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="19_capsule"]
-[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="20_box"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/RustboundSkyfreighterVisual.tscn" id="20_box"]
 
 [sub_resource type="Environment" id="Environment_space"]
 background_mode = 1

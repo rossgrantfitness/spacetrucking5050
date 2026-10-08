@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_hfw02"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_wnckg"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="7_36i2x"]
-[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="8_ilkmg"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn" id="8_ilkmg"]
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_c3mga"]
 
 [node name="FrostlineRoad" type="Node3D" unique_id=23688370]

@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_tqhgk"]
 [ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_sbkte"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="7_ib10y"]
-[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="8_ivsgj"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/IndustrialStarfreighterVisual.tscn" id="8_ivsgj"]
 [ext_resource type="PackedScene" path="res://scenes/flight/traffic/CourierVisual.tscn" id="9_yg4sr"]
 [ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="10_o8emu"]
 

@@ -1,19 +1,22 @@
-# Playtest: your interior textures, and the Nebula Jackpot
+# Playtest: your interior textures, the Nebula Jackpot, and your traffic ships
 
 **What's new:**
 - The rooms are built from your texture sheet: rusty riveted walls, tread-plate floors, porthole bulkhead doors, gauge panels, stencilled cargo crates and dusty hazard tape.
 - The High Roller casino out in space is now your Nebula Jackpot model.
+- Your four cruiser models fly as traffic: on the roads, passing you, and in convoys.
 - `art/to_paint/` has the 26 room views that still need hand-painted art. Start with `contact_sheet.jpg`; `README.md` there says where each finished painting goes.
 
 1. Fly to (or debug-jump to) the **Truck Stop** and walk around: arrival, atrium, diner, garage, arcade.
 2. Visit a frontier interior (the **Creamery**, the **Salvage Yard** or the **Arboretum**) and the **cannery canteen** at Tidewater.
 3. Fly to **the High Roller** in the Glimmer system, look the saucer over, then dock.
+4. Watch the traffic: your four ships (the red tug, the teal crane ship, the yellow outrigger hauler and the long container freighter) now loop the roads, pass you and run in convoys. Fly up close to one.
 
 **Questions:**
 1. Do the rusty walls fit each room's own color, or do some rooms (the pink creamery, the green arboretum) look muddy now? I can keep the rust for working rooms (garage, salvage yard, cargo areas) and use a cleaner panel from the sheet for the fancy ones.
 2. Is the texture scale right? Panels, crates and doors were sized to match the old placeholders.
 3. Is the Nebula Jackpot the right size, about 860 m across? Does the docking bay sticking out of its rim look right, or should the bay sit flush?
 4. The model is quite dark in flight. Do you want its neon pinks to glow brighter?
+5. Are the traffic ships the right size next to your rig, from 30 m for the tug up to 42 m for the long freighter? Some could be much bigger, like slow cruisers you overtake. And do the engine trails come out of the right spots?
 
 ---
 
