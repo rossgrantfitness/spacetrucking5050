@@ -88,9 +88,49 @@ static func theme() -> Theme:
 	return _theme
 
 
-## A fresh window frame (see RetroWindowStyle.gd).
-static func window() -> RetroWindowStyle:
-	return RetroWindowStyle.new()
+## The maker's plate on the main menu screens (an invented brand: every
+## terminal in the galaxy seems to be one of these).
+const MAKER_PLATE: String = "Haultec Terminal 5050"
+
+
+## A fresh window frame: a terminal screen in a metal bezel (see
+## RetroWindowStyle.gd). `plate` is stamped on the bezel ("" = none).
+static func window(plate: String = "") -> RetroWindowStyle:
+	var frame := RetroWindowStyle.new()
+	frame.plate_text = plate
+	return frame
+
+
+## A smaller, plainer screen (help boxes, name tags): a thin bezel, no tape,
+## no LED.
+static func small_window() -> RetroWindowStyle:
+	var frame := RetroWindowStyle.new()
+	frame.bezel = 11.0
+	frame.corner_radius = 8.0
+	frame.hazard_tape = false
+	frame.power_led = false
+	frame.content_margin_left = 24.0
+	frame.content_margin_right = 24.0
+	frame.content_margin_top = 18.0
+	frame.content_margin_bottom = 18.0
+	return frame
+
+
+## Switches a screen on like an old CRT: a bright line that opens up into
+## the picture. Call it as a menu or box appears.
+static func power_on(screen: Control) -> void:
+	if not screen.is_inside_tree():
+		return
+	screen.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	await screen.get_tree().process_frame  # (So it knows its size.)
+	if not is_instance_valid(screen):
+		return
+	screen.pivot_offset = screen.size * 0.5
+	screen.scale = Vector2(1.0, 0.03)
+	screen.modulate = Color(1.8, 1.8, 1.8, 1.0)
+	var tween := screen.create_tween().set_parallel()
+	tween.tween_property(screen, "scale", Vector2.ONE, 0.13).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(screen, "modulate", Color.WHITE, 0.22)
 
 
 ## Adds the white glove that points at whichever option of `menu` has the

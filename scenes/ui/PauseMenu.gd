@@ -73,11 +73,7 @@ func _ready() -> void:
 ## words with drop shadows, and the white glove.
 func _dress() -> void:
 	var panel := $Center/Panel as PanelContainer
-	var frame := RetroUI.window()
-	frame.content_margin_left = 28.0
-	frame.content_margin_right = 28.0
-	frame.content_margin_top = 22.0
-	frame.content_margin_bottom = 22.0
+	var frame := RetroUI.window("Haultec Rig Systems 5050")
 	panel.add_theme_stylebox_override("panel", frame)
 	var title := $Center/Panel/Items/Title as Label
 	for override: String in ["font_outline_color"]:
@@ -181,6 +177,7 @@ func open() -> void:
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_resume.grab_focus()  # So a gamepad or keyboard can navigate right away.
+	RetroUI.power_on($Center/Panel as Control)
 
 
 func close() -> void:

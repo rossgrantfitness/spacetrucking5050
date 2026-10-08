@@ -1,6 +1,6 @@
-# Playtest: the old console RPG menu look
+# Playtest: the old console RPG menu look, as in-world terminals
 
-**What's new:** menus and conversations now look like the reference you sent: beveled blue windows, white pixel text with a black drop shadow, and the white glove pointer. The flight HUD hasn't changed.
+**What's new:** menus and conversations look like the reference you sent (white pixel text with a black drop shadow, the white glove pointer), on in-world trucker terminals: CRT screens in metal bezels with screws, hazard tape, a power LED and a maker's plate. They switch on like an old CRT. Speakers' names are on yellow label tape. The flight HUD hasn't changed.
 
 1. Talk to someone (Lily at the pumps, Marge): the dialogue box, with the name in its own little window.
 2. Open a job board and a shop (Dusty's), and move up and down with the arrow keys or D-pad: watch the glove.
@@ -8,7 +8,7 @@
 4. In flight, open the course chart (**M**) and dock somewhere to see a counter menu.
 
 **Questions:**
-1. The new cyberpunk PS1 glass (darker, see-through, scanlines and circuit traces): right amount of grit? Too dark or too see-through? The colors are at the top of `scenes/ui/RetroWindowStyle.gd`.
+1. Do the terminals feel like part of the world? Too much metal, or too dark? Any lore you'd like on the maker's plate instead of "Haultec"? The colors are at the top of `scenes/ui/RetroWindowStyle.gd`.
 2. Is the text size right in conversations (bigger) and menus (smaller)?
 3. Is the glove the right size, and does its little tap feel right or fussy?
 4. Should the comm calls in flight get this look too, or stay part of the HUD?

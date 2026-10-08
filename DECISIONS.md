@@ -718,3 +718,10 @@ be revisited; just say so.
   - The bevel is a muted steel instead of bright white.
   - The text, gold titles and glove are unchanged.
   - Every color and the texture strength are at the top of `scenes/ui/RetroWindowStyle.gd` (the fill's alpha is how see-through it is).
+- **Your note: make it feel in-world. Every menu is now a trucker's terminal screen** (`RetroWindowStyle.gd`):
+  - A chunky gunmetal bezel: brushed metal, beveled edges, a Phillips screw in each corner, a strip of hazard-striped tape like the cockpit struts, and a little green power LED.
+  - A recessed CRT screen inside it: dark glass with scanlines, speckle and faint circuit traces, darker toward the edges, a soft glare.
+  - The main menus carry a stamped brass maker's plate. The menus say "Haultec Terminal 5050" and the pause menu "Haultec Rig Systems 5050" (Haultec is invented: every terminal in the galaxy seems to be one).
+  - Menus and the dialogue box **switch on like an old CRT**: a bright line opens into the picture.
+  - In conversations, **the speaker's name is on a strip of yellow label-maker tape** stuck a bit crooked on the frame.
+  - Help boxes use a smaller, plainer screen.

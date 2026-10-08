@@ -55,34 +55,43 @@ func _ready() -> void:
 	box.offset_top = -200.0
 	box.offset_bottom = -36.0
 	var style := RetroUI.window()
-	style.content_margin_left = 30.0
-	style.content_margin_right = 30.0
-	style.content_margin_top = 30.0
-	style.content_margin_bottom = 18.0
+	style.content_margin_top = 32.0
+	style.content_margin_bottom = 24.0
 	box.add_theme_stylebox_override("panel", style)
 	holder.add_child(box)
 	_label = RetroUI.label("", RetroUI.BIG_SIZE)
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	box.add_child(_label)
-	# The nameplate: a small window on the box's top edge (not inside it, so
-	# the box's layout doesn't move it).
+	# The nameplate: a strip of yellow label-maker tape stuck on the box's
+	# top edge, a little crooked (not inside the box, so its layout doesn't
+	# move it).
 	var plate := PanelContainer.new()
-	var plate_style := RetroUI.window()
-	plate_style.corner_radius = 7.0
-	plate_style.content_margin_left = 16.0
-	plate_style.content_margin_right = 16.0
-	plate_style.content_margin_top = 6.0
-	plate_style.content_margin_bottom = 6.0
+	var plate_style := StyleBoxFlat.new()
+	plate_style.bg_color = Color(0.93, 0.76, 0.16)
+	plate_style.border_color = Color(0.35, 0.26, 0.05)
+	plate_style.set_border_width_all(1)
+	plate_style.set_corner_radius_all(2)
+	plate_style.shadow_color = Color(0, 0, 0, 0.45)
+	plate_style.shadow_size = 2
+	plate_style.shadow_offset = Vector2(2, 2)
+	plate_style.content_margin_left = 12.0
+	plate_style.content_margin_right = 12.0
+	plate_style.content_margin_top = 3.0
+	plate_style.content_margin_bottom = 3.0
 	plate.add_theme_stylebox_override("panel", plate_style)
+	plate.rotation = deg_to_rad(-1.5)
 	plate.anchor_top = 1.0
 	plate.anchor_bottom = 1.0
 	plate.offset_left = 90.0
-	plate.offset_top = -224.0
-	plate.offset_bottom = -224.0  # (It grows down to fit the name.)
+	plate.offset_top = -214.0
+	plate.offset_bottom = -214.0  # (It grows down to fit the name.)
 	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	holder.add_child(plate)
-	_name_label = RetroUI.label("", RetroUI.TEXT_SIZE, NAME_COLOR)
+	_name_label = RetroUI.label("", RetroUI.TEXT_SIZE, Color(0.1, 0.08, 0.04))
+	_name_label.add_theme_color_override("font_shadow_color", Color(1, 1, 1, 0.35))  # (Embossed.)
+	_name_label.add_theme_constant_override("shadow_offset_x", 1)
+	_name_label.add_theme_constant_override("shadow_offset_y", 1)
 	plate.add_child(_name_label)
 	_nameplate = plate
 	_next_arrow = RetroUI.label("▼", RetroUI.TEXT_SIZE, RetroUI.WHITE)
@@ -90,16 +99,17 @@ func _ready() -> void:
 	_next_arrow.anchor_right = 1.0
 	_next_arrow.anchor_top = 1.0
 	_next_arrow.anchor_bottom = 1.0
-	_next_arrow.offset_left = -100.0
-	_next_arrow.offset_top = -68.0
+	_next_arrow.offset_left = -104.0
+	_next_arrow.offset_top = -82.0
 	holder.add_child(_next_arrow)
 	# How to leave, small, in the box's bottom-left corner.
 	_hint = RetroUI.label("Esc / B: bye", RetroUI.TEXT_SIZE, RetroUI.GREY)
 	_hint.anchor_top = 1.0
 	_hint.anchor_bottom = 1.0
 	_hint.offset_left = 92.0
-	_hint.offset_top = -66.0
+	_hint.offset_top = -80.0
 	holder.add_child(_hint)
+	RetroUI.power_on(box)
 	_blip = AudioStreamPlayer.new()
 	_blip.stream = VoiceBlips.stream("soft")
 	_blip.max_polyphony = 3

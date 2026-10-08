@@ -62,11 +62,7 @@ func _ready() -> void:
 	windows.add_theme_constant_override("separation", 6)
 	var box := PanelContainer.new()
 	box.custom_minimum_size = Vector2(700.0, 0.0)
-	var frame := RetroUI.window()
-	frame.content_margin_left = 26.0
-	frame.content_margin_right = 26.0
-	frame.content_margin_top = 18.0
-	frame.content_margin_bottom = 18.0
+	var frame := RetroUI.window(RetroUI.MAKER_PLATE)
 	box.add_theme_stylebox_override("panel", frame)
 	windows.add_child(box)
 	if _side != null:
@@ -115,9 +111,7 @@ func _ready() -> void:
 		_buttons.append(button)
 	RetroUI.add_pointer(box)
 	var help := PanelContainer.new()
-	var help_frame := RetroUI.window()
-	help_frame.content_margin_top = 10.0
-	help_frame.content_margin_bottom = 10.0
+	var help_frame := RetroUI.small_window()
 	help.add_theme_stylebox_override("panel", help_frame)
 	help.custom_minimum_size = Vector2(700.0, 0.0)
 	windows.add_child(help)
@@ -132,6 +126,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_focus_first()
 	_shown = true  # (From now on, moving between buttons ticks.)
+	RetroUI.power_on(windows)
 
 
 ## One option in the menu look: its words on the left (white with a drop
