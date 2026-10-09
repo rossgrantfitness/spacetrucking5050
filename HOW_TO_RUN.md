@@ -128,7 +128,7 @@ stops it, it can roll, strafe and loop, and the camera rides along with it.
 | Pan the camera | Hold **right mouse button** and drag | — |
 | Camera back behind the rig (it stays wherever you put it until you do this, so you can set up a cinematic angle and watch) | **P** | — |
 | Throttle lever up | **W** (hold) | **RT** (right trigger) |
-| Throttle lever down (to idle, then reverse) | **S** (hold) | **LT** (left trigger) |
+| Reverse thrusters (and throttle down to idle) | **S** (hold) | **LT** (left trigger) |
 | Boost (hold; full throttle only) | **Space** | **A** |
 | **Newtonian flight:** roll left / right | **Z** / **X**, or **U** / **O** | **LB** / **B** |
 | **Newtonian:** strafe (slide sideways / up / down) | Hold **Left Ctrl** and steer (keys or mouse) | — |
@@ -147,12 +147,15 @@ stops it, it can roll, strafe and loop, and the camera rides along with it.
 | HUD demo (lights every warning, for checking the look) | **F9** | — |
 | Pause menu | **Esc** | **Start** |
 
-**The throttle is a lever.** Hold W to push it up and S to pull it down;
-it stays where you leave it, and the rig speeds up or slows down to match,
-then holds that speed (the yellow tick on the speed bar shows where it's
-set). Pull it back and it stops at **idle** (the rig brakes to a stop);
-it won't go into reverse while you're still holding. Let go and pull
-again for a slow reverse. The rig is heavy: turns take a moment to start and
+**The throttle is a lever.** Hold W to push it up; it stays where you
+leave it, and the rig speeds up or slows down to match, then holds that
+speed (the yellow tick on the speed bar shows where it's set). **S is the
+reverse thrusters:** while you hold it, small thrusters in the nose fire
+against your motion (RETRO on the speed readout) and the lever eases down
+toward idle. Moving forward, they slow you down; sitting still, they push
+you backwards. They're much weaker than the main engines, so start braking
+early (or flip round and burn the main engines). **Boost doesn't switch
+the autopilot off**: hold it on a charted course and she boosts along it. The rig is heavy: turns take a moment to start and
 stop, carve, and slide at high speed. The tiny green **flight marker** (a
 dot with little wings) shows where your momentum is really carrying you,
 which isn't always where the nose points.

@@ -255,20 +255,31 @@ func test_boost_gives_speed_wobbles_not_a_swerve() -> void:
 	check(model.shimmy < 0.05, "the wobbles settle down after boosting")
 
 
-func test_throttle_stops_at_idle_before_reverse() -> void:
-	# Holding "down" from cruising: it slides to idle and stops there.
+func test_s_fires_the_weak_reverse_thrusters() -> void:
+	# The lever goes from idle to full, never into reverse.
 	var lever := 0.3
 	for i in 20:
-		lever = ShipControls.move_lever(lever, -0.05, 1, 0.25)
-	check(is_equal_approx(lever, 0.0), "holding throttle-down from ahead stops at idle, not reverse")
-	# Let go, press again: now it goes into reverse.
-	for i in 20:
-		lever = ShipControls.move_lever(lever, -0.05, 0, 0.25)
-	check(is_equal_approx(lever, -0.25), "a fresh press at idle backs up (to full reverse)")
-	# And back up the other way: it stops at idle again.
-	for i in 20:
-		lever = ShipControls.move_lever(lever, 0.05, -1, 0.25)
-	check(is_equal_approx(lever, 0.0), "holding throttle-up from reverse stops at idle too")
+		lever = ShipControls.move_lever(lever, -0.05)
+	check(is_equal_approx(lever, 0.0), "pulling the lever down stops at idle")
+	# Holding S, the reverse thrusters win over whatever the lever wants.
+	check(is_equal_approx(ShipControls.with_retro(1.0, 1.0), -1.0), "S fires the reverse thrusters, even at full throttle")
+	check(is_equal_approx(ShipControls.with_retro(0.4, 0.0), 0.4), "let go of S: the lever drives again")
+	check(RIG.retro_thrust <= RIG.acceleration * 0.4, "the reverse thrusters are much weaker than the main engines")
+	# Sitting still, holding S: she backs up, slowly.
+	var model := FlightModel.new()
+	model.newtonian = true
+	var controls := FlightControls.new()
+	controls.thrust = -1.0
+	_fly(model, controls, 4.0)
+	var going := model.forward_speed()
+	check(going < -1.0, "from a standstill, S pushes her backwards (%.1f m/s)" % going)
+	check(going > -RIG.retro_thrust * 4.0 - 0.5, "...no faster than the weak reverse thrusters can push (%.1f m/s)" % going)
+	# Moving forward, holding S: she slows down.
+	var cruising := FlightModel.new()
+	cruising.newtonian = true
+	cruising.velocity = cruising.nose() * 40.0
+	_fly(cruising, controls, 3.0)
+	check(cruising.forward_speed() < 40.0 - RIG.retro_thrust * 2.5, "moving forward, S slows her down")
 
 
 func test_heavy_loads_are_slower_to_start_stop_and_turn() -> void:

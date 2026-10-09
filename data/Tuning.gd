@@ -41,8 +41,8 @@ extends Resource
 
 ## The throttle is a lever you set, like a real truck's cruise control or a
 ## plane's throttle: W / right trigger pushes it up, S / left trigger pulls
-## it down, and the rig speeds up or slows down to match, then holds that
-## speed. How fast the lever moves while you hold the key (per second;
+## it down (and fires the reverse thrusters while held), and the rig speeds
+## up or slows down to match, then holds that speed. How fast the lever moves while you hold the key (per second;
 ## 0.45 = about 2 seconds from idle to full).
 @export_range(0.05, 3.0, 0.05) var throttle_lever_speed: float = 0.45
 
@@ -51,9 +51,6 @@ extends Resource
 ## gentler, lazier speed changes.
 @export_range(0.5, 30.0, 0.5, "suffix:m/s") var throttle_band: float = 5.0
 
-## How far the lever goes below zero, into reverse (as a fraction of the
-## lever's travel). Pulling it all the way back = backing up slowly.
-@export_range(0.0, 1.0, 0.05) var reverse_lever: float = 0.25
 
 
 @export_group("Flying")
@@ -239,6 +236,12 @@ extends Resource
 @export_range(0.0, 1.0, 0.005) var overdrive_strain_rate: float = 0.05
 ## Strain that fades away per second once you're back under the strain speed.
 @export_range(0.0, 1.0, 0.01) var overdrive_strain_recovery: float = 0.1
+## The speed alarm sounds above this speed (and whenever the hull strain is
+## past half), louder the faster you go. Below it, no alarm.
+@export_range(500.0, 20000.0, 50.0, "suffix:km/h") var overspeed_alarm_kmh: float = 2100.0
+## At least this many seconds between the worried radio calls about your
+## speed, so they never pile up.
+@export_range(0.0, 120.0, 1.0, "suffix:s") var overdrive_call_gap: float = 15.0
 ## A hard speed limit, only used when crashes_enabled is off (so nothing
 ## blows up and the number doesn't run away forever).
 @export_range(1000.0, 50000.0, 100.0, "suffix:km/h") var overdrive_max_kmh: float = 5000.0

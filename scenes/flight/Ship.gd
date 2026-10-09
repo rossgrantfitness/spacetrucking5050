@@ -187,6 +187,12 @@ func _physics_process(delta: float) -> void:
 			var nudge := hands
 			hands = cruise.steer(self, delta)
 			CruisePilot.mix_in(hands, nudge, GameState.tuning)
+			# Boosting doesn't switch the autopilot off: it keeps steering
+			# the course while you light the boost (full burn behind it).
+			controls.boost_blocked = false
+			if controls.wants_boost and not controls.hands_free:
+				hands.boost = true
+				hands.thrust = 1.0
 			# Keep the lever where the autopilot is driving, so taking over
 			# is smooth.
 			controls.lever = clampf(flight.forward_speed() / ship_data.max_speed, 0.0, 1.0)
@@ -401,8 +407,9 @@ func lose_control(reason: String, where: Vector3 = Vector3.INF, away: Vector3 = 
 
 
 ## OVERDRIVE: past overdrive_strain_kmh the hull strains, quicker the
-## faster you go (see "Overdrive" in tuning.tres). The alarm starts quietly
-## at half strain and gets louder. Full strain: she can't take it.
+## faster you go (see "Overdrive" in tuning.tres). The alarm sounds past
+## overspeed_alarm_kmh or half strain, and gets louder. Full strain: she
+## can't take it.
 func _strain_the_hull(delta: float) -> void:
 	var tuning := GameState.tuning
 	var kmh := flight.speed() * 3.6
@@ -415,12 +422,16 @@ func _strain_the_hull(delta: float) -> void:
 	else:
 		overdrive_strain -= tuning.overdrive_strain_recovery * delta
 	overdrive_strain = clampf(overdrive_strain, 0.0, 1.0)
-	if overdrive_strain > 0.5:
-		_alarm_sound.volume_db = lerpf(-24.0, -8.0, (overdrive_strain - 0.5) / 0.5)
+	# The alarm: past overspeed_alarm_kmh (louder the faster), or past half
+	# strain (louder as it builds).
+	var too_fast := (kmh - tuning.overspeed_alarm_kmh) / 600.0
+	var urgency := maxf(too_fast, (overdrive_strain - 0.5) / 0.5)
+	if urgency > 0.0:
+		_alarm_sound.volume_db = lerpf(-20.0, -8.0, clampf(urgency, 0.0, 1.0))
 		if not _alarm_sound.playing:
 			_alarm_sound.play()
-	elif overdrive_strain < 0.4 and _alarm_sound.playing:
-		_alarm_sound.stop()
+	elif urgency < -0.1 and _alarm_sound.playing:
+		_alarm_sound.stop()  # (A little below the line, so it doesn't stutter.)
 	if overdrive_strain >= 1.0 and tuning.crashes_enabled:
 		lose_control("overdrive")  # Went too fast.
 	# OVERSPEED: going far too fast wears the hull, boost or no boost:

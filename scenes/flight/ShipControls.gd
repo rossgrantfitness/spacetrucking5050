@@ -13,16 +13,26 @@ extends Node
 ## steering feels buttery.
 ##
 ## The throttle is a LEVER (see "Throttle" in tuning.tres): W / right
-## trigger pushes it up, S / left trigger pulls it down, and it stays where
-## you leave it. Pulling it down stops at idle; let go and pull again for
-## reverse (see move_lever). The engines then speed the rig up or slow it down to the
-## lever's speed and hold it there. Boost spools up while held, and only
-## lights at full throttle.
+## trigger pushes it up and it stays where you leave it; the engines speed
+## the rig up or slow it down to the lever's speed and hold it there.
+##
+## S / left trigger is the REVERSE THRUSTERS: while held they fire against
+## the nose (and the lever eases down toward idle). Moving forward, they
+## slow her down; sitting still, they push her backwards. They're much
+## weaker than the main engines (the rig's retro_thrust). Let go and the
+## lever takes over again.
+##
+## Boost spools up while held, and only lights at full throttle (or
+## whenever the cruise autopilot is driving: boosting doesn't switch it off).
 
 
 ## Where the throttle lever is: 1 = full (top speed), 0 = idle (the rig
-## slows to a stop), below 0 = reverse.
+## slows to a stop).
 var lever: float = 0.0
+## How hard the reverse thrusters are firing right now, 0 to 1 (S held).
+var retro: float = 0.0
+## True while the boost button is held (even if boost can't light yet).
+var wants_boost: bool = false
 ## True while the pilot holds boost but the lever isn't at full (the HUD
 ## says so).
 var boost_blocked: bool = false
@@ -39,10 +49,6 @@ var newtonian: bool = false
 var flight_assist: bool = true
 
 var _controls := FlightControls.new()
-## Which side of idle the throttle press being held started on (1 ahead,
-## -1 reverse, 0 at idle or not pressing): see move_lever.
-var _press_side: int = 0
-var _pressing := false
 var _smoothed_steer := Vector2.ZERO
 var _mouse_stick := Vector2.ZERO
 
@@ -74,6 +80,8 @@ func read(delta: float) -> FlightControls:
 		_controls.touched = false
 		_controls.throttle_push = 0.0
 		boost_blocked = false
+		wants_boost = false
+		retro = 0.0
 		return _controls
 	var stick := Input.get_vector("steer_left", "steer_right", "steer_up", "steer_down", tuning.stick_deadzone)
 	_mouse_stick = _mouse_stick.lerp(Vector2.ZERO, 1.0 - exp(-GameState.tuning.mouse_recenter_speed * delta))
@@ -89,17 +97,14 @@ func read(delta: float) -> FlightControls:
 			# Holding Ctrl: the same keys (and mouse) slide the rig instead.
 			_controls.strafe = Vector2(_smoothed_steer.x, -_smoothed_steer.y)
 			_controls.steer = Vector2.ZERO
-	# Move the lever while the throttle keys (or triggers) are held.
+	# Move the lever while the throttle keys (or triggers) are held; S also
+	# fires the reverse thrusters.
 	var push := Input.get_action_strength("throttle_up") - Input.get_action_strength("throttle_down")
 	_controls.throttle_push = push
-	if absf(push) < 0.1:
-		_press_side = 0  # Let go: the next press can cross idle.
-	elif _press_side == 0 and not _pressing:
-		_press_side = int(signf(lever)) if absf(lever) > 0.001 else 0
-	_pressing = absf(push) >= 0.1
-	lever = move_lever(lever, push * tuning.throttle_lever_speed * delta, _press_side, tuning.reverse_lever)
-	_controls.thrust = _engine_thrust(tuning)
-	var wants_boost := Input.is_action_pressed("boost")
+	lever = move_lever(lever, push * tuning.throttle_lever_speed * delta)
+	retro = Input.get_action_strength("throttle_down")
+	_controls.thrust = with_retro(_engine_thrust(tuning), retro)
+	wants_boost = Input.is_action_pressed("boost")
 	boost_blocked = wants_boost and tuning.boost_needs_full_throttle and lever < 0.95
 	_controls.boost = wants_boost and not boost_blocked
 	_controls.touched = absf(push) > 0.1 or wants_boost or combined.length() > 0.3 or absf(_controls.roll) > 0.3
@@ -114,19 +119,18 @@ func _engine_thrust(tuning: Tuning) -> float:
 	return thrust_for(lever, forward_speed, max_speed, tuning)
 
 
-## Moves the lever by `amount`, between full reverse (-`reverse_limit`) and
-## full ahead (1). The IDLE NOTCH: a press that started above idle stops
-## at idle (0), and so does one that started in reverse (`press_side` is
-## which side of idle the press started on: 1, -1, or 0 at idle). So
-## slowing down never slams you into reverse by accident: let go at idle
-## and press again to back up.
-static func move_lever(position: float, amount: float, press_side: int, reverse_limit: float) -> float:
-	var moved := clampf(position + amount, -reverse_limit, 1.0)
-	if press_side > 0 and moved < 0.0:
-		return 0.0
-	if press_side < 0 and moved > 0.0:
-		return 0.0
-	return moved
+## Moves the lever by `amount`, between idle (0) and full ahead (1). (No
+## reverse on the lever: backing up is the reverse thrusters, S.)
+static func move_lever(position: float, amount: float) -> float:
+	return clampf(position + amount, 0.0, 1.0)
+
+
+## The engine thrust with the reverse thrusters (`retro_strength`, 0 to 1)
+## firing: while they fire, they win, pushing against the nose.
+static func with_retro(engine_thrust: float, retro_strength: float) -> float:
+	if retro_strength >= 0.1:
+		return -retro_strength
+	return engine_thrust
 
 
 ## The engine thrust (-1 to 1) that gets the rig to the lever's speed and
@@ -157,3 +161,4 @@ func clear() -> void:
 	_mouse_stick = Vector2.ZERO
 	_smoothed_steer = Vector2.ZERO
 	lever = 0.0
+	retro = 0.0

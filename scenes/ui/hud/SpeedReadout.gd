@@ -68,11 +68,12 @@ func _draw() -> void:
 		slanted(Rect2(overflow_left + i * 3.0, bar_top + 1.0, 2.0, 3.0), 1.0, YELLOW if on else tint(0.12))
 	# The throttle lever's tick: where you've set your speed.
 	var lever := rig.controls.lever
-	if absf(lever) > 0.01:
-		var tick_x := left + absf(lever) * BAR_SEGMENTS * step - 1.0
-		box(Rect2(tick_x, bar_top - 2.0, 1.0, 9.0), YELLOW if lever > 0.0 else tint())
-		if lever < 0.0:
-			text(Vector2(tick_x + 3.0, bar_top - 8.0), "REV", tint())
+	if lever > 0.01:
+		var tick_x := left + lever * BAR_SEGMENTS * step - 1.0
+		box(Rect2(tick_x, bar_top - 2.0, 1.0, 9.0), YELLOW)
+	# The reverse thrusters firing (S held).
+	if rig.controls.retro >= 0.1 and not rig.destroyed:
+		text(Vector2(left, bar_top - 8.0), "RETRO", RED if blink(0.3) else tint())
 	# Hull strain (overdrive), over the big number.
 	if rig.overdrive_strain > 0.0 and not rig.destroyed:
 		var strain_top := number_top - 9.0
