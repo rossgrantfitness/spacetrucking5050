@@ -14,6 +14,12 @@ extends Node3D
 ## and junk pieces (crates, containers, barrels, terminals, cable tangles)
 ## tumbling about (a spilled cargo, an old scrapyard). Same bonks.
 ##
+## Fields are clumpy, never an even sprinkle: an invisible 3D "density
+## cloud" (smooth noise) makes some patches thick with rocks, some thin and
+## some nearly empty, in every direction, and some patches are mostly
+## boulders while others are mostly gravel. Each field also gets a random
+## number of rocks around rock_count.
+##
 ## Everything is generated when the scene starts, from a seed: the same seed
 ## always makes the same field. All the knobs are in the Inspector when you
 ## select this node in the scene.
@@ -60,6 +66,18 @@ const JUNK_COLORS := [Color(0.7, 0.42, 0.28), Color(0.35, 0.62, 0.62), Color(0.9
 ## starts). Global coordinates.
 @export var keep_clear_spots := PackedVector3Array([Vector3.ZERO])
 @export var keep_clear_radius: float = 150.0
+## How clumpy the field is: 0 = rocks spread evenly, 1 = tight clusters
+## with near-empty gaps between them.
+@export_range(0.0, 1.0, 0.05) var clumpiness: float = 0.7
+## Roughly how big the clumps and gaps are, in meters (0 = about a quarter
+## of the field's size).
+@export var clump_size: float = 0.0
+## How much the number of rocks varies from field to field: 0.35 means
+## anywhere from 65% to 135% of rock_count.
+@export_range(0.0, 0.9, 0.05) var count_jitter: float = 0.35
+## How much rock sizes vary from patch to patch: 0 = the same mix
+## everywhere, 1 = some patches are all boulders, others all gravel.
+@export_range(0.0, 1.0, 0.05) var size_patchiness: float = 0.7
 ## How fast rocks tumble at most, in radians per second. Big rocks turn slower.
 @export var max_spin: float = 0.35
 ## How many different rock shapes to make.
@@ -72,6 +90,10 @@ const JUNK_COLORS := [Color(0.7, 0.42, 0.28), Color(0.35, 0.62, 0.62), Color(0.9
 	Color(0.7, 0.6, 0.46), Color(0.62, 0.34, 0.26)])
 
 var _rng := RandomNumberGenerator.new()
+# The invisible clouds that say where rocks are thick or thin, and where
+# they're big or small.
+var _density := FastNoiseLite.new()
+var _sizes := FastNoiseLite.new()
 # Every rock's center (in world space) and radius, for rocks_within().
 var _rock_centers := PackedVector3Array()
 var _rock_radii := PackedFloat32Array()
@@ -84,16 +106,21 @@ var _biggest_radius := 0.0
 
 func _ready() -> void:
 	_rng.seed = field_seed
+	_set_up_clouds()
 	# Each rock: its spot (relative to this node) and radius.
 	var spots := PackedVector3Array()
 	var radii := PackedFloat32Array()
 	for i in landmark_count:
 		radii.append(_rng.randf_range(landmark_radius_range.x, landmark_radius_range.y))
-		spots.append(_random_spot(false, radii[-1]))
-	for i in rock_count:
-		# Cubing a 0..1 random number makes small rocks common and big ones rare.
-		radii.append(lerpf(rock_radius_range.x, rock_radius_range.y, pow(_rng.randf(), 3.0)))
-		spots.append(_random_spot(_rng.randf() < near_route_fraction, radii[-1]))
+		spots.append(_random_spot(false, radii[-1], false))
+	var count := roundi(rock_count * _rng.randf_range(1.0 - count_jitter, 1.0 + count_jitter))
+	for i in count:
+		var spot := _random_spot(_rng.randf() < near_route_fraction, rock_radius_range.x, true)
+		var radius := _rock_radius(spot)
+		if not _is_clear(to_global(spot), radius):
+			radius = rock_radius_range.x  # Too big for the gap it's in.
+		spots.append(spot)
+		radii.append(radius)
 	_build_rocks(spots, radii)
 	_build_collision(spots, radii)
 	add_to_group("asteroid_fields")  # So the HUD's radar can find us.
@@ -239,11 +266,46 @@ func _build_collision(spots: PackedVector3Array, radii: PackedFloat32Array) -> v
 		body.add_child(shape)
 
 
+## The density and size clouds: smooth 3D noise, its blobs about
+## clump_size across.
+func _set_up_clouds() -> void:
+	var span := clump_size
+	if span <= 0.0:
+		var extent := Vector3.ONE * shell_radii.y * 2.0 if layout == "shell" else field_size
+		span = maxf(extent[extent.max_axis_index()] * 0.25, 60.0)
+	for cloud: FastNoiseLite in [_density, _sizes]:
+		cloud.seed = _rng.randi()
+		cloud.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+		cloud.fractal_octaves = 2
+		cloud.frequency = 1.0 / span
+	_sizes.frequency = 1.0 / (span * 0.8)
+
+
+## How likely a rock is to stay at this spot: near 1 in the thick patches,
+## near 0 in the gaps (and 1 everywhere when clumpiness is 0).
+func _density_at(spot: Vector3) -> float:
+	var cloud := clampf(_density.get_noise_3dv(spot) * 1.6 + 0.5, 0.0, 1.0)
+	return pow(cloud, 4.0 * clumpiness)
+
+
+## A rock's size for this spot: mostly small, but some patches lean to big
+## boulders and others to gravel.
+func _rock_radius(spot: Vector3) -> float:
+	# Cubing a 0..1 random number makes small rocks common and big ones rare;
+	# a smaller power (boulder patches) makes big ones common.
+	var lean := clampf(_sizes.get_noise_3dv(spot) * 1.6, -1.0, 1.0) * size_patchiness
+	var power := 3.0 - lean * 2.0 if lean > 0.0 else 3.0 - lean * 3.0
+	return lerpf(rock_radius_range.x, rock_radius_range.y, pow(_rng.randf(), power))
+
+
 ## A random spot for a rock of this radius: inside the egg (or the shell),
-## away from the keep-clear spots and out of the lanes.
-func _random_spot(near_route: bool, radius: float) -> Vector3:
+## away from the keep-clear spots and out of the lanes, and (if `clumped`)
+## more likely where the density cloud is thick.
+func _random_spot(near_route: bool, radius: float, clumped: bool) -> Vector3:
 	var spot := Vector3.ZERO
-	for attempt in 60:
+	var fallback := Vector3.ZERO  # A clear spot, even if in a thin patch.
+	var found_fallback := false
+	for attempt in 120:
 		if layout == "shell":
 			# Any direction, any distance between the two radii (evenly by
 			# volume, so the outside isn't sparser than the inside).
@@ -258,9 +320,15 @@ func _random_spot(near_route: bool, radius: float) -> Vector3:
 			if near_route:
 				unit *= Vector3(0.06, 0.1, 1.0)  # Squeeze toward the middle line.
 			spot = unit * field_size * 0.5
-		if _is_clear(to_global(spot), radius):
-			break
-	return spot
+		if not _is_clear(to_global(spot), radius):
+			continue
+		if not found_fallback:
+			fallback = spot
+			found_fallback = true
+		if clumped and _rng.randf() > _density_at(spot):
+			continue  # A thin patch: the rock goes somewhere thicker.
+		return spot
+	return fallback if found_fallback else spot
 
 
 func _is_clear(global_spot: Vector3, radius: float) -> bool:

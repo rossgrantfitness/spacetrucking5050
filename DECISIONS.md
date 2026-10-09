@@ -799,3 +799,10 @@ be revisited; just say so.
   - The cuts follow the bones from `tools/rig_jacki.py`'s skinning, so each triangle goes with the limb that moved it most.
   - Her right hand has a "Hand" marker for snacks.
   - `JackiAnimator.gd`, the old `BunnyVisual.tscn`, `build_bunny.gd` and the old `jacki_rabbit.glb` were removed.
+- **Asteroid and junk fields are clumpy now, never an even sprinkle.**
+  - An invisible 3D density cloud (smooth noise, blobs about a quarter of the field across) makes some patches thick with rocks and leaves others nearly empty, in every direction.
+  - A second cloud makes some patches mostly boulders and others mostly gravel.
+  - Each field also gets a random number of rocks, ±35% around its setting.
+  - The knobs are on every AsteroidField in the Inspector: `clumpiness` (0.7), `clump_size` (auto), `count_jitter` (0.35) and `size_patchiness` (0.7).
+  - Traffic lanes stay clear. Junk clouds and station shells use the same knobs.
+  - `tools/tests/FieldTests.gd` checks the clumps, the count variety and the clear lanes.
