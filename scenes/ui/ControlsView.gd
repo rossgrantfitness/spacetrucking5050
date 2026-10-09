@@ -24,7 +24,7 @@ const GROUPS: Array = [
 	["FLYING", [
 		["Steer", ["steer_left", "steer_right", "steer_up", "steer_down"]],
 		["Steer with the mouse", ["Move the mouse", ""]],
-		["Throttle lever up / down", ["throttle_up", "throttle_down"]],
+		["Throttle up / reverse thrusters (hold)", ["throttle_up", "throttle_down"]],
 		["Boost (at full throttle, hold)", ["boost"]],
 		["Roll left / right (Newtonian)", ["roll_left", "roll_right"]],
 		["Strafe (Newtonian): hold + steer", ["strafe_mode"]],

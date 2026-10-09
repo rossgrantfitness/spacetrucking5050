@@ -41,9 +41,11 @@ extends Resource
 ## forward. Heavy rigs are low.
 @export_range(0.5, 100.0, 0.5, "suffix:m/s²") var acceleration: float = 9.0
 
-## Reverse thrust: how much speed it sheds every second while burning
-## backward. This is the ship's brake. Lower = easier to overshoot.
-@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var retro_thrust: float = 7.0
+## Reverse thrusters (S): how much speed they shed every second, or how
+## fast they push her backwards from a standstill. Small nose thrusters,
+## much weaker than the main engines (a third of `acceleration` on the
+## Thumper), so plan your stops: or flip round and burn the main engines.
+@export_range(0.5, 100.0, 0.5, "suffix:m/s²") var retro_thrust: float = 3.0
 
 
 @export_group("Hauling")

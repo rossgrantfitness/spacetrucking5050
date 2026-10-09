@@ -116,6 +116,9 @@ const OVERDRIVE_CALLS: OverdriveCallList = preload("res://data/dialogue/overdriv
 var _overdrive_called: Dictionary = {}
 var _overdrive_pending: OverdriveCall = null
 var _overdrive_banner_clock: float = 0.0
+var _overdrive_call_clock: float = 0.0
+var _overdrive_last_kmh: float = 0.0
+var _overdrive_trend: float = 0.0  # km/h gained per second (smoothed).
 ## A new game starts here, out past the company HQ (which sits at the
 ## origin), cruising down the road toward the truck stop.
 const OPEN_SPACE_SPOT := Vector3(0.0, 60.0, -1700.0)
@@ -680,39 +683,51 @@ func _on_lost_control(reason: String) -> void:
 func _watch_overdrive(delta: float) -> void:
 	if _ship.out_of_control:
 		return
+	var tuning := GameState.tuning
 	var kmh := _ship.flight.speed() * 3.6
 	var strain := _ship.overdrive_strain
+	# Is she still speeding up? (Smoothed, so a wobble doesn't count.)
+	if delta > 0.0:
+		_overdrive_trend = lerpf(_overdrive_trend, (kmh - _overdrive_last_kmh) / delta, minf(delta * 3.0, 1.0))
+	_overdrive_last_kmh = kmh
+	var climbing := _ship.flight.boosting and _overdrive_trend > 1.0
 	var cap_kmh := FlightModel.boosted_top_speed(_ship.ship_data) * 3.6
+	_overdrive_call_clock -= delta
+	_overdrive_banner_clock -= delta
 	if kmh < cap_kmh - 50.0 and strain <= 0.0:
 		_overdrive_called.clear()  # Calmed down: the next climb starts fresh.
 		_overdrive_pending = null
 		_overdrive_banner_clock = 0.0
 		return
+	# The worried radio calls: speed ones only while she's still climbing
+	# (no "you're doing 1,500!" while you're slowing down), strain ones
+	# whenever. Never two in a row: at least overdrive_call_gap apart.
 	var calls := OVERDRIVE_CALLS.calls
 	for i in calls.size():
 		var worry := calls[i]
 		if worry == null or _overdrive_called.has(i):
 			continue
-		if (worry.at_kmh > 0.0 and kmh >= worry.at_kmh) or (worry.at_strain > 0.0 and strain >= worry.at_strain):
+		var speed_call := worry.at_kmh > 0.0 and kmh >= worry.at_kmh and climbing
+		var strain_call := worry.at_strain > 0.0 and strain >= worry.at_strain
+		if speed_call or strain_call:
 			_overdrive_called[i] = true
 			_overdrive_pending = worry  # (The newest, most urgent one wins.)
-	if _overdrive_pending != null and not _hud.comm.is_busy():
+	if _overdrive_pending != null and _overdrive_call_clock <= 0.0 and not _hud.comm.is_busy():
 		_hud.comm.call_in(_overdrive_pending.speaker, _overdrive_pending.line, ChatterSet.Situation.IDLE, false, PackedStringArray(), true)
 		_overdrive_pending = null
-	# The banner, again and again, more urgent as the strain builds.
-	_overdrive_banner_clock -= delta
-	if _overdrive_banner_clock > 0.0 or (_ship.flight.overdrive <= 0.0 and strain <= 0.0):
+		_overdrive_call_clock = tuning.overdrive_call_gap
+	# On screen: the speed readout already shows OVERDRIVE and the hull
+	# strain meter. A banner only when it's critical (and only now and
+	# then), or once as she first goes into overdrive.
+	if _overdrive_banner_clock > 0.0:
 		return
-	var percent := roundi(strain * 100.0)
 	if strain >= 0.75:
-		_hud.show_banner("!!! HULL CRITICAL %d%%: LET GO OF BOOST !!!" % percent, 0.6)
-		_overdrive_banner_clock = 0.5
-	elif strain > 0.0:
-		_hud.show_banner("!! HULL STRAIN %d%%: EASE OFF !!" % percent, 1.2)
-		_overdrive_banner_clock = 1.0
-	else:
-		_hud.show_banner("OVERDRIVE · %d KM/H AND CLIMBING" % roundi(kmh), 1.2)
-		_overdrive_banner_clock = 2.5
+		_hud.show_banner("!!! HULL CRITICAL %d%%: LET GO OF BOOST !!!" % roundi(strain * 100.0), 2.0)
+		_overdrive_banner_clock = 6.0
+	elif climbing and _ship.flight.overdrive > 0.0 and not _overdrive_called.has(-1):
+		_overdrive_called[-1] = true
+		_hud.show_banner("OVERDRIVE · %d KM/H AND CLIMBING" % roundi(kmh), 2.0)
+		_overdrive_banner_clock = 4.0
 
 
 ## The rig blew up. A moment to take it in, then a prompt to reload, then back

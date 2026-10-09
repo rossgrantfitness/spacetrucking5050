@@ -806,3 +806,16 @@ be revisited; just say so.
   - The knobs are on every AsteroidField in the Inspector: `clumpiness` (0.7), `clump_size` (auto), `count_jitter` (0.35) and `size_patchiness` (0.7).
   - Traffic lanes stay clear. Junk clouds and station shells use the same knobs.
   - `tools/tests/FieldTests.gd` checks the clumps, the count variety and the clear lanes.
+
+## Boost on autopilot, S = reverse thrusters, calmer overdrive warnings (2026-10-09)
+
+- **Boost no longer switches the cruise autopilot off.** Hold boost on a charted course and the autopilot keeps steering while the rig boosts along it. Working the stick or the throttle still takes over as before.
+- **S (left trigger) is the reverse thrusters.**
+  - While held, small nose thrusters fire against the nose (RETRO shows on the speed readout), and the throttle lever eases down toward idle.
+  - Moving forward, they slow you down. Sitting still, they push you backwards (up to `reverse_speed_fraction` of top speed with Flight Assist on).
+  - The lever no longer has a reverse range. The "press again for reverse" notch is gone.
+  - They're much weaker than the main engines: the Thumper's `retro_thrust` went from 7 to 3 m/s² (main engines: 9). The cruise autopilot plans its braking with the new number.
+- **Fewer overdrive warnings.**
+  - The speed readout already shows OVERDRIVE and the hull-strain meter, so the repeating banners are gone. "OVERDRIVE · ... KM/H AND CLIMBING" shows once per climb, and only while the speed is actually rising. "HULL CRITICAL" shows at most every 6 s.
+  - The worried radio calls about speed only come while you're still speeding up. They're at least `overdrive_call_gap` (15 s) apart.
+- **Speed alarm past 2,100 km/h** (`overspeed_alarm_kmh`). It gets louder the faster you go, and still also sounds past half hull strain.

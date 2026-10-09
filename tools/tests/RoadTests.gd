@@ -160,7 +160,11 @@ func test_the_autopilot_forgives_small_nudges() -> void:
 		flicked = flicked or flick.feel_hands(hands, 1.0 / 60.0)
 	check(not flicked and flick.grab == 0.0, "a quick flick is forgiven, and the grab fades away")
 	hands.boost = true
-	check(CruisePilot.new().feel_hands(hands, 1.0 / 60.0), "boost takes over at once")
+	var boosting := CruisePilot.new()
+	var let_go := false
+	for i in 120:
+		let_go = let_go or boosting.feel_hands(hands, 1.0 / 60.0)
+	check(not let_go, "boosting doesn't switch the autopilot off")
 
 
 func test_hazards_affect_the_rig() -> void:

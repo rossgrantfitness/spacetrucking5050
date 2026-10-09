@@ -9,8 +9,9 @@ extends RefCounted
 ## hands do, so the rig flies the same way it does for you (same handling,
 ## same fuel burn). It forgives small inputs: a nudge of the stick moves
 ## the rig a little and it steers back on course. Push harder (or work the
-## throttle) for a moment, or hit boost, and it lets go (see feel_hands and
-## Ship.gd). It never boosts: that's your call.
+## throttle) for a moment and it lets go (see feel_hands and Ship.gd). It
+## never boosts on its own: that's your call. Hold boost and it keeps
+## steering the course while you boost (Ship.gd).
 
 
 ## The spots to fly through, in order (in the world). The course chart
@@ -31,14 +32,11 @@ var _avoid_clock: float = 0.0
 
 
 ## Feels the pilot's hands on the controls this step. Returns true when
-## they've taken over (a firm push held for a moment, the throttle, or
-## boost). Small nudges don't count: they're mixed into the autopilot's own
-## steering by mix_in.
+## they've taken over (a firm push held for a moment, or the throttle).
+## Small nudges don't count: they're mixed into the autopilot's own steering
+## by mix_in. Boost doesn't count either: the autopilot keeps flying.
 func feel_hands(hands: FlightControls, delta: float) -> bool:
 	var tuning := GameState.tuning
-	if hands.boost:
-		grab = 1.0
-		return true
 	var push := maxf(hands.steer.length(), maxf(absf(hands.roll), hands.strafe.length()))
 	var rate := 0.0
 	if push > tuning.autopilot_tolerance:
