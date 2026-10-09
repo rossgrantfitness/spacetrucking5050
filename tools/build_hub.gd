@@ -14,7 +14,7 @@ extends "res://tools/build_placeholder_models.gd"
 ## and people) are NOT touched, so camera angles you set in the editor are safe.
 ##
 ## It borrows the shape helpers (boxes, lofts...) from build_placeholder_models.gd.
-## (The bunny is built from her 3D model by tools/build_bunny.gd.)
+## (The bunny is built from her 3D model by tools/build_jacki.gd.)
 ## Characters use the wobbly PS1 shader; the sets use smooth lit materials
 ## with hand-painted textures (shaders/set_surface.gdshader) and real lights, because they get "pre-rendered" into painted
 ## backgrounds (see scenes/hub/HubRoom.gd).
@@ -55,7 +55,7 @@ var _set_materials := {}
 func _initialize() -> void:
 	_animator_script = load(ANIMATOR_PATH)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/hub/sets"))
-	# (The bunny herself is built from her 3D model by tools/build_bunny.gd.)
+	# (The bunny herself is built from her 3D model by tools/build_jacki.gd.)
 	_save(_build_critter("RaccoonVisual", RACCOON_LOOK), "res://scenes/hub/RaccoonVisual.tscn")
 	_save(_build_apartment(), "res://scenes/hub/sets/ApartmentSet.tscn")
 	_save(_build_hallway(), "res://scenes/hub/sets/HallwaySet.tscn")

@@ -783,3 +783,19 @@ be revisited; just say so.
   - The old hand-animated bunny (`BunnyVisual.tscn`) stays in the project, unused.
 - **I couldn't get Quaternius's newer *Universal Animation Library* (itch.io).** Its download needs an itch.io account, and the older pack, also CC0 and posted on OpenGameArt, downloads directly. If you'd like the bigger library (130+ animations), download it from itch.io and drop it in `art/source/`, and I'll wire it up.
 
+
+## Slimmer project, exhaust out the back, Jacki's old walk (2026-10-09)
+
+- **Every AI model was slimmed (`tools/slim_models.py`), from 207 MB to 10 MB.** Each Meshy model carried three 2048×2048 pictures: color, metal/roughness and bumps. The PS1 look renders tiny and matte, so it never used the last two.
+  - The script keeps only the color picture (and glow, if any), shrunk to 512 px (1024 for the big stations and Jacki's room).
+  - It makes the materials matte and rewrites the .glb files in place.
+  - Re-run it whenever you drop in a new model from Meshy, then delete the old `<name>_1.jpg` / `_2.jpg` files next to the model and let Godot reimport.
+  - The junk kit was re-cut against the new pictures.
+  - Byte-identical copies in `reference/` (three radio songs, three crew models) were removed.
+  - `trailer/` is now ignored by Godot.
+- **Git history is still big (about 530 MB).** It keeps every old version of every big file. Shrinking it means rewriting history and force-pushing, so it waits for the developer's OK.
+- **Engine trails stream straight out the back of the engines.** The trail used to be a line through where the engine had been. With Newtonian drift that points along the drift, not out of the nozzle. Now each puff of exhaust shoots out the back of the nozzle as fast as the ship is moving, so the trail always leaves the engines in line with the ship. Flying straight ahead it looks exactly as before.
+- **Jacki walks the old way again (the developer preferred it).** The downloaded animation set (Quaternius) moved her strangely, so `tools/build_jacki.gd` instead cuts her Rocket Cap model into rigid parts, the way the earlier Jacki was made, and `BunnyAnimator.gd` swings them (walk, bob, breathing, poses).
+  - The cuts follow the bones from `tools/rig_jacki.py`'s skinning, so each triangle goes with the limb that moved it most.
+  - Her right hand has a "Hand" marker for snacks.
+  - `JackiAnimator.gd`, the old `BunnyVisual.tscn`, `build_bunny.gd` and the old `jacki_rabbit.glb` were removed.

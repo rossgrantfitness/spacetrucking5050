@@ -661,11 +661,11 @@ to each solar system, in `data/systems/home_system.tres`.
 crates, machinery...) are painted by `tools/paint_textures.gd`; tweak and
 re-run it with `godot --headless --path . -s tools/paint_textures.gd`.
 Every box also gets painted bevels and shadow automatically
-(`shaders/painted_edges.gdshaderinc`). **The bunny** is your 3D model in
-`assets/characters/bunny/` (the .obj and its texture), cut into parts and
-made chibi by `tools/build_bunny.gd`: the CHIBI numbers at the top of that
-file set head size, leg length and so on. Replace the model (same file
-names) and re-run it to update her.
+(`shaders/painted_edges.gdshaderinc`). **Jacki** is your Rocket Cap Rabbit
+model (`art/models/jacki_rocket_cap.glb`), skinned to a skeleton by
+`tools/rig_jacki.py` and then cut into rigid parts (legs, body, arms, head)
+by `tools/build_jacki.gd`, which `scenes/hub/BunnyAnimator.gd` swings as she
+walks. Replace the model, re-run both, and she's updated.
 
 **Your rig's rooms** are `scenes/hub/Apartment.tscn`, `Hallway.tscn` and
 `Dispatch.tscn`. Open one and look under **Shots**: each shot has a

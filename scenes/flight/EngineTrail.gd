@@ -3,12 +3,19 @@ extends MeshInstance3D
 ## A glowing ribbon streaming out behind an engine.
 ##
 ## Put this on a marker at an engine nozzle, anywhere inside a ship that has
-## speed_ratio() and trail_color() functions (your Ship, or a TrafficShip). Every frame it remembers where
-## the nozzle is, forgets spots older than Tuning's trail_lifetime, and draws a
-## fading ribbon through the remembered spots, always turned to face the
-## camera. Because the ship keeps moving, flying faster spreads the spots out
-## into a longer trail. Brightness follows speed too, so a parked ship leaves
-## no trail at all.
+## speed_ratio() and trail_color() functions (your Ship, or a TrafficShip).
+## Every frame the engine puffs out a bit of glowing exhaust, which shoots
+## straight out the back of the nozzle (the way the nozzle points), and the
+## trail is a fading ribbon through the puffs, always turned to face the
+## camera. Puffs older than Tuning's trail_lifetime are gone.
+##
+## The puffs fly out of the nozzle as fast as the ship is going, so flying
+## faster still makes a longer trail. And because they shoot out the back
+## (rather than just being left behind where the ship was), the trail always
+## streams out of the engines, even when the ship is drifting sideways or
+## coasting backwards with Newtonian flight. Flying straight ahead, the puffs
+## hang still in space, just where the engine was. Brightness follows speed
+## too, so a parked ship leaves no trail at all.
 
 
 ## Never remember more spots than this (keeps very high frame rates cheap).
@@ -17,9 +24,15 @@ const MAX_POINTS: int = 128
 ## back to the start), wipe the trail instead of drawing a giant streak.
 const TELEPORT_DISTANCE: float = 200.0
 
-## Oldest spots first, newest last. Each spot has an age in seconds.
-var _points: Array[Vector3] = []
+## Oldest puffs first, newest last. Each puff has where it left the nozzle,
+## how fast it's flying (world space), and an age in seconds.
+var _starts: Array[Vector3] = []
+var _speeds: Array[Vector3] = []
 var _ages: Array[float] = []
+## Where each puff is now (worked out from the three above every frame).
+var _points: Array[Vector3] = []
+var _last_nozzle := Vector3.ZERO
+var _ship_velocity := Vector3.ZERO
 var _source: Node3D  # The ship this trail belongs to.
 var _ribbon := ImmediateMesh.new()
 var _material := StandardMaterial3D.new()
@@ -47,17 +60,32 @@ func _process(delta: float) -> void:
 	if _source == null:
 		return
 	var lifetime := GameState.tuning.trail_lifetime
-	var nozzle := (get_parent() as Node3D).get_global_transform_interpolated().origin
+	var nozzle_transform := (get_parent() as Node3D).get_global_transform_interpolated()
+	var nozzle := nozzle_transform.origin
 
-	if not _points.is_empty() and nozzle.distance_to(_points.back()) > TELEPORT_DISTANCE:
+	if not _starts.is_empty() and nozzle.distance_to(_last_nozzle) > TELEPORT_DISTANCE:
 		clear()
+	# How fast the engine is moving through space (smoothed a little, so
+	# uneven frames don't make the trail wiggle).
+	if not _starts.is_empty() and delta > 0.0:
+		_ship_velocity = _ship_velocity.lerp((nozzle - _last_nozzle) / delta, minf(delta * 20.0, 1.0))
+	_last_nozzle = nozzle
 	for i in _ages.size():
 		_ages[i] += delta
 	while not _ages.is_empty() and (_ages[0] > lifetime or _ages.size() >= MAX_POINTS):
-		_points.pop_front()
+		_starts.pop_front()
+		_speeds.pop_front()
 		_ages.pop_front()
-	_points.append(nozzle)
+	# The new puff: out the back of the nozzle (its +Z, the way the exhaust
+	# points), on top of the ship's own speed, so it streams straight back
+	# from the engine whichever way the ship is actually drifting.
+	var back := nozzle_transform.basis.z.normalized()
+	_starts.append(nozzle)
+	_speeds.append(_ship_velocity + back * _ship_velocity.length())
 	_ages.append(0.0)
+	_points.resize(_starts.size())
+	for i in _starts.size():
+		_points[i] = _starts[i] + _speeds[i] * _ages[i]
 
 	_redraw(lifetime)
 
@@ -65,7 +93,10 @@ func _process(delta: float) -> void:
 ## Forgets the whole trail at once.
 func clear() -> void:
 	_points.clear()
+	_starts.clear()
+	_speeds.clear()
 	_ages.clear()
+	_ship_velocity = Vector3.ZERO
 	_ribbon.clear_surfaces()
 
 

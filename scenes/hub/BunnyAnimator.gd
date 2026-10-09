@@ -5,7 +5,7 @@ extends Node3D
 ## still she breathes and blinks. No animation files needed: it's all done
 ## by turning the model's parts (found by name) a little every frame.
 ##
-## Used by BunnyVisual.tscn, the crew (scenes/hub/crew/) and the other
+## Used by JackiVisual.tscn, the crew (scenes/hub/crew/) and the other
 ## critters. The player and NPCs call animate() every frame.
 ##
 ## Standing still, they can hold a POSE (set `pose`, for the crew's
@@ -76,6 +76,12 @@ func _ready() -> void:
 		_body_rest_y = _body.position.y
 	if _leg_left != null:
 		_legs_rest_y = _leg_left.position.y
+
+
+## Where her right hand is, for things she holds (Snack.gd), if the model
+## has a "Hand" marker on its right arm (Jacki does); null otherwise.
+func hand() -> Node3D:
+	return get_node_or_null("Body/ArmRight/Hand") as Node3D
 
 
 ## `walking` runs from 0 (standing still) to 1 (full walking speed).

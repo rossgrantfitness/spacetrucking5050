@@ -12,7 +12,7 @@ const ENJOY_SECONDS: float = 2.6
 ## How much bigger than life the packet is in her hand (chibi props read
 ## better a bit oversized).
 const HELD_SCALE: float = 1.8
-## Where her right hand is, on her right arm's pivot (BunnyVisual.tscn).
+## Where her right hand is, on her right arm's pivot (older models without a "Hand" marker).
 const HAND_SPOT := Vector3(0.05, -0.36, -0.02)
 
 
@@ -30,8 +30,8 @@ static func enjoy(tree: SceneTree, product: ProductData) -> void:
 	var held: Node3D = null
 	if room != null and room.player != null:
 		animator = room.player.visual
-		# Her right hand: the rigged Jacki has one (JackiAnimator.hand());
-		# the hand-animated bunny has an arm pivot.
+		# Her right hand: Jacki has a "Hand" marker (BunnyAnimator.hand());
+		# older models only have an arm pivot.
 		var arm: Node3D = null
 		if animator.has_method("hand"):
 			arm = animator.call("hand") as Node3D
@@ -43,7 +43,7 @@ static func enjoy(tree: SceneTree, product: ProductData) -> void:
 			held.scale = Vector3.ONE * HELD_SCALE
 			arm.add_child(held)
 			if animator.has_method("hand"):
-				# Right in the rigged hand, the same size in the world.
+				# Right in her hand, the same size in the world.
 				held.position = Vector3.ZERO
 				held.scale = Vector3.ONE * HELD_SCALE / maxf(arm.global_basis.get_scale().x, 0.001)
 	if animator != null and "pose" in animator:

@@ -24,6 +24,8 @@ project on a machine without a screen.
 | `generate_pixel_font.gd` | The game's font (`fonts/pixel_font.tres`) from the HUD's pixel letters in `scenes/ui/PixelFont.gd`. Re-run it after adding letters there. |
 | `route_events/import_route_events.py` | The route events list (`data/events/route_events.tres`) from your design list (`docs/ROUTE_EVENTS_LIST.md`) plus what each playable event does (written in the script). Python, not Godot: `python3 tools/route_events/import_route_events.py`. **Re-running overwrites the list**, so make inspector edits in the script too. |
 | `rig_jacki.py` | **Python + Blender** (`pip install bpy==4.2.0`, Python 3.11): gives Jacki's model (`art/models/jacki_rocket_cap.glb`) a skeleton and animations from Quaternius's free CC0 pack (`art/source/`) → `art/models/jacki_rigged.glb`. Run `python tools/rig_jacki.py`. Her joint positions are at the top of the file. |
+| `slim_models.py` | **Python + Pillow**: shrinks every AI model in `art/models/` and `assets/characters/` (keeps only the color picture at 512 px, makes materials matte). Run `python3 tools/slim_models.py` after adding a model, delete the old `<name>_1/_2.jpg` next to it, then let Godot reimport. `--check` just lists what would change. |
+| `build_jacki.gd` | Cuts Jacki's rigged model (`art/models/jacki_rigged.glb`) into rigid parts that `BunnyAnimator.gd` swings → `scenes/hub/JackiVisual.tscn`. |
 | `build_jacki_room.gd` | Jacki's cabin from the Orbital Hideaway diorama (`art/models/jacki_room.glb` → `scenes/hub/sets/JackiRoomSet.tscn`): scale, floor, collision, steps, window spot, lights. |
 | `build_gas_n_go.gd` | Gas-N-Go 47 from the Fuel Stop in the Sky model, beside the lane, with clean sign boards over its garbled letters. |
 | `build_casino_model.gd` | The High Roller from the Nebula Jackpot model. |
@@ -60,7 +62,7 @@ godot --headless --path . -s tools/run_tests.gd      # just the self-tests
 godot --headless --path . -s tools/validate_project.gd -- scenes/boot/Boot.gd   # check one file
 godot --headless --path . -s tools/setup_input_map.gd                           # reset controls
 godot --headless --path . -s tools/paint_textures.gd      # repaint the hand-painted textures
-godot --headless --path . -s tools/build_bunny.gd         # rebuild the bunny from her 3D model
+godot --headless --path . -s tools/build_jacki.gd         # rebuild Jacki (rigid parts) from her rigged model
 godot --headless --path . -s tools/build_crew.gd          # rebuild the crew from their 3D models
 godot --headless --path . -s tools/build_player_rig.gd     # rebuild the Thumper from its five load models
 godot --headless --path . -s tools/generate_sounds.gd     # remake the sounds (engine, voices, menu and game cues)

@@ -1,7 +1,7 @@
 extends "res://tools/build_placeholder_models.gd"
 ## Builds the rig's crew from the developer's 3D models (.glb files from
 ## Meshy, in res://assets/characters/<folder>/source.glb), the same way
-## tools/build_bunny.gd builds Jacki: each model is cut into rigid parts
+## tools/build_jacki.gd builds Jacki: each model is cut into rigid parts
 ## (legs, body, arms, head) hung on pivots that BunnyAnimator.gd swings,
 ## the T-pose arms are dropped to the sides, it's turned to face -Z, stood
 ## on the floor and sized. They're already chibi, so nothing is stretched.
