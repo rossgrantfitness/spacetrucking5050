@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/moss_bees.tres" id="job_moss_bees"]
+[ext_resource type="Resource" path="res://data/jobs/moss_sapling.tres" id="job_moss_sapling"]
+[ext_resource type="Resource" path="res://data/jobs/moss_chairs.tres" id="job_moss_chairs"]
+
+[sub_resource type="Resource" id="Conversation_meet"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("greenhouse_open")
+blocked_by_flags = PackedStringArray("moss_met")
+lines = PackedStringArray("Ah... the soil. Premium. You can smell the nice planet it came from.", "I'm Dr. Moss. Shelby. I've been growing one tree here... for ninety-one years.", "It's nearly ready. Trees take their time. So do tortoises. We get along.")
+sets_flags = PackedStringArray("moss_met")
+
+[sub_resource type="Resource" id="Conversation_bees"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_met")
+blocked_by_flags = PackedStringArray("moss_called_bees", "moss_bees_done")
+lines = PackedStringArray("Dear... our bees retired. All of them. On the same day. Very coordinated.", "Without bees... nothing gets pollinated. Things just... wait.", "> {company} can bring bees. They bring everything. For a fee.", "Lovely... I'll call. Slowly.")
+sets_flags = PackedStringArray("moss_called_bees")
+places_order = ExtResource("job_moss_bees")
+
+[sub_resource type="Resource" id="Conversation_bees_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_called_bees")
+blocked_by_flags = PackedStringArray("moss_bees_done")
+lines = PackedStringArray("Your lion said bees are 'a premium live cargo tier.' I said bees are bees. He didn't like that.")
+
+[sub_resource type="Resource" id="Conversation_sapling"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_bees_done")
+blocked_by_flags = PackedStringArray("moss_offered_sapling")
+lines = PackedStringArray("The bees are working. Listen... bzz... that's science.", "This sapling only grows when it hears music. I sing to it. It shrinks a little.", "Is there somewhere with... a jukebox? Somewhere loud, and warm?", "> Marge's diner. At the truck stop. The jukebox only plays one song.", "Perfect... one song is... plenty.")
+sets_flags = PackedStringArray("moss_offered_sapling")
+offers_job = ExtResource("job_moss_sapling")
+
+[sub_resource type="Resource" id="Conversation_sapling_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_offered_sapling")
+blocked_by_flags = PackedStringArray("moss_sapling_done")
+lines = PackedStringArray("The sapling's on the board, dear. It's humming. I think it's excited.")
+
+[sub_resource type="Resource" id="Conversation_chairs"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_sapling_done")
+blocked_by_flags = PackedStringArray("moss_called_chairs", "moss_chairs_done")
+lines = PackedStringArray("Marge sent a photo. The sapling is taller than the jukebox now. It likes the one song.", "And... the big tree is going to bloom. Once a century. Next week. Or the week after. Trees.", "I'd like company for it. Everyone. Folding chairs... four hundred.", "> I'll tell the boss.", "Thank you, dear. Bring a sweater. Blooms get... chilly.")
+sets_flags = PackedStringArray("moss_called_chairs")
+places_order = ExtResource("job_moss_chairs")
+
+[sub_resource type="Resource" id="Conversation_chairs_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_called_chairs")
+blocked_by_flags = PackedStringArray("moss_chairs_done")
+lines = PackedStringArray("Your boss asked if the bloom has 'monetization potential.' I put him on hold. I'm very slow at holds.")
+
+[sub_resource type="Resource" id="Conversation_bloom"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_chairs_done")
+blocked_by_flags = PackedStringArray("moss_bloom_seen")
+lines = PackedStringArray("It bloomed... last night. You just missed it.", "...", "I'm teasing. It's blooming now. Look up. Through the dome.", "> ...Oh.", "Ninety-one years, for that. Worth it. Everything slow is worth it.")
+sets_flags = PackedStringArray("moss_bloom_seen")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("moss_met")
+lines = PackedStringArray("The board's by the ferns, dear. The ferns... are by the board.", "The jellyfish come through every season. They like the light from the dome.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Welcome... to the Orbital Arboretum. Mind the moss. It's sleeping.", "If you're hauling, the board's by the ferns.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Dr. Shelby Moss (The Orbital Arboretum)"
+species = "tortoise"
+voice_pitch = 0.5
+voice_type = "soft"
+voice_key = 7
+voice_scale = "dreamy"
+lines = PackedStringArray("Welcome... to the Arboretum.")
+comm_name = "DR. MOSS · ARBORETUM"
+fur_color = Color(0.48, 0.6, 0.36, 1)
+accent_color = Color(0.5, 1, 0.5, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_meet"), SubResource("Conversation_bees"), SubResource("Conversation_bees_wait"), SubResource("Conversation_sapling"), SubResource("Conversation_sapling_wait"), SubResource("Conversation_chairs"), SubResource("Conversation_chairs_wait"), SubResource("Conversation_bloom"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

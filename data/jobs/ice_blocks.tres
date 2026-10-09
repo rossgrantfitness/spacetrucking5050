@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "ice_blocks"
+cargo_name = "Comet ice blocks (for Gill's fish)"
+client_name = "Tidewater Cannery"
+description = "Gill's cannery runs on ice. Penny's comet ice is the coldest there is."
+from_place = "creamery"
+to_place = "tidewater"
+weight = 3200000000.0
+base_pay = 2300
+care_kind = "fragile"
+care_bonus = 0
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "frostline_open"
+completes_flag = ""

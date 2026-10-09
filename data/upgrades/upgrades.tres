@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="UpgradeList" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="2_upgrade"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_1.tres" id="u0"]
+[ext_resource type="Resource" path="res://data/upgrades/handling_1.tres" id="u1"]
+[ext_resource type="Resource" path="res://data/upgrades/tank_1.tres" id="u2"]
+[ext_resource type="Resource" path="res://data/upgrades/boost_tank_1.tres" id="u3"]
+[ext_resource type="Resource" path="res://data/upgrades/grip_1.tres" id="u4"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_2.tres" id="u5"]
+[ext_resource type="Resource" path="res://data/upgrades/tank_2.tres" id="u6"]
+[ext_resource type="Resource" path="res://data/upgrades/handling_2.tres" id="u7"]
+[ext_resource type="Resource" path="res://data/upgrades/speed_3.tres" id="u8"]
+[ext_resource type="Resource" path="res://data/upgrades/eco_injectors.tres" id="u9"]
+[ext_resource type="Resource" path="res://data/upgrades/solar_trim.tres" id="u10"]
+[ext_resource type="Resource" path="res://data/upgrades/cargo_cradles.tres" id="u11"]
+[ext_resource type="Resource" path="res://data/upgrades/bumper_bars.tres" id="u12"]
+[ext_resource type="Resource" path="res://data/upgrades/stacking_racks.tres" id="u13"]
+[ext_resource type="Resource" path="res://data/upgrades/zero_g_suspension.tres" id="u14"]
+[ext_resource type="Resource" path="res://data/upgrades/long_range_radar.tres" id="u15"]
+[ext_resource type="Resource" path="res://data/upgrades/docking_computer.tres" id="u16"]
+[ext_resource type="Resource" path="res://data/upgrades/air_horn.tres" id="u17"]
+[ext_resource type="Resource" path="res://data/upgrades/light_bar.tres" id="u18"]
+
+[resource]
+script = ExtResource("1_list")
+upgrades = Array[ExtResource("2_upgrade")]([ExtResource("u0"), ExtResource("u1"), ExtResource("u2"), ExtResource("u3"), ExtResource("u4"), ExtResource("u5"), ExtResource("u6"), ExtResource("u7"), ExtResource("u8"), ExtResource("u9"), ExtResource("u10"), ExtResource("u11"), ExtResource("u12"), ExtResource("u13"), ExtResource("u14"), ExtResource("u15"), ExtResource("u16"), ExtResource("u17"), ExtResource("u18")])

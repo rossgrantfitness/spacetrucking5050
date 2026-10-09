@@ -1,0 +1,178 @@
+[gd_resource type="Resource" script_class="EmailList" format=3]
+
+[ext_resource type="Script" path="res://data/pc/EmailList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/pc/EmailData.gd" id="2_email"]
+
+[sub_resource type="Resource" id="Email_0"]
+script = ExtResource("2_email")
+id = "hq_memo"
+from_name = "ORBITALEX HQ"
+subject = "Memo: you now live in your truck"
+body = "Effective immediately, all drivers live in their rigs. This saves on rent. It does not, but it saves on the paperwork about rent. Your apartment, hallway and a dispatch office have been fitted behind your cab. Thank you for your service. - Management"
+
+[sub_resource type="Resource" id="Email_1"]
+script = ExtResource("2_email")
+id = "dottie_moving_day"
+from_name = "RACCOONY (DISPATCH)"
+subject = "Moving day!!"
+body = "Hon, the company says the office rides with you now, so I've set up dispatch behind the cab. Coffee's on the left. My chair is not up for discussion. Marge at the truck stop has work for you: she's right outside, through the airlock. - D"
+
+[sub_resource type="Resource" id="Email_2"]
+script = ExtResource("2_email")
+id = "carrot_coin"
+from_name = "CARROT-COIN REWARDS"
+subject = "YOU HAVE WON A CARROT!!!"
+body = "Click nothing. Do nothing. A carrot has been reserved in your name at a warehouse four light years away. Shipping not included. Carrot not guaranteed. Carrot may be a turnip."
+
+[sub_resource type="Resource" id="Email_3"]
+script = ExtResource("2_email")
+id = "trucker_monthly"
+from_name = "SPACE TRUCKER MONTHLY"
+subject = "Issue 812 is here"
+body = "This month: Ten Rest Stops That Are Technically Inside A Whale. Is Your Bobblehead Judging You? (Yes.) Plus: our readers rank every drive-through that has ever said 'pull around'."
+
+[sub_resource type="Resource" id="Email_4"]
+script = ExtResource("2_email")
+id = "stellar_mutual"
+from_name = "STELLAR MUTUAL"
+subject = "Your hull is not insured"
+body = "Your hull is not insured! It is also not uninsured. We checked. It's complicated. Call us during business hours, which are a feeling more than a time."
+
+[sub_resource type="Resource" id="Email_5"]
+script = ExtResource("2_email")
+id = "horoscope"
+from_name = "COSMIC HOROSCOPE"
+subject = "Rabbits: this week"
+body = "Mercury is in retrograde, which in your sector means the vending machine in the hallway eats coins. Avoid it. Lucky number: 5050. Lucky snack: whatever's in the cup holder."
+
+[sub_resource type="Resource" id="Email_6"]
+script = ExtResource("2_email")
+id = "lily_prices"
+from_name = "LILY'S PUMPS"
+subject = "re: fuel prices"
+body = "Hi hi! Prices are fixed, hon, I don't make the rules, I just wear the visor. Coasting's free everywhere. Tell your friends. Do you have friends? Tell them anyway. - Lily"
+requires_flag = "met_marge"
+
+[sub_resource type="Resource" id="Email_7"]
+script = ExtResource("2_email")
+id = "marge_pies"
+from_name = "MARGE"
+subject = "you did good"
+body = "Gill says the pies got there in one piece. That's a first. Come by for coffee, on the house. The coffee, not the house. - M"
+requires_flag = "first_mission_done"
+
+[sub_resource type="Resource" id="Email_8"]
+script = ExtResource("2_email")
+id = "sal_cards"
+from_name = "SAL GRINWELL"
+subject = "A GOLDEN OPPORTUNITY, CHAMP"
+body = "Champ! Sal Grinwell, The High Roller, Glimmer System. I need cards. Lots of cards. Forty thousand decks. Raccoony has the paperwork. Don't tell him I said paperwork, he hates that. Smiles, Sal"
+requires_flag = "glimmer_heard"
+
+[sub_resource type="Resource" id="Email_9"]
+script = ExtResource("2_email")
+id = "high_roller_promo"
+from_name = "THE HIGH ROLLER"
+subject = "Your FREE spin is waiting!"
+body = "Come try the Lucky Molar, Glimmer's friendliest slot machine! Ten credits a pull! The house always wins, but it wins NICELY. (Terms, conditions and teeth apply.)"
+requires_flag = "glimmer_open"
+
+[sub_resource type="Resource" id="Email_10"]
+script = ExtResource("2_email")
+id = "no_subject"
+from_name = "(UNKNOWN SENDER)"
+subject = "(no subject)"
+body = "saw your rig at the casino. same color he used to drive. thought you should know somebody else remembers."
+requires_flag = "sal_mentioned_rig"
+
+[sub_resource type="Resource" id="Email_11"]
+script = ExtResource("2_email")
+id = "orbitalex_billing"
+from_name = "ORBITALEX BILLING"
+subject = "Your weekly statement"
+body = "Thank you for choosing OrbitalEx for your berth, your dispatch, your jobs, and your entire life. This week's fee has been collected. If you could not pay, it is on your tab. We do not charge interest. We do not need to. We have patience, and a lot of paperwork. - Billing"
+requires_flag = "first_bills"
+
+[sub_resource type="Resource" id="Email_12"]
+script = ExtResource("2_email")
+id = "dottie_tab"
+from_name = "RACCOONY (DISPATCH)"
+subject = "about that tab"
+body = "Hon, billing says you're running a tab. Don't you worry about it, it comes out of your next job, nobody's breaking any kneecaps. I told them you're good for it. You ARE good for it. Eat something. - D"
+requires_flag = "ran_a_tab"
+
+[sub_resource type="Resource" id="Email_13"]
+script = ExtResource("2_email")
+id = "dusty_level"
+from_name = "DUSTY'S GARAGE"
+subject = "your rig's coming along"
+body = "Noticed your rig's got some miles on her now. Rigs settle in, you know. Engines loosen up, she starts listening to you. I've got parts that only fit a rig that knows what it's doing. Come by. - Dusty"
+requires_flag = "rig_level_3"
+
+[sub_resource type="Resource" id="Email_white_pie"]
+script = ExtResource("2_email")
+id = "white_order"
+from_name = "MARGE (TRUCK STOP)"
+subject = "his order"
+body = "Five months left on his order. They'll keep going out, one a month. I'm not asking you to drive them, hon. Anybody can.\n\nBut it got there warm. Thought you should know. -M"
+requires_flag = "white_pie_done"
+
+[sub_resource type="Resource" id="Email_white_claims"]
+script = ExtResource("2_email")
+id = "orbitalex_claims"
+from_name = "ORBITALEX CLAIMS"
+subject = "Re: Claim #4381"
+body = "Storage fees on impounded cargo #4381 have been waived at the request of the regional manager.\n\nThis is not an admission of anything.\n\nThe regional manager asks us to add that he does not have feelings. - Claims"
+requires_flag = "white_story_done"
+
+[sub_resource type="Resource" id="Email_b4_mags_scrap"]
+script = ExtResource("2_email")
+id = "mags_scrap"
+from_name = "HOOF & HULL SALVAGE"
+subject = "re: scrap"
+body = "Need scrap. Yes, I know what I run. Raccoony has the details. Bring it in one piece or several, don't care. - M. Hoofmann"
+requires_flag = "dustbowl_heard"
+
+[sub_resource type="Resource" id="Email_b4_dustbowl_storms"]
+script = ExtResource("2_email")
+id = "dustbowl_storms"
+from_name = "DUSTBOWL WEATHER SERVICE"
+subject = "Storm advisory (always)"
+body = "Today: dust. Tonight: dust. Tomorrow: a chance of dust, followed by dust. Drive slow, close your vents, and do not lick the windshield."
+requires_flag = "dustbowl_open"
+
+[sub_resource type="Resource" id="Email_b4_moss_soil"]
+script = ExtResource("2_email")
+id = "moss_soil"
+from_name = "DR. SHELBY MOSS"
+subject = "soil (please)"
+body = "Dear driver, I would like some soil. Good soil. From a nice planet. Raccoony has the order. There's no rush. There's never a rush. Warmly, Dr. S. Moss (The Orbital Arboretum, Greenhouse Reach)"
+requires_flag = "greenhouse_heard"
+
+[sub_resource type="Resource" id="Email_b4_moss_bloom"]
+script = ExtResource("2_email")
+id = "moss_bloom"
+from_name = "DR. SHELBY MOSS"
+subject = "it's soon"
+body = "The big tree is going to bloom. You're invited. Bring a sweater. And a chair, if the chairs haven't come. - S."
+requires_flag = "moss_called_chairs"
+
+[sub_resource type="Resource" id="Email_b4_penny_cones"]
+script = ExtResource("2_email")
+id = "penny_cones"
+from_name = "PENNY FLURRY"
+subject = "CONES!!!"
+body = "Hi!!! Penny from Flurry's Comet Creamery!!! Top of the map!!! I need two billion waffle cones and Raccoony says you're the best driver!!! Please don't break them!!! - P"
+requires_flag = "frostline_heard"
+
+[sub_resource type="Resource" id="Email_b4_penny_flavor"]
+script = ExtResource("2_email")
+id = "penny_flavor"
+from_name = "FLURRY'S COMET CREAMERY"
+subject = "New flavor alert!"
+body = "Introducing JACKI'S LONG HAUL: vanilla, a bit of coffee, a crunchy bit you don't expect. Named after our favorite (only) returning trucker. Free scoop with every visit!"
+requires_flag = "penny_after"
+
+[resource]
+script = ExtResource("1_list")
+emails = Array[ExtResource("2_email")]([SubResource("Email_0"), SubResource("Email_1"), SubResource("Email_2"), SubResource("Email_3"), SubResource("Email_4"), SubResource("Email_5"), SubResource("Email_6"), SubResource("Email_7"), SubResource("Email_8"), SubResource("Email_9"), SubResource("Email_10"), SubResource("Email_11"), SubResource("Email_12"), SubResource("Email_13"), SubResource("Email_white_pie"), SubResource("Email_white_claims"), SubResource("Email_b4_mags_scrap"), SubResource("Email_b4_dustbowl_storms"), SubResource("Email_b4_moss_soil"), SubResource("Email_b4_moss_bloom"), SubResource("Email_b4_penny_cones"), SubResource("Email_b4_penny_flavor")])

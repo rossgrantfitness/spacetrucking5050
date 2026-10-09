@@ -1,0 +1,146 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_c6g7y"]
+[ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_xv3pc"]
+[ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="4_r2dc6"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="5_hfw02"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_wnckg"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="7_36i2x"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn" id="8_ilkmg"]
+[ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="9_c3mga"]
+
+[node name="FrostlineRoad" type="Node3D" unique_id=23688370]
+
+[node name="BigSnowman" type="Node3D" parent="." unique_id=1159621266]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 6255.534, 18436.424, -33572.3)
+script = ExtResource("2_c6g7y")
+kind = 12
+log_id = "big_snowman"
+
+[node name="GiantCone" type="Node3D" parent="." unique_id=1411833977]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 5163.1357, 37188.4, -57454.723)
+script = ExtResource("2_c6g7y")
+kind = 13
+log_id = "giant_cone"
+
+[node name="LastScoop" type="Node3D" parent="." unique_id=2062376277]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 9610.602, 42860.547, -65112.844)
+script = ExtResource("2_c6g7y")
+kind = 3
+label = "THE LAST SCOOP"
+log_id = "derelict"
+
+[node name="Billboard440Km" type="Node3D" parent="." unique_id=1147917534]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 5910.1777, 27134.754, -44732.977)
+script = ExtResource("3_xv3pc")
+headline = "WELCOME TO THE FROSTLINE"
+tagline = "TOP OF THE MAP · BRING A SWEATER"
+log_id = "billboard"
+
+[node name="Billboard490Km" type="Node3D" parent="." unique_id=1662405150]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 5497.426, 30207.494, -48791.234)
+script = ExtResource("3_xv3pc")
+headline = "ALMOST THERE"
+tagline = "(NO YOU'RE NOT)"
+log_id = "billboard"
+
+[node name="Billboard540Km" type="Node3D" parent="." unique_id=1952700165]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 7139.273, 33280.23, -52525.438)
+script = ExtResource("3_xv3pc")
+headline = "HAVE YOU SEEN THE SNOWMAN?"
+tagline = "WHO BUILT IT? WE NEED TO KNOW"
+log_id = "billboard"
+
+[node name="Billboard610Km" type="Node3D" parent="." unique_id=898373386]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 6972.3394, 37582.06, -58142.19)
+script = ExtResource("3_xv3pc")
+headline = "TRY: NEBULA SWIRL"
+tagline = "OR PLAIN. PLAIN IS ALSO GOOD."
+log_id = "billboard"
+
+[node name="Billboard670Km" type="Node3D" parent="." unique_id=802000596]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 8737.096, 41269.348, -62655.637)
+script = ExtResource("3_xv3pc")
+headline = "BRAIN FREEZE?"
+tagline = "KEEP DRIVING"
+log_id = "billboard"
+
+[node name="Billboard740Km" type="Node3D" parent="." unique_id=17882480]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 8570.162, 45571.176, -68272.39)
+script = ExtResource("3_xv3pc")
+headline = "FLURRY'S COMET CREAMERY"
+tagline = "COLDEST CONES IN THE GALAXY"
+log_id = "billboard"
+
+[node name="Storm48Km" type="Node3D" parent="." unique_id=1884425231]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 5899.656, 29498.28, -48003.816)
+script = ExtResource("4_r2dc6")
+radius = 2400.0
+tint = Color(0.8, 0.65, 1, 1)
+log_id = "ion_storm"
+
+[node name="Storm58Km" type="Node3D" parent="." unique_id=1940738421]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 7425.0874, 35643.754, -55749.54)
+script = ExtResource("4_r2dc6")
+radius = 2200.0
+tint = Color(0.8, 0.65, 1, 1)
+log_id = "ion_storm"
+
+[node name="Storm68Km" type="Node3D" parent="." unique_id=1593095225]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 8061.5093, 41789.23, -63635.484)
+script = ExtResource("4_r2dc6")
+radius = 2400.0
+tint = Color(0.8, 0.65, 1, 1)
+log_id = "ion_storm"
+
+[node name="IceField" type="Node3D" parent="." unique_id=641430877]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 6391.2935, 31956.47, -51120.8)
+script = ExtResource("5_hfw02")
+lane_starts = PackedVector3Array()
+lane_ends = PackedVector3Array()
+rock_count = 300
+field_size = Vector3(2200, 700, 2600)
+rock_radius_range = Vector2(4, 30)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 3501
+rock_colors = PackedColorArray(0.75, 0.9, 1, 1, 0.6, 0.8, 0.9, 1, 0.85, 0.95, 0.95, 1, 0.75, 0.7, 0.95, 1)
+
+[node name="IceField2" type="Node3D" parent="." unique_id=900542770]
+transform = Transform3D(0.9877882, -0.09574807, -0.12290949, 0, 0.7888798, -0.6145475, 0.15580255, 0.6070428, 0.77924615, 7866.2075, 39331.04, -60471.758)
+script = ExtResource("5_hfw02")
+lane_starts = PackedVector3Array()
+lane_ends = PackedVector3Array()
+rock_count = 320
+field_size = Vector3(2200, 700, 2600)
+rock_radius_range = Vector2(4, 30)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 3502
+rock_colors = PackedColorArray(0.75, 0.9, 1, 1, 0.6, 0.8, 0.9, 1, 0.85, 0.95, 0.95, 1, 0.75, 0.7, 0.95, 1)
+
+[node name="IceHauler" type="Node3D" parent="." unique_id=1536728033]
+script = ExtResource("6_wnckg")
+visual_scene = ExtResource("7_36i2x")
+waypoints = PackedVector3Array(412.81607, 992.82043, -11676.843, 3672.6213, 17054.78, -32035.93, 7018.134, 34070.113, -53554.563, 9810.56, 47981.54, -71258.54, 9397.876, 48288.813, -71722.945, 6551.655, 34007.004, -53677.914, 3103.6555, 17054.78, -32125.672, -61.322266, 992.82043, -11751.628)
+speed = 60.0
+start_fraction = 0.25
+engine_trail_color = Color(0.75, 0.85, 1, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "COMET ICE HAULER"
+
+[node name="SnowPlow" type="Node3D" parent="." unique_id=2053312478]
+script = ExtResource("6_wnckg")
+visual_scene = ExtResource("8_ilkmg")
+waypoints = PackedVector3Array(-85.514114, 866.5996, -11854.987, 3071.5613, 16928.559, -32230.277, 6519.8037, 33943.89, -53732.707, 9312.229, 47855.316, -71436.68, 9926.846, 48162.59, -71739.055, 7080.6245, 33880.78, -53694.02, 3735.3552, 16928.559, -32125.578, 467.6473, 866.5996, -11767.737)
+speed = 80.0
+start_fraction = 0.65
+engine_trail_color = Color(1, 0.75, 0.3, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "SPACE SNOWPLOW (OFF DUTY)"
+
+[node name="SpacewayFrostline" type="MultiMeshInstance3D" parent="." unique_id=694733392]
+script = ExtResource("9_c3mga")
+points = PackedVector3Array(110.61854, 553.0927, -11301.321, 9705.018, 48525.086, -72129.81)
+left_color = Color(0.8, 0.65, 1, 1)
+right_color = Color(0.6, 0.85, 1, 1)

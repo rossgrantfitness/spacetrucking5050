@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Officer Tibbs (Weigh Station 9)"
+species = "tortoise"
+voice_pitch = 0.6
+voice_type = "square"
+voice_key = 7
+voice_scale = "major"
+lines = PackedStringArray("Pull onto the scale, please. Slowly. Everything slowly.")
+comm_name = "TIBBS · WEIGH STATION 9"
+fur_color = Color(0.5, 0.65, 0.4, 1)
+accent_color = Color(0.3, 0.5, 0.95, 1)

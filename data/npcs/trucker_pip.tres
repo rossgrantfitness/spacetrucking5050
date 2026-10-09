@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Can't talk! High score! Okay I can talk. What's up?", "Fun fact: boosting makes your rig slide like a bar of soap. Fun fact two: I boost everywhere.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Pip (courier)"
+species = "hamster"
+voice_pitch = 1.9
+voice_type = "chirp"
+voice_key = 9
+voice_scale = "major"
+lines = PackedStringArray("Can't talk! High score! Okay I can talk. What's up?")
+comm_name = "PIP · COURIER"
+fur_color = Color(0.98, 0.78, 0.5, 1)
+accent_color = Color(1, 0.45, 0.35, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0")])

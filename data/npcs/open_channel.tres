@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Channel 19 (open comm)"
+species = "static"
+voice_pitch = 1.0
+voice_type = "square"
+voice_key = 1
+voice_scale = "minor"
+lines = PackedStringArray("...kssht...")
+comm_name = "CH 19 · OPEN"
+fur_color = Color(0.5, 0.5, 0.55, 1)
+accent_color = Color(0.9, 0.9, 0.9, 1)

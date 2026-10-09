@@ -1,0 +1,989 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/set_surface.gdshader" id="1_ay7qs"]
+[ext_resource type="Texture2D" path="res://textures/interior/floor_tiles.png" id="2_f5mco"]
+[ext_resource type="Texture2D" path="res://textures/generated/paint_grain.png" id="3_dff3r"]
+[ext_resource type="Texture2D" path="res://textures/interior/wall_panels.png" id="4_gxltl"]
+[ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="5_ca00a"]
+[ext_resource type="Texture2D" path="res://textures/interior/hazard_stripes.png" id="6_l67je"]
+[ext_resource type="Texture2D" path="res://textures/interior/terminal.png" id="7_m5f1r"]
+[ext_resource type="Texture2D" path="res://textures/generated/job_board.png" id="8_7d2wx"]
+[ext_resource type="Texture2D" path="res://textures/interior/machinery.png" id="9_6gok2"]
+[ext_resource type="Texture2D" path="res://textures/interior/door.png" id="10_aq0kj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_skdub"]
+size = Vector3(10, 0.2, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wbfbu"]
+size = Vector3(10, 0.2, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14vce"]
+size = Vector3(10, 6, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2mips"]
+size = Vector3(10, 6, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dpgnt"]
+size = Vector3(0.2, 6, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_toynj"]
+size = Vector3(0.2, 6, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4w45e"]
+size = Vector3(4, 0.85, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qk1tu"]
+size = Vector3(4.4, 0.45, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nklxl"]
+size = Vector3(0.4, 2.6, 2.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ucv6t"]
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yj0dw"]
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4gnmp"]
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_08nsu"]
+size = Vector3(0.45, 0.5, 0.45)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u6v2p"]
+size = Vector3(2.6, 0.1, 5.3665633)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rx4ni"]
+size = Vector3(2.6, 2.4, 2.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cfqj1"]
+size = Vector3(0.15, 2.4, 3.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eedue"]
+size = Vector3(0.15, 1.2, 2.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4by70"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("2_f5mco")
+shader_parameter/meters = 1.2
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_wtcd7"]
+material = SubResource("ShaderMaterial_4by70")
+size = Vector3(10, 0.2, 9)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f0q38"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.2, 0.2, 0.28, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_5d4dp"]
+material = SubResource("ShaderMaterial_f0q38")
+size = Vector3(10, 0.2, 9)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mavu6"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.45, 0.5, 0.7, 1)
+shader_parameter/albedo_texture = ExtResource("4_gxltl")
+shader_parameter/meters = 2.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_m4vsx"]
+material = SubResource("ShaderMaterial_mavu6")
+size = Vector3(10, 6, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cvqu8"]
+material = SubResource("ShaderMaterial_mavu6")
+size = Vector3(0.2, 6, 9)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jjygq"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.85, 0.6, 0.35, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_pg1sr"]
+material = SubResource("ShaderMaterial_jjygq")
+size = Vector3(4, 0.85, 0.8)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ab54f"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.25, 0.25, 0.3, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_qf2kh"]
+material = SubResource("ShaderMaterial_ab54f")
+size = Vector3(4.2, 0.06, 0.95)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dwjtt"]
+render_priority = 0
+shader = ExtResource("5_ca00a")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("6_l67je")
+shader_parameter/uv_scale = Vector2(0.5, 0.5)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_p6lga"]
+material = SubResource("ShaderMaterial_dwjtt")
+size = Vector3(4.02, 0.12, 0.02)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0k0ga"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.32, 0.32, 0.4, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_iidgn"]
+material = SubResource("ShaderMaterial_0k0ga")
+size = Vector3(4.4, 0.45, 1.8)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fymsy"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.85, 0.82, 0.74, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_1yklm"]
+material = SubResource("ShaderMaterial_fymsy")
+size = Vector3(0.5, 0.4, 0.4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_txjka"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.15, 0.15, 0.15, 0.15)
+shader_parameter/albedo_texture = ExtResource("7_m5f1r")
+shader_parameter/meters = 0.4
+shader_parameter/emission = Color(1, 1, 1, 1)
+shader_parameter/emission_strength = 1.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_2ejl8"]
+material = SubResource("ShaderMaterial_txjka")
+size = Vector3(0.4, 0.3, 0.02)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4l8cw"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.95, 0.9, 0.85, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rgpjq"]
+material = SubResource("ShaderMaterial_4l8cw")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.12
+radial_segments = 8
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q0xry"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.9, 0.8, 0.4, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qe70b"]
+material = SubResource("ShaderMaterial_q0xry")
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rlt0w"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.96, 0.95, 0.9, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_rabie"]
+material = SubResource("ShaderMaterial_rlt0w")
+size = Vector3(0.3, 0.04, 0.22)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g07xi"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.9, 0.3, 0.3, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_duyg1"]
+material = SubResource("ShaderMaterial_g07xi")
+size = Vector3(0.2, 0.3, 0.15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ehm8t"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("8_7d2wx")
+shader_parameter/meters = 2.6
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_d5yk3"]
+material = SubResource("ShaderMaterial_ehm8t")
+size = Vector3(2.6, 1.3, 0.05)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xtlj6"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.2, 0.2, 0.26, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_rwfa0"]
+material = SubResource("ShaderMaterial_xtlj6")
+size = Vector3(4, 1.1, 0.05)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epr4l"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.9, 0.9, 1, 1)
+shader_parameter/albedo_texture = ExtResource("9_6gok2")
+shader_parameter/meters = 2.2
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_r4psv"]
+material = SubResource("ShaderMaterial_epr4l")
+size = Vector3(0.4, 2.6, 2.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2mna1"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.3, 0.6, 0.62, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_7vur6"]
+material = SubResource("ShaderMaterial_2mna1")
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_00iqy"]
+material = SubResource("ShaderMaterial_2mna1")
+size = Vector3(0.08, 0.5, 0.55)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhpdr"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.75, 0.4, 0.3, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_ambnh"]
+material = SubResource("ShaderMaterial_hhpdr")
+size = Vector3(0.45, 0.5, 0.45)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sanqa"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.35, 0.7, 0.35, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_gyke3"]
+material = SubResource("ShaderMaterial_sanqa")
+size = Vector3(0.1, 0.7, 0.25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yuj5m"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("10_aq0kj")
+shader_parameter/meters = 2.2
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_xopar"]
+material = SubResource("ShaderMaterial_yuj5m")
+size = Vector3(1.2, 2.2, 0.06)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_12bb2"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.18, 0.18, 0.24, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_gbwm7"]
+material = SubResource("ShaderMaterial_12bb2")
+size = Vector3(1.45, 2.4, 0.04)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d708j"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.5, 0.53, 0.62, 1)
+shader_parameter/albedo_texture = ExtResource("2_f5mco")
+shader_parameter/meters = 1.2
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_0u8xj"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 0.3, 0.6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5f201"]
+render_priority = 0
+shader = ExtResource("5_ca00a")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("6_l67je")
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_u246d"]
+material = SubResource("ShaderMaterial_5f201")
+size = Vector3(2.6, 0.03, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_88721"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 0.6, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bed3d"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 0.9, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_glarc"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 1.2, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8wtq4"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 1.5, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7p0hc"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 1.8, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rvg3b"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 2.1, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_odf00"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 2.4, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6a7i6"]
+material = SubResource("ShaderMaterial_d708j")
+size = Vector3(2.6, 2.4, 2.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5tu67"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 0.8, 0.2, 1)
+shader_parameter/albedo_texture = ExtResource("3_dff3r")
+shader_parameter/meters = 1.5
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_1pcux"]
+material = SubResource("ShaderMaterial_5tu67")
+size = Vector3(0.06, 0.06, 5.3665633)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sggt6"]
+material = SubResource("ShaderMaterial_5tu67")
+size = Vector3(0.06, 0.06, 2.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wcld0"]
+material = SubResource("ShaderMaterial_xtlj6")
+size = Vector3(1.6, 0.8, 0.05)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtgec"]
+render_priority = 0
+shader = ExtResource("1_ay7qs")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.135, 0.1425, 0.15, 0.15)
+shader_parameter/meters = 1.0
+shader_parameter/emission = Color(0.9, 0.95, 1, 1)
+shader_parameter/emission_strength = 1.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_f5mdu"]
+material = SubResource("ShaderMaterial_mtgec")
+size = Vector3(1.6, 0.05, 0.6)
+
+[node name="DispatchSet" type="Node3D" unique_id=2136872931]
+
+[node name="Collision" type="StaticBody3D" parent="." unique_id=1146630667]
+
+[node name="FloorShape" type="CollisionShape3D" parent="Collision" unique_id=385629696]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_skdub")
+
+[node name="CeilingShape" type="CollisionShape3D" parent="Collision" unique_id=195536474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1, 0)
+shape = SubResource("BoxShape3D_wbfbu")
+
+[node name="WallBackShape" type="CollisionShape3D" parent="Collision" unique_id=862247346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.6)
+shape = SubResource("BoxShape3D_14vce")
+
+[node name="WallFrontShape" type="CollisionShape3D" parent="Collision" unique_id=1294888484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 4.6)
+shape = SubResource("BoxShape3D_2mips")
+
+[node name="WallLeftShape" type="CollisionShape3D" parent="Collision" unique_id=1717206968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, 3, 0)
+shape = SubResource("BoxShape3D_dpgnt")
+
+[node name="WallRightShape" type="CollisionShape3D" parent="Collision" unique_id=1614878265]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 3, 0)
+shape = SubResource("BoxShape3D_toynj")
+
+[node name="CounterShape" type="CollisionShape3D" parent="Collision" unique_id=356381227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.43, -2)
+shape = SubResource("BoxShape3D_4w45e")
+
+[node name="ClerkPlatformShape" type="CollisionShape3D" parent="Collision" unique_id=652456648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.225, -3.3)
+shape = SubResource("BoxShape3D_qk1tu")
+
+[node name="MachineBankShape" type="CollisionShape3D" parent="Collision" unique_id=1545379807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 1.3, -3.3)
+shape = SubResource("BoxShape3D_nklxl")
+
+[node name="ChairShape" type="CollisionShape3D" parent="Collision" unique_id=1549745143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 1)
+shape = SubResource("BoxShape3D_ucv6t")
+
+[node name="Chair2Shape" type="CollisionShape3D" parent="Collision" unique_id=1990372798]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 1.8)
+shape = SubResource("BoxShape3D_yj0dw")
+
+[node name="Chair3Shape" type="CollisionShape3D" parent="Collision" unique_id=277571697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 2.6)
+shape = SubResource("BoxShape3D_4gnmp")
+
+[node name="PlantPotShape" type="CollisionShape3D" parent="Collision" unique_id=1605709604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.25, -0.2)
+shape = SubResource("BoxShape3D_08nsu")
+
+[node name="StairRamp" type="CollisionShape3D" parent="Collision" unique_id=1602155625]
+transform = Transform3D(1, 0, 0, 0, 0.8944272, -0.4472136, 0, 0.4472136, 0.8944272, 3.6, 1.2, 0.1)
+shape = SubResource("BoxShape3D_u6v2p")
+
+[node name="LandingShape" type="CollisionShape3D" parent="Collision" unique_id=929032044]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.2, -3.4)
+shape = SubResource("BoxShape3D_rx4ni")
+
+[node name="StairSide" type="CollisionShape3D" parent="Collision" unique_id=1034997923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 1.2, -0.6)
+shape = SubResource("BoxShape3D_cfqj1")
+
+[node name="LandingEdge" type="CollisionShape3D" parent="Collision" unique_id=294297998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 3, -3.4)
+shape = SubResource("BoxShape3D_eedue")
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1373626533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mesh = SubResource("BoxMesh_wtcd7")
+
+[node name="Ceiling" type="MeshInstance3D" parent="." unique_id=394518000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1, 0)
+mesh = SubResource("BoxMesh_5d4dp")
+
+[node name="WallBack" type="MeshInstance3D" parent="." unique_id=1807984596]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.6)
+mesh = SubResource("BoxMesh_m4vsx")
+
+[node name="WallFront" type="MeshInstance3D" parent="." unique_id=1053755090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 4.6)
+mesh = SubResource("BoxMesh_m4vsx")
+
+[node name="WallLeft" type="MeshInstance3D" parent="." unique_id=1029607827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, 3, 0)
+mesh = SubResource("BoxMesh_cvqu8")
+
+[node name="WallRight" type="MeshInstance3D" parent="." unique_id=1788723457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 3, 0)
+mesh = SubResource("BoxMesh_cvqu8")
+
+[node name="Counter" type="MeshInstance3D" parent="." unique_id=1294356454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.43, -2)
+mesh = SubResource("BoxMesh_pg1sr")
+
+[node name="CounterTop" type="MeshInstance3D" parent="." unique_id=844191398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.88, -2)
+mesh = SubResource("BoxMesh_qf2kh")
+
+[node name="CounterStripe" type="MeshInstance3D" parent="." unique_id=268695366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.62, -1.59)
+mesh = SubResource("BoxMesh_p6lga")
+
+[node name="ClerkPlatform" type="MeshInstance3D" parent="." unique_id=698283370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.225, -3.3)
+mesh = SubResource("BoxMesh_iidgn")
+
+[node name="DeskMonitor" type="MeshInstance3D" parent="." unique_id=43916404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1.12, -2.1)
+mesh = SubResource("BoxMesh_1yklm")
+
+[node name="DeskScreen" type="MeshInstance3D" parent="." unique_id=1005285859]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4, 1.13, -2.31)
+mesh = SubResource("BoxMesh_2ejl8")
+
+[node name="Mug" type="MeshInstance3D" parent="." unique_id=1434257098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.97, -1.8)
+mesh = SubResource("CylinderMesh_rgpjq")
+
+[node name="Bell" type="MeshInstance3D" parent="." unique_id=273669342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.93, -1.7)
+mesh = SubResource("CylinderMesh_qe70b")
+
+[node name="Papers" type="MeshInstance3D" parent="." unique_id=1132174426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.93, -1.85)
+mesh = SubResource("BoxMesh_rabie")
+
+[node name="TicketMachine" type="MeshInstance3D" parent="." unique_id=1240396573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.05, -1.75)
+mesh = SubResource("BoxMesh_duyg1")
+
+[node name="JobBoard" type="MeshInstance3D" parent="." unique_id=1220673330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 2.1, -4.47)
+mesh = SubResource("BoxMesh_d5yk3")
+
+[node name="SignBacking" type="MeshInstance3D" parent="." unique_id=810901553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3.55, -4.47)
+mesh = SubResource("BoxMesh_rwfa0")
+
+[node name="DispatchSign" type="Label3D" parent="." unique_id=1149744345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3.75, -4.4)
+pixel_size = 0.007
+modulate = Color(1, 0.8, 0.3, 1)
+outline_modulate = Color(0.25, 0.05, 0.3, 1)
+text = "DISPATCH"
+font_size = 96
+outline_size = 16
+
+[node name="Motto" type="Label3D" parent="." unique_id=1607595538]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3.2, -4.4)
+pixel_size = 0.0025
+modulate = Color(0.4, 0.95, 1, 1)
+outline_modulate = Color(0.25, 0.05, 0.3, 1)
+text = "WE MOVE IT SO YOU DON'T HAVE TO"
+font_size = 96
+outline_size = 16
+
+[node name="MachineBank" type="MeshInstance3D" parent="." unique_id=1999288758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 1.3, -3.3)
+mesh = SubResource("BoxMesh_r4psv")
+
+[node name="Chair" type="MeshInstance3D" parent="." unique_id=1674258378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 1)
+mesh = SubResource("BoxMesh_7vur6")
+
+[node name="ChairBack" type="MeshInstance3D" parent="." unique_id=1167395542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 0.7, 1)
+mesh = SubResource("BoxMesh_00iqy")
+
+[node name="Chair2" type="MeshInstance3D" parent="." unique_id=514380097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 1.8)
+mesh = SubResource("BoxMesh_7vur6")
+
+[node name="ChairBack2" type="MeshInstance3D" parent="." unique_id=1661115031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 0.7, 1.8)
+mesh = SubResource("BoxMesh_00iqy")
+
+[node name="Chair3" type="MeshInstance3D" parent="." unique_id=545563746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.23, 2.6)
+mesh = SubResource("BoxMesh_7vur6")
+
+[node name="ChairBack3" type="MeshInstance3D" parent="." unique_id=1836412742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 0.7, 2.6)
+mesh = SubResource("BoxMesh_00iqy")
+
+[node name="PlantPot" type="MeshInstance3D" parent="." unique_id=165038172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.25, -0.2)
+mesh = SubResource("BoxMesh_ambnh")
+
+[node name="Leaf" type="MeshInstance3D" parent="." unique_id=741249787]
+transform = Transform3D(1, 0, 0, 0, 0.90044713, -0.43496552, 0, 0.43496552, 0.90044713, -4.5, 0.85, -0.2)
+mesh = SubResource("BoxMesh_gyke3")
+
+[node name="Leaf2" type="MeshInstance3D" parent="." unique_id=1747757853]
+transform = Transform3D(0.31532237, 0.4127756, 0.8545105, 0, 0.90044713, -0.43496552, -0.9489846, 0.13715436, 0.28393114, -4.5, 0.85, -0.2)
+mesh = SubResource("BoxMesh_gyke3")
+
+[node name="Leaf3" type="MeshInstance3D" parent="." unique_id=1437605696]
+transform = Transform3D(-0.8011436, 0.26031473, 0.5388925, 0, 0.90044713, -0.43496552, -0.5984721, -0.34846982, -0.72138745, -4.5, 0.85, -0.2)
+mesh = SubResource("BoxMesh_gyke3")
+
+[node name="Leaf4" type="MeshInstance3D" parent="." unique_id=1287113438]
+transform = Transform3D(-0.8205594, -0.24860947, -0.5146608, 0, 0.90044713, -0.43496552, 0.57156134, -0.35691503, -0.7388703, -4.5, 0.85, -0.2)
+mesh = SubResource("BoxMesh_gyke3")
+
+[node name="Leaf5" type="MeshInstance3D" parent="." unique_id=1581610445]
+transform = Transform3D(0.2836622, -0.417099, -0.8634606, 0, 0.90044713, -0.43496552, 0.9589243, 0.123383276, 0.2554228, -4.5, 0.85, -0.2)
+mesh = SubResource("BoxMesh_gyke3")
+
+[node name="HallwayDoor" type="MeshInstance3D" parent="." unique_id=158469835]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.5, 1.1, 4.47)
+mesh = SubResource("BoxMesh_xopar")
+
+[node name="HallwayDoorFrame" type="MeshInstance3D" parent="." unique_id=1701345259]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.5, 1.1, 4.49)
+mesh = SubResource("BoxMesh_gbwm7")
+
+[node name="Step" type="MeshInstance3D" parent="." unique_id=351938329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.15, 2.2)
+mesh = SubResource("BoxMesh_0u8xj")
+
+[node name="StepEdge" type="MeshInstance3D" parent="." unique_id=513616462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.31, 1.93)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step2" type="MeshInstance3D" parent="." unique_id=1508867010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.3, 1.6)
+mesh = SubResource("BoxMesh_88721")
+
+[node name="StepEdge2" type="MeshInstance3D" parent="." unique_id=1532196201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.61, 1.33)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step3" type="MeshInstance3D" parent="." unique_id=303526640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.45, 1)
+mesh = SubResource("BoxMesh_bed3d")
+
+[node name="StepEdge3" type="MeshInstance3D" parent="." unique_id=765633631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.91, 0.73)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step4" type="MeshInstance3D" parent="." unique_id=1605324708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.6, 0.4)
+mesh = SubResource("BoxMesh_glarc")
+
+[node name="StepEdge4" type="MeshInstance3D" parent="." unique_id=2024947398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.21, 0.13)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step5" type="MeshInstance3D" parent="." unique_id=351076169]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.75, -0.2)
+mesh = SubResource("BoxMesh_8wtq4")
+
+[node name="StepEdge5" type="MeshInstance3D" parent="." unique_id=1507585857]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.51, -0.47)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step6" type="MeshInstance3D" parent="." unique_id=2038655658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0.9, -0.8)
+mesh = SubResource("BoxMesh_7p0hc")
+
+[node name="StepEdge6" type="MeshInstance3D" parent="." unique_id=1831917238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.81, -1.07)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step7" type="MeshInstance3D" parent="." unique_id=1681987461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.05, -1.4)
+mesh = SubResource("BoxMesh_rvg3b")
+
+[node name="StepEdge7" type="MeshInstance3D" parent="." unique_id=1065934406]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 2.11, -1.67)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Step8" type="MeshInstance3D" parent="." unique_id=2118575319]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.2, -2)
+mesh = SubResource("BoxMesh_odf00")
+
+[node name="StepEdge8" type="MeshInstance3D" parent="." unique_id=1637641490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 2.41, -2.27)
+mesh = SubResource("BoxMesh_u246d")
+
+[node name="Landing" type="MeshInstance3D" parent="." unique_id=1900399804]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.2, -3.4)
+mesh = SubResource("BoxMesh_6a7i6")
+
+[node name="Railing" type="MeshInstance3D" parent="." unique_id=1193210456]
+transform = Transform3D(1, 0, 0, 0, 0.8944272, -0.4472136, 0, 0.4472136, 0.8944272, 2.3, 2.2, 0.100000024)
+mesh = SubResource("BoxMesh_1pcux")
+
+[node name="LandingRailing" type="MeshInstance3D" parent="." unique_id=410329743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 3.4, -3.4)
+mesh = SubResource("BoxMesh_sggt6")
+
+[node name="ShipDoor" type="MeshInstance3D" parent="." unique_id=673132978]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.5, -4.47)
+mesh = SubResource("BoxMesh_xopar")
+
+[node name="ShipDoorFrame" type="MeshInstance3D" parent="." unique_id=591709031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.5, -4.49)
+mesh = SubResource("BoxMesh_gbwm7")
+
+[node name="ShipSign" type="Label3D" parent="." unique_id=1084392543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 5, -4.4)
+pixel_size = 0.007
+modulate = Color(0.4, 0.95, 1, 1)
+outline_modulate = Color(0.25, 0.05, 0.3, 1)
+text = "COCKPIT"
+font_size = 96
+outline_size = 16
+
+[node name="ShipSignBacking" type="MeshInstance3D" parent="." unique_id=696335919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 5, -4.47)
+mesh = SubResource("BoxMesh_wcld0")
+
+[node name="CounterLight" type="OmniLight3D" parent="." unique_id=34884327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3.2, -1)
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 2.5
+shadow_enabled = true
+omni_range = 7.0
+omni_attenuation = 1.2
+metadata/paint_shadows = true
+
+[node name="StairsLight" type="OmniLight3D" parent="." unique_id=2068582156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 5, -1)
+light_color = Color(0.6, 0.85, 1, 1)
+light_energy = 2.0
+shadow_enabled = true
+omni_range = 7.0
+omni_attenuation = 1.2
+metadata/paint_shadows = true
+
+[node name="SignGlow" type="OmniLight3D" parent="." unique_id=216747716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3.8, -3.8)
+light_color = Color(1, 0.7, 0.3, 1)
+light_energy = 1.2
+omni_range = 4.0
+omni_attenuation = 1.2
+metadata/paint_shadows = false
+
+[node name="LobbyFill" type="OmniLight3D" parent="." unique_id=4169951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 3)
+light_color = Color(0.75, 0.6, 1, 1)
+light_energy = 1.2
+omni_range = 8.0
+omni_attenuation = 1.2
+metadata/paint_shadows = false
+
+[node name="CeilingLight" type="MeshInstance3D" parent="." unique_id=340164165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 5.97, 0)
+mesh = SubResource("BoxMesh_f5mdu")
+
+[node name="CeilingLight2" type="MeshInstance3D" parent="." unique_id=2269915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 5.97, 0)
+mesh = SubResource("BoxMesh_f5mdu")
+
+[node name="CeilingLight3" type="MeshInstance3D" parent="." unique_id=1328140880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5.97, 0)
+mesh = SubResource("BoxMesh_f5mdu")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "zero_g_suspension"
+display_name = "Zero-G Suspension"
+description = "The whole hold floats on little gravity cushions. Your cargo barely notices a bonk."
+price = 4000
+requires_upgrade = "cargo_cradles"
+min_level = 4
+category = "hauling"
+cargo_care = 0.7

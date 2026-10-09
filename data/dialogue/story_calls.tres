@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="StoryCallList" format=3]
+
+[ext_resource type="Script" path="res://data/dialogue/StoryCallList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/dialogue/StoryCall.gd" id="2_call"]
+[ext_resource type="Resource" path="res://data/npcs/white_message.tres" id="3_white"]
+[ext_resource type="Resource" path="res://data/npcs/white_tape.tres" id="4_tape"]
+[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="5_raccoony"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="6_wendell"]
+
+[sub_resource type="Resource" id="Call_message"]
+script = ExtResource("2_call")
+id = "white_message"
+speaker = ExtResource("3_white")
+lines = PackedStringArray("Hey, J. It's me. Running a little late.", "Tidewater lane's all lit up tonight. Storm on the scopes.", "Pretty, though. Like driving through one of your lava lamps.", "Company wants it there by morning. So. Morning it is.", "Save me some of whatever you're having. Water the plant.", "Okay. Love you. Don't let Raccoony sell my mug.")
+banner = "Playing: message chip \"J\""
+repliable = false
+delay_seconds = 45.0
+sets_flags = PackedStringArray("white_voicemail")
+needs_flags = PackedStringArray("white_chip")
+
+[sub_resource type="Resource" id="Call_tape"]
+script = ExtResource("2_call")
+id = "white_tape_one"
+speaker = ExtResource("4_tape")
+lines = PackedStringArray("Is it recording? The little light's on. Okay.", "This is a tape for the long hauls.", "Side A: songs J likes. Side B: songs J pretends not to like.", "Rewind it when you're done. Don't be a monster.")
+banner = "New on the dial: White Noise"
+repliable = false
+delay_seconds = 20.0
+needs_flags = PackedStringArray("white_story_done")
+
+[sub_resource type="Resource" id="Call_raccoony"]
+script = ExtResource("2_call")
+id = "raccoony_after_message"
+speaker = ExtResource("5_raccoony")
+lines = PackedStringArray("Hey. Comms are my job, so... I heard it. The message.", "He said not to sell his mug. I wasn't gonna sell it.", "I was gonna rent it.")
+replies = PackedStringArray("Thanks, Raccoony.", "Rent it to me.", "...")
+delay_seconds = 30.0
+needs_flags = PackedStringArray("white_voicemail")
+
+[sub_resource type="Resource" id="Call_wendell_tapes"]
+script = ExtResource("2_call")
+id = "wendell_tapes"
+speaker = ExtResource("6_wendell")
+lines = PackedStringArray("Kid. That station on the dial. The tapes. That's him, isn't it.", "Side B's the good side. Always was.")
+replies = PackedStringArray("I know.", "Side A's fine.", "...")
+delay_seconds = 60.0
+needs_flags = PackedStringArray("white_story_done")
+
+[sub_resource type="Resource" id="Call_wendell_scope"]
+script = ExtResource("2_call")
+id = "wendell_scope"
+speaker = ExtResource("6_wendell")
+lines = PackedStringArray("Thumper on my scope. Huh.", "Sorry, kid. Still think it's him for a second. Every time.")
+replies = PackedStringArray("Me too.", "He'd laugh at you.", "...")
+delay_seconds = 60.0
+needs_flags = PackedStringArray("first_mission_done")
+min_deliveries = 3
+
+[resource]
+script = ExtResource("1_list")
+calls = Array[ExtResource("2_call")]([SubResource("Call_message"), SubResource("Call_tape"), SubResource("Call_raccoony"), SubResource("Call_wendell_tapes"), SubResource("Call_wendell_scope")])

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "light_bar"
+display_name = "Roof Light Bar"
+description = "Six big amber lights across the roof. They don't do anything. They look incredible."
+price = 600
+category = "cab"
+add_on = "light_bar"

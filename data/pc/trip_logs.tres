@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="TripLogList" format=3]
+
+[ext_resource type="Script" path="res://data/pc/TripLogList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/pc/TripLog.gd" id="2_log"]
+
+[sub_resource type="Resource" id="Log_0"]
+script = ExtResource("2_log")
+id = "day_12"
+day = "DAY 12"
+body = "Bought a rig. Named her the Thumper, for the noise. J says it sounds more like a cough. J is right.\n\nHauled scrap to the truck stop. Marge gave me a pie for no reason. Good day."
+min_deliveries = 1
+
+[sub_resource type="Resource" id="Log_1"]
+script = ExtResource("2_log")
+id = "day_140"
+day = "DAY 140"
+body = "Pie run to Tidewater. Gill's an otter who doesn't talk. We sat on the dock for two hours.\n\nBest conversation I've had all year."
+min_deliveries = 2
+
+[sub_resource type="Resource" id="Log_2"]
+script = ExtResource("2_log")
+id = "day_388"
+day = "DAY 388"
+body = "Rewired the dash. Works now. Do not ask me how.\n\nDo not touch the blue wire."
+min_deliveries = 3
+
+[sub_resource type="Resource" id="Log_3"]
+script = ExtResource("2_log")
+id = "day_701"
+day = "DAY 701"
+body = "J came along for a run. Fell asleep before the first ring. Woke up at Tidewater and said \"that was fast.\"\n\nIt was nine hours."
+min_deliveries = 4
+
+[sub_resource type="Resource" id="Log_4"]
+script = ExtResource("2_log")
+id = "day_1022"
+day = "DAY 1,022"
+body = "Lost forty credits to a crocodile at cards. He says I have the worst poker face in the sector.\n\nI said thank you."
+min_deliveries = 5
+
+[sub_resource type="Resource" id="Log_5"]
+script = ExtResource("2_log")
+id = "day_1460"
+day = "DAY 1,460"
+body = "Paid for the next guy's fuel at Lily's. She says I can't keep doing that.\n\nKept doing that."
+min_deliveries = 6
+
+[sub_resource type="Resource" id="Log_6"]
+script = ExtResource("2_log")
+id = "day_1905"
+day = "DAY 1,905"
+body = "Whales went past the buoy tonight. Killed the engine and drifted.\n\nCalled J and held the phone up to the window. She said she couldn't hear anything. That's the point."
+min_deliveries = 7
+
+[sub_resource type="Resource" id="Log_7"]
+script = ExtResource("2_log")
+id = "day_2230"
+day = "DAY 2,230"
+body = "{company} raised the cut again. The boss says it's \"industry standard.\"\n\nBought Raccoony donuts anyway. Also industry standard."
+min_deliveries = 8
+
+[sub_resource type="Resource" id="Log_8"]
+script = ExtResource("2_log")
+id = "day_2604"
+day = "DAY 2,604"
+body = "Made another tape for the long hauls. Side A: songs J likes. Side B: songs J pretends not to like.\n\nSide B is better. Don't tell her."
+min_deliveries = 9
+
+[sub_resource type="Resource" id="Log_9"]
+script = ExtResource("2_log")
+id = "day_3018"
+day = "DAY 3,018"
+body = "Eight years with the Thumper. New air freshener. Pine.\n\nShe deserves pine."
+min_deliveries = 10
+
+[sub_resource type="Resource" id="Log_10"]
+script = ExtResource("2_log")
+id = "day_3551"
+day = "DAY 3,551"
+body = "J asked when I'm going to stop hauling. I said when the rig's paid off.\n\nThe rig's paid off. Told her next year."
+min_deliveries = 12
+
+[sub_resource type="Resource" id="Log_11"]
+script = ExtResource("2_log")
+id = "day_4102"
+day = "DAY 4,102"
+body = "Every time I dock at home, the hallway smells like her cooking or her smoking.\n\nEither way, I'm home."
+min_deliveries = 14
+
+[sub_resource type="Resource" id="Log_12"]
+script = ExtResource("2_log")
+id = "day_4381"
+day = "DAY 4,381"
+body = "Tidewater lane. Cannery parts in the back. Cherry pie on the dash. Storm on the scopes.\n\nGoing around adds a day. {company} wants it by morning.\n\nNot going around."
+requires_flag = "white_voicemail"
+
+[resource]
+script = ExtResource("1_list")
+logs = Array[ExtResource("2_log")]([SubResource("Log_0"), SubResource("Log_1"), SubResource("Log_2"), SubResource("Log_3"), SubResource("Log_4"), SubResource("Log_5"), SubResource("Log_6"), SubResource("Log_7"), SubResource("Log_8"), SubResource("Log_9"), SubResource("Log_10"), SubResource("Log_11"), SubResource("Log_12")])

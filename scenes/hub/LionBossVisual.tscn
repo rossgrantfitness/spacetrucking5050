@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/ModelVisual.gd" id="1_visual"]
+[ext_resource type="PackedScene" path="res://art/models/boss_lion.glb" id="2_model"]
+
+[node name="LionBossVisual" type="Node3D"]
+script = ExtResource("1_visual")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(-1.45, 0, 0, 0, 1.45, 0, 0, 0, -1.45, 0, 0.725, 0)

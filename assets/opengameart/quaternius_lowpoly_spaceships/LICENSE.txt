@@ -1,0 +1,10 @@
+LowPoly Spaceships pack by Quaternius (https://quaternius.com)
+Found on OpenGameArt.org. License: CC0 1.0 (public domain dedication).
+https://creativecommons.org/publicdomain/zero/1.0/
+
+CC0 means it's free to use in any project, including commercial ones, with no
+credit required. We credit Quaternius anyway, because it's nice.
+
+Files here: Zenith.obj (the model, unchanged except for removing the
+material-library line) and Zenith.png (its texture, shrunk from 2048 to 256
+pixels for the PS1 look).

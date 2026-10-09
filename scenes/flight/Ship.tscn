@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/Ship.gd" id="1_ship"]
+[ext_resource type="Resource" path="res://data/ships/starter_rig.tres" id="2_rig"]
+[ext_resource type="PackedScene" path="res://scenes/flight/RigLoadVisual.tscn" id="3_visual"]
+[ext_resource type="Script" path="res://scenes/flight/CockpitCamera.gd" id="4_cockpit"]
+[ext_resource type="Script" path="res://scenes/flight/ShipControls.gd" id="5_controls"]
+[ext_resource type="Script" path="res://scenes/flight/EngineHum.gd" id="6_hum"]
+[ext_resource type="Script" path="res://scenes/flight/ShipDamageEffects.gd" id="7_damage"]
+[ext_resource type="PackedScene" path="res://scenes/flight/CockpitInterior.tscn" id="8_cockpit"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hull"]
+radius = 3.6
+height = 34.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pod"]
+radius = 2.0
+height = 12.0
+
+[node name="Ship" type="CharacterBody3D"]
+motion_mode = 1
+script = ExtResource("1_ship")
+ship_data = ExtResource("2_rig")
+
+[node name="Hull" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.8, -1.5)
+shape = SubResource("CapsuleShape3D_hull")
+
+[node name="LeftPod" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -5.4, 0.4, 9.75)
+shape = SubResource("CapsuleShape3D_pod")
+
+[node name="RightPod" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 5.4, 0.4, 9.75)
+shape = SubResource("CapsuleShape3D_pod")
+
+[node name="VisualPivot" type="Node3D" parent="."]
+
+[node name="RigLoadVisual" parent="VisualPivot" instance=ExtResource("3_visual")]
+
+[node name="Cockpit" parent="." instance=ExtResource("8_cockpit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -14.5)
+visible = false
+
+[node name="CockpitCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -14.5)
+fov = 70.0
+near = 0.2
+far = 18000.0
+script = ExtResource("4_cockpit")
+
+[node name="ShipControls" type="Node" parent="."]
+script = ExtResource("5_controls")
+
+[node name="EngineHum" type="Node" parent="."]
+script = ExtResource("6_hum")
+
+[node name="DamageEffects" type="Node3D" parent="."]
+script = ExtResource("7_damage")

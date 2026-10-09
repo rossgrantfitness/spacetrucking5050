@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "tidewater_mail"
+cargo_name = "Mail for Tidewater"
+client_name = "Interstellar Post"
+description = "Letters, parcels and one very insistent birthday card."
+from_place = "base"
+to_place = "tidewater"
+weight = 250000000.0
+base_pay = 1250
+care_bonus = 0
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "first_mission_done"
+completes_flag = ""

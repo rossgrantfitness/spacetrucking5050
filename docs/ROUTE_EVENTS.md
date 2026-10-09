@@ -1,0 +1,147 @@
+# Things you pass on the road (research notes)
+
+What would a space trucker pass on a long haul? This is the list I worked
+from for round 8, what made it into the game, and what's left for later.
+The rule I used: **mundane trucker stuff + surreal space stuff**, never
+danger. Everything is something to *look at*, *talk about* on the comms,
+or *gently steer around*.
+
+## Where the ideas come from
+
+- **Real highway trucking** (the American/Euro Truck Simulator feeling):
+  green highway signs counting down the kilometers, the next fuel stop,
+  roadside attractions ("world's biggest ___"), weigh stations and speed
+  traps, convoys, spilled loads, lighthouses, border crossings, other
+  truckers on the CB radio, billboards for the next diner.
+- **Space trucking games:** *Star Trucker* (Monster and Monster, published
+  by Raw Fury, 2024) is the closest cousin: hauling cargo between stations,
+  a CB radio full of characters, a rig you keep running, space weather.
+  Sources I read: the game's page at Raw Fury
+  (<https://rawfury.com/games/star-trucker/>), its Wikipedia article
+  (<https://en.wikipedia.org/wiki/Star_Trucker>), PCGamesN's hands-on
+  impressions (<https://www.pcgamesn.com/star-trucker/impressions>) and its
+  TV Tropes page (<https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/StarTrucker>).
+  We take the *vibe* (the lonely road, the radio voices), not its systems
+  or content.
+- **Sci-fi in general:** derelict ships with a story, huge ships passing
+  close, comets, ion storms, creatures that live in space (whales,
+  jellyfish), lonely beacons. Cowboy Bebop's tired, beautiful, absurd
+  universe is the tone (see `CLAUDE.md`).
+
+## In the game now
+
+**Fixed, along the road to Tidewater** (`scenes/flight/TidewaterRoad.tscn`,
+built by `tools/build_road.gd`):
+
+| Km | What | Why it's there |
+|---|---|---|
+| 3, 13, 25, 36, 47, 56 | Green highway signs (both directions) | Mundane = homey. Countdown to the next stop. |
+| 18 | A junk spill across the lane | Debris to weave through (bonkable). |
+| ~30 (1.8 km right) | **Gas-N-Go 47**, a drive-through fuel stop | The optional stop. Moe the sloth runs it. |
+| 28 | THE WORLD'S BIGGEST DONUT | A roadside attraction, just because. |
+| 31 | The border gate into Tidewater | You know you've crossed over. |
+| 33.5 | A lighthouse warning ships off a rock that isn't there anymore | A sweet, slightly sad joke. |
+| 40 | *The Dorothy Mae*, an abandoned derelict, one light still blinking | A mystery (lore can hang off it later). |
+| 44 | An ion storm off the lane | Radio static, the STORM light, a few jolts. Never damage. |
+| 48-53 | Tidewater's icy rocks | A pretty, gentle obstacle field. |
+| 52 | A pod of space whales, singing | Tidewater's gimmick (from the brief). |
+| 55 | Space patrol radar buoy | The brief's speed trap: a small fine, not a fight. |
+| 57.5 | Scrap around the cannery | Industrial clutter near the destination. |
+| all the way | Two long-haul truckers and a courier going back and forth | Traffic, engine trails, ID labels. |
+
+**Random, every few kilometers** (`data/events/route_events.tres`, placed
+by `scenes/flight/RouteEvents.gd`): a big ship crossing your path (with a
+rumbling, Doppler-shifted engine), a convoy of rigs, billboards for
+surreal products, comets, cosmic jellyfish drifting by, junk clouds,
+derelicts, a giant rubber duck, whales and ion storms (those two only in
+Tidewater). Some come with a comment on the comms.
+
+**Rare** (round 9; about one every dozen long hauls, any particular one
+about once in fifty): THE GREAT MIGRATION (a jellyfish swarm four times the
+size), a LEVIATHAN POD (whales six times the size), a GHOST SHIP
+(see-through, flickering, you fly right through it) and a COMET STORM. All
+of them, and everything above, go in the **logbook** (L) the first time you
+get within 3 km. The same kind of sight never comes up twice within four.
+
+## Ideas for later (not built)
+
+- **Weigh station:** pull in, the scale reads your cargo, a bored clerk
+  waves you on. (Overweight = a joke, not a fine.)
+- **Rest area / scenic overlook:** a place to stop and look at a planet.
+  Could tie into sleep/time (M6).
+- **Construction zone:** cones and a flagger bot slowing traffic to one lane.
+- **Broken-down trucker:** an optional favor (tow, fuel), with a thank-you
+  later. Cozy side quest.
+- **Hitchhiker beacon:** a stranded someone with a story; a free ride is
+  its own little scene.
+- **Yard sale in space:** a junk dealer drifting with a sign.
+- **Lost cargo pods** to pick up and return for a reward.
+- **Message buoys / old signals:** lore about the husband (M8).
+- **Gravity well with a slingshot** (already in the brief for M5).
+- **Wedding barge, parade float, funeral procession:** slow ships with
+  streamers to pass respectfully.
+- **Seasonal migrations:** jellyfish that only come through on some days.
+
+## Round 10: your 250-event list
+
+You sent a list of 250 route events (inspired by the spirit of Space
+Dandy, Red Dwarf, Star Trek, Cowboy Bebop and Hitchhiker's Guide, every one
+original). The paste stopped after **#167 ("Clean cut")**, so 168-250
+haven't arrived yet. The list as received is in `docs/ROUTE_EVENTS_LIST.md`.
+
+**All 167 are in the game's data** (`data/events/route_events.tres`) with
+their zone, type, tone, rarity and build cost. **49 are playable now**,
+plus the 11 original sights (60 in all). The rest are switched off with a
+note saying what each still needs: mostly a new model (a vending machine,
+space cows, a piano...) or a small new system (the horn, picking up
+hitchhikers, joining a convoy, the rival, windshield wipers, a cab
+kitten...).
+
+Playable now, by zone:
+
+| Zone | Events |
+|---|---|
+| Deep space | #4 Last-gas sign, #5 Dead air, #8 Jingle satellite, #10 Micrometeoroid sprinkle, #11 Comet tail crossing, #15 You are here, #16 Echo transponder (story), #22 Napping trucker, #26 Gravity eddy, #30 Long nothing, #156 Auto-SOS derelict, #162 Half-message billboard, #164 The twin rig (legendary, story), plus the jellyfish and the giant duck |
+| Traffic lanes | #31 Freighter flyby (more names), #33 Slowpoke, #34 Courier cut-off, #35 Tow ship, #40 Funeral procession, #41 Student driver, #42 Gate merge jam, #45 Breakdown on the shoulder, #46 Fender-bender, #49 Billboard ship, #52 Trucker shuttle, #53 Escort flotilla, #54 Ambulance, #55 Trap warning (Tidewater), #57 Lost tourist, #59 Spilled ball bearings, #61 Lane ends, #157 Junk spills, plus convoys |
+| Station approach | #66 Holding pattern, #67 Docking queue, #72 Customs scan, #74 Stuck hangar door, #76 Ad blimp, #77 Wrong ring, #82 Broken neon, #85 Sleepy controller (nights) |
+| Orbit | #87 Debris belt, #102 Local station, #105 Satellite graveyard, #108 Whale breach (rare, Tidewater) |
+| Weather | #111 Ion storms (green, violet and amber), #116 Ice hail, #120 Gravity tide, #122 Sunspot season, #126 Space thunder, #129 Skip signal |
+| Anywhere | Billboards, Tidewater's whales, and the rare sights (great migration, leviathans, ghost ship, comet storm) |
+
+**How it works:** see `scenes/flight/RouteEvents.gd` (the director) and
+`data/events/EventData.gd` (what an event can do). The rules are yours:
+zones with their own pace (deep space: one every 3-5 minutes; traffic
+lanes: every 30-90 seconds; the approach: every 20-45 seconds; orbit and
+weather in between), never two hazards at once, haul cooldowns (common 3,
+uncommon 10, legendary once per save), at most one rare per haul, weather
+zones skip weather that doesn't match, story events wait for the story,
+and night-only events wait for night. Everyday sights (big ships,
+convoys, billboards, junk, the ion storm) have no haul cooldown, only the
+"not one of the last four" rule, so the road never runs out of traffic.
+
+**Simplified for now** (each is noted in the event's data): replies are
+flavor only, so "share fuel for a tip", "pull over for a courtesy bonus"
+and "carry one letter" have no reward yet. Dead air silences the radio
+but doesn't dim the stars yet. "Wrong ring" is a joke call (you keep your
+ring). The procession and the escort use the convoy and big-ship models.
+
+## Round 11: the road to the Glimmer System
+
+`scenes/flight/GlimmerRoad.tscn` (made by `tools/build_glimmer_road.gd`),
+56 km from the truck stop to The High Roller:
+
+| Km | What |
+|---|---|
+| 3, 15, 27, 40, 52 | Highway signs (magenta boards, both directions) |
+| 12 | A spill of casino chips across the lane |
+| 22 (2.6 km right) | THE WORLD'S BIGGEST SLOT MACHINE |
+| 30 | The border gate into Glimmer (magenta) |
+| 32-55 | Twelve neon billboards, thicker near the casino |
+| 37 (2.8 km left) | The giant dice |
+| 45 (1.7 km right) | The Little Chapel of the Void (event #106) |
+| 53.5 | A space patrol speed trap |
+| all the way | A limo, a chip hauler and a bachelor party bus |
+
+Glimmer's own random events (in `data/events/route_events.tres`, Glimmer
+only): casino billboards (the most common sight there), limo convoys, a
+winner on channel 19, and Sal calling to say hi (after you've met him).

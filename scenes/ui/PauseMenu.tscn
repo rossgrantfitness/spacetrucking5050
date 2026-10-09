@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/PauseMenu.gd" id="1_pause"]
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+content_margin_left = 28.0
+content_margin_top = 22.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.07, 0.04, 0.14, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.62, 0.82, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_pause")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.08, 0.55)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Items" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81, 0.42, 1)
+theme_override_colors/font_outline_color = Color(0.23, 0.12, 0.36, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 34
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Keep going"
+
+[node name="Controls" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Controls (every key and button)"
+
+[node name="InvertY" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Invert Y (pilot style: push up = nose down)"
+
+[node name="CameraRoll" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Camera leans with the rig (camera roll)"
+
+[node name="ShowHud" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show HUD"
+
+[node name="ScreenShake" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Screen shake"
+
+[node name="Rumble" type="CheckButton" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gamepad rumble"
+
+[node name="RadioVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Music (radio)"
+
+[node name="RadioVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="SfxVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Sound effects (engine, boost, bonks)"
+
+[node name="SfxVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.7
+
+[node name="VoiceVolumeLabel" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+text = "Voices"
+
+[node name="VoiceVolume" type="HSlider" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.9
+
+[node name="Logbook" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Logbook (sights you've seen)"
+
+[node name="DockAtBase" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Get towed to the truck stop"
+
+[node name="BackToStart" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back to the launch point"
+
+[node name="QuitToTitle" type="Button" parent="Center/Panel/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit to the title screen"
+
+[node name="Hint" type="Label" parent="Center/Panel/Items"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 16
+text = "Esc / Start: back to the game"
+horizontal_alignment = 1

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "company_plaques"
+cargo_name = "Employee of the Month plaques"
+client_name = "Tidewater Cannery"
+description = "A plaque for every office in the sector. None of them have your name on them."
+from_place = "truck_stop"
+to_place = "tidewater"
+weight = 600000000.0
+base_pay = 1100
+care_kind = "fragile"
+care_bonus = 400
+on_job_board = false
+repeatable = false
+requires_flag = "company_ledgers_done"
+completes_flag = "company_plaques_done"

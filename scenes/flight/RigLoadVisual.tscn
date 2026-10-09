@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/RigLoadVisual.gd" id="1_51l8q"]
+[ext_resource type="PackedScene" path="res://art/models/rig_load_0.glb" id="2_jo0dc"]
+[ext_resource type="PackedScene" path="res://art/models/rig_load_1.glb" id="3_5he1v"]
+[ext_resource type="PackedScene" path="res://art/models/rig_load_2.glb" id="4_querc"]
+[ext_resource type="PackedScene" path="res://art/models/rig_load_3.glb" id="5_0jvan"]
+[ext_resource type="PackedScene" path="res://art/models/rig_load_4.glb" id="6_hb7vr"]
+[ext_resource type="Script" path="res://scenes/flight/EngineTrail.gd" id="7_mkfo1"]
+[ext_resource type="Script" path="res://scenes/flight/EngineFlare.gd" id="8_y6xj3"]
+
+[node name="RigLoadVisual" type="Node3D" unique_id=1935041118]
+script = ExtResource("1_51l8q")
+thresholds = PackedFloat32Array(0.35, 0.7, 1.05)
+
+[node name="Load0" type="Node3D" parent="." unique_id=2133268754 instance=ExtResource("2_jo0dc")]
+transform = Transform3D(-1.6442623e-06, 0, -37.616337, 0, 37.616337, 0, 37.616337, 0, -1.6442623e-06, 0, 0.8, -1.5)
+
+[node name="Load1" type="Node3D" parent="." unique_id=2085204470 instance=ExtResource("3_5he1v")]
+transform = Transform3D(-1.6442623e-06, 0, -37.616337, 0, 37.616337, 0, 37.616337, 0, -1.6442623e-06, 0, 0.8, -1.5)
+visible = false
+
+[node name="Load2" type="Node3D" parent="." unique_id=2103943649 instance=ExtResource("4_querc")]
+transform = Transform3D(-1.6442623e-06, 0, -37.616337, 0, 37.616337, 0, 37.616337, 0, -1.6442623e-06, 0, 0.8, -1.5)
+visible = false
+
+[node name="Load3" type="Node3D" parent="." unique_id=12419502 instance=ExtResource("5_0jvan")]
+transform = Transform3D(-1.6442623e-06, 0, -37.616337, 0, 37.616337, 0, 37.616337, 0, -1.6442623e-06, 0, 0.8, -1.5)
+visible = false
+
+[node name="Load4" type="Node3D" parent="." unique_id=290334573 instance=ExtResource("6_hb7vr")]
+transform = Transform3D(-1.6442623e-06, 0, -37.616337, 0, 37.616337, 0, 37.616337, 0, -1.6442623e-06, 0, 0.8, -1.5)
+visible = false
+
+[node name="Nozzle" type="Marker3D" parent="." unique_id=1242411256]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.896458, 1.9284902, 16.7)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=90527512]
+script = ExtResource("7_mkfo1")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=146722284]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("8_y6xj3")
+
+[node name="Nozzle2" type="Marker3D" parent="." unique_id=275274524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.896458, 1.9284902, 16.7)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=800160560]
+script = ExtResource("7_mkfo1")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=1608095065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("8_y6xj3")
+
+[node name="Nozzle3" type="Marker3D" parent="." unique_id=906773475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.896458, -1.4569802, 16.7)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle3" unique_id=523141910]
+script = ExtResource("7_mkfo1")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle3" unique_id=1996151789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("8_y6xj3")
+
+[node name="Nozzle4" type="Marker3D" parent="." unique_id=1145382731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.896458, -1.4569802, 16.7)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle4" unique_id=1354076426]
+script = ExtResource("7_mkfo1")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle4" unique_id=1391260482]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("8_y6xj3")

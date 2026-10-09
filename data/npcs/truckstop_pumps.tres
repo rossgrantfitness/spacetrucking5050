@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_lily")
+lines = PackedStringArray("Hi hi! Welcome to Lily's Pumps! Fuel, boost, snacks. Mostly fuel. The snacks are a lie.", "Fuel costs money, hon. Coasting's free everywhere though!")
+sets_flags = PackedStringArray("met_lily")
+opens_menu = "fuel"
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Fill 'er up?")
+opens_menu = "fuel"
+
+[sub_resource type="Resource" id="Conversation_white"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("marge_mentioned_white")
+blocked_by_flags = PackedStringArray("whites_tab")
+lines = PackedStringArray("Hi hi! Oh, hon. Marge told me whose rig that is.", "He used to pay for the next guy's fuel. Every single time. I'd yell at him. He'd do it anyway.", "There's still credit on his tab. So your next fill-up's on him. Don't argue. I'm the honor.")
+sets_flags = PackedStringArray("whites_tab")
+opens_menu = "fuel"
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Lily (pumps)"
+species = "frog"
+voice_pitch = 1.45
+voice_type = "square"
+voice_key = 11
+voice_scale = "dreamy"
+lines = PackedStringArray("Pump's on the honor system. I'm the honor.")
+comm_name = "LILY · PUMPS"
+fur_color = Color(0.45, 0.78, 0.4, 1)
+accent_color = Color(0.95, 0.3, 0.5, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_white"), SubResource("Conversation_1")])

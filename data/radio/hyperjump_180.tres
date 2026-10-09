@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/happy_hardcore.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "HYPERJUMP 180"
+frequency = "106.5"
+genre = "Happy hardcore, gabber"
+dj_name = "DJ Sparkz"
+tagline = "180 BPM. Zero chill."
+music_folder = "res://audio/radio/hyperjump_180/music"
+ads_folder = "res://audio/radio/hyperjump_180/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("SPARKZ - SIX ENERGY DRINKS LATER", "HAPPY PLANET - LOVE AT LIGHTSPEED", "KICKDRUM KITTENS - BOUNCE THE COSMOS", "GABBER GALAXY - FASTER FASTER FASTER", "SUGAR RUSH - I CAN SEE SOUNDS", "POGO PILOTS - HYPERJUMP!!")
+ads = PackedStringArray("ZOOM JUICE. NOW WITH 40% MORE ZOOM.", "GLOWSTICK WHOLESALE. BUY 1000, GET 1000 FREE. PLEASE TAKE THEM.", "EAR PLUGS. YOU'RE LISTENING TO HYPERJUMP 180. YOU NEED THEM.", "STAR-STOP RAMEN. HOT NOODLES AT EVERY RING ON THE ROAD. YOU WILL BURN YOUR TONGUE.")
+dj_lines = PackedStringArray("HIHIHIHI IT'S SPARKZ AND THIS IS HYPERJUMP 180 AND I'VE HAD SIX OF THEM", "(incomprehensible joy at 180 BPM)", "FASTERFASTERFASTER oh you're a truck. that's fine. FASTER", "NEXT TRACK! no wait THIS track! no wait")
+dj_on_storm = PackedStringArray("STORMSTORMSTORM it's like a RAVE in the SKY")
+dj_on_delivery = PackedStringArray("{bunny} DELIVERED to {place} WOOOO I don't know you but I LOVE you")
+dj_on_ticket = PackedStringArray("TICKET?! SPEED IS LIFE! (please obey the speed limit)")
+dj_on_new_system = PackedStringArray("{system}!!! NEW SYSTEM!!! NEW ME!!!")

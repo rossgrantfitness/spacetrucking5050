@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/boom_bap.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "MIC CHECK MOON"
+frequency = "91.7"
+genre = "Battle rap, freestyle"
+dj_name = "Twin Mics"
+tagline = "Live from the moon base. Bring bars."
+music_folder = "res://audio/radio/mic_check_moon/music"
+ads_folder = "res://audio/radio/mic_check_moon/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("TWIN MICS - LEFT HEAD VS RIGHT HEAD", "MOON BASE CYPHER - VOL. 12", "CALLER 7 - MY CARGO IS CHEESE (FREESTYLE)", "THE LUNAR LYRICISTS - CRATER FLOW", "LOW GRAVITY FLOW - BARS IN ORBIT", "HAULER HANK - I DRIVE A TRUCK (FREESTYLE, BAD)")
+ads = PackedStringArray("RHYMING DICTIONARY FOR TRUCKERS. FIND A WORD THAT RHYMES WITH \"PALLET\". (THERE ISN'T ONE.)", "MOON BASE OPEN MIC NIGHT. EVERY NIGHT. THE MOON IS VERY LONELY.")
+dj_lines = PackedStringArray("LEFT HEAD: Live from the moon! RIGHT HEAD: I was gonna say that!", "Caller on line two says they're hauling forty tons of cheese and they've got bars. They do not have bars.", "RIGHT HEAD: My flow is out of this world. LEFT HEAD: We're ON the moon. RIGHT HEAD: ...", "Next battle: a forklift operator versus a vending machine. Vending machine is favored.")
+dj_on_storm = PackedStringArray("LEFT HEAD: Ion storm! RIGHT HEAD: Storm of BARS! LEFT HEAD: That's not how storms work.")
+dj_on_delivery = PackedStringArray("RIGHT HEAD: {bunny} delivered to {place}! LEFT HEAD: Make it rhyme! RIGHT HEAD: ...no.")
+dj_on_ticket = PackedStringArray("LEFT HEAD: Somebody got a ticket! RIGHT HEAD: Spit a verse about it! Nobody does.")
+dj_on_new_system = PackedStringArray("RIGHT HEAD: {system}, make some noise! LEFT HEAD: It's a vacuum. Nobody can hear them.")

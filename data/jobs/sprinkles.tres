@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "sprinkles"
+cargo_name = "Sprinkles (a planet's worth)"
+client_name = "Flurry's Comet Creamery"
+description = "Penny ran out of sprinkles. Rush them up the long climb and she'll name a flavor after you."
+from_place = "truck_stop"
+to_place = "creamery"
+weight = 600000000.0
+base_pay = 2600
+care_kind = "fragile"
+care_bonus = 0
+rush_seconds = 1800.0
+rush_bonus = 500
+on_job_board = true
+repeatable = true
+requires_flag = "frostline_open"
+completes_flag = ""

@@ -1,0 +1,3280 @@
+[gd_resource type="Resource" script_class="RouteEventList" format=3]
+
+[ext_resource type="Script" path="res://data/events/RouteEventList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/events/EventData.gd" id="2_event"]
+[ext_resource type="Resource" path="res://data/npcs/tourist_bev.tres" id="npc_bev"]
+[ext_resource type="Resource" path="res://data/npcs/space_deputy.tres" id="npc_biscuit"]
+[ext_resource type="Resource" path="res://data/npcs/open_channel.tres" id="npc_ch19"]
+[ext_resource type="Resource" path="res://data/npcs/dispatch_morning.tres" id="npc_dottie"]
+[ext_resource type="Resource" path="res://data/npcs/approach_fern.tres" id="npc_fern"]
+[ext_resource type="Resource" path="res://data/npcs/tidewater_gill.tres" id="npc_gill"]
+[ext_resource type="Resource" path="res://data/npcs/courier_gus.tres" id="npc_gus"]
+[ext_resource type="Resource" path="res://data/npcs/bunny_jack.tres" id="npc_jack"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_pip.tres" id="npc_pip"]
+[ext_resource type="Resource" path="res://data/npcs/casino_sal.tres" id="npc_sal"]
+[ext_resource type="Resource" path="res://data/npcs/trucker_wendell.tres" id="npc_wendell"]
+[ext_resource type="Resource" path="res://data/npcs/dustbowl_mags.tres" id="npc_dustbowl_mags"]
+[ext_resource type="Resource" path="res://data/npcs/frostline_penny.tres" id="npc_frostline_penny"]
+[ext_resource type="Resource" path="res://data/npcs/greenhouse_moss.tres" id="npc_greenhouse_moss"]
+[ext_resource type="AudioStream" path="res://audio/generated/big_engine.wav" id="sound_thunder"]
+
+[sub_resource type="Resource" id="Event_0_waving_spacesuit"]
+script = ExtResource("2_event")
+id = "waving_spacesuit"
+number = 1
+title = "Waving spacesuit"
+summary = "An empty spacesuit drifts by, one arm waving slowly. It's on a spring."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_1_lone_vending_machine"]
+script = ExtResource("2_event")
+id = "lone_vending_machine"
+number = 2
+title = "Lone vending machine"
+summary = "A lit vending machine hums in the void. Fly through its little ring to buy a soda."
+type = 3
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_2_hitchhiker"]
+script = ExtResource("2_event")
+id = "hitchhiker"
+number = 3
+title = "Hitchhiker"
+summary = "A critter on a tiny rock with a thumb out. Pick them up for chatter until the next station, plus a tip."
+type = 1
+tone = 1
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_3_last_gas_sign"]
+script = ExtResource("2_event")
+id = "last_gas_sign"
+number = 4
+title = "Last-gas sign"
+summary = "Mile marker: \"LAST GAS FOR 40,000 KM.\" There is gas in 2 km."
+type = 0
+tone = 0
+build = 1
+zone = 1
+rarity = 0
+kind = 11
+playable = false
+needs = "Switched off: no giant signs (developer, 2026-10-08)."
+ahead = 4500.0
+side_offset = Vector2(300.0, 700.0)
+height_offset = Vector2(60.0, 200.0)
+texts = PackedStringArray("LAST GAS FOR 40,000 KM|LAST GAS FOR 40,000 KM")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("'Last gas for forty thousand.' There's a pump right up the road. That sign's been lying since before you were born.", "Don't trust that sign, kid. Nobody's updated it since the Gas-N-Go opened.")
+
+[sub_resource type="Resource" id="Event_4_dead_air"]
+script = ExtResource("2_event")
+id = "dead_air"
+number = 5
+title = "Dead air"
+summary = "The radio cuts to silence for 20 seconds and the stars dim. Then everything comes back. Nobody mentions it."
+type = 4
+tone = 2
+build = 0
+zone = 1
+rarity = 2
+kind = 10
+effect = 1
+effect_seconds = 20.0
+
+[sub_resource type="Resource" id="Event_5_message_in_a_bottle"]
+script = ExtResource("2_event")
+id = "message_in_a_bottle"
+number = 6
+title = "Message in a bottle"
+summary = "A tumbling bottle. Scan it to read a short note from a stranger."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_6_floating_living_room"]
+script = ExtResource("2_event")
+id = "floating_living_room"
+number = 7
+title = "Floating living room"
+summary = "A couch, a rug and a lamp, still switched on."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_7_jingle_satellite"]
+script = ExtResource("2_event")
+id = "jingle_satellite"
+number = 8
+title = "Jingle satellite"
+summary = "An old satellite singing a decades-old ad jingle on loop. It bleeds onto the radio."
+type = 4
+tone = 0
+build = 0
+zone = 1
+rarity = 1
+kind = 10
+dj_lines = PackedStringArray("♪ SPARKLE-FRESH! SPARKLE-FRESH! THE MOON SOAP THAT LOVES YOU BACK! ♪", "♪ BUY ONE COMET, GET ONE COMET! ONLY AT COMET MART! ♪ (OFFER EXPIRED 62 YEARS AGO)", "♪ CRUNCHY! MUNCHY! ASTRO-NUGGETS! ...ASTRO-NUGGETS! ...ASTRO-NUGGETS! ♪")
+radio_from = "JINGLE SAT"
+effect = 2
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_8_rogue_planet"]
+script = ExtResource("2_event")
+id = "rogue_planet"
+number = 9
+title = "Rogue planet"
+summary = "A dark, wandering planet crosses far away, blotting out stars as it passes."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_9_micrometeoroid_sprinkle"]
+script = ExtResource("2_event")
+id = "micrometeoroid_sprinkle"
+number = 10
+title = "Micrometeoroid sprinkle"
+summary = "Tiny pings on the hull. Small hull wear, slight RIDE wiggle."
+type = 2
+tone = 3
+build = 0
+zone = 1
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Hear that pinging? Space sand. Hull's seen worse.", "Little rocks. Big sky. Keep her steady, it'll pass.")
+replies = PackedStringArray("Sounds like hail on a tin roof.", "My hull has a lot of opinions today.", "...ping.")
+effect = 3
+effect_seconds = 8.0
+
+[sub_resource type="Resource" id="Event_10_comet"]
+script = ExtResource("2_event")
+id = "comet"
+number = 11
+title = "Comet tail crossing"
+summary = "You fly through sparkly dust; the radio shimmers."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 1.0
+cooldown_hauls = 0
+kind = 5
+log_id = "comet"
+ahead = 5000.0
+side_offset = Vector2(0.0, 0.0)
+height_offset = Vector2(300.0, 900.0)
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("Comet! Make a wish! I wished for a sandwich.", "Was that a comet? It was a comet! Did your radio do the sparkly thing too?")
+effect = 2
+effect_seconds = 5.0
+
+[sub_resource type="Resource" id="Event_11_picnic_table"]
+script = ExtResource("2_event")
+id = "picnic_table"
+number = 12
+title = "Picnic table"
+summary = "A picnic table with a still-steaming pie on it. Nobody around."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_12_the_eyeball"]
+script = ExtResource("2_event")
+id = "the_eyeball"
+number = 13
+title = "The eyeball"
+summary = "A huge drifting eyeball blinks at you once."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_13_space_jogger"]
+script = ExtResource("2_event")
+id = "space_jogger"
+number = 14
+title = "Space jogger"
+summary = "A critter in a spacesuit jogging on nothing. Waves."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_14_you_are_here"]
+script = ExtResource("2_event")
+id = "you_are_here"
+number = 15
+title = "You are here"
+summary = "A map sign with a \"YOU ARE HERE\" arrow pointing at empty space."
+type = 0
+tone = 0
+build = 1
+zone = 1
+rarity = 0
+kind = 11
+playable = false
+needs = "Switched off: no giant signs (developer, 2026-10-08)."
+ahead = 4500.0
+side_offset = Vector2(300.0, 700.0)
+height_offset = Vector2(60.0, 200.0)
+texts = PackedStringArray("▼ YOU ARE HERE ▼|YOU WERE HERE")
+speaker = ExtResource("npc_jack")
+lines = PackedStringArray("...thanks. Very helpful.", "Good to know.")
+
+[sub_resource type="Resource" id="Event_15_echo_transponder"]
+script = ExtResource("2_event")
+id = "echo_transponder"
+number = 16
+title = "Echo transponder"
+summary = "Your own rig's ID pings from somewhere ahead. It fades before you reach it."
+type = 4
+tone = 2
+build = 0
+needs = "The husband's story (M8) sets the story flag; until then it never happens."
+zone = 1
+rarity = 2
+story_flag = "story_echo_transponder"
+kind = 10
+banner = "TRANSPONDER MATCH: THIS RIG"
+effect = 2
+effect_seconds = 6.0
+
+[sub_resource type="Resource" id="Event_16_self_playing_piano"]
+script = ExtResource("2_event")
+id = "self_playing_piano"
+number = 17
+title = "Self-playing piano"
+summary = "A grand piano tumbles past, playing itself."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_17_ancient_probe"]
+script = ExtResource("2_event")
+id = "ancient_probe"
+number = 18
+title = "Ancient probe"
+summary = "An old golden probe broadcasting greetings in 50 languages (all gibberish)."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_18_starfield_smile"]
+script = ExtResource("2_event")
+id = "starfield_smile"
+number = 19
+title = "Starfield smile"
+summary = "A patch of stars rearranges into a smiley face, then back."
+type = 0
+tone = 2
+build = 0
+playable = false
+needs = "A star-pattern effect (the stars shuffle into a smile)."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_19_dust_bunnies"]
+script = ExtResource("2_event")
+id = "dust_bunnies"
+number = 20
+title = "Dust bunnies"
+summary = "Literal glowing dust bunnies drift by. The bunny mutters \"...cousins?\""
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_20_fog_wall"]
+script = ExtResource("2_event")
+id = "fog_wall"
+number = 21
+title = "Fog wall"
+summary = "A slow wall of fog with faint lights moving inside."
+type = 0
+tone = 2
+build = 1
+playable = false
+needs = "A fog-wall set piece with lights moving inside."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_21_napping_trucker"]
+script = ExtResource("2_event")
+id = "napping_trucker"
+number = 22
+title = "Napping trucker"
+summary = "A parked rig with dim lights. Pass close and you hear snoring on the CB."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+kind = 12
+ahead = 2500.0
+side_offset = Vector2(150.0, 300.0)
+height_offset = Vector2(-40.0, 40.0)
+ship_names = PackedStringArray("PARKED · DO NOT DISTURB", "OFF DUTY (ASLEEP)")
+speed_scale = 0.05
+same_direction = true
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("zzz... hnnk... five more minutes, Marge... zzz", "...mm... I'm up. I'm up. ...zzz")
+replies = PackedStringArray("Sweet dreams, Wendell.", "(turn the radio down)", "...same, buddy. Same.")
+
+[sub_resource type="Resource" id="Event_22_space_tumbleweed"]
+script = ExtResource("2_event")
+id = "space_tumbleweed"
+number = 23
+title = "Space tumbleweed"
+summary = "A ball of tangled cable rolls past."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_23_star_krill"]
+script = ExtResource("2_event")
+id = "star_krill"
+number = 24
+title = "Star krill"
+summary = "A swirl of tiny glowing krill circles the rig for a while."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_24_rest_area"]
+script = ExtResource("2_event")
+id = "rest_area"
+number = 25
+title = "Rest area"
+summary = "\"Deep Space Rest Area, 2 km.\" A tiny pullout with one bench and a great view. Stop for a long-idle moment."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_25_gravity_eddy"]
+script = ExtResource("2_event")
+id = "gravity_eddy"
+number = 26
+title = "Gravity eddy"
+summary = "An invisible current nudges you sideways. Steady steering keeps the cargo happy."
+type = 2
+tone = 3
+build = 0
+zone = 1
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Feel that tug? Gravity eddy. Hold her steady, don't fight it.", "Current's pushing you sideways. Easy hands, kid.")
+effect = 4
+effect_seconds = 10.0
+
+[sub_resource type="Resource" id="Event_26_birthday_balloons"]
+script = ExtResource("2_event")
+id = "birthday_balloons"
+number = 27
+title = "Birthday balloons"
+summary = "Floating balloons. One says \"HAPPY 400TH.\""
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_27_cosmic_string_twang"]
+script = ExtResource("2_event")
+id = "cosmic_string_twang"
+number = 28
+title = "Cosmic string twang"
+summary = "A visible ripple passes; every sound pitches down for a moment."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_28_star_fisherman"]
+script = ExtResource("2_event")
+id = "star_fisherman"
+number = 29
+title = "Star fisherman"
+summary = "A critter fishing off a rock, line dropping into nothing. Catches a tiny star as you pass."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_29_long_nothing"]
+script = ExtResource("2_event")
+id = "long_nothing"
+number = 30
+title = "Long nothing"
+summary = "Nothing happens for a long stretch. Then the DJ: \"Y'all still out there? Real quiet tonight.\""
+type = 4
+tone = 1
+build = 0
+zone = 1
+rarity = 0
+weight = 0.6
+kind = 10
+dj_lines = PackedStringArray("Y'all still out there? Real quiet tonight.", "...anybody? Just me and the static? Cool. Cool cool cool. Here's a song.", "If you can hear this, you're farther out than most. Hang in there, trucker.")
+
+[sub_resource type="Resource" id="Event_30_big_ship"]
+script = ExtResource("2_event")
+id = "big_ship"
+number = 31
+title = "Freighter flyby variants"
+summary = "New labels and colors for the existing capital-ship flyby (\"Navy Leisure Barge,\" \"Retiree Cruise Liner\")."
+type = 0
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+weight = 2.0
+cooldown_hauls = 0
+kind = 0
+log_id = "big_ship"
+ahead = 4500.0
+side_offset = Vector2(0.0, 150.0)
+height_offset = Vector2(260.0, 420.0)
+ship_names = PackedStringArray("NAVY LEISURE BARGE", "RETIREE CRUISE LINER", "DISCOUNT MATTRESS FREIGHTER", "MUNICIPAL WASTE HAULER", "BULK SOUP CARRIER", "COLONY MOVING CO.", "OVERNIGHT PILLOW EXPRESS", "REGIONAL CHEESE AUTHORITY", "SPARE PARTS & SONS", "THE SLIGHTLY LATE EXPRESS", "FLOATING TIMESHARE (ASK US!)", "BULK BUBBLE WRAP CARRIER", "MOBILE DENTIST FLEET")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Whoa, look at the size of that one.", "Big ship crossing, kid. Let it by, it doesn't do brakes.")
+
+[sub_resource type="Resource" id="Event_31_join_the_convoy"]
+script = ExtResource("2_event")
+id = "join_the_convoy"
+number = 32
+title = "Join the convoy"
+summary = "A convoy of haulers. Flash your lights to join; riding in the convoy steadies the RIDE bar."
+type = 3
+tone = 1
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_32_slowpoke"]
+script = ExtResource("2_event")
+id = "slowpoke"
+number = 33
+title = "Slowpoke"
+summary = "A tortoise in a tiny ship doing a crawl in the fast lane."
+type = 0
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+log_id = "slowpoke"
+ahead = 2500.0
+side_offset = Vector2(60.0, 150.0)
+height_offset = Vector2(-20.0, 20.0)
+ship_names = PackedStringArray("SHELDON'S SLOW FREIGHT", "TORTOISE TRANSPORT · 12 KM/H")
+speed_scale = 0.25
+same_direction = true
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Tortoise in the fast lane again. Go around, kid. He's been in that lane since Tuesday.", "That's Sheldon. Don't honk. He'll just go slower.")
+
+[sub_resource type="Resource" id="Event_33_courier_cut_off"]
+script = ExtResource("2_event")
+id = "courier_cut_off"
+number = 34
+title = "Courier cut-off"
+summary = "A pigeon courier cuts you off, yelling gibberish."
+type = 1
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+ahead = 3000.0
+side_offset = Vector2(40.0, 90.0)
+height_offset = Vector2(-10.0, 10.0)
+ship_names = PackedStringArray("PIGEON POST · PRIORITY", "PIGEON POST · VERY PRIORITY")
+speed_scale = 2.0
+speaker = ExtResource("npc_gus")
+lines = PackedStringArray("COO-ROO! RRRK! MOVE IT, BUN! ROO-COO-ROO!", "PRRRT! COO! BRRRK-COO! (that's pigeon for 'sorry, late')")
+replies = PackedStringArray("Rude.", "Love you too, buddy.", "...pigeons.")
+
+[sub_resource type="Resource" id="Event_34_tow_ship"]
+script = ExtResource("2_event")
+id = "tow_ship"
+number = 35
+title = "Tow ship"
+summary = "A tow ship hauling a broken rig. The driver waves."
+type = 0
+tone = 1
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+ahead = 4000.0
+side_offset = Vector2(120.0, 220.0)
+height_offset = Vector2(-20.0, 20.0)
+ship_names = PackedStringArray("A-1 TOW · WE HAUL HAULERS", "TOW SHIP (+1 SAD RIG)")
+speed_scale = 0.6
+
+[sub_resource type="Resource" id="Event_35_construction_zone"]
+script = ExtResource("2_event")
+id = "construction_zone"
+number = 36
+title = "Construction zone"
+summary = "Floating orange cones, a reduced speed limit, and a flagger with a STOP/SLOW sign."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_36_wide_load"]
+script = ExtResource("2_event")
+id = "wide_load"
+number = 37
+title = "Wide load"
+summary = "A whole house being hauled with an \"OVERSIZE LOAD\" banner. Pass carefully."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_37_ice_cream_ship"]
+script = ExtResource("2_event")
+id = "ice_cream_ship"
+number = 38
+title = "Ice cream ship"
+summary = "Plays its jingle. Flag it down to buy a cone."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_38_wedding_procession"]
+script = ExtResource("2_event")
+id = "wedding_procession"
+number = 39
+title = "Wedding procession"
+summary = "Ships with streamers and cans trailing. Honk to congratulate and get a small tip."
+type = 1
+tone = 1
+build = 3
+playable = false
+needs = "A small new system first (horn), and its own look."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_39_funeral_procession"]
+script = ExtResource("2_event")
+id = "funeral_procession"
+number = 40
+title = "Funeral procession"
+summary = "Slow dark ships, lights on. Tradition is to dim your lights and ease off. The bunny goes quiet."
+type = 0
+tone = 3
+build = 1
+zone = 2
+rarity = 1
+kind = 1
+ahead = 4000.0
+side_offset = Vector2(150.0, 260.0)
+height_offset = Vector2(-20.0, 20.0)
+ship_names = PackedStringArray("PROCESSION")
+tint = Color(0.6, 0.5, 0.95, 1)
+speed_scale = 0.4
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Procession coming. Lights low, ease off. ...That's how we do it out here.", "Slow ships, lights on. Somebody's last haul. Give 'em room, kid.")
+replies = PackedStringArray("...", "Easing off.", "Safe travels, whoever you were.")
+
+[sub_resource type="Resource" id="Event_40_student_driver"]
+script = ExtResource("2_event")
+id = "student_driver"
+number = 41
+title = "Student driver"
+summary = "A ship with a \"STUDENT DRIVER\" sign weaving all over."
+type = 2
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+log_id = "student_driver"
+ahead = 2500.0
+side_offset = Vector2(30.0, 120.0)
+height_offset = Vector2(-15.0, 15.0)
+ship_names = PackedStringArray("STUDENT DRIVER", "STUDENT DRIVER · PLEASE BE PATIENT")
+speed_scale = 0.5
+weaving = true
+same_direction = true
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Heads up hon, student driver on your lane. Give 'em room. We were all new once.")
+banner = "STUDENT DRIVER AHEAD"
+
+[sub_resource type="Resource" id="Event_41_gate_merge_jam"]
+script = ExtResource("2_event")
+id = "gate_merge_jam"
+number = 42
+title = "Gate merge jam"
+summary = "Traffic backed up at a jump-gate merge. Everyone chats on the CB."
+type = 2
+tone = 0
+build = 1
+zone = 2
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_ch19")
+lines = PackedStringArray("—moving yet? —nope. —how 'bout now? —still nope. —somebody's reading every single sign up there.", "—who's doing the zipper merge wrong? —everybody. —everybody, great.")
+replies = PackedStringArray("Classic gate merge.", "I brought snacks. I'm fine.", "Zipper merge, people. ZIPPER.")
+banner = "MERGE AHEAD · EXPECT DELAYS"
+
+[sub_resource type="Resource" id="Event_42_robot_hitchhiker"]
+script = ExtResource("2_event")
+id = "robot_hitchhiker"
+number = 43
+title = "Robot hitchhiker"
+summary = "A robot holding a cardboard sign: \"ANYWHERE BUT HERE.\""
+type = 1
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_43_tourist_bus"]
+script = ExtResource("2_event")
+id = "tourist_bus"
+number = 44
+title = "Tourist bus"
+summary = "A space bus full of tourists photographing you."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_44_breakdown_on_the_shoulder"]
+script = ExtResource("2_event")
+id = "breakdown_on_the_shoulder"
+number = 45
+title = "Breakdown on the shoulder"
+summary = "A rig with hazard lights and a dead thruster. Share fuel for a tip and reputation, or pass."
+type = 1
+tone = 1
+build = 1
+needs = "Sharing fuel for a tip and reputation (reputation comes later)."
+zone = 2
+rarity = 0
+kind = 12
+ahead = 2500.0
+side_offset = Vector2(150.0, 260.0)
+height_offset = Vector2(-20.0, 20.0)
+ship_names = PackedStringArray("BROKE DOWN · HAZARDS ON")
+tint = Color(1.0, 0.5, 0.1, 1)
+speed_scale = 0.03
+same_direction = true
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("Uh. Hi. Don't laugh. I boosted through a thruster. Again. Tow's coming. Probably.")
+replies = PackedStringArray("Need a hand? ...I don't have a hand. I have a mitten.", "Tow's on its way, hang tight.", "Again, Pip?")
+
+[sub_resource type="Resource" id="Event_45_fender_bender"]
+script = ExtResource("2_event")
+id = "fender_bender"
+number = 46
+title = "Fender-bender"
+summary = "Two ships bumped; the drivers argue on open comm. Traffic slows to rubberneck."
+type = 4
+tone = 0
+build = 1
+zone = 2
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_ch19")
+lines = PackedStringArray("—you BUMPED me! —you were in MY lane! —there are no lanes, it's SPACE! —then why are there SIGNS?!", "—that's a scratch. —that's a DENT. —that dent was there. —it was NOT there.")
+replies = PackedStringArray("Grab some popcorn.", "Exchange insurance, nerds.", "(turn the radio up)")
+
+[sub_resource type="Resource" id="Event_46_escaped_space_cows"]
+script = ExtResource("2_event")
+id = "escaped_space_cows"
+number = 47
+title = "Escaped space cows"
+summary = "Space cows drift across the lane after a spill. Weave through; the farmer apologizes."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_47_drag_race"]
+script = ExtResource("2_event")
+id = "drag_race"
+number = 48
+title = "Drag race"
+summary = "A hot-rodder challenges you to race to the next marker. Win credits; risk the cargo."
+type = 3
+tone = 0
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_48_billboard_ship"]
+script = ExtResource("2_event")
+id = "billboard_ship"
+number = 49
+title = "Billboard ship"
+summary = "A mobile billboard with a rotating ad."
+type = 0
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+log_id = "billboard"
+ahead = 4000.0
+side_offset = Vector2(200.0, 400.0)
+height_offset = Vector2(20.0, 80.0)
+ship_names = PackedStringArray("AD SHIP · MOON MILK · 30% LESS GRAVITY", "AD SHIP · NAP MOTEL · SLEEP IS GOOD", "AD SHIP · DR. SPRINKLE'S HULL PUTTY")
+speed_scale = 0.4
+
+[sub_resource type="Resource" id="Event_49_inflatable_hot_dog"]
+script = ExtResource("2_event")
+id = "inflatable_hot_dog"
+number = 50
+title = "Inflatable hot dog"
+summary = "A parade float shaped like a giant hot dog."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_50_one_letter"]
+script = ExtResource("2_event")
+id = "one_letter"
+number = 51
+title = "One letter"
+summary = "A frantic mail courier asks you to carry one letter to the next station."
+type = 3
+tone = 1
+build = 0
+playable = false
+needs = "A quick side job (carry the letter, get a tip)."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_51_trucker_shuttle"]
+script = ExtResource("2_event")
+id = "trucker_shuttle"
+number = 52
+title = "Trucker shuttle"
+summary = "A shuttle of sleepy truckers heading to a rest stop. They wave."
+type = 0
+tone = 1
+build = 1
+zone = 2
+rarity = 0
+kind = 12
+ahead = 4000.0
+side_offset = Vector2(120.0, 220.0)
+height_offset = Vector2(-20.0, 20.0)
+ship_names = PackedStringArray("REST STOP SHUTTLE · ZZZ", "DRIVERS' SHUTTLE · NAP EXPRESS")
+speed_scale = 0.8
+
+[sub_resource type="Resource" id="Event_52_military_escort"]
+script = ExtResource("2_event")
+id = "military_escort"
+number = 53
+title = "Military escort"
+summary = "A flotilla passes; the radio asks civilians to yield. Pull over until it's gone."
+type = 2
+tone = 3
+build = 1
+zone = 2
+rarity = 1
+kind = 0
+ahead = 5000.0
+side_offset = Vector2(0.0, 150.0)
+height_offset = Vector2(260.0, 420.0)
+ship_names = PackedStringArray("ADMIRAL'S BIRTHDAY YACHT", "PARADE FLAGSHIP (CONFETTI ONLY)")
+tint = Color(0.85, 0.85, 0.95, 1)
+speed_scale = 0.6
+speaker = ExtResource("npc_biscuit")
+lines = PackedStringArray("Civilian traffic, please yield for the Admiral's birthday flotilla. ...He's turning 90. Wave if you want.")
+replies = PackedStringArray("Happy birthday, Admiral.", "Yielding. Waving.", "Ninety. Respect.")
+
+[sub_resource type="Resource" id="Event_53_ambulance"]
+script = ExtResource("2_event")
+id = "ambulance"
+number = 54
+title = "Ambulance"
+summary = "Siren behind you. Pull over to let it pass for a courtesy bonus."
+type = 1
+tone = 3
+build = 1
+needs = "The courtesy bonus for pulling over."
+zone = 2
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_biscuit")
+lines = PackedStringArray("Ambulance coming through! Ease right, folks. Thank you kindly.")
+replies = PackedStringArray("Easing right.", "Go go go.", "Hope they're okay.")
+banner = "SIREN BEHIND YOU · EASE RIGHT"
+
+[sub_resource type="Resource" id="Event_54_trap_warning"]
+script = ExtResource("2_event")
+id = "trap_warning"
+number = 55
+title = "Trap warning"
+summary = "A passing trucker flashes lights: \"Biscuit's in the bushes up ahead.\""
+type = 4
+tone = 0
+build = 0
+zone = 2
+rarity = 0
+systems = PackedStringArray("tidewater")
+kind = 10
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Word on channel 19: Biscuit's parked in the bushes up ahead. Ease off, kid.", "Smokey's out by the cannery today. Watch your speed.")
+
+[sub_resource type="Resource" id="Event_55_roadside_tune_up"]
+script = ExtResource("2_event")
+id = "roadside_tune_up"
+number = 56
+title = "Roadside tune-up"
+summary = "A mechanic stand: \"THRUSTER TUNE-UP 50¢.\" Small handling buff for this haul."
+type = 3
+tone = 0
+build = 2
+playable = false
+needs = "A roadside stand and a small handling buff for the haul."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_56_lost_tourist"]
+script = ExtResource("2_event")
+id = "lost_tourist"
+number = 57
+title = "Lost tourist"
+summary = "A lost tourist asks for directions. Point them right or wrong."
+type = 1
+tone = 0
+build = 0
+zone = 2
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_bev")
+lines = PackedStringArray("Excuse me, sugar, which way to the World's Biggest Donut? My map's upside down. Or I am.", "Hi! Is this the scenic route? Everything's so... spacey.")
+replies = PackedStringArray("Back that way. Can't miss it.", "Straight ahead, forever.", "Follow the beacons, hon.")
+
+[sub_resource type="Resource" id="Event_57_car_carrier"]
+script = ExtResource("2_event")
+id = "car_carrier"
+number = 58
+title = "Car carrier"
+summary = "A hauler carrying twelve tiny spaceships."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_58_spilled_ball_bearings"]
+script = ExtResource("2_event")
+id = "spilled_ball_bearings"
+number = 59
+title = "Spilled ball bearings"
+summary = "A glittering spill of ball bearings. Bumpy ride."
+type = 2
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Ball bearings all over the lane. Gonna be a bumpy one, kid.")
+banner = "SPILL ON THE LANE"
+effect = 6
+effect_seconds = 10.0
+
+[sub_resource type="Resource" id="Event_59_horn_salute"]
+script = ExtResource("2_event")
+id = "horn_salute"
+number = 60
+title = "Horn salute"
+summary = "Pass a rig and honk; it honks back."
+type = 1
+tone = 1
+build = 3
+playable = false
+needs = "A small new system first (horn), and its own look."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_60_lane_ends"]
+script = ExtResource("2_event")
+id = "lane_ends"
+number = 61
+title = "Lane ends"
+summary = "\"FAST LANE ENDS.\" Everyone merges at once."
+type = 2
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Lane's ending, hon. Everybody's merging at once. Patience.")
+banner = "FAST LANE ENDS · MERGE"
+effect = 4
+effect_seconds = 5.0
+
+[sub_resource type="Resource" id="Event_61_dancing_traffic_robot"]
+script = ExtResource("2_event")
+id = "dancing_traffic_robot"
+number = 62
+title = "Dancing traffic robot"
+summary = "A traffic robot waving glow sticks to the beat of your radio."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_62_bell_hauler"]
+script = ExtResource("2_event")
+id = "bell_hauler"
+number = 63
+title = "Bell hauler"
+summary = "A rig hauling a giant bell that bongs on every bump."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_63_pizza_drone_flock"]
+script = ExtResource("2_event")
+id = "pizza_drone_flock"
+number = 64
+title = "Pizza drone flock"
+summary = "A swarm of pizza delivery drones crosses the lane like birds."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 2
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_64_the_rival"]
+script = ExtResource("2_event")
+id = "the_rival"
+number = 65
+title = "The rival"
+summary = "A recurring rival trucker racing you to the same station. Friendly trash talk."
+type = 1
+tone = 0
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 2
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_65_holding_pattern"]
+script = ExtResource("2_event")
+id = "holding_pattern"
+number = 66
+title = "Holding pattern"
+summary = "Approach control asks you to circle for 30 seconds. The DJ fills the time."
+type = 2
+tone = 0
+build = 0
+zone = 3
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_fern")
+lines = PackedStringArray("Approach to inbound rig: please hold for thirty seconds. ...Thank you for holding. Your call is important to us.")
+replies = PackedStringArray("Holding.", "Is there hold music?", "I'll just float here.")
+dj_lines = PackedStringArray("While you're holding out there, here's a song about waiting.")
+
+[sub_resource type="Resource" id="Event_66_docking_queue"]
+script = ExtResource("2_event")
+id = "docking_queue"
+number = 67
+title = "Docking queue"
+summary = "Ships lined up outside the ring. A sign: \"NOW SERVING #47.\""
+type = 0
+tone = 0
+build = 1
+zone = 3
+rarity = 0
+kind = 11
+playable = false
+needs = "Switched off: no giant signs (developer, 2026-10-08)."
+ahead = 1500.0
+side_offset = Vector2(600.0, 900.0)
+height_offset = Vector2(80.0, 200.0)
+texts = PackedStringArray("NOW SERVING #47|PLEASE TAKE A NUMBER")
+
+[sub_resource type="Resource" id="Event_67_crate_catch"]
+script = ExtResource("2_event")
+id = "crate_catch"
+number = 68
+title = "Crate catch"
+summary = "Dock workers playing catch with a crate in the open bay."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_68_window_washers"]
+script = ExtResource("2_event")
+id = "window_washers"
+number = 69
+title = "Window washers"
+summary = "Little bots squeegeeing the station windows."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_69_light_show"]
+script = ExtResource("2_event")
+id = "light_show"
+number = 70
+title = "Light show"
+summary = "The station is throwing itself a birthday light show."
+type = 0
+tone = 1
+build = 1
+playable = false
+needs = "Station lights that can put on a show."
+zone = 3
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_70_fireworks"]
+script = ExtResource("2_event")
+id = "fireworks"
+number = 71
+title = "Fireworks"
+summary = "Fireworks over the station for a holiday."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_71_customs_scan"]
+script = ExtResource("2_event")
+id = "customs_scan"
+number = 72
+title = "Customs scan"
+summary = "A scan beam sweeps over your rig on approach."
+type = 0
+tone = 3
+build = 0
+zone = 3
+rarity = 0
+kind = 10
+speaker = ExtResource("npc_fern")
+lines = PackedStringArray("Scanning... one rig, one tired driver, zero contraband. Welcome in.", "Scan complete. You're clear. Your cab could use a vacuum.")
+replies = PackedStringArray("Thanks.", "Rude, but fair.", "The crumbs are decorative.")
+banner = "CUSTOMS SCAN... CLEAR"
+
+[sub_resource type="Resource" id="Event_72_space_pigeons"]
+script = ExtResource("2_event")
+id = "space_pigeons"
+number = 73
+title = "Space pigeons"
+summary = "Pigeons nesting on the antenna scatter as you arrive."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_73_stuck_hangar_door"]
+script = ExtResource("2_event")
+id = "stuck_hangar_door"
+number = 74
+title = "Stuck hangar door"
+summary = "The door jams. A mechanic bangs it with a wrench over comm."
+type = 2
+tone = 0
+build = 0
+zone = 3
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_fern")
+lines = PackedStringArray("Ring's sticking again. Hang on. *CLANG* ...*CLANG* ...okay. Sorry about that.")
+replies = PackedStringArray("Hit it again.", "Take your time.", "Percussive maintenance.")
+
+[sub_resource type="Resource" id="Event_74_kids_at_the_window"]
+script = ExtResource("2_event")
+id = "kids_at_the_window"
+number = 75
+title = "Kids at the window"
+summary = "Kids waving from a viewport."
+type = 0
+tone = 1
+build = 1
+playable = false
+needs = "Station windows with little figures behind them."
+zone = 3
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_75_ad_blimp"]
+script = ExtResource("2_event")
+id = "ad_blimp"
+number = 76
+title = "Ad blimp"
+summary = "An advertising blimp circling the station."
+type = 0
+tone = 0
+build = 1
+zone = 3
+rarity = 0
+kind = 12
+ahead = 1500.0
+side_offset = Vector2(600.0, 900.0)
+height_offset = Vector2(150.0, 300.0)
+ship_names = PackedStringArray("AD BLIMP · SNOOZE PODS", "AD BLIMP · GALAXY GUMBALLS", "AD BLIMP · CALL YOUR MOTHER")
+speed_scale = 0.15
+
+[sub_resource type="Resource" id="Event_76_wrong_ring"]
+script = ExtResource("2_event")
+id = "wrong_ring"
+number = 77
+title = "Wrong ring"
+summary = "Traffic control apologizes and reassigns you to a different ring."
+type = 2
+tone = 0
+build = 0
+zone = 3
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_fern")
+lines = PackedStringArray("Inbound rig, we've moved you to ring... oh. No. Same ring. Sorry. Long day.")
+replies = PackedStringArray("Happens.", "Same ring. Got it.", "Want me to bring you a coffee?")
+
+[sub_resource type="Resource" id="Event_77_protest_flotilla"]
+script = ExtResource("2_event")
+id = "protest_flotilla"
+number = 78
+title = "Protest flotilla"
+summary = "Little ships with signs: \"MORE NAPS FOR HAULERS.\""
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_78_garbage_barge"]
+script = ExtResource("2_event")
+id = "garbage_barge"
+number = 79
+title = "Garbage barge"
+summary = "A garbage barge leaving, trailed by squawking space gulls."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_79_lost_suitcase"]
+script = ExtResource("2_event")
+id = "lost_suitcase"
+number = 80
+title = "Lost suitcase"
+summary = "A suitcase drifting from the station. Return it for a tip."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_80_gravity_test"]
+script = ExtResource("2_event")
+id = "gravity_test"
+number = 81
+title = "Gravity test"
+summary = "Through the windows, everything inside floats for a second."
+type = 0
+tone = 0
+build = 1
+playable = false
+needs = "Station windows you can see inside."
+zone = 3
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_81_broken_neon"]
+script = ExtResource("2_event")
+id = "broken_neon"
+number = 82
+title = "Broken neon"
+summary = "A station sign with missing letters spells something funny."
+type = 0
+tone = 0
+build = 0
+zone = 3
+rarity = 0
+kind = 11
+playable = false
+needs = "Switched off: no giant signs (developer, 2026-10-08)."
+ahead = 1500.0
+side_offset = Vector2(600.0, 900.0)
+height_offset = Vector2(80.0, 200.0)
+texts = PackedStringArray("FUEL & FOO|EAT AT MAR E'S", "HOT  OFFEE|GOO  EATS", "TUCK TOP|OPEN 24 HOU S")
+
+[sub_resource type="Resource" id="Event_82_food_truck"]
+script = ExtResource("2_event")
+id = "food_truck"
+number = 83
+title = "Food truck"
+summary = "A food truck ship parked by the ring, grill smoking. Buy a snack."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_83_welcome_drone"]
+script = ExtResource("2_event")
+id = "welcome_drone"
+number = 84
+title = "Welcome drone"
+summary = "First visit to a new system: a drone brings you a flower garland."
+type = 1
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 3
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_84_sleepy_controller"]
+script = ExtResource("2_event")
+id = "sleepy_controller"
+number = 85
+title = "Sleepy controller"
+summary = "Night shift only. The approach controller dozes off mid-sentence."
+type = 4
+tone = 1
+build = 0
+zone = 3
+rarity = 1
+night_only = true
+kind = 10
+speaker = ExtResource("npc_fern")
+lines = PackedStringArray("Approach control to inbound... you're cleared for... for... zzz... ...huh? Yes. Cleared. Hi.")
+replies = PackedStringArray("Go back to sleep, Fern.", "Cleared. Thanks.", "Night shift's rough, huh.")
+
+[sub_resource type="Resource" id="Event_85_space_elevator"]
+script = ExtResource("2_event")
+id = "space_elevator"
+number = 86
+title = "Space elevator"
+summary = "A cable rising from the planet with cars crawling up it."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_86_debris_belt"]
+script = ExtResource("2_event")
+id = "debris_belt"
+number = 87
+title = "Debris belt"
+summary = "A band of orbital junk to weave through."
+type = 2
+tone = 3
+build = 1
+zone = 4
+rarity = 0
+kind = 6
+log_id = "junk"
+ahead = 4000.0
+side_offset = Vector2(0.0, 300.0)
+height_offset = Vector2(-100.0, 100.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Orbital junk belt. Weave easy, kid.")
+
+[sub_resource type="Resource" id="Event_87_weather_satellite"]
+script = ExtResource("2_event")
+id = "weather_satellite"
+number = 88
+title = "Weather satellite"
+summary = "A satellite turns and snaps your photo."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_88_face_moon"]
+script = ExtResource("2_event")
+id = "face_moon"
+number = 89
+title = "Face moon"
+summary = "A moon with a billionaire's giant face carved into it."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_89_aurora"]
+script = ExtResource("2_event")
+id = "aurora"
+number = 90
+title = "Aurora"
+summary = "Aurora dancing over the planet's night side."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_90_ring_gap"]
+script = ExtResource("2_event")
+id = "ring_gap"
+number = 91
+title = "Ring gap"
+summary = "Fly through a gap in a sparkling ice ring."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_91_slingshot_window"]
+script = ExtResource("2_event")
+id = "slingshot_window"
+number = 92
+title = "Slingshot window"
+summary = "A glowing marker shows a perfect slingshot path for free speed."
+type = 3
+tone = 3
+build = 1
+playable = false
+needs = "Gravity wells and slingshots (planned for M5)."
+zone = 4
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_92_orbital_farm"]
+script = ExtResource("2_event")
+id = "orbital_farm"
+number = 93
+title = "Orbital farm"
+summary = "Greenhouses full of glowing crops."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_93_rocket_launch"]
+script = ExtResource("2_event")
+id = "rocket_launch"
+number = 94
+title = "Rocket launch"
+summary = "A rocket rises from the surface and passes you."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_94_meteor_shower_below"]
+script = ExtResource("2_event")
+id = "meteor_shower_below"
+number = 95
+title = "Meteor shower below"
+summary = "Meteors burning up in the atmosphere under you."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_95_orbital_hotel"]
+script = ExtResource("2_event")
+id = "orbital_hotel"
+number = 96
+title = "Orbital hotel"
+summary = "A hotel with a swimming pool visible under a glass dome."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_96_drive_in_moon"]
+script = ExtResource("2_event")
+id = "drive_in_moon"
+number = 97
+title = "Drive-in moon"
+summary = "A moon with a drive-in movie screen. Tune the radio to hear the movie."
+type = 3
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_97_city_light_ad"]
+script = ExtResource("2_event")
+id = "city_light_ad"
+number = 98
+title = "City-light ad"
+summary = "The night side's city lights spell out an advertisement."
+type = 0
+tone = 0
+build = 0
+playable = false
+needs = "City lights on a planet's night side that can spell words."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_98_terraformer"]
+script = ExtResource("2_event")
+id = "terraformer"
+number = 99
+title = "Terraformer"
+summary = "A machine puffing clouds onto a bare moon."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_99_moon_volcano"]
+script = ExtResource("2_event")
+id = "moon_volcano"
+number = 100
+title = "Moon volcano"
+summary = "A volcano erupting a glittering plume into space."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_100_one_house_moon"]
+script = ExtResource("2_event")
+id = "one_house_moon"
+number = 101
+title = "One-house moon"
+summary = "A tiny moon with one house and a mailbox."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_101_local_station"]
+script = ExtResource("2_event")
+id = "local_station"
+number = 102
+title = "Local station"
+summary = "A planet's local radio station bleeds onto your dial."
+type = 4
+tone = 1
+build = 0
+zone = 4
+rarity = 0
+kind = 10
+dj_lines = PackedStringArray("...and that's the tide report: high, then low, then high again. Back to polka.", "...lost: one fishing hat. Answers to 'hat'. Call the cannery. Now, the polka hour.", "...today's weather: space. Tomorrow's weather: also space.")
+radio_from = "LOCAL AM 540"
+effect = 2
+effect_seconds = 8.0
+
+[sub_resource type="Resource" id="Event_102_rope_bridge_moons"]
+script = ExtResource("2_event")
+id = "rope_bridge_moons"
+number = 103
+title = "Rope-bridge moons"
+summary = "Two moons almost touching, joined by a rope bridge."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_103_planet_sneeze"]
+script = ExtResource("2_event")
+id = "planet_sneeze"
+number = 104
+title = "Planet sneeze"
+summary = "A geyser of clouds bursts off the planet."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_104_satellite_graveyard_orbit"]
+script = ExtResource("2_event")
+id = "satellite_graveyard_orbit"
+number = 105
+title = "Satellite graveyard orbit"
+summary = "Rows of retired satellites like tombstones."
+type = 0
+tone = 3
+build = 1
+zone = 4
+rarity = 1
+kind = 6
+ahead = 4000.0
+side_offset = Vector2(300.0, 900.0)
+height_offset = Vector2(-100.0, 200.0)
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Old satellites up there. They used to tell the weather. Now they just... float. Mmh. Relatable.")
+
+[sub_resource type="Resource" id="Event_105_wedding_chapel"]
+script = ExtResource("2_event")
+id = "wedding_chapel"
+number = 106
+title = "Wedding chapel"
+summary = "\"Little Chapel of the Void,\" with a neon heart."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "It's built as a fixed landmark on the road to the Glimmer System (the Little Chapel of the Void), not a random event."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_106_planet_sized_sale"]
+script = ExtResource("2_event")
+id = "planet_sized_sale"
+number = 107
+title = "Planet-sized SALE"
+summary = "Tugboats pulling a planet-sized \"SALE\" banner."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_107_whale_breach"]
+script = ExtResource("2_event")
+id = "whale_breach"
+number = 108
+title = "Whale breach"
+summary = "Tidewater only: a whale breaches out of the ocean world into low orbit."
+type = 0
+tone = 1
+build = 1
+zone = 4
+rarity = 2
+systems = PackedStringArray("tidewater")
+kind = 2
+log_id = "whale_breach"
+size = 3.0
+ahead = 7000.0
+side_offset = Vector2(1500.0, 3000.0)
+height_offset = Vector2(-1200.0, -400.0)
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("...did one just jump OUT of the planet? Mmh. Showoff.")
+
+[sub_resource type="Resource" id="Event_108_golden_hour"]
+script = ExtResource("2_event")
+id = "golden_hour"
+number = 109
+title = "Golden hour"
+summary = "You cross the terminator into sunrise. Warm light floods the cab; the DJ goes quiet."
+type = 0
+tone = 1
+build = 0
+playable = false
+needs = "A sunrise lighting change when you cross into daylight."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_109_laundry_day"]
+script = ExtResource("2_event")
+id = "laundry_day"
+number = 110
+title = "Laundry day"
+summary = "A moon base with laundry drifting on a line."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 4
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_110_ion_storm"]
+script = ExtResource("2_event")
+id = "ion_storm"
+number = 111
+title = "Ion storm variants"
+summary = "New colors and intensities for the existing ion storm."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weight = 0.8
+cooldown_hauls = 0
+systems = PackedStringArray("tidewater")
+weather = "ion"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 600.0)
+height_offset = Vector2(-100.0, 100.0)
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Ion storm brewing out there. Your radio'll get crackly. Mine always is.")
+
+[sub_resource type="Resource" id="Event_111_solar_flare"]
+script = ExtResource("2_event")
+id = "solar_flare"
+number = 112
+title = "Solar flare"
+summary = "The screen brightens and the radio drops out. Duck behind a rock for a small bonus."
+type = 2
+tone = 4
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_112_static_storm"]
+script = ExtResource("2_event")
+id = "static_storm"
+number = 113
+title = "Static storm"
+summary = "HUD numbers glitch and flicker."
+type = 2
+tone = 2
+build = 0
+playable = false
+needs = "A HUD glitch effect (numbers flicker)."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_113_dust_storm"]
+script = ExtResource("2_event")
+id = "dust_storm"
+number = 114
+title = "Dust storm"
+summary = "Visibility shrinks as the fog thickens."
+type = 2
+tone = 3
+build = 1
+playable = false
+needs = "A way for events to thicken the haze for a while."
+zone = 5
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_114_magnetic_storm"]
+script = ExtResource("2_event")
+id = "magnetic_storm"
+number = 115
+title = "Magnetic storm"
+summary = "The compass tape spins and the nav arrow wobbles."
+type = 2
+tone = 3
+build = 0
+playable = false
+needs = "A HUD wobble for the compass and nav arrow."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_115_ice_hail"]
+script = ExtResource("2_event")
+id = "ice_hail"
+number = 116
+title = "Ice hail"
+summary = "Ice pellets plink off the hull."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weather = "ice"
+kind = 10
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Hail. Ice hail. It's just frozen space, it won't hurt the cargo. Much.")
+effect = 3
+effect_seconds = 10.0
+
+[sub_resource type="Resource" id="Event_116_plasma_rain"]
+script = ExtResource("2_event")
+id = "plasma_rain"
+number = 117
+title = "Plasma rain"
+summary = "Glowing streaks falling past the rig."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_117_calm_pocket"]
+script = ExtResource("2_event")
+id = "calm_pocket"
+number = 118
+title = "Calm pocket"
+summary = "Inside a quiet nebula pocket, sound muffles and everything slows."
+type = 0
+tone = 1
+build = 0
+playable = false
+needs = "A muffle-and-slow effect for sound and motion."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_118_rainbow_nebula"]
+script = ExtResource("2_event")
+id = "rainbow_nebula"
+number = 119
+title = "Rainbow nebula"
+summary = "The fog slowly cycles through colors."
+type = 0
+tone = 1
+build = 1
+playable = false
+needs = "A way for events to shift the haze color."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_119_gravity_tide"]
+script = ExtResource("2_event")
+id = "gravity_tide"
+number = 120
+title = "Gravity tide"
+summary = "The rig rises and falls gently, like a boat."
+type = 2
+tone = 1
+build = 0
+zone = 5
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Gravity tide, hon. Just ride it like a boat.")
+replies = PackedStringArray("Like a boat.", "I get seasick.", "Wheee.")
+effect = 5
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_120_rock_lightning"]
+script = ExtResource("2_event")
+id = "rock_lightning"
+number = 121
+title = "Rock lightning"
+summary = "Lightning arcs between asteroids."
+type = 0
+tone = 4
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_121_sunspot_season"]
+script = ExtResource("2_event")
+id = "sunspot_season"
+number = 122
+title = "Sunspot season"
+summary = "The sun flickers; truckers chatter about it on the CB."
+type = 4
+tone = 3
+build = 0
+zone = 5
+rarity = 1
+kind = 10
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Sun's flickering again. Sunspot season. Radio's gonna be garbage for a bit.")
+effect = 2
+effect_seconds = 8.0
+
+[sub_resource type="Resource" id="Event_122_spore_fog"]
+script = ExtResource("2_event")
+id = "spore_fog"
+number = 123
+title = "Spore fog"
+summary = "Glowing spores dust the windshield. Hit the wipers."
+type = 5
+tone = 1
+build = 3
+playable = false
+needs = "A small new system first (wipers), and its own look."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_123_cosmic_wind"]
+script = ExtResource("2_event")
+id = "cosmic_wind"
+number = 124
+title = "Cosmic wind"
+summary = "A particle stream you can ride for free speed."
+type = 3
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_124_snow_nebula"]
+script = ExtResource("2_event")
+id = "snow_nebula"
+number = 125
+title = "Snow nebula"
+summary = "Snowflakes stick to the windshield."
+type = 5
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_125_space_thunder"]
+script = ExtResource("2_event")
+id = "space_thunder"
+number = 126
+title = "Space thunder"
+summary = "You hear thunder. The DJ points out that's impossible."
+type = 4
+tone = 2
+build = 0
+zone = 5
+rarity = 2
+kind = 10
+dj_lines = PackedStringArray("...was that thunder? Folks, there's no air out there. Sound can't... never mind. Next song.")
+sound = ExtResource("sound_thunder")
+sound_pitch = 0.35
+
+[sub_resource type="Resource" id="Event_126_radiation_belt"]
+script = ExtResource("2_event")
+id = "radiation_belt"
+number = 127
+title = "Radiation belt"
+summary = "The counter clicks fast; go around or punch through quickly."
+type = 2
+tone = 4
+build = 0
+playable = false
+needs = "A Geiger counter sound and a belt you can fly around."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_127_aurora_curtain"]
+script = ExtResource("2_event")
+id = "aurora_curtain"
+number = 128
+title = "Aurora curtain"
+summary = "Fly through a curtain of light that washes the cab in color."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 5
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_128_skip_signal"]
+script = ExtResource("2_event")
+id = "skip_signal"
+number = 129
+title = "Skip signal"
+summary = "A station from another system comes in for a few minutes."
+type = 4
+tone = 1
+build = 0
+zone = 5
+rarity = 1
+kind = 10
+dj_lines = PackedStringArray("...coming to you live from somewhere you've never been. Weather's nice. Wish you were here.", "...that was the number one song in a system you'll never visit. Goodnight, strangers.")
+radio_from = "FAR-OFF STATION"
+effect = 2
+effect_seconds = 10.0
+
+[sub_resource type="Resource" id="Event_129_time_pocket"]
+script = ExtResource("2_event")
+id = "time_pocket"
+number = 130
+title = "Time pocket"
+summary = "The clock jumps five minutes and everything goes slow-motion for a moment."
+type = 2
+tone = 2
+build = 0
+playable = false
+needs = "The in-game clock (M6) and a slow-motion moment."
+zone = 5
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_130_whale_calf"]
+script = ExtResource("2_event")
+id = "whale_calf"
+number = 131
+title = "Whale calf"
+summary = "A space whale calf follows the rig for a while, then swims home."
+type = 0
+tone = 1
+build = 1
+playable = false
+needs = "A whale that follows the rig for a while."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_131_windshield_jelly"]
+script = ExtResource("2_event")
+id = "windshield_jelly"
+number = 132
+title = "Windshield jelly"
+summary = "One jellyfish from a migration sticks to the windshield, then lets go."
+type = 5
+tone = 1
+build = 1
+playable = false
+needs = "Things that can stick to the windshield."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_132_space_gulls"]
+script = ExtResource("2_event")
+id = "space_gulls"
+number = 133
+title = "Space gulls"
+summary = "Gulls chase the rig hoping for snacks."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_133_rock_hugging_squid"]
+script = ExtResource("2_event")
+id = "rock_hugging_squid"
+number = 134
+title = "Rock-hugging squid"
+summary = "A giant squid wrapped around an asteroid."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_134_crystal_moths"]
+script = ExtResource("2_event")
+id = "crystal_moths"
+number = 135
+title = "Crystal moths"
+summary = "Moths flutter toward your headlights."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_135_asteroid_turtle"]
+script = ExtResource("2_event")
+id = "asteroid_turtle"
+number = 136
+title = "Asteroid turtle"
+summary = "A \"rock\" wakes up, yawns, and swims away."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_136_manta_formation"]
+script = ExtResource("2_event")
+id = "manta_formation"
+number = 137
+title = "Manta formation"
+summary = "Stellar mantas gliding in formation alongside you."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_137_hull_kitten"]
+script = ExtResource("2_event")
+id = "hull_kitten"
+number = 138
+title = "Hull kitten"
+summary = "A tiny space kitten on your hull wants in. Let it in and it becomes a cab pet."
+type = 1
+tone = 1
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_138_cloud_sheep"]
+script = ExtResource("2_event")
+id = "cloud_sheep"
+number = 139
+title = "Cloud sheep"
+summary = "A herd of fluffy cloud-sheep drifting by."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_139_windshield_starfish"]
+script = ExtResource("2_event")
+id = "windshield_starfish"
+number = 140
+title = "Windshield starfish"
+summary = "A starfish clings to the cockpit glass."
+type = 5
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_140_space_barnacles"]
+script = ExtResource("2_event")
+id = "space_barnacles"
+number = 141
+title = "Space barnacles"
+summary = "Barnacles slowly grow on your hull; get them washed at a station."
+type = 2
+tone = 0
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_141_void_eel"]
+script = ExtResource("2_event")
+id = "void_eel"
+number = 142
+title = "Void eel"
+summary = "A long shiny eel slithers past."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_142_the_big_eye"]
+script = ExtResource("2_event")
+id = "the_big_eye"
+number = 143
+title = "The big eye"
+summary = "A huge eye opens inside a nebula, watches, then closes."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_143_snail_trail"]
+script = ExtResource("2_event")
+id = "snail_trail"
+number = 144
+title = "Snail trail"
+summary = "A space snail's glowing trail crosses the lane. Steering slides on it."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_144_firefly_words"]
+script = ExtResource("2_event")
+id = "firefly_words"
+number = 145
+title = "Firefly words"
+summary = "Fireflies briefly spell a word."
+type = 0
+tone = 1
+build = 0
+playable = false
+needs = "A small hook in the game (see the summary) that isn't there yet."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_145_space_bees"]
+script = ExtResource("2_event")
+id = "space_bees"
+number = 146
+title = "Space bees"
+summary = "Bees pollinating a floating field of flowers."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_146_comet_pup"]
+script = ExtResource("2_event")
+id = "comet_pup"
+number = 147
+title = "Comet pup"
+summary = "A tiny comet with eyes follows you to the station."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_147_water_bears"]
+script = ExtResource("2_event")
+id = "water_bears"
+number = 148
+title = "Water bears"
+summary = "A colony of microscopic-turned-huge water bears waving."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_148_space_geese"]
+script = ExtResource("2_event")
+id = "space_geese"
+number = 149
+title = "Space geese"
+summary = "Geese in V formation honk as they pass."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_149_satellite_octopus"]
+script = ExtResource("2_event")
+id = "satellite_octopus"
+number = 150
+title = "Satellite octopus"
+summary = "An octopus playing with satellites like toys."
+type = 0
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_150_jelly_cube"]
+script = ExtResource("2_event")
+id = "jelly_cube"
+number = 151
+title = "Jelly cube"
+summary = "A gelatinous cube drifts by with a lost shoe inside."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_151_meteor_ladybugs"]
+script = ExtResource("2_event")
+id = "meteor_ladybugs"
+number = 152
+title = "Meteor ladybugs"
+summary = "Ladybugs riding a meteor."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_152_moon_eater"]
+script = ExtResource("2_event")
+id = "moon_eater"
+number = 153
+title = "Moon-eater"
+summary = "Far away, a giant shadow nibbles a dead moon."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_153_glowworm_asteroid"]
+script = ExtResource("2_event")
+id = "glowworm_asteroid"
+number = 154
+title = "Glowworm asteroid"
+summary = "A hollow asteroid lit from inside by glowworms."
+type = 0
+tone = 1
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_154_pufferfish"]
+script = ExtResource("2_event")
+id = "pufferfish"
+number = 155
+title = "Pufferfish"
+summary = "A space pufferfish inflates when you get close. Bonk risk."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_155_derelict"]
+script = ExtResource("2_event")
+id = "derelict"
+number = 156
+title = "Auto-SOS derelict"
+summary = "A derelict blinking an automated SOS. Nobody's been aboard for years."
+type = 0
+tone = 3
+build = 1
+zone = 1
+rarity = 1
+weight = 0.8
+kind = 7
+log_id = "derelict"
+ahead = 5000.0
+side_offset = Vector2(500.0, 900.0)
+height_offset = Vector2(-200.0, 200.0)
+texts = PackedStringArray("THE DOROTHY MAE", "LUCKY STRIKE VIII", "SPIRIT OF OCTOBER", "THE WANDERING TUESDAY")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("That old hulk's still sending an automatic SOS. Nobody's been aboard in years. It just... keeps asking.", "Derelict off the lane. Nobody's home. Probably.")
+
+[sub_resource type="Resource" id="Event_156_junk"]
+script = ExtResource("2_event")
+id = "junk"
+number = 157
+title = "Junk spill variants"
+summary = "New mixes for the existing junk spill."
+type = 2
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+weight = 1.5
+cooldown_hauls = 0
+kind = 6
+log_id = "junk"
+ahead = 4000.0
+side_offset = Vector2(0.0, 300.0)
+height_offset = Vector2(-100.0, 100.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Junk on the road ahead. Somebody lost a load.", "Debris up ahead, kid. Easy through there.")
+
+[sub_resource type="Resource" id="Event_157_household_junk_cloud"]
+script = ExtResource("2_event")
+id = "household_junk_cloud"
+number = 158
+title = "Household junk cloud"
+summary = "A fridge, a toilet and a bicycle tumbling together."
+type = 2
+tone = 0
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 0
+kind = 10
+
+[sub_resource type="Resource" id="Event_158_lost_cargo_crate"]
+script = ExtResource("2_event")
+id = "lost_cargo_crate"
+number = 159
+title = "Lost cargo crate"
+summary = "A crate marked FRAGILE. Scan it, then deliver it to its owner for a reward."
+type = 3
+tone = 3
+build = 3
+playable = false
+needs = "A small new game system, and its own look."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_159_ghost_cruise_liner"]
+script = ExtResource("2_event")
+id = "ghost_cruise_liner"
+number = 160
+title = "Ghost cruise liner"
+summary = "A derelict liner with ballroom music still playing."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_160_shipwreck_figurehead"]
+script = ExtResource("2_event")
+id = "shipwreck_figurehead"
+number = 161
+title = "Shipwreck figurehead"
+summary = "An old wreck with a carved figurehead on the bow."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_161_half_message_billboard"]
+script = ExtResource("2_event")
+id = "half_message_billboard"
+number = 162
+title = "Half-message billboard"
+summary = "A wrecked billboard with a strange half-finished message."
+type = 0
+tone = 2
+build = 0
+zone = 1
+rarity = 1
+kind = 4
+log_id = "half_billboard"
+ahead = 4000.0
+side_offset = Vector2(250.0, 600.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("WE'RE SORRY ABOUT THE|", "IF FOUND, PLEASE RETURN TO|", "THE END IS|NEAR-ISH", "YOU ARE NOT ALONE. YOU ARE|", "CONGRATULATIONS ON YOUR|")
+
+[sub_resource type="Resource" id="Event_162_empty_escape_pod"]
+script = ExtResource("2_event")
+id = "empty_escape_pod"
+number = 163
+title = "Empty escape pod"
+summary = "An escape pod with nobody in it, and a note."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_163_the_twin_rig"]
+script = ExtResource("2_event")
+id = "the_twin_rig"
+number = 164
+title = "The twin rig"
+summary = "A derelict rig of the same model as yours, in the same paint."
+type = 0
+tone = 3
+build = 1
+needs = "The husband's story (M8) sets the story flag; until then it never happens."
+zone = 1
+rarity = 3
+story_flag = "story_twin_rig"
+kind = 7
+ahead = 4000.0
+side_offset = Vector2(400.0, 700.0)
+height_offset = Vector2(-100.0, 100.0)
+texts = PackedStringArray("NO NAME ON THE HULL")
+speaker = ExtResource("npc_jack")
+lines = PackedStringArray("...huh.", "...that's the same paint.")
+
+[sub_resource type="Resource" id="Event_164_satellite_graveyard"]
+script = ExtResource("2_event")
+id = "satellite_graveyard"
+number = 165
+title = "Satellite graveyard"
+summary = "A field of dead satellites."
+type = 0
+tone = 3
+build = 1
+playable = false
+needs = "A small hook in the game (see the summary) that isn't there yet."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_165_forgotten_statue"]
+script = ExtResource("2_event")
+id = "forgotten_statue"
+number = 166
+title = "Forgotten statue"
+summary = "A huge statue of some hero nobody remembers."
+type = 0
+tone = 3
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 1
+kind = 10
+
+[sub_resource type="Resource" id="Event_166_clean_cut"]
+script = ExtResource("2_event")
+id = "clean_cut"
+number = 167
+title = "Clean cut"
+summary = "A ship sliced perfectly in half, lights still on in both halves."
+type = 0
+tone = 2
+build = 2
+playable = false
+needs = "A new 3D model or effect."
+zone = 1
+rarity = 2
+kind = 10
+
+[sub_resource type="Resource" id="Event_167_convoy"]
+script = ExtResource("2_event")
+id = "convoy"
+number = 0
+title = "Convoy"
+summary = "A line of rigs going the other way, engine trails and funny names."
+type = 0
+tone = 1
+build = 1
+zone = 2
+rarity = 0
+weight = 2.0
+cooldown_hauls = 0
+kind = 1
+log_id = "convoy"
+ahead = 3500.0
+side_offset = Vector2(180.0, 260.0)
+height_offset = Vector2(-30.0, 30.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("That's the Tuesday convoy. Wave!", "Convoy coming the other way. Flash 'em your lights.")
+
+[sub_resource type="Resource" id="Event_168_billboard"]
+script = ExtResource("2_event")
+id = "billboard"
+number = 0
+title = "Space billboard"
+summary = "A giant billboard advertising something surreal."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 1.5
+cooldown_hauls = 0
+kind = 4
+log_id = "billboard"
+ahead = 4000.0
+side_offset = Vector2(250.0, 600.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("MOON MILK|NOW WITH 30% LESS GRAVITY", "DR. SPRINKLE'S HULL PUTTY|IT'S ALSO A SNACK", "GAS-N-GO 47|CLEAN RESTROOMS · WARM JERKY", "SPACE MUTUAL INSURANCE|BECAUSE ASTEROIDS DON'T CALL AHEAD", "NAP MOTEL|SLEEP IS A GOOD IDEA", "GALAXY GUMBALLS|COLLECT ALL 9000", "SNOOZE PODS|SLEEP LIKE YOU MEAN IT", "TIDEWATER CANNERY|FRESH FROM THE VOID", "WIGGLE'S WORMHOLE WASH|IN ONE END, OUT THE OTHER", "HAVE YOU CALLED YOUR MOTHER?|SHE'S FINE. CALL ANYWAY.", "SPACE JERKY|MYSTERIOUSLY CHEWY SINCE FOREVER", "LOST: ONE RUBBER DUCK|VERY LARGE · ANSWERS TO DUCK", "DUSTY'S GARAGE|IF IT'S LOOSE, WE TIGHTEN IT", "MARGE'S DINER|NEBULA PIE · TURN AROUND · YOU KNOW YOU WANT TO", "DRIVE TIRED? DON'T.|PULL OVER · NAP · LIVE")
+
+[sub_resource type="Resource" id="Event_169_duck"]
+script = ExtResource("2_event")
+id = "duck"
+number = 0
+title = "The giant rubber duck"
+summary = "A rubber duck the size of a station, slowly turning. Nobody knows why."
+type = 0
+tone = 0
+build = 1
+zone = 1
+rarity = 1
+weight = 0.6
+kind = 8
+log_id = "duck"
+ahead = 5000.0
+side_offset = Vector2(600.0, 1200.0)
+height_offset = Vector2(-200.0, 300.0)
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("Is that... a duck?", "Guys. GUYS. There's a duck.")
+
+[sub_resource type="Resource" id="Event_170_whales"]
+script = ExtResource("2_event")
+id = "whales"
+number = 0
+title = "Space whales"
+summary = "A pod of space whales swimming near the ocean planet, singing."
+type = 0
+tone = 1
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("tidewater")
+kind = 2
+log_id = "whales"
+ahead = 5000.0
+side_offset = Vector2(500.0, 1000.0)
+height_offset = Vector2(-200.0, 200.0)
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("Whales off your side. Big ones. They like trucks.", "Mmh. Whales. Say hi. They won't say hi back. They're shy.")
+
+[sub_resource type="Resource" id="Event_171_jellyfish"]
+script = ExtResource("2_event")
+id = "jellyfish"
+number = 0
+title = "Jellyfish migration"
+summary = "Cosmic jellyfish drifting across the lane. Drift through slow."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 1.5
+kind = 3
+log_id = "jellyfish"
+ahead = 4500.0
+side_offset = Vector2(0.0, 150.0)
+height_offset = Vector2(-60.0, 60.0)
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Jellyfish migration on the lane, hon. Drift through slow, they don't sting.")
+
+[sub_resource type="Resource" id="Event_172_ion_storm_violet"]
+script = ExtResource("2_event")
+id = "ion_storm_violet"
+number = 0
+title = "Ion storm (violet)"
+summary = "An ion storm in a different color: violet and pink."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 1
+weather = "ion"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 600.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(0.8, 0.4, 1.0, 1)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Purple storm up ahead. Those are the pretty ones. Still crackly.")
+
+[sub_resource type="Resource" id="Event_173_ion_storm_amber"]
+script = ExtResource("2_event")
+id = "ion_storm_amber"
+number = 0
+title = "Ion storm (amber)"
+summary = "An ion storm in a different color: warm amber."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 1
+weather = "ion"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 600.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(1.0, 0.7, 0.25, 1)
+speaker = ExtResource("npc_dottie")
+lines = PackedStringArray("Amber storm on your route, hon. Radio's gonna fuzz out. Sing to yourself.")
+
+[sub_resource type="Resource" id="Event_174_glimmer_billboard"]
+script = ExtResource("2_event")
+id = "glimmer_billboard"
+number = 0
+title = "Glimmer billboard"
+summary = "Casino ads in neon, everywhere you look in the Glimmer System."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 3.0
+cooldown_hauls = 0
+systems = PackedStringArray("glimmer")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("THE HIGH ROLLER|EVERYBODY'S A WINNER* · *TERMS APPLY", "LOOSEST SLOTS IN THE SECTOR|PROBABLY", "ALL-YOU-CAN-EAT SHRIMP|ALL NIGHT · ALL SHRIMP · ALL YOU", "LIVE TONIGHT: THE CROONING CRAB|TWO SHOWS · BOTH SIDEWAYS", "FEELING LUCKY?|YOU SHOULD. YOU REALLY SHOULD.", "LITTLE CHAPEL OF THE VOID|WEDDINGS · VOW RENEWALS · NO REFUNDS", "CASH 4 RIGS|WE BUY ANYTHING THAT FLIES (OR USED TO)", "SAL SAYS: COME ON IN|SAL ALWAYS SAYS THAT", "FREE DRINKS FOR PLAYERS|DEFINE 'PLAYER'", "LOST? GOOD.|THE HIGH ROLLER · NEXT EXIT")
+
+[sub_resource type="Resource" id="Event_175_limo_convoy"]
+script = ExtResource("2_event")
+id = "limo_convoy"
+number = 0
+title = "Limo convoy"
+summary = "A line of stretch limos heading for the casino, honking."
+type = 0
+tone = 0
+build = 1
+zone = 2
+rarity = 0
+systems = PackedStringArray("glimmer")
+kind = 1
+log_id = "convoy"
+ahead = 3500.0
+side_offset = Vector2(180.0, 260.0)
+height_offset = Vector2(-30.0, 30.0)
+ship_names = PackedStringArray("HIGH ROLLER LIMO", "VIP SHUTTLE", "BACHELOR PARTY BUS", "STRETCH LIMO (VERY)")
+tint = Color(1.0, 0.3, 0.8, 1)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Limos. Every night it's limos out here. Somebody's always getting married or broke. Or both.")
+
+[sub_resource type="Resource" id="Event_176_channel19_winner"]
+script = ExtResource("2_event")
+id = "channel19_winner"
+number = 0
+title = "A winner on channel 19"
+summary = "Somebody on the open channel just won big. Sort of."
+type = 4
+tone = 0
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("glimmer")
+kind = 10
+speaker = ExtResource("npc_ch19")
+lines = PackedStringArray("—I WON! I WON! —won what? —...a coupon. For the buffet. —that's still winning, buddy.", "—anybody need a ride home? I lost my rig. —at the tables? —at the tables.")
+replies = PackedStringArray("Congrats?", "The house always wins.", "Buffet's not bad, actually.")
+
+[sub_resource type="Resource" id="Event_177_sal_calls"]
+script = ExtResource("2_event")
+id = "sal_calls"
+number = 0
+title = "Sal calls"
+summary = "Sal calls to say hi. Sal always calls to say hi."
+type = 1
+tone = 0
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("glimmer")
+story_flag = "sal_met"
+kind = 10
+speaker = ExtResource("npc_sal")
+lines = PackedStringArray("Champ! Saw you on the scope. Swing by, the shrimp's fresh. Fresh-ish.", "Champ, quick one: if anybody asks, the dice were always that shape. Okay bye.")
+replies = PackedStringArray("Hi, Sal.", "What dice?", "...fresh-ish?")
+
+[sub_resource type="Resource" id="Event_178_great_migration"]
+script = ExtResource("2_event")
+id = "great_migration"
+number = 0
+title = "THE GREAT MIGRATION"
+summary = "A jellyfish swarm four times the size."
+type = 0
+tone = 1
+build = 1
+zone = 0
+rarity = 2
+kind = 3
+log_id = "great_migration"
+size = 4.0
+ahead = 7000.0
+side_offset = Vector2(800.0, 1600.0)
+height_offset = Vector2(-300.0, 400.0)
+speaker = ExtResource("npc_gill")
+lines = PackedStringArray("...is that the Great Migration? My grandma saw it once. Slow down. Look.")
+
+[sub_resource type="Resource" id="Event_179_leviathan"]
+script = ExtResource("2_event")
+id = "leviathan"
+number = 0
+title = "LEVIATHAN POD"
+summary = "Whales six times the size."
+type = 0
+tone = 3
+build = 1
+zone = 0
+rarity = 2
+kind = 2
+log_id = "leviathan"
+size = 6.0
+ahead = 8000.0
+side_offset = Vector2(1800.0, 3000.0)
+height_offset = Vector2(-400.0, 600.0)
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Kid. KID. Look off your side. Twenty years hauling and I never... wow.")
+
+[sub_resource type="Resource" id="Event_180_ghost_ship"]
+script = ExtResource("2_event")
+id = "ghost_ship"
+number = 0
+title = "GHOST SHIP"
+summary = "A see-through, flickering ship. You fly right through it."
+type = 0
+tone = 2
+build = 1
+zone = 0
+rarity = 2
+kind = 7
+log_id = "ghost_ship"
+ghost = true
+ahead = 5000.0
+side_offset = Vector2(400.0, 800.0)
+height_offset = Vector2(-150.0, 150.0)
+texts = PackedStringArray("UNKNOWN VESSEL")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("...you see that ship? ...No. Me neither. Let's just keep driving.")
+
+[sub_resource type="Resource" id="Event_181_comet_storm"]
+script = ExtResource("2_event")
+id = "comet_storm"
+number = 0
+title = "COMET STORM"
+summary = "Seven comets at once."
+type = 0
+tone = 1
+build = 1
+zone = 0
+rarity = 2
+kind = 5
+log_id = "comet_storm"
+copies = 7
+ahead = 7000.0
+side_offset = Vector2(0.0, 2000.0)
+height_offset = Vector2(400.0, 2000.0)
+speaker = ExtResource("npc_pip")
+lines = PackedStringArray("COMET STORM!! Everybody make a wish! I'm wishing for seven sandwiches!")
+
+[sub_resource type="Resource" id="Event_b4_dustbowl_billboard"]
+script = ExtResource("2_event")
+id = "dustbowl_billboard"
+number = 0
+title = "Dustbowl billboard"
+summary = "Junkyard ads, sun-bleached and peeling, all over the Dustbowl."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("dustbowl")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("HOOF & HULL SALVAGE|WE BUY WRECKS · WE SELL WRECKS · WE ARE WRECKS", "CACTUS JUICE|IT'S MOSTLY WATER. MOSTLY.", "DUST? WHAT DUST?|AIR FILTERS · NEXT EXIT", "LAST WATER FOR 40 KM|(THERE IS NO WATER)", "USED RIGS · LIKE NEW|IF NEW WAS A LONG TIME AGO", "SEE THE BIG STEER|IT'S A SKULL · IT'S BIG", "LOST: ONE FRIDGE|LAST SEEN: CANYON · ANSWERS TO NOTHING")
+
+[sub_resource type="Resource" id="Event_b4_dust_storm_amber"]
+script = ExtResource("2_event")
+id = "dust_storm_amber"
+number = 0
+title = "Dust storm (Dustbowl)"
+summary = "A real Dustbowl dust storm: thick amber haze, sand hissing on the hull, the radio full of grit."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weight = 2.0
+systems = PackedStringArray("dustbowl")
+weather = "dust"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(1.0, 0.6, 0.2, 1)
+speaker = ExtResource("npc_dustbowl_mags")
+lines = PackedStringArray("Dust storm coming through, Rabbit. Close your vents. Radio's gonna sound like gravel.", "Storm on your lane. Keep the nose steady. Sand never killed anybody. Mostly.")
+effect = 6
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_b4_dustbowl_wrecks"]
+script = ExtResource("2_event")
+id = "dustbowl_wrecks"
+number = 0
+title = "Dustbowl wrecks"
+summary = "Old derelicts half-buried in drifting dust. The Dustbowl is a ship graveyard."
+type = 0
+tone = 2
+build = 1
+zone = 1
+rarity = 0
+weight = 2.0
+cooldown_hauls = 0
+systems = PackedStringArray("dustbowl")
+kind = 7
+log_id = "derelict"
+ahead = 5000.0
+side_offset = Vector2(400.0, 900.0)
+height_offset = Vector2(-250.0, 250.0)
+texts = PackedStringArray("THE DUSTY ROSE", "GOODNIGHT GERTRUDE", "PRIDE OF THE PRAIRIE", "SECOND MORTGAGE", "THE TUMBLEWEED", "MAGS'S NEXT PROJECT")
+speaker = ExtResource("npc_wendell")
+lines = PackedStringArray("Wreck off your side, kid. Dustbowl's full of 'em. Mags'll have that one in pieces by Tuesday.")
+
+[sub_resource type="Resource" id="Event_b4_mags_calls"]
+script = ExtResource("2_event")
+id = "mags_calls"
+number = 0
+title = "Mags calls"
+summary = "Mags calls about something she found. Or ate."
+type = 1
+tone = 0
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("dustbowl")
+story_flag = "mags_met"
+kind = 10
+speaker = ExtResource("npc_dustbowl_mags")
+lines = PackedStringArray("Rabbit. Found a jukebox in the dunes. Plays one song. Backwards. I like it.", "Rabbit. If you see a fridge out there, it's mine. Don't tell it I said that.")
+replies = PackedStringArray("Noted.", "...Backwards?", "I'll keep an eye out.")
+
+[sub_resource type="Resource" id="Event_b4_greenhouse_billboard"]
+script = ExtResource("2_event")
+id = "greenhouse_billboard"
+number = 0
+title = "Greenhouse billboard"
+summary = "Mossy, overgrown billboards in Greenhouse Reach, vines and all."
+type = 0
+tone = 1
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("greenhouse")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("THE ORBITAL ARBORETUM|91 YEARS · 1 TREE · WORTH IT", "TALK TO YOUR PLANTS|THEY'RE LISTENING", "U-PICK MOONBERRIES|BRING YOUR OWN SPACESUIT", "JELLYFISH CROSSING|NEXT 20 KM · DRIFT SLOW", "POLLEN COUNT: HIGH|SNEEZE RESPONSIBLY", "COMPOST: IT'S THE GOOD STUFF|DR. MOSS AGREES")
+
+[sub_resource type="Resource" id="Event_b4_jelly_bloom"]
+script = ExtResource("2_event")
+id = "jelly_bloom"
+number = 0
+title = "Jellyfish bloom"
+summary = "Greenhouse Reach's gimmick: big, slow jellyfish migrations through the lane, glowing green."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 3.0
+cooldown_hauls = 0
+systems = PackedStringArray("greenhouse")
+kind = 3
+log_id = "jellyfish"
+size = 2.0
+ahead = 4500.0
+side_offset = Vector2(0.0, 200.0)
+height_offset = Vector2(-80.0, 80.0)
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Jellyfish, dear... drifting your way. Slow down... and say hello. They won't say it back. They're busy.", "The bloom's moving through... drift slowly... they're very old.")
+
+[sub_resource type="Resource" id="Event_b4_pollen_storm"]
+script = ExtResource("2_event")
+id = "pollen_storm"
+number = 0
+title = "Pollen storm"
+summary = "A glittering yellow-green pollen cloud. The rig sways like a boat in it."
+type = 2
+tone = 1
+build = 1
+zone = 5
+rarity = 0
+weight = 1.6
+systems = PackedStringArray("greenhouse")
+weather = "pollen"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(0.75, 1.0, 0.3, 1)
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Pollen cloud ahead, dear. It sways you a little. Like a hammock. Enjoy it.")
+effect = 5
+effect_seconds = 14.0
+
+[sub_resource type="Resource" id="Event_b4_moss_calls"]
+script = ExtResource("2_event")
+id = "moss_calls"
+number = 0
+title = "Dr. Moss calls"
+summary = "Dr. Moss calls with a plant update. It takes a while."
+type = 1
+tone = 1
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("greenhouse")
+story_flag = "moss_met"
+kind = 10
+speaker = ExtResource("npc_greenhouse_moss")
+lines = PackedStringArray("Dear... the ferns grew a centimeter. I thought you'd want to know. I stayed up for it.", "Hello... it's Dr. Moss... I forgot why I called... it'll come to me... take your time.")
+replies = PackedStringArray("Congratulations?", "Take your time.", "I'll be by soon.")
+
+[sub_resource type="Resource" id="Event_b4_frostline_billboard"]
+script = ExtResource("2_event")
+id = "frostline_billboard"
+number = 0
+title = "Frostline billboard"
+summary = "Frosted-over signs at the top of the map, most of them about ice cream."
+type = 0
+tone = 0
+build = 1
+zone = 0
+rarity = 0
+weight = 2.5
+cooldown_hauls = 0
+systems = PackedStringArray("frostline")
+kind = 4
+log_id = "billboard"
+ahead = 3500.0
+side_offset = Vector2(200.0, 500.0)
+height_offset = Vector2(-50.0, 200.0)
+texts = PackedStringArray("FLURRY'S COMET CREAMERY|COLDEST CONES IN THE GALAXY", "ALMOST THERE|(NO YOU'RE NOT)", "CHAINS REQUIRED|FOR WHAT? NOBODY KNOWS", "HAVE YOU SEEN THE SNOWMAN?|WHO BUILT IT? WE NEED TO KNOW", "TRY: NEBULA SWIRL|OR PLAIN. PLAIN IS ALSO GOOD.", "BRAIN FREEZE?|KEEP DRIVING")
+
+[sub_resource type="Resource" id="Event_b4_frost_hail"]
+script = ExtResource("2_event")
+id = "frost_hail"
+number = 0
+title = "Comet hail"
+summary = "A hailstorm of comet ice: lavender glow, little pings off the hull, the radio crackling."
+type = 2
+tone = 3
+build = 1
+zone = 5
+rarity = 0
+weight = 2.2
+systems = PackedStringArray("frostline")
+weather = "ice"
+kind = 9
+log_id = "ion_storm"
+ahead = 6000.0
+side_offset = Vector2(0.0, 400.0)
+height_offset = Vector2(-100.0, 100.0)
+tint = Color(0.75, 0.65, 1.0, 1)
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Hail on your lane, pal! Comet bits! They ping! Keep the cargo snug!", "Ice storm! It's pretty from in here! Less pretty from out there!")
+effect = 3
+effect_seconds = 12.0
+
+[sub_resource type="Resource" id="Event_b4_frostline_comets"]
+script = ExtResource("2_event")
+id = "frostline_comets"
+number = 0
+title = "Comet parade"
+summary = "A string of small icy comets crossing the lane, tails sparkling."
+type = 0
+tone = 1
+build = 1
+zone = 1
+rarity = 0
+weight = 1.5
+systems = PackedStringArray("frostline")
+kind = 5
+log_id = "comet"
+copies = 3
+ahead = 6000.0
+side_offset = Vector2(600.0, 1400.0)
+height_offset = Vector2(-300.0, 300.0)
+tint = Color(0.8, 0.75, 1.0, 1)
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Comets! Fresh ones! That's tomorrow's ice cream, pal!")
+
+[sub_resource type="Resource" id="Event_b4_penny_calls"]
+script = ExtResource("2_event")
+id = "penny_calls"
+number = 0
+title = "Penny calls"
+summary = "Penny calls. She's just happy someone's out there."
+type = 1
+tone = 1
+build = 0
+zone = 0
+rarity = 1
+systems = PackedStringArray("frostline")
+story_flag = "penny_met"
+kind = 10
+speaker = ExtResource("npc_frostline_penny")
+lines = PackedStringArray("Pal! I see a dot on my scope and I said 'that's a trucker!' Is it you? Say it's you!", "Hi pal! No reason! It's quiet up here! Okay bye! Wait. Bye!")
+replies = PackedStringArray("It's me.", "Hi, Penny.", "Save me a cone.")
+
+[resource]
+script = ExtResource("1_list")
+events = Array[ExtResource("2_event")]([SubResource("Event_0_waving_spacesuit"), SubResource("Event_1_lone_vending_machine"), SubResource("Event_2_hitchhiker"), SubResource("Event_3_last_gas_sign"), SubResource("Event_4_dead_air"), SubResource("Event_5_message_in_a_bottle"), SubResource("Event_6_floating_living_room"), SubResource("Event_7_jingle_satellite"), SubResource("Event_8_rogue_planet"), SubResource("Event_9_micrometeoroid_sprinkle"), SubResource("Event_10_comet"), SubResource("Event_11_picnic_table"), SubResource("Event_12_the_eyeball"), SubResource("Event_13_space_jogger"), SubResource("Event_14_you_are_here"), SubResource("Event_15_echo_transponder"), SubResource("Event_16_self_playing_piano"), SubResource("Event_17_ancient_probe"), SubResource("Event_18_starfield_smile"), SubResource("Event_19_dust_bunnies"), SubResource("Event_20_fog_wall"), SubResource("Event_21_napping_trucker"), SubResource("Event_22_space_tumbleweed"), SubResource("Event_23_star_krill"), SubResource("Event_24_rest_area"), SubResource("Event_25_gravity_eddy"), SubResource("Event_26_birthday_balloons"), SubResource("Event_27_cosmic_string_twang"), SubResource("Event_28_star_fisherman"), SubResource("Event_29_long_nothing"), SubResource("Event_30_big_ship"), SubResource("Event_31_join_the_convoy"), SubResource("Event_32_slowpoke"), SubResource("Event_33_courier_cut_off"), SubResource("Event_34_tow_ship"), SubResource("Event_35_construction_zone"), SubResource("Event_36_wide_load"), SubResource("Event_37_ice_cream_ship"), SubResource("Event_38_wedding_procession"), SubResource("Event_39_funeral_procession"), SubResource("Event_40_student_driver"), SubResource("Event_41_gate_merge_jam"), SubResource("Event_42_robot_hitchhiker"), SubResource("Event_43_tourist_bus"), SubResource("Event_44_breakdown_on_the_shoulder"), SubResource("Event_45_fender_bender"), SubResource("Event_46_escaped_space_cows"), SubResource("Event_47_drag_race"), SubResource("Event_48_billboard_ship"), SubResource("Event_49_inflatable_hot_dog"), SubResource("Event_50_one_letter"), SubResource("Event_51_trucker_shuttle"), SubResource("Event_52_military_escort"), SubResource("Event_53_ambulance"), SubResource("Event_54_trap_warning"), SubResource("Event_55_roadside_tune_up"), SubResource("Event_56_lost_tourist"), SubResource("Event_57_car_carrier"), SubResource("Event_58_spilled_ball_bearings"), SubResource("Event_59_horn_salute"), SubResource("Event_60_lane_ends"), SubResource("Event_61_dancing_traffic_robot"), SubResource("Event_62_bell_hauler"), SubResource("Event_63_pizza_drone_flock"), SubResource("Event_64_the_rival"), SubResource("Event_65_holding_pattern"), SubResource("Event_66_docking_queue"), SubResource("Event_67_crate_catch"), SubResource("Event_68_window_washers"), SubResource("Event_69_light_show"), SubResource("Event_70_fireworks"), SubResource("Event_71_customs_scan"), SubResource("Event_72_space_pigeons"), SubResource("Event_73_stuck_hangar_door"), SubResource("Event_74_kids_at_the_window"), SubResource("Event_75_ad_blimp"), SubResource("Event_76_wrong_ring"), SubResource("Event_77_protest_flotilla"), SubResource("Event_78_garbage_barge"), SubResource("Event_79_lost_suitcase"), SubResource("Event_80_gravity_test"), SubResource("Event_81_broken_neon"), SubResource("Event_82_food_truck"), SubResource("Event_83_welcome_drone"), SubResource("Event_84_sleepy_controller"), SubResource("Event_85_space_elevator"), SubResource("Event_86_debris_belt"), SubResource("Event_87_weather_satellite"), SubResource("Event_88_face_moon"), SubResource("Event_89_aurora"), SubResource("Event_90_ring_gap"), SubResource("Event_91_slingshot_window"), SubResource("Event_92_orbital_farm"), SubResource("Event_93_rocket_launch"), SubResource("Event_94_meteor_shower_below"), SubResource("Event_95_orbital_hotel"), SubResource("Event_96_drive_in_moon"), SubResource("Event_97_city_light_ad"), SubResource("Event_98_terraformer"), SubResource("Event_99_moon_volcano"), SubResource("Event_100_one_house_moon"), SubResource("Event_101_local_station"), SubResource("Event_102_rope_bridge_moons"), SubResource("Event_103_planet_sneeze"), SubResource("Event_104_satellite_graveyard_orbit"), SubResource("Event_105_wedding_chapel"), SubResource("Event_106_planet_sized_sale"), SubResource("Event_107_whale_breach"), SubResource("Event_108_golden_hour"), SubResource("Event_109_laundry_day"), SubResource("Event_110_ion_storm"), SubResource("Event_111_solar_flare"), SubResource("Event_112_static_storm"), SubResource("Event_113_dust_storm"), SubResource("Event_114_magnetic_storm"), SubResource("Event_115_ice_hail"), SubResource("Event_116_plasma_rain"), SubResource("Event_117_calm_pocket"), SubResource("Event_118_rainbow_nebula"), SubResource("Event_119_gravity_tide"), SubResource("Event_120_rock_lightning"), SubResource("Event_121_sunspot_season"), SubResource("Event_122_spore_fog"), SubResource("Event_123_cosmic_wind"), SubResource("Event_124_snow_nebula"), SubResource("Event_125_space_thunder"), SubResource("Event_126_radiation_belt"), SubResource("Event_127_aurora_curtain"), SubResource("Event_128_skip_signal"), SubResource("Event_129_time_pocket"), SubResource("Event_130_whale_calf"), SubResource("Event_131_windshield_jelly"), SubResource("Event_132_space_gulls"), SubResource("Event_133_rock_hugging_squid"), SubResource("Event_134_crystal_moths"), SubResource("Event_135_asteroid_turtle"), SubResource("Event_136_manta_formation"), SubResource("Event_137_hull_kitten"), SubResource("Event_138_cloud_sheep"), SubResource("Event_139_windshield_starfish"), SubResource("Event_140_space_barnacles"), SubResource("Event_141_void_eel"), SubResource("Event_142_the_big_eye"), SubResource("Event_143_snail_trail"), SubResource("Event_144_firefly_words"), SubResource("Event_145_space_bees"), SubResource("Event_146_comet_pup"), SubResource("Event_147_water_bears"), SubResource("Event_148_space_geese"), SubResource("Event_149_satellite_octopus"), SubResource("Event_150_jelly_cube"), SubResource("Event_151_meteor_ladybugs"), SubResource("Event_152_moon_eater"), SubResource("Event_153_glowworm_asteroid"), SubResource("Event_154_pufferfish"), SubResource("Event_155_derelict"), SubResource("Event_156_junk"), SubResource("Event_157_household_junk_cloud"), SubResource("Event_158_lost_cargo_crate"), SubResource("Event_159_ghost_cruise_liner"), SubResource("Event_160_shipwreck_figurehead"), SubResource("Event_161_half_message_billboard"), SubResource("Event_162_empty_escape_pod"), SubResource("Event_163_the_twin_rig"), SubResource("Event_164_satellite_graveyard"), SubResource("Event_165_forgotten_statue"), SubResource("Event_166_clean_cut"), SubResource("Event_167_convoy"), SubResource("Event_168_billboard"), SubResource("Event_169_duck"), SubResource("Event_170_whales"), SubResource("Event_171_jellyfish"), SubResource("Event_172_ion_storm_violet"), SubResource("Event_173_ion_storm_amber"), SubResource("Event_174_glimmer_billboard"), SubResource("Event_175_limo_convoy"), SubResource("Event_176_channel19_winner"), SubResource("Event_177_sal_calls"), SubResource("Event_178_great_migration"), SubResource("Event_179_leviathan"), SubResource("Event_180_ghost_ship"), SubResource("Event_181_comet_storm"), SubResource("Event_b4_dustbowl_billboard"), SubResource("Event_b4_dust_storm_amber"), SubResource("Event_b4_dustbowl_wrecks"), SubResource("Event_b4_mags_calls"), SubResource("Event_b4_greenhouse_billboard"), SubResource("Event_b4_jelly_bloom"), SubResource("Event_b4_pollen_storm"), SubResource("Event_b4_moss_calls"), SubResource("Event_b4_frostline_billboard"), SubResource("Event_b4_frost_hail"), SubResource("Event_b4_frostline_comets"), SubResource("Event_b4_penny_calls")])

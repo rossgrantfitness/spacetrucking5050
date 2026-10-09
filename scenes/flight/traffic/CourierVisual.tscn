@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/opengameart/quaternius_lowpoly_spaceships/Zenith.obj" id="1_mesh"]
+[ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://assets/opengameart/quaternius_lowpoly_spaceships/Zenith.png" id="3_texture"]
+[ext_resource type="Script" path="res://scenes/flight/EngineTrail.gd" id="4_trail"]
+[ext_resource type="Script" path="res://scenes/flight/EngineFlare.gd" id="5_flare"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_courier"]
+render_priority = 0
+shader = ExtResource("2_shader")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("3_texture")
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/box_uv = false
+
+[node name="CourierVisual" type="Node3D"]
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.2, 0, 0, 0, 2.2, 0, 0, 0, -2.2, 0, 0, 0)
+mesh = ExtResource("1_mesh")
+material_override = SubResource("ShaderMaterial_courier")
+
+[node name="Nozzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle"]
+script = ExtResource("4_trail")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle"]
+script = ExtResource("5_flare")
+size_at_top_speed = 10.0

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/gasngo_moe.tres" id="2_moe"]
+
+[resource]
+script = ExtResource("1_place")
+freight_flag = "first_mission_done"
+id = "gas_n_go"
+display_name = "GAS-N-GO 47"
+kind = 2
+services = PackedStringArray("fuel", "snacks", "souvenir")
+host = ExtResource("2_moe")
+host_lines = PackedStringArray("Welcome... to... Gas-N-Go. You... ever... wonder... why they call it... a gas... station...", "...when it's... in space... and the gas... is... rocket fuel... and it doesn't... station... anywhere...", "...anyway. That's... what I... was saying. Last time. Pumps... are on.", "Welcome... back. Jerky... is... warm. Ish. Fuel's... cheap. Cheaper... than Lily's. Don't... tell her.", "Long... haul? ...Same.")
+host_lines_in_order = true
+fuel_price_factor = 0.7
+surrounding_field = "junk"
+field_radii = Vector2(1000, 1900)
+field_rock_count = 1600
+map_position = Vector3(23207, 8500, -29184)

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://boa10pjikiasd"
+path="res://.godot/imported/Zenith.obj-7734da50c02ff8f3613944db1d083591.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Zenith.obj-7734da50c02ff8f3613944db1d083591.mesh"]
+
+source_file="res://assets/opengameart/quaternius_lowpoly_spaceships/Zenith.obj"
+dest_files=["res://.godot/imported/Zenith.obj-7734da50c02ff8f3613944db1d083591.mesh", "res://.godot/imported/Zenith.obj-7734da50c02ff8f3613944db1d083591.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

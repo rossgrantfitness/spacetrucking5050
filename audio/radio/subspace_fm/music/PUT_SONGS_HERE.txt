@@ -1,0 +1,2 @@
+Drop this station's songs here (.ogg, .mp3 or .wav), named "Artist - Title.ogg".
+See res://audio/radio/README.md. Only music you made, royalty-free, or licensed!

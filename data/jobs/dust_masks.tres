@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "dust_masks"
+cargo_name = "Dust masks (one per goat, plus spares)"
+client_name = "Hoof & Hull Salvage"
+description = "The yard goes through masks fast. The goats eat them."
+from_place = "truck_stop"
+to_place = "salvage_yard"
+weight = 300000000.0
+base_pay = 1900
+care_kind = "fragile"
+care_bonus = 0
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "dustbowl_open"
+completes_flag = ""

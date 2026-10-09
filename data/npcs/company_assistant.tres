@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_owner"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("owns_company")
+lines = PackedStringArray("Ms. Rabbit! Boss! Ma'am! I've reorganized your inbox by fear.", "Mr. Pembrook says hello. He's hiding in the supply closet. I'm not supposed to tell you that.")
+
+[sub_resource type="Resource" id="Conversation_first"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("met_mort")
+lines = PackedStringArray("Mort Fenwick. Assistant to the regional manager.", "Not ASSISTANT regional manager. Assistant TO. It's on my mug.", "Mr. Pembrook is a visionary. A legend. A... he's listening, isn't he.", "> You okay, Mort?", "Thriving! Absolutely thriving. Please take a pen. Take two. They're the only perk.")
+sets_flags = PackedStringArray("met_mort")
+
+[sub_resource type="Resource" id="Conversation_checks"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_mort")
+blocked_by_flags = PackedStringArray("owns_company")
+lines = PackedStringArray("I personally calculated your fees this week. By hand. With feeling.", "If it helps, I get a cut of nothing. Ninety percent of nothing. Mr. Pembrook says it builds character.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Mort ({company})"
+species = "weasel"
+voice_pitch = 1.35
+voice_type = "reed"
+voice_key = 2
+voice_scale = "minor"
+lines = PackedStringArray("Assistant TO the regional manager. Can I help? Please say no.")
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_owner"), SubResource("Conversation_first"), SubResource("Conversation_checks")])
+comm_name = "MORT · {company}"
+fur_color = Color(0.5, 0.36, 0.24, 1)
+accent_color = Color(0.95, 0.95, 0.97, 1)

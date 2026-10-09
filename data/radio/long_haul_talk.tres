@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/talk.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "LONG HAUL TALK 55"
+frequency = "55.0"
+genre = "Trucker talk radio (no music)"
+dj_name = "Uncle Gus"
+tagline = "Talk radio for the long haul. No music. Just us."
+music_folder = "res://audio/radio/long_haul_talk/music"
+ads_folder = "res://audio/radio/long_haul_talk/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("TONIGHT: IS THE GIANT DONUT A SIGNAL?", "CALLER: MY ENGINE MAKES A NOISE LIKE A SAD GOOSE", "TOPIC: BEST TRUCK STOP PIE IN THE SYSTEM", "CALLER: HAS ANYBODY SEEN MY CAT? SHE'S IN SPACE", "TOPIC: THE LIGHTHOUSE WITH NO ROCK. DISCUSS.", "CALLER: I SAW A DUCK. A BIG ONE. NOBODY BELIEVES ME")
+ads = PackedStringArray("GUS'S GARAGE TIPS: IF IT'S MAKING A NOISE, TURN THE RADIO UP. (DON'T DO THIS.)", "LOST AND FOUND HOTLINE. WE FOUND A CAT. IT'S NOT YOURS.")
+dj_lines = PackedStringArray("Uncle Gus here. Lines are open. Tell me about your engine trouble, your conspiracies, your lost cats.", "Caller says Marge's pie is the best in the system. Caller is correct. Next.", "Somebody swears the lighthouse out past the gate warned them about a rock that wasn't there. Spooky.", "Big Wendell called again about his cat. Wendell, we love you. The cat is fine.")
+dj_on_storm = PackedStringArray("We've got reports of an ion storm. Callers, how's your signal? ...Hello? Hello?")
+dj_on_delivery = PackedStringArray("Got a tip that {bunny} just dropped a load at {place}. Call in, hon! Tell us about it!")
+dj_on_ticket = PackedStringArray("Another call about Deputy Biscuit's speed trap. Folks, he's been there for years. It's a landmark.")
+dj_on_new_system = PackedStringArray("Listeners in {system}, you're coming through. Welcome to the show.")

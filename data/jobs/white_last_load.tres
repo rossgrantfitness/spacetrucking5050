@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "white_last_load"
+cargo_name = "Cannery parts (impounded, years ago)"
+client_name = "Tidewater Cannery (long overdue)"
+description = "{husband}'s last load. It never made it to Tidewater. It's been in {company}'s impound ever since."
+from_place = "truck_stop"
+to_place = "tidewater"
+weight = 2200000000.0
+base_pay = 1500
+on_job_board = false
+repeatable = false
+requires_flag = "white_voicemail"
+completes_flag = "white_last_load_done"

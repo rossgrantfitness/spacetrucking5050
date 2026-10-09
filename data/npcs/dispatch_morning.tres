@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/glimmer_cards.tres" id="job_glimmer_cards"]
+[ext_resource type="Resource" path="res://data/jobs/dustbowl_scrap.tres" id="job_dustbowl_scrap"]
+[ext_resource type="Resource" path="res://data/jobs/greenhouse_soil.tres" id="job_greenhouse_soil"]
+[ext_resource type="Resource" path="res://data/jobs/frostline_cones.tres" id="job_frostline_cones"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_boss")
+blocked_by_flags = PackedStringArray("met_marge", "heard_about_marge")
+needs_no_job = true
+lines = PackedStringArray("So {boss} gave you Marge's pie run. Good. Pie pays.", "Well. It pays HIM. We get the crust.", "She's the owl at the diner, out the airlock. Go on, hon.")
+sets_flags = PackedStringArray("heard_about_marge")
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+needs_active_job = "first_long_haul"
+lines = PackedStringArray("Tidewater? That's a real haul, hon. Chart a course in the cockpit with M and let the autopilot drive if you get tired.")
+
+[sub_resource type="Resource" id="Conversation_2"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Look at you, an employed trucker. The job board's working again. Mostly.", "Pick something off the board, or go spend your money at the truck stop. I won't tell.")
+opens_menu = "job_board"
+
+[sub_resource type="Resource" id="Conversation_3"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("met_marge")
+blocked_by_flags = PackedStringArray("first_mission_done")
+needs_no_job = true
+lines = PackedStringArray("Marge says you two met. Did you take her pie job? She's right outside the airlock, hon.")
+
+[sub_resource type="Resource" id="Conversation_4"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("You've got a load in the back, {bunny}. Cockpit's up the stairs. Go get paid.")
+
+[sub_resource type="Resource" id="Conversation_glimmer"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_mission_done")
+blocked_by_flags = PackedStringArray("glimmer_heard")
+needs_no_job = true
+lines = PackedStringArray("Hon. Got a call from out in the Glimmer System. The pink one, past the rocks the other way.", "Casino guy. Sal something. Wants forty thousand decks of cards, and he asked for 'the hauler with the old rig.' That's you.", "He smiles a lot. Like, a LOT. But his money's real. I checked. Twice.")
+sets_flags = PackedStringArray("glimmer_heard")
+offers_job = ExtResource("job_glimmer_cards")
+
+[sub_resource type="Resource" id="Conversation_dustbowl"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("glimmer_open")
+blocked_by_flags = PackedStringArray("dustbowl_heard")
+needs_no_job = true
+min_deliveries = 5
+lines = PackedStringArray("Hon. Call from the Dustbowl. The amber one, way DOWN below the lane. Point your nose at your boots.", "Salvage yard. Goat named Mags. Wants scrap hauled in. Scrap. To a scrapyard. I asked. She hung up.", "Dust storms out there, hon. Gets in the radio. Take it slow.")
+sets_flags = PackedStringArray("dustbowl_heard")
+offers_job = ExtResource("job_dustbowl_scrap")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_greenhouse"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("dustbowl_open")
+blocked_by_flags = PackedStringArray("greenhouse_heard")
+needs_no_job = true
+min_deliveries = 8
+lines = PackedStringArray("Hon, new client. Greenhouse Reach. The green one, way UP. Climb like you mean it.", "A tortoise. A doctor. She talked for twenty minutes and I think she ordered soil?", "Nicest call I ever had. Also the longest.")
+sets_flags = PackedStringArray("greenhouse_heard")
+offers_job = ExtResource("job_greenhouse_soil")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_frostline"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("greenhouse_open")
+blocked_by_flags = PackedStringArray("frostline_heard")
+needs_no_job = true
+min_deliveries = 11
+lines = PackedStringArray("Hon. This one's far. The Frostline. Top of the map, past everything. Ice out there. Hail.", "A penguin with an ice-cream shop wants two billion waffle cones. Fragile. Of course they're fragile.", "Long climb. Fill up first. I'll keep the coffee on.")
+sets_flags = PackedStringArray("frostline_heard")
+offers_job = ExtResource("job_frostline_cones")
+marked = true
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Raccoony (Dispatch)"
+species = "raccoon"
+voice_pitch = 1.35
+voice_type = "soft"
+voice_key = 5
+voice_scale = "major"
+lines = PackedStringArray("Morning, {bunny}. You look like you slept in your jacket again.", "Coffee's burnt, the job board's broken, and somebody fed the vending machine a sock.", "Cockpit's up the stairs, same as always. Fly safe, hon. Or at least fly.")
+comm_name = "RACCOONY · DISPATCH"
+fur_color = Color(0.62, 0.6, 0.66, 1)
+accent_color = Color(1, 0.42, 0.75, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1"), SubResource("Conversation_glimmer"), SubResource("Conversation_dustbowl"), SubResource("Conversation_greenhouse"), SubResource("Conversation_frostline"), SubResource("Conversation_2"), SubResource("Conversation_3"), SubResource("Conversation_4")])

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "glow_guppies"
+cargo_name = "A tank of glow-guppies (live)"
+client_name = "The Tidewater Aquarium"
+description = "Three hundred little guppies that glow when they're happy. Keep them happy: easy on the turns."
+from_place = "truck_stop"
+to_place = "tidewater"
+weight = 900000000.0
+base_pay = 1250
+care_kind = "live"
+care_bonus = 450
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "first_mission_done"
+completes_flag = ""

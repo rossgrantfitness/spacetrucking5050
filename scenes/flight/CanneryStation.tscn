@@ -1,0 +1,1023 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/psx_surface.gdshader" id="1_2jsp4"]
+[ext_resource type="Texture2D" path="res://textures/generated/hull_panels.png" id="2_olihy"]
+[ext_resource type="Texture2D" path="res://textures/generated/station_windows.png" id="3_66wwr"]
+[ext_resource type="Script" path="res://scenes/flight/Blinker.gd" id="4_p15fm"]
+[ext_resource type="Texture2D" path="res://textures/generated/hazard_stripes.png" id="5_xdwxp"]
+[ext_resource type="Texture2D" path="res://textures/generated/container.png" id="6_ibjf4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_08bwl"]
+size = Vector3(320, 160, 260)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fwgt1"]
+height = 8.0
+radius = 56.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fegrb"]
+height = 220.0
+radius = 55.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_n5yyj"]
+height = 260.0
+radius = 65.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lwc6l"]
+height = 200.0
+radius = 50.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_nfcmd"]
+height = 260.0
+radius = 18.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d0p1v"]
+size = Vector3(360, 14, 24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pd3vd"]
+size = Vector3(360, 14, 24)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d2h1w"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.86, 0.9, 0.9, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(10, 6)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_375g7"]
+material = SubResource("ShaderMaterial_d2h1w")
+size = Vector3(320, 160, 260)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_38w5i"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.2, 0.7, 0.68, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(10, 2)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_gxv8p"]
+material = SubResource("ShaderMaterial_38w5i")
+size = Vector3(324, 24, 264)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cnse5"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.12, 0.14, 0.18, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(0.05, 0.05)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_decgk"]
+material = SubResource("ShaderMaterial_cnse5")
+top_radius = 56.0
+bottom_radius = 56.0
+height = 8.0
+radial_segments = 16
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jjw75"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.35, 1, 0.85, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(0.35, 1, 0.85, 1)
+shader_parameter/emission_strength = 1.6
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="TorusMesh" id="TorusMesh_iixav"]
+material = SubResource("ShaderMaterial_jjw75")
+inner_radius = 30.0
+outer_radius = 38.0
+rings = 24
+ring_segments = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2l1kc"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = null
+shader_parameter/albedo_texture = ExtResource("3_66wwr")
+shader_parameter/uv_scale = Vector2(1, 14)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 1, 1, 1)
+shader_parameter/emission_strength = 1.3
+shader_parameter/emission_from_texture = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_67p6y"]
+material = SubResource("ShaderMaterial_2l1kc")
+size = Vector3(4, 40, 220)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21oja"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = null
+shader_parameter/albedo_texture = ExtResource("3_66wwr")
+shader_parameter/uv_scale = Vector2(1, 14)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 1, 1, 1)
+shader_parameter/emission_strength = 1.3
+shader_parameter/emission_from_texture = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_j1pji"]
+material = SubResource("ShaderMaterial_21oja")
+size = Vector3(4, 40, 220)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4phv"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.86, 0.9, 0.9, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(10, 6)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bft51"]
+material = SubResource("ShaderMaterial_f4phv")
+top_radius = 55.0
+bottom_radius = 55.0
+height = 220.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n287o"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.2, 0.7, 0.68, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(10, 2)
+shader_parameter/box_uv = false
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gvyw4"]
+material = SubResource("ShaderMaterial_n287o")
+top_radius = 57.0
+bottom_radius = 57.0
+height = 14.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pi8b8"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.7, 0.38, 0.25, 1)
+shader_parameter/albedo_texture = ExtResource("2_olihy")
+shader_parameter/uv_scale = Vector2(0.05, 0.05)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_joyi6"]
+material = SubResource("ShaderMaterial_pi8b8")
+top_radius = 33.0
+bottom_radius = 33.0
+height = 16.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vjs7s"]
+material = SubResource("ShaderMaterial_f4phv")
+top_radius = 65.0
+bottom_radius = 65.0
+height = 260.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6u7iv"]
+material = SubResource("ShaderMaterial_n287o")
+top_radius = 67.0
+bottom_radius = 67.0
+height = 14.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ckkg2"]
+material = SubResource("ShaderMaterial_pi8b8")
+top_radius = 39.0
+bottom_radius = 39.0
+height = 16.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fc3ii"]
+material = SubResource("ShaderMaterial_f4phv")
+top_radius = 50.0
+bottom_radius = 50.0
+height = 200.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fr1wp"]
+material = SubResource("ShaderMaterial_n287o")
+top_radius = 52.0
+bottom_radius = 52.0
+height = 14.0
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g1smo"]
+material = SubResource("ShaderMaterial_pi8b8")
+top_radius = 30.0
+bottom_radius = 30.0
+height = 16.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tm2u4"]
+material = SubResource("ShaderMaterial_pi8b8")
+top_radius = 18.0
+bottom_radius = 18.0
+height = 260.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epcky"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 0.6, 0.3, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 0.6, 0.3, 1)
+shader_parameter/emission_strength = 1.8
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_4nmm6"]
+material = SubResource("ShaderMaterial_epcky")
+size = Vector3(30, 6, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vphix"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("5_xdwxp")
+shader_parameter/uv_scale = Vector2(0.015, 0.015)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_usvqj"]
+material = SubResource("ShaderMaterial_vphix")
+size = Vector3(360, 14, 24)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jk85k"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.8, 0.38, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_b71ik"]
+material = SubResource("ShaderMaterial_jk85k")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j650d"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.22, 0.56, 0.6, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_udxmp"]
+material = SubResource("ShaderMaterial_j650d")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c8fi6"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.7, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_xpewy"]
+material = SubResource("ShaderMaterial_c8fi6")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pj5a2"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.86, 0.78, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_l3amp"]
+material = SubResource("ShaderMaterial_pj5a2")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n80gq"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.52, 0.32, 0.64, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_ir8u3"]
+material = SubResource("ShaderMaterial_n80gq")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4pc2"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.76, 0.22, 0.24, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_2fp7i"]
+material = SubResource("ShaderMaterial_y4pc2")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2hofe"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 0.3, 0.2, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 0.3, 0.2, 1)
+shader_parameter/emission_strength = 1.8
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_500vh"]
+material = SubResource("ShaderMaterial_2hofe")
+size = Vector3(12, 12, 12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4afv6"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.3, 0.62, 0.38, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_vrh8t"]
+material = SubResource("ShaderMaterial_4afv6")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p47m6"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.55, 0.62, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.06, 0.06)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_0g0f4"]
+material = SubResource("ShaderMaterial_p47m6")
+size = Vector3(24, 18, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y2jbq"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.8, 0.38, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_cacpd"]
+material = SubResource("ShaderMaterial_y2jbq")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5d0t"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.22, 0.56, 0.6, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_4vjeq"]
+material = SubResource("ShaderMaterial_k5d0t")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3pgs6"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.7, 0.22, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_8o523"]
+material = SubResource("ShaderMaterial_3pgs6")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nkx1g"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.86, 0.78, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_rrs0k"]
+material = SubResource("ShaderMaterial_nkx1g")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g8pl6"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.52, 0.32, 0.64, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_6vnn6"]
+material = SubResource("ShaderMaterial_g8pl6")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j3r0j"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.76, 0.22, 0.24, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_2n6hg"]
+material = SubResource("ShaderMaterial_j3r0j")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lm81k"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.3, 0.62, 0.38, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_xr763"]
+material = SubResource("ShaderMaterial_lm81k")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qwra2"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = true
+shader_parameter/edge_width = 0.22
+shader_parameter/edge_pixels_per_meter = 8.0
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = 1.5
+shader_parameter/albedo = Color(0.9, 0.55, 0.62, 1)
+shader_parameter/albedo_texture = ExtResource("6_ibjf4")
+shader_parameter/uv_scale = Vector2(0.04, 0.04)
+shader_parameter/box_uv = true
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = null
+shader_parameter/emission_strength = null
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_j7wbo"]
+material = SubResource("ShaderMaterial_qwra2")
+size = Vector3(40, 26, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e4wss"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(1, 0.55, 0.75, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(1, 0.55, 0.75, 1)
+shader_parameter/emission_strength = 2.0
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_rlbnj"]
+material = SubResource("ShaderMaterial_e4wss")
+size = Vector3(140, 50, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_63mo2"]
+material = SubResource("ShaderMaterial_e4wss")
+size = Vector3(50, 14, 6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_waj23"]
+render_priority = 0
+shader = ExtResource("1_2jsp4")
+shader_parameter/painted_edges = null
+shader_parameter/edge_width = null
+shader_parameter/edge_pixels_per_meter = null
+shader_parameter/edge_light = null
+shader_parameter/edge_shadow = null
+shader_parameter/edge_floor_shadow = null
+shader_parameter/edge_floor_reach = null
+shader_parameter/albedo = Color(0.35, 1, 0.85, 1)
+shader_parameter/uv_scale = null
+shader_parameter/box_uv = null
+shader_parameter/use_vertex_color = null
+shader_parameter/emission = Color(0.35, 1, 0.85, 1)
+shader_parameter/emission_strength = 2.4
+shader_parameter/emission_from_texture = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_ivib4"]
+material = SubResource("ShaderMaterial_waj23")
+size = Vector3(10, 10, 8)
+
+[node name="CanneryStation" type="Node3D" unique_id=997243619]
+
+[node name="Collision" type="StaticBody3D" parent="." unique_id=1712881943]
+
+[node name="HallShape" type="CollisionShape3D" parent="Collision" unique_id=867735405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+shape = SubResource("BoxShape3D_08bwl")
+
+[node name="DockingFaceShape" type="CollisionShape3D" parent="Collision" unique_id=1191599967]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 113)
+shape = SubResource("CylinderShape3D_fwgt1")
+
+[node name="SiloShape" type="CollisionShape3D" parent="Collision" unique_id=953521829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 150, -60)
+shape = SubResource("CylinderShape3D_fegrb")
+
+[node name="Silo2Shape" type="CollisionShape3D" parent="Collision" unique_id=1978888654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 170, -90)
+shape = SubResource("CylinderShape3D_n5yyj")
+
+[node name="Silo3Shape" type="CollisionShape3D" parent="Collision" unique_id=1903467913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 140, -50)
+shape = SubResource("CylinderShape3D_lwc6l")
+
+[node name="SmokestackShape" type="CollisionShape3D" parent="Collision" unique_id=1509861776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 180, -110)
+shape = SubResource("CylinderShape3D_nfcmd")
+
+[node name="ConveyorArmShape" type="CollisionShape3D" parent="Collision" unique_id=2122524498]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -340, -40, 30)
+shape = SubResource("BoxShape3D_d0p1v")
+
+[node name="ConveyorArm2Shape" type="CollisionShape3D" parent="Collision" unique_id=909492554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -40, 30)
+shape = SubResource("BoxShape3D_pd3vd")
+
+[node name="Hall" type="MeshInstance3D" parent="." unique_id=1732164046]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+mesh = SubResource("BoxMesh_375g7")
+
+[node name="HallStripe" type="MeshInstance3D" parent="." unique_id=1857758022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40, -20)
+mesh = SubResource("BoxMesh_gxv8p")
+
+[node name="DockingFace" type="MeshInstance3D" parent="." unique_id=270870142]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 113)
+mesh = SubResource("CylinderMesh_decgk")
+
+[node name="DockingLights" type="MeshInstance3D" parent="." unique_id=1959062704]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 118)
+mesh = SubResource("TorusMesh_iixav")
+
+[node name="Windows" type="MeshInstance3D" parent="." unique_id=1224046583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -160, -30, -20)
+mesh = SubResource("BoxMesh_67p6y")
+
+[node name="Windows2" type="MeshInstance3D" parent="." unique_id=1532341839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, -30, -20)
+mesh = SubResource("BoxMesh_j1pji")
+
+[node name="Silo" type="MeshInstance3D" parent="." unique_id=549063142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 150, -60)
+mesh = SubResource("CylinderMesh_bft51")
+
+[node name="SiloBand" type="MeshInstance3D" parent="." unique_id=1061637353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 216, -60)
+mesh = SubResource("CylinderMesh_gvyw4")
+
+[node name="SiloCap" type="MeshInstance3D" parent="." unique_id=856282440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 268, -60)
+mesh = SubResource("CylinderMesh_joyi6")
+
+[node name="Silo2" type="MeshInstance3D" parent="." unique_id=358747880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 170, -90)
+mesh = SubResource("CylinderMesh_vjs7s")
+
+[node name="SiloBand2" type="MeshInstance3D" parent="." unique_id=1506740740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 248, -90)
+mesh = SubResource("CylinderMesh_6u7iv")
+
+[node name="SiloCap2" type="MeshInstance3D" parent="." unique_id=1198320052]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 308, -90)
+mesh = SubResource("CylinderMesh_ckkg2")
+
+[node name="Silo3" type="MeshInstance3D" parent="." unique_id=1348848358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 140, -50)
+mesh = SubResource("CylinderMesh_fc3ii")
+
+[node name="SiloBand3" type="MeshInstance3D" parent="." unique_id=1117840959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 200, -50)
+mesh = SubResource("CylinderMesh_fr1wp")
+
+[node name="SiloCap3" type="MeshInstance3D" parent="." unique_id=1909522853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 248, -50)
+mesh = SubResource("CylinderMesh_g1smo")
+
+[node name="Smokestack" type="MeshInstance3D" parent="." unique_id=1360836627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 180, -110)
+mesh = SubResource("CylinderMesh_tm2u4")
+
+[node name="SmokestackGlow" type="MeshInstance3D" parent="." unique_id=1304015324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 312, -110)
+mesh = SubResource("BoxMesh_4nmm6")
+script = ExtResource("4_p15fm")
+
+[node name="ConveyorArm" type="MeshInstance3D" parent="." unique_id=583577520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -340, -40, 30)
+mesh = SubResource("BoxMesh_usvqj")
+
+[node name="ConveyorCrate" type="MeshInstance3D" parent="." unique_id=1803613697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -200, -24, 30)
+mesh = SubResource("BoxMesh_b71ik")
+
+[node name="ConveyorCrate2" type="MeshInstance3D" parent="." unique_id=771148301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, -24, 30)
+mesh = SubResource("BoxMesh_udxmp")
+
+[node name="ConveyorCrate3" type="MeshInstance3D" parent="." unique_id=1848507600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -24, 30)
+mesh = SubResource("BoxMesh_xpewy")
+
+[node name="ConveyorCrate4" type="MeshInstance3D" parent="." unique_id=1365060447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -350, -24, 30)
+mesh = SubResource("BoxMesh_l3amp")
+
+[node name="ConveyorCrate5" type="MeshInstance3D" parent="." unique_id=963572879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -400, -24, 30)
+mesh = SubResource("BoxMesh_ir8u3")
+
+[node name="ConveyorCrate6" type="MeshInstance3D" parent="." unique_id=1094141116]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -450, -24, 30)
+mesh = SubResource("BoxMesh_2fp7i")
+
+[node name="Beacon" type="MeshInstance3D" parent="." unique_id=4734451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -525, -40, 30)
+mesh = SubResource("BoxMesh_500vh")
+script = ExtResource("4_p15fm")
+
+[node name="ConveyorArm2" type="MeshInstance3D" parent="." unique_id=1558450377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -40, 30)
+mesh = SubResource("BoxMesh_usvqj")
+
+[node name="ConveyorCrate7" type="MeshInstance3D" parent="." unique_id=405659658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, -24, 30)
+mesh = SubResource("BoxMesh_xpewy")
+
+[node name="ConveyorCrate8" type="MeshInstance3D" parent="." unique_id=292818876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -24, 30)
+mesh = SubResource("BoxMesh_l3amp")
+
+[node name="ConveyorCrate9" type="MeshInstance3D" parent="." unique_id=1347451378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -24, 30)
+mesh = SubResource("BoxMesh_ir8u3")
+
+[node name="ConveyorCrate10" type="MeshInstance3D" parent="." unique_id=975464087]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 350, -24, 30)
+mesh = SubResource("BoxMesh_2fp7i")
+
+[node name="ConveyorCrate11" type="MeshInstance3D" parent="." unique_id=1741081200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 400, -24, 30)
+mesh = SubResource("BoxMesh_vrh8t")
+
+[node name="ConveyorCrate12" type="MeshInstance3D" parent="." unique_id=1092035704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 450, -24, 30)
+mesh = SubResource("BoxMesh_0g0f4")
+
+[node name="Beacon2" type="MeshInstance3D" parent="." unique_id=2053333290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 525, -40, 30)
+mesh = SubResource("BoxMesh_500vh")
+script = ExtResource("4_p15fm")
+
+[node name="RoofCrate" type="MeshInstance3D" parent="." unique_id=82922405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -120, 93, 70)
+mesh = SubResource("BoxMesh_cacpd")
+
+[node name="RoofCrate2" type="MeshInstance3D" parent="." unique_id=1252576201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 93, 70)
+mesh = SubResource("BoxMesh_4vjeq")
+
+[node name="RoofCrate3" type="MeshInstance3D" parent="." unique_id=1377741705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 93, 70)
+mesh = SubResource("BoxMesh_8o523")
+
+[node name="RoofCrate4" type="MeshInstance3D" parent="." unique_id=1619852050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 93, 70)
+mesh = SubResource("BoxMesh_rrs0k")
+
+[node name="RoofCrate5" type="MeshInstance3D" parent="." unique_id=1587805800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -120, 119, 70)
+mesh = SubResource("BoxMesh_6vnn6")
+
+[node name="RoofCrate6" type="MeshInstance3D" parent="." unique_id=1054550326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 119, 70)
+mesh = SubResource("BoxMesh_2n6hg")
+
+[node name="RoofCrate7" type="MeshInstance3D" parent="." unique_id=115716017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 119, 70)
+mesh = SubResource("BoxMesh_xr763")
+
+[node name="RoofCrate8" type="MeshInstance3D" parent="." unique_id=1528590588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 119, 70)
+mesh = SubResource("BoxMesh_j7wbo")
+
+[node name="NeonFish" type="Node3D" parent="." unique_id=2101525291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 140, 110)
+
+[node name="Body" type="MeshInstance3D" parent="NeonFish" unique_id=1439263000]
+mesh = SubResource("BoxMesh_rlbnj")
+
+[node name="TailTop" type="MeshInstance3D" parent="NeonFish" unique_id=1208602151]
+transform = Transform3D(0.8253356, -0.5646425, 0, 0.5646425, 0.8253356, 0, 0, 0, 1, -88, 16, 0)
+mesh = SubResource("BoxMesh_63mo2")
+
+[node name="TailBottom" type="MeshInstance3D" parent="NeonFish" unique_id=502209407]
+transform = Transform3D(0.8253356, 0.5646425, 0, -0.5646425, 0.8253356, 0, 0, 0, 1, -88, -16, 0)
+mesh = SubResource("BoxMesh_63mo2")
+
+[node name="Eye" type="MeshInstance3D" parent="NeonFish" unique_id=338909567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 8, 0)
+mesh = SubResource("BoxMesh_ivib4")
+

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "stacking_racks"
+display_name = "Stacking Racks"
+description = "Fold-down racks that squeeze a little more into the hold: +10% pay on every delivery."
+price = 2400
+min_level = 2
+category = "hauling"
+pay = 1.1
+add_on = "racks"

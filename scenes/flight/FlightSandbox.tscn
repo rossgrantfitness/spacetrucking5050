@@ -1,0 +1,455 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/planet_cinder_moon.glb" id="90_cinder_moon"]
+[ext_resource type="PackedScene" path="res://art/models/planet_stormbound_orb.glb" id="91_stormbound_orb"]
+[ext_resource type="Script" path="res://scenes/flight/FlightSandbox.gd" id="1_sandbox"]
+[ext_resource type="Script" path="res://scenes/common/SkyBody.gd" id="42_sky_body"]
+[ext_resource type="Texture2D" path="res://textures/generated/ocean_planet.png" id="43_ocean_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/sun_surface.png" id="44_sun_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/CanneryStation.tscn" id="45_cannery"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GasNGo.tscn" id="46_gas_n_go"]
+[ext_resource type="PackedScene" path="res://scenes/flight/TidewaterRoad.tscn" id="47_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/HighRollerStation.tscn" id="48_high_roller"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GlimmerRoad.tscn" id="49_glimmer_road"]
+[ext_resource type="Texture2D" path="res://textures/generated/glimmer_planet.png" id="50_glimmer_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/SalvageYardStation.tscn" id="60_salvage"]
+[ext_resource type="PackedScene" path="res://scenes/flight/ArboretumStation.tscn" id="61_arboretum"]
+[ext_resource type="PackedScene" path="res://scenes/flight/CreameryStation.tscn" id="62_creamery"]
+[ext_resource type="PackedScene" path="res://scenes/flight/DustbowlRoad.tscn" id="63_dustbowl_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/GreenhouseRoad.tscn" id="64_greenhouse_road"]
+[ext_resource type="PackedScene" path="res://scenes/flight/FrostlineRoad.tscn" id="65_frostline_road"]
+[ext_resource type="Texture2D" path="res://textures/generated/desert_planet.png" id="66_desert_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/jungle_planet.png" id="67_jungle_tex"]
+[ext_resource type="Texture2D" path="res://textures/generated/ice_planet.png" id="68_ice_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/BaseStation.tscn" id="26_base"]
+[ext_resource type="Script" path="res://scenes/flight/ApproachRing.gd" id="27_ring"]
+[ext_resource type="Script" path="res://scenes/flight/CommChatter.gd" id="25_chatter"]
+[ext_resource type="Script" path="res://scenes/common/Starfield.gd" id="3_stars"]
+[ext_resource type="PackedScene" path="res://scenes/flight/Ship.tscn" id="4_ship"]
+[ext_resource type="Script" path="res://scenes/flight/ChaseCamera.gd" id="5_chase"]
+[ext_resource type="Script" path="res://scenes/flight/SpaceDust.gd" id="6_dust"]
+[ext_resource type="PackedScene" path="res://scenes/flight/Station.tscn" id="8_station"]
+[ext_resource type="Script" path="res://scenes/flight/SpeedLines.gd" id="10_lines"]
+[ext_resource type="Shader" path="res://shaders/speed_lines.gdshader" id="11_lines_shader"]
+[ext_resource type="PackedScene" path="res://scenes/ui/FlightHUD.tscn" id="12_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="13_pause"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="14_psx"]
+[ext_resource type="Script" path="res://scenes/common/SkyBackdrop.gd" id="15_sky"]
+[ext_resource type="Texture2D" path="res://textures/generated/planet_swirl.png" id="17_planet_tex"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="18_traffic"]
+[ext_resource type="Shader" path="res://shaders/nebula_sky.gdshader" id="21_nebula_shader"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/LongHaulStarfreighterVisual.tscn" id="23_courier"]
+[ext_resource type="Texture2D" path="res://textures/generated/nebula.png" id="22_nebula_tex"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="19_capsule"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/RustboundSkyfreighterVisual.tscn" id="20_box"]
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 1
+background_color = Color(0.008, 0.008, 0.024, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.42, 0.38, 0.62, 1)
+ambient_light_energy = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nebula"]
+render_priority = 0
+shader = ExtResource("21_nebula_shader")
+shader_parameter/clouds = ExtResource("22_nebula_tex")
+shader_parameter/strength = 0.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_nebula"]
+material = SubResource("ShaderMaterial_nebula")
+radius = 10500.0
+height = 21000.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lines"]
+shader = ExtResource("11_lines_shader")
+
+[node name="FlightSandbox" type="Node"]
+script = ExtResource("1_sandbox")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_space")
+
+[node name="Sun" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(0.77292824, -0.31702483, 0.54961544, 0, 0.86622715, 0.49965036, -0.63449335, -0.38619387, 0.6695315, 0, 100, 0)
+light_color = Color(1, 0.9, 0.78, 1)
+light_energy = 1.3
+
+[node name="FillLight" type="DirectionalLight3D" parent="World"]
+rotation = Vector3(0.336, -2.453, 0)
+light_color = Color(0.5, 0.45, 0.95, 1)
+light_energy = 0.35
+
+[node name="Starfield" type="MultiMeshInstance3D" parent="World"]
+script = ExtResource("3_stars")
+star_count = 1200
+radius = 9000.0
+star_size = 30.0
+drift_speed = 0.0
+follow_camera = true
+
+[node name="Ship" parent="World" instance=ExtResource("4_ship")]
+
+[node name="ChaseCamera" type="Camera3D" parent="World" node_paths=PackedStringArray("target")]
+current = true
+fov = 70.0
+near = 0.3
+far = 18000.0
+script = ExtResource("5_chase")
+target = NodePath("../Ship")
+
+[node name="SpaceDust" type="MeshInstance3D" parent="World"]
+script = ExtResource("6_dust")
+
+[node name="Motes" type="MeshInstance3D" parent="World"]
+script = ExtResource("6_dust")
+count_scale = 0.07
+box_scale = 0.75
+size_scale = 3.5
+brightness_scale = 0.55
+streak_scale = 1.6
+
+[node name="Places" type="Node3D" parent="World"]
+
+[node name="truck_stop" type="Node3D" parent="World/Places"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10600)
+
+[node name="Station" parent="World/Places/truck_stop" instance=ExtResource("8_station")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/truck_stop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/truck_stop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 480)
+script = ExtResource("27_ring")
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/truck_stop"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
+
+[node name="tidewater" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.671178, 0, -0.741296, 0.229073, 0.951057, 0.207405, 0.705015, -0.309017, 0.638328, 43998, 17000, -50436)
+
+[node name="CanneryStation" parent="World/Places/tidewater" instance=ExtResource("45_cannery")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/tidewater"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 135)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/tidewater"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 480)
+script = ExtResource("27_ring")
+color = Color(0.4, 1, 0.85, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/tidewater"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 700)
+
+[node name="gas_n_go" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.671178, 0, -0.741296, 0.179336, 0.970296, 0.162373, 0.719277, -0.241922, 0.651241, 23207, 8500, -29184)
+
+[node name="GasNGo" parent="World/Places/gas_n_go" instance=ExtResource("46_gas_n_go")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
+script = ExtResource("27_ring")
+color = Color(1, 0.75, 0.3, 1)
+
+[node name="ApproachRing2" type="Node3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -350)
+script = ExtResource("27_ring")
+color = Color(1, 0.75, 0.3, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/gas_n_go"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 600)
+
+[node name="high_roller" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.6, -0, 0.8, 0.247214, 0.951057, -0.18541, -0.760845, 0.309017, 0.570634, -44790, -15000, -44194)
+
+[node name="HighRollerStation" parent="World/Places/high_roller" instance=ExtResource("48_high_roller")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/high_roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/high_roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(1, 0.35, 0.8, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/high_roller"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="salvage_yard" type="Node3D" parent="World/Places"]
+transform = Transform3D(-0.19288573, 0.5866331, -0.7865473, 0.32127076, 0.795173, 0.51428086, 0.92713547, -0.1534972, -0.34184557, 52000, -34000, 12000)
+
+[node name="SalvageYardStation" parent="World/Places/salvage_yard" instance=ExtResource("60_salvage")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(1, 0.65, 0.25, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/salvage_yard"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="arboretum" type="Node3D" parent="World/Places"]
+transform = Transform3D(-0.7022716, 0.078292176, 0.70759094, -0.43024555, 0.74520713, -0.50946546, -0.567189, -0.66222095, -0.48965293, -50000, 36000, 24000)
+
+[node name="ArboretumStation" parent="World/Places/arboretum" instance=ExtResource("61_arboretum")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/arboretum"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/arboretum"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(0.45, 1, 0.45, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/arboretum"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="creamery" type="Node3D" parent="World/Places"]
+transform = Transform3D(0.7194394, -0.68359375, -0.1229095, 0.48568296, 0.6216458, -0.6145475, 0.496507, 0.38243467, 0.7792462, 10000, 50000, -74000)
+
+[node name="CreameryStation" parent="World/Places/creamery" instance=ExtResource("62_creamery")]
+
+[node name="DockPoint" type="Marker3D" parent="World/Places/creamery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 205)
+
+[node name="ApproachRing" type="Node3D" parent="World/Places/creamery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 560)
+script = ExtResource("27_ring")
+color = Color(0.8, 0.65, 1, 1)
+
+[node name="LaunchPoint" type="Marker3D" parent="World/Places/creamery"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 780)
+
+[node name="SkyBodies" type="Node3D" parent="World"]
+
+[node name="HomePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(160000, 60000, 40000)
+true_radius = 12375
+model = ExtResource("91_stormbound_orb")
+
+[node name="HomeSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-150000, 70000, 90000)
+true_radius = 9000.0
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(1, 0.9, 0.7, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="TidewaterPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(55992, 36000, -341744)
+true_radius = 36000
+system_id = "tidewater"
+texture = ExtResource("43_ocean_tex")
+drift_speed = 0.003
+night_glow = 0.2
+
+[node name="TidewaterSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(113998, 62000, -160436)
+true_radius = 14000.0
+system_id = "tidewater"
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(0.75, 1, 0.9, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="GlimmerPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-275160, -124000, -296776)
+true_radius = 13200
+system_id = "glimmer"
+night_glow = 0.6
+model = ExtResource("90_cinder_moon")
+
+[node name="GlimmerSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-134790, 30000, -144194)
+true_radius = 12000.0
+system_id = "glimmer"
+is_sun = true
+texture = ExtResource("44_sun_tex")
+tint = Color(1, 0.7, 0.9, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="DustbowlPlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(312000, -200000, 120000)
+true_radius = 18700
+system_id = "dustbowl"
+texture = ExtResource("66_desert_tex")
+saturation = 0.45
+drift_speed = 0.003
+night_glow = 0.25
+
+[node name="DustbowlSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(160000, 10000, 120000)
+true_radius = 13000.0
+system_id = "dustbowl"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(1, 0.75, 0.4, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="GreenhousePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-304000, 208000, 184000)
+true_radius = 19800
+system_id = "greenhouse"
+texture = ExtResource("67_jungle_tex")
+saturation = 0.45
+drift_speed = 0.003
+night_glow = 0.2
+
+[node name="GreenhouseSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(-170000, 120000, 140000)
+true_radius = 12000.0
+system_id = "greenhouse"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(0.9, 1, 0.75, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="FrostlinePlanet" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(72000, 296000, -400000)
+true_radius = 16500
+system_id = "frostline"
+night_glow = 0.3
+model = ExtResource("91_stormbound_orb")
+
+[node name="FrostlineSun" type="Node3D" parent="World/SkyBodies"]
+script = ExtResource("42_sky_body")
+true_position = Vector3(90000, 180000, -200000)
+true_radius = 11000.0
+system_id = "frostline"
+texture = ExtResource("44_sun_tex")
+is_sun = true
+tint = Color(0.85, 0.85, 1, 1)
+uv_scale = Vector2(1, 1)
+drift_speed = 0.01
+night_glow = 1.0
+
+[node name="Roadside" parent="World" instance=ExtResource("47_road")]
+
+[node name="GlimmerRoadside" parent="World" instance=ExtResource("49_glimmer_road")]
+
+[node name="DustbowlRoadside" parent="World" instance=ExtResource("63_dustbowl_road")]
+
+[node name="GreenhouseRoadside" parent="World" instance=ExtResource("64_greenhouse_road")]
+
+[node name="FrostlineRoadside" parent="World" instance=ExtResource("65_frostline_road")]
+
+[node name="Events" type="Node3D" parent="World"]
+
+[node name="SkyBackdrop" type="Node3D" parent="World"]
+script = ExtResource("15_sky")
+
+[node name="Nebula" type="MeshInstance3D" parent="World/SkyBackdrop"]
+mesh = SubResource("SphereMesh_nebula")
+
+[node name="Commuter" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("19_capsule")
+waypoints = PackedVector3Array(150, 520, -9800, 260, 560, -5000, 200, 520, -900, 0, 450, -200, -220, 400, -900, -260, 460, -5000, -150, 420, -9800, 0, 300, -10100)
+speed = 70.0
+start_fraction = 0.55
+engine_trail_color = Color(0.45, 0.85, 1, 1)
+hull_size = Vector3(14, 7, 34)
+
+[node name="Orbiter" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("20_box")
+waypoints = PackedVector3Array(700, 180, -10600, 494.975, 222.426, -10105, 4.28626e-14, 240, -9900, -494.975, 222.426, -10105, -700, 180, -10600, -494.975, 137.574, -11095, -1.28588e-13, 120, -11300, 494.975, 137.574, -11095)
+speed = 40.0
+engine_trail_color = Color(0.45, 0.85, 1, 1)
+hull_size = Vector3(5, 5, 20)
+
+[node name="Courier" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("23_courier")
+waypoints = PackedVector3Array(480, -60, -10600, 240, -38.3494, -10184.3, -240, -81.6506, -10184.3, -480, -60, -10600, -240, -38.3494, -11015.7, 240, -81.6506, -11015.7)
+speed = 85.0
+start_fraction = 0.4
+max_bank_degrees = 40.0
+engine_trail_color = Color(1, 0.45, 0.35, 1)
+hull_size = Vector3(12, 12, 26)
+
+[node name="LongHauler" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("19_capsule")
+waypoints = PackedVector3Array(900, -250, -9500, 950, -200, -5300, 900, -250, -1000, 700, -150, -400, 600, -250, -1000, 650, -300, -5300, 700, -250, -9500, 800, -200, -10000)
+speed = 60.0
+start_fraction = 0.2
+engine_trail_color = Color(1, 0.75, 0.35, 1)
+hull_size = Vector3(14, 7, 34)
+
+[node name="FreightLane" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("20_box")
+waypoints = PackedVector3Array(-900, 300, -800, -1000, 350, -5300, -950, 300, -9600, -700, 250, -9900, -650, 300, -9600, -700, 350, -5300, -650, 300, -800, -800, 280, -500)
+speed = 50.0
+start_fraction = 0.7
+engine_trail_color = Color(0.6, 1, 0.5, 1)
+hull_size = Vector3(5, 5, 20)
+
+[node name="CompanyHQ" parent="World" instance=ExtResource("26_base")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 250)
+
+[node name="BaseShuttle" type="Node3D" parent="World"]
+script = ExtResource("18_traffic")
+visual_scene = ExtResource("23_courier")
+waypoints = PackedVector3Array(500, 200, 300, 350, 250, -150, 0, 230, -350, -350, 200, -150, -500, 180, 300, -350, 160, 800, 0, 180, 1000, 350, 200, 800)
+speed = 70.0
+max_bank_degrees = 40.0
+engine_trail_color = Color(1, 0.45, 0.8, 1)
+hull_size = Vector3(12, 12, 26)
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("14_psx")
+
+[node name="SpeedLinesLayer" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="SpeedLines" type="ColorRect" parent="SpeedLinesLayer"]
+material = SubResource("ShaderMaterial_lines")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_lines")
+
+[node name="FlightHUD" parent="." instance=ExtResource("12_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("13_pause")]
+
+[node name="CommChatter" type="Node" parent="."]
+script = ExtResource("25_chatter")

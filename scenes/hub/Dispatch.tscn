@@ -1,0 +1,146 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/hub/HubRoom.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/hub/sets/DispatchSet.tscn" id="2_set"]
+[ext_resource type="Script" path="res://scenes/hub/RoomShot.gd" id="3_shot"]
+[ext_resource type="Script" path="res://scenes/hub/RoomExit.gd" id="4_exit"]
+[ext_resource type="Script" path="res://scenes/common/PSXScreen.gd" id="5_psx"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="7_service"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.35, 0.5, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone0"]
+size = Vector3(6.8, 6, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zone1"]
+size = Vector3(3.2, 6, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit0"]
+size = Vector3(1.1, 2, 0.4)
+
+[sub_resource type="SphereShape3D" id="Sphere_terminal"]
+radius = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit1"]
+size = Vector3(1.4, 2, 1)
+
+[node name="Dispatch" type="Node3D"]
+script = ExtResource("1_room")
+default_spawn = "FromHallway"
+place_id = "base"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_room")
+
+[node name="Set" parent="." instance=ExtResource("2_set")]
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="Lobby" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+live_signs = PackedStringArray("DispatchSign", "Motto")
+
+[node name="Camera" type="Camera3D" parent="Shots/Lobby"]
+position = Vector3(-3.9, 2.9, 3.4)
+rotation = Vector3(-0.3185, -0.5173, 0)
+fov = 56
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Lobby"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Lobby/Zone"]
+position = Vector3(-1.6, 3, 0)
+shape = SubResource("BoxShape3D_zone0")
+
+[node name="Stairs" type="Node3D" parent="Shots"]
+script = ExtResource("3_shot")
+live_signs = PackedStringArray("DispatchSign", "Motto")
+
+[node name="Camera" type="Camera3D" parent="Shots/Stairs"]
+position = Vector3(-0.6, 3.4, 3.9)
+rotation = Vector3(-0.1664, -0.5737, 0)
+fov = 60
+near = 0.1
+far = 100.0
+
+[node name="Zone" type="Area3D" parent="Shots/Stairs"]
+
+[node name="Shape" type="CollisionShape3D" parent="Shots/Stairs/Zone"]
+position = Vector3(3.4, 3, 0)
+shape = SubResource("BoxShape3D_zone1")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="FromHallway" type="Marker3D" parent="Spawns"]
+position = Vector3(-2.6, 0, 1)
+rotation = Vector3(0, 0.0000, 0)
+
+[node name="FromShip" type="Marker3D" parent="Spawns"]
+position = Vector3(3.6, 2.45, -3.6)
+rotation = Vector3(0, 3.1416, 0)
+
+[node name="Exits" type="Node3D" parent="."]
+
+[node name="HallwayDoor" type="Area3D" parent="Exits"]
+position = Vector3(-3.5, 1, 4.45)
+script = ExtResource("4_exit")
+target_scene = "res://scenes/hub/Hallway.tscn"
+target_spawn = "FromDispatch"
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/HallwayDoor"]
+shape = SubResource("BoxShape3D_exit0")
+
+[node name="ShipDoor" type="Area3D" parent="Exits"]
+position = Vector3(3.6, 3.4, -4.2)
+script = ExtResource("4_exit")
+prompt = "TAKE THE WHEEL"
+target_scene = "res://scenes/flight/FlightSandbox.tscn"
+target_spawn = ""
+needs_button = true
+
+[node name="Shape" type="CollisionShape3D" parent="Exits/ShipDoor"]
+shape = SubResource("BoxShape3D_exit1")
+
+[node name="People" type="Node3D" parent="."]
+
+[node name="Things" type="Node3D" parent="."]
+
+[node name="JobTerminal" type="Area3D" parent="Things"]
+position = Vector3(0.3, 1, -1.4)
+script = ExtResource("7_service")
+prompt = "JOB BOARD"
+menu = "job_board"
+
+[node name="Shape" type="CollisionShape3D" parent="Things/JobTerminal"]
+shape = SubResource("Sphere_terminal")
+
+[node name="CrewSpots" type="Node3D" parent="."]
+
+[node name="Counter" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-1.5, 0.45, -2.6)
+rotation = Vector3(0, 3.1416, 0)
+
+[node name="Chairs" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-3.9, 0, 1.8)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="ChairNap" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-4.5, 0.47, 1.3)
+
+[node name="MachineBank" type="Marker3D" parent="CrewSpots"]
+position = Vector3(-4.1, 0, -3.3)
+rotation = Vector3(0, 1.5708, 0)
+
+[node name="PSXScreen" type="CanvasLayer" parent="."]
+layer = 0
+script = ExtResource("5_psx")
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+flying = false

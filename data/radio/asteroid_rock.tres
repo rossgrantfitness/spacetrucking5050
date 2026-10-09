@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/rock.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "ASTEROID ROCK"
+frequency = "99.9"
+genre = "Classic hard rock, long-haul classics"
+dj_name = "Big Rusty"
+tagline = "The trucker station. Long-haul classics, all night."
+music_folder = "res://audio/radio/asteroid_rock/music"
+ads_folder = "res://audio/radio/asteroid_rock/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("THE MAINLINERS - HIGHWAY TO THE BELT", "RUSTY & THE RIVETS - DIESEL DREAMS", "LONESOME COMET - TEN THOUSAND MILES OF NOTHING", "THE CB HANDLES - BREAKER BREAKER", "IRON HORSE - LAST RIG HOME", "STARDUST JUNCTION - ALL NIGHT DINER")
+ads = PackedStringArray("MARGE'S TRUCK STOP. PIE'S ON. COFFEE'S ON. SHE'S ON.", "LUCKY STRIPE MUD FLAPS. THERE'S NO MUD IN SPACE. BUY THEM ANYWAY.", "KING OF THE ROAD SEAT CUSHIONS. YOUR BACK WILL WRITE US A THANK-YOU NOTE.", "OLD ORBIT SPACE JERKY. MYSTERIOUSLY CHEWY SINCE FOREVER. WHAT ANIMAL? SPACE.")
+dj_lines = PackedStringArray("Big Rusty here, twenty-two years hauling before I hung up the keys. This one's for the lifers.", "Got a shout-out from a hauler out past the Gas-N-Go. Keep her steady, friend.", "Some rigs outlive their drivers. Somebody always keeps 'em flying. That's trucking.", "Call-in line's open. Tell me where you're headed. I'll pretend I'm riding along.")
+dj_on_storm = PackedStringArray("Ion storm on the lanes. Old-timer's tip: ease off, ride it out, crank this song.")
+dj_on_delivery = PackedStringArray("Shout-out to {bunny}, just made the drop at {place}. That old rig's still got it, huh?")
+dj_on_ticket = PackedStringArray("Somebody met Deputy Biscuit. Happens to all of us. Twice, for me. Okay, nine times.")
+dj_on_new_system = PackedStringArray("Rolling into {system}. Long way from home, haulers. That's the good part.")

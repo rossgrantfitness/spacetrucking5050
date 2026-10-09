@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/thrash.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "EVENT HORIZON"
+frequency = "93.9"
+genre = "Death metal, black metal"
+dj_name = "DJ Corvina"
+tagline = "Weather, traffic and manifests, as gothic poetry."
+music_folder = "res://audio/radio/event_horizon/music"
+ads_folder = "res://audio/radio/event_horizon/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("CORVINA - CROWS OVER THE CARGO BAY", "NECROMANIFEST - FORTY CRATES OF YOGURT", "FROZEN VOID - CORPSE OF A DEAD STAR", "THE GRAVEYARD SHIFT - DISPATCH FROM THE ABYSS", "OBSIDIAN OWL - ECLIPSE ETERNAL", "BLASTBEAT BRIGADE - NO LIGHT ESCAPES")
+ads = PackedStringArray("ETERNAL NIGHT CANDLES. SCENTED: SORROW, ASH AND VANILLA.", "BLACK LIPSTICK, NOW IN ZERO-G FORMULA.")
+dj_lines = PackedStringArray("Traffic: a procession of silent haulers... crawling toward the void.", "Weather: cold. Endless. The cold of forgotten stars.", "Forty crates... of yogurt... bound for the void.", "This is Corvina. The night listens... and so do I.")
+dj_on_storm = PackedStringArray("The ion storm screams across the lanes... a beautiful, crackling dirge.")
+dj_on_delivery = PackedStringArray("{bunny} has delivered unto {place}... the cargo rests now, in the dark.")
+dj_on_ticket = PackedStringArray("A fine is levied... upon a soul who flew too fast toward oblivion.")
+dj_on_new_system = PackedStringArray("You cross into {system}... a new sky, equally indifferent.")

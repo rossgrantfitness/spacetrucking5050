@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/dub.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "TIDE 77"
+frequency = "77.1"
+genre = "Dub, trip-hop"
+dj_name = "DJ Kelp"
+tagline = "Live from under the cannery. Clearest in Tidewater."
+music_folder = "res://audio/radio/tide_77/music"
+ads_folder = "res://audio/radio/tide_77/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("KELP - LIVE FROM UNDER THE CANNERY", "DEEP CURRENT - ECHO CHAMBER WHALES", "THE BRINE SHRIMP - ROCKERS ON THE CONVEYOR", "TIDAL LOCK - SLOW SPIN", "SEA LION SOUND SYSTEM - SALTY DUB", "BARNACLE - FOGHORN SKANK")
+ads = PackedStringArray("TIDEWATER CANNERY. WE CAN, THEREFORE WE ARE.", "SCALE-B-GONE FIN CREAM. FOR THE SMOOTHEST SWIM IN THE SYSTEM.")
+dj_lines = PackedStringArray("Kelp here, live from under the cannery. Smells like fish. Sounds like this.", "If you can hear me clear, you're in the teal now. Welcome home, sort of.", "The whales were singing along to that one. True story.", "Slow it down, trucker. The tide does.")
+dj_on_storm = PackedStringArray("Ion storm rolling over Tidewater. Lights flickering down here. Bass holding steady.")
+dj_on_delivery = PackedStringArray("Big up {bunny}, landed a load at {place}. The crane says thanks.")
+dj_on_ticket = PackedStringArray("Deputy Biscuit's out on the lanes again. Easy on the throttle, haulers.")
+dj_on_new_system = PackedStringArray("You found the teal. Welcome to {system}. Kelp's coming in clear now, yeah?")
+signal_center = Vector3(43998, 2378, -50436)
+signal_radius = 32000.0

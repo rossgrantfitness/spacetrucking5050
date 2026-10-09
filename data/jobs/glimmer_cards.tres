@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "glimmer_cards"
+cargo_name = "Playing cards (40,000 decks)"
+client_name = "Sal Grinwell, The High Roller"
+description = "A casino out in the magenta Glimmer System wants cards. Lots of cards. The owner smiles a lot. Too much."
+from_place = "base"
+to_place = "high_roller"
+weight = 1200000000.0
+base_pay = 1400
+care_bonus = 0
+rush_seconds = 1080.0
+rush_bonus = 300
+on_job_board = true
+repeatable = false
+requires_flag = "glimmer_heard"
+completes_flag = "glimmer_open"

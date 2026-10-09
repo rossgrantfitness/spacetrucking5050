@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/flight/events/Landmark.gd" id="2_87abc"]
+[ext_resource type="Script" path="res://scenes/flight/events/Billboard.gd" id="3_6d4y0"]
+[ext_resource type="Script" path="res://scenes/flight/AsteroidField.gd" id="4_p3ofn"]
+[ext_resource type="Script" path="res://scenes/flight/events/HazardZone.gd" id="5_so67c"]
+[ext_resource type="Script" path="res://scenes/flight/TrafficShip.gd" id="6_jbol7"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/RustboundStarforgeVisual.tscn" id="7_pywuu"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/BoxHaulerVisual.tscn" id="8_un1w7"]
+[ext_resource type="PackedScene" path="res://scenes/flight/traffic/CapsuleHaulerVisual.tscn" id="9_4st0q"]
+[ext_resource type="Script" path="res://scenes/flight/Spaceway.gd" id="10_ip1qw"]
+
+[node name="GlimmerRoad" type="Node3D" unique_id=723416667]
+
+[node name="BiggestSlotMachine" type="Node3D" parent="." unique_id=277034059]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -15439.271, -5393.6, -25431.102)
+script = ExtResource("2_87abc")
+kind = 5
+log_id = "biggest_slot"
+
+[node name="GiantDice" type="Node3D" parent="." unique_id=1986862626]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -30270.04, -9075.6, -29805.305)
+script = ExtResource("2_87abc")
+kind = 6
+log_id = "giant_dice"
+
+[node name="LittleChapel" type="Node3D" parent="." unique_id=1887888132]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -33751.414, -11746, -38041.938)
+script = ExtResource("2_87abc")
+kind = 7
+log_id = "void_chapel"
+
+[node name="Billboard320Km" type="Node3D" parent="." unique_id=129779465]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -24414.375, -8161.5996, -29563.18)
+script = ExtResource("3_6d4y0")
+headline = "WELCOME TO GLIMMER"
+tagline = "WHERE THE NIGHT NEVER ENDS (WE HID THE CLOCKS)"
+log_id = "billboard"
+
+[node name="Billboard350Km" type="Node3D" parent="." unique_id=155966356]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -27356.525, -8938, -30470.02)
+script = ExtResource("3_6d4y0")
+headline = "THE HIGH ROLLER"
+tagline = "EVERYBODY'S A WINNER* · *TERMS APPLY"
+log_id = "billboard"
+
+[node name="Billboard380Km" type="Node3D" parent="." unique_id=1068429607]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -29050.574, -9714.4, -33040.78)
+script = ExtResource("3_6d4y0")
+headline = "LOOSEST SLOTS IN THE SECTOR"
+tagline = "PROBABLY"
+log_id = "billboard"
+
+[node name="Billboard410Km" type="Node3D" parent="." unique_id=515672712]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -31992.727, -10490.8, -33947.62)
+script = ExtResource("3_6d4y0")
+headline = "ALL-YOU-CAN-EAT SHRIMP"
+tagline = "ALL NIGHT · ALL SHRIMP · ALL YOU"
+log_id = "billboard"
+
+[node name="Billboard435Km" type="Node3D" parent="." unique_id=21348958]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -33300.42, -11137.8, -36228.582)
+script = ExtResource("3_6d4y0")
+headline = "LIVE TONIGHT: THE CROONING CRAB"
+tagline = "TWO SHOWS · BOTH SIDEWAYS"
+log_id = "billboard"
+
+[node name="Billboard460Km" type="Node3D" parent="." unique_id=635051544]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -35856.227, -11784.801, -36845.617)
+script = ExtResource("3_6d4y0")
+headline = "CASH 4 RIGS"
+tagline = "WE BUY ANYTHING THAT FLIES (OR USED TO)"
+log_id = "billboard"
+
+[node name="Billboard480Km" type="Node3D" parent="." unique_id=206503232]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -36777.574, -12302.399, -38836.777)
+script = ExtResource("3_6d4y0")
+headline = "FEELING LUCKY?"
+tagline = "YOU SHOULD. YOU REALLY SHOULD."
+log_id = "billboard"
+
+[node name="Billboard495Km" type="Node3D" parent="." unique_id=28702618]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -38560.676, -12690.601, -38874.22)
+script = ExtResource("3_6d4y0")
+headline = "FREE DRINKS FOR PLAYERS"
+tagline = "DEFINE 'PLAYER'"
+log_id = "billboard"
+
+[node name="Billboard510Km" type="Node3D" parent="." unique_id=1679180943]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -39095.67, -13078.8, -40575.582)
+script = ExtResource("3_6d4y0")
+headline = "SAL SAYS: COME ON IN"
+tagline = "SAL ALWAYS SAYS THAT"
+log_id = "billboard"
+
+[node name="Billboard525Km" type="Node3D" parent="." unique_id=1068625451]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -40878.777, -13467, -40613.02)
+script = ExtResource("3_6d4y0")
+headline = "LITTLE CHAPEL OF THE VOID"
+tagline = "WEDDINGS · VOW RENEWALS · NO REFUNDS"
+log_id = "billboard"
+
+[node name="Billboard540Km" type="Node3D" parent="." unique_id=137310459]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -41413.773, -13855.199, -42314.38)
+script = ExtResource("3_6d4y0")
+headline = "LOST? GOOD."
+tagline = "THE HIGH ROLLER · NEXT EXIT"
+log_id = "billboard"
+
+[node name="Billboard550Km" type="Node3D" parent="." unique_id=368438847]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -42810.527, -14114, -42062.02)
+script = ExtResource("3_6d4y0")
+headline = "DON'T FORGET YOUR RIG"
+tagline = "(PEOPLE DO)"
+log_id = "billboard"
+
+[node name="ChipSpill" type="Node3D" parent="." unique_id=60293149]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -9272.4, -3105.5999, -17555.2)
+script = ExtResource("4_p3ofn")
+lane_starts = PackedVector3Array()
+lane_ends = PackedVector3Array()
+rock_count = 220
+field_size = Vector3(1600, 400, 2800)
+rock_radius_range = Vector2(2, 10)
+landmark_count = 0
+keep_clear_spots = PackedVector3Array()
+field_seed = 2801
+rock_colors = PackedColorArray(1, 0.3, 0.6, 1, 0.3, 0.6, 1, 1, 1, 0.85, 0.3, 1, 0.95, 0.95, 0.9, 1, 0.2, 0.2, 0.25, 1)
+
+[node name="SpeedTrap" type="Node3D" parent="." unique_id=1792958129]
+transform = Transform3D(0.6002362, -0.20699415, 0.7725736, 0, 0.96593094, 0.2588, -0.7998228, -0.15534112, 0.5797867, -41183.438, -13785.801, -41816.59)
+script = ExtResource("5_so67c")
+kind = 1
+radius = 2500.0
+log_id = "speed_trap"
+
+[node name="Limo" type="Node3D" parent="." unique_id=28166467]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("7_pywuu")
+waypoints = PackedVector3Array(-1027.0391, -298.19998, -11645.393, -15295.587, -5086, -22403.19, -30775.988, -10222, -33959.992, -41593.79, -13885.199, -42074.39, -42244.164, -14014.6, -42012.207, -31040.012, -10302, -33608.008, -15612.413, -5086, -21980.81, -1291.061, -298.19998, -11293.408)
+speed = 85.0
+start_fraction = 0.2
+engine_trail_color = Color(1, 0.35, 0.8, 1)
+hull_size = Vector3(14, 7, 34)
+id_label = "HIGH ROLLER LIMO"
+
+[node name="ChipHauler" type="Node3D" parent="." unique_id=1688319132]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("8_un1w7")
+waypoints = PackedVector3Array(-1339.065, -458.19998, -11229.411, -15670.018, -5246, -21904.014, -31088.016, -10382, -33544.01, -41905.816, -14045.199, -41658.41, -41932.137, -14174.6, -42428.188, -30727.984, -10462, -34023.99, -15237.982, -5246, -22479.986, -979.03516, -458.19998, -11709.39)
+speed = 55.0
+start_fraction = 0.55
+engine_trail_color = Color(1, 0.8, 0.35, 1)
+hull_size = Vector3(14, 7, 34)
+
+[node name="PartyBus" type="Node3D" parent="." unique_id=1455303171]
+script = ExtResource("6_jbol7")
+visual_scene = ExtResource("9_4st0q")
+waypoints = PackedVector3Array(-1063.0421, -188.19998, -11597.395, -15338.79, -4976, -22345.594, -30811.992, -10112, -33911.992, -41629.793, -13775.199, -42026.39, -42208.16, -13904.6, -42060.207, -31004.008, -10192, -33656.008, -15569.21, -4976, -22038.406, -1255.058, -188.19998, -11341.406)
+speed = 70.0
+start_fraction = 0.8
+hull_size = Vector3(14, 7, 34)
+id_label = "BACHELOR PARTY BUS"
+
+[node name="SpacewayGlimmer" type="MultiMeshInstance3D" parent="." unique_id=247106226]
+script = ExtResource("10_ip1qw")
+points = PackedVector3Array(-695.43, -232.92, -11121.64, -42962.12, -14389.279, -42825.758)
+left_color = Color(1, 0.35, 0.8, 1)
+right_color = Color(1, 0.85, 0.45, 1)

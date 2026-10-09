@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="RouteList" format=3]
+
+[ext_resource type="Script" path="res://data/routes/RouteList.gd" id="1_list"]
+[ext_resource type="Script" path="res://data/routes/RouteData.gd" id="2_route"]
+
+[sub_resource type="Resource" id="Route_starlight_turnpike"]
+script = ExtResource("2_route")
+id = "starlight_turnpike"
+display_name = "STARLIGHT TURNPIKE"
+kind = "toll"
+description = "A toll lane from the truck stop to Tidewater. The current carries you along at seven times cruising speed. Pay at the gate, brake at the end."
+start = Vector3(-1500, 1500, -15000)
+finish = Vector3(40500, 14500, -46500)
+radius = 300.0
+toll = 45
+current_speed = 400.0
+current_push = 30.0
+
+[sub_resource type="Resource" id="Route_frostline_skyway"]
+script = ExtResource("2_route")
+id = "frostline_skyway"
+display_name = "FROSTLINE SKYWAY"
+kind = "toll"
+description = "A toll lane climbing from the truck stop toward the Frostline. Steep, cold, and very fast."
+start = Vector3(-4000, 4000, -15000)
+finish = Vector3(8000, 45000, -68000)
+radius = 300.0
+toll = 60
+current_speed = 450.0
+current_push = 30.0
+
+[sub_resource type="Resource" id="Route_rubble_run"]
+script = ExtResource("2_route")
+id = "rubble_run"
+display_name = "THE RUBBLE RUN"
+kind = "shortcut"
+description = "A belt of tumbling rocks between the Glimmer System and Greenhouse Reach. Straight through is shorter. Bring patience and a good bumper."
+start = Vector3(-47837, 14827, -4312)
+finish = Vector3(-48203, 18413, 484)
+radius = 600.0
+rock_count = 3000
+belt_width = 36000.0
+rock_colors = PackedColorArray(0.56, 0.42, 0.52, 1, 0.62, 0.34, 0.26, 1, 0.4, 0.42, 0.53, 1)
+
+[sub_resource type="Resource" id="Route_rust_belt"]
+script = ExtResource("2_route")
+id = "rust_belt"
+display_name = "THE RUST BELT"
+kind = "shortcut"
+description = "An old junkyard drift between the Dustbowl and Tidewater. Cuts the corner, if you don't mind the clanging."
+start = Vector3(47335, -4269, -24398)
+finish = Vector3(46742, -491, -29022)
+radius = 600.0
+rock_count = 3000
+belt_width = 36000.0
+rock_colors = PackedColorArray(0.7, 0.42, 0.28, 1, 0.55, 0.45, 0.35, 1, 0.8, 0.6, 0.3, 1)
+
+[sub_resource type="Resource" id="Route_nebula_overlook"]
+script = ExtResource("2_route")
+id = "nebula_overlook"
+display_name = "NEBULA OVERLOOK WAY"
+kind = "scenic"
+description = "The long way up to Greenhouse Reach, past a nebula the color of sherbet. Truckers say the view settles your hands."
+start = Vector3(-8000, -2000, -6000)
+finish = Vector3(-46000, 26000, 30000)
+radius = 300.0
+sight_id = "nebula_overlook"
+
+[resource]
+script = ExtResource("1_list")
+routes = Array[ExtResource("2_route")]([SubResource("Route_starlight_turnpike"), SubResource("Route_frostline_skyway"), SubResource("Route_rubble_run"), SubResource("Route_rust_belt"), SubResource("Route_nebula_overlook")])

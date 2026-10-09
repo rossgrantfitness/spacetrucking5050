@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/chug.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "HULL BREACH 101"
+frequency = "101.7"
+genre = "Metalcore, nu metal"
+dj_name = "Brick & Mortar"
+tagline = "Two rhinos. One mic. No furniture."
+music_folder = "res://audio/radio/hull_breach_101/music"
+ads_folder = "res://audio/radio/hull_breach_101/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("BRICK & MORTAR - BREAK STUFF (THE STUDIO)", "PRESSURE SUIT - DECOMPRESS", "CHAIN WALLET - RED CAP ENERGY", "BREAKDOWN BOULEVARD - CHUG LIFE", "SEVEN STRING SATELLITE - DROP Z", "THE SCREAMERS - SPACE IS SO LOUD (NOT REALLY)")
+ads = PackedStringArray("KEV'S KOLLISION REPAIR. WE'VE SEEN WORSE. PROBABLY.", "RHINO-PROOF FURNITURE. BUY ONCE. CRY NEVER.")
+dj_lines = PackedStringArray("BRICK: That was the best breakdown of the year. MORTAR: It's the WORST. *crash*", "We're out of chairs again. Next track!", "MORTAR: Brick broke the desk. BRICK: The desk was asking for it.", "Hull Breach 101! Hold onto something! Not the desk!")
+dj_on_storm = PackedStringArray("BRICK: Ion storm! MORTAR: That's just the bass. BRICK: It's a STORM. *crash*")
+dj_on_delivery = PackedStringArray("Shout to {bunny} at {place}! BRICK: Delivered! MORTAR: Barely. *crash*")
+dj_on_ticket = PackedStringArray("MORTAR: Somebody got a ticket! BRICK: Respect. MORTAR: Don't encourage it.")
+dj_on_new_system = PackedStringArray("{system}! BRICK: New system! MORTAR: Same us. *crash*")

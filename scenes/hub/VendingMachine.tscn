@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/vending_machine.glb" id="1_model"]
+[ext_resource type="Script" path="res://scenes/hub/ServicePoint.gd" id="2_service"]
+
+[sub_resource type="BoxShape3D" id="Box_solid"]
+size = Vector3(1.6, 1.449, 0.704)
+
+[sub_resource type="SphereShape3D" id="Sphere_use"]
+radius = 1.0
+
+[node name="VendingMachine" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(1.6, 0, 0, 0, 2.1, 0, 0, 0, 1.6, 0, 0.72975, 0)
+
+[node name="Solid" type="StaticBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="Solid"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7245, 0)
+shape = SubResource("Box_solid")
+
+[node name="Use" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.952)
+script = ExtResource("2_service")
+prompt = "VENDING"
+menu = "vending"
+
+[node name="Shape" type="CollisionShape3D" parent="Use"]
+shape = SubResource("Sphere_use")

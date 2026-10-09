@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Dolores (Comet Diner)"
+species = "cow"
+voice_pitch = 0.85
+voice_type = "reed"
+voice_key = 4
+voice_scale = "blues"
+lines = PackedStringArray("Coffee's on. It's always on.")
+comm_name = "DOLORES · COMET DINER"
+fur_color = Color(0.95, 0.92, 0.88, 1)
+accent_color = Color(0.95, 0.35, 0.45, 1)

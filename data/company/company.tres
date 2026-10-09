@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="CompanyLines" format=3]
+
+[ext_resource type="Script" path="res://data/company/CompanyLines.gd" id="1_lines"]
+[ext_resource type="Script" path="res://data/company/CompanyMission.gd" id="2_mission"]
+[ext_resource type="Resource" path="res://data/jobs/company_suits.tres" id="m_company_suits"]
+[ext_resource type="Resource" path="res://data/jobs/company_posters.tres" id="m_company_posters"]
+[ext_resource type="Resource" path="res://data/jobs/company_statue.tres" id="m_company_statue"]
+[ext_resource type="Resource" path="res://data/jobs/company_ledgers.tres" id="m_company_ledgers"]
+[ext_resource type="Resource" path="res://data/jobs/company_plaques.tres" id="m_company_plaques"]
+[ext_resource type="Resource" path="res://data/jobs/company_toilet.tres" id="m_company_toilet"]
+[ext_resource type="Resource" path="res://data/jobs/company_report.tres" id="m_company_report"]
+
+[sub_resource type="Resource" id="Mission_company_suits"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_suits")
+min_deliveries = 1
+pitch = PackedStringArray("Rabbit. Good. You showed up. That's the bare minimum, and you met it.", "My suits need dry cleaning. Sal's guy at The High Roller. Best creases in the sector.", "Don't touch them. Don't breathe on them. Don't look at them with that face.")
+declined = PackedStringArray("Not right now? I'll tell my suits. They'll be devastated. They have feelings. More than you.")
+done = PackedStringArray("My suits came back. Crisp. No thanks to you, but crisp.", "I've deducted a 'proximity to greatness' fee. It's on the check. Page forty.")
+
+[sub_resource type="Resource" id="Mission_company_posters"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_posters")
+min_deliveries = 3
+pitch = PackedStringArray("Gill's crew is underperforming. Morale. I've had posters made.", "Four million of them. They say HUSTLE. In gold foil.", "Don't read them. They're not for you. You're past helping.")
+declined = PackedStringArray("Fine. The posters will wait. Unlike you, they're patient AND inspiring.")
+done = PackedStringArray("Gill says the crew put the posters up. In the break room. Facing the wall.", "...That's still technically up. Here's your check.")
+
+[sub_resource type="Resource" id="Mission_company_statue"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_statue")
+min_deliveries = 5
+pitch = PackedStringArray("Moe at the Gas-N-Go has agreed to display a statue of me. By the pumps. For morale.", "Solid gold. It's worth more than you. More than your rig. More than your family tree.", "If it gets a single scratch, you're the one getting melted down.")
+declined = PackedStringArray("You'd rather NOT carry a golden likeness of me across the stars? ...Noted. In your file. In red.")
+done = PackedStringArray("Moe put the statue up. He says people keep stopping to stare at it.", "He says they can't believe it. I choose to hear that as a compliment.", "Your check. Don't spend it on anything I'd be embarrassed to be seen near. So, anything.")
+
+[sub_resource type="Resource" id="Mission_company_ledgers"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_ledgers")
+min_deliveries = 7
+pitch = PackedStringArray("Sal's quarterly books. Sealed. Do not open them.", "Not because they're secret. Because you wouldn't understand numbers that big.", "You count on your fingers, Rabbit. I've seen you.")
+declined = PackedStringArray("The books can wait. Sal can't. He'll call. He'll call ME. Thanks for that.")
+done = PackedStringArray("Sal signed for the books. He says you were 'a delight.'", "Nobody's ever said that about you before. I checked. There's a form.")
+
+[sub_resource type="Resource" id="Mission_company_plaques"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_plaques")
+min_deliveries = 9
+pitch = PackedStringArray("Employee of the Month plaques. One for every office in the sector. Take them to Tidewater; they'll pass them along.", "None of them have your name on them. I checked twice.", "Mind the glass. The glass is worth something.")
+declined = PackedStringArray("Suit yourself. The plaques will keep. They've got more staying power than you.")
+done = PackedStringArray("Gill hung one up in the canteen. It's of a fish.", "The fish deserved it more than you. The fish never asked for a raise.")
+
+[sub_resource type="Resource" id="Mission_company_toilet"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_toilet")
+min_deliveries = 11
+pitch = PackedStringArray("My yacht's moored at the Gas-N-Go. It needs a new toilet.", "Gold-plated. Heated seat. It plays the company anthem when you flush.", "Handle it with the respect you've never been shown.")
+declined = PackedStringArray("You're turning down the toilet. The TOILET, Rabbit. I'll remember this at your review.")
+done = PackedStringArray("It's installed. Moe says it played the anthem for an hour. He couldn't make it stop.", "That's called brand loyalty. Look it up. You won't.")
+
+[sub_resource type="Resource" id="Mission_company_report"]
+script = ExtResource("2_mission")
+job = ExtResource("m_company_report")
+min_deliveries = 13
+pitch = PackedStringArray("The quarterly report. The board meets in the casino penthouse. Of course they do.", "They'll see your name on the delivery slip and laugh. I've arranged for them to laugh.", "Then they'll see the numbers. MY numbers. And they'll weep. With joy.")
+declined = PackedStringArray("The board is waiting, Rabbit. The board does not like waiting. The board is me, emotionally.")
+done = PackedStringArray("The board read the report.", "They... they want to sell. The whole company.", "To anyone with the money. ANYONE.")
+
+[resource]
+script = ExtResource("1_lines")
+fee_items = PackedStringArray("Dispatch|25", "{company} brand use|15", "Insurance (theirs, not yours)|15", "Paperwork processing|10", "Coffee fund|8", "Regional manager's parking|7", "Fees on the fees|10")
+first_check_reaction = PackedStringArray("...", "Three hundred.", "Three HUNDRED. Out of three THOUSAND?", "Ninety percent?! That's not a cut, {boss}. That's an amputation.", "A week of hauling kitty litter across the black, and I can't afford the kitty litter.")
+first_check_boss = PackedStringArray("Read your contract, Rabbit. Page forty. Fees.", "Dispatch, brand use, insurance, my parking spot. It adds up.", "Now. Marge at the diner has a pie run for Tidewater. It's yours.", "Don't make me regret it. ...More than usual.")
+buyout_jacki = PackedStringArray("{boss}. Remember page forty?", "I read it. All of it. Including the bit where the company's for sale.", "Here's {price}. Cash. Count it.", "...Ninety percent of it is fees.")
+buyout_boss = PackedStringArray("You... you can't just...", "That's... that IS the right number.", "...", "Okay. Okay okay okay. Who do I... report to now?", "...Boss.")
+not_yet = PackedStringArray("{boss} laughs so hard he has to sit down.", "{boss} doesn't even look up from his crossword.", "\"Sure, Rabbit. And I'll buy a moon.\"", "{boss} pats the brochure like it's a pet.")
+order_placed = "{client} is calling {company}.\n\n{cargo}, to {to}.\n\nThe job will be waiting at the {company} office at the truck stop. Check in to pick it up."
+order_lines = PackedStringArray("Rabbit. New orders. {client} called it in. Asked for you by name. No accounting for taste.", "{cargo}, out to {to}. It's at the depot. Don't scratch it, the deductible's yours.")
+owner_order_lines = PackedStringArray("Boss! An order came in. {client}. Asked for you personally.", "{cargo}, out to {to}. I had the depot load it. I, uh. I alphabetized the paperwork.")
+more_orders = PackedStringArray("And there's {count} more on my desk. One at a time. Even you can't haul two.")
+missions = Array[ExtResource("2_mission")]([SubResource("Mission_company_suits"), SubResource("Mission_company_posters"), SubResource("Mission_company_statue"), SubResource("Mission_company_ledgers"), SubResource("Mission_company_plaques"), SubResource("Mission_company_toilet"), SubResource("Mission_company_report")])
+missions_all_done = PackedStringArray("Don't look at me like that, Rabbit.", "You can't afford ideas. Ideas are on page forty. They're extra.", "...The brochure's on my desk. Not that you'd need it.")

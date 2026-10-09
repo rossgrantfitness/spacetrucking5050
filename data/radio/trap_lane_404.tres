@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/trap.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "TRAP LANE 404"
+frequency = "104.4"
+genre = "Trap, heavy bass hip hop"
+dj_name = "Lil Comet"
+tagline = "The lane not found. (SKRRT!)"
+music_folder = "res://audio/radio/trap_lane_404/music"
+ads_folder = "res://audio/radio/trap_lane_404/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("LIL COMET - TAIL OF FIRE (SKRRT)", "808 ASTRONAUT - BOOM IN THE BELT", "DRIP NEBULA - ICE FIELD", "HAT ROLL HARRY - TRIPLETS", "BIG TANK - FUEL GAUGE ON E", "THE ORBITERS - NO GRAVITY NO PROBLEM")
+ads = PackedStringArray("ICE FIELD JEWELRY. REAL SPACE ICE. MELTS IN AN HOUR.", "SUBWOOFER SEATS. FEEL EVERY 808 IN YOUR SPINE.")
+dj_lines = PackedStringArray("Lil Comet on the mic! (SKRRT!) Trap Lane four-oh-four!", "Weather: cold! (BRR!) Traffic: light! (LET'S GO!)", "That beat? Hard. (HARD!) Your cargo? Secure. (SECURE!)", "Shout-out to everybody grinding the lanes tonight! (YEAH!)")
+dj_on_storm = PackedStringArray("Solar storm incoming! (SKRRT!) Ion storm! (WHAT!) Stay safe! (SAFE!)")
+dj_on_delivery = PackedStringArray("{bunny} just delivered to {place}! (LET'S GOOO!)")
+dj_on_ticket = PackedStringArray("Somebody got a ticket! (OOF!) Pay that! (PAY IT!)")
+dj_on_new_system = PackedStringArray("Welcome to {system}! (NEW SYSTEM!) (SKRRT!)")

@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/mags_magnet.tres" id="job_mags_magnet"]
+[ext_resource type="Resource" path="res://data/jobs/mags_beacon.tres" id="job_mags_beacon"]
+[ext_resource type="Resource" path="res://data/jobs/mags_bell.tres" id="job_mags_bell"]
+
+[sub_resource type="Resource" id="Conversation_meet"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("dustbowl_open")
+blocked_by_flags = PackedStringArray("mags_met")
+lines = PackedStringArray("Scrap came in one piece. That's a first, for scrap.", "Mags Hoofmann. I run the yard. The yard runs me. Fair trade.", "Don't offer me anything to eat. I'll eat it. Whatever it is. The wrapper. The table.", "Stick around, Rabbit. The dust coughs up a wreck a week. Somebody's got to haul the good bits out.")
+sets_flags = PackedStringArray("mags_met")
+
+[sub_resource type="Resource" id="Conversation_magnet"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_met")
+blocked_by_flags = PackedStringArray("mags_called_magnet", "mags_magnet_done")
+lines = PackedStringArray("Rabbit. Crane magnet died. Picked up a fridge yesterday and just... held it. Like a hug. Then let go.", "The canyon has a fridge now.", "> Order a new one through {company}. They'll send somebody.", "Somebody. Meaning you. Right. Calling.")
+sets_flags = PackedStringArray("mags_called_magnet")
+places_order = ExtResource("job_mags_magnet")
+
+[sub_resource type="Resource" id="Conversation_magnet_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_called_magnet")
+blocked_by_flags = PackedStringArray("mags_magnet_done")
+lines = PackedStringArray("Your lion wanted a 'magnetism surcharge.' Fine. I ate the invoice.")
+
+[sub_resource type="Resource" id="Conversation_beacon"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_magnet_done")
+blocked_by_flags = PackedStringArray("mags_offered_beacon")
+lines = PackedStringArray("Magnet works. Pulled a whole lighthouse lamp out of the east dunes. Still warm.", "An otter out in Tidewater asked about a lamp for his whale buoy. Years back. I keep a list.", "Haul it out to him? Careful. Old glass. Older than me.")
+sets_flags = PackedStringArray("mags_offered_beacon")
+offers_job = ExtResource("job_mags_beacon")
+
+[sub_resource type="Resource" id="Conversation_beacon_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_offered_beacon")
+blocked_by_flags = PackedStringArray("mags_beacon_done")
+lines = PackedStringArray("Lamp's on the board if you didn't grab it. It's not going anywhere. Nothing out here goes anywhere.")
+
+[sub_resource type="Resource" id="Conversation_bell"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_beacon_done")
+blocked_by_flags = PackedStringArray("mags_offered_bell")
+lines = PackedStringArray("Otter sent a thank-you card. I ate it. Nice card.", "Dug up a bell this week. Big brass thing off a wedding barge. Says 'TO THE LITTLE CHAPEL, WITH LOVE.'", "> The chapel on the Glimmer strip. Past Sal's casino.", "Then it goes home. Long haul, Rabbit. Don't ring it. It's loud. I rang it.")
+sets_flags = PackedStringArray("mags_offered_bell")
+offers_job = ExtResource("job_mags_bell")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_bell_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_offered_bell")
+blocked_by_flags = PackedStringArray("mags_bell_done")
+lines = PackedStringArray("Bell's on the board. Still loud. I checked.")
+
+[sub_resource type="Resource" id="Conversation_after"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_bell_done")
+blocked_by_flags = PackedStringArray("mags_after")
+lines = PackedStringArray("Sal called. Chapel rang the bell at a wedding. The couple cried. Sal cried. Sal billed them for the tissues.", "Funny. Nothing out here's junk, Rabbit. It's just between owners.", "> Like my rig.", "Like your rig. Like me.")
+sets_flags = PackedStringArray("mags_after")
+marked = true
+
+[sub_resource type="Resource" id="Conversation_tapes"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_after", "white_story_done")
+blocked_by_flags = PackedStringArray("mags_heard_tapes")
+lines = PackedStringArray("Heard you found his tapes. Good.", "Dust takes everything else. Hang on to the stuff it can't.")
+sets_flags = PackedStringArray("mags_heard_tapes")
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("mags_met")
+lines = PackedStringArray("Rabbit. Board's by the crane. Don't touch the pile marked 'DON'T.'", "Storm coming. Or leaving. Hard to tell out here.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Hoof and Hull Salvage. We buy, we sell, we don't ask.", "Mind the dust. It gets in everything. It got in me. I'm mostly dust now.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Mags Hoofmann (Hoof & Hull Salvage)"
+species = "goat"
+voice_pitch = 0.85
+voice_type = "gruff"
+voice_key = 2
+voice_scale = "blues"
+lines = PackedStringArray("Hoof and Hull. We buy, we sell, we don't ask.")
+comm_name = "MAGS · HOOF & HULL"
+fur_color = Color(0.9, 0.85, 0.74, 1)
+accent_color = Color(1, 0.65, 0.2, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_meet"), SubResource("Conversation_magnet"), SubResource("Conversation_magnet_wait"), SubResource("Conversation_beacon"), SubResource("Conversation_beacon_wait"), SubResource("Conversation_bell"), SubResource("Conversation_bell_wait"), SubResource("Conversation_after"), SubResource("Conversation_tapes"), SubResource("Conversation_regular"), SubResource("Conversation_default")])

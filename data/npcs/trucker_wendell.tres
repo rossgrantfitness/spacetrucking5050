@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+
+[sub_resource type="Resource" id="Conversation_0"]
+script = ExtResource("2_conv")
+blocked_by_flags = PackedStringArray("first_mission_done")
+lines = PackedStringArray("New face! Big Wendell. Twenty years hauling. Sit, sit. Or stand, I'm not your boss.", "Tip from an old salt: once you're at top speed, the limiter sips fuel. It's speeding up that drinks it.", "And when you're docking, aim for the big glowing ring. Can't miss it. I've missed it.")
+
+[sub_resource type="Resource" id="Conversation_1"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Heard you made the Tidewater run. Marge doesn't trust just anybody with those pies.", "My cat says hi. She's in the truck. She's always in the truck.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Big Wendell (trucker)"
+species = "walrus"
+voice_pitch = 0.55
+voice_type = "gruff"
+voice_key = 2
+voice_scale = "major"
+lines = PackedStringArray("Twenty years hauling and I still can't parallel park.")
+comm_name = "BIG WENDELL"
+fur_color = Color(0.55, 0.4, 0.36, 1)
+accent_color = Color(1, 0.78, 0.2, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_0"), SubResource("Conversation_1")])

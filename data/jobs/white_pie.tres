@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "white_pie"
+cargo_name = "One cherry pie, lattice top (paid for)"
+client_name = "A standing order (paid up)"
+description = "He paid for a pie a month for Gill, a year ahead. Marge kept baking them. This one's already paid for."
+from_place = "truck_stop"
+to_place = "tidewater"
+weight = 40000000.0
+base_pay = 400
+care_kind = "perishable"
+care_bonus = 200
+on_job_board = false
+repeatable = false
+requires_flag = "marge_mentioned_white"
+completes_flag = "white_pie_done"

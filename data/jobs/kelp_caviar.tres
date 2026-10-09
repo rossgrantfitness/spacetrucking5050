@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "kelp_caviar"
+cargo_name = "Fancy kelp caviar"
+client_name = "The High Roller"
+description = "Gill's crew makes it from kelp. Sal sells it as 'ocean pearls' for 90 credits a spoon."
+from_place = "tidewater"
+to_place = "high_roller"
+weight = 250000000.0
+base_pay = 1800
+care_kind = "perishable"
+care_bonus = 300
+rush_seconds = 0.0
+rush_bonus = 0
+on_job_board = true
+repeatable = true
+requires_flag = "glimmer_open"
+completes_flag = ""

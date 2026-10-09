@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "buffet_leftovers"
+cargo_name = "Leftover buffet (perishable)"
+client_name = "Marge's Diner"
+description = "The High Roller's buffet throws out more food in a night than Marge sells in a week. Marge will take it. Fast and gentle."
+from_place = "high_roller"
+to_place = "truck_stop"
+weight = 600000000.0
+base_pay = 1100
+care_kind = "perishable"
+care_bonus = 300
+rush_seconds = 960.0
+rush_bonus = 200
+on_job_board = true
+repeatable = true
+requires_flag = "glimmer_open"
+completes_flag = ""

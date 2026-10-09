@@ -1,0 +1,208 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/FlightHUD.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scenes/ui/hud/WorldMarkers.gd" id="2_WorldMarkers"]
+[ext_resource type="Script" path="res://scenes/ui/hud/FlightMarker.gd" id="3_FlightMarker"]
+[ext_resource type="Script" path="res://scenes/ui/hud/StatusLights.gd" id="4_StatusLights"]
+[ext_resource type="Script" path="res://scenes/ui/hud/RadioTicker.gd" id="5_RadioTicker"]
+[ext_resource type="Script" path="res://scenes/ui/hud/NavTape.gd" id="6_NavTape"]
+[ext_resource type="Script" path="res://scenes/ui/hud/RushTimer.gd" id="7_RushTimer"]
+[ext_resource type="Script" path="res://scenes/ui/hud/CargoReadout.gd" id="8_CargoReadout"]
+[ext_resource type="Script" path="res://scenes/ui/hud/SpeedReadout.gd" id="9_SpeedReadout"]
+[ext_resource type="Script" path="res://scenes/ui/hud/RadarGlobe.gd" id="10_RadarGlobe"]
+[ext_resource type="Script" path="res://scenes/ui/hud/JumpCharge.gd" id="11_JumpCharge"]
+[ext_resource type="Script" path="res://scenes/ui/hud/FuelGauge.gd" id="12_FuelGauge"]
+[ext_resource type="Script" path="res://scenes/ui/hud/HullSilhouette.gd" id="13_HullSilhouette"]
+[ext_resource type="Script" path="res://scenes/ui/hud/CommPortrait.gd" id="14_CommPortrait"]
+[ext_resource type="Script" path="res://scenes/ui/hud/Banner.gd" id="15_Banner"]
+[ext_resource type="Script" path="res://scenes/ui/hud/CalendarClock.gd" id="16_CalendarClock"]
+[ext_resource type="Script" path="res://scenes/ui/hud/ObjectiveLine.gd" id="17_ObjectiveLine"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_premult"]
+blend_mode = 4
+
+[node name="FlightHUD" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_hud")
+
+[node name="Pixels" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+gui_disable_input = true
+size = Vector2i(640, 360)
+render_target_update_mode = 1
+
+[node name="WorldMarkers" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_WorldMarkers")
+
+[node name="FlightMarker" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_FlightMarker")
+
+[node name="StatusLights" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_StatusLights")
+
+[node name="RadioTicker" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_RadioTicker")
+
+[node name="NavTape" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_NavTape")
+
+[node name="RushTimer" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_RushTimer")
+
+[node name="CargoReadout" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_CargoReadout")
+
+[node name="CalendarClock" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("16_CalendarClock")
+
+[node name="ObjectiveLine" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("17_ObjectiveLine")
+
+[node name="SpeedReadout" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("9_SpeedReadout")
+
+[node name="RadarGlobe" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_RadarGlobe")
+
+[node name="JumpCharge" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_JumpCharge")
+
+[node name="FuelGauge" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("12_FuelGauge")
+
+[node name="HullSilhouette" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("13_HullSilhouette")
+
+[node name="CommPortrait" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_CommPortrait")
+
+[node name="Banner" type="Control" parent="Pixels"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("15_Banner")
+
+[node name="Screen" type="TextureRect" parent="."]
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_premult")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 0

@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/traffic_rustbound_starforge.glb" id="1_gjdv8"]
+[ext_resource type="Script" path="res://scenes/flight/EngineTrail.gd" id="2_r3r6l"]
+[ext_resource type="Script" path="res://scenes/flight/EngineFlare.gd" id="3_wt0jf"]
+
+[node name="RustboundStarforgeVisual" type="Node3D" unique_id=1332018147]
+metadata/hull_size = Vector3(12.511573, 9.119374, 28.900002)
+
+[node name="Model" type="Node3D" parent="." unique_id=1337451468 instance=ExtResource("1_gjdv8")]
+transform = Transform3D(-1.546602e-06, 0, -35.38213, 0, 35.38213, 0, 35.38213, 0, -1.546602e-06, -0.09501878, 0.08638532, -0.21595538)
+
+[node name="Nozzle" type="Marker3D" parent="." unique_id=1512735861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2079246, 0, 17.3)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=432207635]
+script = ExtResource("2_r3r6l")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=1735837163]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("3_wt0jf")
+size_at_top_speed = 6.0
+
+[node name="Nozzle2" type="Marker3D" parent="." unique_id=233101100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2079246, 0, 17.3)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=2125586864]
+script = ExtResource("2_r3r6l")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=857963392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("3_wt0jf")
+size_at_top_speed = 6.0

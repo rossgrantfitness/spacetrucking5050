@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RadioStation" format=3]
+
+[ext_resource type="Script" path="res://data/radio/RadioStation.gd" id="1_station"]
+[ext_resource type="AudioStream" path="res://audio/radio/placeholders/thrash.wav" id="2_loop"]
+
+[resource]
+script = ExtResource("1_station")
+display_name = "KRSH 666 THE CRUSHER"
+frequency = "66.6"
+genre = "Thrash, classic heavy metal"
+dj_name = "DJ Grimsby"
+tagline = "Crushing the lanes since forever."
+music_folder = "res://audio/radio/krsh_666/music"
+ads_folder = "res://audio/radio/krsh_666/ads"
+placeholder_loop = ExtResource("2_loop")
+tracks = PackedStringArray("GRIMSBY & THE GOATS - HORNS UP IN ZERO G", "IRON CARGO - FREIGHT TRAIN TO HELL'S DOCK", "RIVET STORM - THRASHING THE AIRLOCK", "SKULL TRUCKER - 18 WHEELS OF STEEL (THERE ARE NO WHEELS)", "VOID WARDEN - DENIM IN THE DARK", "METEOR MOSH - CRASH LANDING")
+ads = PackedStringArray("SPIKE & STUD LEATHERWORKS. VESTS FOR EVERY GRAVITY.", "HEADBANG HELMETS. PROTECT YOUR SKULL. KEEP YOUR SPIRIT.", "AIR GUITAR STRINGS. INVISIBLE. INDESTRUCTIBLE. $40.")
+dj_lines = PackedStringArray("KRSH SIX SIX SIX! THE CRUSHER! (off mic) ...stay hydrated, hon.", "THAT WAS HEAVY! LIKE YOUR CARGO! (off mic) secure your load, please.", "HORNS UP, HAULERS! (off mic) ...and stretch your legs at the next stop.", "THE CRUSHER NEVER SLEEPS! (off mic) but you should. eight hours.")
+dj_on_storm = PackedStringArray("ION STORM! THE SKY IS SHREDDING! (off mic) ...slow down in the storm, sweetie.")
+dj_on_delivery = PackedStringArray("HORNS UP FOR {bunny}! DELIVERED TO {place}! (off mic) proud of you.")
+dj_on_ticket = PackedStringArray("THE MAN GAVE YOU A TICKET! (off mic) ...the speed limit is there for a reason though.")
+dj_on_new_system = PackedStringArray("NEW SYSTEM! {system}! CONQUER IT! (off mic) ...and be polite to the locals.")

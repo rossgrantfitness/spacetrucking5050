@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/depot_hank.tres" id="2_host"]
+
+[resource]
+script = ExtResource("1_place")
+id = "skyway_depot"
+display_name = "SKYWAY FUEL DEPOT"
+kind = 2
+services = PackedStringArray("fuel")
+host = ExtResource("2_host")
+host_lines = PackedStringArray("Fuel. Pumps are on.", "Cheapest fuel this side of the Frostline. Don't spill it.", "You again. Pumps are on.")
+host_lines_in_order = true
+fuel_price_factor = 0.6
+map_position = Vector3(4645, 18782, -34276)
+rest_stop = "fuel_depot"
+rest_stop_facing = Vector3(0.1229, 0.6145, -0.7792)
+takes_freight = false

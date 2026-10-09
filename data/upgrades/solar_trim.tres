@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/UpgradeData.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = "solar_trim"
+display_name = "Solar Sail Trim"
+description = "Little gold sails along the hull catch starlight. Another 15% off the fuel you burn."
+price = 3000
+requires_upgrade = "eco_injectors"
+min_level = 4
+category = "engine"
+fuel_burn = 0.85
+add_on = "solar_fins"

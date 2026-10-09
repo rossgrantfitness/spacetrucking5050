@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "company_report"
+cargo_name = "The quarterly report"
+client_name = "The board, The High Roller penthouse"
+description = "The board meets in the casino's penthouse. Of course it does. Deliver the report. Try to look employed."
+from_place = "truck_stop"
+to_place = "high_roller"
+weight = 50000000.0
+base_pay = 1600
+on_job_board = false
+repeatable = false
+requires_flag = "company_toilet_done"
+completes_flag = "company_report_done"

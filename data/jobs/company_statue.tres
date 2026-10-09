@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="JobData" format=3]
+
+[ext_resource type="Script" path="res://data/jobs/JobData.gd" id="1_job"]
+
+[resource]
+script = ExtResource("1_job")
+id = "company_statue"
+cargo_name = "A golden statue of the boss (fragile)"
+client_name = "Moe, Gas-N-Go 47"
+description = "Solid gold, larger than life, for display by the pumps. Worth more than your rig."
+from_place = "truck_stop"
+to_place = "gas_n_go"
+weight = 1200000000.0
+base_pay = 1100
+care_kind = "fragile"
+care_bonus = 600
+on_job_board = false
+repeatable = false
+requires_flag = "company_posters_done"
+completes_flag = "company_statue_done"

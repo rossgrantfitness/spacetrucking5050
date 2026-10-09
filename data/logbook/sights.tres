@@ -1,0 +1,212 @@
+[gd_resource type="Resource" script_class="Logbook" format=3]
+
+[ext_resource type="Script" path="res://data/logbook/Logbook.gd" id="1_book"]
+[ext_resource type="Script" path="res://data/logbook/LogbookEntry.gd" id="2_entry"]
+
+[sub_resource type="Resource" id="Entry_big_ship"]
+script = ExtResource("2_entry")
+id = "big_ship"
+display_name = "CAPITAL SHIP CROSSING"
+description = "A ship the size of a town, crossing the lane like it owns it. It kind of does."
+
+[sub_resource type="Resource" id="Entry_convoy"]
+script = ExtResource("2_entry")
+id = "convoy"
+display_name = "CONVOY"
+description = "A line of rigs going the other way. Somebody always waves."
+
+[sub_resource type="Resource" id="Entry_billboard"]
+script = ExtResource("2_entry")
+id = "billboard"
+display_name = "SPACE BILLBOARD"
+description = "Ads, out here. Of course there are ads out here."
+
+[sub_resource type="Resource" id="Entry_comet"]
+script = ExtResource("2_entry")
+id = "comet"
+display_name = "COMET"
+description = "Made a wish. Probably wasted it on a sandwich."
+
+[sub_resource type="Resource" id="Entry_jellyfish"]
+script = ExtResource("2_entry")
+id = "jellyfish"
+display_name = "COSMIC JELLYFISH"
+description = "They drift. They glow. They don't sting. Better than most people."
+
+[sub_resource type="Resource" id="Entry_junk"]
+script = ExtResource("2_entry")
+id = "junk"
+display_name = "SPACE JUNK"
+description = "Somebody's bad day, scattered across the lane."
+
+[sub_resource type="Resource" id="Entry_derelict"]
+script = ExtResource("2_entry")
+id = "derelict"
+display_name = "DERELICT"
+description = "Nobody home. Probably."
+
+[sub_resource type="Resource" id="Entry_duck"]
+script = ExtResource("2_entry")
+id = "duck"
+display_name = "THE GIANT RUBBER DUCK"
+description = "Nobody knows why. Nobody asks."
+
+[sub_resource type="Resource" id="Entry_whales"]
+script = ExtResource("2_entry")
+id = "whales"
+display_name = "SPACE WHALES"
+description = "They sing. It sounds like a sad tuba. In a good way."
+
+[sub_resource type="Resource" id="Entry_ion_storm"]
+script = ExtResource("2_entry")
+id = "ion_storm"
+display_name = "ION STORM"
+description = "Green lightning and a crackly radio. Pretty, from a distance."
+
+[sub_resource type="Resource" id="Entry_lighthouse"]
+script = ExtResource("2_entry")
+id = "lighthouse"
+display_name = "THE LIGHTHOUSE WITH NO ROCK"
+description = "Still warning ships about a rock that isn't there anymore. Respect."
+
+[sub_resource type="Resource" id="Entry_dorothy_mae"]
+script = ExtResource("2_entry")
+id = "dorothy_mae"
+display_name = "THE DOROTHY MAE"
+description = "An old hauler, drifting off the lane. One light still blinking. Somebody loved this rig once."
+
+[sub_resource type="Resource" id="Entry_speed_trap"]
+script = ExtResource("2_entry")
+id = "speed_trap"
+display_name = "SPACE PATROL RADAR BUOY"
+description = "Deputy Biscuit's favorite spot. It's practically a landmark."
+
+[sub_resource type="Resource" id="Entry_numbers_station"]
+script = ExtResource("2_entry")
+id = "numbers_station"
+display_name = "THE NUMBERS STATION"
+description = "A station with no name, reading numbers into the dark near the Dorothy Mae. Who's listening?"
+rare = true
+
+[sub_resource type="Resource" id="Entry_great_migration"]
+script = ExtResource("2_entry")
+id = "great_migration"
+display_name = "THE GREAT MIGRATION"
+description = "Thousands of jellies, all heading the same way. Gill says his grandma saw it once."
+rare = true
+
+[sub_resource type="Resource" id="Entry_leviathan"]
+script = ExtResource("2_entry")
+id = "leviathan"
+display_name = "LEVIATHAN POD"
+description = "Whales the size of stations. I turned the radio off. Felt rude."
+rare = true
+
+[sub_resource type="Resource" id="Entry_ghost_ship"]
+script = ExtResource("2_entry")
+id = "ghost_ship"
+display_name = "GHOST SHIP"
+description = "A ship that flickered, and then wasn't there. Didn't tell anybody. Writing it here."
+rare = true
+
+[sub_resource type="Resource" id="Entry_comet_storm"]
+script = ExtResource("2_entry")
+id = "comet_storm"
+display_name = "COMET STORM"
+description = "The whole sky, streaking. Made about a hundred wishes."
+rare = true
+
+[sub_resource type="Resource" id="Entry_gas_n_go_keychain"]
+script = ExtResource("2_entry")
+id = "gas_n_go_keychain"
+display_name = "SOUVENIR: GAS-N-GO 47 KEYCHAIN"
+description = "A tiny plastic sloth holding a tiny plastic fuel nozzle. Moe made them. Slowly."
+
+[sub_resource type="Resource" id="Entry_slowpoke"]
+script = ExtResource("2_entry")
+id = "slowpoke"
+display_name = "SHELDON, THE SLOWPOKE"
+description = "A tortoise doing twelve in the fast lane. He's been in that lane since Tuesday."
+
+[sub_resource type="Resource" id="Entry_student_driver"]
+script = ExtResource("2_entry")
+id = "student_driver"
+display_name = "STUDENT DRIVER"
+description = "Weaving all over the lane. We were all new once. Some of us still are."
+
+[sub_resource type="Resource" id="Entry_half_billboard"]
+script = ExtResource("2_entry")
+id = "half_billboard"
+display_name = "HALF A MESSAGE"
+description = "A wrecked billboard that stops mid-sentence. You'll be wondering about it for days."
+
+[sub_resource type="Resource" id="Entry_whale_breach"]
+script = ExtResource("2_entry")
+id = "whale_breach"
+display_name = "WHALE BREACH"
+description = "A whale jumped clean out of the ocean planet into orbit. Showoff."
+rare = true
+
+[sub_resource type="Resource" id="Entry_biggest_slot"]
+script = ExtResource("2_entry")
+id = "biggest_slot"
+display_name = "THE WORLD'S BIGGEST SLOT MACHINE"
+description = "Three reels the size of houses. Somebody pulls the lever every hour. It has never paid out."
+
+[sub_resource type="Resource" id="Entry_giant_dice"]
+script = ExtResource("2_entry")
+id = "giant_dice"
+display_name = "THE GIANT DICE"
+description = "Two dice the size of moons, tumbling forever. Locals bet on them. Nobody has ever seen them land."
+
+[sub_resource type="Resource" id="Entry_void_chapel"]
+script = ExtResource("2_entry")
+id = "void_chapel"
+display_name = "LITTLE CHAPEL OF THE VOID"
+description = "Weddings, vow renewals, no refunds. The neon heart buzzes in a way you can feel in your teeth."
+
+[sub_resource type="Resource" id="Entry_big_steer"]
+script = ExtResource("2_entry")
+id = "big_steer"
+display_name = "THE BIG STEER"
+description = "A cow skull the size of a moon, bleached by the Dustbowl's sun. Nobody knows where the rest of the cow went. Nobody asks."
+
+[sub_resource type="Resource" id="Entry_old_windmill"]
+script = ExtResource("2_entry")
+id = "old_windmill"
+display_name = "THE OLD WINDMILL"
+description = "A farm windmill, turning in the solar wind. It isn't pumping anything. It just likes turning."
+
+[sub_resource type="Resource" id="Entry_floating_tree"]
+script = ExtResource("2_entry")
+id = "floating_tree"
+display_name = "THE FLOATING TREE"
+description = "A whole tree, roots and all, drifting through Greenhouse Reach with little glowing fruit. Dr. Moss says it's 'free range.'"
+
+[sub_resource type="Resource" id="Entry_watering_can"]
+script = ExtResource("2_entry")
+id = "watering_can"
+display_name = "THE GIANT WATERING CAN"
+description = "A tin watering can the size of a station, pouring forever. Nobody's sure what it's watering. Space, probably."
+
+[sub_resource type="Resource" id="Entry_big_snowman"]
+script = ExtResource("2_entry")
+id = "big_snowman"
+display_name = "THE BIG SNOWMAN"
+description = "Three snowballs the size of hills, a carrot nose and a purple scarf. Somebody built it. Nobody has ever owned up."
+
+[sub_resource type="Resource" id="Entry_giant_cone"]
+script = ExtResource("2_entry")
+id = "giant_cone"
+display_name = "THE GIANT CONE"
+description = "An ice-cream cone frozen into a comet, three scoops and a cherry. Penny swears it was there before her shop."
+
+[sub_resource type="Resource" id="Entry_nebula_overlook"]
+script = ExtResource("2_entry")
+id = "nebula_overlook"
+display_name = "NEBULA OVERLOOK"
+description = "Took the scenic way up to Greenhouse Reach. A nebula the color of sherbet. Worth the extra kilometers."
+
+[resource]
+script = ExtResource("1_book")
+entries = Array[ExtResource("2_entry")]([SubResource("Entry_big_ship"), SubResource("Entry_convoy"), SubResource("Entry_billboard"), SubResource("Entry_comet"), SubResource("Entry_jellyfish"), SubResource("Entry_junk"), SubResource("Entry_derelict"), SubResource("Entry_duck"), SubResource("Entry_whales"), SubResource("Entry_ion_storm"), SubResource("Entry_lighthouse"), SubResource("Entry_dorothy_mae"), SubResource("Entry_speed_trap"), SubResource("Entry_numbers_station"), SubResource("Entry_great_migration"), SubResource("Entry_leviathan"), SubResource("Entry_ghost_ship"), SubResource("Entry_comet_storm"), SubResource("Entry_gas_n_go_keychain"), SubResource("Entry_slowpoke"), SubResource("Entry_student_driver"), SubResource("Entry_half_billboard"), SubResource("Entry_whale_breach"), SubResource("Entry_biggest_slot"), SubResource("Entry_giant_dice"), SubResource("Entry_void_chapel"), SubResource("Entry_big_steer"), SubResource("Entry_old_windmill"), SubResource("Entry_floating_tree"), SubResource("Entry_watering_can"), SubResource("Entry_big_snowman"), SubResource("Entry_giant_cone"), SubResource("Entry_nebula_overlook")])

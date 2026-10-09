@@ -1,0 +1,248 @@
+[gd_resource type="Resource" script_class="FreightMarket" format=3]
+
+[ext_resource type="Script" path="res://data/freight/FreightMarket.gd" id="1_market"]
+[ext_resource type="Script" path="res://data/freight/CargoType.gd" id="2_cargo"]
+
+[sub_resource type="Resource" id="Cargo_dry_goods"]
+script = ExtResource("2_cargo")
+id = "dry_goods"
+names = PackedStringArray("Assorted dry goods", "Bulk paper towels", "Flat-pack furniture", "Spare spatulas", "Discount umbrellas", "Office chairs (no wheels)", "Novelty mugs", "Pallets of socks")
+clients = PackedStringArray("Galactimart", "Box-o-Rama Wholesale", "Orbital Discount Depot", "Kessler & Sons Supply")
+blurbs = PackedStringArray("Nothing fancy. Just stuff people buy.", "It's boxes. Of things.", "Somebody somewhere needs more of this.")
+look = "container"
+color = Color(0.85, 0.32, 0.2, 1)
+weight_range = Vector2(400000000, 1800000000)
+pay_factor = 1.0
+care_kind = "none"
+rush_chance = 0.2
+
+[sub_resource type="Resource" id="Cargo_frozen_food"]
+script = ExtResource("2_cargo")
+id = "frozen_food"
+names = PackedStringArray("Frozen fish sticks", "Space popsicles", "Ice-cold pizza rolls", "Frozen dumplings", "Comet ice (culinary grade)", "Freeze-dried casseroles")
+clients = PackedStringArray("Polar Pantry", "Snackwave Foods", "Moonbite Frozen", "Big Chill Distribution")
+blurbs = PackedStringArray("Keep the reefer humming.", "Thawed is a refund.", "The cold chain is sacred.")
+look = "reefer"
+color = Color(0.92, 0.94, 0.96, 1)
+weight_range = Vector2(300000000, 1200000000)
+pay_factor = 1.15
+care_kind = "perishable"
+rush_chance = 0.35
+
+[sub_resource type="Resource" id="Cargo_produce"]
+script = ExtResource("2_cargo")
+id = "produce"
+names = PackedStringArray("Hydroponic lettuce", "Zero-G tomatoes", "Asteroid avocados", "Glow-melons", "Space kale (nobody asked)", "Crater carrots")
+clients = PackedStringArray("Greenleaf Orbital Farms", "Sunny Dome Produce", "The Veggie Barge")
+blurbs = PackedStringArray("Fresh today, sad tomorrow.", "Ripens on the way. Hopefully not too much.")
+look = "reefer"
+color = Color(0.4, 0.75, 0.35, 1)
+weight_range = Vector2(200000000, 900000000)
+pay_factor = 1.1
+care_kind = "perishable"
+rush_chance = 0.4
+
+[sub_resource type="Resource" id="Cargo_fuel_tanks"]
+script = ExtResource("2_cargo")
+id = "fuel_tanks"
+names = PackedStringArray("Reactor slush", "Liquid hydrogen", "Engine coolant", "Starship lube", "Bulk thruster gel")
+clients = PackedStringArray("Gas-N-Go Supply", "Hydro-Haulers Inc.", "Nebula Petro")
+blurbs = PackedStringArray("Heavy and sloshy. Brake early.", "Don't smoke near it. Seriously.")
+look = "tank"
+color = Color(0.95, 0.75, 0.15, 1)
+weight_range = Vector2(1200000000, 3200000000)
+pay_factor = 1.2
+care_kind = "none"
+rush_chance = 0.15
+
+[sub_resource type="Resource" id="Cargo_goo"]
+script = ExtResource("2_cargo")
+id = "goo"
+names = PackedStringArray("Industrial slime", "Mystery goo", "Grade-B gelatin", "Liquid soap concentrate", "Bubble tea pearls (bulk)")
+clients = PackedStringArray("Goopco", "The Slime Works", "Splat Chemical")
+blurbs = PackedStringArray("Don't ask what it's for.", "Sticky. Very sticky.")
+look = "tank"
+color = Color(0.55, 0.85, 0.3, 1)
+weight_range = Vector2(600000000, 2400000000)
+pay_factor = 1.1
+care_kind = "none"
+rush_chance = 0.1
+
+[sub_resource type="Resource" id="Cargo_glassware"]
+script = ExtResource("2_cargo")
+id = "glassware"
+names = PackedStringArray("Crystal chandeliers", "Snow globes", "Antique vases", "Lava lamps", "Stained-glass windows", "Fish bowls (empty)")
+clients = PackedStringArray("Fancy Things Ltd.", "The Glass Moon", "Auntie Pearl's Antiques")
+blurbs = PackedStringArray("Every bonk costs you.", "Handle like it's your grandma's.")
+look = "crates"
+color = Color(0.75, 0.6, 0.4, 1)
+weight_range = Vector2(100000000, 600000000)
+pay_factor = 1.2
+care_kind = "fragile"
+rush_chance = 0.2
+
+[sub_resource type="Resource" id="Cargo_electronics"]
+script = ExtResource("2_cargo")
+id = "electronics"
+names = PackedStringArray("Arcade cabinets", "Holo-TVs", "Pocket robots", "Karaoke machines", "Retro game consoles", "Toasters (smart)")
+clients = PackedStringArray("Bleep Bloop Electronics", "Circuit City Station", "Gizmo Galaxy")
+blurbs = PackedStringArray("Don't shake the robots.", "Fragile tech, nervous client.")
+look = "crates"
+color = Color(0.3, 0.45, 0.8, 1)
+weight_range = Vector2(100000000, 700000000)
+pay_factor = 1.15
+care_kind = "fragile"
+rush_chance = 0.35
+
+[sub_resource type="Resource" id="Cargo_livestock"]
+script = ExtResource("2_cargo")
+id = "livestock"
+names = PackedStringArray("Space chickens", "Moon goats", "Zero-G cows", "Show alpacas", "Space bees", "Racing snails")
+clients = PackedStringArray("Happy Hooves Ranch", "Orbital Farmers Co-op", "The Petting Zoo Barge")
+blurbs = PackedStringArray("They can feel every bump.", "Smooth flying keeps them calm.")
+look = "livestock"
+color = Color(0.85, 0.65, 0.35, 1)
+weight_range = Vector2(200000000, 1100000000)
+pay_factor = 1.25
+care_kind = "live"
+rush_chance = 0.2
+
+[sub_resource type="Resource" id="Cargo_pets"]
+script = ExtResource("2_cargo")
+id = "pets"
+names = PackedStringArray("Kittens (lots)", "Goldfish", "Guinea pigs", "Puppies for adoption", "Show rabbits (distant cousins)")
+clients = PackedStringArray("Paws Across Space", "Fizzwick Pet Supply", "The Kitty Litter Barge")
+blurbs = PackedStringArray("Precious cargo. Be gentle.", "They're napping. Keep it that way.")
+look = "livestock"
+color = Color(0.95, 0.5, 0.65, 1)
+weight_range = Vector2(50000000, 400000000)
+pay_factor = 1.3
+care_kind = "live"
+rush_chance = 0.3
+
+[sub_resource type="Resource" id="Cargo_machinery"]
+script = ExtResource("2_cargo")
+id = "machinery"
+names = PackedStringArray("Mining drills", "A spare docking clamp", "Hull plating", "Gravity generators", "Industrial dryers", "A whole bulldozer")
+clients = PackedStringArray("Heavy Metal Mining", "Orbital Construction", "Bolt & Rivet Industrial")
+blurbs = PackedStringArray("Big, heavy and lumpy.", "It's under a tarp for a reason.")
+look = "machinery"
+color = Color(0.3, 0.55, 0.45, 1)
+weight_range = Vector2(1400000000, 3400000000)
+pay_factor = 1.15
+care_kind = "none"
+rush_chance = 0.1
+
+[sub_resource type="Resource" id="Cargo_scrap"]
+script = ExtResource("2_cargo")
+id = "scrap"
+names = PackedStringArray("Scrap hull plates", "Old satellites", "Recycled cans", "Junked engines", "Bent space girders")
+clients = PackedStringArray("Mags' Salvage", "The Recycling Barge", "Second Life Scrap")
+blurbs = PackedStringArray("Junk to someone, treasure to somebody else.")
+look = "machinery"
+color = Color(0.55, 0.45, 0.35, 1)
+weight_range = Vector2(1500000000, 3500000000)
+pay_factor = 0.9
+care_kind = "none"
+rush_chance = 0.05
+sources = PackedStringArray("salvage_yard", "truck_stop", "gas_n_go")
+
+[sub_resource type="Resource" id="Cargo_ore"]
+script = ExtResource("2_cargo")
+id = "ore"
+names = PackedStringArray("Iron ore", "Copper ore", "Moon rocks (bulk)", "Crushed asteroid", "Raw space gravel")
+clients = PackedStringArray("Heavy Metal Mining", "Big Rock Quarries", "Dustbowl Minerals")
+blurbs = PackedStringArray("Rocks. Heavy rocks.", "Slow to start, slower to stop.")
+look = "container"
+color = Color(0.5, 0.35, 0.3, 1)
+weight_range = Vector2(2000000000, 3600000000)
+pay_factor = 0.95
+care_kind = "none"
+rush_chance = 0.05
+sources = PackedStringArray("salvage_yard", "creamery", "tidewater")
+
+[sub_resource type="Resource" id="Cargo_seafood"]
+script = ExtResource("2_cargo")
+id = "seafood"
+names = PackedStringArray("Canned starfish", "Kelp noodles", "Fresh space squid", "Sea-cucumber chips", "Whale-safe tuna")
+clients = PackedStringArray("Tidewater Cannery", "Gill's Catch", "Deep Blue Foods")
+blurbs = PackedStringArray("Smells fine. For now.")
+look = "reefer"
+color = Color(0.3, 0.7, 0.8, 1)
+weight_range = Vector2(300000000, 1300000000)
+pay_factor = 1.15
+care_kind = "perishable"
+rush_chance = 0.35
+sources = PackedStringArray("tidewater")
+
+[sub_resource type="Resource" id="Cargo_casino_supplies"]
+script = ExtResource("2_cargo")
+id = "casino_supplies"
+names = PackedStringArray("Poker chips", "Slot machine reels", "Cocktail umbrellas", "Sequined tablecloths", "Neon signs")
+clients = PackedStringArray("The High Roller", "Lucky Lizard Supply", "Glimmer Entertainment")
+blurbs = PackedStringArray("The house always wants it yesterday.")
+look = "crates"
+color = Color(0.85, 0.25, 0.65, 1)
+weight_range = Vector2(100000000, 800000000)
+pay_factor = 1.1
+care_kind = "none"
+rush_chance = 0.4
+sources = PackedStringArray("high_roller", "truck_stop")
+
+[sub_resource type="Resource" id="Cargo_plants"]
+script = ExtResource("2_cargo")
+id = "plants"
+names = PackedStringArray("Potted ferns", "Bonsai trees", "Glow moss", "Venus flytraps", "Seedling trays")
+clients = PackedStringArray("Greenhouse Reach Arboretum", "Leafy Logistics", "Sprout & Co.")
+blurbs = PackedStringArray("Living cargo. Gentle on the turns.")
+look = "reefer"
+color = Color(0.45, 0.8, 0.4, 1)
+weight_range = Vector2(100000000, 600000000)
+pay_factor = 1.2
+care_kind = "live"
+rush_chance = 0.15
+sources = PackedStringArray("arboretum", "tidewater", "truck_stop")
+
+[sub_resource type="Resource" id="Cargo_ice_cream"]
+script = ExtResource("2_cargo")
+id = "ice_cream"
+names = PackedStringArray("Comet ice cream", "Frozen yogurt tubs", "Sprinkle barrels", "Popsicle sticks (frozen, somehow)")
+clients = PackedStringArray("Penny's Comet Creamery", "Frosty Freight")
+blurbs = PackedStringArray("Melted is a very sad delivery.")
+look = "reefer"
+color = Color(0.75, 0.75, 0.95, 1)
+weight_range = Vector2(300000000, 1200000000)
+pay_factor = 1.2
+care_kind = "perishable"
+rush_chance = 0.3
+sources = PackedStringArray("creamery")
+
+[sub_resource type="Resource" id="Cargo_mail"]
+script = ExtResource("2_cargo")
+id = "mail"
+names = PackedStringArray("Mail sacks", "Parcels", "Birthday cards", "Junk mail (it pays)", "Returned packages")
+clients = PackedStringArray("Galactic Post", "Speedy Parcel Co.", "Interstellar Mail Service")
+blurbs = PackedStringArray("Neither rain nor sleet nor asteroid belt.")
+look = "container"
+color = Color(0.2, 0.35, 0.75, 1)
+weight_range = Vector2(50000000, 400000000)
+pay_factor = 1.05
+care_kind = "none"
+rush_chance = 0.5
+
+[sub_resource type="Resource" id="Cargo_toys"]
+script = ExtResource("2_cargo")
+id = "toys"
+names = PackedStringArray("Rubber ducks", "Fuzzy dice", "Plush space whales", "Yo-yos", "Bouncy balls (a lot)", "Lawn gnomes")
+clients = PackedStringArray("Toybox Orbital", "Fun Stuff Inc.", "The Novelty Barn")
+blurbs = PackedStringArray("Squeaky.", "Somebody's birthday depends on this.")
+look = "crates"
+color = Color(0.95, 0.55, 0.15, 1)
+weight_range = Vector2(100000000, 700000000)
+pay_factor = 1.0
+care_kind = "none"
+rush_chance = 0.25
+
+[resource]
+script = ExtResource("1_market")
+cargo_types = Array[ExtResource("2_cargo")]([SubResource("Cargo_dry_goods"), SubResource("Cargo_frozen_food"), SubResource("Cargo_produce"), SubResource("Cargo_fuel_tanks"), SubResource("Cargo_goo"), SubResource("Cargo_glassware"), SubResource("Cargo_electronics"), SubResource("Cargo_livestock"), SubResource("Cargo_pets"), SubResource("Cargo_machinery"), SubResource("Cargo_scrap"), SubResource("Cargo_ore"), SubResource("Cargo_seafood"), SubResource("Cargo_casino_supplies"), SubResource("Cargo_plants"), SubResource("Cargo_ice_cream"), SubResource("Cargo_mail"), SubResource("Cargo_toys")])

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PlaceData" format=3]
+
+[ext_resource type="Script" path="res://data/places/PlaceData.gd" id="1_place"]
+[ext_resource type="Resource" path="res://data/npcs/greenhouse_moss.tres" id="2_host"]
+
+[resource]
+script = ExtResource("1_place")
+freight_flag = "greenhouse_open"
+freight_pay_factor = 1.35
+id = "arboretum"
+display_name = "THE ORBITAL ARBORETUM"
+interior_scene = "res://scenes/hub/Arboretum.tscn"
+arrival_spawn = "FromShip"
+host = ExtResource("2_host")
+host_lines = PackedStringArray("Welcome... to the Arboretum. Wipe your feet. The moss is sleeping.", "Ah, dear. You're back. The ferns noticed before I did.", "Come in... slowly. Everything here goes slowly.")
+host_lines_in_order = true
+fuel_price_factor = 1.1
+surrounding_field = "rocks"
+field_radii = Vector2(1500, 2600)
+field_rock_count = 2000
+map_position = Vector3(-50000, 36000, 24000)

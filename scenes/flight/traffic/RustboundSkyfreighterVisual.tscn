@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/traffic_rustbound_skyfreighter.glb" id="1_or82m"]
+[ext_resource type="Script" path="res://scenes/flight/EngineTrail.gd" id="2_qcdhl"]
+[ext_resource type="Script" path="res://scenes/flight/EngineFlare.gd" id="3_c0fdd"]
+
+[node name="RustboundSkyfreighterVisual" type="Node3D" unique_id=267638013]
+metadata/hull_size = Vector3(9.28793, 13.2702675, 25.5)
+
+[node name="Model" type="Node3D" parent="." unique_id=1793666660 instance=ExtResource("1_or82m")]
+transform = Transform3D(-1.3529615e-06, 0, -30.95215, 0, 30.95215, 0, 30.95215, 0, -1.3529615e-06, -0.060449727, 0.27203855, -0.060449734)
+
+[node name="Nozzle" type="Marker3D" parent="." unique_id=1639021961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9122207, 1.2489663, 15.3)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle" unique_id=891771157]
+script = ExtResource("2_qcdhl")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle" unique_id=220605390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("3_c0fdd")
+size_at_top_speed = 6.0
+
+[node name="Nozzle2" type="Marker3D" parent="." unique_id=1639821341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9122207, 1.2489663, 15.3)
+
+[node name="EngineTrail" type="MeshInstance3D" parent="Nozzle2" unique_id=83423773]
+script = ExtResource("2_qcdhl")
+
+[node name="EngineFlare" type="MeshInstance3D" parent="Nozzle2" unique_id=583259925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+script = ExtResource("3_c0fdd")
+size_at_top_speed = 6.0

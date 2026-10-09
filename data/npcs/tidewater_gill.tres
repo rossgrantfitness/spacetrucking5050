@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="NPCData" format=3]
+
+[ext_resource type="Script" path="res://data/npcs/NPCData.gd" id="1_npc"]
+[ext_resource type="Script" path="res://data/npcs/Conversation.gd" id="2_conv"]
+[ext_resource type="Resource" path="res://data/jobs/gill_ice.tres" id="job_ice"]
+
+[sub_resource type="Resource" id="Conversation_perfect"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_perfect")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Mmh. The pies. Marge's pies. Not a crumb out of place.", "I'm not crying. It's the cannery. It's very... fishy in here.", "Thanks, {bunny}. Board's by the window if you want a load back. Cans, mostly. Sometimes records.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_bumpy"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_bumpy")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("The pies are a little... smushed. That's okay. Pie is pie.", "Long road out here. Bumpy. I get it. Board's by the window if you want a load back.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_rough"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("first_long_haul_arrived_rough")
+blocked_by_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Pie soup. Huh.", "I'll get a spoon. ...I'm keeping the spoon. Board's by the window, if you want another try at something.")
+sets_flags = PackedStringArray("gill_thanked")
+
+[sub_resource type="Resource" id="Conversation_regular"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_thanked")
+lines = PackedStringArray("Oh, hey. It's you again. Coffee's in the... somewhere.", "Kelp's on the radio downstairs. He never comes up. I bring him fish.")
+
+[sub_resource type="Resource" id="Conversation_default"]
+script = ExtResource("2_conv")
+lines = PackedStringArray("Mmh? Oh. Hi. Welcome to Tidewater. Fish?", "The board by the window has loads going out. The pump's by your airlock.")
+
+[sub_resource type="Resource" id="Conversation_slot"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("sal_slot_done")
+blocked_by_flags = PackedStringArray("gill_slot")
+lines = PackedStringArray("...Why is there a slot machine in my canteen.", "Mmh. The crew loves it. Nobody's working. I won six fish.", "Tell Sal... 'why.' Just 'why.' He'll know.")
+sets_flags = PackedStringArray("gill_slot")
+
+[sub_resource type="Resource" id="Conversation_ice"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_thanked")
+blocked_by_flags = PackedStringArray("gill_called_ice", "gill_ice_done")
+lines = PackedStringArray("Mmh. {bunny}. Can I tell you something? The ice machine broke.", "Three hundred million tons of fish, and nothing keeping them cold. They're getting... opinions.", "> Call {company} at the truck stop. They'll haul you some ice.", "Mmh. Okay. I'll call. ...Is it the lion? It's always the lion.")
+sets_flags = PackedStringArray("gill_called_ice")
+places_order = ExtResource("job_ice")
+
+[sub_resource type="Resource" id="Conversation_ice_wait"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_called_ice")
+blocked_by_flags = PackedStringArray("gill_ice_done")
+lines = PackedStringArray("I called. The lion put me on hold. The hold music was just him, humming.", "The fish say hurry. Politely. Mostly.")
+
+[sub_resource type="Resource" id="Conversation_iced"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("gill_ice_done")
+blocked_by_flags = PackedStringArray("gill_iced")
+lines = PackedStringArray("Ice! Mmh. The fish are calm. I'm calm. This is my calm face.", "It looks like my other face. Trust me.")
+sets_flags = PackedStringArray("gill_iced")
+
+[sub_resource type="Resource" id="Conversation_white_last"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_last_load_done")
+blocked_by_flags = PackedStringArray("white_story_done")
+lines = PackedStringArray("Mmh? These are... can-sealer parts. Old ones. We fixed that line years ago.", "Oh. Oh, this was his load. The last one.", "There's a box in here that isn't ours. Tapes. \"FOR THE LONG HAULS\" on the side. In marker.", "> He labeled them. He never labeled anything.", "Mmh. Take them home, {bunny}. Play side B first.")
+sets_flags = PackedStringArray("white_story_done")
+
+[sub_resource type="Resource" id="Conversation_white_pie"]
+script = ExtResource("2_conv")
+marked = true
+needs_flags = PackedStringArray("white_pie_done")
+blocked_by_flags = PackedStringArray("gill_talked_white")
+lines = PackedStringArray("Mmh. Cherry. Lattice top.", "He always brought cherry. Said it was the only pie that survives the lane.", "We used to sit out past the whale buoy. Engines off. He never said much. Best company I ever had.", "> He said the same about you.", "...Mmh. Tell Marge thanks. Tell her it's still warm.")
+sets_flags = PackedStringArray("gill_talked_white")
+
+[sub_resource type="Resource" id="Conversation_white_after"]
+script = ExtResource("2_conv")
+needs_flags = PackedStringArray("white_story_done")
+lines = PackedStringArray("Oh, hey. You. Coffee's in the... somewhere.", "If you're ever out past the whale buoy at night, kill the engine for a minute. He did. Mmh.")
+
+[resource]
+script = ExtResource("1_npc")
+display_name = "Gill"
+species = "otter"
+voice_pitch = 0.7
+voice_type = "soft"
+voice_key = 7
+voice_scale = "dreamy"
+lines = PackedStringArray("Mmh? Oh. Hi. Fish.")
+comm_name = "GILL · TIDEWATER"
+fur_color = Color(0.52, 0.38, 0.28, 1)
+accent_color = Color(0.95, 0.8, 0.3, 1)
+conversations = Array[ExtResource("2_conv")]([SubResource("Conversation_white_last"), SubResource("Conversation_white_pie"), SubResource("Conversation_perfect"), SubResource("Conversation_bumpy"), SubResource("Conversation_rough"), SubResource("Conversation_slot"), SubResource("Conversation_iced"), SubResource("Conversation_ice_wait"), SubResource("Conversation_ice"), SubResource("Conversation_white_after"), SubResource("Conversation_regular"), SubResource("Conversation_default")])
